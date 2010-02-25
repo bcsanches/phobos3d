@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_Kernel", "Kernel\Kernel.vcproj", "{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KernelTest", "KernelTest\KernelTest.vcproj", "{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A} = {C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}.Debug|Win32.Build.0 = Debug|Win32
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}.Release|Win32.ActiveCfg = Release|Win32
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}.Release|Win32.Build.0 = Release|Win32
+		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Debug|Win32.Build.0 = Debug|Win32
+		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Release|Win32.ActiveCfg = Release|Win32
+		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

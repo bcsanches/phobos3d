@@ -1,0 +1,90 @@
+1. General guide
+	- All global names must start with uppercase and use "camel case" style.
+	- Every project must have a prefix (IM for immersion, PH for phobos).
+	- Every global name must start with prefix
+	- Structs name must end with _s
+	- Classes name must end with _c
+	- Enums name must end with _e
+	- Typedefs name must end with _t
+	- Every function must start with object name and the first param must be an object pointer (Renderware Style)
+	- Variables prefix:
+		pointer: p
+		reference: r
+		UInt8: u8
+		SInt8: s8
+		UInt16: u16
+		SInt16: s16
+		...
+		UInt: u *
+		SInt: s *
+		Float32: d32
+		Float64: d64
+		Float: d *				
+		Char: c *
+		Size_t: sz
+		Bool_t: f
+		String_c: str *		
+		classes: cl
+		structs: st
+		typedefs: t
+		enums: e
+		unions: un
+		ScopedPtr: sp
+		IntrusivePtr: ip
+		std::vector: vec 		
+		Lists: lst (followed by data type?)
+		Vector: vec
+		Maps: map
+		bimap: bimap
+		...		
+		ContextCmd_c: cmd
+		ContextVar_c: var
+		Boost::Array: ar
+		Signal: sig
+		Slot: slt
+		Transform_c: tr
+		
+		
+		* Cant be streamed		
+	
+2 - Class declaration:
+
+[includes]
+
+[macros]
+
+<class>
+	[public types]
+	
+	[public static methods]
+	
+	[public static atributes]
+	
+	[public methods]
+	
+	[public atributes]
+	
+	[protected types]
+	
+	[protected static methods]
+	
+	[protected static atributes]
+	
+	[protected methods]
+	
+	[protected atributes]	
+	
+	[private types]	
+	
+	[private static methods]
+	
+	[private static atributes]
+	
+	[private methods]		
+			
+	[private atributes]						
+<end of class>
+
+[inline methods implementation]
+
+		
