@@ -35,30 +35,30 @@ namespace Phobos
 	#define IS_ID(X) (IS_NUMBER(X) || IS_ID_START(X) || (X == '-'))
 	#define IS_NUMBER_START(X) ((X == '-') || IS_NUMBER(X))
 
-	PH_Parser_c::PH_Parser_c(void):
+	Parser_c::Parser_c(void):
 		fLookAhead(false),
 		pclStream(NULL),
 		fTokenAhead(false)
 	{
 	}
 
-	PH_Parser_c::~PH_Parser_c(void)
+	Parser_c::~Parser_c(void)
 	{
 
 	}
 
-	void PH_Parser_c::SetStream(std::istream *stream)
+	void Parser_c::SetStream(std::istream *stream)
 	{
 		pclStream = stream;
 	}
 
-	void PH_Parser_c::SetLookAhead(Char_t ch)
+	void Parser_c::SetLookAhead(Char_t ch)
 	{
 		chLookAhead = ch;
 		fLookAhead = true;
 	}
 
-	bool PH_Parser_c::GetNextChar(Char_t &out)
+	bool Parser_c::GetNextChar(Char_t &out)
 	{
 		PH_ASSERT_VALID(this);
 		PH_ASSERT_VALID(pclStream);
@@ -82,7 +82,7 @@ namespace Phobos
 
 	#define RETURN_TOKEN(X)	do{if(out != NULL) out->assign(strToken);eTokenType=X;return(X);}while(0);
 
-	ParserTokens_e PH_Parser_c::GetToken(String_c *out)
+	ParserTokens_e Parser_c::GetToken(String_c *out)
 	{
 		Char_t ch;
 
@@ -100,7 +100,7 @@ namespace Phobos
 
 		bool e = this->GetNextChar(ch);
 		if(e != true)
-			RETURN_TOKEN(PH_TOKEN_EOF);
+			RETURN_TOKEN(TOKEN_EOF);
 
 		do
 		{	
@@ -114,22 +114,22 @@ namespace Phobos
 				
 				case '{':
 					strToken+=ch;
-					RETURN_TOKEN(PH_TOKEN_OPEN_BRACE);
+					RETURN_TOKEN(TOKEN_OPEN_BRACE);
 					break;
 
 				case '}':
 					strToken += ch;
-					RETURN_TOKEN(PH_TOKEN_CLOSE_BRACE);
+					RETURN_TOKEN(TOKEN_CLOSE_BRACE);
 					break;
 
 				case '(':
 					strToken += ch;
-					RETURN_TOKEN(PH_TOKEN_OPEN_PAREN);
+					RETURN_TOKEN(TOKEN_OPEN_PAREN);
 					break;
 
 				case ')':
 					strToken += ch;
-					RETURN_TOKEN(PH_TOKEN_CLOSE_PAREN);
+					RETURN_TOKEN(TOKEN_CLOSE_PAREN);
 					break;
 
 				case '/':
@@ -137,16 +137,16 @@ namespace Phobos
 				e = pclStream->good();
 
 					if(e != true)
-						RETURN_TOKEN(PH_TOKEN_ERROR);
+						RETURN_TOKEN(TOKEN_ERROR);
 					if(ch != '/')
-						RETURN_TOKEN(PH_TOKEN_ERROR);
+						RETURN_TOKEN(TOKEN_ERROR);
 
 					do
 					{
 						(*pclStream)>>ch;
 						e = pclStream->good();
 						if(e != true)
-							RETURN_TOKEN(PH_TOKEN_EOF);
+							RETURN_TOKEN(TOKEN_EOF);
 					} while(ch != '\n');		
 					break;
 
@@ -156,10 +156,10 @@ namespace Phobos
 						(*pclStream)>>ch;
 						e = pclStream->good();
 						if(e != true)
-							RETURN_TOKEN(PH_TOKEN_ERROR);
+							RETURN_TOKEN(TOKEN_ERROR);
 
 						if(ch == '\"')
-							RETURN_TOKEN(PH_TOKEN_STRING);
+							RETURN_TOKEN(TOKEN_STRING);
 
 						strToken += ch;
 					} while(1);
@@ -174,7 +174,7 @@ namespace Phobos
 							if(ch == '.')
 							{
 								if(gotDot)
-									RETURN_TOKEN(PH_TOKEN_ERROR);
+									RETURN_TOKEN(TOKEN_ERROR);
 								gotDot = true;
 							}
 
@@ -187,13 +187,13 @@ namespace Phobos
 							if(e != true)
 							{
 								//this is an expected EOF
-								RETURN_TOKEN(PH_TOKEN_NUMBER);
+								RETURN_TOKEN(TOKEN_NUMBER);
 							}
 
 						} while(IS_NUMBER(ch));
 
 						this->SetLookAhead(ch);
-						RETURN_TOKEN(PH_TOKEN_NUMBER);
+						RETURN_TOKEN(TOKEN_NUMBER);
 					}
 					else if(IS_ID_START(ch))
 					{
@@ -208,13 +208,13 @@ namespace Phobos
 							if(e != true)
 							{
 								//This is a expected EOF
-								RETURN_TOKEN(PH_TOKEN_ID);
+								RETURN_TOKEN(TOKEN_ID);
 							}
 			
 						} while(IS_ID(ch));
 
 						this->SetLookAhead(ch);
-						RETURN_TOKEN(PH_TOKEN_ID);
+						RETURN_TOKEN(TOKEN_ID);
 					}
 				
 			}
@@ -223,16 +223,16 @@ namespace Phobos
 			bool e = pclStream->good();
 
 			if(e != true)
-				RETURN_TOKEN(PH_TOKEN_EOF);
+				RETURN_TOKEN(TOKEN_EOF);
 
 		}while(1);
 
 		//shut up compiler
-		RETURN_TOKEN(PH_TOKEN_ERROR);
+		RETURN_TOKEN(TOKEN_ERROR);
 	}
 
 
-	const Char_t *PH_Parser_c::GetTokenTypeName(ParserTokens_e token)
+	const Char_t *Parser_c::GetTokenTypeName(ParserTokens_e token)
 	{
 		struct TokenName_s
 		{
@@ -242,16 +242,16 @@ namespace Phobos
 
 		static TokenName_s stTokens[] =
 		{
-			{"number",				PH_TOKEN_NUMBER},
-			{"string",				PH_TOKEN_STRING},
-			{"id",					PH_TOKEN_ID},
-			{"open brace",			PH_TOKEN_OPEN_BRACE},
-			{"close brace",			PH_TOKEN_CLOSE_BRACE},
-			{"open parenthesis",	PH_TOKEN_OPEN_PAREN},
-			{"close parenthesis",	PH_TOKEN_CLOSE_PAREN}, 		
-			{"EOF",					PH_TOKEN_EOF},
-			{"parse error",			PH_TOKEN_ERROR},
-			{NULL,					PH_TOKEN_ERROR}
+			{"number",				TOKEN_NUMBER},
+			{"string",				TOKEN_STRING},
+			{"id",					TOKEN_ID},
+			{"open brace",			TOKEN_OPEN_BRACE},
+			{"close brace",			TOKEN_CLOSE_BRACE},
+			{"open parenthesis",	TOKEN_OPEN_PAREN},
+			{"close parenthesis",	TOKEN_CLOSE_PAREN}, 		
+			{"EOF",					TOKEN_EOF},
+			{"parse error",			TOKEN_ERROR},
+			{NULL,					TOKEN_ERROR}
 		};
 
 		UInt_t i = 0;

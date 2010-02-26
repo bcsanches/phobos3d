@@ -35,25 +35,25 @@ namespace Phobos
 {
 	enum ParserTokens_e
 	{
-		PH_TOKEN_NUMBER,
-		PH_TOKEN_STRING,
-		PH_TOKEN_ID,
-		PH_TOKEN_OPEN_BRACE,
-		PH_TOKEN_CLOSE_BRACE,
-		PH_TOKEN_OPEN_PAREN,
-		PH_TOKEN_CLOSE_PAREN,
-		PH_TOKEN_ERROR,
-		PH_TOKEN_EOF
+		TOKEN_NUMBER,
+		TOKEN_STRING,
+		TOKEN_ID,
+		TOKEN_OPEN_BRACE,
+		TOKEN_CLOSE_BRACE,
+		TOKEN_OPEN_PAREN,
+		TOKEN_CLOSE_PAREN,
+		TOKEN_ERROR,
+		TOKEN_EOF
 	};
 
-	class PH_Parser_c
+	class Parser_c
 	{
 		public:
 			static const Char_t *GetTokenTypeName(ParserTokens_e token);
 
 		public:
-			PH_Parser_c(void);
-			~PH_Parser_c(void);
+			Parser_c(void);
+			~Parser_c(void);
 
 			void SetStream(std::istream *stream);
 
@@ -76,7 +76,7 @@ namespace Phobos
 			bool		fTokenAhead;
 	};
 
-	inline void PH_Parser_c::PushToken(void)
+	inline void Parser_c::PushToken(void)
 	{
 		fTokenAhead = true;
 	}
