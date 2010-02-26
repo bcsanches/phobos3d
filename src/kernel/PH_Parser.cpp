@@ -36,9 +36,9 @@ namespace Phobos
 	#define IS_NUMBER_START(X) ((X == '-') || IS_NUMBER(X))
 
 	PH_Parser_c::PH_Parser_c(void):
-		oLookAhead(false),
+		fLookAhead(false),
 		pclStream(NULL),
-		oTokenAhead(false)
+		fTokenAhead(false)
 	{
 	}
 
@@ -47,7 +47,7 @@ namespace Phobos
 
 	}
 
-	void PH_Parser_c::SetStream(std::ostream *stream)
+	void PH_Parser_c::SetStream(std::istream *stream)
 	{
 		pclStream = stream;
 	}
@@ -55,7 +55,7 @@ namespace Phobos
 	void PH_Parser_c::SetLookAhead(Char_t ch)
 	{
 		chLookAhead = ch;
-		oLookAhead = true;
+		fLookAhead = true;
 	}
 
 	bool PH_Parser_c::GetNextChar(Char_t &out)
@@ -64,15 +64,15 @@ namespace Phobos
 		PH_ASSERT_VALID(pclStream);
 
 		bool e = true;
-		if(oLookAhead)
+		if(fLookAhead)
 		{
-			oLookAhead = false;
+			fLookAhead = false;
 			
 			out = chLookAhead;
 		}
 		else
 		{
-			(*pclStream)<<out;
+			(*pclStream)>>out;
 
 			e = pclStream->good();
 		}
@@ -82,16 +82,16 @@ namespace Phobos
 
 	#define RETURN_TOKEN(X)	do{if(out != NULL) out->assign(strToken);eTokenType=X;return(X);}while(0);
 
-	PH_ParserTokens_e PH_Parser_c::GetToken(String_c *out)
+	ParserTokens_e PH_Parser_c::GetToken(String_c *out)
 	{
 		Char_t ch;
 
 		PH_ASSERT_VALID(pclStream);
 		PH_ASSERT_VALID(this);
 
-		if(oTokenAhead)
+		if(fTokenAhead)
 		{
-			oTokenAhead = false;
+			fTokenAhead = false;
 
 			RETURN_TOKEN(eTokenType);
 		}
@@ -133,7 +133,7 @@ namespace Phobos
 					break;
 
 				case '/':
-				(*pclStream)<<ch;
+				(*pclStream)>>ch;
 				e = pclStream->good();
 
 					if(e != true)
@@ -143,7 +143,7 @@ namespace Phobos
 
 					do
 					{
-						(*pclStream)<<ch;
+						(*pclStream)>>ch;
 						e = pclStream->good();
 						if(e != true)
 							RETURN_TOKEN(PH_TOKEN_EOF);
@@ -153,7 +153,7 @@ namespace Phobos
 				case '\"':
 					do
 					{
-						(*pclStream)<<ch;
+						(*pclStream)>>ch;
 						e = pclStream->good();
 						if(e != true)
 							RETURN_TOKEN(PH_TOKEN_ERROR);
@@ -180,7 +180,7 @@ namespace Phobos
 
 							strToken += ch;												
 
-							(*pclStream)<<ch;
+							(*pclStream)>>ch;
 
 							e = pclStream->good();
 
@@ -201,7 +201,7 @@ namespace Phobos
 						{
 							strToken += ch;
 
-							(*pclStream)<<ch;
+							(*pclStream)>>ch;
 							
 							e = pclStream->good();
 
@@ -218,7 +218,7 @@ namespace Phobos
 					}
 				
 			}
-			(*pclStream)<<ch;
+			(*pclStream)>>ch;
 
 			bool e = pclStream->good();
 
@@ -232,12 +232,12 @@ namespace Phobos
 	}
 
 
-	const Char_t *PH_Parser_c::GetTokenTypeName(PH_ParserTokens_e token)
+	const Char_t *PH_Parser_c::GetTokenTypeName(ParserTokens_e token)
 	{
 		struct TokenName_s
 		{
 			const Char_t		*pchName;
-			PH_ParserTokens_e	eToken;
+			ParserTokens_e	eToken;
 		};
 
 		static TokenName_s stTokens[] =
