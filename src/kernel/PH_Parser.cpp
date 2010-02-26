@@ -63,21 +63,20 @@ namespace Phobos
 		PH_ASSERT_VALID(this);
 		PH_ASSERT_VALID(pclStream);
 
-		bool e = true;
 		if(fLookAhead)
 		{
 			fLookAhead = false;
 			
 			out = chLookAhead;
+
+			return true;
 		}
 		else
 		{
 			(*pclStream)>>out;
 
-			e = pclStream->good();
+			return pclStream->good();
 		}
-
-		return(e);
 	}
 
 	#define RETURN_TOKEN(X)	do{if(out != NULL) out->assign(strToken);eTokenType=X;return(X);}while(0);
@@ -182,9 +181,7 @@ namespace Phobos
 
 							(*pclStream)>>ch;
 
-							e = pclStream->good();
-
-							if(e != true)
+							if(pclStream->good() != true)
 							{
 								//this is an expected EOF
 								RETURN_TOKEN(TOKEN_NUMBER);
@@ -220,9 +217,7 @@ namespace Phobos
 			}
 			(*pclStream)>>ch;
 
-			bool e = pclStream->good();
-
-			if(e != true)
+			if(pclStream->good() != true)
 				RETURN_TOKEN(TOKEN_EOF);
 
 		}while(1);
