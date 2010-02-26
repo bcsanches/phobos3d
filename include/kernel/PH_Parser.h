@@ -33,7 +33,7 @@ Phobos 3d
 
 namespace Phobos
 {
-	enum PH_ParserTokens_e
+	enum ParserTokens_e
 	{
 		PH_TOKEN_NUMBER,
 		PH_TOKEN_STRING,
@@ -49,15 +49,15 @@ namespace Phobos
 	class PH_Parser_c
 	{
 		public:
-			static const Char_t *GetTokenTypeName(PH_ParserTokens_e token);
+			static const Char_t *GetTokenTypeName(ParserTokens_e token);
 
 		public:
 			PH_Parser_c(void);
 			~PH_Parser_c(void);
 
-			void SetStream(std::ostream *stream);
+			void SetStream(std::istream *stream);
 
-			PH_ParserTokens_e GetToken(String_c *out);
+			ParserTokens_e GetToken(String_c *out);
 
 			inline void PushToken(void);
 
@@ -67,18 +67,18 @@ namespace Phobos
 			bool GetNextChar(Char_t &out);
 
 		private:
-			std::ostream	*pclStream;
-			String_c			strToken;
-			PH_ParserTokens_e	eTokenType;
+			std::istream	*pclStream;
+			String_c		strToken;
+			ParserTokens_e	eTokenType;
 
 			Char_t		chLookAhead;
-			Bool_t		oLookAhead;
-			Bool_t		oTokenAhead;
+			bool		fLookAhead;
+			bool		fTokenAhead;
 	};
 
 	inline void PH_Parser_c::PushToken(void)
 	{
-		oTokenAhead = true;
+		fTokenAhead = true;
 	}
 }
 
