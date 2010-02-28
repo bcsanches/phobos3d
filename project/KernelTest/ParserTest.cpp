@@ -23,63 +23,27 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_PARSER_H
-#define PH_PARSER_H
+#include <boost/test/unit_test.hpp>
 
-#include "PH_Types.h"
-#include "PH_String.h"
+#include "PH_Parser.h"
 
-#include <istream>
+#include <sstream>
+#include <iostream>
 
-namespace Phobos
+using namespace Phobos;
+
+using namespace std;
+
+BOOST_AUTO_TEST_CASE(parser_test)
 {
-	enum ParserTokens_e
-	{
-		TOKEN_NUMBER,
-		TOKEN_STRING,
-		TOKEN_ID,
-		TOKEN_OPEN_BRACE,
-		TOKEN_CLOSE_BRACE,
-		TOKEN_OPEN_PAREN,
-		TOKEN_CLOSE_PAREN,
-		TOKEN_ERROR,
-		TOKEN_EOF
-	};
+	stringstream str;
 
-	class PH_KERNEL_API Parser_c
-	{
-		public:
-			static const Char_t *GetTokenTypeName(ParserTokens_e token);
+	str << "123";
 
-		public:
-			Parser_c(void);
-			~Parser_c(void);
+	Parser_c parser;
 
-			void SetStream(std::istream *stream);
+	parser.SetStream(&str);
+	
+	cout<<parser.GetTokenTypeName(parser.GetToken(0))<<endl;
 
-			ParserTokens_e GetToken(String_c *out);
-
-			inline void PushToken(void);
-
-		private:
-			void SetLookAhead(Char_t ch);
-
-			bool GetNextChar(Char_t &out);
-
-		private:
-			std::istream	*pclStream;
-			String_c		strToken;
-			ParserTokens_e	eTokenType;
-
-			Char_t		chLookAhead;
-			bool		fLookAhead;
-			bool		fTokenAhead;
-	};
-
-	inline void Parser_c::PushToken(void)
-	{
-		fTokenAhead = true;
-	}
 }
-
-#endif
