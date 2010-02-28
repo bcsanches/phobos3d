@@ -166,6 +166,10 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\src\kernelTest\EventManagerTest.cpp"
+			>
+		</File>
+		<File
 			RelativePath="..\..\src\kernelTest\KernelTest.cpp"
 			>
 		</File>

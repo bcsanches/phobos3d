@@ -79,6 +79,18 @@ namespace Phobos
 		node->pclParent = this;
 	}
 
+	void Node_c::RemoveSelf()
+	{
+		if(pclParent == NULL)
+		{
+			std::stringstream stream;
+			stream << "Node " << this->GetName() << " does not have a parent";
+			PH_RAISE(ERROR_INVALID_PARAMETER, "[Node_c::RemoveSelf]", stream.str());
+		}
+
+		pclParent->RemoveChild(NodePtr_t(this));
+	}
+
 	void Node_c::RemoveChild(NodePtr_t node)
 	{
 		//node is not registered?

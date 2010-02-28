@@ -116,8 +116,10 @@ namespace Phobos
 		public:	
 			static EventManagerPtr_t CreateInstance(const String_c &name);
 			static void ReleaseInstance();
-			static EventManagerPtr_t GetInstance();
+			static EventManagerPtr_t GetInstance();	
+			static const String_c &GetDefaultName();
 
+		public:
 			virtual void Update() = 0;
 
 			void AddListener(EventListener_c &listener, EventType_e type);
@@ -131,9 +133,11 @@ namespace Phobos
 			bool IsListenersListEmpty(EventType_e type);
 			void NotityListeners(Event_s &event);
 
-		private:
+		private:			
+			static const String_c DEFAULT_NAME;
 			static EventManagerPtr_t ipInstance_gl;
 
+		private:
 			EventListenerList_t arlstListeners[EVENT_TYPE_NUM];
 
 	};

@@ -29,29 +29,45 @@ Phobos 3d
 
 #include "PH_Error.h"
 #include "PH_Exception.h"
+#include "PH_Folders.h"
+#include "PH_Kernel.h"
+#include "PH_Path.h"
 
 namespace Phobos
 {
 	EventManagerPtr_t EventManager_c::ipInstance_gl;
 
+	const String_c EventManager_c::DEFAULT_NAME("eventManager");
+
 	EventManagerPtr_t EventManager_c::CreateInstance(const String_c &name)
 	{
-		if(ipInstance_gl)
-			PH_RAISE(ERROR_INVALID_OPERATION, "EventManager_c::Create", "Instance already exists");
+		PH_ASSERT_MSG(!ipInstance_gl, "[EventManager_c::CreateInstance]: Instance already exists");		
 
-		ipInstance_gl = EventManager_c::CreateInstanceImpl(name);
+		ipInstance_gl = EventManager_c::CreateInstanceImpl(name);		
+
+		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(SYSTEM_FOLDER));
 
 		return ipInstance_gl;
 	}
 
 	EventManagerPtr_t EventManager_c::GetInstance()
 	{
+		PH_ASSERT_MSG(ipInstance_gl, "[EventManager_c::GetInstance]: Instance does not exists, use CreateInstance");
+
 		return ipInstance_gl;
 	}
 
 	void EventManager_c::ReleaseInstance()
-	{
+	{	
+		PH_ASSERT_MSG(ipInstance_gl, "[EventManager_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
+
+		ipInstance_gl->RemoveSelf();
 		ipInstance_gl.reset();
+	}
+
+	const String_c &EventManager_c::GetDefaultName()
+	{
+		return DEFAULT_NAME;
 	}
 
 	EventManager_c::EventManager_c(const String_c &name):
@@ -62,8 +78,7 @@ namespace Phobos
 
 	void EventManager_c::AddListener(EventListener_c &listener, EventType_e type)
 	{
-		if(type == EVENT_TYPE_NUM)
-			PH_RAISE(ERROR_INVALID_PARAMETER, "EventManager_c::AddListener", "EventType value \"EVENT_TYPE_NUM\" is not valid for adding listeners");
+		PH_ASSERT_MSG(type != EVENT_TYPE_NUM, "[EventManager_c::AddListener]: EventType value \"EVENT_TYPE_NUM\" is not valid for adding listeners");		
 
 		arlstListeners[type].push_back(listener);
 	}

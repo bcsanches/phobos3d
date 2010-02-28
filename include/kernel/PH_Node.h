@@ -51,6 +51,8 @@ namespace Phobos
 			void RemoveChild(NodePtr_t node);
 			NodePtr_t GetChild(const String_c &name) const;
 
+			void RemoveSelf();
+
 			size_t GetNumChildren() const;
 			bool HasChildren() const;
 

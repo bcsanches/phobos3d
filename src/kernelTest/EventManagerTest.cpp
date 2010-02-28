@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  January 2010
+  version 0.0.1, January 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,30 +23,26 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_OBJECT_MANAGER_H
-#define PH_OBJECT_MANAGER_H
+#include <boost/test/unit_test.hpp>
 
-#include <boost/utility.hpp>
+#include <PH_EventManager.h>
+#include <PH_Exception.h>
+#include <PH_Kernel.h>
+#include <PH_Path.h>
 
-#include "PH_KernelAPI.h"
-#include "PH_Node.h"
-#include "PH_PathFwd.h"
+using namespace Phobos;
 
-namespace Phobos
+BOOST_AUTO_TEST_CASE(eventManager_basic)
 {
-	class PH_KERNEL_API ObjectManager_c: public boost::noncopyable
-	{
-		public:
-			ObjectManager_c();
+	Kernel_c &kernel = Kernel_c::CreateInstance("eventManager_basic.log");
+	EventManager_c::CreateInstance(EventManager_c::GetDefaultName());
 
-			void AddObject(NodePtr_t ptr, const Path_c &path);
-			NodePtr_t LookupObject(const Path_c &path) const;
+	NodePtr_t node = kernel.LookupObject(Path_c("/sys/eventManager"));
+	BOOST_REQUIRE(node);
 
-			void RemoveObject(NodePtr_t ptr);
+	EventManager_c::ReleaseInstance();
 
-		private:
-			NodePtr_t ipRoot;
-	};
+	BOOST_REQUIRE_THROW(kernel.LookupObject(Path_c("/sys/eventManager")), ObjectNotFoundException_c);	
+
+	Kernel_c::DestroyInstance();
 }
-
-#endif

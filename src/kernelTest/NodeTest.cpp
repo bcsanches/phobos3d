@@ -91,6 +91,11 @@ BOOST_AUTO_TEST_CASE(node_basic)
 			child.reset();
 		}
 
+		NodePtr_t child(new TestNode_c("child2"));
+		ptr->AddChild(child);
+		child->RemoveSelf();
+		child.reset();
+
 		BOOST_REQUIRE(iAliveNodes_gl == 2);
 	}
 

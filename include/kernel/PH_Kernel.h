@@ -29,6 +29,7 @@ Phobos 3d
 
 #include "PH_KernelAPI.h"
 #include "PH_Log.h"
+#include "PH_ObjectManager.h"
 #include "PH_String.h"
 
 #define PH_KERNEL_TYPE PH_OBJECT_TYPE_BUILD_TYPE(PH_VENDOR_IMMERSION, PH_ObjectType_c::KERNEL)
@@ -70,6 +71,9 @@ namespace Phobos
 			void AddLogListener(LogListener_c &listener);
 			void RemoveLogListener(LogListener_c &listener);
 
+			inline void AddObject(NodePtr_t ptr, const Path_c &path);
+			inline NodePtr_t LookupObject(const Path_c &path) const;
+
 		private:
 			//Singleton, so constructor and destructor is private.
 			Kernel_c(const String_c &logName);
@@ -79,11 +83,22 @@ namespace Phobos
 			static Kernel_c *pclInstance_g;
 
 			Log_c clLog;
+
+			ObjectManager_c clObjectManager;
 	};
 
 	// =====================================================
 	// KERNEL INLNE METHODS
-	// =====================================================				  
+	// =====================================================	
+	inline void Kernel_c::AddObject(NodePtr_t ptr, const Path_c &path)
+	{
+		clObjectManager.AddObject(ptr, path);
+	}
+
+	inline NodePtr_t Kernel_c::LookupObject(const Path_c &path) const
+	{
+		return clObjectManager.LookupObject(path);
+	}
 }
 
 #endif
