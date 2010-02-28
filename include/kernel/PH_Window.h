@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  January 2010
+  February 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,30 +23,25 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_OBJECT_MANAGER_H
-#define PH_OBJECT_MANAGER_H
+#ifndef PH_WINDOW_H
+#define PH_WINDOW_H
 
 #include <boost/utility.hpp>
 
-#include "PH_KernelAPI.h"
 #include "PH_Node.h"
-#include "PH_PathFwd.h"
 
 namespace Phobos
 {
-	class PH_KERNEL_API ObjectManager_c: public boost::noncopyable
+	class Window_c;
+
+	typedef boost::intrusive_ptr<Window_c> WindowPtr_t;
+
+	class Window_c: public Node_c, boost::noncopyable
 	{
 		public:
-			ObjectManager_c();
-
-			void AddObject(NodePtr_t ptr, const Path_c &path);
-			NodePtr_t LookupObject(const Path_c &path) const;
-
-			void RemoveObject(NodePtr_t ptr);
-
-		private:
-			NodePtr_t ipRoot;
+			static WindowPtr_t Create(const String_c &name);
 	};
-}
+
+};
 
 #endif

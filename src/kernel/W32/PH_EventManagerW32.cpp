@@ -396,25 +396,18 @@ namespace Phobos
 					break;
 
 				case WM_QUIT:
-				case WM_ACTIVATE:
-					if(!this->IsListenersListEmpty(SYSTEM_EVENT_TYPE))
-					{					
-						BuildSystemEvent(event, msg);
-
-						this->NotityListeners(event);						
-					}
+				case WM_ACTIVATE:					
+					BuildSystemEvent(event, msg);
+					this->NotityListeners(event);											
 					break;
 
 				case WM_KEYDOWN:
 				case WM_KEYUP:
-				case WM_CHAR:
-					if(!this->IsListenersListEmpty(KEYBOARD_EVENT_TYPE))
-					{
-						if(!BuildKeyboardEvent(event, msg))
-							continue;
-						
-						this->NotityListeners(event);
-					}				
+				case WM_CHAR:					
+					if(!BuildKeyboardEvent(event, msg))
+						continue;
+
+					this->NotityListeners(event);					
 					break;
 
 				case WM_MOUSEMOVE:
@@ -423,13 +416,9 @@ namespace Phobos
 				case WM_RBUTTONDOWN:
 				case WM_RBUTTONUP:
 				case WM_MBUTTONDOWN:
-				case WM_MBUTTONUP:
-					if(!this->IsListenersListEmpty(MOUSE_EVENT_TYPE))					
-					{
-						BuildMouseEvent(event, msg);							
-
-						this->NotityListeners(event);			
-					}
+				case WM_MBUTTONUP:					
+					BuildMouseEvent(event, msg);							
+					this->NotityListeners(event);								
 					break;			
 			}
 		}		

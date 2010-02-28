@@ -52,4 +52,40 @@ namespace Phobos
 #endif //WIN32
 }
 
+template <typename T>
+struct Rect_s
+{
+	inline Rect_s():
+		tWidth(0),
+		tHeight(0)
+	{
+		tOrigin[0] = tOrigin[1] = 0;		
+	}
+
+	inline Rect_s(const Rect_s &rhs):
+		tWidth(rhs.tWidth),
+		tHeight(rhs.tHeight)
+	{
+		tOrigin[0] = rhs.tOrigin[0];
+		tOrigin[1] = rhs.tOrigin[1];
+	}
+
+
+	inline Rect_s &operator=(const Rect_s &other)
+	{
+		tOrigin[0] = other.tOrigin[0];
+		tOrigin[1] = other.tOrigin[1];
+
+		tWidth = other.tWidth;
+		tHeight = other.tHeight;
+
+		return *this;
+	}
+
+	T tOrigin[2];
+	T tWidth;
+	T tHeight;
+};
+
+
 #endif //PH_TYPES_H

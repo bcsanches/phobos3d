@@ -179,6 +179,14 @@
 				RelativePath="..\..\include\kernel\W32\PH_EventManagerW32.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\kernel\W32\PH_WindowW32.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\W32\PH_WindowW32.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\..\include\kernel\PH_Defs.h"
@@ -214,6 +222,14 @@
 		</File>
 		<File
 			RelativePath="..\..\include\kernel\PH_Exception.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\kernel\PH_Folders.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\include\kernel\PH_Folders.h"
 			>
 		</File>
 		<File
@@ -310,6 +326,14 @@
 		</File>
 		<File
 			RelativePath="..\..\include\kernel\PH_Types.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\kernel\PH_Window.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\include\kernel\PH_Window.h"
 			>
 		</File>
 	</Files>

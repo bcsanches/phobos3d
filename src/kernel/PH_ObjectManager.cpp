@@ -97,4 +97,9 @@ namespace Phobos
 			currentNode = child.get();
 		}
 	}
+
+	void ObjectManager_c::RemoveObject(NodePtr_t ptr)
+	{
+		ptr->RemoveSelf();
+	}
 }
