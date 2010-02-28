@@ -1,0 +1,261 @@
+/*
+Phobos 3d
+  January 2010
+
+  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+
+  This software is provided 'as-is', without any express or implied
+  warranty. In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Bruno Crivelari Sanches bcsanches@gmail.com
+*/
+
+#include "PH_Parser.h"
+
+#include "PH_Error.h"
+
+namespace Phobos
+{
+	#define IS_NUMBER(X) (((X >= '0') && (X <= '9')) || (X == '.'))
+
+	#define IS_ID_START(X) (((X >= 'a') && (X <= 'z')) || ((X >= 'A') && (X <= 'Z')) || (X == '_'))
+	#define IS_ID(X) (IS_NUMBER(X) || IS_ID_START(X) || (X == '-'))
+	#define IS_NUMBER_START(X) ((X == '-') || IS_NUMBER(X))
+
+	Parser_c::Parser_c(void):
+		fLookAhead(false),
+		pclStream(NULL),
+		fTokenAhead(false)
+	{
+	}
+
+	Parser_c::~Parser_c(void)
+	{
+
+	}
+
+	void Parser_c::SetStream(std::istream *stream)
+	{
+		pclStream = stream;
+	}
+
+	void Parser_c::SetLookAhead(Char_t ch)
+	{
+		chLookAhead = ch;
+		fLookAhead = true;
+	}
+
+	bool Parser_c::GetNextChar(Char_t &out)
+	{
+		PH_ASSERT_VALID(this);
+		PH_ASSERT_VALID(pclStream);
+
+		if(fLookAhead)
+		{
+			fLookAhead = false;
+			
+			out = chLookAhead;
+
+			return true;
+		}
+		else
+		{
+			(*pclStream)>>out;
+
+			return pclStream->good();
+		}
+	}
+
+	#define RETURN_TOKEN(X)	do{if(out != NULL) out->assign(strToken);eTokenType=X;return(X);}while(0);
+
+	ParserTokens_e Parser_c::GetToken(String_c *out)
+	{
+		Char_t ch;
+
+		PH_ASSERT_VALID(pclStream);
+		PH_ASSERT_VALID(this);
+
+		if(fTokenAhead)
+		{
+			fTokenAhead = false;
+
+			RETURN_TOKEN(eTokenType);
+		}
+
+		strToken.clear();
+
+		bool e = this->GetNextChar(ch);
+		if(e != true)
+			RETURN_TOKEN(TOKEN_EOF);
+
+		do
+		{	
+			switch(ch)
+			{
+				case '\n':
+				case '\t':
+				case '\r':
+				case ' ':
+					break;
+				
+				case '{':
+					strToken+=ch;
+					RETURN_TOKEN(TOKEN_OPEN_BRACE);
+					break;
+
+				case '}':
+					strToken += ch;
+					RETURN_TOKEN(TOKEN_CLOSE_BRACE);
+					break;
+
+				case '(':
+					strToken += ch;
+					RETURN_TOKEN(TOKEN_OPEN_PAREN);
+					break;
+
+				case ')':
+					strToken += ch;
+					RETURN_TOKEN(TOKEN_CLOSE_PAREN);
+					break;
+
+				case '/':
+				(*pclStream)>>ch;
+				e = pclStream->good();
+
+					if(e != true)
+						RETURN_TOKEN(TOKEN_ERROR);
+					if(ch != '/')
+						RETURN_TOKEN(TOKEN_ERROR);
+
+					do
+					{
+						(*pclStream)>>ch;
+						e = pclStream->good();
+						if(e != true)
+							RETURN_TOKEN(TOKEN_EOF);
+					} while(ch != '\n');		
+					break;
+
+				case '\"':
+					do
+					{
+						(*pclStream)>>ch;
+						e = pclStream->good();
+						if(e != true)
+							RETURN_TOKEN(TOKEN_ERROR);
+
+						if(ch == '\"')
+							RETURN_TOKEN(TOKEN_STRING);
+
+						strToken += ch;
+					} while(1);
+					break;
+
+				default:
+					if(IS_NUMBER_START(ch))
+					{
+						bool gotDot = false;
+						do
+						{
+							if(ch == '.')
+							{
+								if(gotDot)
+									RETURN_TOKEN(TOKEN_ERROR);
+								gotDot = true;
+							}
+
+							strToken += ch;												
+
+							(*pclStream)>>ch;
+
+							if(pclStream->good() != true)
+							{
+								//this is an expected EOF
+								RETURN_TOKEN(TOKEN_NUMBER);
+							}
+
+						} while(IS_NUMBER(ch));
+
+						this->SetLookAhead(ch);
+						RETURN_TOKEN(TOKEN_NUMBER);
+					}
+					else if(IS_ID_START(ch))
+					{
+						do
+						{
+							strToken += ch;
+
+							(*pclStream)>>ch;
+							
+							e = pclStream->good();
+
+							if(e != true)
+							{
+								//This is a expected EOF
+								RETURN_TOKEN(TOKEN_ID);
+							}
+			
+						} while(IS_ID(ch));
+
+						this->SetLookAhead(ch);
+						RETURN_TOKEN(TOKEN_ID);
+					}
+				
+			}
+			(*pclStream)>>ch;
+
+			if(pclStream->good() != true)
+				RETURN_TOKEN(TOKEN_EOF);
+
+		}while(1);
+
+		//shut up compiler
+		RETURN_TOKEN(TOKEN_ERROR);
+	}
+
+
+	const Char_t *Parser_c::GetTokenTypeName(ParserTokens_e token)
+	{
+		struct TokenName_s
+		{
+			const Char_t		*pchName;
+			ParserTokens_e	eToken;
+		};
+
+		static TokenName_s stTokens[] =
+		{
+			{"number",				TOKEN_NUMBER},
+			{"string",				TOKEN_STRING},
+			{"id",					TOKEN_ID},
+			{"open brace",			TOKEN_OPEN_BRACE},
+			{"close brace",			TOKEN_CLOSE_BRACE},
+			{"open parenthesis",	TOKEN_OPEN_PAREN},
+			{"close parenthesis",	TOKEN_CLOSE_PAREN}, 		
+			{"EOF",					TOKEN_EOF},
+			{"parse error",			TOKEN_ERROR},
+			{NULL,					TOKEN_ERROR}
+		};
+
+		UInt_t i = 0;
+		for(;stTokens[i].pchName; ++i)
+		{
+			if(stTokens[i].eToken == token)
+				return(stTokens[i].pchName);
+		}
+
+		return("INVALID TOKEN");
+	}
+}
