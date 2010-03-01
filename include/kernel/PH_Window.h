@@ -40,6 +40,9 @@ namespace Phobos
 	{
 		public:
 			static WindowPtr_t Create(const String_c &name);
+
+		protected:
+			Window_c(const String_c &name);
 	};
 
 };

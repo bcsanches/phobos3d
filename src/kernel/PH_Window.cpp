@@ -24,3 +24,11 @@ Phobos 3d
 */
 
 #include "PH_Window.h"
+
+namespace Phobos
+{
+	Window_c::Window_c(const String_c &name):
+		Node_c(name)
+	{
+	}
+}
