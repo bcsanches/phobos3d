@@ -34,11 +34,12 @@ Phobos 3d
 namespace Phobos
 {
 	enum ExceptionTypes_e
-	{
-		ERROR_OBJECT_NOT_FOUND,
-		ERROR_OBJECT_ALREADY_EXISTS,
-		ERROR_INVALID_PARAMETER,
-		ERROR_INVALID_OPERATION
+	{		
+		OBJECT_NOT_FOUND_EXCEPTION,
+		OBJECT_ALREADY_EXISTS_EXCEPTION,
+		INVALID_PARAMETER_EXCEPTION,
+		INVALID_OPERATION_EXCEPTION,
+		NATIVE_API_FAILED_EXCEPTION
 	};
 
 	class PH_KERNEL_API Exception_c: public std::exception
@@ -106,6 +107,15 @@ namespace Phobos
 				}
 	};
 
+	class PH_KERNEL_API NativeAPIFailedException_c: public Exception_c
+	{
+		public:
+			inline NativeAPIFailedException_c(int errorCode, const String_c &moduleName, const String_c &extraInfo, const char *fileName, unsigned int line):
+				Exception_c(errorCode, "NativeAPIFailedException", moduleName, extraInfo, fileName, line)
+				{
+				}
+	};
+
 	/**
 		Template for creating a unique type for implementing a static factory
 	*/
@@ -122,7 +132,7 @@ namespace Phobos
 	{
 		public:
 			static ObjectNotFoundException_c Create(
-				ExceptionErrorType_s<ERROR_OBJECT_NOT_FOUND> code, 
+				ExceptionErrorType_s<OBJECT_NOT_FOUND_EXCEPTION> code, 
 				const String_c &moduleName, 
 				const String_c& extraInfo, 
 				const char* file, long line)
@@ -131,7 +141,7 @@ namespace Phobos
 			}
 
 			static ObjectAlreadyExistsException_c Create(
-				ExceptionErrorType_s<ERROR_OBJECT_ALREADY_EXISTS> code, 
+				ExceptionErrorType_s<OBJECT_ALREADY_EXISTS_EXCEPTION> code, 
 				const String_c &moduleName, 
 				const String_c& extraInfo, 
 				const char* file, long line)
@@ -140,7 +150,7 @@ namespace Phobos
 			}
 
 			static InvalidParameterException_c Create(
-				ExceptionErrorType_s<ERROR_INVALID_PARAMETER> code, 
+				ExceptionErrorType_s<INVALID_PARAMETER_EXCEPTION> code, 
 				const String_c &moduleName, 
 				const String_c& extraInfo, 
 				const char* file, long line)
@@ -149,12 +159,21 @@ namespace Phobos
 			}
 
 			static InvalidOperationException_c Create(
-				ExceptionErrorType_s<ERROR_INVALID_OPERATION> code, 
+				ExceptionErrorType_s<INVALID_OPERATION_EXCEPTION> code, 
 				const String_c &moduleName, 
 				const String_c& extraInfo, 
 				const char* file, long line)
 			{
 				return InvalidOperationException_c(code.error, moduleName, extraInfo, file, line);
+			}
+
+			static NativeAPIFailedException_c Create(
+				ExceptionErrorType_s<NATIVE_API_FAILED_EXCEPTION> code, 
+				const String_c &moduleName, 
+				const String_c& extraInfo, 
+				const char* file, long line)
+			{
+				return NativeAPIFailedException_c(code.error, moduleName, extraInfo, file, line);
 			}
 	};
 }

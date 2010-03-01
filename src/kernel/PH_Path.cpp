@@ -157,7 +157,7 @@ namespace Phobos
 		{
 			std::stringstream stream;
 			stream << "Path " << path.strPath << " must be relative for concanetating to " << strPath;
-			PH_RAISE(ERROR_INVALID_PARAMETER, "Path_c::Add", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Path_c::Add", stream.str());
 		}
 			
 		if(!strPath.empty() && !this->IsOnlyRoot())

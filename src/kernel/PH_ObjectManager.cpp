@@ -82,7 +82,7 @@ namespace Phobos
 			std::stringstream stream;
 
 			stream << "Invalid path: " << path;
-			PH_RAISE(ERROR_INVALID_PARAMETER, "ObjectManager_c::LookupObject", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "ObjectManager_c::LookupObject", stream.str());
 		}
 
 		NodePtr_t currentNode = ipRoot;

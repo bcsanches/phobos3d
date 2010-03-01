@@ -66,13 +66,13 @@ namespace Phobos
 		{
 			std::stringstream stream;
 			stream << "Node " << node->GetName() << " is already a child of " << node->pclParent->GetName() << ", unregister if first before adding it to " << this->GetName();
-			PH_RAISE(ERROR_INVALID_PARAMETER, "[Node_c::AddChild]", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::AddChild]", stream.str());
 		} 
 		else if(mapNodes.find(node->GetName()) != mapNodes.end())
 		{
 			std::stringstream stream;
 			stream << "Node " << node->GetName() << " already exists on node " << this->GetName();
-			PH_RAISE(ERROR_OBJECT_ALREADY_EXISTS, "[Node_c::AddChild]", stream.str());
+			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[Node_c::AddChild]", stream.str());
 		}
 
 		mapNodes.insert(std::make_pair(node->GetName(), node));
@@ -85,7 +85,7 @@ namespace Phobos
 		{
 			std::stringstream stream;
 			stream << "Node " << this->GetName() << " does not have a parent";
-			PH_RAISE(ERROR_INVALID_PARAMETER, "[Node_c::RemoveSelf]", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveSelf]", stream.str());
 		}
 
 		pclParent->RemoveChild(NodePtr_t(this));
@@ -98,14 +98,14 @@ namespace Phobos
 		{
 			std::stringstream stream;
 			stream << "Node " << node->GetName() << " is not registered, cant remove it from " << this->GetName();
-			PH_RAISE(ERROR_INVALID_PARAMETER, "[Node_c::RemoveChild]", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveChild]", stream.str());
 		}
 		//wrong parent?
 		else if(node->pclParent != this)
 		{
 			std::stringstream stream;
 			stream << "Node " << node->GetName() << " is not registered on " << this->GetName() << " it is registered on " << node->pclParent->GetName();
-			PH_RAISE(ERROR_INVALID_PARAMETER, "[Node_c::RemoveChild]", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveChild]", stream.str());
 		}
 				
 		mapNodes.erase(node->GetName());
@@ -119,7 +119,7 @@ namespace Phobos
 		{
 			std::stringstream stream;
 			stream << "Node " << name << " not found on node " << this->GetName();
-			PH_RAISE(ERROR_OBJECT_NOT_FOUND, "[Node_c::GetChild]", stream.str());
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[Node_c::GetChild]", stream.str());
 		}
 
 		return it->second;
