@@ -52,13 +52,9 @@ namespace Phobos
 		NodePtr_t currentNode = ipRoot;
 		for(;;)
 		{
-			NodePtr_t child;
-			try
+			NodePtr_t child = currentNode->TryGetChild(currentFolder);
+			if(!child)
 			{
-				child = currentNode->GetChild(currentFolder);
-			}
-			catch(ObjectNotFoundException_c &)
-			{			
 				//No path, lets create a default one
 				child = Node_c::Create(currentFolder);
 				currentNode->AddChild(child);

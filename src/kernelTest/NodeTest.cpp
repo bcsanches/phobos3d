@@ -96,6 +96,8 @@ BOOST_AUTO_TEST_CASE(node_basic)
 		child->RemoveSelf();
 		child.reset();
 
+		BOOST_REQUIRE(!(ptr->TryGetChild("child2")));
+
 		BOOST_REQUIRE(iAliveNodes_gl == 2);
 	}
 

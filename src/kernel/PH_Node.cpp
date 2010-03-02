@@ -112,17 +112,28 @@ namespace Phobos
 		node->pclParent = NULL;
 	}
 
-	NodePtr_t Node_c::GetChild(const String_c &name) const
+	NodePtr_t Node_c::TryGetChild(const String_c &name) const
 	{
 		NodeMap_t::const_iterator it = mapNodes.find(name);
 		if(it == mapNodes.end())
+		{
+			return NodePtr_t();			
+		}
+
+		return it->second;
+	}
+
+	NodePtr_t Node_c::GetChild(const String_c &name) const
+	{
+		NodePtr_t ptr = this->TryGetChild(name);
+		if(!ptr)
 		{
 			std::stringstream stream;
 			stream << "Node " << name << " not found on node " << this->GetName();
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[Node_c::GetChild]", stream.str());
 		}
-
-		return it->second;
+		
+		return ptr;
 	}
 
 	size_t Node_c::GetNumChildren() const
