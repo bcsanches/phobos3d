@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\include\kernel;..\..\include\kernelTest"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -93,7 +93,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -115,7 +115,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_MSVC"
+				AdditionalIncludeDirectories="..\..\include\kernel;..\..\include\kernelTest"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_MSVC;PH_WIN32;PH_RELEASE;PH_IGNORE_ASSERT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"

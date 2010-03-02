@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\include\kernel"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_KERNEL_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -92,10 +92,10 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -117,7 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;KERNEL_EXPORTS;PH_MSVC"
+				AdditionalIncludeDirectories="..\..\include\kernel"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_KERNEL_EXPORTS;PH_MSVC;PH_WIN32;PH_IGNORE_ASSERT;PH_RELEASE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -140,6 +141,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -169,24 +171,80 @@
 	</References>
 	<Files>
 		<Filter
-			Name="w32"
+			Name="eventManager"
 			>
 			<File
-				RelativePath="..\..\src\kernel\W32\PH_EventManagerW32.cpp"
+				RelativePath="..\..\include\kernel\PH_EventListener.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\W32\PH_EventManagerW32.h"
+				RelativePath="..\..\include\kernel\PH_EventListenerFwd.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\kernel\W32\PH_WindowW32.cpp"
+				RelativePath="..\..\src\kernel\PH_EventManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\W32\PH_WindowW32.h"
+				RelativePath="..\..\include\kernel\PH_EventManager.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_EventManagerFwd.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="object"
+			>
+			<File
+				RelativePath="..\..\src\kernel\PH_Object.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_Object.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\kernel\PH_ObjectManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_ObjectManager.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="window"
+			>
+			<File
+				RelativePath="..\..\src\kernel\PH_Window.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_Window.h"
+				>
+			</File>
+			<Filter
+				Name="w32"
+				>
+				<File
+					RelativePath="..\..\src\kernel\W32\PH_EventManagerW32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\kernel\W32\PH_EventManagerW32.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\kernel\W32\PH_WindowW32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\kernel\W32\PH_WindowW32.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\..\include\kernel\PH_Defs.h"
@@ -194,26 +252,6 @@
 		</File>
 		<File
 			RelativePath="..\..\include\kernel\PH_Error.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_EventListener.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_EventListenerFwd.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\src\kernel\PH_EventManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_EventManager.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_EventManagerFwd.h"
 			>
 		</File>
 		<File
@@ -269,22 +307,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Object.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_Object.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\src\kernel\PH_ObjectManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_ObjectManager.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\src\kernel\PH_Parser.cpp"
 			>
 		</File>
@@ -326,14 +348,6 @@
 		</File>
 		<File
 			RelativePath="..\..\include\kernel\PH_Types.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\src\kernel\PH_Window.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\include\kernel\PH_Window.h"
 			>
 		</File>
 	</Files>
