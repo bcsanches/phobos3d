@@ -38,11 +38,23 @@ BOOST_AUTO_TEST_CASE(parser_test)
 {
 	stringstream str;
 
-	str << "123";
+	str << "123 abc \"string token\"";
+	str << endl << "new line" << endl;
+	str << "{}()//comment"<< endl;
+	str << "end" << endl;
 
 	Parser_c parser;
-
 	parser.SetStream(&str);
+
+	String_c token;
+	BOOST_REQUIRE(parser.GetToken(&token)==TOKEN_NUMBER);
+	BOOST_REQUIRE(token.compare("123") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token)==TOKEN_ID);
+	BOOST_REQUIRE(token.compare("abc") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token)==TOKEN_STRING);
+	BOOST_REQUIRE(token.compare("string token") == 0);
 	
 	cout<<parser.GetTokenTypeName(parser.GetToken(0))<<endl;
 
