@@ -191,7 +191,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ParserTest.cpp"
+			RelativePath="..\..\src\kernelTest\ParserTest.cpp"
 			>
 		</File>
 		<File
