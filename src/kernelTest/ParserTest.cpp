@@ -38,24 +38,64 @@ BOOST_AUTO_TEST_CASE(parser_test)
 {
 	stringstream str;
 
-	str << "123 abc \"string token\"";
+	str << noskipws << "123 abc \"string token\"";
 	str << endl << "new line" << endl;
 	str << "{}()//comment"<< endl;
+	str << "bla" << endl << "bli" << endl;
 	str << "end" << endl;
+	str << ".25" << endl;
+	str << ".." << endl;
+	str << "/bla" << endl << "id" << endl;
 
 	Parser_c parser;
 	parser.SetStream(&str);
 
 	String_c token;
-	BOOST_REQUIRE(parser.GetToken(&token)==TOKEN_NUMBER);
+	
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
 	BOOST_REQUIRE(token.compare("123") == 0);
 
-	BOOST_REQUIRE(parser.GetToken(&token)==TOKEN_ID);
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
 	BOOST_REQUIRE(token.compare("abc") == 0);
 
-	BOOST_REQUIRE(parser.GetToken(&token)==TOKEN_STRING);
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_STRING);
 	BOOST_REQUIRE(token.compare("string token") == 0);
-	
-	cout<<parser.GetTokenTypeName(parser.GetToken(0))<<endl;
 
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("new") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("line") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_OPEN_BRACE);
+	BOOST_REQUIRE(token.compare("{") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_CLOSE_BRACE);
+	BOOST_REQUIRE(token.compare("}") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_OPEN_PAREN);
+	BOOST_REQUIRE(token.compare("(") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_CLOSE_PAREN);
+	BOOST_REQUIRE(token.compare(")") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("bla") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("bli") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("end") == 0);
+	
+	//
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
+	BOOST_REQUIRE(token.compare(".25") == 0);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ERROR);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ERROR);
+
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("id") == 0);
 }

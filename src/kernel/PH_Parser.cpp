@@ -26,6 +26,7 @@ Phobos 3d
 #include "PH_Parser.h"
 
 #include "PH_Error.h"
+#include <iostream>
 
 namespace Phobos
 {
@@ -132,14 +133,16 @@ namespace Phobos
 					break;
 
 				case '/':
-				(*pclStream)>>ch;
-				e = pclStream->good();
+					//-------------------------
+					(*pclStream)>>ch;					
 
-					if(e != true)
+					if((!(pclStream->good())) || (ch != '/'))
+					{
+						this->SetLookAhead(ch);
 						RETURN_TOKEN(TOKEN_ERROR);
-					if(ch != '/')
-						RETURN_TOKEN(TOKEN_ERROR);
+					}
 
+					//-----------------------
 					do
 					{
 						(*pclStream)>>ch;
