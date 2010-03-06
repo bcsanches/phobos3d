@@ -51,6 +51,9 @@ namespace Phobos
 	void Parser_c::SetStream(std::istream *stream)
 	{
 		pclStream = stream;
+
+		if(stream != NULL)
+			(*stream) >> std::noskipws;
 	}
 
 	void Parser_c::SetLookAhead(Char_t ch)

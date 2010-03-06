@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(parser_test)
 {
 	stringstream str;
 
-	str << noskipws << "123 abc \"string token\"";
+	str << "123 abc \"string token\"";
 	str << endl << "new line" << endl;
 	str << "{}()//comment"<< endl;
 	str << "bla" << endl << "bli" << endl;
@@ -92,10 +92,17 @@ BOOST_AUTO_TEST_CASE(parser_test)
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
 	BOOST_REQUIRE(token.compare(".25") == 0);
 
+	//.. line
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ERROR);
 
+	//bugged comment /bla
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ERROR);
 
+	//bla
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
+	BOOST_REQUIRE(token.compare("bla") == 0);
+
+	//id
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
 	BOOST_REQUIRE(token.compare("id") == 0);
 }
