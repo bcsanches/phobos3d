@@ -51,6 +51,29 @@ namespace Phobos
 		}
 	};
 
+	template <typename T>
+	static inline typename T::const_pointer TryGetItem(T &list, const String_c &name)
+	{
+		T::const_iterator it = list.find(name, ContextItemComp_s());
+		if(it == list.end())
+			return NULL;
+
+		return &(*it);
+	}	
+
+	template <typename T, typename Y>
+	static inline void AddContextItem(T &list, Y &item, const char *objectName, const char *module)
+	{
+		const Y *other = TryGetItem(list, item.GetName());
+		if(other == NULL)
+		{
+			stringstream str;
+			str << objectName << ' ' << item.GetName() << " already exists";
+			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, module, str.str());
+		}
+		list.insert(item);
+	}
+
 	// =====================================================
 	// 
 	// =====================================================
@@ -82,20 +105,12 @@ namespace Phobos
 		this->AddContextCmd(cmdIf);
 
 		this->AddContextVar(varDebug);
-		this->AddContextVar(varRelease);
-	}
+		this->AddContextVar(varRelease);		
+	}	
 
 	void Context_c::AddContextVar(ContextVar_c &var)
 	{
-		ContextVar_c *other = this->TryGetContextVar(var.GetName());
-		if(other != NULL)
-		{
-			stringstream str;
-			str << "Variable " << var.GetName() << " already exists";
-			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "Context_c::AddContextVar", str.str());
-		}
-
-		setVariables.insert(var);
+		AddContextItem(setVariables, var, "Variable", "Context_c::AddContextVar");		
 	}
 
 	void Context_c::RemoveContextVar(ContextVar_c &var)
@@ -125,11 +140,7 @@ namespace Phobos
 
 	const ContextVar_c *Context_c::TryGetContextVar(const String_c &name) const
 	{
-		ContextVarSet_t::const_iterator it = setVariables.find(name, ContextItemComp_s());
-		if(it == setVariables.end())
-			return NULL;
-
-		return &(*it);
+		return TryGetItem(setVariables, name);
 	}
 
 	ContextVar_c *Context_c::TryGetContextVar(const String_c &name)
@@ -139,11 +150,7 @@ namespace Phobos
 			
 	const ContextCmd_c *Context_c::TryGetContextCmd(const String_c &name) const
 	{
-		ContextCmdSet_t::const_iterator it = setCommands.find(name, ContextItemComp_s());
-		if(it == setCommands.end())
-			return NULL;
-
-		return &(*it);
+		return TryGetItem(setCommands, name);		
 	}
 
 	ContextCmd_c *Context_c::TryGetContextCmd(const String_c &name)
@@ -153,14 +160,7 @@ namespace Phobos
 
 	void Context_c::AddContextCmd(ContextCmd_c &cmd)
 	{
-		ContextCmd_c *other = this->TryGetContextCmd(cmd.GetName());
-		if(other == NULL)
-		{
-			stringstream str;
-			str << "Command " << cmd.GetName() << " already exists";
-			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "Context_c::AddContextCmd", str.str());
-		}
-		setCommands.insert(cmd);
+		AddContextItem(setCommands, cmd, "Command", "Context_c::AddContextCmd");		
 	}
 
 	void Context_c::RemoveContextCmd(ContextCmd_c &cmd)
