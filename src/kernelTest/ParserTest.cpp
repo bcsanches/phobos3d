@@ -28,7 +28,6 @@ Phobos 3d
 #include "PH_Parser.h"
 
 #include <sstream>
-#include <iostream>
 
 using namespace Phobos;
 
