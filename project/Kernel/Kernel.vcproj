@@ -171,6 +171,42 @@
 	</References>
 	<Files>
 		<Filter
+			Name="context"
+			>
+			<File
+				RelativePath="..\..\src\kernel\PH_Context.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_Context.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\kernel\PH_ContextCmd.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_ContextCmd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\kernel\PH_ContextItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_ContextItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\kernel\PH_ContextVar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\kernel\PH_ContextVar.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="eventManager"
 			>
 			<File
