@@ -34,8 +34,9 @@ Phobos 3d
 
 namespace Phobos
 {
+	class Context_c;
 	typedef std::vector<String_c> StringVector_t;
-	typedef boost::function1<void, const StringVector_t &> CmdProc_t;
+	typedef boost::function2<void, const StringVector_t &, Context_c &> CmdProc_t;
 
 	class PH_KERNEL_API ContextCmd_c: public ContextItem_c
 	{	
@@ -46,7 +47,7 @@ namespace Phobos
 			inline ContextCmd_c(const String_c &name, CmdProc_t proc = CmdProc_t());		
 			inline ContextCmd_c(const ContextCmd_c &other);
 
-			inline void Execute(const StringVector_t &args);
+			inline void Execute(const StringVector_t &args, Context_c &context);
 
 			inline void SetProc(CmdProc_t proc);
 
@@ -80,9 +81,9 @@ namespace Phobos
 		pfnProc = proc;
 	}
 
-	inline void ContextCmd_c::Execute(const StringVector_t &args)
+	inline void ContextCmd_c::Execute(const StringVector_t &args, Context_c &context)
 	{	
-		pfnProc(args);
+		pfnProc(args, context);
 	}
 }
 

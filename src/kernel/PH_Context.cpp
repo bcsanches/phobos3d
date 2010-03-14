@@ -24,10 +24,9 @@ Phobos 3d
 */
 
 #include "PH_Context.h"
+#include "PH_ContextUtils.h"
 
 #include <sstream>
-
-#include <boost/bind.hpp>
 
 #include "PH_Error.h"
 #include "PH_Exception.h"
@@ -65,7 +64,7 @@ namespace Phobos
 	static inline void AddContextItem(T &list, Y &item, const char *objectName, const char *module)
 	{
 		const Y *other = TryGetItem(list, item.GetName());
-		if(other == NULL)
+		if(other != NULL)
 		{
 			stringstream str;
 			str << objectName << ' ' << item.GetName() << " already exists";
@@ -92,11 +91,11 @@ namespace Phobos
 		varRelease("dvRelease", "true")
 	#endif
 	{
-		cmdEcho.SetProc(boost::bind(&Context_c::CmdEcho, this, _1));
-		cmdListCmds.SetProc(boost::bind(&Context_c::CmdListCmds, this, _1));
-		cmdListVars.SetProc(boost::bind(&Context_c::CmdListVars, this, _1));
-		cmdSet.SetProc(boost::bind(&Context_c::CmdSet, this, _1));
-		cmdIf.SetProc(boost::bind(&Context_c::CmdIf, this, _1));
+		cmdEcho.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdEcho, this));
+		cmdListCmds.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdListCmds, this));
+		cmdListVars.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdListVars, this));
+		cmdSet.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdSet, this));
+		cmdIf.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdIf, this));
 
 		this->AddContextCmd(cmdEcho);
 		this->AddContextCmd(cmdListCmds);
@@ -393,7 +392,7 @@ namespace Phobos
 			Kernel_c::GetInstance().LogMessage(stream.str());			
 		}
 
-		return(cmd->Execute(args));
+		return(cmd->Execute(args, *this));
 	}
 
 	/**
@@ -439,7 +438,7 @@ namespace Phobos
 	// COMMANDS
 	// =====================================================
 
-	void Context_c::CmdEcho(const StringVector_t &args)
+	void Context_c::CmdEcho(const StringVector_t &args, Context_c &)
 	{	
 		size_t sz = args.size();
 
@@ -465,21 +464,21 @@ namespace Phobos
 		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
-	void Context_c::CmdListCmds(const StringVector_t &args)
+	void Context_c::CmdListCmds(const StringVector_t &args, Context_c &)
 	{
 		//lstCommands.ForEachItem(PrintNodesNameProc);	
 
 		//return(IM_SUCCESS);
 	}
 
-	void Context_c::CmdListVars(const StringVector_t &args)
+	void Context_c::CmdListVars(const StringVector_t &args, Context_c &)
 	{	
 		//lstVariables.ForEachItem(PrintNodesNameProc);
 
 		//return(IM_SUCCESS);
 	}
 
-	void Context_c::CmdSet(const StringVector_t &args)
+	void Context_c::CmdSet(const StringVector_t &args, Context_c &)
 	{
 		stringstream stream;
 		if(args.size() < 3)
@@ -496,6 +495,8 @@ namespace Phobos
 				try
 				{
 					var->SetValue(args[2]);
+
+					return;
 				}
 				catch(Exception_c &e)
 				{
@@ -512,7 +513,7 @@ namespace Phobos
 	}
 
 
-	void Context_c::CmdIf(const StringVector_t &args)
+	void Context_c::CmdIf(const StringVector_t &args, Context_c &)
 	{
 		size_t sz = args.size();
 		

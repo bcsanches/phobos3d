@@ -101,11 +101,11 @@ namespace Phobos
 			// =====================================================
 			// STATIC PRIVATE METHODS
 			// =====================================================						
-			void CmdEcho(const StringVector_t &args);
-			void CmdListCmds(const StringVector_t &args);
-			void CmdListVars(const StringVector_t &args);
-			void CmdSet(const StringVector_t &args);
-			void CmdIf(const StringVector_t &args);
+			void CmdEcho(const StringVector_t &args, Context_c &);
+			void CmdListCmds(const StringVector_t &args, Context_c &);
+			void CmdListVars(const StringVector_t &args, Context_c &);
+			void CmdSet(const StringVector_t &args, Context_c &);
+			void CmdIf(const StringVector_t &args, Context_c &);
 
 			ContextCmd_c cmdEcho;
 			ContextCmd_c cmdListCmds;
