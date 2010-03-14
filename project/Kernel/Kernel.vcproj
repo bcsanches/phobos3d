@@ -198,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\kernel\PH_ContextUtils.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\kernel\PH_ContextVar.cpp"
 				>
 			</File>
