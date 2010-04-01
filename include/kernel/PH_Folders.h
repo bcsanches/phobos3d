@@ -26,11 +26,13 @@ Phobos 3d
 #ifndef PH_FOLDERS_H
 #define PH_FOLDERS_H
 
+#include <PH_KernelAPI.h>
 #include <PH_String.h>
 
+#define PH_SYSTEM_FOLDER "sys/"
+
 namespace Phobos
-{
-	extern const String_c SYSTEM_FOLDER;
+{	
 }
 
 #endif

@@ -40,8 +40,8 @@ namespace Phobos
 		typedef unsigned __int64	UInt64_t;		//u64
 		typedef unsigned int		UInt_t;			//platform dependent type, never store or transmit (u)
   		typedef int					SInt_t;			//platform dependent type, never store or transmit (s)
-  		typedef float				Float32_t;		//f32
-  		typedef double				Float64_t;		//f64
+  		typedef float				Float32_t;		//fp32
+  		typedef double				Float64_t;		//pf64
   		typedef Float32_t			Float_t;			//platform dependent type, never store or transmit (f)
 		typedef void *				Handler_t;		//platform dependent type, never store or transmit (h)
 		typedef bool				Bool_t;			//b

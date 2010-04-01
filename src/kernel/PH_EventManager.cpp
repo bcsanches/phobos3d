@@ -41,11 +41,11 @@ namespace Phobos
 
 	EventManagerPtr_t EventManager_c::CreateInstance(const String_c &name)
 	{
-		PH_ASSERT_MSG(!ipInstance_gl, "[EventManager_c::CreateInstance]: Instance already exists");		
+		PH_ASSERT_MSG(!ipInstance_gl, "[EventManager_c::CreateInstance]: Instance already exists");
 
-		ipInstance_gl = EventManager_c::CreateInstanceImpl(name);		
+		ipInstance_gl = EventManager_c::CreateInstanceImpl(name);
 
-		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(SYSTEM_FOLDER));
+		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
 
 		return ipInstance_gl;
 	}

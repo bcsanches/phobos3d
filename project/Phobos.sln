@@ -8,6 +8,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KernelTest", "KernelTest\Ke
 		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A} = {C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_EngineMain", "PH_EngineMain\PH_EngineMain.vcproj", "{1DCEF06E-BB6B-4B75-B82E-AFEE638EB5F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AF1F5305-150B-4084-9FBA-8E72A37D42BD} = {AF1F5305-150B-4084-9FBA-8E72A37D42BD}
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A} = {C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_EngineCore", "PH_EngineCore\PH_EngineCore.vcproj", "{AF1F5305-150B-4084-9FBA-8E72A37D42BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A} = {C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -22,6 +33,14 @@ Global
 		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Debug|Win32.Build.0 = Debug|Win32
 		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Release|Win32.ActiveCfg = Release|Win32
 		{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}.Release|Win32.Build.0 = Release|Win32
+		{1DCEF06E-BB6B-4B75-B82E-AFEE638EB5F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1DCEF06E-BB6B-4B75-B82E-AFEE638EB5F0}.Debug|Win32.Build.0 = Debug|Win32
+		{1DCEF06E-BB6B-4B75-B82E-AFEE638EB5F0}.Release|Win32.ActiveCfg = Release|Win32
+		{1DCEF06E-BB6B-4B75-B82E-AFEE638EB5F0}.Release|Win32.Build.0 = Release|Win32
+		{AF1F5305-150B-4084-9FBA-8E72A37D42BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AF1F5305-150B-4084-9FBA-8E72A37D42BD}.Debug|Win32.Build.0 = Debug|Win32
+		{AF1F5305-150B-4084-9FBA-8E72A37D42BD}.Release|Win32.ActiveCfg = Release|Win32
+		{AF1F5305-150B-4084-9FBA-8E72A37D42BD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

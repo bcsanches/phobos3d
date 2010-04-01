@@ -335,6 +335,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\include\kernel\PH_MemoryFunctions.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\src\kernel\PH_Node.cpp"
 			>
 		</File>

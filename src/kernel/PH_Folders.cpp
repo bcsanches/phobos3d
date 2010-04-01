@@ -27,5 +27,5 @@ Phobos 3d
 
 namespace Phobos
 {
-	const String_c SYSTEM_FOLDER("/sys");
+	
 }
