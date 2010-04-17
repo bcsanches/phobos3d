@@ -176,6 +176,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\src\engineCore\PH_CoreModule.cpp"
+			>
+		</File>
+		<File
 			RelativePath="..\..\include\engineCore\PH_CoreModule.h"
 			>
 		</File>
