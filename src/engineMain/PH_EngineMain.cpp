@@ -1,5 +1,7 @@
 #include <sstream>
 
+#include <boost/thread.hpp>
+
 #include <OgreTimer.h>
 
 #include <PH_ContextVar.h>
@@ -11,17 +13,19 @@
 
 namespace Phobos
 {
-	class SystemInfo_c
+	class EngineMain_c
 	{
 		public:
-			inline SystemInfo_c(void):
-				varFixedTime("dvFixedTime", "0"),
-				varEngineFPS("dvEngineFPS", "60"),
-				varMinFrameTime("dvMinFrameTime", "0.01"),
-				fStop(false)
-			{
-			}			
+			EngineMain_c();
+			~EngineMain_c();
 
+			inline Float_t ConvertMSecToSeconds(UInt_t msec);
+			inline Float_t GetUpdateTime(void);
+			inline Float_t GetMinFrameTime(void);
+
+			void MainLoop(void);
+
+		private:
 			ContextVar_c	varFixedTime;
 			ContextVar_c	varEngineFPS;
 			ContextVar_c	varMinFrameTime;
@@ -29,28 +33,30 @@ namespace Phobos
 			bool			fStop;
 	};
 
-	static SystemInfo_c clSystemInfo_gl;
-
-	static void InitPhobos()
+	EngineMain_c::EngineMain_c():
+		varFixedTime("dvFixedTime", "0"),
+		varEngineFPS("dvEngineFPS", "60"),
+		varMinFrameTime("dvMinFrameTime", "0.01"),
+		fStop(false)
 	{
 		Kernel_c::CreateInstance("phobos.log");
 		Core_c::CreateInstance();
 	}
 
-	static void FinalizePhobos()
+	EngineMain_c::~EngineMain_c()
 	{
 		Core_c::ReleaseInstance();
 		Kernel_c::DestroyInstance();
 	}
 
-	inline Float_t ConvertMSecToSeconds(UInt_t msec)
+	inline Float_t EngineMain_c::ConvertMSecToSeconds(UInt_t msec)
 	{
 		return((Float_t) msec / 1000.0f);
 	}
 
-	static inline Float_t GetUpdateTime(void)
+	inline Float_t EngineMain_c::GetUpdateTime(void)
 	{
-		const Float_t updateTime = clSystemInfo_gl.varEngineFPS.GetFloat();
+		const Float_t updateTime = varEngineFPS.GetFloat();
 
 		if(updateTime > 0)
 			return(1.0f / updateTime);
@@ -60,15 +66,15 @@ namespace Phobos
 			stringstream stream;
 			stream << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0" << endl;
 			Kernel_c::GetInstance().LogMessage(stream.str());
-			clSystemInfo_gl.varEngineFPS.SetValue("60");
+			varEngineFPS.SetValue("60");
 
 			return(1.0f / UPDATE_TIME);
 		}
 	}
 
-	static inline Float_t GetMinFrameTime(void)
+	inline Float_t EngineMain_c::GetMinFrameTime(void)
 	{
-		Float_t minFrameTime = clSystemInfo_gl.varMinFrameTime.GetFloat();
+		Float_t minFrameTime = varMinFrameTime.GetFloat();
 
 		if(minFrameTime > 0.05)
 		{
@@ -76,7 +82,7 @@ namespace Phobos
 			stringstream stream;
 			stream << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05" << endl;
 			Kernel_c::GetInstance().LogMessage(stream.str());			
-			clSystemInfo_gl.varMinFrameTime.SetValue("0.01");
+			varMinFrameTime.SetValue("0.01");
 
 			minFrameTime = MIN_TIME;
 		}
@@ -89,7 +95,7 @@ namespace Phobos
 		The engine main loop
 
 	*/
-	static void MainLoop(void)
+	void EngineMain_c::MainLoop(void)
 	{
 		Float_t			executionTime = 0;
 		unsigned int	lastTicks;					
@@ -97,16 +103,16 @@ namespace Phobos
 
 		CorePtr_t core = Core_c::GetInstance();					
 
-		lastTicks = clSystemInfo_gl.clTimer.getMilliseconds();
+		lastTicks = clTimer.getMilliseconds();
 		do 
 		{		
 			core->SetFrameRate(updateTime);
 
-			UInt_t ticks = clSystemInfo_gl.clTimer.getMilliseconds();
+			UInt_t ticks = clTimer.getMilliseconds();
 
 			Float_t lastFrameTime = ConvertMSecToSeconds(ticks - lastTicks);
 
-			if(clSystemInfo_gl.varFixedTime.GetBoolean())
+			if(varFixedTime.GetBoolean())
 				lastFrameTime = updateTime;
 			
 			if(lastFrameTime < GetMinFrameTime())
@@ -146,19 +152,15 @@ namespace Phobos
 			//update it after frame
 			updateTime = GetUpdateTime();
 
-		} while(!clSystemInfo_gl.fStop);
+		} while(!fStop);
 	}
 }
 
 int main(int, char **)
 {
-	using namespace Phobos;
+	Phobos::EngineMain_c engine;
 
-	InitPhobos();
-
-	MainLoop();
-
-	FinalizePhobos();
+	engine.MainLoop();	
 
 	return 0;
 }
