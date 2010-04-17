@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\bin"
+			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="0"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include\kernel"
+				AdditionalIncludeDirectories="..\..\..\include\kernel"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_KERNEL_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,7 @@
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="..\..\lib\$(TargetName).lib"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -92,7 +92,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\bin"
+			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="0"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\include\kernel"
+				AdditionalIncludeDirectories="..\..\..\include\kernel"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_KERNEL_EXPORTS;PH_MSVC;PH_WIN32;PH_IGNORE_ASSERT;PH_RELEASE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -141,7 +141,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="..\..\lib\$(TargetName).lib"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -174,39 +174,39 @@
 			Name="context"
 			>
 			<File
-				RelativePath="..\..\src\kernel\PH_Context.cpp"
+				RelativePath="..\..\..\src\kernel\PH_Context.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_Context.h"
+				RelativePath="..\..\..\include\kernel\PH_Context.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\kernel\PH_ContextCmd.cpp"
+				RelativePath="..\..\..\src\kernel\PH_ContextCmd.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_ContextCmd.h"
+				RelativePath="..\..\..\include\kernel\PH_ContextCmd.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\kernel\PH_ContextItem.cpp"
+				RelativePath="..\..\..\src\kernel\PH_ContextItem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_ContextItem.h"
+				RelativePath="..\..\..\include\kernel\PH_ContextItem.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_ContextUtils.h"
+				RelativePath="..\..\..\include\kernel\PH_ContextUtils.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\kernel\PH_ContextVar.cpp"
+				RelativePath="..\..\..\src\kernel\PH_ContextVar.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_ContextVar.h"
+				RelativePath="..\..\..\include\kernel\PH_ContextVar.h"
 				>
 			</File>
 		</Filter>
@@ -214,23 +214,23 @@
 			Name="eventManager"
 			>
 			<File
-				RelativePath="..\..\include\kernel\PH_EventListener.h"
+				RelativePath="..\..\..\include\kernel\PH_EventListener.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_EventListenerFwd.h"
+				RelativePath="..\..\..\include\kernel\PH_EventListenerFwd.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\kernel\PH_EventManager.cpp"
+				RelativePath="..\..\..\src\kernel\PH_EventManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_EventManager.h"
+				RelativePath="..\..\..\include\kernel\PH_EventManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_EventManagerFwd.h"
+				RelativePath="..\..\..\include\kernel\PH_EventManagerFwd.h"
 				>
 			</File>
 		</Filter>
@@ -238,19 +238,19 @@
 			Name="object"
 			>
 			<File
-				RelativePath="..\..\src\kernel\PH_Object.cpp"
+				RelativePath="..\..\..\src\kernel\PH_Object.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_Object.h"
+				RelativePath="..\..\..\include\kernel\PH_Object.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\kernel\PH_ObjectManager.cpp"
+				RelativePath="..\..\..\src\kernel\PH_ObjectManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_ObjectManager.h"
+				RelativePath="..\..\..\include\kernel\PH_ObjectManager.h"
 				>
 			</File>
 		</Filter>
@@ -258,140 +258,140 @@
 			Name="window"
 			>
 			<File
-				RelativePath="..\..\src\kernel\PH_Window.cpp"
+				RelativePath="..\..\..\src\kernel\PH_Window.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\kernel\PH_Window.h"
+				RelativePath="..\..\..\include\kernel\PH_Window.h"
 				>
 			</File>
 			<Filter
 				Name="w32"
 				>
 				<File
-					RelativePath="..\..\src\kernel\W32\PH_EventManagerW32.cpp"
+					RelativePath="..\..\..\src\kernel\W32\PH_EventManagerW32.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\include\kernel\W32\PH_EventManagerW32.h"
+					RelativePath="..\..\..\include\kernel\W32\PH_EventManagerW32.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\kernel\W32\PH_WindowW32.cpp"
+					RelativePath="..\..\..\src\kernel\W32\PH_WindowW32.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\include\kernel\W32\PH_WindowW32.h"
+					RelativePath="..\..\..\include\kernel\W32\PH_WindowW32.h"
 					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath="..\..\include\kernel\PH_Defs.h"
+			RelativePath="..\..\..\include\kernel\PH_Defs.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Error.h"
+			RelativePath="..\..\..\include\kernel\PH_Error.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Exception.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Exception.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Exception.h"
+			RelativePath="..\..\..\include\kernel\PH_Exception.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Folders.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Folders.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Folders.h"
+			RelativePath="..\..\..\include\kernel\PH_Folders.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_InputDefs.h"
+			RelativePath="..\..\..\include\kernel\PH_InputDefs.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Kernel.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Kernel.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Kernel.h"
+			RelativePath="..\..\..\include\kernel\PH_Kernel.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_KernelAPI.h"
+			RelativePath="..\..\..\include\kernel\PH_KernelAPI.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Log.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Log.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Log.h"
+			RelativePath="..\..\..\include\kernel\PH_Log.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_MemoryFunctions.h"
+			RelativePath="..\..\..\include\kernel\PH_MemoryFunctions.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Node.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Node.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Node.h"
+			RelativePath="..\..\..\include\kernel\PH_Node.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_NodeFwd.h"
+			RelativePath="..\..\..\include\kernel\PH_NodeFwd.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Parser.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Parser.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Parser.h"
+			RelativePath="..\..\..\include\kernel\PH_Parser.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_Path.cpp"
+			RelativePath="..\..\..\src\kernel\PH_Path.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Path.h"
+			RelativePath="..\..\..\include\kernel\PH_Path.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_PathFwd.h"
+			RelativePath="..\..\..\include\kernel\PH_PathFwd.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_RefCounter.cpp"
+			RelativePath="..\..\..\src\kernel\PH_RefCounter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_RefCounter.h"
+			RelativePath="..\..\..\include\kernel\PH_RefCounter.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_RefCounterFwd.h"
+			RelativePath="..\..\..\include\kernel\PH_RefCounterFwd.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\kernel\PH_String.cpp"
+			RelativePath="..\..\..\src\kernel\PH_String.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_String.h"
+			RelativePath="..\..\..\include\kernel\PH_String.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\kernel\PH_Types.h"
+			RelativePath="..\..\..\include\kernel\PH_Types.h"
 			>
 		</File>
 	</Files>

@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\bin"
+			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include\engineCore;..\..\include\kernel"
+				AdditionalIncludeDirectories="..\..\..\include\engineCore;..\..\..\include\kernel"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,10 +61,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="..\..\lib\$(TargetName).lib"
+				ImportLibrary="..\..\..\lib\$(TargetName)_d.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -91,7 +92,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -116,7 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_ENGINECORE_EXPORTS"
+				AdditionalIncludeDirectories="..\..\..\include\engineCore;..\..\..\include\kernel"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_ENGINE_CORE_EXPORTS;PH_RELEASE;PH_WIN32;PH_IGNORE_ASSERT;PH_MSVC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -139,6 +141,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -168,31 +171,31 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\engineCore\PH_Core.cpp"
+			RelativePath="..\..\..\src\engineCore\PH_Core.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\engineCore\PH_Core.h"
+			RelativePath="..\..\..\include\engineCore\PH_Core.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\engineCore\PH_CoreModule.cpp"
+			RelativePath="..\..\..\src\engineCore\PH_CoreModule.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\engineCore\PH_CoreModule.h"
+			RelativePath="..\..\..\include\engineCore\PH_CoreModule.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\engineCore\PH_CoreModuleFwd.h"
+			RelativePath="..\..\..\include\engineCore\PH_CoreModuleFwd.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\engineCore\PH_CoreTimer.h"
+			RelativePath="..\..\..\include\engineCore\PH_CoreTimer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\engineCore\PH_EngineCoreAPI.h"
+			RelativePath="..\..\..\include\engineCore\PH_EngineCoreAPI.h"
 			>
 		</File>
 	</Files>

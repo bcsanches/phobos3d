@@ -43,7 +43,7 @@ namespace Phobos
 		STRING_TRIM_BOTH = STRING_TRIM_LEFT | STRING_TRIM_RIGHT
 	};	
 
-	PH_KERNEL_API size_t StringReplaceAll(String_c &str, char search, char replace);
+	PH_KERNEL_API std::size_t StringReplaceAll(String_c &str, char search, char replace);
 	PH_KERNEL_API void StringReplaceAll(String_c &out, const String_c &src, char search, char replace);
 
 	PH_KERNEL_API int StringToInt(const String_c &str);

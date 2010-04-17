@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="PH_EngineMain"
-	ProjectGUID="{1DCEF06E-BB6B-4B75-B82E-AFEE638EB5F0}"
-	RootNamespace="PH_EngineMain"
+	Name="KernelTest"
+	ProjectGUID="{ECD9F6C2-BD5E-47CF-A226-FC93D88EC4F3}"
+	RootNamespace="KernelTest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include\kernel;..\..\include\engineCore"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_CHECK_ASSERT;PH_DEBUG;PH_MSVC"
+				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\kernelTest"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -94,7 +93,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -116,7 +115,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\kernelTest"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_MSVC;PH_WIN32;PH_RELEASE;PH_IGNORE_ASSERT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -168,7 +168,59 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\engineMain\PH_EngineMain.cpp"
+			RelativePath="..\..\..\src\kernelTest\ContextCmdTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\ContextItemTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\ContextTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\ContextVarTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\EventManagerTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\KernelTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\LogTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\NodeTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\ObjectManagerTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\ParserTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\PathTest.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\kernelTest\SimpleLogListener.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernelTest\StringTest.cpp"
 			>
 		</File>
 	</Files>
