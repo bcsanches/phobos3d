@@ -196,4 +196,6 @@ namespace Phobos
 		else
 			return(::DefWindowProc(hwnd, uMsg, wParam, lParam));
 	}
+
+	//fulscreen http://blogs.msdn.com/oldnewthing/archive/2010/04/12/9994016.aspx
 }
