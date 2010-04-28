@@ -29,8 +29,9 @@ Phobos 3d
 #include <string>
 #include <sstream>
 
-#include <PH_KernelAPI.h>
-#include <PH_Types.h>
+#include "PH_Defs.h"
+#include "PH_KernelAPI.h"
+#include "PH_Types.h"
 
 namespace Phobos
 {
