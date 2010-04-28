@@ -23,16 +23,6 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_CORE_MODULE_FWD_H
-#define PH_CORE_MODULE_FWD_H
+#define BOOST_TEST_MODULE EngineCore
+#include <boost/test/unit_test.hpp>
 
-#include <boost/intrusive_ptr.hpp>
-
-namespace Phobos
-{
-	class CoreModule_c;
-
-	typedef boost::intrusive_ptr<CoreModule_c> CoreModulePtr_t;
-}
-
-#endif

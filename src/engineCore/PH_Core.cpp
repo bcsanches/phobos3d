@@ -1,3 +1,28 @@
+/*
+Phobos 3d
+  April 2010
+
+  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+
+  This software is provided 'as-is', without any express or implied
+  warranty. In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Bruno Crivelari Sanches bcsanches@gmail.com
+*/
+
 #include "PH_Core.h"
 
 #include <boost/foreach.hpp>
@@ -56,10 +81,42 @@ namespace Phobos
 
 	void Core_c::Update(Float_t seconds, Float_t delta)
 	{
+		this->UpdateDestroyList();
+		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
+		{
+			if(stSimInfo.stTimers[i].IsPaused())
+				continue;
+
+			stSimInfo.stTimers[i].fpRenderFrameTime = seconds;
+			stSimInfo.stTimers[i].fpTotalRenderFrameTime += seconds;
+			stSimInfo.stTimers[i].fpDelta = delta;
+		}
+
+		this->CallCoreModuleProc(&CoreModule_c::OnUpdate);		
 	}
 
 	void Core_c::FixedUpdate(Float_t seconds)
 	{
+		this->UpdateDestroyList();
+		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
+		{
+			if(stSimInfo.stTimers[i].IsPaused())
+				continue;
+
+			stSimInfo.stTimers[i].fpFrameTime = seconds;
+			stSimInfo.stTimers[i].fpTotalTicks += seconds;
+			++stSimInfo.stTimers[i].uFrameCount;
+		}
+
+		this->CallCoreModuleProc(&CoreModule_c::OnFixedUpdate);		
+	}
+
+	void Core_c::CallCoreModuleProc(CoreModuleProc_t proc)
+	{
+		BOOST_FOREACH(ModuleInfo_s &moduleInfo, vecModules)
+		{			
+			((*moduleInfo.ipModule).*proc)();
+		}
 	}
 
 
@@ -71,28 +128,34 @@ namespace Phobos
 		std::sort(vecModules.begin(), vecModules.end());
 	}
 
-	void Core_c::AddModuleToDestroyList(CoreModulePtr_t module)
+	void Core_c::AddModuleToDestroyList(CoreModule_c &module)
 	{
-		bool found = false;
-		for(ModulesVector_t::iterator it = vecModules.begin(), end = vecModules.end(); it != end; ++it)
-		{		
-			if(it->ipModule == module)
-			{
-				vecModules.erase(it);
-				found = true;
-				break;
-			}
-		}
-
-		if(!found)
+		ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), module);
+		if(it == vecModules.end())
 		{
 			std::stringstream stream;
-			stream << "Module " << module->GetName() << " not found on core list.";
+			stream << "Module " << module.GetName() << " not found on core list.";
 
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Core_c::AddModuleToDestroyList", stream.str());
 		}
+		
+		setModulesToDestroy.insert(it->ipModule);
+	}
 
-		setModulesToDestroy.insert(module);
+	void Core_c::UpdateDestroyList()
+	{
+		BOOST_FOREACH(CoreModulePtr_t ptr, setModulesToDestroy)
+		{
+			ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), ptr);
+
+			PH_ASSERT_MSG(it != vecModules.end(), "Module on removed list is not registered!!!");
+						
+			vecModules.erase(it);
+			this->RemoveChild(ptr);
+			ptr->OnFinalize();
+		}
+
+		setModulesToDestroy.clear();
 	}
 
 	void Core_c::CreateDefaultCmds(Context_c &context)
@@ -112,8 +175,7 @@ namespace Phobos
 
 		if(timer == CORE_SYS_TIMER)
 		{
-			Kernel_c::GetInstance().LogMessage("IM_Core_c::PauseTimer: Cant pause sys timer");
-			return;
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core_c::PauseTimer", "Cant pause sys timer");			
 		}
 
 		stSimInfo.stTimers[timer].Pause();
@@ -196,7 +258,14 @@ namespace Phobos
 		{
 			if(timerName.compare(pauseInfo[i].pstrzName) == 0)
 			{
-				this->ToggleTimerPause(pauseInfo[i].eType);
+				try
+				{
+					this->ToggleTimerPause(pauseInfo[i].eType);
+				}
+				catch(InvalidParameterException_c &)
+				{
+					//simple ignore pause on sys timer
+				}
 
 				break;
 			}
