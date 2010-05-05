@@ -61,7 +61,7 @@ namespace Phobos
 			static Kernel_c &GetInstance(void);
 
 			//destroy the current kernel instance, CreateInstance must be called before using it again
-			static void DestroyInstance(void);		
+			static void ReleaseInstance(void);		
 
 			// =====================================================
 			// LOCAL METHODS

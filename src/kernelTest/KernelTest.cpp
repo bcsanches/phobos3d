@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(kernel_basic)
 
 	BOOST_REQUIRE(exists(LOG_FILE_NAME));
 
-	Kernel_c::DestroyInstance();
+	Kernel_c::ReleaseInstance();
 }
 
 BOOST_AUTO_TEST_CASE(kernel_log_listener)
@@ -67,5 +67,5 @@ BOOST_AUTO_TEST_CASE(kernel_log_listener)
 	kernel.LogMessage("buuuu");
 	BOOST_CHECK(a.oFlag == false);
 	
-	Kernel_c::DestroyInstance();
+	Kernel_c::ReleaseInstance();
 }
