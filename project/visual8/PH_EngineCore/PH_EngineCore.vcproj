@@ -207,6 +207,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\engineCore\PH_EventManagerModule.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_EventManagerModule.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\engineCore\PH_Render.cpp"
 			>
 		</File>
