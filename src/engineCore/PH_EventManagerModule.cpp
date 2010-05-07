@@ -43,7 +43,7 @@ namespace Phobos
 
 	EventManagerModule_c::~EventManagerModule_c()
 	{
-
+		EventManager_c::ReleaseInstance();
 	}
 
 	EventManagerModulePtr_t EventManagerModule_c::CreateInstance()
@@ -59,9 +59,7 @@ namespace Phobos
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
 		
-		ipInstance_gl->RemoveSelf();
-		
-		//ipInstance_gl->reset();
+		ipInstance_gl.reset();
 	}
 
 	EventManagerModulePtr_t EventManagerModule_c::GetInstance()

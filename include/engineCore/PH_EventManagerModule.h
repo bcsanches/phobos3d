@@ -49,14 +49,16 @@ namespace Phobos
 
 		private:
 
-			void OnFixedUpdate(void);
-			
-			EventManagerPtr_t ipEventManager;
+			void OnFixedUpdate();
 
+			EventManagerModule_c();
+			~EventManagerModule_c();
+
+		private:
+
+			EventManagerPtr_t ipEventManager;
 			static EventManagerModulePtr_t ipInstance_gl;
-			
-			EventManagerModule_c(void);
-			~EventManagerModule_c(void);
+
 	};
 }
 #endif
