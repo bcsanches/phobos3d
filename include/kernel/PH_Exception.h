@@ -39,7 +39,8 @@ namespace Phobos
 		OBJECT_ALREADY_EXISTS_EXCEPTION,
 		INVALID_PARAMETER_EXCEPTION,
 		INVALID_OPERATION_EXCEPTION,
-		NATIVE_API_FAILED_EXCEPTION
+		NATIVE_API_FAILED_EXCEPTION,
+		FILE_NOT_FOUND_EXCEPTION
 	};
 
 	class PH_KERNEL_API Exception_c: public std::exception
@@ -116,6 +117,15 @@ namespace Phobos
 				}
 	};
 
+	class PH_KERNEL_API FileNotFoundException_c: public Exception_c
+	{
+		public:
+			inline FileNotFoundException_c(int errorCode, const String_c &moduleName, const String_c &extraInfo, const char *fileName, unsigned int line):
+				Exception_c(errorCode, "FileNotFoundException", moduleName, extraInfo, fileName, line)
+				{
+				}
+	};
+
 	/**
 		Template for creating a unique type for implementing a static factory
 	*/
@@ -174,6 +184,15 @@ namespace Phobos
 				const char* file, long line)
 			{
 				return NativeAPIFailedException_c(code.error, moduleName, extraInfo, file, line);
+			}
+
+			static FileNotFoundException_c Create(
+				ExceptionErrorType_s<FILE_NOT_FOUND_EXCEPTION> code, 
+				const String_c &moduleName, 
+				const String_c &extraInfo, 
+				const char* file, long line)
+			{
+				return FileNotFoundException_c(code.error, moduleName, extraInfo, file, line);
 			}
 	};
 }

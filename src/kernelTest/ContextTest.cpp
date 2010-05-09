@@ -23,6 +23,8 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
+#include <fstream>
+
 #include <boost/test/unit_test.hpp>
 
 #include <PH_Context.h>
@@ -119,4 +121,30 @@ BOOST_AUTO_TEST_CASE(context_basic)
 
 		context.Execute("set temp 0;if $temp thenTest elseTest");
 	}
+}
+
+
+BOOST_AUTO_TEST_CASE(context_file)
+{
+	Context_c context;
+
+	BOOST_REQUIRE_THROW(context.ExecuteFromFile("fileThatShouldNotExits.txt"), FileNotFoundException_c);
+
+	ContextVar_c tempVar("temp", "empty");
+	context.AddContextVar(tempVar);
+
+	{
+		using namespace std;
+		ofstream outf("context_file.cfg", ios_base::trunc);
+
+		outf << "set temp bla" << endl;
+		outf <<"//comment" << endl;
+
+		outf.flush();
+		BOOST_REQUIRE(outf.good());
+	}
+
+	context.ExecuteFromFile("context_file.cfg");
+
+	BOOST_REQUIRE(tempVar.GetValue().compare("bla") == 0);
 }
