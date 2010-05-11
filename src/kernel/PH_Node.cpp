@@ -67,6 +67,11 @@ namespace Phobos
 		if (node->fPrivateChildren)
 			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Node_c::AddChild", "Node " + this->GetName() + "has private childs");
 
+		AddPrivateChild(node);
+	}
+
+	void Node_c::AddPrivateChild(NodePtr_t node)
+	{
 		if(node->pclParent)
 		{
 			std::stringstream stream;
@@ -82,11 +87,6 @@ namespace Phobos
 
 		mapNodes.insert(std::make_pair(node->GetName(), node));
 		node->pclParent = this;
-	}
-
-	void Node_c::AddPrivateChild(NodePtr_t node)
-	{
-		AddChild(node);
 	}
 
 	void Node_c::RemoveSelf()
