@@ -64,8 +64,8 @@ namespace Phobos
 
 	void Node_c::AddChild(NodePtr_t node)
 	{
-		if (node->fPrivateChildren)
-			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Node_c::AddChild", "Node " + this->GetName() + "has private childs");
+		if (this->fPrivateChildren)
+			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Node_c::AddChild", "Node " + this->GetName() + " has private childs");
 
 		AddPrivateChild(node);
 	}
