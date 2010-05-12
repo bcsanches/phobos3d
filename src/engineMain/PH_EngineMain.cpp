@@ -33,6 +33,7 @@ Phobos 3d
 #include <PH_Console.h>
 #include <PH_ContextVar.h>
 #include <PH_Core.h>
+#include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
 #include <PH_Render.h>
 
@@ -72,7 +73,11 @@ namespace Phobos
 		fStop(false)
 	{
 		Kernel_c::CreateInstance("phobos.log");
-		CorePtr_t core = Core_c::CreateInstance();		
+		CorePtr_t core = Core_c::CreateInstance();	
+
+		EventManagerModulePtr_t eventManager = EventManagerModule_c::CreateInstance();
+		vecSingletons.push_back(EventManagerModule_c::ReleaseInstance);
+		core->AddModule(eventManager);
 
 		ConsolePtr_t console = Console_c::CreateInstance();
 		vecSingletons.push_back(Console_c::ReleaseInstance);

@@ -11,6 +11,7 @@
     <ClCompile Include="..\..\..\src\engineCore\PH_BootModule.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_OgreUtils.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_Console.cpp" />
+    <ClCompile Include="..\..\..\src\engineCore\PH_EventManagerModule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\engineCore\PH_EngineCoreAPI.h" />
@@ -30,6 +31,7 @@
     <ClInclude Include="..\..\..\include\engineCore\PH_BootModule.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_OgreUtils.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_Console.h" />
+    <ClInclude Include="..\..\..\include\engineCore\PH_EventManagerModule.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">

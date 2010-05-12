@@ -60,12 +60,11 @@ namespace Phobos
 
 		return stream.str();
 	}
-
-	template <typename T>
-	inline String_c NumberToString(const T *value)
+	
+	inline String_c PointerToString(const void *value)
 	{
 		std::stringstream stream;
-		stream << static_cast<size_t>(value);
+		stream << "0x" << value;
 
 		return stream.str();
 	}

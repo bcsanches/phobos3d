@@ -25,6 +25,7 @@ Phobos 3d
 
 #include <boost/test/unit_test.hpp>
 
+#include <PH_Console.h>
 #include <PH_Core.h>
 #include <PH_CoreModule.h>
 #include <PH_Exception.h>
@@ -171,10 +172,12 @@ struct CoreInstance_s
 	{
 		Kernel_c::CreateInstance("enginecoretest.log");
 		Core_c::CreateInstance();
+		Console_c::CreateInstance();
 	}
 
 	~CoreInstance_s()
 	{
+		Console_c::ReleaseInstance();
 		Core_c::ReleaseInstance();
 
 		Kernel_c::ReleaseInstance();
@@ -185,7 +188,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 {
 	CoreInstance_s instance;
 
-	CorePtr_t core = Core_c::GetInstance();
+	CorePtr_t core = Core_c::GetInstance();	
 
 	BOOST_CHECK_THROW(core->PauseTimer(CORE_SYS_TIMER), InvalidParameterException_c);
 

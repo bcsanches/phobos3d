@@ -95,6 +95,7 @@
     <ClCompile Include="..\..\..\src\engineCore\PH_Console.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_Core.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_CoreModule.cpp" />
+    <ClCompile Include="..\..\..\src\engineCore\PH_EventManagerModule.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_OgreUtils.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_Render.cpp" />
   </ItemGroup>
@@ -106,6 +107,7 @@
     <ClInclude Include="..\..\..\include\engineCore\PH_CoreModuleFwd.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_CoreTimer.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_EngineCoreAPI.h" />
+    <ClInclude Include="..\..\..\include\engineCore\PH_EventManagerModule.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_OgreUtils.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_Render.h" />
   </ItemGroup>

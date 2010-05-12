@@ -90,7 +90,7 @@ namespace Phobos
 		fpHeight(0),
 		lstText(CONSOLE_LINE_COUNT),
 		lstHistory(CONSOLE_HISTORY_COUNT),
-		varMaterialName("dvConsoleMaterialName", "IM_Console/Background"),
+		varMaterialName("dvConsoleMaterialName", "PH_Console/Background"),
 		varShowRenderInfo("dvShowRenderInfo", "0"),
 		cmdLsO("lso"),
 		cmdCdO("cdo")
@@ -256,16 +256,16 @@ namespace Phobos
 			RenderPtr_t render = Render_c::GetInstance();
 
 			pclSceneManager = render->CreateSceneManager(Ogre::ST_GENERIC);
-			pclCamera = pclSceneManager->createCamera("IM_ConsoleCamera");		
+			pclCamera = pclSceneManager->createCamera("PH_ConsoleCamera");		
 
 			// Create background rectangle covering the whole screen
 			OverlayManager& overlayManager = OverlayManager::getSingleton();
 
 			pclTextBox=overlayManager.createOverlayElement("TextArea","ConsoleText");
-			pclTextBox->setCaption("Immersion Engine Console");
+			pclTextBox->setCaption("Phobos Engine Console");
 			pclTextBox->setMetricsMode(GMM_RELATIVE);
 			pclTextBox->setPosition(0,0);
-			pclTextBox->setParameter("font_name","IM_Console");
+			pclTextBox->setParameter("font_name","PH_Console");
 			pclTextBox->setParameter("colour_top","1 1 1");
 			pclTextBox->setParameter("colour_bottom","1 1 1");
 			pclTextBox->setParameter("char_height","0.03");

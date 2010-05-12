@@ -171,7 +171,7 @@ namespace Phobos
 		opts["fullscreen"] = fullScreen ? "true" : "false";
 		opts["vsync"] = vsync ? "true" : "false";
 	
-		opts["externalWindowHandle"] = NumberToString(ipWindow->GetHandler());
+		opts["externalWindowHandle"] = PointerToString(ipWindow->GetHandler());
 
 		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);		
 		

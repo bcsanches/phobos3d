@@ -25,6 +25,9 @@ Phobos 3d
 
 #include "PH_BootModule.h"
 
+#include <PH_Exception.h>
+#include <PH_Kernel.h>
+
 #include "PH_Console.h"
 #include "PH_Core.h"
 
@@ -64,7 +67,17 @@ namespace Phobos
 			}
 			else if(!fBootFired)
 			{
-				Console_c::GetInstance()->ExecuteFromFile("autoexec.cfg");
+				try
+				{
+					Console_c::GetInstance()->ExecuteFromFile("autoexec.cfg");
+				}
+				catch(FileNotFoundException_c &e)
+				{
+					std::stringstream stream;
+					stream << "[BootModule_c::OnFixedUpdate] Warning, boot failed: ";
+					stream << e.what();
+					Kernel_c::GetInstance().LogMessage(stream.str());
+				}
 
 				//Time to boot and game over for us
 				core->OnEvent(CORE_EVENT_BOOT);
