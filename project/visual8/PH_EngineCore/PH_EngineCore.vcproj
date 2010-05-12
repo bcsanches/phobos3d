@@ -180,6 +180,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\engineCore\PH_Console.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_Console.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\engineCore\PH_Core.cpp"
 			>
 		</File>
@@ -213,6 +221,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\engineCore\PH_EventManagerModule.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\engineCore\PH_OgreUtils.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_OgreUtils.h"
 			>
 		</File>
 		<File
