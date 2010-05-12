@@ -27,6 +27,8 @@ Phobos 3d
 
 #include <PH_Kernel.h>
 #include <PH_EventManager.h>
+
+#include "PH_Console.h"
 #include "PH_Core.h"
 
 namespace Phobos
@@ -38,7 +40,7 @@ namespace Phobos
 		CoreModule_c("EventManagerModule"),
 		ipEventManager(EventManager_c::CreateInstance("EventManager"))
 	{
-
+		ipEventManager->AddListener(*this, SYSTEM_EVENT_TYPE);
 	}
 
 	EventManagerModule_c::~EventManagerModule_c()
@@ -74,20 +76,13 @@ namespace Phobos
 		ipEventManager->Update();
 	}
 
-	/*
-		PH_ErrorHandler_t PH_EventManagerModule_c::SystemEventHandler(const PH_EventManager_c::Event_s *event, PH_Handler_t)
+	void EventManagerModule_c::Event(struct Event_s &event)
+	{
+		switch(event.stSystem.eType)
 		{
-			switch(event->stSystem.eType)
-			{
-				case PH_EventManager_c::EVENT_SYSTEM_QUIT:
-					{
-						PH_Console_c &console = PH_Console_c::GetInstance();
-						console.Execute("quit");				
-					}
-					break;
-			}
-
-			return(PH_SUCCESS);
+			case SYSTEM_QUIT:
+				Console_c::GetInstance()->Execute("quit");
+				break;
 		}
-	*/
+	}	
 }

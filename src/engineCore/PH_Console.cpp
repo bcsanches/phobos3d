@@ -325,8 +325,7 @@ namespace Phobos
 
 	void Console_c::Execute(const String_c &cmdLine)
 	{
-		//FIXME
-		//clShell.Execute(clContext, cmdLine, e);
+		clContext.Execute(cmdLine);
 	}
 
 	void Console_c::ExecuteFromFile(const String_c &fileName)
@@ -338,6 +337,7 @@ namespace Phobos
 	{		
 		const String_c &cmdLine = clEditBox.GetStr();
 
+		PH_ASSERT_MSG(false, "Not implemented");
 		//FIXME
 		//clShell.Execute(clContext, cmdLine, IM_SHELL_EXECUTE_MODE_VERBOSE);
 

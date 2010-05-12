@@ -38,8 +38,7 @@ namespace Phobos
 
 	typedef boost::intrusive_ptr<EventManagerModule_c> EventManagerModulePtr_t;
 
-
-	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c
+	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c, private EventListener_c
 	{
 		public:
 
@@ -50,6 +49,8 @@ namespace Phobos
 		private:
 
 			void OnFixedUpdate();
+
+			virtual void Event(struct Event_s &event);
 
 			EventManagerModule_c();
 			~EventManagerModule_c();

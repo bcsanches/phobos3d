@@ -32,6 +32,7 @@ Phobos 3d
 
 #include <PH_Console.h>
 #include <PH_ContextVar.h>
+#include <PH_ContextUtils.h>
 #include <PH_Core.h>
 #include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
@@ -50,16 +51,20 @@ namespace Phobos
 			EngineMain_c();
 			~EngineMain_c();
 
+			void MainLoop(void);
+
+		private:			
 			inline Float_t ConvertMSecToSeconds(UInt_t msec);
 			inline Float_t GetUpdateTime(void);
 			inline Float_t GetMinFrameTime(void);
 
-			void MainLoop(void);
+			void CmdQuit(const StringVector_t &, Context_c &);
 
 		private:
 			ContextVar_c	varFixedTime;
 			ContextVar_c	varEngineFPS;
 			ContextVar_c	varMinFrameTime;
+			ContextCmd_c	cmdQuit;
 			Ogre::Timer		clTimer;
 			bool			fStop;
 
@@ -70,6 +75,7 @@ namespace Phobos
 		varFixedTime("dvFixedTime", "0"),
 		varEngineFPS("dvEngineFPS", "60"),
 		varMinFrameTime("dvMinFrameTime", "0.01"),
+		cmdQuit("quit"),
 		fStop(false)
 	{
 		Kernel_c::CreateInstance("phobos.log");
@@ -82,6 +88,13 @@ namespace Phobos
 		ConsolePtr_t console = Console_c::CreateInstance();
 		vecSingletons.push_back(Console_c::ReleaseInstance);
 		core->AddModule(console);
+
+		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&EngineMain_c::CmdQuit, this));
+		console->AddContextCmd(cmdQuit);
+
+		console->AddContextVar(varFixedTime);
+		console->AddContextVar(varEngineFPS);
+		console->AddContextVar(varMinFrameTime);
 
 		RenderPtr_t render = Render_c::CreateInstance();
 		vecSingletons.push_back(Render_c::ReleaseInstance);
@@ -99,6 +112,11 @@ namespace Phobos
 
 		Core_c::ReleaseInstance();
 		Kernel_c::ReleaseInstance();
+	}
+
+	void EngineMain_c::CmdQuit(const StringVector_t &, Context_c &)
+	{
+		fStop = true;
 	}
 
 	inline Float_t EngineMain_c::ConvertMSecToSeconds(UInt_t msec)

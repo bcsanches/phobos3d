@@ -64,7 +64,7 @@ namespace Phobos
 	inline String_c PointerToString(const void *value)
 	{
 		std::stringstream stream;
-		stream << "0x" << value;
+		stream << reinterpret_cast<const size_t>(value);
 
 		return stream.str();
 	}
