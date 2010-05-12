@@ -25,6 +25,7 @@ Phobos 3d
 
 #include <boost/test/unit_test.hpp>
 
+#include <PH_Console.h>
 #include <PH_Core.h>
 #include <PH_CoreModule.h>
 #include <PH_Exception.h>
@@ -66,6 +67,11 @@ class TestModule_c: public CoreModule_c
 			eSequenceMarkerFixedUpdate_gl= TEST_MODULE;
 		}
 
+		virtual void OnPrepareToBoot()
+		{
+			++iPrepareToBootCount;
+		}
+
 		virtual void OnBoot() 
 		{
 			++iBootCount;
@@ -82,7 +88,8 @@ class TestModule_c: public CoreModule_c
 			iFixedUpdateCount(0),
 			iUpdateCount(0),
 			iBootCount(0),
-			iFinalizeCount(0)
+			iFinalizeCount(0),
+			iPrepareToBootCount(0)
 		{
 			++iCount;
 		}
@@ -98,6 +105,7 @@ class TestModule_c: public CoreModule_c
 		int iFixedUpdateCount;
 		int iUpdateCount;
 		int iBootCount;
+		int iPrepareToBootCount;
 		int iFinalizeCount;
 };
 
@@ -164,10 +172,12 @@ struct CoreInstance_s
 	{
 		Kernel_c::CreateInstance("enginecoretest.log");
 		Core_c::CreateInstance();
+		Console_c::CreateInstance();
 	}
 
 	~CoreInstance_s()
 	{
+		Console_c::ReleaseInstance();
 		Core_c::ReleaseInstance();
 
 		Kernel_c::ReleaseInstance();
@@ -178,9 +188,17 @@ BOOST_AUTO_TEST_CASE(core_basic)
 {
 	CoreInstance_s instance;
 
-	CorePtr_t core = Core_c::GetInstance();
+	CorePtr_t core = Core_c::GetInstance();	
 
 	BOOST_CHECK_THROW(core->PauseTimer(CORE_SYS_TIMER), InvalidParameterException_c);
+
+	{
+		TestModulePtr_t ptr = TestModule_c::CreateInstance();
+
+		BOOST_REQUIRE_THROW(core->AddModule(ptr, BOOT_MODULE_PRIORITY), InvalidParameterException_c);
+	}
+
+	core->LaunchBootModule();
 
 	TestModule_c *testModule;
 	{
@@ -212,22 +230,36 @@ BOOST_AUTO_TEST_CASE(core_basic)
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalRenderFrameTime == 1);
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta == 0.2f);
 
+		//Fire PrepareToBootEvent
+		core->FixedUpdate(1);
+		BOOST_CHECK(testModule->iPrepareToBootCount == 0);		
+
 		core->Update(1, 0.2f);
-		BOOST_CHECK(testModule->iFixedUpdateCount == 2);
+		BOOST_CHECK(testModule->iFixedUpdateCount == 3);
 		BOOST_CHECK(testModule->iUpdateCount == 2);
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime == 1);
-		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalTicks == 2);
-		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].uFrameCount == 2);
+		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalTicks == 3);
+		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].uFrameCount == 3);
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalRenderFrameTime == 2);
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta == 0.2f);
+		BOOST_CHECK(testModule->iPrepareToBootCount == 1);
+
+		//Force boot event fire
+		core->FixedUpdate(1);
+		core->FixedUpdate(1);
+		core->FixedUpdate(1);
+
+		//Force boot dispatch
+		core->FixedUpdate(1);		
+		BOOST_CHECK(testModule->iBootCount);
 
 		core->AddModuleToDestroyList(*testModule);
 		BOOST_REQUIRE(TestModule_c::iCount == 1);
 
 		core->FixedUpdate(1);
 		BOOST_REQUIRE(TestModule_c::iCount == 1);	
-		BOOST_CHECK(testModule->iFixedUpdateCount == 2);
-		BOOST_CHECK(testModule->iUpdateCount == 2);
+		BOOST_CHECK(testModule->iFixedUpdateCount == 7);
+		BOOST_CHECK(testModule->iUpdateCount == 2);		
 
 		BOOST_REQUIRE_THROW(core->AddModuleToDestroyList(*testModule), ObjectNotFoundException_c);
 	}
@@ -235,8 +267,8 @@ BOOST_AUTO_TEST_CASE(core_basic)
 	BOOST_REQUIRE(TestModule_c::iCount == 0);	
 
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpFrameTime == 1);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalTicks == 3);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].uFrameCount == 3);
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalTicks == 8);
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].uFrameCount == 8);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalRenderFrameTime == 2);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpDelta == 0.2f);	
 
@@ -245,14 +277,14 @@ BOOST_AUTO_TEST_CASE(core_basic)
 	core->Update(3, 0.5f);
 
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpFrameTime == 1);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalTicks == 3);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].uFrameCount == 3);
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalTicks == 8);
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].uFrameCount == 8);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalRenderFrameTime == 2);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpDelta == 0.2f);	
 
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime == 2);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalTicks == 5);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].uFrameCount == 4);
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalTicks == 10);
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].uFrameCount == 9);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalRenderFrameTime == 5);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta == 0.5f);
 }

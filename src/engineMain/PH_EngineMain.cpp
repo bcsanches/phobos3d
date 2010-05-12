@@ -25,14 +25,17 @@ Phobos 3d
 
 #include <sstream>
 
+#include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 
 #include <OgreTimer.h>
 
-#include <PH_BootModule.h>
+#include <PH_Console.h>
 #include <PH_ContextVar.h>
 #include <PH_Core.h>
+#include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
+#include <PH_Render.h>
 
 #define UPDATE_TIME (1.0f / 60.0f)
 #define MIN_TIME (10.0f / 1000.0f)
@@ -42,6 +45,8 @@ namespace Phobos
 	class EngineMain_c
 	{
 		public:
+			typedef void (*ReleaseProc_t)();
+
 			EngineMain_c();
 			~EngineMain_c();
 
@@ -57,6 +62,8 @@ namespace Phobos
 			ContextVar_c	varMinFrameTime;
 			Ogre::Timer		clTimer;
 			bool			fStop;
+
+			std::vector<ReleaseProc_t> vecSingletons;
 	};
 
 	EngineMain_c::EngineMain_c():
@@ -66,15 +73,30 @@ namespace Phobos
 		fStop(false)
 	{
 		Kernel_c::CreateInstance("phobos.log");
-		CorePtr_t core = Core_c::CreateInstance();
+		CorePtr_t core = Core_c::CreateInstance();	
 
-		BootModulePtr_t boot = BootModule_c::Create();
+		EventManagerModulePtr_t eventManager = EventManagerModule_c::CreateInstance();
+		vecSingletons.push_back(EventManagerModule_c::ReleaseInstance);
+		core->AddModule(eventManager);
 
-		core->AddModule(boot);
+		ConsolePtr_t console = Console_c::CreateInstance();
+		vecSingletons.push_back(Console_c::ReleaseInstance);
+		core->AddModule(console);
+
+		RenderPtr_t render = Render_c::CreateInstance();
+		vecSingletons.push_back(Render_c::ReleaseInstance);
+		core->AddModule(render);
+
+		core->LaunchBootModule();
 	}
 
 	EngineMain_c::~EngineMain_c()
 	{
+		BOOST_FOREACH(ReleaseProc_t proc, vecSingletons)
+		{
+			proc();
+		}
+
 		Core_c::ReleaseInstance();
 		Kernel_c::ReleaseInstance();
 	}
@@ -187,10 +209,22 @@ namespace Phobos
 }
 
 int main(int, char **)
-{
+{	
 	Phobos::EngineMain_c engine;
 
-	engine.MainLoop();	
+	try
+	{
+		engine.MainLoop();		
+	}
+	catch(std::exception &e)
+	{
+		std::stringstream stream;
+		stream << "main: Unhandled excetion: ";
+		stream << e.what();
+		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+
+		exit(EXIT_FAILURE);
+	}
 
 	return 0;
 }

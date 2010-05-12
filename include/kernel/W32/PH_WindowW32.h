@@ -18,6 +18,8 @@ namespace Phobos
 
 			void GetRect(Rect_s<size_t> &out);
 
+			virtual void *GetHandler() const;
+
 		private:
 			WindowW32_c(const String_c &name);
 			~WindowW32_c();
@@ -31,6 +33,8 @@ namespace Phobos
 
 		private:
 			static bool fWindowClassRegistered;
+
+			friend static WindowPtr_t Window_c::Create(const String_c &name);
 
 		private:
 			HWND hWnd;

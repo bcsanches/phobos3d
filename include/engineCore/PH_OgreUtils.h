@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  May 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,35 +23,17 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_BOOT_MODULE_H
-#define PH_BOOT_MODULE_H
+#ifndef PH_OGRE_UTILS_H
+#define PH_OGRE_UTILS_H
 
-#include "PH_CoreModule.h"
+#include <OgreException.h>
+
+#include <PH_String.h>
 
 namespace Phobos
 {
-	class BootModule_c;
-
-	typedef boost::intrusive_ptr<BootModule_c> BootModulePtr_t;
-
-	class BootModule_c: public CoreModule_c
-	{
-		public:
-			static BootModulePtr_t Create();
-
-			void OnUpdate();			
-			void OnFixedUpdate();
-
-		protected:
-			BootModule_c();
-
-		private:
-			int		iFixedUpdateCount;
-			bool	fUpdateDone;
-			bool	fPrepareFired;
-			bool	fBootFired;
-	};
+	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex);
+	String_c &GenerateOgreName(String_c &out);
 }
-
 
 #endif

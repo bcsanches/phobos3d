@@ -53,10 +53,18 @@ namespace Phobos
 	PH_KERNEL_API bool StringToBoolean(const String_c &a);
 
 	template <typename T>
-	String_c IM_NumberToString(T value)
+	inline String_c NumberToString(T value)
 	{
 		std::stringstream stream;
 		stream << value;
+
+		return stream.str();
+	}
+	
+	inline String_c PointerToString(const void *value)
+	{
+		std::stringstream stream;
+		stream << "0x" << value;
 
 		return stream.str();
 	}

@@ -38,6 +38,7 @@ Phobos 3d
 #include <PH_Path.h>
 
 #include "PH_CoreModule.h"
+#include "PH_BootModule.h"
 
 namespace Phobos
 {
@@ -72,6 +73,7 @@ namespace Phobos
 
 	Core_c::Core_c(const Phobos::String_c &name):
 		Node_c(name),
+		fLaunchedBoot(false),
 		cmdTime("time"),
 		cmdListModules("listModules"),
 		cmdToggleTimerPause("toggleTimerPause")
@@ -82,6 +84,7 @@ namespace Phobos
 	void Core_c::Update(Float_t seconds, Float_t delta)
 	{
 		this->UpdateDestroyList();
+		this->DispatchEvents();
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
 			if(stSimInfo.stTimers[i].IsPaused())
@@ -98,6 +101,7 @@ namespace Phobos
 	void Core_c::FixedUpdate(Float_t seconds)
 	{
 		this->UpdateDestroyList();
+		this->DispatchEvents();
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
 			if(stSimInfo.stTimers[i].IsPaused())
@@ -122,6 +126,9 @@ namespace Phobos
 
 	void Core_c::AddModule(CoreModulePtr_t module, UInt32_t priority)
 	{
+		if(priority == BOOT_MODULE_PRIORITY && (dynamic_cast<BootModule_c *>(module.get()) == NULL))
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core_c::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module->GetName());
+
 		this->AddChild(module);		
 
 		vecModules.push_back(ModuleInfo_s(module, priority));	
@@ -156,6 +163,43 @@ namespace Phobos
 		}
 
 		setModulesToDestroy.clear();
+	}
+
+	void Core_c::OnEvent(CoreEvents_e event)
+	{
+		vecEvents.push_back(event);
+	}
+
+	void Core_c::DispatchEvents()
+	{
+		if(vecEvents.empty())
+			return;
+
+		//use another vector, so we do not freeze on recursive events
+		EventsVector_t tmp;
+		tmp.swap(vecEvents);
+
+		BOOST_FOREACH(CoreEvents_e event, tmp)
+		{
+			switch(event)
+			{
+				case CORE_EVENT_PREPARE_TO_BOOT:
+					this->CallCoreModuleProc(&CoreModule_c::OnPrepareToBoot);
+					break;
+
+				case CORE_EVENT_BOOT:
+					this->CallCoreModuleProc(&CoreModule_c::OnBoot);
+					break;
+
+				case CORE_EVENT_RENDER_READY:
+					this->CallCoreModuleProc(&CoreModule_c::OnRenderReady);
+					break;
+
+				default:
+					PH_ASSERT_MSG(false, "Invalid value on events");
+					break;
+			}
+		}
 	}
 
 	void Core_c::CreateDefaultCmds(Context_c &context)
@@ -206,6 +250,14 @@ namespace Phobos
 		PH_ASSERT(timer < CORE_MAX_TIMERS);
 
 		stSimInfo.stTimers[CORE_GAME_TIMER].Reset();
+	}
+
+	void Core_c::LaunchBootModule()
+	{
+		if(fLaunchedBoot)
+			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core_c::LaunchBootModule", "Boot module already launched");
+
+		this->AddModule(BootModule_c::Create(), HIGHEST_PRIORITY);
 	}
 
 	void Core_c::CmdTime(const StringVector_t &args, Context_c &)

@@ -38,8 +38,10 @@ namespace Phobos
 		public:
 			virtual void OnUpdate() {}
 			virtual void OnFixedUpdate() {}
+			virtual void OnPrepareToBoot() {}
 			virtual void OnBoot() {}
 			virtual void OnFinalize() {}
+			virtual void OnRenderReady() {}
 
 		protected:
 			explicit CoreModule_c(const String_c &name);

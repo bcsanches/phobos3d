@@ -36,13 +36,16 @@ namespace Phobos
 
 	typedef boost::intrusive_ptr<Window_c> WindowPtr_t;
 
-	class Window_c: public Node_c, boost::noncopyable
+	class PH_KERNEL_API Window_c: public Node_c, boost::noncopyable
 	{
 		public:
 			static WindowPtr_t Create(const String_c &name);
 
+			virtual void Open(const String_c &name, const Rect_s<size_t> &rect) = 0;
+			virtual void *GetHandler() const = 0;
+
 		protected:
-			Window_c(const String_c &name);
+			Window_c(const String_c &name);					
 	};
 
 };

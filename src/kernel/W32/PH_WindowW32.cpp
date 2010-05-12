@@ -11,6 +11,11 @@ namespace Phobos
 
 	bool WindowW32_c::fWindowClassRegistered = false;
 
+	WindowPtr_t Window_c::Create(const String_c &name)
+	{
+		return WindowPtr_t(new WindowW32_c(name));
+	}
+
 	WindowW32_c::WindowW32_c(const String_c &name):
 		Window_c(name),
 		hWnd(NULL)
@@ -170,6 +175,11 @@ namespace Phobos
 			stream << "GetClientRect call failed: " << GetLastError();
 			PH_RAISE(NATIVE_API_FAILED_EXCEPTION, "WindowW32_c::GetRect", stream.str());
 		}
+	}
+
+	void *WindowW32_c::GetHandler() const
+	{
+		return hWnd;
 	}
 
 	LRESULT WindowW32_c::MainWndMethod(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

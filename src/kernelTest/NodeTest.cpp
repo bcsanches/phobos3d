@@ -151,6 +151,4 @@ BOOST_AUTO_TEST_CASE(node_private)
 	TestPrivateNodePtr_t child1(new TestPrivateNode_c("child_private_test", PUBLIC_CHILDREN));
 
 	BOOST_REQUIRE_THROW(ptr->AddChild(child1), InvalidOperationException_c);
-
-	ptr->AddPrivateChild();
 }
