@@ -117,6 +117,7 @@
     <ClInclude Include="..\..\..\include\kernel\PH_ContextItem.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_ContextUtils.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_ContextVar.h" />
+    <ClInclude Include="..\..\..\include\kernel\PH_Enum.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_EventListener.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_EventListenerFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_EventManager.h" />

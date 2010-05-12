@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  February 2010
+  May 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,31 +23,17 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_WINDOW_H
-#define PH_WINDOW_H
+#ifndef PH_OGRE_UTILS_H
+#define PH_OGRE_UTILS_H
 
-#include <boost/utility.hpp>
+#include <OgreException.h>
 
-#include "PH_Node.h"
+#include <PH_String.h>
 
 namespace Phobos
 {
-	class Window_c;
-
-	typedef boost::intrusive_ptr<Window_c> WindowPtr_t;
-
-	class PH_KERNEL_API Window_c: public Node_c, boost::noncopyable
-	{
-		public:
-			static WindowPtr_t Create(const String_c &name);
-
-			virtual void Open(const String_c &name, const Rect_s<size_t> &rect) = 0;
-			virtual void *GetHandler() const = 0;
-
-		protected:
-			Window_c(const String_c &name);					
-	};
-
-};
+	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex);
+	String_c &GenerateOgreName(String_c &out);
+}
 
 #endif
