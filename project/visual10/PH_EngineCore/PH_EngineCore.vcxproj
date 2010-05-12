@@ -44,7 +44,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OGRE_LIB_HOME)\release;$(OGRE_LIB_HOME)\debug;$(LibraryPath)</LibraryPath>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -65,6 +65,7 @@
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>OgreMain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,17 +92,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\engineCore\PH_BootModule.cpp" />
+    <ClCompile Include="..\..\..\src\engineCore\PH_Console.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_Core.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_CoreModule.cpp" />
+    <ClCompile Include="..\..\..\src\engineCore\PH_OgreUtils.cpp" />
     <ClCompile Include="..\..\..\src\engineCore\PH_Render.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\engineCore\PH_BootModule.h" />
+    <ClInclude Include="..\..\..\include\engineCore\PH_Console.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_Core.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_CoreModule.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_CoreModuleFwd.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_CoreTimer.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_EngineCoreAPI.h" />
+    <ClInclude Include="..\..\..\include\engineCore\PH_OgreUtils.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_Render.h" />
   </ItemGroup>
   <ItemGroup>

@@ -45,12 +45,20 @@ namespace Phobos
 
 	enum CoreModulePriorities_e
 	{
-		LOWEST_PRIORITY		= 0,
-		LOW_PRIORITY		= 0xFF,
-		MEDIUM_PRIORITY		= 0xFFF,
-		NORMAL_PRIORITY		= 0xFFFF,
-		HIGH_PRIORITY		= 0xFFFFF,
-		HIGHEST_PRIORITY	= 0xFFFFFFFF
+		LOWEST_PRIORITY			= 0,
+		LOW_PRIORITY			= 0xFF,
+		MEDIUM_PRIORITY			= 0xFFF,
+		NORMAL_PRIORITY			= 0xFFFF,
+		HIGH_PRIORITY			= 0xFFFFF,
+		HIGHEST_PRIORITY		= 0xFFFFFFF,
+		BOOT_MODULE_PRIORITY	= 0xFFFFFFFF
+	};
+
+	enum CoreEvents_e
+	{
+		CORE_EVENT_PREPARE_TO_BOOT,
+		CORE_EVENT_BOOT,
+		CORE_EVENT_RENDER_READY		
 	};
 
 	struct CoreSimInfo_s
@@ -87,12 +95,17 @@ namespace Phobos
 
 			void ResetTimer(CoreTimerTypes_e timer);
 
+			void OnEvent(CoreEvents_e event);
+
+			void LaunchBootModule();
+
 		private:			
 			Core_c(const String_c &name);
 
 			void CallCoreModuleProc(CoreModuleProc_t proc);
 
 			void UpdateDestroyList();
+			void DispatchEvents();
 
 			void CmdTime(const StringVector_t &args, Context_c &);
 			void CmdToggleTimerPause(const StringVector_t &args, Context_c &);
@@ -142,9 +155,14 @@ namespace Phobos
 			typedef std::set<CoreModulePtr_t>	ModulesSet_t;
 			ModulesSet_t						setModulesToDestroy;
 
+			typedef std::vector<CoreEvents_e>	EventsVector_t;
+			EventsVector_t						vecEvents;
+
 			ContextCmd_c	cmdTime;
 			ContextCmd_c	cmdToggleTimerPause;
 			ContextCmd_c	cmdListModules;
+
+			bool			fLaunchedBoot;
 	};
 
 	inline const CoreSimInfo_s &Core_c::GetSimInfo(void) const

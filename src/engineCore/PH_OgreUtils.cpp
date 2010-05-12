@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  May 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,35 +23,31 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_BOOT_MODULE_H
-#define PH_BOOT_MODULE_H
+#include "PH_OgreUtils.h"
 
-#include "PH_CoreModule.h"
+#include <string>
+
+#include <boost/detail/atomic_count.hpp>
+
+#include <PH_Kernel.h>
 
 namespace Phobos
 {
-	class BootModule_c;
+	static boost::detail::atomic_count tCount_gl(0);
 
-	typedef boost::intrusive_ptr<BootModule_c> BootModulePtr_t;
-
-	class BootModule_c: public CoreModule_c
+	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
 	{
-		public:
-			static BootModulePtr_t Create();
+		std::stringstream stream;
 
-			void OnUpdate();			
-			void OnFixedUpdate();
+		stream << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
+		Kernel_c::GetInstance().LogMessage(stream.str());
+	}
 
-		protected:
-			BootModule_c();
+	String_c &GenerateOgreName(String_c &out)
+	{		
+		out = "name_";
+		out += NumberToString(++tCount_gl);	
 
-		private:
-			int		iFixedUpdateCount;
-			bool	fUpdateDone;
-			bool	fPrepareFired;
-			bool	fBootFired;
-	};
+		return out;
+	}
 }
-
-
-#endif

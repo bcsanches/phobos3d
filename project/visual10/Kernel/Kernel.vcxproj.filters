@@ -119,5 +119,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_RefCounterFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_String.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Types.h" />
+    <ClInclude Include="..\..\..\include\kernel\PH_Enum.h" />
   </ItemGroup>
 </Project>
