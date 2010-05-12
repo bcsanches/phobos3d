@@ -47,7 +47,7 @@ namespace Phobos
 		return *pclInstance_g;
 	}
 
-	void Kernel_c::DestroyInstance()
+	void Kernel_c::ReleaseInstance()
 	{
 		PH_ASSERT_MSG(pclInstance_g != 0, "[Kernel_c::GetInstance] Instance not created, call CreateInstance");
 

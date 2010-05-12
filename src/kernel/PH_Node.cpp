@@ -41,15 +41,17 @@ namespace Phobos
 		return NodePtr_t(new Node_c(name));
 	}
 
-	Node_c::Node_c(const String_c &name):
+	Node_c::Node_c(const String_c &name, ChildrenMode_e param):
 		Object_c(name),
-		pclParent(NULL)
+		pclParent(NULL),
+		fPrivateChildren(param == PRIVATE_CHILDREN ? true : false)
 	{
 	}
 
-	Node_c::Node_c(const Char_t *name):
+	Node_c::Node_c(const Char_t *name, ChildrenMode_e param):
 		Object_c(name),
-		pclParent(NULL)
+		pclParent(NULL),
+		fPrivateChildren(param == PRIVATE_CHILDREN ? true : false)
 	{
 	}
 
@@ -61,6 +63,14 @@ namespace Phobos
 	}
 
 	void Node_c::AddChild(NodePtr_t node)
+	{
+		if (this->fPrivateChildren)
+			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Node_c::AddChild", "Node " + this->GetName() + " has private childs");
+
+		AddPrivateChild(node);
+	}
+
+	void Node_c::AddPrivateChild(NodePtr_t node)
 	{
 		if(node->pclParent)
 		{

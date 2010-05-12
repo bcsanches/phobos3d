@@ -41,6 +41,13 @@ namespace Phobos
 		\remark Please note that this class was designed to be stored on the heap, we cannot easily block stack creation
 		(using derived classes), but storing stack instances as child nodes results on undefined behavior.
 	*/
+
+	enum ChildrenMode_e
+	{
+	   PRIVATE_CHILDREN,
+	   PUBLIC_CHILDREN
+	};
+
 	class PH_KERNEL_API Node_c: public Object_c
 	{
 		public:			
@@ -60,15 +67,19 @@ namespace Phobos
 			NodePtr_t GetParent() const;
 
 		protected:
-			explicit Node_c(const String_c &name);
-			explicit Node_c(const Char_t *name);		
+			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
+			explicit Node_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);		
 			~Node_c();
+
+			void AddPrivateChild(NodePtr_t node);
 
 		private:					
 			typedef std::map<String_c, NodePtr_t> NodeMap_t;
 			typedef std::pair<String_c, NodePtr_t> NodeMapPair_t;
 			NodeMap_t mapNodes;
 			Node_c *pclParent;
+
+			bool fPrivateChildren;
 	};
 }
 

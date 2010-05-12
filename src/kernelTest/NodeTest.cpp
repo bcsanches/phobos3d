@@ -50,6 +50,17 @@ class TestNode_c: public Node_c
 	private:	
 };
 
+class TestPrivateNode_c: public Node_c
+{
+	public:
+		TestPrivateNode_c(const Char_t *name, ChildrenMode_e mode=PUBLIC_CHILDREN):
+		  Node_c(name, mode)
+		  {
+		  }
+};
+
+typedef intrusive_ptr<TestPrivateNode_c> TestPrivateNodePtr_t;
+
 typedef intrusive_ptr<TestNode_c> TestNodePtr_t;
 
 BOOST_AUTO_TEST_CASE(node_basic)
@@ -131,4 +142,15 @@ BOOST_AUTO_TEST_CASE(node_exceptions)
 	}
 
 	
+}
+
+BOOST_AUTO_TEST_CASE(node_private)
+{
+	TestPrivateNodePtr_t ptr(new TestPrivateNode_c("root_private_test", PRIVATE_CHILDREN));
+	
+	TestPrivateNodePtr_t child1(new TestPrivateNode_c("child_private_test", PUBLIC_CHILDREN));
+
+	BOOST_REQUIRE_THROW(ptr->AddChild(child1), InvalidOperationException_c);
+
+	ptr->AddPrivateChild();
 }

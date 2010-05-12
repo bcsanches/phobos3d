@@ -44,5 +44,5 @@ BOOST_AUTO_TEST_CASE(eventManager_basic)
 
 	BOOST_REQUIRE_THROW(kernel.LookupObject(Path_c("/sys/eventManager")), ObjectNotFoundException_c);	
 
-	Kernel_c::DestroyInstance();
+	Kernel_c::ReleaseInstance();
 }

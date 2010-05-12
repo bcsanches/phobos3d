@@ -93,7 +93,7 @@ namespace Phobos
 		}
 
 		Core_c::ReleaseInstance();
-		Kernel_c::DestroyInstance();
+		Kernel_c::ReleaseInstance();
 	}
 
 	inline Float_t EngineMain_c::ConvertMSecToSeconds(UInt_t msec)

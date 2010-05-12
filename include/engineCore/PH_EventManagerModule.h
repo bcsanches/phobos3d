@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  January 2010
+  version 0.0.1, January 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,49 +23,42 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <boost/test/unit_test.hpp>
+#ifndef PH_SYSTEM_EVENT_MANAGER_H
+#define PH_SYSTEM_EVENT_MANAGER_H
 
-#include <PH_Kernel.h>
+#include "PH_CoreModule.h"
+#include "PH_Core.h"
+#include <PH_EventManager.h>
+#include <PH_EventManagerFwd.h>
+#include <PH_Error.h>
 
-#include <boost/filesystem.hpp>
-
-#include "SimpleLogListener.h"
-
-using namespace boost::filesystem;
-
-using namespace Phobos;
-
-static const String_c LOG_FILE_NAME("phobos.log");
-
-BOOST_AUTO_TEST_CASE(kernel_basic)
-{	
-	if(exists(LOG_FILE_NAME))
-		BOOST_REQUIRE(remove(LOG_FILE_NAME));
-
-	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
-
-	BOOST_REQUIRE(exists(LOG_FILE_NAME));
-
-	Kernel_c::ReleaseInstance();
-}
-
-BOOST_AUTO_TEST_CASE(kernel_log_listener)
+namespace Phobos
 {
-	SimpleLogListener_c a;
+	class EventManagerModule_c;
 
-	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
+	typedef boost::intrusive_ptr<EventManagerModule_c> EventManagerModulePtr_t;
 
-	kernel.AddLogListener(a);
-	kernel.LogMessage("bla");
 
-	BOOST_CHECK(a.oFlag == true);
+	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c
+	{
+		public:
 
-	a.oFlag = false;
+			static EventManagerModulePtr_t CreateInstance();
+			static void ReleaseInstance();
+			static EventManagerModulePtr_t GetInstance();
 
-	kernel.RemoveLogListener(a);
+		private:
 
-	kernel.LogMessage("buuuu");
-	BOOST_CHECK(a.oFlag == false);
-	
-	Kernel_c::ReleaseInstance();
+			void OnFixedUpdate();
+
+			EventManagerModule_c();
+			~EventManagerModule_c();
+
+		private:
+
+			EventManagerPtr_t ipEventManager;
+			static EventManagerModulePtr_t ipInstance_gl;
+
+	};
 }
+#endif

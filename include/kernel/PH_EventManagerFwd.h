@@ -1,5 +1,5 @@
-#ifndef PH_EVENT_MANAGER_H
-#define PH_EVENT_MANAGER_H
+#ifndef PH_EVENT_MANAGER_FWD_H
+#define PH_EVENT_MANAGER_FWD_H
 
 #include <boost/intrusive_ptr.hpp>
 

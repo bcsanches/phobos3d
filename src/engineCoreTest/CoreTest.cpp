@@ -177,7 +177,7 @@ struct CoreInstance_s
 	{
 		Core_c::ReleaseInstance();
 
-		Kernel_c::DestroyInstance();
+		Kernel_c::ReleaseInstance();
 	}
 };
 

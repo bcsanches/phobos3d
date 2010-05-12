@@ -23,6 +23,9 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
+#ifndef PH_EVENT_MANAGER_H
+#define PH_EVENT_MANAGER_H
+
 #include <boost/utility.hpp>
 
 #include "PH_EventListener.h"
@@ -39,14 +42,14 @@ namespace Phobos
 		MOUSE_EVENT_TYPE,
 		SYSTEM_EVENT_TYPE,	
 
-		EVENT_TYPE_NUM,
+		EVENT_TYPE_NUM
 	};
 
 	enum KeyboardEventType_e
 	{
 		KEYBOARD_KEY_DOWN,
 		KEYBOARD_KEY_UP,
-		KEYBOARD_CHAR,			
+		KEYBOARD_CHAR
 	};
 
 	enum MouseEventType_e
@@ -111,7 +114,7 @@ namespace Phobos
 	{
 		public:			
 			typedef boost::intrusive::member_hook<EventListener_c, EventListenerListHook_t, &EventListener_c::hkEventManager> EventListenerMemberHookOption_t;
-			typedef boost::intrusive::list<EventListener_c, boost::intrusive::constant_time_size<false>, EventListenerMemberHookOption_t > EventListenerList_t;
+			typedef boost::intrusive::list<EventListener_c, boost::intrusive::constant_time_size<false>, EventListenerMemberHookOption_t> EventListenerList_t;
 
 		public:	
 			static EventManagerPtr_t CreateInstance(const String_c &name);
@@ -142,3 +145,4 @@ namespace Phobos
 
 	};
 }
+#endif

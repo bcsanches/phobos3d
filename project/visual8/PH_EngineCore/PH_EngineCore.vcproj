@@ -171,6 +171,14 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\src\engineCore\PH_BootModule.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_BootModule.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\engineCore\PH_Core.cpp"
 			>
 		</File>
@@ -196,6 +204,22 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\engineCore\PH_EngineCoreAPI.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\engineCore\PH_EventManagerModule.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_EventManagerModule.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\engineCore\PH_Render.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_Render.h"
 			>
 		</File>
 	</Files>
