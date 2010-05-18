@@ -101,8 +101,7 @@ namespace Phobos
 		clInputDeviceKeyboardListener.SetProc(IM_SubjectListenerProc_t(this, &IM_Console_c::InputDeviceKeyboardListenerProc));	
 		*/		
 
-		//FIXME
-		//IM_Kernel_c::GetInstance().SetLogProc(IM_KernelLogProc_t(this, &IM_Console_c::LogProc));
+		Kernel_c::GetInstance().AddLogListener(*this);
 
 		clContext.AddContextVar(varMaterialName);
 		clContext.AddContextVar(varShowRenderInfo);		
@@ -394,14 +393,11 @@ namespace Phobos
 	
 		fTextBufferChanged = true;		
 	}
-
-	/*
-	FIXME
-	void Console_c::LogProc(IM_UInt8_t , const IM_SInt8_t *text)
+		
+	void Console_c::Message(const String_c &msg)
 	{
-		this->Print(text);
+		this->Print(msg);
 	}
-	*/
 
 	void Console_c::AddToHistory(const String_c &str)
 	{	

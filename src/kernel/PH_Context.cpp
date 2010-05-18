@@ -51,9 +51,9 @@ namespace Phobos
 	};
 
 	template <typename T>
-	static inline typename T::const_pointer TryGetItem(T &list, const String_c &name)
+	static inline typename T::const_pointer TryGetItem(typename T &list, const String_c &name)
 	{
-		T::const_iterator it = list.find(name, ContextItemComp_s());
+		typename T::const_iterator it = list.find(name, ContextItemComp_s());
 		if(it == list.end())
 			return NULL;
 

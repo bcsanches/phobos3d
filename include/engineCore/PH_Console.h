@@ -34,6 +34,7 @@ Phobos 3d
 #include <OgreRectangle2D.h>
 
 #include <PH_Context.h>
+#include <PH_Log.h>
 
 #include "PH_EngineCoreAPI.h"
 
@@ -43,7 +44,7 @@ namespace Phobos
 
 	typedef boost::intrusive_ptr<Console_c> ConsolePtr_t;	
 
-	class PH_ENGINE_CORE_API Console_c: public CoreModule_c
+	class PH_ENGINE_CORE_API Console_c: public CoreModule_c, private LogListener_c
 	{		
 		private:
 			// =====================================================
@@ -130,9 +131,7 @@ namespace Phobos
 
 			void RegisterDefaultCmds(void);
 
-			void ToggleConsole(void);
-
-			//void LogProc(IM_UInt8_t level, const IM_SInt8_t *text);
+			void ToggleConsole(void);			
 
 			void AddToHistory(const String_c &str);
 
@@ -140,6 +139,9 @@ namespace Phobos
 			bool GetNextCommand(String_c &out);
 
 			void UpdateRenderInfo();
+
+			//Log message handler
+			void Message(const String_c &message);
 
 		private:
 			// =====================================================
