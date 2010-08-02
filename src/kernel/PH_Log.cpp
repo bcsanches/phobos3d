@@ -25,7 +25,7 @@ Phobos 3d
 
 #include "PH_Log.h"
 
-#include <boost/foreach.hpp>
+#include <boost/bind.hpp>
 
 namespace Phobos
 {
@@ -40,11 +40,8 @@ namespace Phobos
 	}
 
 	void Log_c::Message(const String_c &message)
-	{
-		BOOST_FOREACH(LogListener_c &listener, lstListeners)
-		{
-			listener.Message(message);
-		}
+	{				
+		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&LogListener_c::Message, _1, message));		
 
 		clFile << message;
 		clFile.flush();
@@ -57,7 +54,7 @@ namespace Phobos
 
 	void Log_c::RemoveListener(LogListener_c &listener)
 	{
-		listener.hkLogListener.unlink();
+		listener.hkListener.unlink();
 	}
 
 	size_t Log_c::GetListenersCount() const

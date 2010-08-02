@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  version 0.0.1, January 2010
+  January 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -31,9 +31,10 @@ Phobos 3d
 #include <boost/intrusive/list.hpp>
 #include <boost/utility.hpp>
 
-#include <PH_Defs.h>
-#include <PH_KernelAPI.h>
-#include <PH_String.h>
+#include "PH_Defs.h"
+#include "PH_Listener.h"
+#include "PH_KernelAPI.h"
+#include "PH_String.h"
 
 namespace Phobos
 {
@@ -44,8 +45,7 @@ namespace Phobos
 
 			virtual void Message(const String_c &message) = 0;
 			
-			typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > LogHook_t;
-			LogHook_t hkLogListener;
+			PH_DECLARE_LISTENER_HOOK
 	};
 
 	class PH_KERNEL_API Log_c: boost::noncopyable
@@ -61,11 +61,10 @@ namespace Phobos
 			size_t GetListenersCount() const;
 
 		private:
-			typedef boost::intrusive::member_hook<LogListener_c, LogListener_c::LogHook_t, &LogListener_c::hkLogListener> LogListenerMemberHookOption;
-			typedef boost::intrusive::list<LogListener_c, boost::intrusive::constant_time_size<false>, LogListenerMemberHookOption > LogListenersList_t;
+			PH_DECLARE_LISTENER_LIST_TYPE(LogListener_c);
 
 			std::ofstream		clFile;
-			LogListenersList_t	lstListeners;
+			ListenersList_t		lstListeners;
 	};
 }
 

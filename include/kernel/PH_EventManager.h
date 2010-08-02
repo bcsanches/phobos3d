@@ -37,10 +37,10 @@ namespace Phobos
 {
 	enum EventType_e
 	{
-		WINDOW_EVENT_TYPE,
-		KEYBOARD_EVENT_TYPE,
-		MOUSE_EVENT_TYPE,
-		SYSTEM_EVENT_TYPE,	
+		EVENT_TYPE_WINDOW,
+		EVENT_TYPE_KEYBOARD,
+		EVENT_TYPE_MOUSE,
+		EVENT_TYPE_SYSTEM,	
 
 		EVENT_TYPE_NUM
 	};
@@ -112,10 +112,6 @@ namespace Phobos
 
 	class PH_KERNEL_API EventManager_c: public Node_c, boost::noncopyable
 	{
-		public:			
-			typedef boost::intrusive::member_hook<EventListener_c, EventListenerListHook_t, &EventListener_c::hkEventManager> EventListenerMemberHookOption_t;
-			typedef boost::intrusive::list<EventListener_c, boost::intrusive::constant_time_size<false>, EventListenerMemberHookOption_t> EventListenerList_t;
-
 		public:	
 			static EventManagerPtr_t CreateInstance(const String_c &name);
 			static void ReleaseInstance();
@@ -141,7 +137,9 @@ namespace Phobos
 			static EventManagerPtr_t ipInstance_gl;
 
 		private:
-			EventListenerList_t arlstListeners[EVENT_TYPE_NUM];
+			PH_DECLARE_LISTENER_LIST_TYPE(EventListener_c);
+
+			ListenersList_t arlstListeners[EVENT_TYPE_NUM];
 
 	};
 }

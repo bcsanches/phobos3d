@@ -85,7 +85,7 @@ namespace Phobos
 
 	void EventManager_c::RemoveListener(EventListener_c &listener)
 	{
-		listener.hkEventManager.unlink();
+		listener.hkListener.unlink();
 	}
 
 	bool EventManager_c::IsListenersListEmpty(EventType_e type)

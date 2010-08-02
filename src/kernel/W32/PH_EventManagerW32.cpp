@@ -1,7 +1,7 @@
 #include "W32/PH_EventManagerW32.h"
 
 #include "PH_Exception.h"
-#include "PH_InputDefs.h"
+#include "PH_InputActions.h"
 
 #include <windows.h>
 #include <windowsX.h>
@@ -268,7 +268,7 @@ namespace Phobos
 
 	bool BuildKeyboardEvent(Event_s &event, MSG &msg)
 	{
-		event.eType = KEYBOARD_EVENT_TYPE;
+		event.eType = EVENT_TYPE_KEYBOARD;
 		event.pParam = &msg;		
 
 		switch(msg.message)
@@ -304,7 +304,7 @@ namespace Phobos
 
 	void BuildMouseEvent(Event_s &event, MSG &msg)
 	{
-		event.eType = MOUSE_EVENT_TYPE;
+		event.eType = EVENT_TYPE_MOUSE;
 		event.pParam = &msg;
 
 		switch(msg.message)
@@ -350,7 +350,7 @@ namespace Phobos
 
 	void BuildSystemEvent(Event_s &event, MSG &msg)
 	{
-		event.eType = SYSTEM_EVENT_TYPE;
+		event.eType = EVENT_TYPE_SYSTEM;
 		event.pParam = &msg;
 
 		switch(msg.message)

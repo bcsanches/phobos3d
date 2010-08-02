@@ -22,7 +22,6 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
-
 #include <boost/test/unit_test.hpp>
 
 #include <string>

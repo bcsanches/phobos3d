@@ -28,6 +28,8 @@ Phobos 3d
 
 #include <sstream>
 
+#include <boost/foreach.hpp>
+
 #include "PH_Error.h"
 #include "PH_Exception.h"
 #include "PH_Kernel.h"
@@ -80,6 +82,7 @@ namespace Phobos
 	Context_c::Context_c(void):
 		cmdEcho("echo"),
 		cmdListCmds("listCmds"),
+		cmdHelp("help"),
 		cmdListVars("listVars"),
 		cmdSet("set"),
 		cmdIf("if"),
@@ -92,12 +95,14 @@ namespace Phobos
 	#endif
 	{
 		cmdEcho.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdEcho, this));
+		cmdHelp.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdListCmds, this));
 		cmdListCmds.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdListCmds, this));
 		cmdListVars.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdListVars, this));
 		cmdSet.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdSet, this));
 		cmdIf.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdIf, this));
 
 		this->AddContextCmd(cmdEcho);
+		this->AddContextCmd(cmdHelp);
 		this->AddContextCmd(cmdListCmds);
 		this->AddContextCmd(cmdListVars);
 		this->AddContextCmd(cmdSet);
@@ -389,10 +394,10 @@ namespace Phobos
 		{		
 			stringstream stream;
 			stream << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found" << endl;
-			Kernel_c::GetInstance().LogMessage(stream.str());			
+			Kernel_c::GetInstance().LogMessage(stream.str());				
 		}
-
-		return(cmd->Execute(args, *this));
+		else
+			cmd->Execute(args, *this);
 	}
 
 	/**
@@ -481,16 +486,26 @@ namespace Phobos
 
 	void Context_c::CmdListCmds(const StringVector_t &args, Context_c &)
 	{
-		//lstCommands.ForEachItem(PrintNodesNameProc);	
+		std::stringstream stream;
 
-		//return(IM_SUCCESS);
+		BOOST_FOREACH(ContextCmd_c &cmd, setCommands)
+		{
+			stream << "\t" << cmd.GetName() << std::endl;
+		}
+
+		Kernel_c::GetInstance().LogMessage(stream.str());		
 	}
 
 	void Context_c::CmdListVars(const StringVector_t &args, Context_c &)
 	{	
-		//lstVariables.ForEachItem(PrintNodesNameProc);
+		std::stringstream stream;
 
-		//return(IM_SUCCESS);
+		BOOST_FOREACH(ContextVar_c &var, setVariables)
+		{
+			stream << "\t" << var.GetName() << " = " << var.GetValue() << std::endl;
+		}
+
+		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
 	void Context_c::CmdSet(const StringVector_t &args, Context_c &)
