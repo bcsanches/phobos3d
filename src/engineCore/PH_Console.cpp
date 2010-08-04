@@ -99,6 +99,8 @@ namespace Phobos
 		fIgnoredLastChar(false),
 		strCurrentNodePathName("/")
 	{
+		Kernel_c &kernel = Kernel_c::GetInstance();
+		
 		InputManager_c::CreateInstance("inputManager")->AddListener(*this);		
 
 		Kernel_c::GetInstance().AddLogListener(*this);
@@ -325,7 +327,7 @@ namespace Phobos
 		const String_c &cmdLine = clEditBox.GetStr();		
 
 		std::stringstream stream;
-		stream << "> " << cmdLine << std::endl;
+		stream << "> " << cmdLine;
 		Kernel_c::GetInstance().LogMessage(stream.str());
 
 		clContext.Execute(cmdLine);		
@@ -366,8 +368,7 @@ namespace Phobos
 		}
 
 		std::string tmp("Console ");
-		tmp.append(msg);
-		tmp.append("\n");
+		tmp.append(msg);		
 		Kernel_c::GetInstance().LogMessage(tmp);
 	}
 
@@ -621,7 +622,7 @@ namespace Phobos
 			}
 		}	
 		else
-			Kernel_c::GetInstance().LogMessage("[Console_c::CmdCd] Insuficient parameters\n");		
+			Kernel_c::GetInstance().LogMessage("[Console_c::CmdCd] Insuficient parameters");		
 	}
 
 	//

@@ -296,7 +296,7 @@ namespace Phobos
 				if(var == NULL)
 				{
 					stringstream str;
-					str << "[Context_c::ParseCmdParam] Error: cant find variable " << result << endl;
+					str << "[Context_c::ParseCmdParam] Error: cant find variable " << result;
 					Kernel_c::GetInstance().LogMessage(str.str());
 					return;
 				}
@@ -393,7 +393,7 @@ namespace Phobos
 		if(cmd == NULL)
 		{		
 			stringstream stream;
-			stream << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found" << endl;
+			stream << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found";
 			Kernel_c::GetInstance().LogMessage(stream.str());				
 		}
 		else
@@ -467,7 +467,7 @@ namespace Phobos
 		{
 			stream << "[DCmdEcho] Error: insuficient parameters" << endl;
 			stream << "\tUsage: echo <param1> [<paramn>]" << endl;
-			stream << "\tExample: echo hallo $varName\n" << endl;			
+			stream << "\tExample: echo hallo $varName\n";			
 		}
 		else
 		{		
@@ -515,7 +515,7 @@ namespace Phobos
 		{
 			stream	<< "[CmdSet] Error: insuficient parameters" << endl
 					<< "[CmdSet] Usage: set <varName> <varValue>" << endl
-					<< "\tExample: set MyPath \"blabla\"" << endl;			
+					<< "\tExample: set MyPath \"blabla\"";			
 		}
 		else
 		{		
@@ -530,12 +530,12 @@ namespace Phobos
 				}
 				catch(Exception_c &e)
 				{
-					stream << "[CmdSet] Error: cant set variable " << var->GetName() << " value to " << args[2] << ", message: " << e.what() << endl;					
+					stream << "[CmdSet] Error: cant set variable " << var->GetName() << " value to " << args[2] << ", message: " << e.what();					
 				}
 			}	
 			else
 			{
-				stream << "[CmdSet] Error: variable " << args[1] << " not found" << endl;				
+				stream << "[CmdSet] Error: variable " << args[1] << " not found";				
 			}
 		}
 
@@ -550,7 +550,7 @@ namespace Phobos
 		if(sz < 3)
 		{
 			stringstream stream;
-			stream << "[CmdIf] Insuficient parameters, usage: if <cond> <expr> [expr2]" << endl;
+			stream << "[CmdIf] Insuficient parameters, usage: if <cond> <expr> [expr2]";
 			Kernel_c::GetInstance().LogMessage(stream.str());
 		}
 		else

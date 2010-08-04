@@ -25,13 +25,25 @@ Phobos 3d
 
 #include "PH_Log.h"
 
+#include <ctime>
+#include <iostream>
+
 #include <boost/bind.hpp>
 
 namespace Phobos
 {
-	Log_c::Log_c(const String_c &name)
+	Log_c::Log_c(const String_c &name, UInt_t flags):
+		fCopyToStdout(flags & LOG_FLAG_COPY_TO_STDOUT)
 	{
 		clFile.open(name.c_str());
+
+		time_t t;		
+		time(&t);
+
+		std::stringstream stream;
+		stream << "Log created at " << ctime(&t);
+
+		this->Message(stream.str());
 	}
 
 	Log_c::~Log_c()
@@ -43,7 +55,10 @@ namespace Phobos
 	{				
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&LogListener_c::Message, _1, message));		
 
-		clFile << message;
+		if(fCopyToStdout)
+			std::cout << message << std::endl;
+
+		clFile << message << std::endl;
 		clFile.flush();
 	}
 

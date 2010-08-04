@@ -134,7 +134,7 @@ namespace Phobos
 		{
 			using namespace std;
 			stringstream stream;
-			stream << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0" << endl;
+			stream << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0";
 			Kernel_c::GetInstance().LogMessage(stream.str());
 			varEngineFPS.SetValue("60");
 
@@ -150,7 +150,7 @@ namespace Phobos
 		{
 			using namespace std;
 			stringstream stream;
-			stream << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05" << endl;
+			stream << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
 			Kernel_c::GetInstance().LogMessage(stream.str());			
 			varMinFrameTime.SetValue("0.01");
 

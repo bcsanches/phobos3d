@@ -52,7 +52,7 @@ namespace Phobos
 		public:
 			virtual void messageLogged( const Ogre::String& message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String & )
 			{
-				Kernel_c::GetInstance().LogMessage("Ogre: " + message + '\n');
+				Kernel_c::GetInstance().LogMessage("Ogre: " + message);
 			}
 	};
 
@@ -96,6 +96,10 @@ namespace Phobos
 		pclOgreWindow(NULL),
 		pclMainSceneManager(NULL)
 	{	
+		Kernel_c &kernel = Kernel_c::GetInstance();
+		
+		kernel.LogMessage("[Render] Initializing");
+
 		cmdOgreLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&Render_c::CmdOgreLoadPlugin, this));
 		cmdOgreAddResourceLocation.SetProc(PH_CONTEXT_CMD_BIND(&Render_c::CmdOgreAddResourceLocation, this));
 		cmdOgreInitialiseResourceGroup.SetProc(PH_CONTEXT_CMD_BIND(&Render_c::CmdOgreInitialiseResourceGroup, this));
@@ -106,8 +110,13 @@ namespace Phobos
 
 		//varRCaelum.SetCallback(VarCallback_t(this, &Render_c::VarRCaelumChanged));
 	
-		spRoot.reset(new Ogre::Root("", ""));		
-		Ogre::LogManager::getSingleton().getDefaultLog()->addListener(&clOgreLogListener_gl);
+		kernel.LogMessage("[Render] Initializing Ogre");
+		spRoot.reset(new Ogre::Root("", ""));	
+		Ogre::Log *log = Ogre::LogManager::getSingleton().getDefaultLog();
+		log->setDebugOutputEnabled(false);
+		log->addListener(&clOgreLogListener_gl);
+
+		kernel.LogMessage("[Render] Initialized.");
 	}
 
 	Render_c::~Render_c(void)
@@ -124,6 +133,7 @@ namespace Phobos
 	void Render_c::OnBoot(void)
 	{
 		Kernel_c	&kernel(Kernel_c::GetInstance());
+		kernel.LogMessage("[Render_c::OnBoot] Starting");
 
 		ipWindow = Window_c::Create("RenderWindow");
 		//EventManagerPtr_t eventManager = EventManager_c::GetInstance();
@@ -137,11 +147,13 @@ namespace Phobos
 		bool fullScreen = varRFullScreen.GetBoolean();
 		bool vsync = varRVSync.GetBoolean();
 
+		kernel.LogMessage("[Render_c::OnBoot] Opening render window");
 		ipWindow->Open("Phobos Engine", r);		
 	
 		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());	
 		Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
 
+		kernel.LogMessage("[Render_c::OnBoot] Searching render system");
 		bool foundRenderSystem = false;
 
 		for(r_it = renderSystems.begin(); r_it != end; ++r_it)
@@ -161,6 +173,7 @@ namespace Phobos
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render_c::OnBoot", "Render system " + varRRenderSystem.GetValue() + "not available");						
 		}
 
+		kernel.LogMessage("[Render_c::OnBoot] render system found, initializing Ogre");
 		spRoot->initialise(false);
 
 		Ogre::NameValuePairList opts;
@@ -173,16 +186,20 @@ namespace Phobos
 	
 		opts["externalWindowHandle"] = PointerToString(ipWindow->GetHandler());
 
+		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");
 		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);		
 		
+		kernel.LogMessage("[Render_c::OnBoot] Initializing all resource groups");
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();		
 
+		kernel.LogMessage("[Render_c::OnBoot] Creating SceneManager");
 		pclMainSceneManager = spRoot->createSceneManager(Ogre::ST_GENERIC);
 
 		this->SetShadowMode(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 	
 		pclMainSceneManager->setShadowFarDistance(1000);
 
+		kernel.LogMessage("[Render_c::OnBoot] Ready.");
 		Core_c::GetInstance()->OnEvent(CORE_EVENT_RENDER_READY);		
 	}
 
@@ -435,7 +452,7 @@ namespace Phobos
 
 		if(args.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Missing parameter type, usage: setShadowMode [none|stencil_additive|stencil_modulative]\n");			
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Missing parameter type, usage: setShadowMode [none|stencil_additive|stencil_modulative]");			
 
 			return;
 		}
@@ -444,7 +461,7 @@ namespace Phobos
 	
 		if(!clShadowType_gl.GetValue(tech,args[1]))
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Parameter " + args[1] + " is invalid\n");
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Parameter " + args[1] + " is invalid");
 
 			return;
 		}
@@ -456,7 +473,7 @@ namespace Phobos
 	{
 		if(args.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowFarDistance] Missing distance parameter, usage: setShadowFarDistance <value>\n");		
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowFarDistance] Missing distance parameter, usage: setShadowFarDistance <value>");		
 		}
 		else
 		{
@@ -477,7 +494,7 @@ namespace Phobos
 			this->UnloadCaelum();
 		else
 		{
-			IM_KernelPrintf(IM_KERNEL_LOG_NORMAL_FLAGS, "[Render_c::VarRCaelumChanged] Caelum will only be show when it is reloaded\n");
+			IM_KernelPrintf(IM_KERNEL_LOG_NORMAL_FLAGS, "[Render_c::VarRCaelumChanged] Caelum will only be show when it is reloaded");
 		}
 
 		return IM_TRUE;
@@ -525,7 +542,7 @@ namespace Phobos
 
 				if(manager.resourceGroupExists(name) && manager.isResourceGroupInitialised(name))
 				{
-					Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreInitialiseResourceGroup] Warning: ResourceGroup " + name + "is being initialised again, clearing it first\n");					
+					Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreInitialiseResourceGroup] Warning: ResourceGroup " + name + "is being initialised again, clearing it first");					
 					manager.clearResourceGroup(name);
 				}
 
@@ -548,7 +565,7 @@ namespace Phobos
 	{
 		if(container.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreLoadPlugin] ERROR: insuficient parameters, usage: ogreLoadPlugin <pluginName>\n");			
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreLoadPlugin] ERROR: insuficient parameters, usage: ogreLoadPlugin <pluginName>");			
 
 			return;
 		}
@@ -564,7 +581,7 @@ namespace Phobos
 			{
 				Ogre::String str(pclOgreWindow->writeContentsToTimestampedFile("screenshots/screen", ".jpg"));
 
-				Kernel_c::GetInstance().LogMessage("Created " + str + "\n");				
+				Kernel_c::GetInstance().LogMessage("Created " + str + "");				
 			}
 			catch(Ogre::Exception &e)
 			{

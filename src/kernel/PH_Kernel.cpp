@@ -56,7 +56,7 @@ namespace Phobos
 	}
 
 	Kernel_c::Kernel_c(const String_c &logName):
-		clLog(logName)
+		clLog(logName, LOG_FLAG_COPY_TO_STDOUT)
 	{
 		//empty
 	}

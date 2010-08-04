@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(log_basic)
 		BOOST_REQUIRE(remove(LOG_FILE_NAME));
 	
 	{
-		Log_c log(LOG_FILE_NAME);
+		Log_c log(LOG_FILE_NAME, 0);
 
 		BOOST_REQUIRE(exists(LOG_FILE_NAME));
 		BOOST_REQUIRE(file_size(LOG_FILE_NAME) == 0);
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(log_basic)
 	}
 
 	{
-		Log_c log(LOG_FILE_NAME);
+		Log_c log(LOG_FILE_NAME, 0);
 		
 		BOOST_REQUIRE(file_size(LOG_FILE_NAME) == 0);
 	}
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(log_basic)
 
 BOOST_AUTO_TEST_CASE(log_listener)
 {
-	Log_c log(LOG_FILE_NAME);
+	Log_c log(LOG_FILE_NAME, 0);
 
 	BOOST_CHECK(log.GetListenersCount() == 0);	
 

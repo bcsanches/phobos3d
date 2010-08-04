@@ -38,6 +38,11 @@ Phobos 3d
 
 namespace Phobos
 {
+	enum LogFlags_e
+	{
+		LOG_FLAG_COPY_TO_STDOUT = 0x01
+	};
+
 	class PH_KERNEL_API LogListener_c
 	{
 		public:
@@ -51,7 +56,7 @@ namespace Phobos
 	class PH_KERNEL_API Log_c: boost::noncopyable
 	{
 		public:
-			Log_c(const String_c &name);
+			Log_c(const String_c &name, UInt_t flags);
 			~Log_c();
 
 			void Message(const String_c &message);
@@ -65,6 +70,8 @@ namespace Phobos
 
 			std::ofstream		clFile;
 			ListenersList_t		lstListeners;
+
+			bool				fCopyToStdout;
 	};
 }
 

@@ -267,7 +267,7 @@ namespace Phobos
 
 		stream	<< "[IM_Core] Current time:"<<endl<<"\tfpTotalTics: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpTotalTicks<<endl
 				<<"\tfpFrameTime: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpFrameTime<<endl
-				<<"\tFrameCount: "<<stSimInfo.stTimers[CORE_SYS_TIMER].uFrameCount<<endl;
+				<<"\tFrameCount: "<<stSimInfo.stTimers[CORE_SYS_TIMER].uFrameCount;
 		
 		Kernel_c::GetInstance().LogMessage(stream.str());			
 	}
@@ -297,8 +297,7 @@ namespace Phobos
 			for(int i = 0;pauseInfo[i].pstrzName; ++i)
 			{				
 				stream << pauseInfo[i].pstrzName << '|';				
-			}
-			stream << endl;
+			}		
 
 			Kernel_c::GetInstance().LogMessage(stream.str());
 			return;
