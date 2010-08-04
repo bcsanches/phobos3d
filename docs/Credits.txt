@@ -1,0 +1,6 @@
+Credits
+
+Phobos Engine use the following Software/SDK/Libraries/Images/etc:
+Ogre (Object Oriented Graphics Rendering Engine) - http://www.ogre3d.org/
+Boost C++ Libraries - http://www.boost.org/
+Genetica Texture Packs (Spiral Graphics) - http://www.spiralgraphics.biz 
