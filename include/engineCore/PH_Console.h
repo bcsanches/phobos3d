@@ -34,6 +34,7 @@ Phobos 3d
 #include <OgreRectangle2D.h>
 
 #include <PH_Context.h>
+#include <PH_InputManager.h>
 #include <PH_Log.h>
 
 #include "PH_EngineCoreAPI.h"
@@ -44,7 +45,7 @@ namespace Phobos
 
 	typedef boost::intrusive_ptr<Console_c> ConsolePtr_t;	
 
-	class PH_ENGINE_CORE_API Console_c: public CoreModule_c, private LogListener_c
+	class PH_ENGINE_CORE_API Console_c: public CoreModule_c, private LogListener_c, private InputManagerListener_c, private InputDeviceListener_c
 	{		
 		private:
 			// =====================================================
@@ -113,7 +114,7 @@ namespace Phobos
 			~Console_c(void);
 
 			void OnFixedUpdate();
-			void OnInit();
+			//void OnInit();
 			void OnUpdate();
 			void OnRenderReady();
 
@@ -143,6 +144,12 @@ namespace Phobos
 			//Log message handler
 			void Message(const String_c &message);
 
+			void InputManagerEvent(const InputManagerEvent_s &event);
+			void InputEvent(const InputEvent_s &event);
+
+			void CmdCd(const StringVector_t &args, Context_c &);
+			void CmdLs(const StringVector_t &args, Context_c &);
+
 		private:
 			// =====================================================
 			// PRIVATE ATTRIBUTES
@@ -171,22 +178,17 @@ namespace Phobos
 
 			ContextVar_c				varMaterialName;
 			ContextVar_c				varShowRenderInfo;
-			ContextCmd_c				cmdLsO;
-			ContextCmd_c				cmdCdO;
+			ContextCmd_c				cmdLs;
+			ContextCmd_c				cmdCd;
+
+			String_c					strCurrentNodePathName;
 
 			bool fActive;
 			bool fIgnoreFirstChar;
+			bool fIgnoredLastChar;
 			bool fTextBufferChanged;
 			bool fEditBoxChanged;
-			bool fUIMoved;			
-					
-		private:
-			// =====================================================
-			// STATIC PRIVATE METHODS
-			// =====================================================		
-			//IM_ErrorHandler_t InputManagerListenerProc(IM_Handler_t input, IM_Handler_t param);
-
-			//IM_ErrorHandler_t InputDeviceKeyboardListenerProc(IM_Handler_t input, IM_Handler_t param);		
+			bool fUIMoved;							
 
 		private:
 			// =====================================================

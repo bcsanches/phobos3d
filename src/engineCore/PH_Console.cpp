@@ -27,11 +27,14 @@ Phobos 3d
 
 #include <limits.h>
 
+#include <boost/foreach.hpp>
+
+#include <PH_ContextUtils.h>
 #include <PH_Error.h>
-#include <PH_InputDefs.h>
-//FIXME
-//#include <PH_InputDevice.h>
-//#include <PH_InputManager.h>
+#include <PH_Exception.h>
+#include <PH_InputActions.h>
+#include <PH_InputEvent.h>
+#include <PH_InputManager.h>
 //#include <PH_InputMapper.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
@@ -45,7 +48,7 @@ Phobos 3d
 #include "PH_Render.h"
 #include "PH_OgreUtils.h"
 
-#define CONSOLE_KEY IM_CHAR('`')
+#define CONSOLE_KEY '`'
 
 #define CONSOLE_TIME 2.5f
 
@@ -80,9 +83,7 @@ namespace Phobos
 	}
 
 	Console_c::Console_c(void):	
-		CoreModule_c("Console"),
-		//FIXME
-		//pclInputManager(NULL),
+		CoreModule_c("Console"),		
 		pclRect(NULL),	
 		pclTextBox(NULL),
 		pclOverlay(NULL),
@@ -92,53 +93,35 @@ namespace Phobos
 		lstHistory(CONSOLE_HISTORY_COUNT),
 		varMaterialName("dvConsoleMaterialName", "PH_Console/Background"),
 		varShowRenderInfo("dvShowRenderInfo", "0"),
-		cmdLsO("lso"),
-		cmdCdO("cdo")
+		cmdLs("ls"),
+		cmdCd("cd"),
+		fIgnoreFirstChar(false),
+		fIgnoredLastChar(false),
+		strCurrentNodePathName("/")
 	{
-		/*
-		//FIXME
-		clInputManagerListener.SetProc(IM_SubjectListenerProc_t(this, &IM_Console_c::InputManagerListenerProc));
-		clInputDeviceKeyboardListener.SetProc(IM_SubjectListenerProc_t(this, &IM_Console_c::InputDeviceKeyboardListenerProc));	
-		*/		
+		InputManager_c::CreateInstance("inputManager")->AddListener(*this);		
 
 		Kernel_c::GetInstance().AddLogListener(*this);
 
-		clContext.AddContextVar(varMaterialName);
-		clContext.AddContextVar(varShowRenderInfo);		
+		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
+		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
 
-		//FIXME
-		//clShell.CreateDefaultCmds(clContext);
+		clContext.AddContextVar(varMaterialName);
+		clContext.AddContextVar(varShowRenderInfo);	
+
+		clContext.AddContextCmd(cmdLs);
+		clContext.AddContextCmd(cmdCd);		
 	}
 
 	Console_c::~Console_c(void)
 	{		
-		//FIXME
-		//IM_Kernel_c::GetInstance().SetLogProc(IM_KernelLogProc_t());
+		InputManager_c::ReleaseInstance();
 	}
 
 	void Console_c::OnFixedUpdate()
 	{
-		//FIXME
-		//pclInputManager->Update();
-	}
-
-	void Console_c::OnInit(void)
-	{
-		Kernel_c &kernel = Kernel_c::GetInstance();
-
-		/*
-		FIXME
-		pclInputManager = static_cast<IM_InputManager_c *>(kernel->LookupNode(IM_DEFAULT_PATH_NAME_INPUT_MANAGER, NULL));
-
-		if(NULL == pclInputManager)
-		{
-			IM_KernelPushErrorf(IM_ERROR_NODE_NOT_FOUND, "IM_Console_c::OnInit", "Cant find IM_InputMapper");
-			return(IM_CORE_EVENT_ERROR);
-		}	
-	
-		pclInputManager->AddListener(clInputManagerListener);		
-		*/		
-	}
+		InputManager_c::GetInstance()->Update();
+	}	
 
 	void Console_c::OnUpdate(void)
 	{
@@ -212,11 +195,7 @@ namespace Phobos
 					const String_c &str = (*it);
 
 					if(str.length() > CONSOLE_LINE_LENGHT)
-					{
-						//IM_String_c tmp;
-						//tmp.SetSub(&str, 0, CONSOLE_LINE_LENGHT);					
-
-						//text += tmp.GetStr();
+					{						
 						text.append(str, 0, CONSOLE_LINE_LENGHT);
 					}
 					else
@@ -301,8 +280,17 @@ namespace Phobos
 		if(fIgnoreFirstChar)
 		{
 			fIgnoreFirstChar = false;
+			fIgnoredLastChar = true;
 			return;
 		}
+
+		if((fIgnoredLastChar) && (ch == CONSOLE_KEY))
+		{
+			fIgnoredLastChar = false;
+			return;
+		}
+
+		fIgnoredLastChar = false;
 
 		switch(ch)
 		{
@@ -334,11 +322,13 @@ namespace Phobos
 
 	void Console_c::OnEnter(void)
 	{		
-		const String_c &cmdLine = clEditBox.GetStr();
+		const String_c &cmdLine = clEditBox.GetStr();		
 
-		PH_ASSERT_MSG(false, "Not implemented");
-		//FIXME
-		//clShell.Execute(clContext, cmdLine, IM_SHELL_EXECUTE_MODE_VERBOSE);
+		std::stringstream stream;
+		stream << "> " << cmdLine << std::endl;
+		Kernel_c::GetInstance().LogMessage(stream.str());
+
+		clContext.Execute(cmdLine);		
 
 		this->AddToHistory(cmdLine);
 
@@ -455,70 +445,53 @@ namespace Phobos
 			clEditBox.SetStr(tmp);
 		}
 	}
+	
+	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)
+	{		
+		std::stringstream stream;
 
-	/*
-	FIXME
-	IM_ErrorHandler_t IM_Console_c::InputManagerListenerProc(IM_Handler_t input, IM_Handler_t param)
-	{
-		IM_InputManager_c::InputManagerEvent_s *event = (IM_InputManager_c::InputManagerEvent_s *) input;
-
-		switch(event->eType)
+		switch(event.eType)
 		{
-			case IM_InputManager_c::INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-				IM_KernelPrintf(
-					IM_KERNEL_LOG_NORMAL_FLAGS, 
-					"[IM_Console_c::InputManagerListenerProc] Device %s attached\n", 
-					event->rclDevice.GetName().c_str()
-				);
-
-				if(event->rclDevice.GetDeviceType() == IM_InputManager_c::DEVICE_KEYBOARD)			
-					event->rclDevice.AddListener(clInputDeviceKeyboardListener);			
-
+			case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
+				stream << "[Console_c::InputManagerEvent] Device " << event.ipDevice->GetName() << " attached.";								
+				if(event.ipDevice->GetDeviceType() == INPUT_DEVICE_KEYBOARD)				
+					event.ipDevice->AddListener(*this);			
 				break;
 
-			case IM_InputManager_c::INPUT_MANAGER_EVENT_DEVICE_DETACHED:
-				IM_KernelPrintf(
-					IM_KERNEL_LOG_NORMAL_FLAGS, 
-					"[IM_Console_c::InputManagerListenerProc] Device %s detached\n", 
-					event->rclDevice.GetName().c_str()
-				);
+			case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
+				stream << "[Console_c::InputManagerEvent] Device " << event.ipDevice->GetName() << " detached.";
 				break;
 		}
 
-		return(IM_SUCCESS);
+		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
-	IM_ErrorHandler_t IM_Console_c::InputDeviceKeyboardListenerProc(IM_Handler_t input, IM_Handler_t param)
-	{
-		IM_InputManager_c::InputEvent_s *event = static_cast<IM_InputManager_c::InputEvent_s *>(input);
-	
-		switch(event->eType)
+	void Console_c::InputEvent(const InputEvent_s &event)
+	{			
+		switch(event.eType)
 		{
-			case IM_InputManager_c::INPUT_EVENT_CHAR:
+			case INPUT_EVENT_CHAR:
 				if(this->IsActive())
-					this->OnChar(static_cast<IM_Char_t>(event->stChar.u16Char));			
+					this->OnChar(static_cast<Char_t>(event.stChar.u16Char));			
 				break;
 
-			case IM_InputManager_c::INPUT_EVENT_BUTTON:	
-				if(event->stButton.eState == IM_InputManager_c::BUTTON_STATE_DOWN)
+			case INPUT_EVENT_BUTTON:	
+				if(event.stButton.eState == BUTTON_STATE_DOWN)
 				{
-					if(event->stButton.uId == CONSOLE_KEY)
+					if(event.stButton.uId == CONSOLE_KEY)
 						this->ToggleConsole();
 					else if(this->IsActive())
 					{
-						if(event->stButton.uId == IM_KB_UP_ARROW)
+						if(event.stButton.uId == KB_UP_ARROW)
 							this->OnPreviousCommand();
-						else if(event->stButton.uId == IM_KB_DOWN_ARROW)
+						else if(event.stButton.uId == KB_DOWN_ARROW)
 							this->OnNextCommand();
 					}
 				}
 				break;
 		}
-
-		return(IM_SUCCESS);
 	}
-	*/
-
+	
 	void Console_c::UpdateRenderInfo()
 	{
 		using namespace Ogre;
@@ -556,6 +529,99 @@ namespace Phobos
 			//guiDbg->setCaption(mDebugText);
 		}
 		catch(...) { /* ignore */ }
+	}
+		
+	void Console_c::CmdLs(const StringVector_t &args, Context_c &)
+	{	
+		Kernel_c	&kernel = Kernel_c::GetInstance();
+		NodePtr_t	currentNode;
+
+		if(args.size() > 1)
+		{
+			Path_c path(args[1]);			
+
+			if(path.IsRelative())
+			{
+				path = strCurrentNodePathName;
+				path.AddName(args[1]);
+			}
+
+			currentNode = kernel.LookupObject(path);
+			if(!currentNode)
+			{
+				std::stringstream stream("[Console_c::CmdLs] Invalid path: ");
+				stream << path.GetStr();
+				
+				kernel.LogMessage(stream.str());
+
+				return;
+			}
+		}
+		else
+		{
+			currentNode = kernel.LookupObject(Path_c(strCurrentNodePathName));
+
+			if(!currentNode)
+			{				
+				std::stringstream stream("[Console_c::CmdLs] Invalid node (");
+				stream << strCurrentNodePathName << "), going to root";
+				
+				kernel.LogMessage(stream.str());
+
+				strCurrentNodePathName = "/";				
+
+				return;
+			}
+		}	
+		std::stringstream stream;
+
+		stream << "\t.\n\t..\n";
+		BOOST_FOREACH(const Node_c::NodeMapPair_t &pair, currentNode->GetNodes())
+		{
+			stream << "\t" << pair.second->GetName() << "\n";
+		}
+
+		kernel.LogMessage(stream.str());
+		
+		//currentNode->get
+		//currentNode->ForAllChildren(IM_Shell_c::PrintNodesNameProc, NULL);		
+	}
+
+	void Console_c::CmdCd(const StringVector_t &args, Context_c &)
+	{
+		if(args.size() == 2)			
+		{		
+			Kernel_c	&kernel = Kernel_c::GetInstance();
+			NodePtr_t	currentNode;
+			Path_c		path(args[1]);
+			
+			if(path.IsRelative())
+			{		
+				path = strCurrentNodePathName;
+				path.AddName(args[1]);
+			}
+
+			try
+			{
+				currentNode = kernel.LookupObject(path);						
+				currentNode->GetThisPath(path);
+
+				//if we are at root, we set the path manually, otherwise the path will be empty
+				if(currentNode->GetParent() == NULL)
+					strCurrentNodePathName = '/';
+				else
+					strCurrentNodePathName = path.GetStr();		
+			}
+			catch(const Exception_c &)
+			{			
+				std::stringstream stream;
+				stream << "[Console_c::CmdCd] Invalid dir " << args[1];
+
+				kernel.LogMessage(stream.str());
+			}
+		}	
+		else
+			Kernel_c::GetInstance().LogMessage("[Console_c::CmdCd] Insuficient parameters\n");		
 	}
 
 	//
