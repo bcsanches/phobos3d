@@ -152,7 +152,7 @@ namespace Phobos
 	void Core_c::UpdateDestroyList()
 	{
 		BOOST_FOREACH(CoreModulePtr_t ptr, setModulesToDestroy)
-		{
+		{			
 			ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), ptr);
 
 			PH_ASSERT_MSG(it != vecModules.end(), "Module on removed list is not registered!!!");

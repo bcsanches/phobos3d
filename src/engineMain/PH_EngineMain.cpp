@@ -234,6 +234,7 @@ int main(int, char **)
 	{
 		engine.MainLoop();		
 	}
+#ifndef PH_DEBUG
 	catch(std::exception &e)
 	{
 		std::stringstream stream;
@@ -242,6 +243,11 @@ int main(int, char **)
 		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
 
 		exit(EXIT_FAILURE);
+#else
+	catch(std::exception &)
+	{
+		throw;
+#endif
 	}
 
 	return 0;

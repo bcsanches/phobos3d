@@ -40,7 +40,7 @@ namespace Phobos
 		CoreModule_c("EventManagerModule"),
 		ipEventManager(EventManager_c::CreateInstance("EventManager"))
 	{
-		ipEventManager->AddListener(*this, SYSTEM_EVENT_TYPE);
+		ipEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
 	}
 
 	EventManagerModule_c::~EventManagerModule_c()

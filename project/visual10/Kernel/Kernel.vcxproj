@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\..\src\kernel\PH_String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\kernel\PH_Listener.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Context.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_ContextCmd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_ContextItem.h" />
@@ -119,7 +120,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_ContextVar.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Enum.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_EventListener.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventListenerFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_EventManager.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_EventManagerFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Object.h" />
@@ -131,7 +131,7 @@
     <ClInclude Include="..\..\..\include\kernel\PH_Error.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Exception.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Folders.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_InputDefs.h" />
+    <ClInclude Include="..\..\..\include\kernel\PH_InputActions.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Kernel.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_KernelAPI.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Log.h" />

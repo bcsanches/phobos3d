@@ -77,9 +77,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_EventListener.h">
       <Filter>eventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\kernel\PH_EventListenerFwd.h">
-      <Filter>eventManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\kernel\PH_EventManager.h">
       <Filter>eventManager</Filter>
     </ClInclude>
@@ -105,7 +102,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_Error.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Exception.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Folders.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_InputDefs.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Kernel.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_KernelAPI.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Log.h" />
@@ -120,5 +116,7 @@
     <ClInclude Include="..\..\..\include\kernel\PH_String.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Types.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Enum.h" />
+    <ClInclude Include="..\..\..\include\kernel\PH_InputActions.h" />
+    <ClInclude Include="..\..\..\include\kernel\PH_Listener.h" />
   </ItemGroup>
 </Project>

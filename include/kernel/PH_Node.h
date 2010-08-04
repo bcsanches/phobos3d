@@ -26,7 +26,13 @@ Phobos 3d
 #ifndef PH_NODE_H
 #define PH_NODE_H
 
+//#define PH_NODE_FOREACH
+
 #include <map>
+
+#ifdef PH_NODE_FOREACH
+#include <boost/range/iterator.hpp>
+#endif
 
 #include "PH_NodeFwd.h"
 #include "PH_Object.h"
@@ -42,14 +48,23 @@ namespace Phobos
 		(using derived classes), but storing stack instances as child nodes results on undefined behavior.
 	*/
 
+	class Path_c;
+
 	enum ChildrenMode_e
 	{
 	   PRIVATE_CHILDREN,
 	   PUBLIC_CHILDREN
-	};
+	};	
 
 	class PH_KERNEL_API Node_c: public Object_c
 	{
+		public:
+			typedef std::map<String_c, NodePtr_t> NodeMap_t;
+			typedef std::pair<String_c, NodePtr_t> NodeMapPair_t;
+
+			typedef NodeMap_t::iterator iterator;
+			typedef NodeMap_t::const_iterator const_iterator;
+
 		public:			
 			static NodePtr_t Create(const String_c &name);
 			static NodePtr_t Create(const Char_t *name);
@@ -66,6 +81,12 @@ namespace Phobos
 
 			NodePtr_t GetParent() const;
 
+			void GetThisPath(Path_c &out);
+
+			inline NodeMap_t::const_iterator begin() const;
+			inline NodeMap_t::const_iterator end() const;
+			inline const NodeMap_t &GetNodes() const;
+
 		protected:
 			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
 			explicit Node_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);		
@@ -73,14 +94,55 @@ namespace Phobos
 
 			void AddPrivateChild(NodePtr_t node);
 
-		private:					
-			typedef std::map<String_c, NodePtr_t> NodeMap_t;
-			typedef std::pair<String_c, NodePtr_t> NodeMapPair_t;
+		private:
+			void GetThisPath_r(Path_c &out);
+
+		private:											
 			NodeMap_t mapNodes;
 			Node_c *pclParent;
 
 			bool fPrivateChildren;
 	};
+
+	inline Node_c::NodeMap_t::const_iterator Node_c::begin() const
+	{
+		return mapNodes.begin();
+	}
+
+	inline Node_c::NodeMap_t::const_iterator Node_c::end() const
+	{
+		return mapNodes.end();
+	}
+
+	inline const Node_c::NodeMap_t &Node_c::GetNodes() const
+	{
+		return mapNodes;
+	}
+
+#ifdef PH_NODE_FOREACH
+
+	inline Node_c::NodeMap_t::const_iterator range_begin( const Node_c &x )
+    {
+		return x.begin();
+    }
+
+    inline Node_c::NodeMap_t::const_iterator range_end( const Node_c &x )
+    {
+        return x.end();
+    }
+#endif
+
 }
+
+#ifdef PH_NODE_FOREACH
+namespace boost
+{    
+    template<>
+    struct range_const_iterator< Phobos::Node_c >
+    {
+		typedef Phobos::Node_c::NodeMap_t::const_iterator type;
+    };
+}
+#endif
 
 #endif

@@ -27,6 +27,7 @@ Phobos 3d
 
 #include <PH_Exception.h>
 #include <PH_Node.h>
+#include <PH_Path.h>
 
 using namespace boost;
 using namespace Phobos;
@@ -91,6 +92,10 @@ BOOST_AUTO_TEST_CASE(node_basic)
 			NodePtr_t parent(child->GetParent());
 			BOOST_REQUIRE(parent);
 			BOOST_REQUIRE(parent->GetName().compare("root") == 0);
+
+			Path_c path;
+			child->GetThisPath(path);
+			BOOST_REQUIRE(path.GetStr().compare("/root/child0")==0);
 
 			child = new TestNode_c("child1");
 			BOOST_REQUIRE(iAliveNodes_gl == 3);

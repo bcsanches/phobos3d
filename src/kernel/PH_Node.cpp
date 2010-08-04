@@ -28,6 +28,7 @@ Phobos 3d
 #include <boost/foreach.hpp>
 
 #include "PH_Exception.h"
+#include "PH_Path.h"
 
 namespace Phobos
 {
@@ -124,6 +125,11 @@ namespace Phobos
 
 	NodePtr_t Node_c::TryGetChild(const String_c &name) const
 	{
+		if((name.size() == 1) && (name[0] == '.'))
+			return NodePtr_t(const_cast<Node_c*>(this));
+		else if((name.size() == 2) && (name.compare("..") == 0))
+			return NodePtr_t(pclParent);
+
 		NodeMap_t::const_iterator it = mapNodes.find(name);
 		if(it == mapNodes.end())
 		{
@@ -159,5 +165,24 @@ namespace Phobos
 	NodePtr_t Node_c::GetParent() const
 	{
 		return NodePtr_t(pclParent);
+	}
+
+	void Node_c::GetThisPath(Path_c &out)
+	{
+		out.Clear();
+
+		this->GetThisPath_r(out);
+	}
+
+	void Node_c::GetThisPath_r(Path_c &out)
+	{
+		if(pclParent != NULL)
+			pclParent->GetThisPath_r(out);
+		else		
+		{
+			out = "/";
+		}
+
+		out.AddName(this->GetName());
 	}
 }

@@ -70,6 +70,9 @@ namespace Phobos
 
 	NodePtr_t ObjectManager_c::LookupObject(const Path_c &path) const
 	{
+		if(path.IsOnlyRoot())
+			return ipRoot;
+
 		Path_c::Iterator_c it;
 
 		String_c folder;
