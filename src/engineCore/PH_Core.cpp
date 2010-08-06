@@ -269,7 +269,7 @@ namespace Phobos
 				<<"\tfpFrameTime: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpFrameTime<<endl
 				<<"\tFrameCount: "<<stSimInfo.stTimers[CORE_SYS_TIMER].uFrameCount;
 		
-		Kernel_c::GetInstance().LogMessage(stream.str());			
+		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
 	void Core_c::CmdToggleTimerPause(const StringVector_t &args, Context_c &)

@@ -131,11 +131,8 @@ namespace Phobos
 		if(updateTime > 0)
 			return(1.0f / updateTime);
 		else
-		{
-			using namespace std;
-			stringstream stream;
-			stream << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0";
-			Kernel_c::GetInstance().LogMessage(stream.str());
+		{			
+			Kernel_c::GetInstance().LogStream() << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0";
 			varEngineFPS.SetValue("60");
 
 			return(1.0f / UPDATE_TIME);
@@ -147,11 +144,8 @@ namespace Phobos
 		Float_t minFrameTime = varMinFrameTime.GetFloat();
 
 		if(minFrameTime > 0.05)
-		{
-			using namespace std;
-			stringstream stream;
-			stream << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
-			Kernel_c::GetInstance().LogMessage(stream.str());			
+		{			
+			Kernel_c::GetInstance().LogStream() << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
 			varMinFrameTime.SetValue("0.01");
 
 			minFrameTime = MIN_TIME;

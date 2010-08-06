@@ -66,7 +66,8 @@ namespace Phobos
 			// =====================================================
 			// LOCAL METHODS
 			// =====================================================
-			void LogMessage(const String_c &message);
+			inline void LogMessage(const String_c &message);
+			inline Log_c::Stream_c LogStream();
 
 			void AddLogListener(LogListener_c &listener);
 			void RemoveLogListener(LogListener_c &listener);
@@ -99,6 +100,16 @@ namespace Phobos
 	{
 		return clObjectManager.LookupObject(path);
 	}
+
+	inline Log_c::Stream_c Kernel_c::LogStream()
+	{
+		return clLog.Stream();
+	}
+
+	inline void Kernel_c::LogMessage(const String_c &message)
+	{
+		clLog.Message(message);
+	}	
 }
 
 #endif

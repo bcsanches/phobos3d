@@ -72,11 +72,8 @@ namespace Phobos
 					Console_c::GetInstance()->ExecuteFromFile("autoexec.cfg");
 				}
 				catch(FileNotFoundException_c &e)
-				{
-					std::stringstream stream;
-					stream << "[BootModule_c::OnFixedUpdate] Warning, boot failed: ";
-					stream << e.what();
-					Kernel_c::GetInstance().LogMessage(stream.str());
+				{					
+					Kernel_c::GetInstance().LogStream() << "[BootModule_c::OnFixedUpdate] Warning, boot failed: " << e.what();
 				}
 
 				//Time to boot and game over for us

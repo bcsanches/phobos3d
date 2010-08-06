@@ -66,11 +66,6 @@ namespace Phobos
 		//empty
 	}
 
-	void Kernel_c::LogMessage(const String_c &message)
-	{
-		clLog.Message(message);
-	}	
-
 	void Kernel_c::AddLogListener(LogListener_c &listener)
 	{
 		clLog.AddListener(listener);

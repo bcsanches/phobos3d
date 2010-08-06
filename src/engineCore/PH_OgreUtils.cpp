@@ -36,11 +36,8 @@ namespace Phobos
 	static boost::detail::atomic_count tCount_gl(0);
 
 	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
-	{
-		std::stringstream stream;
-
-		stream << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
-		Kernel_c::GetInstance().LogMessage(stream.str());
+	{		
+		Kernel_c::GetInstance().LogStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
 	}
 
 	String_c &GenerateOgreName(String_c &out)

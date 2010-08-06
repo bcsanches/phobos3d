@@ -325,10 +325,8 @@ namespace Phobos
 	void Console_c::OnEnter(void)
 	{		
 		const String_c &cmdLine = clEditBox.GetStr();		
-
-		std::stringstream stream;
-		stream << "> " << cmdLine;
-		Kernel_c::GetInstance().LogMessage(stream.str());
+		
+		Kernel_c::GetInstance().LogStream() << "> " << cmdLine;
 
 		clContext.Execute(cmdLine);		
 
@@ -549,11 +547,8 @@ namespace Phobos
 
 			currentNode = kernel.LookupObject(path);
 			if(!currentNode)
-			{
-				std::stringstream stream("[Console_c::CmdLs] Invalid path: ");
-				stream << path.GetStr();
-				
-				kernel.LogMessage(stream.str());
+			{				
+				kernel.LogStream() << "[Console_c::CmdLs] Invalid path: " << path.GetStr();
 
 				return;
 			}
@@ -563,14 +558,10 @@ namespace Phobos
 			currentNode = kernel.LookupObject(Path_c(strCurrentNodePathName));
 
 			if(!currentNode)
-			{				
-				std::stringstream stream("[Console_c::CmdLs] Invalid node (");
-				stream << strCurrentNodePathName << "), going to root";
-				
-				kernel.LogMessage(stream.str());
+			{								
+				kernel.LogStream() << "[Console_c::CmdLs] Invalid node (" << strCurrentNodePathName << "), going to root";
 
 				strCurrentNodePathName = "/";				
-
 				return;
 			}
 		}	
@@ -614,11 +605,8 @@ namespace Phobos
 					strCurrentNodePathName = path.GetStr();		
 			}
 			catch(const Exception_c &)
-			{			
-				std::stringstream stream;
-				stream << "[Console_c::CmdCd] Invalid dir " << args[1];
-
-				kernel.LogMessage(stream.str());
+			{							
+				kernel.LogStream() << "[Console_c::CmdCd] Invalid dir " << args[1];
 			}
 		}	
 		else

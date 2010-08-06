@@ -294,10 +294,8 @@ namespace Phobos
 			{
 				ContextVar_c *var = this->TryGetContextVar(result);
 				if(var == NULL)
-				{
-					stringstream str;
-					str << "[Context_c::ParseCmdParam] Error: cant find variable " << result;
-					Kernel_c::GetInstance().LogMessage(str.str());
+				{					
+					Kernel_c::GetInstance().LogStream() << "[Context_c::ParseCmdParam] Error: cant find variable " << result;
 					return;
 				}
 				else
@@ -391,10 +389,8 @@ namespace Phobos
 		const String_c	&cmdName = args[0];
 		ContextCmd_c		*cmd = this->TryGetContextCmd(cmdName);
 		if(cmd == NULL)
-		{		
-			stringstream stream;
-			stream << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found";
-			Kernel_c::GetInstance().LogMessage(stream.str());				
+		{					
+			Kernel_c::GetInstance().LogStream() << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found";
 		}
 		else
 			cmd->Execute(args, *this);
@@ -548,10 +544,8 @@ namespace Phobos
 		size_t sz = args.size();
 		
 		if(sz < 3)
-		{
-			stringstream stream;
-			stream << "[CmdIf] Insuficient parameters, usage: if <cond> <expr> [expr2]";
-			Kernel_c::GetInstance().LogMessage(stream.str());
+		{			
+			Kernel_c::GetInstance().LogMessage("[CmdIf] Insuficient parameters, usage: if <cond> <expr> [expr2]");
 		}
 		else
 		{

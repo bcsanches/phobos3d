@@ -38,12 +38,9 @@ namespace Phobos
 		clFile.open(name.c_str());
 
 		time_t t;		
-		time(&t);
+		time(&t);		
 
-		std::stringstream stream;
-		stream << "Log created at " << ctime(&t);
-
-		this->Message(stream.str());
+		this->Stream() << "Log created at " << ctime(&t);
 	}
 
 	Log_c::~Log_c()

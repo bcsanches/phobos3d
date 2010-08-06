@@ -26,6 +26,7 @@ Phobos 3d
 #ifndef PH_LOG_H
 #define PH_LOG_H
 
+#include <iostream>
 #include <fstream>
 
 #include <boost/intrusive/list.hpp>
@@ -56,10 +57,68 @@ namespace Phobos
 	class PH_KERNEL_API Log_c: boost::noncopyable
 	{
 		public:
+			class Stream_c
+			{
+				protected:
+					Log_c &rclTarget;					
+					std::stringstream strsStream;					
+		
+				public:
+					/// Simple type to indicate a flush of the stream to the log
+					struct Flush {};
+					struct Endl {};
+
+					Stream_c(Log_c &target):
+						rclTarget(target)
+					{
+						//empty
+					}
+
+					// copy constructor
+					Stream_c(const Stream_c& rhs): 
+						rclTarget(rhs.rclTarget)
+					{
+						strsStream.str(rhs.strsStream.str());
+					} 
+
+					~Stream_c()
+					{
+						// flush on destroy
+						if (strsStream.tellp() > 0)
+						{
+							rclTarget.Message(strsStream.str());
+						}
+					}
+
+					template <typename T>
+					Stream_c& operator<< (const T& v)
+					{
+						strsStream << v;
+						return *this;
+					}
+
+					Stream_c& operator<< (const Flush &)
+					{								
+						rclTarget.Message(strsStream.str());
+						strsStream.str("");
+
+						return *this;
+					}
+
+					Stream_c &operator<<(const Endl &)
+					{
+						strsStream << std::endl;
+
+						return *this;
+					}
+			};
+
+		public:
 			Log_c(const String_c &name, UInt_t flags);
 			~Log_c();
 
 			void Message(const String_c &message);
+			inline Stream_c Stream();
 
 			void AddListener(LogListener_c &listener);
 			void RemoveListener(LogListener_c &listener);
@@ -73,6 +132,11 @@ namespace Phobos
 
 			bool				fCopyToStdout;
 	};
+
+	inline Log_c::Stream_c Log_c::Stream()
+	{
+		return Stream_c(*this);
+	}
 }
 
 #endif
