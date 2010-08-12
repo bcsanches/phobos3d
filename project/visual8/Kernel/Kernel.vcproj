@@ -118,7 +118,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="..\..\..\include\kernel"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_KERNEL_EXPORTS;PH_MSVC;PH_WIN32;PH_IGNORE_ASSERT;PH_RELEASE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_KERNEL_EXPORTS;PH_MSVC;PH_WIN32;PH_IGNORE_ASSERT;PH_RELEASE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
