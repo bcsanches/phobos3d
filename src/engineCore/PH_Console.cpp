@@ -97,6 +97,7 @@ namespace Phobos
 		cmdCd("cd"),
 		fIgnoreFirstChar(false),
 		fIgnoredLastChar(false),
+		fActive(true),
 		strCurrentNodePathName("/")
 	{
 		Kernel_c &kernel = Kernel_c::GetInstance();
@@ -104,6 +105,9 @@ namespace Phobos
 		InputManager_c::CreateInstance("inputManager")->AddListener(*this);		
 
 		Kernel_c::GetInstance().AddLogListener(*this);
+
+		ipInputMapper = InputMapper_c::Create("inputMapper", clContext);
+		ipInputMapper->Disable();
 
 		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
 		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
@@ -337,13 +341,7 @@ namespace Phobos
 
 	void Console_c::ToggleConsole(void)
 	{
-		const Char_t *msg;
-
-		/*
-		FIXME
-		IM_InputMapper_c *mapper = IM_LookupNode<IM_InputMapper_c>(IM_DEFAULT_PATH_NAME_INPUT_MAPPER);
-		IM_ASSERT_VALID(mapper);
-		*/
+		const Char_t *msg;		
 
 		//if just turning on, ignore first input
 		fActive = !fActive;
@@ -352,8 +350,7 @@ namespace Phobos
 			fIgnoreFirstChar = true;			
 			msg = "enabled";
 
-			//FIXME
-			//mapper->Disable();
+			ipInputMapper->Disable();
 
 			if(pclOverlay)
 				pclOverlay->show();		
@@ -361,8 +358,8 @@ namespace Phobos
 		else
 		{
 			msg = "disabled";
-			//FIXME
-			//mapper->Enable();		
+
+			ipInputMapper->Enable();	
 		}
 
 		std::string tmp("Console ");
@@ -573,10 +570,7 @@ namespace Phobos
 			stream << "\t" << pair.second->GetName() << "\n";
 		}
 
-		kernel.LogMessage(stream.str());
-		
-		//currentNode->get
-		//currentNode->ForAllChildren(IM_Shell_c::PrintNodesNameProc, NULL);		
+		kernel.LogMessage(stream.str());			
 	}
 
 	void Console_c::CmdCd(const StringVector_t &args, Context_c &)

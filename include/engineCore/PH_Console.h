@@ -35,6 +35,7 @@ Phobos 3d
 
 #include <PH_Context.h>
 #include <PH_InputManager.h>
+#include <PH_InputMapper.h>
 #include <PH_Log.h>
 
 #include "PH_EngineCoreAPI.h"
@@ -160,6 +161,8 @@ namespace Phobos
 			EditBox_c					clEditBox;			
 
 			Context_c					clContext;
+
+			InputMapperPtr_t			ipInputMapper;
 
 			Ogre::OverlayContainer		*pclRect;		
 			Ogre::OverlayElement		*pclTextBox;
