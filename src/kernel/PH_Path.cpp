@@ -444,6 +444,16 @@ namespace Phobos
 		StringReplaceAll(path, '\\', '/');
 	}
 
+	void Path_c::ConvertToPlatform(String_c &out, const String_c &in)
+	{
+#ifdef PH_WIN32
+		out = in;
+		StringReplaceAll(out, '/', '\\');
+#else
+	#error "Platform not supported"
+#endif
+	}
+
 	// =====================================================
 	// ITERATOR
 	// =====================================================
