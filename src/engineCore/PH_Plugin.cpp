@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,32 +23,23 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_CORE_MODULE_H
-#define PH_CORE_MODULE_H
-
-#include <PH_Node.h>
-
-#include "PH_CoreModuleFwd.h"
-#include "PH_EngineCoreAPI.h"
+#include "PH_Plugin.h"
 
 namespace Phobos
 {
-	class PH_ENGINE_CORE_API CoreModule_c: public Node_c
+	PluginPtr_t Plugin_c::Create(const String_c &name)
 	{
-		public:
-			virtual void OnUpdate() {}
-			virtual void OnFixedUpdate() {}
-			virtual void OnPrepareToBoot() {}
-			virtual void OnBoot() {}
-			virtual void OnFinalize() {}
-			virtual void OnRenderReady() {}
+		return PluginPtr_t(new Plugin_c(name));
+	}
 
-		protected:
-			explicit CoreModule_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit CoreModule_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);			
-	};
+	Plugin_c::Plugin_c(const String_c &name):
+		Node_c(name)
+	{
+		clLibrary.Load(name);
+	}
 
-	typedef void (CoreModule_c::*CoreModuleProc_t)();
+	Plugin_c::~Plugin_c()
+	{
+
+	}
 }
-
-#endif

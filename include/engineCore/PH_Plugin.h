@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,32 +23,25 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_CORE_MODULE_H
-#define PH_CORE_MODULE_H
-
 #include <PH_Node.h>
-
-#include "PH_CoreModuleFwd.h"
-#include "PH_EngineCoreAPI.h"
+#include <PH_DynamicLibrary.h>
 
 namespace Phobos
 {
-	class PH_ENGINE_CORE_API CoreModule_c: public Node_c
+	class Plugin_c;
+
+	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;
+
+	class Plugin_c: public Node_c
 	{
 		public:
-			virtual void OnUpdate() {}
-			virtual void OnFixedUpdate() {}
-			virtual void OnPrepareToBoot() {}
-			virtual void OnBoot() {}
-			virtual void OnFinalize() {}
-			virtual void OnRenderReady() {}
+			static PluginPtr_t Create(const String_c &name);
 
-		protected:
-			explicit CoreModule_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit CoreModule_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);			
+		private:
+			Plugin_c(const String_c &name);
+			~Plugin_c();
+
+		private:
+			DynamicLibrary_c clLibrary;
 	};
-
-	typedef void (CoreModule_c::*CoreModuleProc_t)();
 }
-
-#endif

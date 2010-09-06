@@ -233,6 +233,22 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\engineCore\PH_Plugin.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_Plugin.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\engineCore\PH_PluginManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_PluginManager.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\engineCore\PH_Render.cpp"
 			>
 		</File>

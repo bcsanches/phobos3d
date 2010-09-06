@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,32 +23,30 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_CORE_MODULE_H
-#define PH_CORE_MODULE_H
+#ifndef PH_DYNAMIC_LIBRARY_W32_H
+#define PH_DYNAMIC_LIBRARY_W32_H
 
-#include <PH_Node.h>
+#include <boost/noncopyable.hpp>
 
-#include "PH_CoreModuleFwd.h"
-#include "PH_EngineCoreAPI.h"
+#include "PH_KernelAPI.h"
+#include "PH_String.h"
 
 namespace Phobos
 {
-	class PH_ENGINE_CORE_API CoreModule_c: public Node_c
+	class PH_KERNEL_API DynamicLibrary_c: public boost::noncopyable
 	{
 		public:
-			virtual void OnUpdate() {}
-			virtual void OnFixedUpdate() {}
-			virtual void OnPrepareToBoot() {}
-			virtual void OnBoot() {}
-			virtual void OnFinalize() {}
-			virtual void OnRenderReady() {}
+			DynamicLibrary_c();
+			~DynamicLibrary_c();
 
-		protected:
-			explicit CoreModule_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit CoreModule_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);			
+			void Load(const String_c &name);
+
+			void *TryGetSymbol(const String_c &name);
+
+		private:
+			String_c	strName;
+			void		*pHandle;
 	};
-
-	typedef void (CoreModule_c::*CoreModuleProc_t)();
 }
 
 #endif

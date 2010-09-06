@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -22,33 +22,13 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
+#ifndef PH_DYNAMIC_LIBRARY_H
+#define PH_DYNAMIC_LIBRARY_H
 
-#ifndef PH_CORE_MODULE_H
-#define PH_CORE_MODULE_H
-
-#include <PH_Node.h>
-
-#include "PH_CoreModuleFwd.h"
-#include "PH_EngineCoreAPI.h"
-
-namespace Phobos
-{
-	class PH_ENGINE_CORE_API CoreModule_c: public Node_c
-	{
-		public:
-			virtual void OnUpdate() {}
-			virtual void OnFixedUpdate() {}
-			virtual void OnPrepareToBoot() {}
-			virtual void OnBoot() {}
-			virtual void OnFinalize() {}
-			virtual void OnRenderReady() {}
-
-		protected:
-			explicit CoreModule_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit CoreModule_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);			
-	};
-
-	typedef void (CoreModule_c::*CoreModuleProc_t)();
-}
+#ifdef PH_WIN32
+#include "W32/PH_DynamicLibraryW32.h"
+#else
+#error "Platform not supported"
+#endif
 
 #endif

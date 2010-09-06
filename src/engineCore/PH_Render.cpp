@@ -187,7 +187,7 @@ namespace Phobos
 		opts["externalWindowHandle"] = PointerToString(ipWindow->GetHandler());
 
 		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");
-		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);		
+		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);			
 		
 		kernel.LogMessage("[Render_c::OnBoot] Initializing all resource groups");
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();		

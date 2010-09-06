@@ -115,6 +115,7 @@ namespace Phobos
 			bool StripExtension(void);
 			void SetExtension(const String_c &newExtension);
 
+			static void ConvertToPlatform(String_c &out, const String_c &in);
 
 		private:
 			bool FindExtensionPos(size_t &out) const;
