@@ -23,29 +23,47 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DYNAMIC_LIBRARY_W32_H
-#define PH_DYNAMIC_LIBRARY_W32_H
+#ifndef PH_PLUGIN_MANAGER_H
+#define PH_PLUGIN_MANAGER_H
 
-#include <boost/noncopyable.hpp>
+#include <PH_ContextCmd.h>
 
-#include "PH_KernelAPI.h"
-#include "PH_String.h"
+#include "PH_CoreModule.h"
+
+#include "PH_EngineCoreAPI.h"
 
 namespace Phobos
 {
-	class PH_KERNEL_API DynamicLibrary_c: public boost::noncopyable
+	class PluginManager_c;
+
+	typedef boost::intrusive_ptr<PluginManager_c> PluginManagerPtr_t;
+
+	class PH_ENGINE_CORE_API PluginManager_c: public CoreModule_c
 	{
 		public:
-			DynamicLibrary_c();
-			~DynamicLibrary_c();
+			static PluginManagerPtr_t &CreateInstance(void);
+			static PluginManagerPtr_t &GetInstance(void);
+			static void ReleaseInstance(void);
 
-			void Load(const String_c &name);
+			void LoadPlugin(const String_c &name);
 
-			void *TryGetSymbol(const String_c &name);
+		protected:
+			void OnPrepareToBoot();
 
 		private:
-			String_c	strName;
-			void		*pHandle;
+			PluginManager_c();
+			~PluginManager_c();
+
+			void CmdLoadPlugin(const StringVector_t &args, Context_c &);
+
+		private:
+			ContextCmd_c	cmdLoadPlugin;
+
+			// =====================================================
+			// STATIC PRIVATE ATTRIBUTES
+			// =====================================================
+			static PluginManagerPtr_t ipInstance_gl;
+
 	};
 }
 

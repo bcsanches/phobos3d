@@ -36,6 +36,7 @@ Phobos 3d
 #include <PH_Core.h>
 #include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
+#include <PH_PluginManager.h>
 #include <PH_Render.h>
 
 #define UPDATE_TIME (1.0f / 60.0f)
@@ -88,6 +89,10 @@ namespace Phobos
 		ConsolePtr_t console = Console_c::CreateInstance();
 		vecSingletons.push_back(Console_c::ReleaseInstance);
 		core->AddModule(console);
+
+		PluginManagerPtr_t pluginManager = PluginManager_c::CreateInstance();
+		vecSingletons.push_back(PluginManager_c::ReleaseInstance);
+		core->AddModule(pluginManager);
 
 		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&EngineMain_c::CmdQuit, this));
 		console->AddContextCmd(cmdQuit);

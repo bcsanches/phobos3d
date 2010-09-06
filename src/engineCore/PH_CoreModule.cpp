@@ -27,14 +27,14 @@ Phobos 3d
 
 namespace Phobos
 {
-	CoreModule_c::CoreModule_c(const String_c &name):
-		Node_c(name)
+	CoreModule_c::CoreModule_c(const String_c &name, ChildrenMode_e mode):
+		Node_c(name, mode)
 	{
 		//empty
 	}
 
-	CoreModule_c::CoreModule_c(const Char_t *name):
-		Node_c(name)
+	CoreModule_c::CoreModule_c(const Char_t *name, ChildrenMode_e mode):
+		Node_c(name, mode)
 	{
 		//empty
 	}

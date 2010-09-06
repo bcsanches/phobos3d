@@ -22,11 +22,13 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
-namespace Phobos
-{
+#ifndef PH_DYNAMIC_LIBRARY_H
+#define PH_DYNAMIC_LIBRARY_H
+
 #ifdef PH_WIN32
 #include "W32/PH_DynamicLibraryW32.h"
 #else
 #error "Platform not supported"
 #endif
-}
+
+#endif

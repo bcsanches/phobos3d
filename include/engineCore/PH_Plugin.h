@@ -23,30 +23,25 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DYNAMIC_LIBRARY_W32_H
-#define PH_DYNAMIC_LIBRARY_W32_H
-
-#include <boost/noncopyable.hpp>
-
-#include "PH_KernelAPI.h"
-#include "PH_String.h"
+#include <PH_Node.h>
+#include <PH_DynamicLibrary.h>
 
 namespace Phobos
 {
-	class PH_KERNEL_API DynamicLibrary_c: public boost::noncopyable
+	class Plugin_c;
+
+	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;
+
+	class Plugin_c: public Node_c
 	{
 		public:
-			DynamicLibrary_c();
-			~DynamicLibrary_c();
-
-			void Load(const String_c &name);
-
-			void *TryGetSymbol(const String_c &name);
+			static PluginPtr_t Create(const String_c &name);
 
 		private:
-			String_c	strName;
-			void		*pHandle;
+			Plugin_c(const String_c &name);
+			~Plugin_c();
+
+		private:
+			DynamicLibrary_c clLibrary;
 	};
 }
-
-#endif
