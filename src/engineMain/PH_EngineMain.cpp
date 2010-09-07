@@ -25,7 +25,6 @@ Phobos 3d
 
 #include <sstream>
 
-#include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 
 #include <OgreTimer.h>
@@ -37,6 +36,7 @@ Phobos 3d
 #include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
 #include <PH_PluginManager.h>
+#include <PH_ProcVector.h>
 #include <PH_Render.h>
 
 #define UPDATE_TIME (1.0f / 60.0f)
@@ -46,9 +46,7 @@ namespace Phobos
 {
 	class EngineMain_c
 	{
-		public:
-			typedef void (*ReleaseProc_t)();
-
+		public:			
 			EngineMain_c();
 			~EngineMain_c();
 
@@ -69,7 +67,7 @@ namespace Phobos
 			Ogre::Timer		clTimer;
 			bool			fStop;
 
-			std::vector<ReleaseProc_t> vecSingletons;
+			ProcVector_c	clSingletons;
 	};
 
 	EngineMain_c::EngineMain_c():
@@ -83,15 +81,15 @@ namespace Phobos
 		CorePtr_t core = Core_c::CreateInstance();	
 
 		EventManagerModulePtr_t eventManager = EventManagerModule_c::CreateInstance();
-		vecSingletons.push_back(EventManagerModule_c::ReleaseInstance);
+		clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
 		core->AddModule(eventManager);
 
 		ConsolePtr_t console = Console_c::CreateInstance();
-		vecSingletons.push_back(Console_c::ReleaseInstance);
+		clSingletons.AddProc(Console_c::ReleaseInstance);
 		core->AddModule(console);
 
 		PluginManagerPtr_t pluginManager = PluginManager_c::CreateInstance();
-		vecSingletons.push_back(PluginManager_c::ReleaseInstance);
+		clSingletons.AddProc(PluginManager_c::ReleaseInstance);
 		core->AddModule(pluginManager);
 
 		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&EngineMain_c::CmdQuit, this));
@@ -102,7 +100,7 @@ namespace Phobos
 		console->AddContextVar(varMinFrameTime);
 
 		RenderPtr_t render = Render_c::CreateInstance();
-		vecSingletons.push_back(Render_c::ReleaseInstance);
+		clSingletons.AddProc(Render_c::ReleaseInstance);
 		core->AddModule(render);
 
 		core->LaunchBootModule();
@@ -110,10 +108,7 @@ namespace Phobos
 
 	EngineMain_c::~EngineMain_c()
 	{
-		BOOST_FOREACH(ReleaseProc_t proc, vecSingletons)
-		{
-			proc();
-		}
+		clSingletons.CallAll();		
 
 		Core_c::ReleaseInstance();
 		Kernel_c::ReleaseInstance();

@@ -123,7 +123,6 @@ namespace Phobos
 		}
 	}
 
-
 	void Core_c::AddModule(CoreModulePtr_t module, UInt32_t priority)
 	{
 		if(priority == BOOT_MODULE_PRIORITY && (dynamic_cast<BootModule_c *>(module.get()) == NULL))

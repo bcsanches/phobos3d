@@ -42,6 +42,10 @@ namespace Phobos
 			void Load(const String_c &name);
 
 			void *TryGetSymbol(const String_c &name);
+			void *GetSymbol(const String_c &name);
+
+		private:
+			void RaiseException(const char *module);
 
 		private:
 			String_c	strName;

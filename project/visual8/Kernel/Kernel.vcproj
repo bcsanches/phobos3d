@@ -387,6 +387,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\kernel\PH_ProcVector.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\kernel\PH_RefCounter.cpp"
 			>
 		</File>
@@ -399,6 +403,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\kernel\PH_Singleton.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\kernel\PH_String.cpp"
 			>
 		</File>
@@ -408,6 +416,10 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_Types.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernel\ProcVector.cpp"
 			>
 		</File>
 	</Files>

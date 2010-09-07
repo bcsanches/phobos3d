@@ -23,35 +23,22 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <PH_Node.h>
-#include <PH_DynamicLibrary.h>
+#include "PH_WorldManager.h"
+
+#include "PH_Error.h"
 
 namespace Phobos
-{
-	class Plugin_c;
+{	
+	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);	
 
-	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;	
-
-	class IPluginInstance_c
+	WorldManager_c::WorldManager_c():
+		CoreModule_c("WorldManager", PRIVATE_CHILDREN)
 	{
-		public:
-			virtual void Init() = 0;
-			virtual void Finalize() = 0;			
-	};
 
-	typedef IPluginInstance_c *(*PluginEntryPointProc_t)();
+	}
 
-	class Plugin_c: public Node_c
+	WorldManager_c::~WorldManager_c()
 	{
-		public:
-			static PluginPtr_t Create(const String_c &name);
 
-		private:
-			Plugin_c(const String_c &name);
-			~Plugin_c();
-
-		private:
-			DynamicLibrary_c	clLibrary;
-			IPluginInstance_c	*pclPlugin;
-	};
+	}
 }

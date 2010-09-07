@@ -1,0 +1,75 @@
+/*
+Phobos 3d
+  Septemeber 2010
+
+  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+
+  This software is provided 'as-is', without any express or implied
+  warranty. In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Bruno Crivelari Sanches bcsanches@gmail.com
+*/
+
+#ifndef PH_SINGLETON_H
+#define PH_SINGLETON_H
+
+#define PH_DECLARE_SINGLETON_PTR(X)					\
+	class X##_c;									\
+	typedef boost::intrusive_ptr<X##_c> X##Ptr_t;
+
+#define PH_DECLARE_SINGLETON_METHODS(X)		\
+	private:								\
+		static X##Ptr_t ipInstance_gl;		\
+											\
+	public:									\
+		static X##Ptr_t CreateInstance();	\
+		static void ReleaseInstance();		\
+		static X##Ptr_t GetInstance();
+
+#define PH_DECLARE_NAMED_SINGLETON_METHODS(X)					\
+	private:													\
+		static X##Ptr_t ipInstance_gl;							\
+																\
+	public:														\
+		static X##Ptr_t CreateInstance(const String_c &name);	\
+		static void ReleaseInstance();							\
+		static X##Ptr_t GetInstance();
+
+#define PH_DEFINE_SINGLETON_VAR(X) X##Ptr_t X##_c::ipInstance_gl;
+
+#define PH_DEFINE_DEFAULT_SINGLETON(X)		\
+	PH_DEFINE_SINGLETON_VAR(X)				\
+	X##Ptr_t X##_c::CreateInstance(void)	\
+	{										\
+		PH_ASSERT(!ipInstance_gl);			\
+											\
+		ipInstance_gl.reset(new X##_c());	\
+											\
+		return ipInstance_gl;				\
+	}										\
+											\
+	X##Ptr_t X##_c::GetInstance(void)		\
+	{										\
+		return ipInstance_gl;				\
+	}										\
+											\
+	void X##_c::ReleaseInstance(void)		\
+	{										\
+		ipInstance_gl.reset();				\
+	}
+
+
+#endif

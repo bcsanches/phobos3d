@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  April 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,35 +23,49 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <PH_Node.h>
-#include <PH_DynamicLibrary.h>
+
+#include "PH_GameEnginePlugin.h"
+
+#include <PH_Core.h>
+#include <PH_Plugin.h>
+#include <PH_ProcVector.h>
+
+#include "PH_WorldManager.h"
 
 namespace Phobos
 {
-	class Plugin_c;
-
-	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;	
-
-	class IPluginInstance_c
+	class GameEnginePlugin_c: public IPluginInstance_c
 	{
 		public:
-			virtual void Init() = 0;
-			virtual void Finalize() = 0;			
+			void Init();
+			void Finalize();
+
+		private:
+			ProcVector_c clProcs;
 	};
 
-	typedef IPluginInstance_c *(*PluginEntryPointProc_t)();
-
-	class Plugin_c: public Node_c
+	void GameEnginePlugin_c::Init()
 	{
-		public:
-			static PluginPtr_t Create(const String_c &name);
+		CorePtr_t core = Core_c::GetInstance();
 
-		private:
-			Plugin_c(const String_c &name);
-			~Plugin_c();
+		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
+		clProcs.AddProc(WorldManager_c::ReleaseInstance);
+		core->AddModule(worldManager);		
 
-		private:
-			DynamicLibrary_c	clLibrary;
-			IPluginInstance_c	*pclPlugin;
-	};
+	}
+
+	void GameEnginePlugin_c::Finalize()
+	{
+		clProcs.CallAll();
+		clProcs.Clear();
+	}
+}
+
+Phobos::IPluginInstance_c *PH_PluginEntryPoint(void)
+{
+	using namespace Phobos;
+
+	static GameEnginePlugin_c plugin;
+
+	return &plugin;
 }

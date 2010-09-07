@@ -16,7 +16,7 @@ namespace Phobos
 	static const String_c strMouseName_gl("mouse");
 	static const String_c strPadName_gl("pad");
 
-	InputManagerPtr_t InputManager_c::ipInstance_gl;
+	PH_DEFINE_SINGLETON_VAR(InputManager);	
 
 	InputManagerPtr_t InputManager_c::CreateInstance(const String_c &name)
 	{

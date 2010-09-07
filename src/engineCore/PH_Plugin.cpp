@@ -36,10 +36,18 @@ namespace Phobos
 		Node_c(name)
 	{
 		clLibrary.Load(name);
+
+		PluginEntryPointProc_t proc = static_cast<PluginEntryPointProc_t>(clLibrary.GetSymbol("PH_PluginEntryPoint"));
+		
+		pclPlugin = proc();
+
+		if(pclPlugin != NULL)
+			pclPlugin->Init();
 	}
 
 	Plugin_c::~Plugin_c()
 	{
-
+		if(pclPlugin != NULL)
+			pclPlugin->Finalize();
 	}
 }

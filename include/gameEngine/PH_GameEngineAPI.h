@@ -23,35 +23,19 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <PH_Node.h>
-#include <PH_DynamicLibrary.h>
+#ifndef PH_GAME_ENGINE_API_H
+#define PH_GAME_ENGINE_API_H
 
-namespace Phobos
-{
-	class Plugin_c;
+#ifdef PH_WIN32
+	#ifdef PH_GAME_ENGINE_EXPORTS
+		#define PH_GAME_ENGINE_API __declspec(dllexport)
+	#else
+		#define PH_GAME_ENGINE_API
+	#endif
 
-	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;	
+	#define PH_GAME_ENGINE_API_PROC extern "C" PH_GAME_ENGINE_API	
+#else
+	#error "Platform not defined"
+#endif
 
-	class IPluginInstance_c
-	{
-		public:
-			virtual void Init() = 0;
-			virtual void Finalize() = 0;			
-	};
-
-	typedef IPluginInstance_c *(*PluginEntryPointProc_t)();
-
-	class Plugin_c: public Node_c
-	{
-		public:
-			static PluginPtr_t Create(const String_c &name);
-
-		private:
-			Plugin_c(const String_c &name);
-			~Plugin_c();
-
-		private:
-			DynamicLibrary_c	clLibrary;
-			IPluginInstance_c	*pclPlugin;
-	};
-}
+#endif

@@ -23,35 +23,27 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <PH_Node.h>
-#include <PH_DynamicLibrary.h>
+#include "PH_ProcVector.h"
+
+#include <boost/foreach.hpp>
 
 namespace Phobos
 {
-	class Plugin_c;
-
-	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;	
-
-	class IPluginInstance_c
+	void ProcVector_c::AddProc(Proc_t proc)
 	{
-		public:
-			virtual void Init() = 0;
-			virtual void Finalize() = 0;			
-	};
+		vecProcs.push_back(proc);
+	}
 
-	typedef IPluginInstance_c *(*PluginEntryPointProc_t)();
-
-	class Plugin_c: public Node_c
+	void ProcVector_c::CallAll()
 	{
-		public:
-			static PluginPtr_t Create(const String_c &name);
-
-		private:
-			Plugin_c(const String_c &name);
-			~Plugin_c();
-
-		private:
-			DynamicLibrary_c	clLibrary;
-			IPluginInstance_c	*pclPlugin;
-	};
+		BOOST_FOREACH(Proc_t proc, vecProcs)
+		{
+			proc();
+		}
+	}
+			
+	void ProcVector_c::Clear()
+	{
+		vecProcs.clear();
+	}
 }

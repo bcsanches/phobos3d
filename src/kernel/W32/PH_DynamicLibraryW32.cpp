@@ -56,29 +56,45 @@ namespace Phobos
 		pHandle = LoadLibrary(tmp.c_str());
 		if(pHandle == NULL)
 		{
-			LPVOID lpMsgBuf; 
-			FormatMessage( 
-				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-				FORMAT_MESSAGE_FROM_SYSTEM | 
-				FORMAT_MESSAGE_IGNORE_INSERTS, 
-				NULL, 
-				GetLastError(), 
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
-				(LPTSTR) &lpMsgBuf, 
-				0, 
-				NULL 
-			); 
-
-			String_c ret = (char*)lpMsgBuf;
-			// Free the buffer.
-			LocalFree( lpMsgBuf );
-
-			PH_RAISE(NATIVE_API_FAILED_EXCEPTION, "DynamicLibrary_c::Load", ret);
+			this->RaiseException("DynamicLibrary_c::Load");			
 		}
 	}
 
 	void *DynamicLibrary_c::TryGetSymbol(const String_c &name)
 	{
 		return GetProcAddress(static_cast<HMODULE>(pHandle), name.c_str());
+	}
+
+	void *DynamicLibrary_c::GetSymbol(const String_c &name)
+	{
+		void *ptr = this->TryGetSymbol(name);
+		if(ptr == NULL)
+		{
+			this->RaiseException("DynamicLibrary_c::GetSymbol");
+		}
+		
+		return ptr;
+	}
+
+	void DynamicLibrary_c::RaiseException(const char *module)
+	{
+		LPVOID lpMsgBuf; 
+		FormatMessage( 
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_FROM_SYSTEM | 
+			FORMAT_MESSAGE_IGNORE_INSERTS, 
+			NULL, 
+			GetLastError(), 
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
+			(LPTSTR) &lpMsgBuf, 
+			0, 
+			NULL 
+		); 
+
+		String_c ret = (char*)lpMsgBuf;
+		// Free the buffer.
+		LocalFree( lpMsgBuf );
+
+		PH_RAISE(NATIVE_API_FAILED_EXCEPTION, module, ret);
 	}
 }

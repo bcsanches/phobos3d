@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  April 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,35 +23,16 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <PH_Node.h>
-#include <PH_DynamicLibrary.h>
+#ifndef PH_GAME_ENGINE_PLUGIN_H
+#define PH_GAME_ENGINE_PLUGIN_H
+
+#include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
-	class Plugin_c;
-
-	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;	
-
-	class IPluginInstance_c
-	{
-		public:
-			virtual void Init() = 0;
-			virtual void Finalize() = 0;			
-	};
-
-	typedef IPluginInstance_c *(*PluginEntryPointProc_t)();
-
-	class Plugin_c: public Node_c
-	{
-		public:
-			static PluginPtr_t Create(const String_c &name);
-
-		private:
-			Plugin_c(const String_c &name);
-			~Plugin_c();
-
-		private:
-			DynamicLibrary_c	clLibrary;
-			IPluginInstance_c	*pclPlugin;
-	};
+	class IPluginInstance_c;
 }
+
+PH_GAME_ENGINE_API_PROC Phobos::IPluginInstance_c *PH_PluginEntryPoint(void);
+
+#endif
