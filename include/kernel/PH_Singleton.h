@@ -26,9 +26,7 @@ Phobos 3d
 #ifndef PH_SINGLETON_H
 #define PH_SINGLETON_H
 
-#define PH_DECLARE_SINGLETON_PTR(X)					\
-	class X##_c;									\
-	typedef boost::intrusive_ptr<X##_c> X##Ptr_t;
+#define PH_DECLARE_SINGLETON_PTR(X)	PH_DECLARE_NODE_PTR(X)	
 
 #define PH_DECLARE_SINGLETON_METHODS(X)		\
 	private:								\

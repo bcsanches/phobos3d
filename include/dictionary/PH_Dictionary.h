@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  January 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,64 +23,34 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_PARSER_H
-#define PH_PARSER_H
+#ifndef PH_DICTIONARY_H
+#define PH_DICTIONARY_H
 
-#include "PH_Types.h"
-#include "PH_String.h"
+#include <boost/unordered_map.hpp>
 
-#include <istream>
+#include <PH_Node.h>
 
 namespace Phobos
 {
-	enum ParserTokens_e
-	{
-		TOKEN_NUMBER,
-		TOKEN_STRING,
-		TOKEN_ID,
-		TOKEN_OPEN_BRACE,
-		TOKEN_CLOSE_BRACE,
-		TOKEN_OPEN_PAREN,
-		TOKEN_CLOSE_PAREN,
-		TOKEN_EQUAL,
-		TOKEN_ERROR,
-		TOKEN_EOF
-	};
+	PH_DECLARE_NODE_PTR(Dictionary);	
 
-	class PH_KERNEL_API Parser_c
+	class Parser_c;
+
+	class Dictionary_c: public Node_c
 	{
 		public:
-			static const Char_t *GetTokenTypeName(ParserTokens_e token);
+			static DictionaryPtr_t Create(const String_c &name);
 
-		public:
-			Parser_c(void);
-			~Parser_c(void);
-
-			void SetStream(std::istream *stream);
-
-			ParserTokens_e GetToken(String_c *out);
-
-			inline void PushToken(void);
+			void Load(Parser_c &parser);
 
 		private:
-			void SetLookAhead(Char_t ch);
-
-			bool GetNextChar(Char_t &out);
+			Dictionary_c(const String_c &name);
+			~Dictionary_c();
 
 		private:
-			std::istream	*pclStream;
-			String_c		strToken;
-			ParserTokens_e	eTokenType;
-
-			Char_t		chLookAhead;
-			bool		fLookAhead;
-			bool		fTokenAhead;
+			typedef boost::unordered_map<String_c, String_c> StringMap_t;
+			StringMap_t mapValues;
 	};
-
-	inline void Parser_c::PushToken(void)
-	{
-		fTokenAhead = true;
-	}
 }
 
 #endif

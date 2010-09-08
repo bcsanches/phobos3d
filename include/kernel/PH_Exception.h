@@ -40,7 +40,8 @@ namespace Phobos
 		INVALID_PARAMETER_EXCEPTION,
 		INVALID_OPERATION_EXCEPTION,
 		NATIVE_API_FAILED_EXCEPTION,
-		FILE_NOT_FOUND_EXCEPTION
+		FILE_NOT_FOUND_EXCEPTION,
+		PARSER_EXCEPTION
 	};
 
 	class PH_KERNEL_API Exception_c: public std::exception
@@ -126,6 +127,15 @@ namespace Phobos
 				}
 	};
 
+	class PH_KERNEL_API ParserException_c: public Exception_c
+	{
+		public:
+			inline ParserException_c(int errorCode, const String_c &moduleName, const String_c &extraInfo, const char *fileName, unsigned int line):
+				Exception_c(errorCode, "ParserException", moduleName, extraInfo, fileName, line)
+				{
+				}
+	};
+
 	/**
 		Template for creating a unique type for implementing a static factory
 	*/
@@ -193,6 +203,15 @@ namespace Phobos
 				const char* file, long line)
 			{
 				return FileNotFoundException_c(code.error, moduleName, extraInfo, file, line);
+			}
+
+			static ParserException_c Create(
+				ExceptionErrorType_s<PARSER_EXCEPTION> code, 
+				const String_c &moduleName, 
+				const String_c &extraInfo, 
+				const char* file, long line)
+			{
+				return ParserException_c(code.error, moduleName, extraInfo, file, line);
 			}
 	};
 }

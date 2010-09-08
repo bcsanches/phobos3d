@@ -37,6 +37,10 @@ Phobos 3d
 #include "PH_NodeFwd.h"
 #include "PH_Object.h"
 
+#define PH_DECLARE_NODE_PTR(X)						\
+	class X##_c;									\
+	typedef boost::intrusive_ptr<X##_c> X##Ptr_t;
+
 namespace Phobos
 {
 	/**

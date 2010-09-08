@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  January 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,64 +23,40 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_PARSER_H
-#define PH_PARSER_H
+#include "PH_DictionaryHive.h"
 
-#include "PH_Types.h"
-#include "PH_String.h"
+#include <PH_Parser.h>
 
-#include <istream>
+#include "PH_Dictionary.h"
+#include "PH_DictionaryUtils.h"
 
 namespace Phobos
 {
-	enum ParserTokens_e
+	DictionaryHivePtr_t DictionaryHive_c::Create(const String_c &name)
 	{
-		TOKEN_NUMBER,
-		TOKEN_STRING,
-		TOKEN_ID,
-		TOKEN_OPEN_BRACE,
-		TOKEN_CLOSE_BRACE,
-		TOKEN_OPEN_PAREN,
-		TOKEN_CLOSE_PAREN,
-		TOKEN_EQUAL,
-		TOKEN_ERROR,
-		TOKEN_EOF
-	};
+		return new DictionaryHive_c(name);
+	}
 
-	class PH_KERNEL_API Parser_c
+	DictionaryHive_c::DictionaryHive_c(const String_c &name):
+		Node_c(name, PRIVATE_CHILDREN)
 	{
-		public:
-			static const Char_t *GetTokenTypeName(ParserTokens_e token);
+		//empty
+	}
 
-		public:
-			Parser_c(void);
-			~Parser_c(void);
-
-			void SetStream(std::istream *stream);
-
-			ParserTokens_e GetToken(String_c *out);
-
-			inline void PushToken(void);
-
-		private:
-			void SetLookAhead(Char_t ch);
-
-			bool GetNextChar(Char_t &out);
-
-		private:
-			std::istream	*pclStream;
-			String_c		strToken;
-			ParserTokens_e	eTokenType;
-
-			Char_t		chLookAhead;
-			bool		fLookAhead;
-			bool		fTokenAhead;
-	};
-
-	inline void Parser_c::PushToken(void)
+	DictionaryHive_c::~DictionaryHive_c()
 	{
-		fTokenAhead = true;
+	}
+
+	void DictionaryHive_c::Load(Parser_c &parser)
+	{
+		String_c tokenValue;
+		ParserTokens_e token = parser.GetToken(&tokenValue);
+		if(token != TOKEN_ID)
+			PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
+
+		DictionaryPtr_t dict = Dictionary_c::Create(tokenValue);
+		this->AddPrivateChild(dict);
+
+		dict->Load(parser);
 	}
 }
-
-#endif

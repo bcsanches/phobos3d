@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="PH_GameEngine"
-	ProjectGUID="{BDC0277B-A6AA-441E-A143-1EE7D0A43F8C}"
-	RootNamespace="PH_GameEngine"
+	Name="DictionaryTest"
+	ProjectGUID="{502ADC22-F8EA-4918-8ED2-C14F6855B86A}"
+	RootNamespace="DictionaryTest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -18,9 +18,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_DEBUG;PH_MSVC;PH_CHECK_ASSERT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,11 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				SubSystem="2"
-				ImportLibrary="..\..\..\lib\$(TargetName)_d.lib"
+				SubSystem="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -92,9 +90,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -117,8 +115,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_MSVC;PH_RELEASE;PH_IGNORE_ASSERT"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_WIN32;PH_RELEASE;PH_MSVC;PH_IGNORE_ASSERT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -138,7 +136,7 @@
 				Name="VCLinkerTool"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
@@ -169,26 +167,32 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_GameEngineAPI.h"
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\gameEngine\PH_GameEnginePlugin.cpp"
+			<File
+				RelativePath="..\..\..\src\dictionaryTest\DictionaryTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\dictionaryTest\main.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_GameEnginePlugin.h"
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\gameEngine\PH_WorldManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_WorldManager.h"
-			>
-		</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

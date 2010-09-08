@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="PH_GameEngine"
-	ProjectGUID="{BDC0277B-A6AA-441E-A143-1EE7D0A43F8C}"
-	RootNamespace="PH_GameEngine"
+	Name="PH_Dictionary"
+	ProjectGUID="{58705E86-D5B6-45D5-B334-1920D41B1043}"
+	RootNamespace="PH_Dictionary"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_DICTIONARY_EXPORTS;PH_WIN32;PH_MSVC;PH_DEBUG;PH_CHECK_ASSERT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -92,7 +92,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -117,8 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_MSVC;PH_RELEASE;PH_IGNORE_ASSERT"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_DICTIONARY_EXPORTS;PH_WIN32;PH_MSVC;PH_RELEASE;PH_IGNORE_ASSERT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -170,23 +170,39 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\include\gameEngine\PH_GameEngineAPI.h"
+			RelativePath="..\..\..\src\dictionary\PH_Dictionary.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\gameEngine\PH_GameEnginePlugin.cpp"
+			RelativePath="..\..\..\include\dictionary\PH_Dictionary.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\gameEngine\PH_GameEnginePlugin.h"
+			RelativePath="..\..\..\include\dictionary\PH_DictionaryAPI.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\gameEngine\PH_WorldManager.cpp"
+			RelativePath="..\..\..\src\dictionary\PH_DictionaryHive.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\gameEngine\PH_WorldManager.h"
+			RelativePath="..\..\..\include\dictionary\PH_DictionaryHive.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\dictionary\PH_DictionaryManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\dictionary\PH_DictionaryManager.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\dictionary\PH_DictionaryUtils.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\dictionary\PH_DictionaryUtils.h"
 			>
 		</File>
 	</Files>
