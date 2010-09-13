@@ -29,6 +29,8 @@ Phobos 3d
 #include <istream>
 
 #include "PH_DictionaryAPI.h"
+#include "PH_DictionaryFwd.h"
+#include "PH_DictionaryHiveFwd.h"
 
 namespace Phobos
 {
@@ -41,6 +43,9 @@ namespace Phobos
 		public:
 			void Load(const String_c &fileName);
 			void Load(std::istream &stream);
+
+			DictionaryHivePtr_t GetDictionaryHive(const String_c &name);
+			DictionaryPtr_t GetDictionary(const String_c &hive, const String_c &dictionary);
 
 		private:
 			DictionaryManager_c();

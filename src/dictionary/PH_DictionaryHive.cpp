@@ -55,8 +55,13 @@ namespace Phobos
 			PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
 
 		DictionaryPtr_t dict = Dictionary_c::Create(tokenValue);
-		this->AddPrivateChild(dict);
-
 		dict->Load(parser);
+
+		this->AddPrivateChild(dict);		
+	}
+
+	DictionaryPtr_t DictionaryHive_c::GetDictionary(const String_c &name)
+	{
+		return boost::static_pointer_cast<Dictionary_c>(this->GetChild(name));
 	}
 }

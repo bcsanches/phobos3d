@@ -30,26 +30,37 @@ Phobos 3d
 
 #include <PH_Node.h>
 
-namespace Phobos
-{
-	PH_DECLARE_NODE_PTR(Dictionary);	
+#include "PH_DictionaryAPI.h"
+#include "PH_DictionaryFwd.h"
 
+namespace Phobos
+{	
 	class Parser_c;
 
-	class Dictionary_c: public Node_c
+	class PH_DICTIONARY_API Dictionary_c: public Node_c
 	{
 		public:
 			static DictionaryPtr_t Create(const String_c &name);
 
 			void Load(Parser_c &parser);
 
+			const String_c &GetValue(const String_c &key) const;
+			bool TryGetValue(const String_c &key, String_c &out) const;
+
 		private:
 			Dictionary_c(const String_c &name);
 			~Dictionary_c();
 
+			const Dictionary_c *GetInherited() const;
+
+			static const String_c *TryGetValue(const Dictionary_c *current, const String_c &key);			
+
 		private:
 			typedef boost::unordered_map<String_c, String_c> StringMap_t;
 			StringMap_t mapValues;
+
+			String_c strInherit;
+			mutable const Dictionary_c *pclInherit;
 	};
 }
 

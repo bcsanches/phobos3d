@@ -23,34 +23,14 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DICTIONARY_HIVE_H
-#define PH_DICTIONARY_HIVE_H
+#ifndef PH_DICTIONARY_FWD_H
+#define PH_DICTIONARY_FWD_H
 
 #include <PH_Node.h>
 
-#include "PH_DictionaryAPI.h"
-#include "PH_DictionaryFwd.h"
-
 namespace Phobos
 {
-	class Parser_c;
-
-	PH_DECLARE_NODE_PTR(DictionaryHive);
-
-	class PH_DICTIONARY_API DictionaryHive_c: public Node_c
-	{
-		public:
-			static DictionaryHivePtr_t Create(const String_c &name);
-
-			void Load(Parser_c &parser);
-
-			DictionaryPtr_t GetDictionary(const String_c &name);
-
-	
-		private:
-			DictionaryHive_c(const String_c &name);
-			~DictionaryHive_c();
-	};
+	PH_DECLARE_NODE_PTR(Dictionary);
 }
 
 #endif

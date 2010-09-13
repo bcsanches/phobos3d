@@ -30,6 +30,7 @@ Phobos 3d
 #include <PH_Error.h>
 #include <PH_Parser.h>
 
+#include "PH_Dictionary.h"
 #include "PH_DictionaryHive.h"
 #include "PH_DictionaryUtils.h"
 
@@ -76,11 +77,25 @@ namespace Phobos
 			if(!hive)
 			{
 				hive = DictionaryHive_c::Create(tokenValue);
-				this->AddPrivateChild(hive);
-			}
+				
+				//load before adding, so if error occurs it is not added
+				hive->Load(parser);
 
-			hive->Load(parser);
+				this->AddPrivateChild(hive);
+			}			
+			else
+				hive->Load(parser);
 		}
+	}
+
+	DictionaryHivePtr_t DictionaryManager_c::GetDictionaryHive(const String_c &name)
+	{
+		return boost::static_pointer_cast<DictionaryHive_c>(this->GetChild(name));
+	}
+
+	DictionaryPtr_t DictionaryManager_c::GetDictionary(const String_c &hive, const String_c &dictionary)
+	{
+		return this->GetDictionaryHive(hive)->GetDictionary(dictionary);
 	}
 }
 

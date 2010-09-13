@@ -25,7 +25,10 @@ Phobos 3d
 
 #include <boost/test/unit_test.hpp>
 
+#include <PH_Dictionary.h>
+#include <PH_DictionaryHive.h>
 #include <PH_DictionaryManager.h>
+#include <PH_Exception.h>
 #include <PH_Kernel.h>
 
 using namespace Phobos;
@@ -55,18 +58,147 @@ BOOST_AUTO_TEST_CASE(dictionary_basic)
 
 	stream << "EntityDef InfoPlayerStart" << endl;
 	stream << "{" << endl;
-	stream <<	"ClassName=Entity" << endl;
-	stream <<	"Health=100" << endl;
-	stream <<	"Description=\"bla bla\"" << endl;
+	stream <<	"className=Entity;" << endl;
+	stream <<	"health=100;" << endl;
+	stream <<	"description=\"bla bla\";" << endl;
 	stream << "}" << endl;
 	stream << endl << endl;
 	stream << "RigidBody PlayerCapsule" << endl;
 	stream << "{" << endl;
-	stream <<	"Height=1.0" << endl;
-	stream <<	"Radius=2.0" << endl;
+	stream <<	"height=1.0;" << endl;
+	stream <<	"radius=2.0;" << endl;
 	stream << "}";
 
 	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
 
 	manager->Load(stream);
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_errors)
+{
+	KernelInstance_s instance;
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	{
+		//invalid syntax
+		stringstream stream;
+		
+		stream << "{" << endl;
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//invalid syntax
+		stringstream stream;
+		
+		//missing hive
+		stream << "EntityDef " << endl;
+		stream << "{" << endl;
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//invalid syntax
+		stringstream stream;
+		
+		stream << "EntityDef InfoPlayerStart" << endl;
+		stream << "{" << endl;
+		//missing =
+		stream <<	"className Entity" << endl;
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//invalid syntax
+		stringstream stream;
+		
+		stream << "EntityDef InfoPlayerStart" << endl;
+		stream << "{" << endl;
+		//missing ;
+		stream <<	"className=Entity" << endl;
+		stream <<	"health=100;" << endl;
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		stringstream stream;
+
+		//duplicated entry
+		stream << "EntityDef InfoPlayerStart" << endl;
+		stream << "{" << endl;
+		stream <<	"className=Entity;" << endl;
+		stream <<	"health=100;" << endl;
+		stream <<	"description=\"bla bla\";" << endl;
+		stream << "}" << endl;
+		stream << endl << endl;
+		stream << "EntityDef InfoPlayerStart" << endl;
+		stream << "{" << endl;
+		stream <<	"height=1.0;" << endl;
+		stream <<	"radius=2.0;" << endl;
+		stream << "}";
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ObjectAlreadyExistsException_c);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_inheritance)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "EntityDef InfoPlayerStart" << endl;
+	stream << "{" << endl;
+	stream <<	"className=Entity;" << endl;
+	stream <<	"health=100;" << endl;
+	stream <<	"weight=2.0;" << endl;
+	stream <<	"description=\"bla bla\";" << endl;
+	stream << "}" << endl;
+	stream << endl << endl;
+	stream << "EntityDef SuperPlayer" << endl;
+	stream << "{" << endl;
+	stream <<	"inherit=InfoPlayerStart;" << endl;
+	stream <<	"health=200;" << endl;	
+	stream <<	"boost=2;" << endl;	
+	stream << "}";
+	stream << "EntityDef InvalidPlayer" << endl;
+	stream << "{" << endl;
+	stream <<	"inherit=NonExistingDef;" << endl;
+	stream <<	"health=200;" << endl;	
+	stream << "}";
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	manager->Load(stream);
+
+	//test both forms of retrieving data
+	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
+	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("EntityDef")->GetDictionary("SuperPlayer");
+
+	//now check overriding
+	BOOST_REQUIRE(infoPlayerStart->GetValue("health").compare("100") == 0);
+	BOOST_REQUIRE(superPlayer->GetValue("health").compare("200") == 0);
+
+	//check parent relationship
+	BOOST_REQUIRE(infoPlayerStart->GetValue("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(superPlayer->GetValue("weight").compare("2.0") == 0);
+
+	//non existing value
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetValue("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE(superPlayer->GetValue("boost").compare("2") == 0);
+
+	//bad inheritance
+	DictionaryPtr_t invalidPlayer = manager->GetDictionary("EntityDef", "InvalidPlayer");
+
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetValue("bla"), ObjectNotFoundException_c);
+
+	//Check getters exceptions
+	BOOST_REQUIRE_THROW(manager->GetDictionaryHive("Bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(manager->GetDictionary("Bla", "Bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(manager->GetDictionary("EntityDef", "Bla"), ObjectNotFoundException_c);
 }

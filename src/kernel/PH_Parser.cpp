@@ -119,6 +119,11 @@ namespace Phobos
 					strToken += ch;
 					RETURN_TOKEN(TOKEN_EQUAL);
 					break;
+
+				case ';':
+					strToken += ch;
+					RETURN_TOKEN(TOKEN_SEMI_COLON);
+					break;
 				
 				case '{':
 					strToken+=ch;

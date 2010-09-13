@@ -25,6 +25,7 @@ Phobos 3d
 
 #include "PH_Dictionary.h"
 
+#include <PH_Exception.h>
 #include <PH_Parser.h>
 
 #include "PH_DictionaryUtils.h"
@@ -37,7 +38,8 @@ namespace Phobos
 	}
 		
 	Dictionary_c::Dictionary_c(const String_c &name):
-		Node_c(name)
+		Node_c(name),
+		pclInherit(NULL)
 	{
 		//empty
 	}
@@ -58,8 +60,8 @@ namespace Phobos
 		for(;;)
 		{
 			token = parser.GetToken(&tokenValue);
-			if(token == TOKEN_CLOSE_BRACE)
-				return;
+			if(token == TOKEN_CLOSE_BRACE)			
+				break;
 
 			if(token != TOKEN_ID)
 				PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "Dictionary_c::Load");
@@ -82,6 +84,67 @@ namespace Phobos
 					PH_RaiseDictionaryParseException(parser, TOKEN_STRING, token, tokenValue, "Dictionary_c::Load");
 					break;
 			}
+
+			token = parser.GetToken(&value);
+			if(token != TOKEN_SEMI_COLON)
+				PH_RaiseDictionaryParseException(parser, TOKEN_SEMI_COLON, token, tokenValue, "Dictionary_c::Load");
 		}
+
+		//check for inheritance
+		this->TryGetValue("inherit", strInherit);
+	}
+
+	const String_c &Dictionary_c::GetValue(const String_c &key) const 
+	{
+		const String_c *foundValue = TryGetValue(this, key);
+		if(!foundValue)			
+		{
+			std::stringstream stream;
+			stream << "Value " << key << " does not exists in " << this->GetName();
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Dictionary_c::GetValue", stream.str());
+		}
+
+		return *foundValue;
+	}
+
+	bool Dictionary_c::TryGetValue(const String_c &key, String_c &value) const
+	{
+		const String_c *foundValue = TryGetValue(this, key);
+		if(!foundValue)
+			return false;
+	
+		value = *foundValue;
+		return true;
+	}
+
+	const Dictionary_c *Dictionary_c::GetInherited() const
+	{
+		if(pclInherit)
+			return pclInherit;
+
+		if(!strInherit.empty())
+		{
+			pclInherit = boost::static_pointer_cast<Dictionary_c>(this->GetParent()->GetChild(strInherit)).get();
+		}
+
+		return pclInherit;
+	}
+
+
+	const String_c *Dictionary_c::TryGetValue(const Dictionary_c *current, const String_c &key)
+	{
+		do
+		{
+			StringMap_t::const_iterator it = current->mapValues.find(key);
+			if(it != current->mapValues.end())
+			{
+				return &it->second;				
+			}
+
+			current = current->GetInherited();			
+		}
+		while(current);
+
+		return NULL;
 	}
 }

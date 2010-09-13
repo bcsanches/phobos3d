@@ -182,11 +182,19 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\dictionary\PH_DictionaryFwd.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\dictionary\PH_DictionaryHive.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\..\..\include\dictionary\PH_DictionaryHive.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\dictionary\PH_DictionaryHiveFwd.h"
 			>
 		</File>
 		<File
