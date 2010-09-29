@@ -30,12 +30,13 @@ Phobos 3d
 #include <boost/foreach.hpp>
 
 #include <PH_ContextUtils.h>
+#include <PH_Dictionary.h>
+#include <PH_DictionaryManager.h>
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_InputActions.h>
 #include <PH_InputEvent.h>
 #include <PH_InputManager.h>
-//#include <PH_InputMapper.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
 
@@ -95,6 +96,7 @@ namespace Phobos
 		varShowRenderInfo("dvShowRenderInfo", "0"),
 		cmdLs("ls"),
 		cmdCd("cd"),
+		cmdDumpTable("dumpTable"),
 		fIgnoreFirstChar(false),
 		fIgnoredLastChar(false),
 		fActive(true),
@@ -102,21 +104,25 @@ namespace Phobos
 	{
 		Kernel_c &kernel = Kernel_c::GetInstance();
 		
-		InputManager_c::CreateInstance("inputManager")->AddListener(*this);		
+		InputManager_c::CreateInstance("InputManager")->AddListener(*this);		
 
 		Kernel_c::GetInstance().AddLogListener(*this);
 
-		ipInputMapper = InputMapper_c::Create("inputMapper", clContext);
+		ipInputMapper = InputMapper_c::Create("InputMapper", clContext);
 		ipInputMapper->Disable();
+
+		this->AddChild(ipInputMapper);
 
 		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
 		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
+		cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdDumpTable, this));
 
 		clContext.AddContextVar(varMaterialName);
 		clContext.AddContextVar(varShowRenderInfo);	
 
 		clContext.AddContextCmd(cmdLs);
 		clContext.AddContextCmd(cmdCd);		
+		clContext.AddContextCmd(cmdDumpTable);
 	}
 
 	Console_c::~Console_c(void)
@@ -542,9 +548,12 @@ namespace Phobos
 				path.AddName(args[1]);
 			}
 
-			currentNode = kernel.LookupObject(path);
-			if(!currentNode)
-			{				
+			try
+			{
+				currentNode = kernel.LookupObject(path);
+			}
+			catch(ObjectNotFoundException_c &)
+			{
 				kernel.LogStream() << "[Console_c::CmdLs] Invalid path: " << path.GetStr();
 
 				return;
@@ -552,16 +561,19 @@ namespace Phobos
 		}
 		else
 		{
-			currentNode = kernel.LookupObject(Path_c(strCurrentNodePathName));
-
-			if(!currentNode)
-			{								
+			try
+			{
+				currentNode = kernel.LookupObject(Path_c(strCurrentNodePathName));
+			}
+			catch(ObjectNotFoundException_c &)
+			{			
 				kernel.LogStream() << "[Console_c::CmdLs] Invalid node (" << strCurrentNodePathName << "), going to root";
 
 				strCurrentNodePathName = "/";				
 				return;
 			}
 		}	
+		
 		std::stringstream stream;
 
 		stream << "\t.\n\t..\n";
@@ -605,6 +617,40 @@ namespace Phobos
 		}	
 		else
 			Kernel_c::GetInstance().LogMessage("[Console_c::CmdCd] Insuficient parameters");		
+	}
+
+	void Console_c::CmdDumpTable(const StringVector_t &args, Context_c &)
+	{
+		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
+
+		try
+		{
+			DictionaryPtr_t dict;
+			if(args.size() == 2)
+			{
+				dict = DictionaryManager_c::GetInstance()->GetDictionary(Path_c(args[1]));
+				stream << "Values on " << args[1] << '\n';
+			}
+			else if(args.size() == 3)
+			{
+				dict = DictionaryManager_c::GetInstance()->GetDictionary(args[1], args[2]);
+				stream << "Values on " << args[2];
+			}
+			else
+			{
+				stream << "[Console_c::CmdDumpTable] Insuficient parameters, usage: dumpTable <path>\n";
+				return;
+			}
+			
+			for(Dictionary_c::StringMapConstIterator_t it = dict->begin(), end = dict->end(); it != end; ++it)
+			{
+				stream << it->first << " = " << it->second << "\n";
+			}
+		}
+		catch(std::exception &e)
+		{
+			stream << e.what();
+		}
 	}
 
 	//

@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -22,39 +22,28 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
+#ifndef PH_MAP_LOADER_H
+#define PH_MAP_LOADER_H
 
-#ifndef PH_WORLD_MANAGER_H
-#define PH_WORLD_MANAGER_H
+#include <boost/noncopyable.hpp>
 
-#include <PH_ContextCmd.h>
-#include <PH_CoreModule.h>
-#include <PH_Singleton.h>
-
-#include "PH_GameEngineAPI.h"
-#include "PH_MapLoader.h"
+#include <PH_String.h>
+#include <PH_DictionaryHive.h>
 
 namespace Phobos
-{	
-	PH_DECLARE_SINGLETON_PTR(WorldManager);
-
-	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
+{
+	class MapLoader_c: boost::noncopyable
 	{
-		PH_DECLARE_SINGLETON_METHODS(WorldManager);
+		public:
+			void LoadOgitor(const String_c &fileName);
 
-		protected:
-			void OnPrepareToBoot();
 			void OnBoot();
 
 		private:
-			WorldManager_c();
-			~WorldManager_c();	
+			String_c strCaelumDir;
 
-			void CmdLoadMap(const StringVector_t &args, Context_c &);
-
-		private:
-			ContextCmd_c	cmdLoadMap;
-
-			MapLoader_c		clMapLoader;
+			DictionaryHivePtr_t ipStaticEntitiesHive;
+			DictionaryHivePtr_t	ipDynamicEntitiesHive;
 	};
 }
 

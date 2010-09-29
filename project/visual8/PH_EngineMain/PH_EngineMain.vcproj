@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\engineCore;..\..\..\include\input"
+				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\engineCore;..\..\..\include\input;..\..\..\include\gameEngine;..\..\..\include\dictionary"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_CHECK_ASSERT;PH_DEBUG;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\engineCore;..\..\..\include\input"
+				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\engineCore;..\..\..\include\input;..\..\..\include\gameEngine;..\..\..\include\dictionary"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_WIN32;PH_MSVC;PH_IGNORE_ASSERT;PH_RELEASE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

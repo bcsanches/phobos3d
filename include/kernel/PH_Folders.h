@@ -29,7 +29,7 @@ Phobos 3d
 #include <PH_KernelAPI.h>
 #include <PH_String.h>
 
-#define PH_SYSTEM_FOLDER "sys/"
+#define PH_SYSTEM_FOLDER "System/"
 
 namespace Phobos
 {	

@@ -40,12 +40,21 @@ namespace Phobos
 	class PH_DICTIONARY_API Dictionary_c: public Node_c
 	{
 		public:
+			typedef boost::unordered_map<String_c, String_c> StringMap_t;
+			typedef StringMap_t::const_iterator StringMapConstIterator_t;
+
+		public:
 			static DictionaryPtr_t Create(const String_c &name);
 
 			void Load(Parser_c &parser);
 
 			const String_c &GetValue(const String_c &key) const;
 			bool TryGetValue(const String_c &key, String_c &out) const;
+
+			void AddValue(const String_c &key, const String_c &value);
+
+			inline StringMapConstIterator_t begin() const;
+			inline StringMapConstIterator_t end() const;
 
 		private:
 			Dictionary_c(const String_c &name);
@@ -55,13 +64,22 @@ namespace Phobos
 
 			static const String_c *TryGetValue(const Dictionary_c *current, const String_c &key);			
 
-		private:
-			typedef boost::unordered_map<String_c, String_c> StringMap_t;
+		private:			
 			StringMap_t mapValues;
 
 			String_c strInherit;
 			mutable const Dictionary_c *pclInherit;
 	};
+
+	inline Dictionary_c::StringMapConstIterator_t Dictionary_c::begin() const
+	{
+		return mapValues.begin();
+	}
+
+	inline Dictionary_c::StringMapConstIterator_t Dictionary_c::end() const
+	{
+		return mapValues.end();
+	}
 }
 
 #endif

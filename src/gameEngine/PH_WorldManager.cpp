@@ -25,20 +25,56 @@ Phobos 3d
 
 #include "PH_WorldManager.h"
 
-#include "PH_Error.h"
+#include <PH_Console.h>
+#include <PH_ContextUtils.h>
+#include <PH_Error.h>
+#include <PH_Exception.h>
+#include <PH_Kernel.h>
 
 namespace Phobos
 {	
 	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);	
 
 	WorldManager_c::WorldManager_c():
-		CoreModule_c("WorldManager", PRIVATE_CHILDREN)
+		CoreModule_c("WorldManager", PRIVATE_CHILDREN),
+		cmdLoadMap("loadMap")
 	{
-
+		cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdLoadMap, this));
 	}
 
 	WorldManager_c::~WorldManager_c()
 	{
 
+	}
+
+	void WorldManager_c::OnPrepareToBoot()
+	{
+		ConsolePtr_t console = Console_c::GetInstance();
+
+		console->AddContextCmd(cmdLoadMap);
+	}
+
+	void WorldManager_c::OnBoot()
+	{
+		clMapLoader.OnBoot();
+	}
+
+	void WorldManager_c::CmdLoadMap(const StringVector_t &args, Context_c &)
+	{
+		if(args.size() < 2)
+		{
+			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] Insuficient parameters, usage: loadMap <mapName>");
+
+			return;
+		}
+
+		try
+		{
+			clMapLoader.LoadOgitor(args[1]);
+		}
+		catch(Exception_c &ex)
+		{
+			Kernel_c::GetInstance().LogMessage(ex.what());
+		}
 	}
 }

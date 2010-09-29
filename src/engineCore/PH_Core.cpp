@@ -42,7 +42,7 @@ Phobos 3d
 
 namespace Phobos
 {
-	const String_c Core_c::DEFAULT_NAME = "core";
+	const String_c Core_c::DEFAULT_NAME = "Core";
 	CorePtr_t Core_c::ipInstance_gl;
 
 	CorePtr_t Core_c::CreateInstance()
@@ -51,7 +51,7 @@ namespace Phobos
 
 		ipInstance_gl = CorePtr_t(new Core_c(DEFAULT_NAME));
 
-		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
+		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c("/"));
 
 		return ipInstance_gl;
 	}

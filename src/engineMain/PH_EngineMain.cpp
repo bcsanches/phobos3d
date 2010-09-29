@@ -33,11 +33,13 @@ Phobos 3d
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
 #include <PH_Core.h>
+#include <PH_DictionaryManager.h>
 #include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
 #include <PH_PluginManager.h>
 #include <PH_ProcVector.h>
 #include <PH_Render.h>
+#include <PH_WorldManager.h>
 
 #define UPDATE_TIME (1.0f / 60.0f)
 #define MIN_TIME (10.0f / 1000.0f)
@@ -80,6 +82,9 @@ namespace Phobos
 		Kernel_c::CreateInstance("phobos.log");
 		CorePtr_t core = Core_c::CreateInstance();	
 
+		DictionaryManagerPtr_t dictionaryManager = DictionaryManager_c::CreateInstance();
+		clSingletons.AddProc(DictionaryManager_c::ReleaseInstance);
+
 		EventManagerModulePtr_t eventManager = EventManagerModule_c::CreateInstance();
 		clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
 		core->AddModule(eventManager);
@@ -98,6 +103,10 @@ namespace Phobos
 		console->AddContextVar(varFixedTime);
 		console->AddContextVar(varEngineFPS);
 		console->AddContextVar(varMinFrameTime);
+
+		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
+		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
+		core->AddModule(worldManager);
 
 		RenderPtr_t render = Render_c::CreateInstance();
 		clSingletons.AddProc(Render_c::ReleaseInstance);

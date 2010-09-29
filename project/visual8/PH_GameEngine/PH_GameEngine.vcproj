@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;;&quot;$(ProjectDir)..\..\..\include\input&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;TIXML_USE_STL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,11 +61,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="tinyxmld_STL.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="..\..\..\lib\$(TargetName)_d.lib"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -117,8 +119,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_MSVC;PH_RELEASE;PH_IGNORE_ASSERT"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;;&quot;$(ProjectDir)..\..\..\include\input&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_MSVC;PH_RELEASE;PH_IGNORE_ASSERT;TIXML_USE_STL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,7 +138,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="tinyxml_STL.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(TINYXML_HOME)\Debug_STL"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -179,6 +183,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameEnginePlugin.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\gameEngine\PH_MapLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_MapLoader.h"
 			>
 		</File>
 		<File

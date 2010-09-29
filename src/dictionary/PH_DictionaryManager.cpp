@@ -28,7 +28,9 @@ Phobos 3d
 #include <fstream>
 
 #include <PH_Error.h>
+#include <PH_Kernel.h>
 #include <PH_Parser.h>
+#include <PH_Path.h>
 
 #include "PH_Dictionary.h"
 #include "PH_DictionaryHive.h"
@@ -36,12 +38,11 @@ Phobos 3d
 
 namespace Phobos
 {
-	PH_DEFINE_DEFAULT_SINGLETON(DictionaryManager);
+	PH_DEFINE_NODE_SINGLETON(DictionaryManager, "/");
 
 	DictionaryManager_c::DictionaryManager_c():
 		Node_c("DictionaryManager", PRIVATE_CHILDREN)
-	{
-		//empty
+	{		
 	}
 
 	DictionaryManager_c::~DictionaryManager_c()
@@ -55,6 +56,14 @@ namespace Phobos
 		ifstream file(fileName.c_str());
 
 		this->Load(file);
+	}
+
+	DictionaryHivePtr_t DictionaryManager_c::CreateCustomHive(const String_c &name)
+	{
+		DictionaryHivePtr_t hive = DictionaryHive_c::Create(name);
+		this->AddPrivateChild(hive);
+
+		return hive;
 	}
 
 	void DictionaryManager_c::Load(std::istream &file)
@@ -96,6 +105,18 @@ namespace Phobos
 	DictionaryPtr_t DictionaryManager_c::GetDictionary(const String_c &hive, const String_c &dictionary)
 	{
 		return this->GetDictionaryHive(hive)->GetDictionary(dictionary);
+	}
+
+	DictionaryPtr_t DictionaryManager_c::GetDictionary(const Path_c &relativePath)
+	{
+		Path_c tmp;
+		this->GetThisPath(tmp);
+
+		tmp.Add(relativePath);
+
+		NodePtr_t ptr = Kernel_c::GetInstance().LookupObject(tmp);
+
+		return boost::static_pointer_cast<Dictionary_c>(ptr);
 	}
 }
 

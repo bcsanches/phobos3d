@@ -48,17 +48,7 @@ Phobos 3d
 
 #define PH_DEFINE_SINGLETON_VAR(X) X##Ptr_t X##_c::ipInstance_gl;
 
-#define PH_DEFINE_DEFAULT_SINGLETON(X)		\
-	PH_DEFINE_SINGLETON_VAR(X)				\
-	X##Ptr_t X##_c::CreateInstance(void)	\
-	{										\
-		PH_ASSERT(!ipInstance_gl);			\
-											\
-		ipInstance_gl.reset(new X##_c());	\
-											\
-		return ipInstance_gl;				\
-	}										\
-											\
+#define PH_SINGLETON_PROCS(X, EXTRA)		\
 	X##Ptr_t X##_c::GetInstance(void)		\
 	{										\
 		return ipInstance_gl;				\
@@ -66,8 +56,26 @@ Phobos 3d
 											\
 	void X##_c::ReleaseInstance(void)		\
 	{										\
+		EXTRA;								\
 		ipInstance_gl.reset();				\
 	}
 
+#define PH_DEFINE_DEFAULT_SINGLETON_EX(X, EXTRA_CREATE, EXTRA_RELEASE)\
+	PH_DEFINE_SINGLETON_VAR(X)				\
+	X##Ptr_t X##_c::CreateInstance(void)	\
+	{										\
+		PH_ASSERT(!ipInstance_gl);			\
+											\
+		ipInstance_gl.reset(new X##_c());	\
+											\
+		EXTRA_CREATE;						\
+											\
+		return ipInstance_gl;				\
+	}										\
+	PH_SINGLETON_PROCS(X,EXTRA_RELEASE);
+
+#define PH_DEFINE_NODE_SINGLETON(X, NODE_PATH) PH_DEFINE_DEFAULT_SINGLETON_EX(X, Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(NODE_PATH)), ipInstance_gl->RemoveSelf())	
+
+#define PH_DEFINE_DEFAULT_SINGLETON(X) PH_DEFINE_DEFAULT_SINGLETON_EX(X, ;, ;)	
 
 #endif

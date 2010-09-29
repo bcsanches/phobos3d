@@ -89,7 +89,7 @@ namespace Phobos
 
 			inline NodeMap_t::const_iterator begin() const;
 			inline NodeMap_t::const_iterator end() const;
-			inline const NodeMap_t &GetNodes() const;
+			inline const NodeMap_t &GetNodes() const;			
 
 		protected:
 			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);

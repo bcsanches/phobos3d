@@ -46,6 +46,8 @@ namespace Phobos
 
 			DictionaryPtr_t GetDictionary(const String_c &name);
 
+			void AddDictionary(DictionaryPtr_t dict);
+
 	
 		private:
 			DictionaryHive_c(const String_c &name);

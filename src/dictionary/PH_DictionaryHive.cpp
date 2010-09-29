@@ -47,6 +47,11 @@ namespace Phobos
 	{
 	}
 
+	void DictionaryHive_c::AddDictionary(DictionaryPtr_t dict)
+	{
+		this->AddPrivateChild(dict);
+	}
+
 	void DictionaryHive_c::Load(Parser_c &parser)
 	{
 		String_c tokenValue;
@@ -57,11 +62,11 @@ namespace Phobos
 		DictionaryPtr_t dict = Dictionary_c::Create(tokenValue);
 		dict->Load(parser);
 
-		this->AddPrivateChild(dict);		
+		this->AddDictionary(dict);		
 	}
 
 	DictionaryPtr_t DictionaryHive_c::GetDictionary(const String_c &name)
 	{
 		return boost::static_pointer_cast<Dictionary_c>(this->GetChild(name));
-	}
+	}	
 }

@@ -34,6 +34,8 @@ Phobos 3d
 
 namespace Phobos
 {
+	class Path_c;
+
 	PH_DECLARE_SINGLETON_PTR(DictionaryManager);
 
 	class PH_DICTIONARY_API DictionaryManager_c: public Node_c
@@ -44,8 +46,11 @@ namespace Phobos
 			void Load(const String_c &fileName);
 			void Load(std::istream &stream);
 
+			DictionaryHivePtr_t CreateCustomHive(const String_c &name);			
+
 			DictionaryHivePtr_t GetDictionaryHive(const String_c &name);
 			DictionaryPtr_t GetDictionary(const String_c &hive, const String_c &dictionary);
+			DictionaryPtr_t GetDictionary(const Path_c &relativePath);
 
 		private:
 			DictionaryManager_c();

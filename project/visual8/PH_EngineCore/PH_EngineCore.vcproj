@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\engineCore;..\..\..\include\kernel;..\..\..\include\input"
+				AdditionalIncludeDirectories="..\..\..\include\engineCore;..\..\..\include\kernel;..\..\..\include\input;..\..\..\include\dictionary"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -118,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include\engineCore;..\..\..\include\kernel;..\..\..\include\input"
+				AdditionalIncludeDirectories="..\..\..\include\engineCore;..\..\..\include\kernel;..\..\..\include\input;..\..\..\include\dictionary"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_ENGINE_CORE_EXPORTS;PH_RELEASE;PH_WIN32;PH_IGNORE_ASSERT;PH_MSVC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

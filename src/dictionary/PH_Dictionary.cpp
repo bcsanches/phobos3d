@@ -49,6 +49,11 @@ namespace Phobos
 		//empty
 	}
 
+	void Dictionary_c::AddValue(const String_c &key, const String_c &value)
+	{
+		mapValues[key] = value;
+	}
+
 	void Dictionary_c::Load(Parser_c &parser)
 	{
 		String_c tokenValue;
@@ -76,8 +81,8 @@ namespace Phobos
 			{
 				case TOKEN_ID:
 				case TOKEN_NUMBER:
-				case TOKEN_STRING:					
-					mapValues[tokenValue] = value;
+				case TOKEN_STRING:			
+					this->AddValue(tokenValue, value);					
 					break;
 
 				default:

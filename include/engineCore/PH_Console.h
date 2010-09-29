@@ -150,6 +150,7 @@ namespace Phobos
 
 			void CmdCd(const StringVector_t &args, Context_c &);
 			void CmdLs(const StringVector_t &args, Context_c &);
+			void CmdDumpTable(const StringVector_t &args, Context_c &);
 
 		private:
 			// =====================================================
@@ -183,6 +184,7 @@ namespace Phobos
 			ContextVar_c				varShowRenderInfo;
 			ContextCmd_c				cmdLs;
 			ContextCmd_c				cmdCd;
+			ContextCmd_c				cmdDumpTable;
 
 			String_c					strCurrentNodePathName;
 
