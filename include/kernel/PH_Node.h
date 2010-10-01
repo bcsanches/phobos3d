@@ -75,6 +75,7 @@ namespace Phobos
 
 			void AddChild(NodePtr_t node);
 			void RemoveChild(NodePtr_t node);
+			void RemoveAllChildren();
 			NodePtr_t GetChild(const String_c &name) const;
 			NodePtr_t TryGetChild(const String_c &name) const;
 

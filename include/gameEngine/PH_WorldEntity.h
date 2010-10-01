@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  September 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,41 +23,32 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_WORLD_MANAGER_H
-#define PH_WORLD_MANAGER_H
-
-#include <PH_ContextCmd.h>
-#include <PH_CoreModule.h>
-#include <PH_Singleton.h>
+#ifndef PH_WORLD_ENTITY_H
+#define PH_WORLD_ENTITY_H
 
 #include "PH_GameEngineAPI.h"
-#include "PH_MapLoader.h"
+
+#include "PH_Entity.h"
 
 namespace Phobos
-{	
-	PH_DECLARE_SINGLETON_PTR(WorldManager);
+{
+	PH_DECLARE_NODE_PTR(WorldEntity);
 
-	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
+	class MapLoader_c;
+
+	class PH_GAME_ENGINE_API WorldEntity_c: public Entity_c
 	{
-		PH_DECLARE_SINGLETON_METHODS(WorldManager);
-
 		public:
-			void LoadMap(const String_c &mapName);
+			static EntityPtr_t Create(const String_c &name);
+
+			void Load(const MapLoader_c &loader);
 
 		protected:
-			void OnPrepareToBoot();
-			void OnBoot();
+			virtual void OnLoad(const Dictionary_c &dictionary);
 
 		private:
-			WorldManager_c();
-			~WorldManager_c();	
+			WorldEntity_c(const String_c &name);
 
-			void CmdLoadMap(const StringVector_t &args, Context_c &);
-
-		private:
-			ContextCmd_c	cmdLoadMap;
-
-			MapLoader_c		clMapLoader;
 	};
 }
 

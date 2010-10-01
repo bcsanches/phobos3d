@@ -31,6 +31,8 @@ Phobos 3d
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 
+#include "PH_WorldEntity.h"
+
 namespace Phobos
 {	
 	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);	
@@ -45,6 +47,17 @@ namespace Phobos
 	WorldManager_c::~WorldManager_c()
 	{
 
+	}
+
+	void WorldManager_c::LoadMap(const String_c &mapName)
+	{
+		this->RemoveAllChildren();
+
+		clMapLoader.LoadOgitor(mapName);
+
+		WorldEntityPtr_t world = boost::static_pointer_cast<WorldEntity_c>(WorldEntity_c::Create("WorldSpawn"));
+		world->Load(clMapLoader);
+		this->AddPrivateChild(world);
 	}
 
 	void WorldManager_c::OnPrepareToBoot()
@@ -70,7 +83,7 @@ namespace Phobos
 
 		try
 		{
-			clMapLoader.LoadOgitor(args[1]);
+			this->LoadMap(args[1]);
 		}
 		catch(Exception_c &ex)
 		{

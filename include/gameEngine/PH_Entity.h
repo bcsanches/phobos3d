@@ -42,6 +42,8 @@ namespace Phobos
 			void Load(const Dictionary_c &dictionary);
 
 		protected:
+			Entity_c(const String_c &name);
+
 			virtual void OnLoad(const Dictionary_c &dictionary) = 0;
 
 		private:

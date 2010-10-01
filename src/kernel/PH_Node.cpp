@@ -102,6 +102,11 @@ namespace Phobos
 		pclParent->RemoveChild(NodePtr_t(this));
 	}
 
+	void Node_c::RemoveAllChildren()
+	{
+		mapNodes.clear();
+	}
+
 	void Node_c::RemoveChild(NodePtr_t node)
 	{
 		//node is not registered?
