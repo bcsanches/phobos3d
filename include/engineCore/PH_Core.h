@@ -101,6 +101,7 @@ namespace Phobos
 
 		private:			
 			Core_c(const String_c &name);
+			~Core_c();
 
 			void CallCoreModuleProc(CoreModuleProc_t proc);
 

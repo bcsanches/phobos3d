@@ -80,7 +80,7 @@ namespace Phobos
 
 	static void LoadDictionary(DictionaryPtr_t dict, const TiXmlElement &element)
 	{
-		for(const TiXmlAttribute *atr = element.FirstAttribute(), *end = element.LastAttribute(); atr != end; atr = atr->Next())
+		for(const TiXmlAttribute *atr = element.FirstAttribute(); atr; atr = atr->Next())
 		{
 			dict->AddValue(atr->Name(), atr->Value());			
 		}		
@@ -94,13 +94,16 @@ namespace Phobos
 	}
 
 	void MapLoader_c::LoadOgitor(const String_c &fileName)
-	{
+	{		
 		TiXmlDocument doc(fileName.c_str());	
 
 		if(!doc.LoadFile())
 		{
 			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "MapLoader_c::LoadOgitor", doc.ErrorDesc());
-		}		
+		}	
+
+		ipStaticEntitiesHive->RemoveAllChildren();
+		ipDynamicEntitiesHive->RemoveAllChildren();
 		
 		TiXmlHandle root(doc.FirstChildElement());
 

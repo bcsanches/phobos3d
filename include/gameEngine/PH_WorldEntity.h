@@ -26,6 +26,8 @@ Phobos 3d
 #ifndef PH_WORLD_ENTITY_H
 #define PH_WORLD_ENTITY_H
 
+#include <OgrePreRequisites.h>
+
 #include "PH_GameEngineAPI.h"
 
 #include "PH_Entity.h"
@@ -34,7 +36,9 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(WorldEntity);
 
-	class MapLoader_c;
+	class Dictionary_c;
+	class MapLoader_c;	
+	struct TempStaticObject_s;
 
 	class PH_GAME_ENGINE_API WorldEntity_c: public Entity_c
 	{
@@ -47,8 +51,30 @@ namespace Phobos
 			virtual void OnLoad(const Dictionary_c &dictionary);
 
 		private:
-			WorldEntity_c(const String_c &name);
+			friend struct TempStaticObject_s;
 
+			struct StaticObject_s
+			{
+				String_c strParent;
+
+				Ogre::SceneNode *pclSceneNode;
+				Ogre::Entity *pclEntity;
+				Ogre::Light *pclLight;
+			};
+
+			WorldEntity_c(const String_c &name);
+			~WorldEntity_c();
+
+			bool LoadGlobalObject(const String_c &type, const Dictionary_c &dict);
+			bool LoadStaticObject(StaticObject_s &object, const String_c &type, const Dictionary_c &dict);
+
+			void LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict);
+			void LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict);
+			void LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict);
+
+		private:			
+			typedef std::map<String_c, StaticObject_s> StaticObjectsMap_t;
+			StaticObjectsMap_t mapStaticObjects;
 	};
 }
 

@@ -81,6 +81,11 @@ namespace Phobos
 		MemoryZero(&stSimInfo, sizeof(stSimInfo));
 	}
 
+	Core_c::~Core_c()
+	{
+		this->CallCoreModuleProc(&CoreModule_c::OnFinalize);
+	}
+
 	void Core_c::Update(Float_t seconds, Float_t delta)
 	{
 		this->UpdateDestroyList();

@@ -122,6 +122,20 @@ namespace Phobos
 		return true;
 	}
 
+	bool Dictionary_c::GetBool(const String_c &key) const
+	{
+		const String_c &value = this->GetValue(key);
+
+		return value.compare("true") == 0 ? true : false;
+	}
+
+	void Dictionary_c::Get4Float(const float values[4], const String_c &key) const
+	{
+		const String_c &value = this->GetValue(key);
+
+		sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
+	}
+
 	const Dictionary_c *Dictionary_c::GetInherited() const
 	{
 		if(pclInherit)
@@ -135,6 +149,15 @@ namespace Phobos
 		return pclInherit;
 	}
 
+	int Dictionary_c::GetInt(const String_c &key) const
+	{
+		return StringToInt(this->GetValue(key));
+	}
+
+	float Dictionary_c::GetFloat(const String_c &key) const
+	{		
+		return StringToFloat(this->GetValue(key));
+	}
 
 	const String_c *Dictionary_c::TryGetValue(const Dictionary_c *current, const String_c &key)
 	{

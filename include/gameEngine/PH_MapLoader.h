@@ -39,12 +39,25 @@ namespace Phobos
 
 			void OnBoot();
 
+			inline DictionaryHivePtr_t GetStaticEntitiesHive() const;
+			inline DictionaryHivePtr_t GetDynamicEntitiesHive() const;
+
 		private:
 			String_c strCaelumDir;
 
 			DictionaryHivePtr_t ipStaticEntitiesHive;
 			DictionaryHivePtr_t	ipDynamicEntitiesHive;
 	};
+
+	inline DictionaryHivePtr_t MapLoader_c::GetStaticEntitiesHive() const
+	{
+		return ipStaticEntitiesHive;
+	}
+
+	inline DictionaryHivePtr_t MapLoader_c::GetDynamicEntitiesHive() const
+	{
+		return ipDynamicEntitiesHive;
+	}
 }
 
 #endif

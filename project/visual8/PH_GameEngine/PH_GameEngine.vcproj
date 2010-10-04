@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tinyxmld_STL.lib"
+				AdditionalDependencies="tinyxmld_STL.lib OgreMain_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tinyxml_STL.lib"
+				AdditionalDependencies="tinyxml_STL.lib OgreMain.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(TINYXML_HOME)\Debug_STL"
 				GenerateDebugInformation="true"
@@ -173,6 +173,10 @@
 	<References>
 	</References>
 	<Files>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_DictionaryUtils.h"
+			>
+		</File>
 		<File
 			RelativePath="..\..\..\src\gameEngine\PH_Entity.cpp"
 			>

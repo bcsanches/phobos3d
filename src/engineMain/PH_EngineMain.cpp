@@ -81,6 +81,7 @@ namespace Phobos
 	{
 		Kernel_c::CreateInstance("phobos.log");
 		CorePtr_t core = Core_c::CreateInstance();	
+		clSingletons.AddProc(Core_c::ReleaseInstance);
 
 		DictionaryManagerPtr_t dictionaryManager = DictionaryManager_c::CreateInstance();
 		clSingletons.AddProc(DictionaryManager_c::ReleaseInstance);
@@ -110,7 +111,7 @@ namespace Phobos
 
 		RenderPtr_t render = Render_c::CreateInstance();
 		clSingletons.AddProc(Render_c::ReleaseInstance);
-		core->AddModule(render);
+		core->AddModule(render, LOWEST_PRIORITY);
 
 		core->LaunchBootModule();
 	}
@@ -118,8 +119,7 @@ namespace Phobos
 	EngineMain_c::~EngineMain_c()
 	{
 		clSingletons.CallAll();		
-
-		Core_c::ReleaseInstance();
+		
 		Kernel_c::ReleaseInstance();
 	}
 

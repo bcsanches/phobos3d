@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,43 +23,46 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_WORLD_MANAGER_H
-#define PH_WORLD_MANAGER_H
+#ifndef PH_DICTIONARY_UTILS_H
+#define PH_DICTIONARY_UTILS_H
 
-#include <PH_ContextCmd.h>
-#include <PH_CoreModule.h>
-#include <PH_Singleton.h>
+#include <PH_Dictionary.h>
 
-#include "PH_GameEngineAPI.h"
-#include "PH_MapLoader.h"
+#include <OgreVector3.h>
+#include <OgreQuaternion.h>
 
 namespace Phobos
-{	
-	PH_DECLARE_SINGLETON_PTR(WorldManager);
+{
+	inline Ogre::Vector3 DictionaryGetVector3(const Dictionary_c &dict, const String_c &key)
+	{		
+		const String_c &value = dict.GetValue(key);
 
-	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
+		Ogre::Vector3 tmp;
+		sscanf(value.c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
+
+		return tmp;
+	}
+
+	inline Ogre::Quaternion DictionaryGetQuaternion(const Dictionary_c &dict, const String_c &key)
 	{
-		PH_DECLARE_SINGLETON_METHODS(WorldManager);
+		const String_c &value = dict.GetValue(key);
 
-		public:
-			void LoadMap(const String_c &mapName);
+		Ogre::Quaternion q;
+		sscanf(value.c_str(), "%f %f %f %f", &q.w, &q.x, &q.y, &q.z);
 
-		protected:
-			void OnPrepareToBoot();
-			void OnBoot();
-			void OnFinalize();
+		return q;
+	}
 
-		private:
-			WorldManager_c();
-			~WorldManager_c();	
+	inline Ogre::ColourValue DictionaryGetColour(const Dictionary_c &dict, const String_c &key)
+	{
+		const String_c &value = dict.GetValue(key);
 
-			void CmdLoadMap(const StringVector_t &args, Context_c &);
+		Ogre::ColourValue colour;
 
-		private:
-			ContextCmd_c	cmdLoadMap;
+		sscanf(value.c_str(), "%f %f %f %f", &colour.r, &colour.g, &colour.b, &colour.a);
 
-			MapLoader_c		clMapLoader;
-	};
+		return colour;
+	}
 }
 
 #endif

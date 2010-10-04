@@ -72,6 +72,11 @@ namespace Phobos
 		clMapLoader.OnBoot();
 	}
 
+	void WorldManager_c::OnFinalize()
+	{
+		this->RemoveAllChildren();
+	}
+
 	void WorldManager_c::CmdLoadMap(const StringVector_t &args, Context_c &)
 	{
 		if(args.size() < 2)
