@@ -209,6 +209,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\engineCore\PH_CoreModuleManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_CoreModuleManager.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\engineCore\PH_CoreTimer.h"
 			>
 		</File>

@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 		BOOST_REQUIRE_THROW(core->AddModule(ptr, BOOT_MODULE_PRIORITY), InvalidParameterException_c);
 	}
 
-	core->LaunchBootModule();
+	core->LaunchBootModule("autoexec.cfg");
 
 	TestModule_c *testModule;
 	{
@@ -243,6 +243,8 @@ BOOST_AUTO_TEST_CASE(core_basic)
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalRenderFrameTime == 2);
 		BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta == 0.2f);
 		BOOST_CHECK(testModule->iPrepareToBootCount == 1);
+
+		Kernel_c::GetInstance().LogMessage("Test reminder: ignore autoexec.cfg not found message");
 
 		//Force boot event fire
 		core->FixedUpdate(1);

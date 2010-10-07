@@ -44,7 +44,7 @@ namespace Phobos
 {
 	class Console_c;
 
-	typedef boost::intrusive_ptr<Console_c> ConsolePtr_t;	
+	PH_DECLARE_NODE_PTR(Console);	
 
 	class PH_ENGINE_CORE_API Console_c: public CoreModule_c, private LogListener_c, private InputManagerListener_c, private InputDeviceListener_c
 	{		

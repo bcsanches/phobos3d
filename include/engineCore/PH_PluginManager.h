@@ -46,18 +46,22 @@ namespace Phobos
 			static void ReleaseInstance(void);
 
 			void LoadPlugin(const String_c &name);
+			void UnloadPlugin(const String_c &name);
 
 		protected:
 			void OnPrepareToBoot();
+			void OnFinalize();
 
 		private:
 			PluginManager_c();
 			~PluginManager_c();
 
 			void CmdLoadPlugin(const StringVector_t &args, Context_c &);
+			void CmdUnloadPlugin(const StringVector_t &args, Context_c &);
 
 		private:
 			ContextCmd_c	cmdLoadPlugin;
+			ContextCmd_c	cmdUnloadPlugin;
 
 			// =====================================================
 			// STATIC PRIVATE ATTRIBUTES

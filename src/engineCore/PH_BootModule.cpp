@@ -29,21 +29,23 @@ Phobos 3d
 #include <PH_Kernel.h>
 
 #include "PH_Console.h"
-#include "PH_Core.h"
+#include "PH_CoreModuleManager.h"
 
 namespace Phobos
 {
-	BootModulePtr_t BootModule_c::Create()
+	BootModulePtr_t BootModule_c::Create(const String_c &cfgName, CoreModuleManager_c &manager)
 	{
-		return BootModulePtr_t(new BootModule_c());
+		return BootModulePtr_t(new BootModule_c(cfgName, manager));
 	}
 
-	BootModule_c::BootModule_c():
+	BootModule_c::BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager):
 		CoreModule_c("BootModule"),
+		strCfgName(cfgName),
 		fUpdateDone(false),
 		iFixedUpdateCount(0),
 		fPrepareFired(false),
-		fBootFired(false)
+		fBootFired(false),
+		rclManager(manager)
 	{
 	}
 
@@ -52,13 +54,11 @@ namespace Phobos
 		++iFixedUpdateCount;
 
 		if(fUpdateDone && (iFixedUpdateCount > 2))
-		{
-			CorePtr_t core = Core_c::GetInstance();
-
+		{			
 			//First time, tell the system that we are ready to go
 			if(!fPrepareFired)
 			{				
-				core->OnEvent(CORE_EVENT_PREPARE_TO_BOOT);
+				rclManager.OnEvent(CORE_EVENT_PREPARE_TO_BOOT);
 				fPrepareFired = true;
 
 				//restart count
@@ -69,7 +69,7 @@ namespace Phobos
 			{
 				try
 				{
-					Console_c::GetInstance()->ExecuteFromFile("autoexec.cfg");
+					Console_c::GetInstance()->ExecuteFromFile(strCfgName);
 				}
 				catch(FileNotFoundException_c &e)
 				{					
@@ -77,10 +77,11 @@ namespace Phobos
 				}
 
 				//Time to boot and game over for us
-				core->OnEvent(CORE_EVENT_BOOT);
-				core->AddModuleToDestroyList(*this);
-
+				rclManager.OnEvent(CORE_EVENT_BOOT);
+				
 				fBootFired = true;
+
+				rclManager.RemoveModule(*this);
 			}
 		}
 	}

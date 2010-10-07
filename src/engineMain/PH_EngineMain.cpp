@@ -113,11 +113,13 @@ namespace Phobos
 		clSingletons.AddProc(Render_c::ReleaseInstance);
 		core->AddModule(render, LOWEST_PRIORITY);
 
-		core->LaunchBootModule();
+		core->LaunchBootModule("autoexec.cfg");
 	}
 
 	EngineMain_c::~EngineMain_c()
 	{
+		Core_c::GetInstance()->Shutdown();
+
 		clSingletons.CallAll();		
 		
 		Kernel_c::ReleaseInstance();

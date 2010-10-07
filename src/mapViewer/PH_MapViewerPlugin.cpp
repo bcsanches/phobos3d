@@ -25,8 +25,11 @@ Phobos 3d
 #include "PH_MapViewerPlugin.h"
 
 #include <PH_Core.h>
+#include <PH_CoreModuleManager.h>
 #include <PH_Plugin.h>
 #include <PH_ProcVector.h>
+
+#include "PH_Client.h"
 
 namespace Phobos
 {
@@ -38,22 +41,28 @@ namespace Phobos
 
 		private:
 			ProcVector_c clProcs;
+			CoreModuleManagerPtr_t ipManager;
 	};
 
 	void MapViewerPlugin_c::Init()
 	{
-		CorePtr_t core = Core_c::GetInstance();
+		ipManager = CoreModuleManager_c::Create("MapViewer");
 
-		/*
-		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
-		clProcs.AddProc(WorldManager_c::ReleaseInstance);
-		core->AddModule(worldManager);		*/
+		Core_c::GetInstance()->AddModule(ipManager);
+
+		ClientPtr_t client = Client_c::CreateInstance();
+		clProcs.AddProc(Client_c::ReleaseInstance);
+		ipManager->AddModule(client);		
 	}
 
 	void MapViewerPlugin_c::Finalize()
 	{
+		Core_c::GetInstance()->RemoveModule(*ipManager);		
+
 		clProcs.CallAll();
 		clProcs.Clear();
+
+		ipManager.reset();
 	}
 }
 

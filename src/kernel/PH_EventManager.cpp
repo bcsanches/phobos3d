@@ -37,7 +37,7 @@ namespace Phobos
 {
 	EventManagerPtr_t EventManager_c::ipInstance_gl;
 
-	const String_c EventManager_c::DEFAULT_NAME("eventManager");
+	const String_c EventManager_c::DEFAULT_NAME("EventManager");
 
 	EventManagerPtr_t EventManager_c::CreateInstance(const String_c &name)
 	{

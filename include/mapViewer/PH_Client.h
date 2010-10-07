@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  version 0.0.1, January 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,26 +23,26 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include <boost/test/unit_test.hpp>
+#ifndef PH_CLIENT_H
+#define PH_CLIENT_H
 
-#include <PH_EventManager.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <PH_CoreModule.h>
+#include <PH_Singleton.h>
 
-using namespace Phobos;
-
-BOOST_AUTO_TEST_CASE(eventManager_basic)
+namespace Phobos
 {
-	Kernel_c &kernel = Kernel_c::CreateInstance("eventManager_basic.log");
-	EventManager_c::CreateInstance(EventManager_c::GetDefaultName());
+	PH_DECLARE_NODE_PTR(Client);
 
-	NodePtr_t node = kernel.LookupObject(Path_c("/System/EventManager"));
-	BOOST_REQUIRE(node);
+	class Client_c: public CoreModule_c
+	{
+		PH_DECLARE_SINGLETON_METHODS(Client);
 
-	EventManager_c::ReleaseInstance();
+		public:
 
-	BOOST_REQUIRE_THROW(kernel.LookupObject(Path_c("/System/EventManager")), ObjectNotFoundException_c);	
+		private:
+			Client_c();
 
-	Kernel_c::ReleaseInstance();
+	};
 }
+
+#endif

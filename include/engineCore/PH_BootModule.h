@@ -31,25 +31,30 @@ Phobos 3d
 namespace Phobos
 {
 	class BootModule_c;
+	class CoreModuleManager_c;
 
-	typedef boost::intrusive_ptr<BootModule_c> BootModulePtr_t;
+	PH_DECLARE_NODE_PTR(BootModule);	
 
 	class BootModule_c: public CoreModule_c
 	{
 		public:
-			static BootModulePtr_t Create();
+			static BootModulePtr_t Create(const String_c &cfgName, CoreModuleManager_c &manager);
 
 			void OnUpdate();			
 			void OnFixedUpdate();
 
 		protected:
-			BootModule_c();
+			BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager);
 
 		private:
+			String_c strCfgName;
+
 			int		iFixedUpdateCount;
 			bool	fUpdateDone;
 			bool	fPrepareFired;
 			bool	fBootFired;
+
+			CoreModuleManager_c &rclManager;
 	};
 }
 

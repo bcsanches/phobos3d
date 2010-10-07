@@ -30,9 +30,8 @@ Phobos 3d
 #include <vector>
 
 #include <PH_ContextCmd.h>
-#include <PH_Node.h>
 
-#include "PH_CoreModule.h"
+#include "PH_CoreModuleManager.h"
 #include "PH_CoreTimer.h"
 #include "PH_EngineCoreAPI.h"
 
@@ -41,25 +40,7 @@ namespace Phobos
 	class Context_c;
 	class Core_c;	
 
-	typedef boost::intrusive_ptr<Core_c> CorePtr_t;
-
-	enum CoreModulePriorities_e
-	{
-		LOWEST_PRIORITY			= 0,
-		LOW_PRIORITY			= 0xFF,
-		MEDIUM_PRIORITY			= 0xFFF,
-		NORMAL_PRIORITY			= 0xFFFF,
-		HIGH_PRIORITY			= 0xFFFFF,
-		HIGHEST_PRIORITY		= 0xFFFFFFF,
-		BOOT_MODULE_PRIORITY	= 0xFFFFFFFF
-	};
-
-	enum CoreEvents_e
-	{
-		CORE_EVENT_PREPARE_TO_BOOT,
-		CORE_EVENT_BOOT,
-		CORE_EVENT_RENDER_READY		
-	};
+	typedef boost::intrusive_ptr<Core_c> CorePtr_t;	
 
 	struct CoreSimInfo_s
 	{
@@ -69,7 +50,7 @@ namespace Phobos
 	};
 
 
-	class PH_ENGINE_CORE_API Core_c: public Node_c
+	class PH_ENGINE_CORE_API Core_c: public CoreModuleManager_c
 	{
 		public:
 			static CorePtr_t CreateInstance();
@@ -82,10 +63,7 @@ namespace Phobos
 
 			inline void SetFrameRate(Float_t rate);
 
-			inline const CoreSimInfo_s &GetSimInfo(void) const;
-			
-			void AddModule(CoreModulePtr_t module, UInt32_t priority = NORMAL_PRIORITY);
-			void AddModuleToDestroyList(CoreModule_c &module);
+			inline const CoreSimInfo_s &GetSimInfo(void) const;					
 						
 			void CreateDefaultCmds(Context_c &context);
 
@@ -93,20 +71,11 @@ namespace Phobos
 			void UnpauseTimer(CoreTimerTypes_e timer);
 			void ToggleTimerPause(CoreTimerTypes_e timer);
 
-			void ResetTimer(CoreTimerTypes_e timer);
-
-			void OnEvent(CoreEvents_e event);
-
-			void LaunchBootModule();
+			void ResetTimer(CoreTimerTypes_e timer);					
 
 		private:			
 			Core_c(const String_c &name);
-			~Core_c();
-
-			void CallCoreModuleProc(CoreModuleProc_t proc);
-
-			void UpdateDestroyList();
-			void DispatchEvents();
+			~Core_c();			
 
 			void CmdTime(const StringVector_t &args, Context_c &);
 			void CmdToggleTimerPause(const StringVector_t &args, Context_c &);
@@ -149,15 +118,7 @@ namespace Phobos
 			static const String_c DEFAULT_NAME;
 			static CorePtr_t ipInstance_gl;
 
-			typedef std::vector<ModuleInfo_s>	ModulesVector_t;
-			ModulesVector_t						vecModules;
 			CoreSimInfo_s						stSimInfo;
-
-			typedef std::set<CoreModulePtr_t>	ModulesSet_t;
-			ModulesSet_t						setModulesToDestroy;
-
-			typedef std::vector<CoreEvents_e>	EventsVector_t;
-			EventsVector_t						vecEvents;
 
 			ContextCmd_c	cmdTime;
 			ContextCmd_c	cmdToggleTimerPause;

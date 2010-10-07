@@ -72,7 +72,7 @@ namespace Phobos
 	}
 
 	Core_c::Core_c(const Phobos::String_c &name):
-		Node_c(name),
+		CoreModuleManager_c(name, PRIVATE_CHILDREN),
 		fLaunchedBoot(false),
 		cmdTime("time"),
 		cmdListModules("listModules"),
@@ -83,13 +83,16 @@ namespace Phobos
 
 	Core_c::~Core_c()
 	{
-		this->CallCoreModuleProc(&CoreModule_c::OnFinalize);
+		//empty
+	}
+
+	void Core_c::Shutdown()
+	{		
+		this->OnFinalize();
 	}
 
 	void Core_c::Update(Float_t seconds, Float_t delta)
 	{
-		this->UpdateDestroyList();
-		this->DispatchEvents();
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
 			if(stSimInfo.stTimers[i].IsPaused())
@@ -100,13 +103,11 @@ namespace Phobos
 			stSimInfo.stTimers[i].fpDelta = delta;
 		}
 
-		this->CallCoreModuleProc(&CoreModule_c::OnUpdate);		
+		CoreModuleManager_c::OnUpdate();	
 	}
 
 	void Core_c::FixedUpdate(Float_t seconds)
-	{
-		this->UpdateDestroyList();
-		this->DispatchEvents();
+	{		
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
 			if(stSimInfo.stTimers[i].IsPaused())
@@ -117,93 +118,7 @@ namespace Phobos
 			++stSimInfo.stTimers[i].uFrameCount;
 		}
 
-		this->CallCoreModuleProc(&CoreModule_c::OnFixedUpdate);		
-	}
-
-	void Core_c::CallCoreModuleProc(CoreModuleProc_t proc)
-	{
-		BOOST_FOREACH(ModuleInfo_s &moduleInfo, vecModules)
-		{			
-			((*moduleInfo.ipModule).*proc)();
-		}
-	}
-
-	void Core_c::AddModule(CoreModulePtr_t module, UInt32_t priority)
-	{
-		if(priority == BOOT_MODULE_PRIORITY && (dynamic_cast<BootModule_c *>(module.get()) == NULL))
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core_c::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module->GetName());
-
-		this->AddChild(module);		
-
-		vecModules.push_back(ModuleInfo_s(module, priority));	
-		std::sort(vecModules.begin(), vecModules.end());
-	}
-
-	void Core_c::AddModuleToDestroyList(CoreModule_c &module)
-	{
-		ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), module);
-		if(it == vecModules.end())
-		{
-			std::stringstream stream;
-			stream << "Module " << module.GetName() << " not found on core list.";
-
-			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Core_c::AddModuleToDestroyList", stream.str());
-		}
-		
-		setModulesToDestroy.insert(it->ipModule);
-	}
-
-	void Core_c::UpdateDestroyList()
-	{
-		BOOST_FOREACH(CoreModulePtr_t ptr, setModulesToDestroy)
-		{			
-			ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), ptr);
-
-			PH_ASSERT_MSG(it != vecModules.end(), "Module on removed list is not registered!!!");
-						
-			vecModules.erase(it);
-			this->RemoveChild(ptr);
-			ptr->OnFinalize();
-		}
-
-		setModulesToDestroy.clear();
-	}
-
-	void Core_c::OnEvent(CoreEvents_e event)
-	{
-		vecEvents.push_back(event);
-	}
-
-	void Core_c::DispatchEvents()
-	{
-		if(vecEvents.empty())
-			return;
-
-		//use another vector, so we do not freeze on recursive events
-		EventsVector_t tmp;
-		tmp.swap(vecEvents);
-
-		BOOST_FOREACH(CoreEvents_e event, tmp)
-		{
-			switch(event)
-			{
-				case CORE_EVENT_PREPARE_TO_BOOT:
-					this->CallCoreModuleProc(&CoreModule_c::OnPrepareToBoot);
-					break;
-
-				case CORE_EVENT_BOOT:
-					this->CallCoreModuleProc(&CoreModule_c::OnBoot);
-					break;
-
-				case CORE_EVENT_RENDER_READY:
-					this->CallCoreModuleProc(&CoreModule_c::OnRenderReady);
-					break;
-
-				default:
-					PH_ASSERT_MSG(false, "Invalid value on events");
-					break;
-			}
-		}
+		CoreModuleManager_c::OnFixedUpdate();		
 	}
 
 	void Core_c::CreateDefaultCmds(Context_c &context)
@@ -254,14 +169,6 @@ namespace Phobos
 		PH_ASSERT(timer < CORE_MAX_TIMERS);
 
 		stSimInfo.stTimers[CORE_GAME_TIMER].Reset();
-	}
-
-	void Core_c::LaunchBootModule()
-	{
-		if(fLaunchedBoot)
-			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core_c::LaunchBootModule", "Boot module already launched");
-
-		this->AddModule(BootModule_c::Create(), HIGHEST_PRIORITY);
 	}
 
 	void Core_c::CmdTime(const StringVector_t &args, Context_c &)
@@ -329,15 +236,6 @@ namespace Phobos
 
 	void Core_c::CmdListModules(const StringVector_t &args, Context_c &)
 	{
-		using namespace std;
-		stringstream stream;
-
-		stream << "Core modules: " << endl;		
-		BOOST_FOREACH(ModuleInfo_s &m, vecModules)
-		{			
-			stream << '\t' << m.ipModule->GetName() << ' ' << m.u32Priority << endl;			
-		}
-
-		Kernel_c::GetInstance().LogMessage(stream.str());	
+		this->LogCoreModules();	
 	}
 }

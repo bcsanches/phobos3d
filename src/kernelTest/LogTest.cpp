@@ -43,22 +43,26 @@ BOOST_AUTO_TEST_CASE(log_basic)
 {	
 	if(exists(LOG_FILE_NAME))
 		BOOST_REQUIRE(remove(LOG_FILE_NAME));
+
+	size_t size;
 	
 	{
 		Log_c log(LOG_FILE_NAME, 0);
 
-		BOOST_REQUIRE(exists(LOG_FILE_NAME));
-		BOOST_REQUIRE(file_size(LOG_FILE_NAME) == 0);
+		BOOST_REQUIRE(exists(LOG_FILE_NAME));	
+		size = static_cast<size_t>(file_size(LOG_FILE_NAME));
 
 		log.Message("Test");
 
-		BOOST_REQUIRE(file_size(LOG_FILE_NAME) > 0);
+		size_t current = static_cast<size_t>(file_size(LOG_FILE_NAME));
+		BOOST_REQUIRE(current > size);
+		size = current;
 	}
 
 	{
 		Log_c log(LOG_FILE_NAME, 0);
 		
-		BOOST_REQUIRE(file_size(LOG_FILE_NAME) == 0);
+		BOOST_REQUIRE(file_size(LOG_FILE_NAME) < size);
 	}
 }
 

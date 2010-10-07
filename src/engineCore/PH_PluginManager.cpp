@@ -58,9 +58,11 @@ namespace Phobos
 
 	PluginManager_c::PluginManager_c():
 		CoreModule_c("PluginManager", PRIVATE_CHILDREN),
-		cmdLoadPlugin("loadPlugin")
+		cmdLoadPlugin("loadPlugin"),
+		cmdUnloadPlugin("unloadPlugin")
 	{
 		cmdLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager_c::CmdLoadPlugin, this));
+		cmdUnloadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager_c::CmdUnloadPlugin, this));
 	}
 
 	PluginManager_c::~PluginManager_c()
@@ -72,11 +74,22 @@ namespace Phobos
 		ConsolePtr_t console = Console_c::GetInstance();
 
 		console->AddContextCmd(cmdLoadPlugin);
+		console->AddContextCmd(cmdUnloadPlugin);
+	}
+
+	void PluginManager_c::OnFinalize()
+	{
+		this->RemoveAllChildren();
 	}
 
 	void PluginManager_c::LoadPlugin(const String_c &name)
 	{
 		this->AddPrivateChild(Plugin_c::Create(name));
+	}
+
+	void PluginManager_c::UnloadPlugin(const String_c &name)
+	{
+		this->RemoveChild(this->GetChild(name));
 	}
 
 	void PluginManager_c::CmdLoadPlugin(const StringVector_t &args, Context_c &)
@@ -92,6 +105,27 @@ namespace Phobos
 			try
 			{
 				this->LoadPlugin(args[i]);
+			}
+			catch(Exception_c &e)
+			{
+				Kernel_c::GetInstance().LogMessage(e.what());
+			}
+		}
+	}
+
+	void PluginManager_c::CmdUnloadPlugin(const StringVector_t &args, Context_c &)
+	{
+		if(args.size() < 2)
+		{
+			Kernel_c::GetInstance().LogMessage("[PluginManager_c::CmdUnloadPlugin] Insuficient parameters, usage: unloadPlugin <pluginName> [pluginName1] [pluginName2] [pluginNamen]");
+			return;
+		}
+
+		for(int i = 1, len = args.size(); i < len; ++i)
+		{
+			try
+			{
+				this->UnloadPlugin(args[i]);
 			}
 			catch(Exception_c &e)
 			{

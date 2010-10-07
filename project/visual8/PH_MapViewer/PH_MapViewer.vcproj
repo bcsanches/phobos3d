@@ -178,6 +178,14 @@
 			>
 		</Filter>
 		<File
+			RelativePath="..\..\..\src\mapViewer\PH_Client.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\mapViewer\PH_Client.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\mapViewer\PH_MapViewerAPI.h"
 			>
 		</File>
