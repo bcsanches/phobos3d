@@ -173,6 +173,22 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="player"
+			>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_IPlayerController.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_SpectatorCameraController.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_SpectatorCameraController.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_DictionaryUtils.h"
 			>
@@ -195,6 +211,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_EntityKeys.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\gameEngine\PH_GameCamera.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_GameCamera.h"
 			>
 		</File>
 		<File

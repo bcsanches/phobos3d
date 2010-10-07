@@ -42,7 +42,10 @@ Phobos 3d
 
 namespace Phobos
 {
+	class AxisButton_c;
+	class Button_c;
 	class Console_c;
+	class Thumb_c;
 
 	PH_DECLARE_NODE_PTR(Console);	
 
@@ -105,7 +108,11 @@ namespace Phobos
 			inline void AddContextVar(class ContextVar_c &var);
 			inline void AddContextCmd(class ContextCmd_c &cmd);
 
-			void Print(const String_c &text);			
+			void Print(const String_c &text);		
+
+			void EnableButton(Button_c &button);
+			void EnableThumb(Thumb_c &thumb);
+			void EnableAxisButton(AxisButton_c &axisButton);
 
 		protected:
 			// =====================================================
@@ -220,7 +227,7 @@ namespace Phobos
 	inline void Console_c::AddContextCmd(class ContextCmd_c &cmd)
 	{
 		return clContext.AddContextCmd(cmd);
-	}
+	}	
 }
 
 #endif

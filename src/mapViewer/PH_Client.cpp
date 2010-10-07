@@ -7,8 +7,10 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(Client);
 
 	Client_c::Client_c():
-		CoreModule_c("Client")
+		CoreModule_c("Client")		
 	{
+		clCamera.SetNearClipDistance(0.1f);
+		clCamera.EnableViewport();
 	}
 }
 

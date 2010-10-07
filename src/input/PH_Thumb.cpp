@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,34 +23,41 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "PH_Plugin.h"
+#include "PH_Thumb.h"
+
+#include <PH_Context.h>
+#include <PH_ContextUtils.h>
 
 namespace Phobos
 {
-	PluginPtr_t Plugin_c::Create(const String_c &name)
+	Thumb_c::Thumb_c(const String_c &cmd, Context_c *context):
+		cmdUpdate(cmd)
 	{
-		return PluginPtr_t(new Plugin_c(name));
+		cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Thumb_c::CmdProc, this));
+
+		fpPoint[0] = fpPoint[1] = 0;
+
+		if(context)
+			this->Enable(*context);		
 	}
 
-	Plugin_c::Plugin_c(const String_c &name):
-		Node_c(name)
-	{
-		clLibrary.Load(name);
+	void Thumb_c::Enable(Context_c &context)
+	{	
+		context.AddContextCmd(cmdUpdate);	
+	}
 
-		PluginEntryPointProc_t proc = static_cast<PluginEntryPointProc_t>(clLibrary.GetSymbol("PH_PluginEntryPoint"));
+	void Thumb_c::Disable()
+	{
+		cmdUpdate.Unlink();
+		fpPoint[0] = fpPoint[1] = 0;
+	}
+
+
+	void Thumb_c::CmdProc(const StringVector_t &args, Context_c &)
+	{
+		PH_ASSERT(args.size() >= 5);
 		
-		pclPlugin = proc();	
-	}
-
-	void Plugin_c::Init()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Init();
-	}
-
-	Plugin_c::~Plugin_c()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Finalize();
+		fpPoint[0] = StringToFloat(args[3]);
+		fpPoint[1] = StringToFloat(args[4]);
 	}
 }

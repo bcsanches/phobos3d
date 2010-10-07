@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,34 +23,33 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "PH_Plugin.h"
+#ifndef PH_IPLAYER_CONTROLLER_H
+#define PH_IPLAYER_CONTROLLER_H
+
+#include <boost/intrusive_ptr.hpp>
+
+#include <PH_RefCounter.h>
 
 namespace Phobos
 {
-	PluginPtr_t Plugin_c::Create(const String_c &name)
+	class IPlayerCmd_c: public RefCounter_c
 	{
-		return PluginPtr_t(new Plugin_c(name));
-	}
+		public:		
+	};
 
-	Plugin_c::Plugin_c(const String_c &name):
-		Node_c(name)
+	typedef boost::intrusive_ptr<IPlayerCmd_c> IPlayerCmdPtr_t;
+
+	class IPlayerController_c
 	{
-		clLibrary.Load(name);
+		public:
+			virtual IPlayerCmdPtr_t CreateCmd() = 0;
 
-		PluginEntryPointProc_t proc = static_cast<PluginEntryPointProc_t>(clLibrary.GetSymbol("PH_PluginEntryPoint"));
-		
-		pclPlugin = proc();	
-	}
+			virtual void EnableController() = 0;
+			virtual void DisableController() = 0;
 
-	void Plugin_c::Init()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Init();
-	}
-
-	Plugin_c::~Plugin_c()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Finalize();
-	}
+			virtual void EnableMouse() = 0;
+			virtual void DisableMouse() = 0;
+	};
 }
+
+#endif

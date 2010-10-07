@@ -26,6 +26,8 @@ Phobos 3d
 #ifndef PH_PLUGIN_MANAGER_H
 #define PH_PLUGIN_MANAGER_H
 
+#include <list>
+
 #include <PH_ContextCmd.h>
 
 #include "PH_CoreModule.h"
@@ -51,6 +53,9 @@ namespace Phobos
 		protected:
 			void OnPrepareToBoot();
 			void OnFinalize();
+			void OnRenderReady();
+
+			void OnUpdate();
 
 		private:
 			PluginManager_c();
@@ -62,6 +67,9 @@ namespace Phobos
 		private:
 			ContextCmd_c	cmdLoadPlugin;
 			ContextCmd_c	cmdUnloadPlugin;
+			std::list<String_c> lstPluginsToActivate;
+
+			bool				fSystemReady;
 
 			// =====================================================
 			// STATIC PRIVATE ATTRIBUTES

@@ -65,6 +65,16 @@ namespace Phobos
 		}
 	}
 
+	void CoreModuleManager_c::OnPrepareToBoot()
+	{
+		this->OnEvent(CORE_EVENT_PREPARE_TO_BOOT);
+	}
+
+	void CoreModuleManager_c::OnBoot()
+	{
+		this->OnEvent(CORE_EVENT_BOOT);
+	}
+
 	void CoreModuleManager_c::OnUpdate()
 	{
 		this->UpdateDestroyList();
@@ -81,6 +91,11 @@ namespace Phobos
 		this->SortModules();
 
 		this->CallCoreModuleProc(&CoreModule_c::OnFixedUpdate);		
+	}
+
+	void CoreModuleManager_c::OnRenderReady()
+	{
+		this->OnEvent(CORE_EVENT_RENDER_READY);
 	}
 
 	void CoreModuleManager_c::OnFinalize()

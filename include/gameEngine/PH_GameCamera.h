@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,34 +23,41 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "PH_Plugin.h"
+
+#ifndef PH_GAME_CAMERA_H
+#define PH_GAME_CAMERA_H
+
+#include <boost/noncopyable.hpp>
+
+#include <OgrePrerequisites.h>
+
+#include <PH_Transform.h>
+
+#include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
-	PluginPtr_t Plugin_c::Create(const String_c &name)
+	class PH_GAME_ENGINE_API GameCamera_c: boost::noncopyable
 	{
-		return PluginPtr_t(new Plugin_c(name));
-	}
+		public:
+			GameCamera_c();
+			~GameCamera_c();
 
-	Plugin_c::Plugin_c(const String_c &name):
-		Node_c(name)
-	{
-		clLibrary.Load(name);
+			void EnableViewport(int ZOrder = 0);
 
-		PluginEntryPointProc_t proc = static_cast<PluginEntryPointProc_t>(clLibrary.GetSymbol("PH_PluginEntryPoint"));
-		
-		pclPlugin = proc();	
-	}
+			void SetTransform(const Transform_c &t);
 
-	void Plugin_c::Init()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Init();
-	}
+			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
 
-	Plugin_c::~Plugin_c()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Finalize();
-	}
+			void SetNearClipDistance(const Float_t distance);
+
+		private:
+			Ogre::SceneNode	*pclRootNode;
+			Ogre::Camera	*pclCamera;
+
+			int iViewportZOrder;
+	};
 }
+
+#endif
+

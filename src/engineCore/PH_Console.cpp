@@ -29,6 +29,7 @@ Phobos 3d
 
 #include <boost/foreach.hpp>
 
+#include <PH_Button.h>
 #include <PH_ContextUtils.h>
 #include <PH_Dictionary.h>
 #include <PH_DictionaryManager.h>
@@ -38,6 +39,7 @@ Phobos 3d
 #include <PH_InputEvent.h>
 #include <PH_InputManager.h>
 #include <PH_Kernel.h>
+#include <PH_Thumb.h>
 #include <PH_Path.h>
 
 #include <OgreOverlayContainer.h>
@@ -446,6 +448,21 @@ namespace Phobos
 			fEditBoxChanged = true;
 			clEditBox.SetStr(tmp);
 		}
+	}
+
+	void Console_c::EnableAxisButton(AxisButton_c &axis)
+	{
+		axis.Enable(clContext);
+	}
+
+	void Console_c::EnableButton(Button_c &button)
+	{
+		button.Enable(clContext);
+	}
+
+	void Console_c::EnableThumb(Thumb_c &thumb)
+	{
+		thumb.Enable(clContext);
 	}
 	
 	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)

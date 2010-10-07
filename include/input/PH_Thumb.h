@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,34 +23,53 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "PH_Plugin.h"
+#ifndef PH_THUMB_H
+#define PH_THUMB_H
+
+#include <PH_Error.h>
+#include <PH_ContextCmd.h>
+
+#include "PH_InputAPI.h"
 
 namespace Phobos
 {
-	PluginPtr_t Plugin_c::Create(const String_c &name)
+	class Context_c;
+
+	class PH_INPUT_API Thumb_c
 	{
-		return PluginPtr_t(new Plugin_c(name));
+		public:
+			Thumb_c(const String_c &cmd, Context_c *context = NULL);
+
+			inline Float_t GetX() const;
+			inline Float_t GetY() const;
+			inline const Float_t *GetPoint() const;
+
+			void Enable(Context_c &context);
+			void Disable();
+
+		private:
+			void CmdProc(const StringVector_t &args, Context_c &);
+
+		private:
+			ContextCmd_c cmdUpdate;
+
+			Float_t	fpPoint[2];		
+	};
+
+	inline Float_t Thumb_c::GetX() const
+	{
+		return fpPoint[0];
 	}
 
-	Plugin_c::Plugin_c(const String_c &name):
-		Node_c(name)
+	inline Float_t Thumb_c::GetY() const
 	{
-		clLibrary.Load(name);
-
-		PluginEntryPointProc_t proc = static_cast<PluginEntryPointProc_t>(clLibrary.GetSymbol("PH_PluginEntryPoint"));
-		
-		pclPlugin = proc();	
+		return fpPoint[1];
 	}
 
-	void Plugin_c::Init()
+	inline const Float_t *Thumb_c::GetPoint() const
 	{
-		if(pclPlugin != NULL)
-			pclPlugin->Init();
-	}
-
-	Plugin_c::~Plugin_c()
-	{
-		if(pclPlugin != NULL)
-			pclPlugin->Finalize();
+		return fpPoint;
 	}
 }
+
+#endif

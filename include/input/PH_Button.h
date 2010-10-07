@@ -23,31 +23,58 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_CLIENT_H
-#define PH_CLIENT_H
+#ifndef PH_BUTTON_H
+#define PH_BUTTON_H
 
-#include <PH_CoreModule.h>
-#include <PH_GameCamera.h>
-#include <PH_Singleton.h>
-#include <PH_SpectatorCameraController.h>
+#include <PH_Types.h>
+#include <PH_ContextCmd.h>
+
+#include "PH_InputAPI.h"
 
 namespace Phobos
 {
-	PH_DECLARE_NODE_PTR(Client);
+	class PH_Context_c;
 
-	class Client_c: public CoreModule_c
+	class PH_INPUT_API Button_c
 	{
-		PH_DECLARE_SINGLETON_METHODS(Client);
-
 		public:
+			Button_c(const String_c &up, const String_c &down, const String_c &update, Context_c *context = NULL);		
+
+			inline Float_t GetValue(void) const
+			{
+				return(fValue);
+			}
+
+			void Enable(Context_c &context);
+			void Disable();
 
 		private:
-			Client_c();
+			void CmdProc(const StringVector_t &args, Context_c & );
 
 		private:
-			GameCamera_c clCamera;
-			SpectatorCameraController_c clCameraController;
+			Float_t fValue;
 
+			ContextCmd_c cmdUp;
+			ContextCmd_c cmdDown;
+			ContextCmd_c cmdUpdate;
+	};
+
+	class PH_INPUT_API AxisButton_c
+	{
+		public:
+			AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, Context_c *context = NULL);
+
+			void Enable(Context_c &context);
+			void Disable();
+
+			inline Float_t GetValue() const
+			{
+				return(clButtonB.GetValue() - clButtonA.GetValue());
+			}
+
+		private:		
+			Button_c	clButtonA;
+			Button_c	clButtonB;
 	};
 }
 

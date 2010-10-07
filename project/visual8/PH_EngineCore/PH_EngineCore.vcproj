@@ -233,6 +233,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\engineCore\PH_OgreUtils.cpp"
 			>
 		</File>
@@ -262,6 +266,10 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\engineCore\PH_Render.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_Transform.h"
 			>
 		</File>
 	</Files>

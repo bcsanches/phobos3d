@@ -66,6 +66,11 @@ namespace Phobos
 	{
 		return strName.compare(rhs.strName) < 0;
 	}
+
+	inline void ContextItem_c::Unlink()
+	{
+		unlink();
+	}
 }
 
 #endif

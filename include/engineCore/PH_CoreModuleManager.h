@@ -50,8 +50,11 @@ namespace Phobos
 			~CoreModuleManager_c();		
 
 			virtual void OnUpdate();
-			virtual void OnFixedUpdate();
+			virtual void OnFixedUpdate();					
+			virtual void OnPrepareToBoot();
+			virtual void OnBoot();
 			virtual void OnFinalize();
+			virtual void OnRenderReady();
 
 			void CallCoreModuleProc(CoreModuleProc_t proc);
 

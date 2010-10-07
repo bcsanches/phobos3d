@@ -46,6 +46,8 @@ namespace Phobos
 		public:
 			static PluginPtr_t Create(const String_c &name);
 
+			void Init();
+
 		private:
 			Plugin_c(const String_c &name);
 			~Plugin_c();

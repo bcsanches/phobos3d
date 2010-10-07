@@ -59,7 +59,8 @@ namespace Phobos
 	PluginManager_c::PluginManager_c():
 		CoreModule_c("PluginManager", PRIVATE_CHILDREN),
 		cmdLoadPlugin("loadPlugin"),
-		cmdUnloadPlugin("unloadPlugin")
+		cmdUnloadPlugin("unloadPlugin"),
+		fSystemReady(false)
 	{
 		cmdLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager_c::CmdLoadPlugin, this));
 		cmdUnloadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager_c::CmdUnloadPlugin, this));
@@ -82,9 +83,35 @@ namespace Phobos
 		this->RemoveAllChildren();
 	}
 
+	void PluginManager_c::OnRenderReady()
+	{
+		fSystemReady = true;
+	}
+
+	void PluginManager_c::OnUpdate()
+	{
+		if(!fSystemReady)
+			return;
+
+		while(!lstPluginsToActivate.empty())
+		{
+			String_c pluginName;
+			pluginName.swap(lstPluginsToActivate.front());
+			lstPluginsToActivate.pop_front();
+
+			PluginPtr_t plugin = boost::static_pointer_cast<Plugin_c>(this->TryGetChild(pluginName));
+			if(plugin)
+			{
+				plugin->Init();
+			}
+		}
+	}
+
 	void PluginManager_c::LoadPlugin(const String_c &name)
 	{
 		this->AddPrivateChild(Plugin_c::Create(name));
+
+		lstPluginsToActivate.push_back(name);
 	}
 
 	void PluginManager_c::UnloadPlugin(const String_c &name)
