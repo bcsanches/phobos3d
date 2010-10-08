@@ -92,6 +92,8 @@ namespace Phobos
 
 			void SetShadowMode(Ogre::ShadowTechnique tech);
 
+			void *GetWindowHandler();
+
 		protected:
 			// =====================================================
 			// PROTECTED METHODS

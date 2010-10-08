@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  May 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,41 +23,62 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "W32/PH_InputManagerW32.h"
+#include "PH_MouseInputDevice.h"
 
-#include <PH_Kernel.h>
+#include <PH_InputActions.h>
 
 #include "PH_InputDefs.h"
 
-#include "W32/PH_KeyboardInputDeviceW32.h"
-#include "W32/PH_MouseInputDeviceW32.h"
-
 namespace Phobos
 {
-	static InputManagerPtr_t CreateInstanceLocalImpl(const String_c &name)
+
+	struct ActionInfo_s
 	{
-		return InputManagerPtr_t(new InputManagerW32_c(name));
+		const char	*pstrzName;
+		UInt_t	uId;
+	};
+
+	static const ActionInfo_s stActions_gl[] = 
+	{
+		{"THUMB", MOUSE_THUMB},
+		{"LBUTTON", MOUSE_LBUTTON},
+		{"RBUTTON", MOUSE_RBUTTON},
+		{"MBUTTON", MOUSE_MBUTTON},
+		{NULL, 0}
+	};
+
+
+	MouseInputDevice_c::MouseInputDevice_c(const String_c &name):
+		InputDevice_c(name, INPUT_DEVICE_MOUSE)
+	{
+		//empty
 	}
 
-	InputManagerPtr_t InputManager_c::CreateInstanceImpl(const String_c &name)
+	bool MouseInputDevice_c::TryGetActionName(UInt_t action, String_c &out) const
 	{
-		return CreateInstanceLocalImpl(name);
+		for(int i = 0;stActions_gl[i].pstrzName; ++i)
+		{
+			if(stActions_gl[i].uId == action)
+			{				
+				out = stActions_gl[i].pstrzName;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
-	InputManagerW32_c::InputManagerW32_c(const String_c &name):
-		InputManager_c(name),
-		fPooled(false)
+	bool MouseInputDevice_c::TryGetActionId(const String_c &name, UInt_t &out) const
 	{
-		Kernel_c::GetInstance().LogMessage("[InputManagerW32] Created.");
-	}
+		for(int i = 0;stActions_gl[i].pstrzName; ++i)
+		{			
+			if(name.compare(stActions_gl[i].pstrzName) == 0)
+			{
+				out = stActions_gl[i].uId;
+				return true;
+			}
+		}
 
-	void InputManagerW32_c::PollDevices(void)
-	{
-		if(fPooled)
-			return;
-
-		fPooled = true;
-		this->AttachDevice(KeyboardInputDeviceW32_c::Create(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_KEYBOARD)), 0);
-		this->AttachDevice(MouseInputDeviceW32_c::Create(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_MOUSE)), 0);
+		return false;
 	}
 }

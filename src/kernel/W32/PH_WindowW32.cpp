@@ -182,10 +182,15 @@ namespace Phobos
 		return hWnd;
 	}
 
+	void WindowW32_c::SetEventManager(EventManagerPtr_t manager)
+	{
+		ipEventManager = boost::static_pointer_cast<EventManagerW32_c>(manager);
+	}
+
 	LRESULT WindowW32_c::MainWndMethod(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
-		//if(pclEventManager)
-			 //pclEventManager->OnWindowMessage(hwnd, uMsg, wParam, lParam);		
+		if(ipEventManager)
+			ipEventManager->OnWindowMessage(hwnd, uMsg, wParam, lParam);		
 
 		return(::DefWindowProc(hwnd, uMsg, wParam, lParam));
 	}

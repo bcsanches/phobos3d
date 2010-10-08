@@ -44,6 +44,9 @@ namespace Phobos
 			void EnableController();
 			void DisableController();
 
+			void EnableMouse();
+			void DisableMouse();
+
 		private:
 			GameCamera_c				clCamera;
 			SpectatorCameraController_c clCameraController;

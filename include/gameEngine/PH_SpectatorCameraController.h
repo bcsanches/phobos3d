@@ -91,6 +91,8 @@ namespace Phobos
 		return fpLook;
 	}
 
+	#define PH_MOUSE_THUMB_CMD_NAME "mouseThumb"
+
 	class PH_GAME_ENGINE_API SpectatorCameraController_c: public IPlayerController_c
 	{
 		public:

@@ -29,6 +29,7 @@ Phobos 3d
 #include <boost/utility.hpp>
 
 #include "PH_Node.h"
+#include "PH_EventManager.h"
 
 namespace Phobos
 {
@@ -43,6 +44,8 @@ namespace Phobos
 
 			virtual void Open(const String_c &name, const Rect_s<size_t> &rect) = 0;
 			virtual void *GetHandler() const = 0;
+
+			virtual void SetEventManager(EventManagerPtr_t manager) = 0;
 
 		protected:
 			Window_c(const String_c &name);					

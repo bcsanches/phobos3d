@@ -130,13 +130,19 @@ namespace Phobos
 		}
 	}
 
+	void *Render_c::GetWindowHandler()
+	{
+		PH_ASSERT(ipWindow);
+
+		return ipWindow->GetHandler();
+	}
+
 	void Render_c::OnBoot(void)
 	{
 		Kernel_c	&kernel(Kernel_c::GetInstance());
 		kernel.LogMessage("[Render_c::OnBoot] Starting");
 
-		ipWindow = Window_c::Create("RenderWindow");
-		//EventManagerPtr_t eventManager = EventManager_c::GetInstance();
+		ipWindow = Window_c::Create("RenderWindow");		
 				
 		Rect_s<UInt_t> r;	
 
@@ -149,6 +155,8 @@ namespace Phobos
 
 		kernel.LogMessage("[Render_c::OnBoot] Opening render window");
 		ipWindow->Open("Phobos Engine", r);		
+
+		ipWindow->SetEventManager(EventManager_c::GetInstance());
 	
 		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());	
 		Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();

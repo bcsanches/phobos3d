@@ -82,4 +82,14 @@ namespace Phobos
 	{
 		clCameraController.DisableController();
 	}
+
+	void SpectatorCamera_c::EnableMouse()
+	{
+		clCameraController.EnableMouse();
+	}
+
+	void SpectatorCamera_c::DisableMouse()
+	{
+		clCameraController.DisableMouse();
+	}
 }

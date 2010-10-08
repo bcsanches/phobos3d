@@ -327,10 +327,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\kernel\PH_InputDefs.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\kernel\PH_Kernel.cpp"
 			>
 		</File>

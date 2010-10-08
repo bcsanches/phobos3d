@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  May 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,29 +23,66 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_KEYBOARD_INPUT_DEVICE_W32_H
-#define PH_KEYBOARD_INPUT_DEVICE_W32_H
+#ifndef PH_MOUSE_INPUT_DEVICE_W32_H
+#define PH_MOUSE_INPUT_DEVICE_W32_H
 
-#include "PH_KeyboardInputDevice.h"
+#include "PH_MouseInputDevice.h"
 
 #include <PH_EventListener.h>
 
+#include <windows.h>
+
 namespace Phobos
 {
-	class KeyboardInputDeviceW32_c: public KeyboardInputDevice_c, private EventListener_c
-	{	
+	class MouseInputDeviceW32_c: public MouseInputDevice_c, private EventListener_c
+	{		
+		protected:
+			MouseInputDeviceW32_c(const String_c &name);
+			~MouseInputDeviceW32_c(void);
+
 		public:
 			static InputDevicePtr_t Create(const String_c &name);
 
-
 			virtual void Update(void);
 
-		private:
-			KeyboardInputDeviceW32_c(const String_c &name);
-			~KeyboardInputDeviceW32_c(void);
+			virtual void AcquireCapture(void *window);
+			virtual void ReleaseCapture(void);
 
+			virtual void ClipToWindow(void *window);
+			virtual void Unclip(void);
+
+		private:
 			virtual void Event(struct Event_s &event);
-	};	
+
+			void Enable();
+			void Disable();
+
+		private:			
+			class SytemEventListner_c: EventListener_c
+			{
+				public:
+					SytemEventListner_c();
+
+					inline void SetOwner(MouseInputDeviceW32_c *owner);
+
+				private:
+					virtual void Event(struct Event_s &event);
+
+				private:
+					MouseInputDeviceW32_c *pclOwner;
+			};
+
+			friend class SytemEventListner_c;
+
+			SytemEventListner_c clSystemListener;
+
+			RECT		stOldClipRect;
+			bool		fHasClipRect;
+
+			int			iWindowCenter[2];
+			HWND		hClipWindow;
+			bool		fAppActive;
+	};
 }
 
 #endif

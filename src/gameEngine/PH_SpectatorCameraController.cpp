@@ -21,7 +21,7 @@ namespace Phobos
 		clTurnButton( "-turnRight", "+turnRight", "=turnRight", "-turnLeft", "+turnLeft", "=turnLeft", context),
 		clLookButton("-lookUp", "+lookUp", "=lookUp", "-lookDown", "+lookDown", "=lookDown", context),
 		clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),	
-		clMouseThumb("mouseThumb", context),
+		clMouseThumb(PH_MOUSE_THUMB_CMD_NAME, context),
 		fpTurnSpeed(70),
 		fpMoveSpeed(8),
 		fpMouseSensitivity(0.3f)

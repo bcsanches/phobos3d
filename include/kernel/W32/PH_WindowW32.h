@@ -2,6 +2,7 @@
 #define PH_WINDOW_W32_H
 
 #include "PH_Window.h"
+#include "W32/PH_EventManagerW32.h"
 
 #include <windows.h>
 
@@ -19,6 +20,8 @@ namespace Phobos
 			void GetRect(Rect_s<size_t> &out);
 
 			virtual void *GetHandler() const;
+
+			virtual void SetEventManager(EventManagerPtr_t manager);
 
 		private:
 			WindowW32_c(const String_c &name);
@@ -38,6 +41,7 @@ namespace Phobos
 
 		private:
 			HWND hWnd;
+			EventManagerW32Ptr_t ipEventManager;
 	};
 }
 

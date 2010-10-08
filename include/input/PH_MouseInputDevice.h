@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  May 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,41 +23,32 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "W32/PH_InputManagerW32.h"
+#ifndef PH_MOUSE_INPUT_DEVICE_H
+#define PH_MOUSE_INPUT_DEVICE_H
 
-#include <PH_Kernel.h>
-
-#include "PH_InputDefs.h"
-
-#include "W32/PH_KeyboardInputDeviceW32.h"
-#include "W32/PH_MouseInputDeviceW32.h"
+#include "PH_InputDevice.h"
 
 namespace Phobos
 {
-	static InputManagerPtr_t CreateInstanceLocalImpl(const String_c &name)
-	{
-		return InputManagerPtr_t(new InputManagerW32_c(name));
-	}
+	class MouseInputDevice_c;
 
-	InputManagerPtr_t InputManager_c::CreateInstanceImpl(const String_c &name)
-	{
-		return CreateInstanceLocalImpl(name);
-	}
+	typedef boost::intrusive_ptr<MouseInputDevice_c> MouseInputDevicePtr_t;
 
-	InputManagerW32_c::InputManagerW32_c(const String_c &name):
-		InputManager_c(name),
-		fPooled(false)
-	{
-		Kernel_c::GetInstance().LogMessage("[InputManagerW32] Created.");
-	}
+	class MouseInputDevice_c: public InputDevice_c
+	{		
+		public:
+			virtual bool TryGetActionName(UInt_t action, String_c &out) const;
+			virtual bool TryGetActionId(const String_c &name, UInt_t &out) const;
 
-	void InputManagerW32_c::PollDevices(void)
-	{
-		if(fPooled)
-			return;
+			virtual void AcquireCapture(void *window) = 0;
+			virtual void ReleaseCapture(void)=0;
+			
+			virtual void ClipToWindow(void *window) = 0;
+			virtual void Unclip(void) = 0;
 
-		fPooled = true;
-		this->AttachDevice(KeyboardInputDeviceW32_c::Create(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_KEYBOARD)), 0);
-		this->AttachDevice(MouseInputDeviceW32_c::Create(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_MOUSE)), 0);
-	}
+		protected:
+			MouseInputDevice_c(const String_c &name);		
+	};
 }
+
+#endif

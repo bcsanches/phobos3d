@@ -48,7 +48,7 @@ namespace Phobos
 
 		private:
 
-			void OnFixedUpdate();
+			void OnFixedUpdate();			
 
 			virtual void Event(struct Event_s &event);
 

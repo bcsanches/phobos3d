@@ -359,7 +359,7 @@ namespace Phobos
 				event.stSystem.eType = SYSTEM_QUIT;
 				break;		
 
-			case WM_ACTIVATE:												
+			case WM_ACTIVATEAPP:												
 				event.stSystem.eType = SYSTEM_ACTIVATE;
 				event.stSystem.fActive = LOWORD(msg.wParam) != WA_INACTIVE;
 				event.stSystem.fMinimized = HIWORD(msg.wParam) ? true : false;
@@ -379,6 +379,24 @@ namespace Phobos
 		//empty
 	}
 
+	void EventManagerW32_c::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	{	
+		switch(uMsg)
+		{
+			case WM_ACTIVATE:
+				Event_s	event;
+				event.eType = EVENT_TYPE_SYSTEM;
+				event.pParam = NULL;
+				event.stSystem.eType = SYSTEM_ACTIVATE;
+				event.stSystem.fActive = LOWORD(wParam) != WA_INACTIVE;
+				event.stSystem.fMinimized = HIWORD(wParam) ? true : false;
+
+				//dispatch to all handlers
+				this->NotityListeners(event);
+				break;
+		}
+	}
+
 	void EventManagerW32_c::Update()
 	{
 		Event_s	event;
@@ -396,7 +414,8 @@ namespace Phobos
 					break;
 
 				case WM_QUIT:
-				case WM_ACTIVATE:					
+				case WM_ACTIVATE:
+				case WM_ACTIVATEAPP:
 					BuildSystemEvent(event, msg);
 					this->NotityListeners(event);											
 					break;

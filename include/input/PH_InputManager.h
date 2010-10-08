@@ -81,6 +81,7 @@ namespace Phobos
 			void AddListenerToDevice(const String_c &deviceName,  InputDeviceListener_c &listener);
 
 			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
+			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType);
 
 			void AddListener(InputManagerListener_c &listener);
 			void RemoveListener(InputManagerListener_c &listener);

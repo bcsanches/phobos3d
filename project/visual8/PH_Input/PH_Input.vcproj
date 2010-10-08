@@ -187,6 +187,14 @@
 				RelativePath="..\..\..\include\input\W32\PH_KeyboardInputDeviceW32.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\src\input\W32\PH_MouseInputDeviceW32.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\input\W32\PH_MouseInputDeviceW32.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\..\..\src\input\PH_Button.cpp"
@@ -246,6 +254,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\input\PH_KeyboardInputDevice.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\input\PH_MouseInputDevice.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\input\PH_MouseInputDevice.h"
 			>
 		</File>
 		<File

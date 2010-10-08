@@ -27,6 +27,7 @@ Phobos 3d
 #define PH_CLIENT_H
 
 #include <PH_ContextCmd.h>
+#include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
 #include <PH_Singleton.h>
 
@@ -51,13 +52,28 @@ namespace Phobos
 		private:
 			Client_c();
 
+			void ClipMouseCursor();
+			void UnclipMouseCursor();
+
 			void CmdLoadMap(const StringVector_t &args, Context_c &);
+			void CmdToggleMouseCursorClip(const StringVector_t &args, Context_c &);
+			void CmdNullMouseThumb(const StringVector_t &args, Context_c &);
+
+			struct ConfigInfo_s GetConfig();
 
 		private:
-			ContextCmd_c				cmdLoadMap;
+			ContextCmd_c		cmdLoadMap;			
 
-			SpectatorCamera_c			clSpectatorCamera;
+			ContextCmd_c		cmdToggleMouseCursorClip;
+			ContextCmd_c		cmdNullMouseThumb;
+			ContextVar_c		varMouseSensitivity;
 
+			ContextVar_c		varSpectatorMoveSpeed;
+			ContextVar_c		varSpectatorTurnSpeed;
+
+			SpectatorCamera_c	clSpectatorCamera;
+
+			bool fMouseClipped;
 			bool fMapLoaded;
 	};
 }

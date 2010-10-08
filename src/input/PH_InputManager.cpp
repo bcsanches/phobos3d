@@ -1,3 +1,28 @@
+/*
+Phobos 3d
+  May 2010
+
+  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+
+  This software is provided 'as-is', without any express or implied
+  warranty. In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Bruno Crivelari Sanches bcsanches@gmail.com
+*/
+
 #include "PH_InputManager.h"
 
 #include <boost/bind.hpp>
@@ -68,7 +93,10 @@ namespace Phobos
 	*/
 	void InputManager_c::UpdateDevices(void)
 	{
-		//this->ForAllChildrenHasType(IM_INPUT_DEVICE_TYPE, IM_InputManager_c::ForAllDevicesUpdateProc, this);
+		for(NodeMap_t::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		{
+			boost::static_pointer_cast<InputDevice_c>(it->second)->Update();
+		}
 	}
 
 	InputDevicePtr_t InputManager_c::GetDevice(const InputDeviceTypes_e deviceType, UInt_t id)
@@ -80,6 +108,13 @@ namespace Phobos
 		//Because children is private we can control the types that are added
 		//so we can safely do a static cast
 		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(name));		
+	}
+
+	InputDevicePtr_t InputManager_c::GetDevice(const InputDeviceTypes_e deviceType)
+	{				
+		//Because children is private we can control the types that are added
+		//so we can safely do a static cast
+		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(this->GetDeviceTypeName(deviceType)));		
 	}
 
 	/**
