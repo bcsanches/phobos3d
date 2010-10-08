@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_CHECK_ASSERT;PH_WIN32;PH_MSVC;PH_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OgreMain_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -117,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_IGNORE_ASSERT;PH_MSVC;PH_WIN32;PH_RELEASE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,6 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OgreMain.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -195,6 +197,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\mapViewer\PH_MapViewerPlugin.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\mapViewer\PH_SpectatorCamera.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\mapViewer\PH_SpectatorCamera.h"
 			>
 		</File>
 	</Files>

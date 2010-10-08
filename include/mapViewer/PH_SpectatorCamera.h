@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,36 +23,39 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_WORLD_MANAGER_H
-#define PH_WORLD_MANAGER_H
+#ifndef PH_SPECTATOR_CAMERA_H
+#define PH_SPECTATOR_CAMERA_H
 
-#include <PH_CoreModule.h>
-#include <PH_Singleton.h>
+#include <boost/noncopyable.hpp>
 
-#include "PH_GameEngineAPI.h"
-#include "PH_MapLoader.h"
+#include <PH_SpectatorCameraController.h>
+#include <PH_GameCamera.h>
 
 namespace Phobos
-{	
-	PH_DECLARE_SINGLETON_PTR(WorldManager);
-
-	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
+{
+	class SpectatorCamera_c: boost::noncopyable
 	{
-		PH_DECLARE_SINGLETON_METHODS(WorldManager);
-
 		public:
-			void LoadMap(const String_c &mapName);
+			SpectatorCamera_c();
 
-		protected:			
-			void OnBoot();
-			void OnFinalize();
+			void FixedUpdate();
+			void Update();
 
-		private:
-			WorldManager_c();
-			~WorldManager_c();				
+			void EnableController();
+			void DisableController();
 
 		private:
-			MapLoader_c		clMapLoader;
+			GameCamera_c				clCamera;
+			SpectatorCameraController_c clCameraController;
+
+			Transform_c					clCurrentTransform;
+
+			TransformInterpolator_c		clTransformInterpolator;
+
+			float						fpAlpha;
+
+			Ogre::Degree				dTurn;
+			Ogre::Degree				dLook;	
 	};
 }
 

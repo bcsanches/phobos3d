@@ -30,6 +30,7 @@ Phobos 3d
 #include <OgreQuaternion.h>
 
 #include "PH_MathFunctions.h"
+#include "PH_Interpolator.h"
 
 namespace Phobos
 {
@@ -139,6 +140,18 @@ namespace Phobos
 	{
 		return Transform_c(a, b, delta);
 	}
+
+	template <>
+	inline Transform_c MathInterpolate(const Transform_c &a, const Transform_c &b, Float_t alpha)
+	{
+		return(Transform_c(
+			MathInterpolate(a.GetOrigin(), b.GetOrigin(), alpha), 
+			MathInterpolate(a.GetRotation(), b.GetRotation(), alpha)
+		));
+	}
+
+
+	typedef Interpolator_c<Transform_c> TransformInterpolator_c;
 }
 
 

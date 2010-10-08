@@ -26,10 +26,11 @@ Phobos 3d
 #ifndef PH_CLIENT_H
 #define PH_CLIENT_H
 
+#include <PH_ContextCmd.h>
 #include <PH_CoreModule.h>
-#include <PH_GameCamera.h>
 #include <PH_Singleton.h>
-#include <PH_SpectatorCameraController.h>
+
+#include "PH_SpectatorCamera.h"
 
 namespace Phobos
 {
@@ -41,13 +42,23 @@ namespace Phobos
 
 		public:
 
+		protected:
+			void OnFixedUpdate();
+			void OnUpdate();
+			void OnRenderReady();
+			void OnPrepareToBoot();
+
 		private:
 			Client_c();
 
-		private:
-			GameCamera_c clCamera;
-			SpectatorCameraController_c clCameraController;
+			void CmdLoadMap(const StringVector_t &args, Context_c &);
 
+		private:
+			ContextCmd_c				cmdLoadMap;
+
+			SpectatorCamera_c			clSpectatorCamera;
+
+			bool fMapLoaded;
 	};
 }
 

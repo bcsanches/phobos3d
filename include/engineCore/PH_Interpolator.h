@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  April 2010
+  October 2010
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,36 +23,72 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_WORLD_MANAGER_H
-#define PH_WORLD_MANAGER_H
-
-#include <PH_CoreModule.h>
-#include <PH_Singleton.h>
-
-#include "PH_GameEngineAPI.h"
-#include "PH_MapLoader.h"
+#ifndef PH_INTERPOLATOR_H
+#define PH_INTERPOLATOR_H
 
 namespace Phobos
-{	
-	PH_DECLARE_SINGLETON_PTR(WorldManager);
-
-	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
+{
+	template <typename T>
+	class Interpolator_c
 	{
-		PH_DECLARE_SINGLETON_METHODS(WorldManager);
+		public:			
+			typedef T &Reference_t;
+
 
 		public:
-			void LoadMap(const String_c &mapName);
+			inline Interpolator_c(void)
+			{
+				//empty
+			}
 
-		protected:			
-			void OnBoot();
-			void OnFinalize();
+			inline Interpolator_c(const T &t):
+				tCurrent(t),
+				tLast(t)
+			{
+			}
+
+			inline void SetValue(const T &v)
+			{
+				tLast = tCurrent;
+				tCurrent = v;
+			}
+
+			inline void Reset(const T &v)
+			{
+				tLast = v;
+				tCurrent = v;
+			}
+
+			inline void SetValues(const T &from, const T &to)
+			{
+				tLast = from;
+				tCurrent = to;
+			}
+
+			inline T GetValue(Float_t alpha)
+			{
+				return MathInterpolate(tLast, tCurrent, alpha);
+			}
+
+			inline T & GetValue(T &out, Float_t alpha)
+			{
+				out = this->GetValue(alpha);
+				return(out);
+			}
+
+			inline const T & GetCurrent(void) const
+			{
+				return(tCurrent);
+			}
+
+			inline const T & GetLast(void) const
+			{
+				return(tLast);
+			}
 
 		private:
-			WorldManager_c();
-			~WorldManager_c();				
-
-		private:
-			MapLoader_c		clMapLoader;
+			T tCurrent;
+			T tLast;
 	};
 }
 

@@ -22,9 +22,9 @@ namespace Phobos
 		clLookButton("-lookUp", "+lookUp", "=lookUp", "-lookDown", "+lookDown", "=lookDown", context),
 		clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),	
 		clMouseThumb("mouseThumb", context),
-		fpTurnSpeed(0),
-		fpMoveSpeed(0),
-		fpMouseSensitivity(0)
+		fpTurnSpeed(70),
+		fpMoveSpeed(8),
+		fpMouseSensitivity(0.3f)
 	{
 		clMouseThumb.Disable();
 	}

@@ -172,6 +172,78 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="math"
+			>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_Interpolator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_Transform.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="core"
+			>
+			<File
+				RelativePath="..\..\..\src\engineCore\PH_Core.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_Core.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\engineCore\PH_CoreModule.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_CoreModule.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_CoreModuleFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\engineCore\PH_CoreModuleManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_CoreModuleManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_CoreTimer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="plugin"
+			>
+			<File
+				RelativePath="..\..\..\src\engineCore\PH_Plugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_Plugin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\engineCore\PH_PluginManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_PluginManager.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\src\engineCore\PH_BootModule.cpp"
 			>
@@ -189,38 +261,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\engineCore\PH_Core.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_Core.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\engineCore\PH_CoreModule.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_CoreModule.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_CoreModuleFwd.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\engineCore\PH_CoreModuleManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_CoreModuleManager.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_CoreTimer.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\include\engineCore\PH_EngineCoreAPI.h"
 			>
 		</File>
@@ -233,10 +273,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\engineCore\PH_OgreUtils.cpp"
 			>
 		</File>
@@ -245,31 +281,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\engineCore\PH_Plugin.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_Plugin.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\engineCore\PH_PluginManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_PluginManager.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\engineCore\PH_Render.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\..\..\include\engineCore\PH_Render.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_Transform.h"
 			>
 		</File>
 	</Files>
