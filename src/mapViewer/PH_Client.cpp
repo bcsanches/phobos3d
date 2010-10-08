@@ -17,8 +17,6 @@ namespace Phobos
 		fMapLoaded(false)
 	{		
 		cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdLoadMap, this));
-
-		Console_c::GetInstance()->AddContextCmd(cmdLoadMap);
 	}
 
 	void Client_c::OnRenderReady()

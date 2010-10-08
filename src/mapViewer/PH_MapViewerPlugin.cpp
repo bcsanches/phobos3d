@@ -53,6 +53,8 @@ namespace Phobos
 		ClientPtr_t client = Client_c::CreateInstance();
 		clProcs.AddProc(Client_c::ReleaseInstance);
 		ipManager->AddModule(client);		
+
+		ipManager->LaunchBootModule("mapViewer.cfg");
 	}
 
 	void MapViewerPlugin_c::Finalize()
