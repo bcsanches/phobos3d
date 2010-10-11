@@ -106,6 +106,10 @@ namespace Phobos
 			virtual void EnableMouse();
 			virtual void DisableMouse();
 
+			void SetMoveSpeed(Float_t v);
+			void SetTurnSpeed(Float_t v);
+			void SetMouseSensitivity(Float_t v);
+
 		private:
 			AxisButton_c	clMoveButton;
 			AxisButton_c	clMoveUpDown;

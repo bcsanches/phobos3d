@@ -47,6 +47,10 @@ namespace Phobos
 			void EnableMouse();
 			void DisableMouse();
 
+			inline void SetMouseSensitivity(Float_t value);
+			inline void SetMoveSpeed(Float_t value);
+			inline void SetTurnSpeed(Float_t value);
+
 		private:
 			GameCamera_c				clCamera;
 			SpectatorCameraController_c clCameraController;
@@ -60,6 +64,21 @@ namespace Phobos
 			Ogre::Degree				dTurn;
 			Ogre::Degree				dLook;	
 	};
+
+	inline void SpectatorCamera_c::SetMouseSensitivity(Float_t value)
+	{
+		clCameraController.SetMouseSensitivity(value);
+	}
+
+	inline void SpectatorCamera_c::SetMoveSpeed(Float_t value)
+	{
+		clCameraController.SetMoveSpeed(value);
+	}
+
+	inline void SpectatorCamera_c::SetTurnSpeed(Float_t value)
+	{
+		clCameraController.SetTurnSpeed(value);
+	}
 }
 
 #endif

@@ -12,6 +12,7 @@
 #include <PH_Console.h>
 #include <PH_Core.h>
 #include <PH_CoreTimer.h>
+#include <PH_Exception.h>
 
 namespace Phobos
 {
@@ -79,5 +80,23 @@ namespace Phobos
 	void SpectatorCameraController_c::DisableMouse()
 	{
 		clMouseThumb.Disable();
+	}
+
+	void SpectatorCameraController_c::SetMoveSpeed(Float_t v)
+	{
+		fpMoveSpeed = v;
+	}
+	
+	void SpectatorCameraController_c::SetTurnSpeed(Float_t v)
+	{
+		fpTurnSpeed = v;
+	}
+	
+	void SpectatorCameraController_c::SetMouseSensitivity(Float_t v)
+	{
+		if(v <= 0)
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "SpectatorCameraController_c::SetMouseSensitivity", "Mouse sensitivity must be greater than zero");
+
+		fpMouseSensitivity = v;
 	}
 }

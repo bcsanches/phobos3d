@@ -29,6 +29,10 @@ namespace Phobos
 
 		cmdToggleMouseCursorClip.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdToggleMouseCursorClip, this));
 		cmdNullMouseThumb.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdNullMouseThumb, this));
+
+		varSpectatorMoveSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorMoveSpeedChanged, this));
+		varSpectatorTurnSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorTurnSpeedChanged, this));
+		varMouseSensitivity.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarMouseSensitivityChanged, this));
 	}
 
 	void Client_c::OnRenderReady()
@@ -58,6 +62,10 @@ namespace Phobos
 		console->AddContextCmd(cmdLoadMap);
 		console->AddContextCmd(cmdToggleMouseCursorClip);
 		console->AddContextCmd(cmdNullMouseThumb);
+
+		console->AddContextVar(varMouseSensitivity);
+		console->AddContextVar(varSpectatorMoveSpeed);
+		console->AddContextVar(varSpectatorTurnSpeed);
 	}
 
 	struct ConfigInfo_s
@@ -135,6 +143,21 @@ namespace Phobos
 			Kernel_c::GetInstance().LogMessage(ex.what());
 			fMapLoaded = false;
 		}
+	}
+
+	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	{		
+		clSpectatorCamera.SetMoveSpeed(StringToFloat(newValue));
+	}
+	
+	void Client_c::VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	{
+		clSpectatorCamera.SetTurnSpeed(StringToFloat(newValue));
+	}
+	
+	void Client_c::VarMouseSensitivityChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	{
+		clSpectatorCamera.SetMouseSensitivity(StringToFloat(newValue));
 	}
 }
 

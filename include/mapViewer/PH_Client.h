@@ -59,6 +59,10 @@ namespace Phobos
 			void CmdToggleMouseCursorClip(const StringVector_t &args, Context_c &);
 			void CmdNullMouseThumb(const StringVector_t &args, Context_c &);
 
+			void VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue);
+			void VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue);
+			void VarMouseSensitivityChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue);
+
 			struct ConfigInfo_s GetConfig();
 
 		private:
