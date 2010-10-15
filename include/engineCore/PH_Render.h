@@ -152,6 +152,8 @@ namespace Phobos
 			Ogre::RenderWindow					*pclOgreWindow;
 			Ogre::SceneManager					*pclMainSceneManager;
 
+			Ogre::ShadowTechnique				eShadowMode;
+
 		public:		
 			static RenderPtr_t CreateInstance();
 			static void ReleaseInstance();

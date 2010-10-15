@@ -94,7 +94,8 @@ namespace Phobos
 		cmdSetShadowMode("setShadowMode"),
 		cmdSetShadowFarDistance("setShadowFarDistance"),
 		pclOgreWindow(NULL),
-		pclMainSceneManager(NULL)
+		pclMainSceneManager(NULL),
+		eShadowMode(Ogre::SHADOWTYPE_NONE)
 	{	
 		Kernel_c &kernel = Kernel_c::GetInstance();
 		
@@ -203,7 +204,7 @@ namespace Phobos
 		kernel.LogMessage("[Render_c::OnBoot] Creating SceneManager");
 		pclMainSceneManager = spRoot->createSceneManager(Ogre::ST_GENERIC);
 
-		this->SetShadowMode(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+		this->SetShadowMode(eShadowMode);
 	
 		pclMainSceneManager->setShadowFarDistance(1000);
 

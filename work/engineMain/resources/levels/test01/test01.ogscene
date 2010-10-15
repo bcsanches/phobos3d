@@ -12,7 +12,7 @@
     </RESOURCEDIRECTORIES>
   <CAMERASPEED value="1"></CAMERASPEED>
   <CAMERAPOSITIONS count="0">
-    <OPTION id="0" position="-3.14315 1.27277 0.456611" orientation="-0.996326 0.0838496 -0.01739 -0.00148174"></OPTION>
+    <OPTION id="0" position="-3.77626 1.95329 0.0309893" orientation="0.743003 -0.0674338 -0.66316 -0.0601504"></OPTION>
   </CAMERAPOSITIONS>
     <LAYERS>
       <LAYER id="0" name="Layer 0" visible="true"></LAYER>
@@ -60,7 +60,7 @@
   <OBJECTCOUNT value="0"></OBJECTCOUNT>
   </PROJECT>
   <OBJECT object_id="151554912" name="SceneManager" typename="OctreeSceneManager">
-    <PROPERTY id="ambient" type="11" value="0.5 0.5 0.5 1"></PROPERTY>
+    <PROPERTY id="ambient" type="11" value="0.0627451 0.0627451 0.0627451 1"></PROPERTY>
     <PROPERTY id="configfile" type="7" value=""></PROPERTY>
     <PROPERTY id="fog::colour" type="11" value="0.5 0.5 0.5 1"></PROPERTY>
     <PROPERTY id="fog::density" type="6" value="0"></PROPERTY>
@@ -93,9 +93,9 @@
   <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
     <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
     <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
-    <PROPERTY id="camera::orientation" type="13" value="-0.996326 0.0838496 -0.01739 -0.00148174"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="0.743035 -0.0674367 -0.663189 -0.060153"></PROPERTY>
     <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
-    <PROPERTY id="camera::position" type="9" value="-3.14315 1.27277 0.456611"></PROPERTY>
+    <PROPERTY id="camera::position" type="9" value="-3.77626 1.95329 0.0309893"></PROPERTY>
     <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
     <PROPERTY id="colour" type="11" value="0 0 0 1"></PROPERTY>
     <PROPERTY id="compositorcount" type="2" value="0"></PROPERTY>
@@ -114,7 +114,7 @@
   <OBJECT object_id="837611008" name="luzCeu" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="1 1 1 1"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="0.25098 0.25098 0.25098 1"></PROPERTY>
     <PROPERTY id="direction" type="9" value="0 -0.725374 -0.688354"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
@@ -129,7 +129,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="761314752" name="luzFogo" typename="Light Object" parentnode="nodeCassa">
+  <OBJECT object_id="761314752" name="luzFogo" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
@@ -147,16 +147,16 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="nodeCassa">
+  <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="1 0.466667 0.027451 1"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="0.0941176 1 0.0313726 1"></PROPERTY>
     <PROPERTY id="direction" type="9" value="0 -1 -1.19209e-007"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="45 60 1"></PROPERTY>
     <PROPERTY id="lighttype" type="2" value="2"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="0.707107 0.707107 0 0"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.707107 0.707107 0 -0"></PROPERTY>
     <PROPERTY id="position" type="9" value="0 3.40057 0"></PROPERTY>
     <PROPERTY id="power" type="6" value="1"></PROPERTY>
     <PROPERTY id="specular" type="11" value="0.976471 0.701961 0.00392157 1"></PROPERTY>
@@ -202,7 +202,7 @@
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
     <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="0 0.264876 1.47854"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 0.262238 0.91105"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
     <PROPERTY id="subentity0::material" type="7" value="RustyBarrel"></PROPERTY>

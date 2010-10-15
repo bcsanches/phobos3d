@@ -173,10 +173,16 @@ namespace Phobos
 
 	bool WorldEntity_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
 	{
-		if((type.compare("Caelum Object") == 0) ||
-		   (type.compare("SceneManager") == 0) ||
-		   (type.compare("Viewport Object") == 0))		   
+		if((type.compare("Caelum Object") == 0) ||		   
+		   (type.compare("Viewport Object") == 0))
+		{
 			return true;
+		}
+		else if(type.compare("OctreeSceneManager") == 0)
+		{
+			RenderPtr_t render = Render_c::GetInstance();
+			render->SetAmbientColor(DictionaryGetColour(dict, "ambient"));
+		}
 
 		return false;
 	}
@@ -227,17 +233,16 @@ namespace Phobos
 	}
 			
 	void WorldEntity_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)
-	{
-		this->LoadNodeObject(temp, dict);
-
+	{		
 		temp.pclLight = Render_c::GetInstance()->CreateLight();
 
 		temp.pclLight->setCastShadows(dict.GetBool("castshadows"));
 
 		switch(dict.GetInt("lighttype"))
 		{
-			case 0:
+			case 0:				
 				temp.pclLight->setType(Ogre::Light::LT_POINT);
+				temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
 				break;
 
 			case 1:
@@ -245,10 +250,11 @@ namespace Phobos
 				break;
 
 			case 2:
-				{
+				{					
 					temp.pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
+					temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
 					Ogre::Vector3 lightRange = DictionaryGetVector3(dict, "lightrange");
-					temp.pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);	
+					temp.pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
 				}
 				break;
 
@@ -271,6 +277,9 @@ namespace Phobos
 
 		temp.pclLight->setPowerScale(dict.GetFloat("power"));
 		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));
+
+		if(temp.pclSceneNode != NULL)
+			temp.pclSceneNode->attachObject(temp.pclLight);
 	}
 
 	void WorldEntity_c::OnLoad(const Dictionary_c &dictionary)
