@@ -130,6 +130,12 @@ namespace Phobos
 
 		try
 		{
+			if(fMapLoaded)
+			{
+				fMapLoaded = false;
+				clSpectatorCamera.DisableController();
+			}
+
 			WorldManager_c::GetInstance()->LoadMap(args[1]);
 
 			fMapLoaded = true;

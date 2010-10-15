@@ -41,6 +41,8 @@ Phobos 3d
 #include "PH_EntityFactory.h"
 #include "PH_MapLoader.h"
 
+#define SCENE_MANAGER_NAME "SceneManager"
+
 namespace Phobos
 {
 	PH_ENTITY_CREATOR("WorldEntity", WorldEntity_c);
@@ -50,11 +52,13 @@ namespace Phobos
 		Ogre::Entity *pclEntity;
 		Ogre::SceneNode *pclSceneNode;
 		Ogre::Light *pclLight;
+		bool fParent;
 
 		TempStaticObject_s():
 			pclEntity(NULL),
 			pclSceneNode(NULL),
-			pclLight(NULL)
+			pclLight(NULL),
+			fParent(false)
 		{
 		}
 
@@ -182,6 +186,8 @@ namespace Phobos
 		{
 			RenderPtr_t render = Render_c::GetInstance();
 			render->SetAmbientColor(DictionaryGetColour(dict, "ambient"));
+
+			return true;
 		}
 
 		return false;
@@ -190,6 +196,8 @@ namespace Phobos
 	bool WorldEntity_c::LoadStaticObject(StaticObject_s &object, const String_c &type, const Dictionary_c &dict)
 	{
 		TempStaticObject_s temp;
+
+		temp.fParent = dict.TryGetValue("parentnode", object.strParent) && (object.strParent.compare(SCENE_MANAGER_NAME) != 0);
 
 		if(type.compare("Node Object") == 0)
 		{
@@ -207,9 +215,7 @@ namespace Phobos
 		{
 			Kernel_c::GetInstance().LogStream() << "[WorldEntity_c::LoadStaticObject] Error, unknown static object type: " << type << "\n";
 			return false;
-		}
-
-		dict.TryGetValue("parentnode", object.strParent);
+		}		
 
 		temp.Commit(object);
 		return true;
@@ -236,13 +242,20 @@ namespace Phobos
 	{		
 		temp.pclLight = Render_c::GetInstance()->CreateLight();
 
+		if(temp.fParent)
+		{
+			this->LoadNodeObject(temp, dict);
+			temp.pclSceneNode->attachObject(temp.pclLight);
+		}
+
 		temp.pclLight->setCastShadows(dict.GetBool("castshadows"));
 
 		switch(dict.GetInt("lighttype"))
 		{
 			case 0:				
 				temp.pclLight->setType(Ogre::Light::LT_POINT);
-				temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
+				if(!temp.fParent)
+					temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
 				break;
 
 			case 1:
@@ -252,7 +265,10 @@ namespace Phobos
 			case 2:
 				{					
 					temp.pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
-					temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
+
+					if(!temp.fParent)
+						temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
+
 					Ogre::Vector3 lightRange = DictionaryGetVector3(dict, "lightrange");
 					temp.pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
 				}
@@ -273,13 +289,12 @@ namespace Phobos
 		temp.pclLight->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
 
 		temp.pclLight->setDiffuseColour(DictionaryGetColour(dict, "diffuse"));
-		temp.pclLight->setDirection(DictionaryGetVector3(dict, "direction"));			
+
+		if(!temp.fParent)
+			temp.pclLight->setDirection(DictionaryGetVector3(dict, "direction"));			
 
 		temp.pclLight->setPowerScale(dict.GetFloat("power"));
-		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));
-
-		if(temp.pclSceneNode != NULL)
-			temp.pclSceneNode->attachObject(temp.pclLight);
+		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));		
 	}
 
 	void WorldEntity_c::OnLoad(const Dictionary_c &dictionary)
