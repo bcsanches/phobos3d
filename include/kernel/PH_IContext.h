@@ -23,47 +23,30 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DICTIONARY_UTILS_H
-#define PH_DICTIONARY_UTILS_H
+#ifndef PH_ICONTEXT_H
+#define PH_ICONTEXT_H
 
-#include <PH_Dictionary.h>
-
-#include <OgreColourValue.h>
-#include <OgreVector3.h>
-#include <OgreQuaternion.h>
+#include <PH_String.h>
 
 namespace Phobos
 {
-	inline Ogre::Vector3 DictionaryGetVector3(const Dictionary_c &dict, const String_c &key)
-	{		
-		const String_c &value = dict.GetValue(key);
+	class ContextVar_c;
 
-		Ogre::Vector3 tmp;
-		sscanf(value.c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
-
-		return tmp;
-	}
-
-	inline Ogre::Quaternion DictionaryGetQuaternion(const Dictionary_c &dict, const String_c &key)
+	class IContext_c
 	{
-		const String_c &value = dict.GetValue(key);
+		public:
+			virtual void AddContextVar(ContextVar_c &var) = 0;			
 
-		Ogre::Quaternion q;
-		sscanf(value.c_str(), "%f %f %f %f", &q.w, &q.x, &q.y, &q.z);
+			virtual void AddContextCmd(ContextCmd_c &cmd) = 0;
+			virtual void RemoveContextCmd(ContextCmd_c &cmd) = 0;
 
-		return q;
-	}
+			virtual const ContextVar_c &GetContextVar(const String_c &name) const = 0;
+			virtual const ContextVar_c *TryGetContextVar(const String_c &name) const = 0;
 
-	inline Ogre::ColourValue DictionaryGetColour(const Dictionary_c &dict, const String_c &key)
-	{
-		const String_c &value = dict.GetValue(key);
+		protected:
+			virtual ~IContext_c() {}
 
-		Ogre::ColourValue colour;
-
-		sscanf(value.c_str(), "%f %f %f %f", &colour.r, &colour.g, &colour.b, &colour.a);
-
-		return colour;
-	}
+	};
 }
 
 #endif

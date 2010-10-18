@@ -56,11 +56,11 @@ namespace Phobos
 	{
 		ConsolePtr_t console = Console_c::GetInstance();
 
-		console->EnableAxisButton(clMoveButton);
-		console->EnableAxisButton(clStrafeButton);
-		console->EnableAxisButton(clMoveUpDown);
-		console->EnableAxisButton(clTurnButton);
-		console->EnableAxisButton(clLookButton);
+		clMoveButton.Enable(*console);		
+		clStrafeButton.Enable(*console);
+		clMoveUpDown.Enable(*console);
+		clTurnButton.Enable(*console);
+		clLookButton.Enable(*console);
 	}
 
 	void SpectatorCameraController_c::DisableController()
@@ -74,7 +74,7 @@ namespace Phobos
 
 	void SpectatorCameraController_c::EnableMouse()
 	{
-		Console_c::GetInstance()->EnableThumb(clMouseThumb);		
+		clMouseThumb.Enable(*Console_c::GetInstance());		
 	}
 
 	void SpectatorCameraController_c::DisableMouse()

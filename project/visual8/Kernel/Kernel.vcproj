@@ -209,6 +209,10 @@
 				RelativePath="..\..\..\include\kernel\PH_ContextVar.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_IContext.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="eventManager"

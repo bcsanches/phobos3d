@@ -93,7 +93,7 @@
   <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
     <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
     <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
-    <PROPERTY id="camera::orientation" type="13" value="-0.996547 0.0827487 0.0130504 0.00104728"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="-0.996485 0.0827436 0.0130496 0.00104721"></PROPERTY>
     <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
     <PROPERTY id="camera::position" type="9" value="3.75387 3.95002 18.4534"></PROPERTY>
     <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
@@ -129,7 +129,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="761314752" name="luzFogo" typename="Light Object" parentnode="nodeCassa">
+  <OBJECT object_id="761314752" name="luzFogo" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
@@ -147,7 +147,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="153233440" name="LuzTeto#0" typename="Light Object" parentnode="nodeCassa#0">
+  <OBJECT object_id="153233440" name="LuzTeto#0" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="diffuse" type="11" value="0.0941176 1 0.0313726 1"></PROPERTY>
@@ -165,7 +165,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="683187392" name="luzFogo#0" typename="Light Object" parentnode="nodeCassa#0">
+  <OBJECT object_id="683187392" name="luzFogo#0" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
@@ -183,7 +183,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="nodeCassa">
+  <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="diffuse" type="11" value="0.0941176 1 0.0313726 1"></PROPERTY>
@@ -298,7 +298,8 @@
     <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="ClassName" type="7" value="info_player_start"></PROPERTY>
+      <PROPERTY id="inherit" type="7" value="InfoPlayerStart"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 

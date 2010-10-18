@@ -39,6 +39,7 @@ Phobos 3d
 
 #include "PH_DictionaryUtils.h"
 #include "PH_EntityFactory.h"
+#include "PH_EntityKeys.h"
 #include "PH_MapLoader.h"
 
 #define SCENE_MANAGER_NAME "SceneManager"
@@ -225,8 +226,8 @@ namespace Phobos
 	{
 		temp.pclSceneNode = Render_c::GetInstance()->CreateSceneNode();
 
-		temp.pclSceneNode->setPosition(DictionaryGetVector3(dict, "position"));
-		temp.pclSceneNode->setOrientation(DictionaryGetQuaternion(dict, "orientation"));
+		temp.pclSceneNode->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
+		temp.pclSceneNode->setOrientation(DictionaryGetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
 	}
 
 	void WorldEntity_c::LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict)
@@ -255,7 +256,7 @@ namespace Phobos
 			case 0:				
 				temp.pclLight->setType(Ogre::Light::LT_POINT);
 				if(!temp.fParent)
-					temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
+					temp.pclLight->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
 				break;
 
 			case 1:
@@ -267,7 +268,7 @@ namespace Phobos
 					temp.pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
 
 					if(!temp.fParent)
-						temp.pclLight->setPosition(DictionaryGetVector3(dict, "position"));
+						temp.pclLight->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
 
 					Ogre::Vector3 lightRange = DictionaryGetVector3(dict, "lightrange");
 					temp.pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);

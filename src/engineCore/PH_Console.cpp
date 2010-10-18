@@ -449,21 +449,6 @@ namespace Phobos
 			clEditBox.SetStr(tmp);
 		}
 	}
-
-	void Console_c::EnableAxisButton(AxisButton_c &axis)
-	{
-		axis.Enable(clContext);
-	}
-
-	void Console_c::EnableButton(Button_c &button)
-	{
-		button.Enable(clContext);
-	}
-
-	void Console_c::EnableThumb(Thumb_c &thumb)
-	{
-		thumb.Enable(clContext);
-	}
 	
 	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)
 	{		

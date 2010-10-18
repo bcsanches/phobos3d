@@ -28,6 +28,7 @@ Phobos 3d
 
 #include "PH_ContextCmd.h"
 #include "PH_ContextVar.h"
+#include "PH_IContext.h"
 #include "PH_KernelAPI.h"
 #include "PH_String.h"
 
@@ -46,7 +47,7 @@ namespace Phobos
 
 	*/
 
-	class PH_KERNEL_API Context_c
+	class PH_KERNEL_API Context_c: public IContext_c
 	{	
 		public:		
 			// =====================================================

@@ -45,6 +45,7 @@ namespace Phobos
 			void Load(Parser_c &parser);
 
 			DictionaryPtr_t GetDictionary(const String_c &name);
+			DictionaryPtr_t TryGetDictionary(const String_c &name);
 
 			void AddDictionary(DictionaryPtr_t dict);
 

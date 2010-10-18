@@ -6,6 +6,7 @@
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_MouseInputDevice.h>
+#include <PH_PointEntity.h>
 #include <PH_Render.h>
 #include <PH_Window.h>
 #include <PH_WorldManager.h>
@@ -136,7 +137,18 @@ namespace Phobos
 				clSpectatorCamera.DisableController();
 			}
 
-			WorldManager_c::GetInstance()->LoadMap(args[1]);
+			WorldManagerPtr_t worldManager = WorldManager_c::GetInstance();
+			worldManager->LoadMap(args[1]);
+
+			PointEntityPtr_t player = boost::static_pointer_cast<PointEntity_c>(worldManager->TryGetEntityByType("InfoPlayerStart"));
+			if(!player)
+			{
+				Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contais InfoPlayerStart entity");
+			}
+			else
+			{
+				clSpectatorCamera.SetTransform(player->GetTransform());
+			}
 
 			fMapLoaded = true;
 			clSpectatorCamera.EnableController();

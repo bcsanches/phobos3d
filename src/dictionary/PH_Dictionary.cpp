@@ -28,6 +28,7 @@ Phobos 3d
 #include <PH_Exception.h>
 #include <PH_Parser.h>
 
+#include "PH_DictionaryManager.h"
 #include "PH_DictionaryUtils.h"
 
 namespace Phobos
@@ -52,6 +53,11 @@ namespace Phobos
 	void Dictionary_c::AddValue(const String_c &key, const String_c &value)
 	{
 		mapValues[key] = value;
+
+		if(key.compare("inherit") == 0)
+			strInherit = value;
+		if(key.compare("baseHive") == 0)
+			strBaseHive = value;
 	}
 
 	void Dictionary_c::Load(Parser_c &parser)
@@ -94,9 +100,6 @@ namespace Phobos
 			if(token != TOKEN_SEMI_COLON)
 				PH_RaiseDictionaryParseException(parser, TOKEN_SEMI_COLON, token, tokenValue, "Dictionary_c::Load");
 		}
-
-		//check for inheritance
-		this->TryGetValue("inherit", strInherit);
 	}
 
 	const String_c &Dictionary_c::GetValue(const String_c &key) const 
@@ -143,8 +146,11 @@ namespace Phobos
 
 		if(!strInherit.empty())
 		{
-			pclInherit = boost::static_pointer_cast<Dictionary_c>(this->GetParent()->GetChild(strInherit)).get();
-		}
+			if(strBaseHive.empty())
+				pclInherit = boost::static_pointer_cast<Dictionary_c>(this->GetParent()->GetChild(strInherit)).get();
+			else
+				pclInherit = DictionaryManager_c::GetInstance()->GetDictionary(strBaseHive, strInherit).get();
+		}		
 
 		return pclInherit;
 	}

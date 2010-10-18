@@ -25,10 +25,14 @@ Phobos 3d
 
 #include "PH_WorldManager.h"
 
+#include <PH_Dictionary.h>
+#include <PH_DictionaryManager.h>
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 
+#include "PH_EntityFactory.h"
+#include "PH_EntityKeys.h"
 #include "PH_WorldEntity.h"
 
 namespace Phobos
@@ -55,7 +59,37 @@ namespace Phobos
 		WorldEntityPtr_t world = boost::static_pointer_cast<WorldEntity_c>(WorldEntity_c::Create("WorldSpawn"));
 		world->Load(clMapLoader);
 		this->AddPrivateChild(world);
+
+		this->LoadEntities();
 	}	
+
+	void WorldManager_c::LoadEntities()
+	{
+		DictionaryHivePtr_t hive = clMapLoader.GetDynamicEntitiesHive();
+		EntityFactory_c &factory = EntityFactory_c::GetInstance();		
+
+		for(Node_c::const_iterator it = hive->begin(), end = hive->end(); it != end; ++it)
+		{
+			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
+
+			EntityPtr_t ptr = factory.Create(dict->GetValue(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
+			ptr->Load(*dict);
+
+			this->AddPrivateChild(ptr);
+		}
+	}
+
+	EntityPtr_t WorldManager_c::TryGetEntityByType(const String_c &className)
+	{
+		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		{
+			EntityPtr_t entity = boost::static_pointer_cast<Entity_c>(it->second);
+			if(entity->GetClassName().compare(className) == 0)
+				return entity;
+		}
+
+		return EntityPtr_t();
+	}
 
 	void WorldManager_c::OnBoot()
 	{
@@ -66,6 +100,4 @@ namespace Phobos
 	{
 		this->RemoveAllChildren();
 	}
-
-	
 }

@@ -189,28 +189,40 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="entities"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_Entity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_Entity.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_EntityFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_EntityFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_EntityKeys.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_PointEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_PointEntity.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_DictionaryUtils.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\gameEngine\PH_Entity.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_Entity.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\gameEngine\PH_EntityFactory.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_EntityFactory.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_EntityKeys.h"
 			>
 		</File>
 		<File

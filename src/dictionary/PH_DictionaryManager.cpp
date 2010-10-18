@@ -27,7 +27,12 @@ Phobos 3d
 
 #include <fstream>
 
+#include <boost/filesystem.hpp>
+
+#include <PH_Context.h>
+#include <PH_ContextUtils.h>
 #include <PH_Error.h>
+#include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Parser.h>
 #include <PH_Path.h>
@@ -41,8 +46,10 @@ namespace Phobos
 	PH_DEFINE_NODE_SINGLETON(DictionaryManager, "/");
 
 	DictionaryManager_c::DictionaryManager_c():
-		Node_c("DictionaryManager", PRIVATE_CHILDREN)
+		Node_c("DictionaryManager", PRIVATE_CHILDREN),
+		cmdLoadAllDeclarations("loadAllDeclarations")
 	{		
+		cmdLoadAllDeclarations.SetProc(PH_CONTEXT_CMD_BIND(&DictionaryManager_c::CmdLoadAllDeclarations, this));
 	}
 
 	DictionaryManager_c::~DictionaryManager_c()
@@ -97,14 +104,55 @@ namespace Phobos
 		}
 	}
 
+	void DictionaryManager_c::LoadAll(const String_c &path)
+	{
+		using namespace std;
+		using namespace boost::filesystem;
+
+		if(!exists(path))
+		{
+			stringstream stream;
+
+			stream << "path " << path << " does not exists." << endl;
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "DictionaryManager_c::LoadAll", stream.str());
+		}
+
+		if(!is_directory(path))
+		{
+			stringstream stream;
+
+			stream << "path " << path << " is not a directory." << endl;
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "DictionaryManager_c::LoadAll", stream.str());
+		}
+
+		directory_iterator end;
+		for(directory_iterator it(path);it != end; ++it)
+		{
+			if(!is_regular_file(it->path()))
+				continue;
+
+			this->Load(it->path().string());
+		}
+	}
+
 	DictionaryHivePtr_t DictionaryManager_c::GetDictionaryHive(const String_c &name)
 	{
 		return boost::static_pointer_cast<DictionaryHive_c>(this->GetChild(name));
 	}
 
+	DictionaryHivePtr_t DictionaryManager_c::TryGetDictionaryHive(const String_c &name)
+	{
+		return boost::static_pointer_cast<DictionaryHive_c>(this->TryGetChild(name));
+	}
+
 	DictionaryPtr_t DictionaryManager_c::GetDictionary(const String_c &hive, const String_c &dictionary)
 	{
 		return this->GetDictionaryHive(hive)->GetDictionary(dictionary);
+	}
+
+	DictionaryPtr_t DictionaryManager_c::TryGetDictionary(const String_c &hive, const String_c &dictionary)
+	{
+		return this->TryGetDictionaryHive(hive)->TryGetDictionary(dictionary);
 	}
 
 	DictionaryPtr_t DictionaryManager_c::GetDictionary(const Path_c &relativePath)
@@ -117,6 +165,24 @@ namespace Phobos
 		NodePtr_t ptr = Kernel_c::GetInstance().LookupObject(tmp);
 
 		return boost::static_pointer_cast<Dictionary_c>(ptr);
+	}
+
+	void DictionaryManager_c::RegisterCommands(IContext_c &context)
+	{
+		context.AddContextCmd(cmdLoadAllDeclarations);
+	}
+
+	void DictionaryManager_c::CmdLoadAllDeclarations(const StringVector_t &args, Context_c &context)
+	{
+		if(args.size() < 2)
+		{
+			Kernel_c::GetInstance().LogMessage("[DictionaryManager_c::CmdLoadAllDeclarations] Insuficient parameters, usage: loadAllDeclarations <path>\n");
+
+			return;
+		}
+
+		for(int i = 1, len = args.size(); i < len; ++i)
+			this->LoadAll(args[i]);
 	}
 }
 

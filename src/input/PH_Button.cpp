@@ -31,7 +31,7 @@ Phobos 3d
 
 namespace Phobos
 {
-	Button_c::Button_c(const String_c &up, const String_c &down, const String_c &update, Context_c *context):
+	Button_c::Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context):
 		cmdUp(up),
 		cmdDown(down),
 		cmdUpdate(update),
@@ -45,7 +45,7 @@ namespace Phobos
 			this->Enable(*context);
 	}
 
-	void Button_c::Enable(Context_c &context)
+	void Button_c::Enable(IContext_c &context)
 	{
 		context.AddContextCmd(cmdUp);
 		context.AddContextCmd(cmdDown);
@@ -68,14 +68,14 @@ namespace Phobos
 		fValue = StringToFloat(args[3]);
 	}
 
-	AxisButton_c::AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, Context_c *context):
+	AxisButton_c::AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context):
 		clButtonA(upA, downA, updateA, context),
 		clButtonB(upB, downB, updateB, context)
 	{
 		//empty
 	}
 
-	void AxisButton_c::Enable(Context_c &context)
+	void AxisButton_c::Enable(IContext_c &context)
 	{
 		clButtonA.Enable(context);
 		clButtonB.Enable(context);

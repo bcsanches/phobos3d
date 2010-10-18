@@ -23,47 +23,39 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DICTIONARY_UTILS_H
-#define PH_DICTIONARY_UTILS_H
 
-#include <PH_Dictionary.h>
+#ifndef PH_POINT_ENGINE_H
+#define PH_POINT_ENGINE_H
 
-#include <OgreColourValue.h>
-#include <OgreVector3.h>
-#include <OgreQuaternion.h>
+#include "PH_Entity.h"
+
+#include <PH_Transform.h>
 
 namespace Phobos
 {
-	inline Ogre::Vector3 DictionaryGetVector3(const Dictionary_c &dict, const String_c &key)
-	{		
-		const String_c &value = dict.GetValue(key);
+	PH_DECLARE_NODE_PTR(PointEntity);
 
-		Ogre::Vector3 tmp;
-		sscanf(value.c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
-
-		return tmp;
-	}
-
-	inline Ogre::Quaternion DictionaryGetQuaternion(const Dictionary_c &dict, const String_c &key)
+	class PointEntity_c: public Entity_c
 	{
-		const String_c &value = dict.GetValue(key);
+		public:
+			static EntityPtr_t Create(const String_c &name);
 
-		Ogre::Quaternion q;
-		sscanf(value.c_str(), "%f %f %f %f", &q.w, &q.x, &q.y, &q.z);
+			inline const Transform_c &GetTransform() const;
 
-		return q;
-	}
+		protected:
+			PointEntity_c(const String_c &name);
 
-	inline Ogre::ColourValue DictionaryGetColour(const Dictionary_c &dict, const String_c &key)
+			void OnLoad(const Dictionary_c &dictionary);
+
+		private:
+			Transform_c	clTransform;
+	};
+
+	inline const Transform_c &PointEntity_c::GetTransform() const
 	{
-		const String_c &value = dict.GetValue(key);
-
-		Ogre::ColourValue colour;
-
-		sscanf(value.c_str(), "%f %f %f %f", &colour.r, &colour.g, &colour.b, &colour.a);
-
-		return colour;
+		return clTransform;
 	}
 }
+
 
 #endif

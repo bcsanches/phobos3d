@@ -62,11 +62,11 @@ namespace Phobos
 			inline StringMapConstIterator_t begin() const;
 			inline StringMapConstIterator_t end() const;
 
+			const Dictionary_c *GetInherited() const;
+
 		private:
 			Dictionary_c(const String_c &name);
-			~Dictionary_c();
-
-			const Dictionary_c *GetInherited() const;
+			~Dictionary_c();			
 
 			static const String_c *TryGetValue(const Dictionary_c *current, const String_c &key);			
 
@@ -74,6 +74,7 @@ namespace Phobos
 			StringMap_t mapValues;
 
 			String_c strInherit;
+			String_c strBaseHive;
 			mutable const Dictionary_c *pclInherit;
 	};
 

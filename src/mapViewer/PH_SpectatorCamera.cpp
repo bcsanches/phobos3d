@@ -73,6 +73,14 @@ namespace Phobos
 		clCamera.SetTransform(clTransformInterpolator.GetValue(Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta));
 	}
 
+	void SpectatorCamera_c::SetTransform(const Transform_c &transform)
+	{
+		clCurrentTransform = transform;
+
+		dTurn = transform.GetRotation().getYaw().valueDegrees();
+		dLook = transform.GetRotation().getPitch().valueDegrees();
+	}
+
 	void SpectatorCamera_c::EnableController()
 	{
 		clCameraController.EnableController();

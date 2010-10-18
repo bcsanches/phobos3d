@@ -38,7 +38,7 @@ namespace Phobos
 
 	void Entity_c::Load(const Dictionary_c &dict)
 	{
-		strClassName = dict.GetValue(PH_ENTITY_KEY_CLASS_NAME);
+		strClassName = dict.GetInherited()->GetName();
 
 		this->OnLoad(dict);
 	}

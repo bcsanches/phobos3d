@@ -51,6 +51,8 @@ namespace Phobos
 			inline void SetMoveSpeed(Float_t value);
 			inline void SetTurnSpeed(Float_t value);
 
+			void SetTransform(const Transform_c &transform);
+
 		private:
 			GameCamera_c				clCamera;
 			SpectatorCameraController_c clCameraController;

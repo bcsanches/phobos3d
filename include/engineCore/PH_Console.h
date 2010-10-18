@@ -49,7 +49,12 @@ namespace Phobos
 
 	PH_DECLARE_NODE_PTR(Console);	
 
-	class PH_ENGINE_CORE_API Console_c: public CoreModule_c, private LogListener_c, private InputManagerListener_c, private InputDeviceListener_c
+	class PH_ENGINE_CORE_API Console_c: 
+		public CoreModule_c, 
+		public IContext_c,
+		private LogListener_c, 
+		private InputManagerListener_c, 
+		private InputDeviceListener_c
 	{		
 		private:
 			// =====================================================
@@ -105,14 +110,14 @@ namespace Phobos
 
 			inline bool IsActive(void) const;
 
-			inline void AddContextVar(class ContextVar_c &var);
-			inline void AddContextCmd(class ContextCmd_c &cmd);
+			inline void AddContextVar(ContextVar_c &var);
+			inline void AddContextCmd(ContextCmd_c &cmd);
+			inline void RemoveContextCmd(ContextCmd_c &cmd);
+
+			inline const ContextVar_c &GetContextVar(const String_c &name) const;
+			inline const ContextVar_c *TryGetContextVar(const String_c &name) const;
 
 			void Print(const String_c &text);		
-
-			void EnableButton(Button_c &button);
-			void EnableThumb(Thumb_c &thumb);
-			void EnableAxisButton(AxisButton_c &axisButton);
 
 		protected:
 			// =====================================================
@@ -219,15 +224,30 @@ namespace Phobos
 		return fActive;
 	}
 
-	inline void Console_c::AddContextVar(class ContextVar_c &var)
+	inline void Console_c::AddContextVar(ContextVar_c &var)
 	{
 		return clContext.AddContextVar(var);
 	}
 
-	inline void Console_c::AddContextCmd(class ContextCmd_c &cmd)
+	inline void Console_c::AddContextCmd(ContextCmd_c &cmd)
 	{
 		return clContext.AddContextCmd(cmd);
 	}	
+
+	inline void Console_c::RemoveContextCmd(ContextCmd_c &cmd)
+	{
+		return clContext.RemoveContextCmd(cmd);
+	}
+
+	inline const ContextVar_c &Console_c::GetContextVar(const String_c &name) const
+	{
+		return clContext.GetContextVar(name);
+	}
+
+	inline const ContextVar_c *Console_c::TryGetContextVar(const String_c &name) const
+	{
+		return clContext.TryGetContextVar(name);
+	}
 }
 
 #endif

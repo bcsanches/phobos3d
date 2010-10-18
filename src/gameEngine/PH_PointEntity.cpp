@@ -23,47 +23,27 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DICTIONARY_UTILS_H
-#define PH_DICTIONARY_UTILS_H
 
-#include <PH_Dictionary.h>
+#include "PH_PointEntity.h"
 
-#include <OgreColourValue.h>
-#include <OgreVector3.h>
-#include <OgreQuaternion.h>
+#include "PH_DictionaryUtils.h"
+#include "PH_EntityFactory.h"
+#include "PH_EntityKeys.h"
 
 namespace Phobos
 {
-	inline Ogre::Vector3 DictionaryGetVector3(const Dictionary_c &dict, const String_c &key)
-	{		
-		const String_c &value = dict.GetValue(key);
+	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);
 
-		Ogre::Vector3 tmp;
-		sscanf(value.c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
-
-		return tmp;
+	PointEntity_c::PointEntity_c(const String_c &name):
+		Entity_c(name)
+	{
 	}
 
-	inline Ogre::Quaternion DictionaryGetQuaternion(const Dictionary_c &dict, const String_c &key)
+	void PointEntity_c::OnLoad(const Dictionary_c &dictionary)
 	{
-		const String_c &value = dict.GetValue(key);
+		Entity_c::OnLoad(dictionary);
 
-		Ogre::Quaternion q;
-		sscanf(value.c_str(), "%f %f %f %f", &q.w, &q.x, &q.y, &q.z);
-
-		return q;
-	}
-
-	inline Ogre::ColourValue DictionaryGetColour(const Dictionary_c &dict, const String_c &key)
-	{
-		const String_c &value = dict.GetValue(key);
-
-		Ogre::ColourValue colour;
-
-		sscanf(value.c_str(), "%f %f %f %f", &colour.r, &colour.g, &colour.b, &colour.a);
-
-		return colour;
+		clTransform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
+		clTransform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
 	}
 }
-
-#endif

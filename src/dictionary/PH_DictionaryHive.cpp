@@ -68,5 +68,10 @@ namespace Phobos
 	DictionaryPtr_t DictionaryHive_c::GetDictionary(const String_c &name)
 	{
 		return boost::static_pointer_cast<Dictionary_c>(this->GetChild(name));
-	}	
+	}
+
+	DictionaryPtr_t DictionaryHive_c::TryGetDictionary(const String_c &name)
+	{
+		return boost::static_pointer_cast<Dictionary_c>(this->TryGetChild(name));
+	}
 }

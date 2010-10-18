@@ -33,18 +33,18 @@ Phobos 3d
 
 namespace Phobos
 {
-	class Context_c;
+	class IContext_c;
 
 	class PH_INPUT_API Thumb_c
 	{
 		public:
-			Thumb_c(const String_c &cmd, Context_c *context = NULL);
+			Thumb_c(const String_c &cmd, IContext_c *context = NULL);
 
 			inline Float_t GetX() const;
 			inline Float_t GetY() const;
 			inline const Float_t *GetPoint() const;
 
-			void Enable(Context_c &context);
+			void Enable(IContext_c &context);
 			void Disable();
 
 		private:

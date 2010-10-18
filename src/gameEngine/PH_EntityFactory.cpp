@@ -77,9 +77,9 @@ namespace Phobos
 		setEntitiesCreator.insert(creator);
 	}
 
-	EntityPtr_t EntityFactory_c::Create(const String_c &name) const
+	EntityPtr_t EntityFactory_c::Create(const String_c &className, const String_c &name) const
 	{
-		EntityCreatorSet_t::const_iterator it = setEntitiesCreator.find(name, EntityCreatorComp_s());
+		EntityCreatorSet_t::const_iterator it = setEntitiesCreator.find(className, EntityCreatorComp_s());
 		if(it == setEntitiesCreator.end())
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
 

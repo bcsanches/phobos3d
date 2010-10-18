@@ -41,14 +41,21 @@ namespace Phobos
 		public:
 			void Load(const Dictionary_c &dictionary);
 
+			inline const String_c &GetClassName() const;
+
 		protected:
 			Entity_c(const String_c &name);
 
-			virtual void OnLoad(const Dictionary_c &dictionary) = 0;
+			virtual void OnLoad(const Dictionary_c &dictionary) {};
 
 		private:
 			String_c strClassName;
 	};
+
+	inline const String_c &Entity_c::GetClassName() const
+	{
+		return strClassName;
+	}
 }
 
 #endif

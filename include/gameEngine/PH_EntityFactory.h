@@ -70,7 +70,7 @@ namespace Phobos
 		public:
 			static EntityFactory_c &GetInstance();
 
-			EntityPtr_t Create(const String_c &name) const;			
+			EntityPtr_t Create(const String_c &className, const String_c &name) const;			
 
 		private:
 			EntityFactory_c();
@@ -88,5 +88,12 @@ namespace Phobos
 
 #define PH_ENTITY_CREATOR(NAME, TYPE)											\
 	static EntityCreator_c TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+
+#define PH_FULL_ENTITY_CREATOR(NAME, TYPE)			\
+	PH_ENTITY_CREATOR(NAME, TYPE);					\
+	EntityPtr_t TYPE::Create(const String_c &name)	\
+	{												\
+		return new TYPE(name);						\
+	}
 
 #endif

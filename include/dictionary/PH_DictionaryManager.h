@@ -22,7 +22,10 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
+#ifndef PH_DICTIONARY_MANAGER_H
+#define PH_DICTIONARY_MANAGER_H
 
+#include <PH_ContextCmd.h>
 #include <PH_Node.h>
 #include <PH_Singleton.h>
 
@@ -34,6 +37,7 @@ Phobos 3d
 
 namespace Phobos
 {
+	class IContext_c;
 	class Path_c;
 
 	PH_DECLARE_SINGLETON_PTR(DictionaryManager);
@@ -46,15 +50,27 @@ namespace Phobos
 			void Load(const String_c &fileName);
 			void Load(std::istream &stream);
 
+			void LoadAll(const String_c &path);
+
 			DictionaryHivePtr_t CreateCustomHive(const String_c &name);			
 
 			DictionaryHivePtr_t GetDictionaryHive(const String_c &name);
+			DictionaryHivePtr_t TryGetDictionaryHive(const String_c &name);
 			DictionaryPtr_t GetDictionary(const String_c &hive, const String_c &dictionary);
+			DictionaryPtr_t TryGetDictionary(const String_c &hive, const String_c &dictionary);
 			DictionaryPtr_t GetDictionary(const Path_c &relativePath);
+
+			void RegisterCommands(IContext_c &context);
 
 		private:
 			DictionaryManager_c();
 			~DictionaryManager_c();
 
+			void CmdLoadAllDeclarations(const StringVector_t &args, Context_c &);
+
+		private:
+			ContextCmd_c cmdLoadAllDeclarations;
 	};
 }
+
+#endif

@@ -29,6 +29,7 @@ Phobos 3d
 #include <PH_CoreModule.h>
 #include <PH_Singleton.h>
 
+#include "PH_Entity.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_MapLoader.h"
 
@@ -43,13 +44,17 @@ namespace Phobos
 		public:
 			void LoadMap(const String_c &mapName);
 
+			EntityPtr_t TryGetEntityByType(const String_c &className);
+
 		protected:			
 			void OnBoot();
 			void OnFinalize();
 
 		private:
 			WorldManager_c();
-			~WorldManager_c();				
+			~WorldManager_c();		
+
+			void LoadEntities();
 
 		private:
 			MapLoader_c		clMapLoader;

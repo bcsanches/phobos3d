@@ -32,20 +32,20 @@ Phobos 3d
 #include "PH_InputAPI.h"
 
 namespace Phobos
-{
-	class PH_Context_c;
+{	
+	class IContext_c;
 
 	class PH_INPUT_API Button_c
 	{
 		public:
-			Button_c(const String_c &up, const String_c &down, const String_c &update, Context_c *context = NULL);		
+			Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context = NULL);		
 
 			inline Float_t GetValue(void) const
 			{
 				return(fValue);
 			}
 
-			void Enable(Context_c &context);
+			void Enable(IContext_c &context);
 			void Disable();
 
 		private:
@@ -62,9 +62,9 @@ namespace Phobos
 	class PH_INPUT_API AxisButton_c
 	{
 		public:
-			AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, Context_c *context = NULL);
+			AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context = NULL);
 
-			void Enable(Context_c &context);
+			void Enable(IContext_c &context);
 			void Disable();
 
 			inline Float_t GetValue() const

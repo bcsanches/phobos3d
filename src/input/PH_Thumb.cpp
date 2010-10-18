@@ -30,7 +30,7 @@ Phobos 3d
 
 namespace Phobos
 {
-	Thumb_c::Thumb_c(const String_c &cmd, Context_c *context):
+	Thumb_c::Thumb_c(const String_c &cmd, IContext_c *context):
 		cmdUpdate(cmd)
 	{
 		cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Thumb_c::CmdProc, this));
@@ -41,7 +41,7 @@ namespace Phobos
 			this->Enable(*context);		
 	}
 
-	void Thumb_c::Enable(Context_c &context)
+	void Thumb_c::Enable(IContext_c &context)
 	{	
 		context.AddContextCmd(cmdUpdate);	
 	}
