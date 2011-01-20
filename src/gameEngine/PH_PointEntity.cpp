@@ -32,7 +32,7 @@ Phobos 3d
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);
+	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);	
 
 	PointEntity_c::PointEntity_c(const String_c &name):
 		Entity_c(name)

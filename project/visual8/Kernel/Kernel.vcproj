@@ -331,6 +331,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\kernel\PH_GenericFactory.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\kernel\PH_Kernel.cpp"
 			>
 		</File>
