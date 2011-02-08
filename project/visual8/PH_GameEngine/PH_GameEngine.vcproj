@@ -221,6 +221,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Components"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_EntityComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_EntityComponent.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_EntityComponentFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_EntityComponentFactory.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_DictionaryUtils.h"
 			>

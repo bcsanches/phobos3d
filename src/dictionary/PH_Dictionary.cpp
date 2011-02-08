@@ -125,6 +125,11 @@ namespace Phobos
 		return true;
 	}
 
+	const String_c *Dictionary_c::TryGetValue(const String_c &key) const
+	{
+		return TryGetValue(this, key);
+	}
+
 	bool Dictionary_c::GetBool(const String_c &key) const
 	{
 		const String_c &value = this->GetValue(key);

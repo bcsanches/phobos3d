@@ -50,6 +50,7 @@ namespace Phobos
 
 			const String_c &GetValue(const String_c &key) const;
 			bool TryGetValue(const String_c &key, String_c &out) const;
+			const String_c *TryGetValue(const String_c &key) const;
 
 			bool GetBool(const String_c &key) const;
 

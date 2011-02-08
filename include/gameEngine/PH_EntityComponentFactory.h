@@ -1,8 +1,8 @@
 /*
 Phobos 3d
-  September 2010
+  February 2011
 
-  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+  Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages
@@ -23,37 +23,26 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "PH_Entity.h"
-#include "PH_EntityComponentFactory.h"
+#ifndef PH_ENTITY_COMPONENT_FACTORY_H
+#define PH_ENTITY_COMPONENT_FACTORY_H
 
-#include <PH_Dictionary.h>
+#include <PH_GenericFactory.h>
 
-#include "PH_EntityKeys.h"
+#include "PH_EntityComponent.h"
 
 namespace Phobos
 {
-	Entity_c::Entity_c(const String_c &name):
-		Node_c(name, PRIVATE_CHILDREN)
-	{
-	}
-
-	void Entity_c::Load(const Dictionary_c &dict)
-	{
-		strClassName = dict.GetInherited()->GetName();
-
-		const String_c *components = dict.TryGetValue("Components");
-		if(components)
-		{
-			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
-
-			String_c componentName;
-			size_t pos = 0;
-			while(StringSplitBy(componentName, *components, '|', pos, &pos))
-			{
-				this->AddPrivateChild(factory.Create(componentName, componentName));
-			}
-		}
-
-		this->OnLoad(dict);
-	}
+	typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
 }
+
+#define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
+	static ObjectCreator_c<EntityComponentPtr_t> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+
+#define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)		\
+	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);				\
+	EntityComponentPtr_t TYPE::Create(const String_c &name)	\
+	{														\
+		return new TYPE(name);								\
+	}
+
+#endif

@@ -1,8 +1,8 @@
 /*
 Phobos 3d
-  September 2010
+  February 2011
 
-  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+  Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages
@@ -23,37 +23,18 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#include "PH_Entity.h"
-#include "PH_EntityComponentFactory.h"
-
-#include <PH_Dictionary.h>
-
-#include "PH_EntityKeys.h"
+#include "PH_EntityComponent.h"
 
 namespace Phobos
 {
-	Entity_c::Entity_c(const String_c &name):
-		Node_c(name, PRIVATE_CHILDREN)
+	EntityComponent_c::EntityComponent_c(const String_c &name):
+		Node_c(name)
 	{
+		//empty
 	}
 
-	void Entity_c::Load(const Dictionary_c &dict)
+	void EntityComponent_c::Load(const Dictionary_c &dictionary)
 	{
-		strClassName = dict.GetInherited()->GetName();
-
-		const String_c *components = dict.TryGetValue("Components");
-		if(components)
-		{
-			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
-
-			String_c componentName;
-			size_t pos = 0;
-			while(StringSplitBy(componentName, *components, '|', pos, &pos))
-			{
-				this->AddPrivateChild(factory.Create(componentName, componentName));
-			}
-		}
-
-		this->OnLoad(dict);
-	}
+		this->OnLoad(dictionary);
+	}					
 }

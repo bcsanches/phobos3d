@@ -2,3 +2,9 @@ EntityDef InfoPlayerStart
 {
   className=PointEntity;  
 }
+
+EntityDef Fire
+{
+  className=Entity
+  components=MeshRenderer|ParticleSystem|Light
+}
