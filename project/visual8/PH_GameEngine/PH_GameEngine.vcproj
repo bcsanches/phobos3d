@@ -240,6 +240,14 @@
 				RelativePath="..\..\..\include\gameEngine\PH_EntityComponentFactory.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_ModelRendererComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_ModelRendererComponent.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_DictionaryUtils.h"

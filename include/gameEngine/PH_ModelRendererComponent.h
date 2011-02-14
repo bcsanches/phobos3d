@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  September 2010
+  February 2011
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -23,12 +23,31 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_ENTITY_KEYS_H
-#define PH_ENTITY_KEYS_H
+#ifndef PH_MODEL_RENDERER
+#define PH_MODEL_RENDERER
 
-#define PH_ENTITY_KEY_CLASS_NAME "className"
-#define PH_ENTITY_KEY_POSITION "position"
-#define PH_ENTITY_KEY_ORIENTATION "orientation"
-#define PH_ENTITY_KEY_MESH_FILE "meshfile"
+#include "PH_EntityComponent.h"
+
+#include <OgreSceneNode.h>
+
+namespace Phobos
+{
+	class ModelRendererComponent_c: public EntityComponent_c
+	{
+		public:
+			static EntityComponentPtr_t Create(const String_c &name);
+
+		protected:
+			ModelRendererComponent_c(const String_c &name);
+			~ModelRendererComponent_c();				
+
+			virtual void OnLoad(const Dictionary_c &dictionary);
+
+		private:
+			Ogre::SceneNode *pclSceneNode;
+			Ogre::Entity *pclMeshEntity;
+	};
+}
+
 
 #endif
