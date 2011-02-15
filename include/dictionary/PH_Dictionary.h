@@ -50,10 +50,12 @@ namespace Phobos
 
 			const String_c &GetValue(const String_c &key) const;
 			bool TryGetValue(const String_c &key, String_c &out) const;
+			const String_c *TryGetValue(const String_c &key) const;
 
 			bool GetBool(const String_c &key) const;
 
 			void Get4Float(const float values[4], const String_c &key) const;
+			void Get3Float(const float values[3], const String_c &key) const;
 			int GetInt(const String_c &key) const;
 			float GetFloat(const String_c &key) const;
 

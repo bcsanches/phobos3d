@@ -30,6 +30,7 @@ Phobos 3d
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
 #include <PH_Singleton.h>
+#include <PH_WorldManager.h>
 
 #include "PH_SpectatorCamera.h"
 
@@ -37,7 +38,7 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(Client);
 
-	class Client_c: public CoreModule_c
+	class Client_c: public CoreModule_c, private WorldManagerListener_c
 	{
 		PH_DECLARE_SINGLETON_METHODS(Client);
 
@@ -52,10 +53,12 @@ namespace Phobos
 		private:
 			Client_c();
 
+			void OnMapUnloaded();
+			void OnMapLoaded();
+
 			void ClipMouseCursor();
 			void UnclipMouseCursor();
-
-			void CmdLoadMap(const StringVector_t &args, Context_c &);
+			
 			void CmdToggleMouseCursorClip(const StringVector_t &args, Context_c &);
 			void CmdNullMouseThumb(const StringVector_t &args, Context_c &);
 
@@ -65,9 +68,7 @@ namespace Phobos
 
 			struct ConfigInfo_s GetConfig();
 
-		private:
-			ContextCmd_c		cmdLoadMap;			
-
+		private:					
 			ContextCmd_c		cmdToggleMouseCursorClip;
 			ContextCmd_c		cmdNullMouseThumb;
 			ContextVar_c		varMouseSensitivity;

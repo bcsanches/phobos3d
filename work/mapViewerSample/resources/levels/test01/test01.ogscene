@@ -12,7 +12,7 @@
     </RESOURCEDIRECTORIES>
   <CAMERASPEED value="1"></CAMERASPEED>
   <CAMERAPOSITIONS count="0">
-    <OPTION id="0" position="3.75387 3.95002 18.4534" orientation="-0.996485 0.0827436 0.0130496 0.00104721"></OPTION>
+    <OPTION id="0" position="4.91266 1.39749 14.3526" orientation="-0.960873 0.0766046 -0.26534 -0.0212054"></OPTION>
   </CAMERAPOSITIONS>
     <LAYERS>
       <LAYER id="0" name="Layer 0" visible="true"></LAYER>
@@ -93,9 +93,9 @@
   <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
     <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
     <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
-    <PROPERTY id="camera::orientation" type="13" value="-0.996485 0.0827436 0.0130496 0.00104721"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="-0.96094 0.07661 -0.265359 -0.0212068"></PROPERTY>
     <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
-    <PROPERTY id="camera::position" type="9" value="3.75387 3.95002 18.4534"></PROPERTY>
+    <PROPERTY id="camera::position" type="9" value="4.91266 1.39749 14.3526"></PROPERTY>
     <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
     <PROPERTY id="colour" type="11" value="0 0 0 1"></PROPERTY>
     <PROPERTY id="compositorcount" type="2" value="0"></PROPERTY>
@@ -106,96 +106,6 @@
     <PROPERTY id="placement" type="10" value="0 0 1 1"></PROPERTY>
     <PROPERTY id="shadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="skies" type="12" value="true"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="837611008" name="luzCeu" typename="Light Object" parentnode="SceneManager">
-    <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="0.25098 0.25098 0.25098 1"></PROPERTY>
-    <PROPERTY id="direction" type="9" value="0 -0.725374 -0.688354"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
-    <PROPERTY id="lighttype" type="2" value="1"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="0.394744 0.918791 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="0 11.4401 7.82279"></PROPERTY>
-    <PROPERTY id="power" type="6" value="1"></PROPERTY>
-    <PROPERTY id="specular" type="11" value="1 1 1 1"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="761314752" name="luzFogo" typename="Light Object" parentnode="SceneManager">
-    <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
-    <PROPERTY id="direction" type="9" value="0 0 1"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
-    <PROPERTY id="lighttype" type="2" value="0"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="-3.44144 0.680176 -1.70923"></PROPERTY>
-    <PROPERTY id="power" type="6" value="1"></PROPERTY>
-    <PROPERTY id="specular" type="11" value="0.960784 0.866667 0.152941 1"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="153233440" name="LuzTeto#0" typename="Light Object" parentnode="SceneManager">
-    <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="0.0941176 1 0.0313726 1"></PROPERTY>
-    <PROPERTY id="direction" type="9" value="0 -1 -1.19209e-007"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="45 60 1"></PROPERTY>
-    <PROPERTY id="lighttype" type="2" value="2"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="0.707107 0.707107 0 -0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="0 3.40057 0"></PROPERTY>
-    <PROPERTY id="power" type="6" value="1"></PROPERTY>
-    <PROPERTY id="specular" type="11" value="0.976471 0.701961 0.00392157 1"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="683187392" name="luzFogo#0" typename="Light Object" parentnode="SceneManager">
-    <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
-    <PROPERTY id="direction" type="9" value="0 0 1"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
-    <PROPERTY id="lighttype" type="2" value="0"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="-3.44144 0.680176 -1.70923"></PROPERTY>
-    <PROPERTY id="power" type="6" value="1"></PROPERTY>
-    <PROPERTY id="specular" type="11" value="0.960784 0.866667 0.152941 1"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="SceneManager">
-    <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="0.0941176 1 0.0313726 1"></PROPERTY>
-    <PROPERTY id="direction" type="9" value="0 -1 -1.19209e-007"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="45 60 1"></PROPERTY>
-    <PROPERTY id="lighttype" type="2" value="2"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="0.707107 0.707107 0 -0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="0 3.40057 0"></PROPERTY>
-    <PROPERTY id="power" type="6" value="1"></PROPERTY>
-    <PROPERTY id="specular" type="11" value="0.976471 0.701961 0.00392157 1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
     </CUSTOMPROPERTIES>
@@ -220,6 +130,78 @@
     <PROPERTY id="orientation" type="13" value="0.992546 0 -0.121869 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="15.0155 0.0839043 0.680365"></PROPERTY>
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="837611008" name="luzCeu" typename="Light Object" parentnode="SceneManager">
+    <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="0.25098 0.25098 0.25098 1"></PROPERTY>
+    <PROPERTY id="direction" type="9" value="0 -0.725374 -0.688354"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
+    <PROPERTY id="lighttype" type="2" value="1"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.394744 0.918791 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 11.4401 7.82279"></PROPERTY>
+    <PROPERTY id="power" type="6" value="1"></PROPERTY>
+    <PROPERTY id="specular" type="11" value="1 1 1 1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="761314752" name="luzFogo" typename="Light Object" parentnode="nodeCassa">
+    <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
+    <PROPERTY id="direction" type="9" value="0 0 1"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
+    <PROPERTY id="lighttype" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="-3.44144 0.680176 -1.70923"></PROPERTY>
+    <PROPERTY id="power" type="6" value="1"></PROPERTY>
+    <PROPERTY id="specular" type="11" value="0.960784 0.866667 0.152941 1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="683187392" name="luzFogo#0" typename="Light Object" parentnode="nodeCassa#0">
+    <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
+    <PROPERTY id="direction" type="9" value="0.241921 0 0.970296"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
+    <PROPERTY id="lighttype" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.992546 0 0.121869 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="-3.49571 0.660184 -1.59117"></PROPERTY>
+    <PROPERTY id="power" type="6" value="1"></PROPERTY>
+    <PROPERTY id="specular" type="11" value="0.960784 0.866667 0.152941 1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="nodeCassa">
+    <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="0.0941176 1 0.0313726 1"></PROPERTY>
+    <PROPERTY id="direction" type="9" value="0 -1 -1.19209e-007"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="45 60 1"></PROPERTY>
+    <PROPERTY id="lighttype" type="2" value="2"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.707107 0.707107 0 -0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 3.40057 0"></PROPERTY>
+    <PROPERTY id="power" type="6" value="1"></PROPERTY>
+    <PROPERTY id="specular" type="11" value="0.976471 0.701961 0.00392157 1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
     </CUSTOMPROPERTIES>
@@ -279,7 +261,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="454512160" name="Ogre#0Copy#0#0" typename="Entity Object" parentnode="SceneManager">
+  <OBJECT object_id="454512160" name="Ogre#0Copy#0#0" typename="Entity Object" parentnode="nodeCassa">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>

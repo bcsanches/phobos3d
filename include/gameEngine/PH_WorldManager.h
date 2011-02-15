@@ -26,7 +26,9 @@ Phobos 3d
 #ifndef PH_WORLD_MANAGER_H
 #define PH_WORLD_MANAGER_H
 
+#include <PH_ContextCmd.h>
 #include <PH_CoreModule.h>
+#include <PH_Listener.h>
 #include <PH_Singleton.h>
 
 #include "PH_Entity.h"
@@ -37,6 +39,18 @@ namespace Phobos
 {	
 	PH_DECLARE_SINGLETON_PTR(WorldManager);
 
+	class WorldManagerListener_c
+	{
+		public:
+			virtual ~WorldManagerListener_c() {};
+
+			virtual void OnMapUnloaded() = 0;
+			virtual void OnMapLoaded() = 0;
+
+		public:
+			PH_DECLARE_LISTENER_HOOK;
+	};
+
 	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
 	{
 		PH_DECLARE_SINGLETON_METHODS(WorldManager);
@@ -46,18 +60,27 @@ namespace Phobos
 
 			EntityPtr_t TryGetEntityByType(const String_c &className);
 
-		protected:			
+			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);
+
+		protected:		
+			void OnPrepareToBoot();
 			void OnBoot();
 			void OnFinalize();
 
 		private:
 			WorldManager_c();
-			~WorldManager_c();		
+			~WorldManager_c();				
 
 			void LoadEntities();
 
+			void CmdLoadMap(const StringVector_t &args, Context_c &);
+
 		private:
 			MapLoader_c		clMapLoader;
+
+			ContextCmd_c	cmdLoadMap;	
+
+			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);			
 	};
 }
 

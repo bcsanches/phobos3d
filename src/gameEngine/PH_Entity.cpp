@@ -24,6 +24,7 @@ Phobos 3d
 */
 
 #include "PH_Entity.h"
+#include "PH_EntityComponentFactory.h"
 
 #include <PH_Dictionary.h>
 
@@ -32,13 +33,26 @@ Phobos 3d
 namespace Phobos
 {
 	Entity_c::Entity_c(const String_c &name):
-		Node_c(name)
+		Node_c(name, PRIVATE_CHILDREN)
 	{
 	}
 
 	void Entity_c::Load(const Dictionary_c &dict)
 	{
 		strClassName = dict.GetInherited()->GetName();
+
+		const String_c *components = dict.TryGetValue("Components");
+		if(components)
+		{
+			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
+
+			String_c componentName;
+			size_t pos = 0;
+			while(StringSplitBy(componentName, *components, '|', pos, &pos))
+			{
+				this->AddPrivateChild(factory.Create(componentName, componentName));
+			}
+		}
 
 		this->OnLoad(dict);
 	}

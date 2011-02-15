@@ -1,4 +1,0 @@
-EntityDef InfoPlayerStart
-{
-  className=PointEntity;  
-}

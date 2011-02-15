@@ -28,12 +28,13 @@ Phobos 3d
 
 #include <boost/noncopyable.hpp>
 
-#include <PH_SpectatorCameraController.h>
 #include <PH_GameCamera.h>
+
+#include "PH_SpectatorCameraController.h"
 
 namespace Phobos
 {
-	class SpectatorCamera_c: boost::noncopyable
+	class PH_GAME_ENGINE_API SpectatorCamera_c: boost::noncopyable
 	{
 		public:
 			SpectatorCamera_c();

@@ -29,5 +29,6 @@ Phobos 3d
 #define PH_ENTITY_KEY_CLASS_NAME "className"
 #define PH_ENTITY_KEY_POSITION "position"
 #define PH_ENTITY_KEY_ORIENTATION "orientation"
+#define PH_ENTITY_KEY_MESH_FILE "meshfile"
 
 #endif

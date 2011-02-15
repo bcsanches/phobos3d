@@ -1,0 +1,16 @@
+EntityDef InfoPlayerStart
+{
+  className=PointEntity;  
+}
+
+EntityDef Fire
+{
+  className=Entity;
+  components="ModelRenderer|ParticleSystem|Light";
+}
+
+EntityDef Target
+{
+  className=Entity;
+  components="ModelRenderer|LinearMover";
+}

@@ -125,6 +125,11 @@ namespace Phobos
 		return true;
 	}
 
+	const String_c *Dictionary_c::TryGetValue(const String_c &key) const
+	{
+		return TryGetValue(this, key);
+	}
+
 	bool Dictionary_c::GetBool(const String_c &key) const
 	{
 		const String_c &value = this->GetValue(key);
@@ -137,6 +142,13 @@ namespace Phobos
 		const String_c &value = this->GetValue(key);
 
 		sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
+	}
+
+	void Dictionary_c::Get3Float(const float values[3], const String_c &key) const
+	{
+		const String_c &value = this->GetValue(key);
+
+		sscanf(value.c_str(), "%f %f %f", &values[0], &values[1], &values[2]);
 	}
 
 	const Dictionary_c *Dictionary_c::GetInherited() const

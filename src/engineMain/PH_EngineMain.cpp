@@ -237,7 +237,9 @@ int main(int, char **)
 {	
 	Phobos::EngineMain_c engine;
 
+#ifndef PH_DEBUG
 	try
+#endif
 	{
 		engine.MainLoop();		
 	}
@@ -250,12 +252,8 @@ int main(int, char **)
 		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
 
 		exit(EXIT_FAILURE);
-#else
-	catch(std::exception &)
-	{
-		throw;
-#endif
 	}
+#endif
 
 	return 0;
 }
