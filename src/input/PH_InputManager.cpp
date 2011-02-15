@@ -184,13 +184,5 @@ namespace Phobos
 		out = stream.str();
 	}
 
-	void InputManager_c::AddListener(InputManagerListener_c &listener)
-	{
-		lstListeners.push_back(listener);
-	}
-			
-	void InputManager_c::RemoveListener(InputManagerListener_c &listener)
-	{
-		listener.hkListener.unlink();
-	}
+	PH_DEFINE_LISTENER_PROCS(InputManager_c, InputManagerListener_c, lstListeners);
 }

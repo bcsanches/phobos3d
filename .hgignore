@@ -37,3 +37,5 @@ glob:project/visual8/PH_GameEngine/PH_GameEngine.vcproj.mordor.bcsanches.user
 glob:project/visual8/PH_MapViewer/Debug/
 glob:project/visual8/PH_MapViewer/Release/
 glob:project/visual8/PH_MapViewer/PH_MapViewer.vcproj.mordor.bcsanches.user
+glob:work/mapViewerSample/Ogre.log
+glob:work/mapViewerSample/phobos.log

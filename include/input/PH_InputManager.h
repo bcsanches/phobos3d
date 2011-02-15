@@ -83,8 +83,7 @@ namespace Phobos
 			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
 			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType);
 
-			void AddListener(InputManagerListener_c &listener);
-			void RemoveListener(InputManagerListener_c &listener);
+			PH_DECLARE_LISTENER_PROCS(InputManagerListener_c);
 
 		protected:
 			// =====================================================
@@ -118,8 +117,7 @@ namespace Phobos
 			static InputManagerPtr_t CreateInstanceImpl(const String_c &name);		
 
 		private:
-			PH_DECLARE_LISTENER_LIST_TYPE(InputManagerListener_c);
-			ListenersList_t lstListeners;
+			PH_DECLARE_LISTENER_LIST(InputManagerListener_c, lstListeners);
 	};	
 }
 

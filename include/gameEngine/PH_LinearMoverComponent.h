@@ -23,8 +23,8 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_MODEL_RENDERER_COMPONENT_H
-#define PH_MODEL_RENDERER_COMPONENT_H
+#ifndef PH_LINEAR_MOVER_COMPONENT_H
+#define PH_LINEAR_MOVER_COMPONENT_H
 
 #include "PH_EntityComponent.h"
 
@@ -32,20 +32,16 @@ Phobos 3d
 
 namespace Phobos
 {
-	class ModelRendererComponent_c: public EntityComponent_c
+	class LinearMoverComponent_c: public EntityComponent_c
 	{
 		public:
 			static EntityComponentPtr_t Create(const String_c &name);
 
 		protected:
-			ModelRendererComponent_c(const String_c &name);
-			~ModelRendererComponent_c();				
+			LinearMoverComponent_c(const String_c &name);
+			~LinearMoverComponent_c();				
 
 			virtual void OnLoad(const Dictionary_c &dictionary);
-
-		private:
-			Ogre::SceneNode *pclSceneNode;
-			Ogre::Entity *pclMeshEntity;
 	};
 }
 

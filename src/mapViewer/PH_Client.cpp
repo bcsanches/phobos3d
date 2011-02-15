@@ -16,8 +16,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(Client);
 
 	Client_c::Client_c():
-		CoreModule_c("Client"),
-		cmdLoadMap("loadMap"),
+		CoreModule_c("Client"),		
 		cmdNullMouseThumb(PH_MOUSE_THUMB_CMD_NAME),
 		cmdToggleMouseCursorClip("toggleMouseCursorClip"),
 		varMouseSensitivity("dvMouseSensitivity", "0.1"),
@@ -25,9 +24,7 @@ namespace Phobos
 		varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),
 		fMapLoaded(false),
 		fMouseClipped(false)
-	{		
-		cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdLoadMap, this));
-
+	{				
 		cmdToggleMouseCursorClip.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdToggleMouseCursorClip, this));
 		cmdNullMouseThumb.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdNullMouseThumb, this));
 
@@ -59,14 +56,15 @@ namespace Phobos
 	void Client_c::OnPrepareToBoot()
 	{
 		ConsolePtr_t console = Console_c::GetInstance();
-
-		console->AddContextCmd(cmdLoadMap);
+		
 		console->AddContextCmd(cmdToggleMouseCursorClip);
 		console->AddContextCmd(cmdNullMouseThumb);
 
 		console->AddContextVar(varMouseSensitivity);
 		console->AddContextVar(varSpectatorMoveSpeed);
 		console->AddContextVar(varSpectatorTurnSpeed);
+
+		WorldManager_c::GetInstance()->AddListener(*this);
 	}
 
 	struct ConfigInfo_s
@@ -107,6 +105,35 @@ namespace Phobos
 		fMouseClipped = false;
 	}
 
+	void Client_c::OnMapUnloaded()
+	{		
+		if(fMapLoaded)
+		{
+			fMapLoaded = false;
+			clSpectatorCamera.DisableController();
+		}
+	}
+
+	void Client_c::OnMapLoaded()
+	{			
+		WorldManagerPtr_t worldManager = WorldManager_c::GetInstance();
+		PointEntityPtr_t player = boost::static_pointer_cast<PointEntity_c>(worldManager->TryGetEntityByType("InfoPlayerStart"));
+		if(!player)
+		{
+			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contais InfoPlayerStart entity");
+		}
+		else
+		{
+			clSpectatorCamera.SetTransform(player->GetTransform());
+		}
+
+		fMapLoaded = true;
+		clSpectatorCamera.EnableController();
+
+		if(!fMouseClipped)
+			this->ClipMouseCursor();		
+	}
+
 	void Client_c::CmdNullMouseThumb(const StringVector_t &, Context_c &  )
 	{
 		//empty
@@ -118,50 +145,7 @@ namespace Phobos
 			this->UnclipMouseCursor();
 		else
 			this->ClipMouseCursor();		
-	}
-
-	void Client_c::CmdLoadMap(const StringVector_t &args, Context_c &)
-	{
-		if(args.size() < 2)
-		{
-			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] Insuficient parameters, usage: loadMap <mapName>");
-
-			return;
-		}
-
-		try
-		{
-			if(fMapLoaded)
-			{
-				fMapLoaded = false;
-				clSpectatorCamera.DisableController();
-			}
-
-			WorldManagerPtr_t worldManager = WorldManager_c::GetInstance();
-			worldManager->LoadMap(args[1]);
-
-			PointEntityPtr_t player = boost::static_pointer_cast<PointEntity_c>(worldManager->TryGetEntityByType("InfoPlayerStart"));
-			if(!player)
-			{
-				Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contais InfoPlayerStart entity");
-			}
-			else
-			{
-				clSpectatorCamera.SetTransform(player->GetTransform());
-			}
-
-			fMapLoaded = true;
-			clSpectatorCamera.EnableController();
-
-			if(!fMouseClipped)
-				this->ClipMouseCursor();
-		}
-		catch(Exception_c &ex)
-		{
-			Kernel_c::GetInstance().LogMessage(ex.what());
-			fMapLoaded = false;
-		}
-	}
+	}	
 
 	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
 	{		

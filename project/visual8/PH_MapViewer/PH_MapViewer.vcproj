@@ -199,14 +199,6 @@
 			RelativePath="..\..\..\include\mapViewer\PH_MapViewerPlugin.h"
 			>
 		</File>
-		<File
-			RelativePath="..\..\..\src\mapViewer\PH_SpectatorCamera.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\mapViewer\PH_SpectatorCamera.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

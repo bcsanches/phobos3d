@@ -5,6 +5,12 @@ EntityDef InfoPlayerStart
 
 EntityDef Fire
 {
-  className=Entity
-  components=MeshRenderer|ParticleSystem|Light
+  className=Entity;
+  components="ModelRenderer|ParticleSystem|Light";
+}
+
+EntityDef Target
+{
+  className=Entity;
+  components="ModelRenderer|LinearMover";
 }

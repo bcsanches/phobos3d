@@ -181,6 +181,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_SpectatorCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_SpectatorCamera.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_SpectatorCameraController.cpp"
 				>
 			</File>
@@ -238,6 +246,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_EntityComponentFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_LinearMoverComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_LinearMoverComponent.h"
 				>
 			</File>
 			<File
