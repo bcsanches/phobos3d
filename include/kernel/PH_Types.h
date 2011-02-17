@@ -26,8 +26,6 @@ Phobos 3d
 #ifndef PH_TYPES_H
 #define PH_TYPES_H
 
-//TODO: mudei aki
-//necessario pois o size_t esta definido nele
 #include <cstring>
 
 namespace Phobos
@@ -56,8 +54,6 @@ namespace Phobos
 
 #else
 
-    //TODO:mudei aki
-    //verifique para ver se tem todos os tipos necessários
     #ifdef PH_LINUX
 
         typedef unsigned char		UInt8_t;			//u8

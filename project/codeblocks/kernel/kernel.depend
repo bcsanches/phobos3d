@@ -24,7 +24,7 @@
 
 1297890911 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Defs.h
 
-1297907874 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Types.h
+1297908216 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Types.h
 	<cstring>
 
 1297870671 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_ContextItem.cpp
@@ -189,4 +189,32 @@
 	"PH_Types.h"
 	"PH_String.h"
 	<istream>
+
+1297908093 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_Path.cpp
+	"PH_Path.h"
+	"PH_Exception.h"
+
+1297870671 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_RefCounter.cpp
+	"PH_RefCounter.h"
+
+1297870671 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_String.cpp
+	"PH_String.h"
+	<boost/algorithm/string/trim.hpp>
+
+1297870671 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_Window.cpp
+	"PH_Window.h"
+
+1297870671 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Window.h
+	<boost/utility.hpp>
+	"PH_Node.h"
+	"PH_EventManager.h"
+
+1297870671 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/ProcVector.cpp
+	"PH_ProcVector.h"
+	<boost/foreach.hpp>
+
+1297870671 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_ProcVector.h
+	<vector>
+	"PH_Defs.h"
+	"PH_KernelAPI.h"
 

@@ -56,7 +56,7 @@ namespace Phobos
 		pHandle = LoadLibrary(tmp.c_str());
 		if(pHandle == NULL)
 		{
-			this->RaiseException("DynamicLibrary_c::Load");			
+			this->RaiseException("DynamicLibrary_c::Load");
 		}
 	}
 
@@ -72,24 +72,24 @@ namespace Phobos
 		{
 			this->RaiseException("DynamicLibrary_c::GetSymbol");
 		}
-		
+
 		return ptr;
 	}
 
 	void DynamicLibrary_c::RaiseException(const char *module)
-	{
-		LPVOID lpMsgBuf; 
-		FormatMessage( 
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-			FORMAT_MESSAGE_FROM_SYSTEM | 
-			FORMAT_MESSAGE_IGNORE_INSERTS, 
-			NULL, 
-			GetLastError(), 
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
-			(LPTSTR) &lpMsgBuf, 
-			0, 
-			NULL 
-		); 
+	{autologin mercurial
+		LPVOID lpMsgBuf;
+		FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR) &lpMsgBuf,
+			0,
+			NULL
+		);
 
 		String_c ret = (char*)lpMsgBuf;
 		// Free the buffer.

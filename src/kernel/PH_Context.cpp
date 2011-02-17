@@ -52,8 +52,6 @@ namespace Phobos
 		}
 	};
 
-    //TODO: mudei aki
-    //o typename do argumento "T &list" causava um erro no gcc
 	template <typename T>
 	static inline typename T::const_pointer TryGetItem(T &list, const String_c &name)
 	{

@@ -451,9 +451,8 @@ namespace Phobos
 		StringReplaceAll(out, '/', '\\');
 #else
 
-    //TODO: mudei aki
-    //linux não precisa converter as barras
     #ifdef PH_LINUX
+        //linux does not need slash changes
 
     #else
         #error "Platform not supported"
