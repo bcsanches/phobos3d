@@ -77,7 +77,7 @@ namespace Phobos
 	}
 
 	void DynamicLibrary_c::RaiseException(const char *module)
-	{autologin mercurial
+	{
 		LPVOID lpMsgBuf;
 		FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
