@@ -13,7 +13,7 @@
 	"PH_KernelAPI.h"
 	"PH_String.h"
 
-1297891595 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_KernelAPI.h
+1297954552 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_KernelAPI.h
 
 1297870671 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_String.h
 	<string>
@@ -22,9 +22,9 @@
 	"PH_KernelAPI.h"
 	"PH_Types.h"
 
-1297890911 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Defs.h
+1297951784 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Defs.h
 
-1297908216 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Types.h
+1297954581 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_Types.h
 	<cstring>
 
 1297870671 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_ContextItem.cpp
@@ -158,7 +158,7 @@
 	"PH_ObjectManager.h"
 	"PH_Path.h"
 
-1297907682 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_Context.cpp
+1297951696 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_Context.cpp
 	"PH_Context.h"
 	"PH_ContextUtils.h"
 	<sstream>
@@ -190,7 +190,7 @@
 	"PH_String.h"
 	<istream>
 
-1297908093 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_Path.cpp
+1297954697 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_Path.cpp
 	"PH_Path.h"
 	"PH_Exception.h"
 
@@ -217,4 +217,21 @@
 	<vector>
 	"PH_Defs.h"
 	"PH_KernelAPI.h"
+
+1297955682 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/W32/PH_DynamicLibraryW32.cpp
+	"PH_DynamicLibrary.h"
+	"PH_Exception.h"
+	"PH_Path.h"
+	<windows.h>
+
+1297955539 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_DynamicLibrary.h
+	<boost/noncopyable.hpp>
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1297957385 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/LINUX/PH_DynamicLibrary.cpp
+	"PH_DynamicLibrary.h"
+	"PH_Exception.h"
+	"PH_Path.h"
+	<dlfcn.h>
 

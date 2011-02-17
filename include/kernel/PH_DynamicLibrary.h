@@ -22,13 +22,35 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
-#ifndef PH_DYNAMIC_LIBRARY_H
-#define PH_DYNAMIC_LIBRARY_H
 
-#ifdef PH_WIN32
-#include "W32/PH_DynamicLibraryW32.h"
-#else
-#error "Platform not supported"
-#endif
+#ifndef PH_DYNAMIC_LIBRARY_W32_H
+#define PH_DYNAMIC_LIBRARY_W32_H
+
+#include <boost/noncopyable.hpp>
+
+#include "PH_KernelAPI.h"
+#include "PH_String.h"
+
+namespace Phobos
+{
+	class PH_KERNEL_API DynamicLibrary_c: public boost::noncopyable
+	{
+		public:
+			DynamicLibrary_c();
+			~DynamicLibrary_c();
+
+			void Load(const String_c &name);
+
+			void *TryGetSymbol(const String_c &name);
+			void *GetSymbol(const String_c &name);
+
+		private:
+			void RaiseException(const char *module);
+
+		private:
+			String_c	strName;
+			void		*pHandle;
+	};
+}
 
 #endif
