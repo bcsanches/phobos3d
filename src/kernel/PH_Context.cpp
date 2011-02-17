@@ -52,15 +52,17 @@ namespace Phobos
 		}
 	};
 
+    //TODO: mudei aki
+    //o typename do argumento "T &list" causava um erro no gcc
 	template <typename T>
-	static inline typename T::const_pointer TryGetItem(typename T &list, const String_c &name)
+	static inline typename T::const_pointer TryGetItem(T &list, const String_c &name)
 	{
-		typename T::const_iterator it = list.find(name, ContextItemComp_s());
+	    typename T::const_iterator it = list.find(name, ContextItemComp_s());
 		if(it == list.end())
 			return NULL;
 
 		return &(*it);
-	}	
+	}
 
 	template <typename T, typename Y>
 	static inline void AddContextItem(T &list, Y &item, const char *objectName, const char *module)
@@ -76,7 +78,7 @@ namespace Phobos
 	}
 
 	// =====================================================
-	// 
+	//
 	// =====================================================
 
 	Context_c::Context_c(void):
@@ -109,12 +111,12 @@ namespace Phobos
 		this->AddContextCmd(cmdIf);
 
 		this->AddContextVar(varDebug);
-		this->AddContextVar(varRelease);		
-	}	
+		this->AddContextVar(varRelease);
+	}
 
 	void Context_c::AddContextVar(ContextVar_c &var)
 	{
-		AddContextItem(setVariables, var, "Variable", "Context_c::AddContextVar");		
+		AddContextItem(setVariables, var, "Variable", "Context_c::AddContextVar");
 	}
 
 	void Context_c::RemoveContextVar(ContextVar_c &var)
@@ -125,8 +127,8 @@ namespace Phobos
 	void Context_c::SetContextVarValue(const String_c &name, const String_c &value)
 	{
 		ContextVar_c &var(const_cast<ContextVar_c&>(this->GetContextVar(name)));
-	
-		var.SetValue(value);		
+
+		var.SetValue(value);
 	}
 
 	const ContextVar_c &Context_c::GetContextVar(const String_c &name) const
@@ -138,7 +140,7 @@ namespace Phobos
 			str << "Variable " << name << " not found.";
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "&Context_c::GetContextVar", str.str());
 		}
-		
+
 		return *p;
 	}
 
@@ -151,10 +153,10 @@ namespace Phobos
 	{
 		return const_cast<ContextVar_c *>(static_cast<const Context_c *>(this)->TryGetContextVar(name));
 	}
-			
+
 	const ContextCmd_c *Context_c::TryGetContextCmd(const String_c &name) const
 	{
-		return TryGetItem(setCommands, name);		
+		return TryGetItem(setCommands, name);
 	}
 
 	ContextCmd_c *Context_c::TryGetContextCmd(const String_c &name)
@@ -164,7 +166,7 @@ namespace Phobos
 
 	void Context_c::AddContextCmd(ContextCmd_c &cmd)
 	{
-		AddContextItem(setCommands, cmd, "Command", "Context_c::AddContextCmd");		
+		AddContextItem(setCommands, cmd, "Command", "Context_c::AddContextCmd");
 	}
 
 	void Context_c::RemoveContextCmd(ContextCmd_c &cmd)
@@ -175,13 +177,13 @@ namespace Phobos
 	bool Context_c::GetCmdLine(String_c &dest, const String_c &src, size_t &currentPos)
 	{
 		size_t len = src.length();
-		size_t pos;	
+		size_t pos;
 		Char_t ch;
 		size_t quotes;
-		Size_t size;		
+		Size_t size;
 
 	BEGIN:
-		pos = currentPos;		
+		pos = currentPos;
 
 		//We clear it for security on start, because sometimes we dont store anything there
 		dest.clear();
@@ -208,8 +210,8 @@ namespace Phobos
 							++pos;
 
 							//we reached the end of the buffer?
-							if(pos >= len)						
-								return(false);				
+							if(pos >= len)
+								return(false);
 
 							//we reached the end of line?
 							if(src[pos] == '\n')
@@ -221,7 +223,7 @@ namespace Phobos
 						}
 					}
 					//If we are not at the begin, we finish the cmd line
-					else		
+					else
 					{
 						comment = true;
 						break;
@@ -234,7 +236,7 @@ namespace Phobos
 			//If the ; is inside quoetes, we ignore
 			else if((ch == ';') && !(quotes & 1))
 				break;
-			//If dont check quotes here, so we can end a line with: "aaaaaa\n 
+			//If dont check quotes here, so we can end a line with: "aaaaaa\n
 			else if(ch == '\n')
 				break;
 		}
@@ -281,20 +283,20 @@ namespace Phobos
 		Char_t ch = param[0];
 
 		if((ch == '$') && (len > 1))
-		{		
+		{
 			ch = param[1];
 
 			//getting the real value
 			//result.Set(param.GetStr() + 1);
 			result.assign(param, 1, len);
 
-			//If the second char isnot a $, we got a var name, else we got $$, so copy just one $ 
+			//If the second char isnot a $, we got a var name, else we got $$, so copy just one $
 			//we copied the name with just one $ on the line above (we need this name to search for the var too)
-			if(ch != '$')		
+			if(ch != '$')
 			{
 				ContextVar_c *var = this->TryGetContextVar(result);
 				if(var == NULL)
-				{					
+				{
 					Kernel_c::GetInstance().LogStream() << "[Context_c::ParseCmdParam] Error: cant find variable " << result;
 					return;
 				}
@@ -302,15 +304,15 @@ namespace Phobos
 					result = var->GetValue();
 			}
 		}
-		else	
-			result = param;		
+		else
+			result = param;
 	}
 
 	bool Context_c::ParseCmdLine(StringVector_t &args, const String_c &cmdLine)
-	{	
-		size_t pos;	
+	{
+		size_t pos;
 		size_t start;
-		size_t dataSize;	
+		size_t dataSize;
 		Char_t ch;
 
 		String_c tempStr;
@@ -321,7 +323,7 @@ namespace Phobos
 		const Char_t *cmdLineStr = cmdLine.c_str();
 
 		pos = 0;
-		dataSize = 0;	
+		dataSize = 0;
 		for(;;)
 		{
 			ch = cmdLineStr[pos];
@@ -332,8 +334,8 @@ namespace Phobos
 			}
 
 			//end of cmd Line?
-			if(ch == '\0')		
-				return(!args.empty());					
+			if(ch == '\0')
+				return(!args.empty());
 
 			if(ch == '\"')
 			{
@@ -373,7 +375,7 @@ namespace Phobos
 			}
 
 			//creating a new entry
-			//tempStr.SetSub(cmdLine, start, dataSize);		
+			//tempStr.SetSub(cmdLine, start, dataSize);
 			tempStr.assign(cmdLine, start, dataSize);
 			this->ParseCmdParam(param, tempStr);
 
@@ -383,13 +385,13 @@ namespace Phobos
 	}
 
 	void Context_c::ExecuteCmdLine(StringVector_t &args)
-	{		
+	{
 		PH_ASSERT(!args.empty());
 
 		const String_c	&cmdName = args[0];
 		ContextCmd_c		*cmd = this->TryGetContextCmd(cmdName);
 		if(cmd == NULL)
-		{					
+		{
 			Kernel_c::GetInstance().LogStream() << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found";
 		}
 		else
@@ -430,7 +432,7 @@ namespace Phobos
 			}
 
 			//lets call the cmd
-			this->ExecuteCmdLine(args);			
+			this->ExecuteCmdLine(args);
 		}
 	}
 
@@ -444,7 +446,7 @@ namespace Phobos
 		String_c line;
 		while(input.good())
 		{
-			getline(input, line);			
+			getline(input, line);
 			this->Execute(line);
 		}
 	}
@@ -455,7 +457,7 @@ namespace Phobos
 	// =====================================================
 
 	void Context_c::CmdEcho(const StringVector_t &args, Context_c &)
-	{	
+	{
 		size_t sz = args.size();
 
 		stringstream stream;
@@ -463,20 +465,20 @@ namespace Phobos
 		{
 			stream << "[DCmdEcho] Error: insuficient parameters" << endl;
 			stream << "\tUsage: echo <param1> [<paramn>]" << endl;
-			stream << "\tExample: echo hallo $varName\n";			
+			stream << "\tExample: echo hallo $varName\n";
 		}
 		else
-		{		
+		{
 			for(size_t i = 1; i < sz; ++i)
-			{			
+			{
 				if(i > 1)
 				{
 					stream << ' ';
 				}
 
-				stream << args[i];			
+				stream << args[i];
 			}
-		}		
+		}
 		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
@@ -489,11 +491,11 @@ namespace Phobos
 			stream << "\t" << cmd.GetName() << std::endl;
 		}
 
-		Kernel_c::GetInstance().LogMessage(stream.str());		
+		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
 	void Context_c::CmdListVars(const StringVector_t &args, Context_c &)
-	{	
+	{
 		std::stringstream stream;
 
 		BOOST_FOREACH(ContextVar_c &var, setVariables)
@@ -511,10 +513,10 @@ namespace Phobos
 		{
 			stream	<< "[CmdSet] Error: insuficient parameters" << endl
 					<< "[CmdSet] Usage: set <varName> <varValue>" << endl
-					<< "\tExample: set MyPath \"blabla\"";			
+					<< "\tExample: set MyPath \"blabla\"";
 		}
 		else
-		{		
+		{
 			ContextVar_c *var = this->TryGetContextVar(args[1]);
 			if(var)
 			{
@@ -526,12 +528,12 @@ namespace Phobos
 				}
 				catch(Exception_c &e)
 				{
-					stream << "[CmdSet] Error: cant set variable " << var->GetName() << " value to " << args[2] << ", message: " << e.what();					
+					stream << "[CmdSet] Error: cant set variable " << var->GetName() << " value to " << args[2] << ", message: " << e.what();
 				}
-			}	
+			}
 			else
 			{
-				stream << "[CmdSet] Error: variable " << args[1] << " not found";				
+				stream << "[CmdSet] Error: variable " << args[1] << " not found";
 			}
 		}
 
@@ -542,24 +544,24 @@ namespace Phobos
 	void Context_c::CmdIf(const StringVector_t &args, Context_c &)
 	{
 		size_t sz = args.size();
-		
+
 		if(sz < 3)
-		{			
+		{
 			Kernel_c::GetInstance().LogMessage("[CmdIf] Insuficient parameters, usage: if <cond> <expr> [expr2]");
 		}
 		else
 		{
 			const String_c &expr = args[1];
 			const String_c *result = NULL;
-			
+
 			if(StringToBoolean(expr))
 				result = &args[2];
 			else
 				result = (sz == 4) ? &args[3] : NULL;
 
 			if(result)
-			{		
-				this->Execute(*result);		
+			{
+				this->Execute(*result);
 			}
 		}
 	}

@@ -26,17 +26,23 @@ Phobos 3d
 #ifndef PH_KERNEL_API_H
 #define PH_KERNEL_API_H
 
-#ifdef PH_WIN32
+//TODO: mudei aki
+#if ((defined PH_WIN32) && (defined PH_KERNEL_EXPORTS))
 
-	#ifdef PH_KERNEL_EXPORTS
+	//#ifdef PH_KERNEL_EXPORTS
 		#define PH_KERNEL_API __declspec(dllexport)
-	#else
-		#define PH_KERNEL_API
-	#endif
+	//#else
+		//#define PH_KERNEL_API
+	//#endif
 
 	#define PH_KERNEL_API_PROC extern "C" PH_KERNEL_API
 
-	#define PH_STDCALL __stdcall	
+	#define PH_STDCALL __stdcall
+
+#else
+
+    #define PH_KERNEL_API
+
 #endif
 
 #endif

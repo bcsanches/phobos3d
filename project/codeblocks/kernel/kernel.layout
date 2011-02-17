@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="../../../include/kernel/PH_Context.h" open="0" top="0" tabpos="0">
+		<Cursor position="1730" topLine="45" />
+	</File>
+	<File name="../../../include/kernel/PH_Defs.h" open="0" top="0" tabpos="0">
+		<Cursor position="1873" topLine="15" />
+	</File>
+	<File name="../../../include/kernel/PH_Error.h" open="0" top="0" tabpos="0">
+		<Cursor position="2186" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/PH_KernelAPI.h" open="0" top="0" tabpos="0">
+		<Cursor position="1083" topLine="33" />
+	</File>
+	<File name="../../../include/kernel/PH_Path.h" open="0" top="0" tabpos="0">
+		<Cursor position="6833" topLine="325" />
+	</File>
+	<File name="../../../include/kernel/PH_String.h" open="0" top="0" tabpos="0">
+		<Cursor position="1628" topLine="43" />
+	</File>
+	<File name="../../../include/kernel/PH_Types.h" open="0" top="0" tabpos="0">
+		<Cursor position="2312" topLine="92" />
+	</File>
+	<File name="../../../include/kernel/W32/PH_DynamicLibraryW32.h" open="0" top="0" tabpos="0">
+		<Cursor position="657" topLine="24" />
+	</File>
+	<File name="../../../src/kernel/PH_Context.cpp" open="1" top="1" tabpos="0">
+		<Cursor position="1717" topLine="51" />
+	</File>
+	<File name="../../../src/kernel/PH_Kernel.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1194" topLine="19" />
+	</File>
+	<File name="../../../src/kernel/PH_Path.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="8023" topLine="445" />
+	</File>
+</CodeBlocks_layout_file>

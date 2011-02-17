@@ -49,7 +49,7 @@ namespace Phobos
 
 	void Path_c::FixPath()
 	{
-		Path_c::FixPathSlash(strPath);	
+		Path_c::FixPathSlash(strPath);
 
 		//If the user suplied only one char, it can be just a bar '/'
 		size_t sz = strPath.length();
@@ -57,11 +57,11 @@ namespace Phobos
 		{
 			//root path, ok just a one letter path, its fine
 			return;
-		}	
-		
+		}
+
 		//Here we have a "big path", lets check it
-		if(strPath[sz-1] == '/')	
-			strPath.erase(sz-1);	
+		if(strPath[sz-1] == '/')
+			strPath.erase(sz-1);
 	}
 
 	Path_c &Path_c::operator=(const Path_c &rhs)
@@ -76,11 +76,11 @@ namespace Phobos
 	Path_c &Path_c::operator=(const String_c &rhs)
 	{
 		strPath = rhs;
-				
+
 		this->FixPath();
 
 		return *this;
-	}	
+	}
 
 	Path_c &Path_c::operator=(const Char_t *str)
 	{
@@ -99,7 +99,7 @@ namespace Phobos
 		\param name the path-name to be added
 	*/
 	void Path_c::AddName(const String_c &n)
-	{	
+	{
 		size_t len = n.length();
 		if(len == 0)
 			return;
@@ -145,11 +145,11 @@ namespace Phobos
 		//	strPath.RemoveBack(NULL);
 		len = strPath.length()-1;
 		if(strPath[len] == '/')
-			strPath.erase(len);	
+			strPath.erase(len);
 	}
 
 	void Path_c::Add(const Path_c &path)
-	{			
+	{
 		if(path.GetStr().empty())
 			return;
 
@@ -159,7 +159,7 @@ namespace Phobos
 			stream << "Path " << path.strPath << " must be relative for concanetating to " << strPath;
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Path_c::Add", stream.str());
 		}
-			
+
 		if(!strPath.empty() && !this->IsOnlyRoot())
 			strPath.append("/");
 
@@ -173,7 +173,7 @@ namespace Phobos
 	}
 
 	bool Path_c::SetSubPath(Path_c::Iterator_c it)
-	{		
+	{
 		String_c tmp;
 
 		this->Clear();
@@ -188,7 +188,7 @@ namespace Phobos
 			}
 
 			return(true);
-		}	
+		}
 		else
 			return(false);
 	}
@@ -204,12 +204,12 @@ namespace Phobos
 	{
 		size_t pos;
 
-		if(this->FindExtensionPos(pos))		
-		{		
+		if(this->FindExtensionPos(pos))
+		{
 			size_t sz = strPath.length();
 
 			out.assign(strPath, pos+1, sz - (pos + 1));
-			
+
 			return(true);
 		}
 
@@ -249,19 +249,19 @@ namespace Phobos
 			/
 
 			it will return ERROR, no filename
-			
-			
+
+
 
 	*/
 	bool Path_c::GetFileName(String_c &out) const
-	{		
+	{
 		size_t sz = strPath.length();
 
 		if(sz == 0)
 			return(false);
 
 		//Now, just go back the path until we found a '/' or the start of the path
-		size_t pos = sz -1;	
+		size_t pos = sz -1;
 		for(;;)
 		{
 			Char_t ch = strPath[pos];
@@ -278,7 +278,7 @@ namespace Phobos
 				return(true);
 			}
 			else if(pos == 0)
-			{								
+			{
 				out = strPath.c_str() + pos;
 
 				return(true);
@@ -309,7 +309,7 @@ namespace Phobos
 			"/video" -> return 1
 
 			"video/" -> returns 1
-			
+
 			"/video/" -> returns 1
 
 	*/
@@ -347,8 +347,8 @@ namespace Phobos
 	}
 
 	bool Path_c::ExtractPathAndFilename(Path_c *path, Path_c *fileName) const
-	{		
-		PH_ASSERT_VALID(path || fileName);	
+	{
+		PH_ASSERT_VALID(path || fileName);
 
 		if(NULL == path)
 		{
@@ -359,10 +359,10 @@ namespace Phobos
 			Path_c::Iterator_c it(this->GetBegin());
 
 			String_c			currentName;
-			String_c			nextName;			
+			String_c			nextName;
 
 			path->Clear();
-			
+
 			if(NULL != fileName)
 				fileName->Clear();
 
@@ -373,8 +373,8 @@ namespace Phobos
 				*path = "/";
 
 			for(;;)
-			{	
-				if(!it.GetNext(&nextName))				
+			{
+				if(!it.GetNext(&nextName))
 				{
 					if(fileName != NULL)
 						*fileName = currentName;
@@ -413,14 +413,14 @@ namespace Phobos
 		}
 
 		out = 0;
-		return strPath[0] == '.' ? true : false;		
+		return strPath[0] == '.' ? true : false;
 	}
 
 	bool Path_c::StripExtension(void)
 	{
 		size_t pos;
 		if(!this->FindExtensionPos(pos))
-			return false;		
+			return false;
 
 		//extension found, now remove it
 		//strPath.RemoveAt(pos, strPath.GetLength() - pos);
@@ -431,16 +431,16 @@ namespace Phobos
 
 	void Path_c::SetExtension(const String_c &newExtension)
 	{
-		this->StripExtension();	
+		this->StripExtension();
 
 		if(newExtension[0] != '.')
 			strPath.append(".");
-		
+
 		strPath.append(newExtension);
 	}
 
 	void Path_c::FixPathSlash(String_c &path)
-	{		
+	{
 		StringReplaceAll(path, '\\', '/');
 	}
 
@@ -450,7 +450,15 @@ namespace Phobos
 		out = in;
 		StringReplaceAll(out, '/', '\\');
 #else
-	#error "Platform not supported"
+
+    //TODO: mudei aki
+    //linux não precisa converter as barras
+    #ifdef PH_LINUX
+
+    #else
+        #error "Platform not supported"
+    #endif
+
 #endif
 	}
 

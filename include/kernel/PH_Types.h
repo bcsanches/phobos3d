@@ -26,6 +26,10 @@ Phobos 3d
 #ifndef PH_TYPES_H
 #define PH_TYPES_H
 
+//TODO: mudei aki
+//necessario pois o size_t esta definido nele
+#include <cstring>
+
 namespace Phobos
 {
 
@@ -49,7 +53,37 @@ namespace Phobos
 		typedef SInt8_t				Char_t;			//ch
 		typedef size_t				Size_t;			//platform dependent type, never store or transmit (sz)
 		typedef UInt32_t			ObjectType_t;
+
+#else
+
+    //TODO:mudei aki
+    //verifique para ver se tem todos os tipos necessários
+    #ifdef PH_LINUX
+
+        typedef unsigned char		UInt8_t;			//u8
+		typedef char				SInt8_t;			//s8
+		typedef unsigned short		UInt16_t;		//u16
+		typedef short				SInt16_t;		//s16
+		typedef unsigned int		UInt32_t;		//u32
+		typedef int					SInt32_t;		//s32
+		typedef long long   		SInt64_t;		//s64
+		typedef unsigned long long	UInt64_t;		//u64
+		typedef unsigned int		UInt_t;			//platform dependent type, never store or transmit (u)
+  		typedef int					SInt_t;			//platform dependent type, never store or transmit (s)
+  		typedef float				Float32_t;		//fp32
+  		typedef double				Float64_t;		//pf64
+  		typedef float   			Float_t;			//platform dependent type, never store or transmit (f)
+		typedef void *				Handler_t;		//platform dependent type, never store or transmit (h)
+		typedef bool				Bool_t;			//b
+		typedef UInt_t				ErrorHandler_t;	//platform dependent type, never store or transmit (eh)
+		typedef SInt8_t				Char_t;			//ch
+		typedef size_t				Size_t;			//platform dependent type, never store or transmit (sz)
+		typedef UInt32_t			ObjectType_t;
+
+    #endif
+
 #endif //WIN32
+
 }
 
 template <typename T>
@@ -59,7 +93,7 @@ struct Rect_s
 		tWidth(0),
 		tHeight(0)
 	{
-		tOrigin[0] = tOrigin[1] = 0;		
+		tOrigin[0] = tOrigin[1] = 0;
 	}
 
 	inline Rect_s(const Rect_s &rhs):

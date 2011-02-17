@@ -39,18 +39,18 @@ Phobos 3d
 #		define PH_ASSERT_ADDRESS_ALIGN_SIZE(VAR, SIZE) PH_ASSERT((SIZE != 0) && (((PH_Size_t) VAR) % SIZE) == 0)
 #		define PH_ASSERT_ADDRESS_ALIGN(VAR) PH_ASSERT_ADDRESS_ALIGN_SIZE(VAR, sizeof(*VAR))
 #		define PH_ASSERT_ALIGN(VAR) PH_ASSERT_ADDRESS_ALIGN_SIZE(&VAR, sizeof(VAR))
-#   elif(defined PH_MINGW)
-#		define PH_ASSERT(EXP) 
-#		define PH_ASSERT_MSG(EXP, MSG) 
-#		define PH_ASSERT_VALID(VALUE) 
+#   elif(defined PH_GCC)
+#		define PH_ASSERT(EXP)
+#		define PH_ASSERT_MSG(EXP, MSG)
+#		define PH_ASSERT_VALID(VALUE)
 #		define PH_ASSERT_VALID_MSG(VALUE, MSG)
 #		define PH_ASSERT_ADDRESS_ALIGN(VALUE)
 #		define PH_VERIFY(EXP) if(EXP){};
 #	endif
 #else
-#		define PH_ASSERT(EXP) 
-#		define PH_ASSERT_MSG(EXP, MSG) 
-#		define PH_ASSERT_VALID(VALUE) 
+#		define PH_ASSERT(EXP)
+#		define PH_ASSERT_MSG(EXP, MSG)
+#		define PH_ASSERT_VALID(VALUE)
 #		define PH_ASSERT_VALID_MSG(VALUE, MSG)
 #		define PH_ASSERT_ADDRESS_ALIGN(VALUE)
 #		define PH_VERIFY(EXP) if(EXP){};

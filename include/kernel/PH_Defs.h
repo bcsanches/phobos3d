@@ -34,9 +34,10 @@ Phobos 3d
 
 #define PH_FORCE_ENUM_32_BITS 0xFFFFFFFF
 
-#ifndef PH_WIN32
-	#error "Phobos: please define PH_WIN32"
-#else
+//TODO: mudei aki
+//#ifndef PH_WIN32
+//	#error "Phobos: please define PH_WIN32"
+//#else
 
 	/*
 	#ifndef _WIN32_WINNT
@@ -44,7 +45,12 @@ Phobos 3d
 	#endif
 	*/
 
-	#if ((!defined PH_DEBUG) && (!defined PH_RELEASE))
+	//TODO: mudei aki
+	#if ((!defined PH_WIN32) && (!defined PH_LINUX))
+	#error "Phobos: please define PH_WIN32 or PH_LINUX"
+	#endif
+
+    #if ((!defined PH_DEBUG) && (!defined PH_RELEASE))
 	#error "Phobos: please define PH_DEBUG or PH_RELEASE"
 	#endif
 
@@ -52,10 +58,11 @@ Phobos 3d
 	#error "Phobos: please define PH_CHECK_ASSERT or PH_IGNORE_ASSERT"
 	#endif
 
-	#if ((!defined PH_MSVC) && (!defined PH_MINGW))
-	#error "Phobos: please define PH_MSVC or PH_MINGW"
+	#if ((!defined PH_MSVC) && (!defined PH_GCC))
+	#error "Phobos: please define PH_MSVC or PH_GCC"
 	#endif
 
-#endif
+//TODO: mudei aki
+//#endif
 
 #endif
