@@ -23,8 +23,8 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DYNAMIC_LIBRARY_W32_H
-#define PH_DYNAMIC_LIBRARY_W32_H
+#ifndef PH_DYNAMIC_LIBRARY_H
+#define PH_DYNAMIC_LIBRARY_H
 
 #include <boost/noncopyable.hpp>
 
