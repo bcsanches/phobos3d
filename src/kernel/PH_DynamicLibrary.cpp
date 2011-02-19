@@ -27,9 +27,36 @@ Phobos 3d
 #include "PH_Exception.h"
 #include "PH_Path.h"
 
-#ifdef PH_LINUX
+#if (!defined PH_LINUX) && (!defined PH_WIN32)
+#error "Phobos: Plataform not supported!"
+#endif
 
+#ifdef PH_LINUX
 #include <dlfcn.h>
+#define CloseLib dlclose
+
+inline void *OpenLib(const char *name)
+{
+	return dlopen(name, RTLD_LAZY);
+}
+
+#define GetLibSymbol dlsym
+
+#elif defined PH_WIN32
+#include <windows.h>
+
+inline void CloseLib(void *handle)
+{
+	FreeLibrary(static_cast<HMODULE>(handle));
+}
+
+#define OpenLib LoadLibrary
+inline void *GetLibSymbol(void *handle, const char *name)
+{
+	return GetProcAddress(static_cast<HMODULE>(handle), name);
+}
+
+#endif
 
 namespace Phobos
 {
@@ -42,7 +69,7 @@ namespace Phobos
 	DynamicLibrary_c::~DynamicLibrary_c()
 	{
 		if(pHandle != NULL)
-            dlclose(pHandle);
+            CloseLib(pHandle);
 	}
 
 	void DynamicLibrary_c::Load(const String_c &name)
@@ -53,9 +80,9 @@ namespace Phobos
 		Path_c::ConvertToPlatform(tmp, name);
 
 		if(pHandle != NULL)
-			dlclose(pHandle);
+			CloseLib(pHandle);
 
-		pHandle = dlopen(tmp.c_str(), RTLD_LAZY);
+		pHandle = OpenLib(tmp.c_str());
 		if(pHandle == NULL)
 		{
 			this->RaiseException("DynamicLibrary_c::Load");
@@ -64,7 +91,7 @@ namespace Phobos
 
 	void *DynamicLibrary_c::TryGetSymbol(const String_c &name)
 	{
-		return dlsym(pHandle, name.c_str());
+		return GetLibSymbol(pHandle, name.c_str());
 	}
 
 	void *DynamicLibrary_c::GetSymbol(const String_c &name)
@@ -80,65 +107,11 @@ namespace Phobos
 
 	void DynamicLibrary_c::RaiseException(const char *module)
 	{
+#if defined PH_LINUX
 		String_c ret = dlerror();
 
 		PH_RAISE(NATIVE_API_FAILED_EXCEPTION, module, ret);
-	}
-}
-
-#elif (defined PH_WIN32)
-
-#include <windows.h>
-
-namespace Phobos
-{
-	DynamicLibrary_c::DynamicLibrary_c():
-		pHandle(NULL)
-	{
-		//empty
-	}
-
-	DynamicLibrary_c::~DynamicLibrary_c()
-	{
-		if(pHandle != NULL)
-			FreeLibrary(static_cast<HMODULE>(pHandle));
-	}
-
-	void DynamicLibrary_c::Load(const String_c &name)
-	{
-		strName = name;
-
-		String_c tmp;
-		Path_c::ConvertToPlatform(tmp, name);
-
-		if(pHandle != NULL)
-			FreeLibrary(static_cast<HMODULE>(pHandle));
-
-		pHandle = LoadLibrary(tmp.c_str());
-		if(pHandle == NULL)
-		{
-			this->RaiseException("DynamicLibrary_c::Load");
-		}
-	}
-
-	void *DynamicLibrary_c::TryGetSymbol(const String_c &name)
-	{
-		return GetProcAddress(static_cast<HMODULE>(pHandle), name.c_str());
-	}
-
-	void *DynamicLibrary_c::GetSymbol(const String_c &name)
-	{
-		void *ptr = this->TryGetSymbol(name);
-		if(ptr == NULL)
-		{
-			this->RaiseException("DynamicLibrary_c::GetSymbol");
-		}
-
-		return ptr;
-	}
-
-	void DynamicLibrary_c::RaiseException(const char *module)
-	{
+#elif defined PH_WIN32
 		LPVOID lpMsgBuf;
 		FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -157,12 +130,6 @@ namespace Phobos
 		LocalFree( lpMsgBuf );
 
 		PH_RAISE(NATIVE_API_FAILED_EXCEPTION, module, ret);
+#endif
 	}
 }
-
-#else
-
-    #error "Phobos: Plataform not supported!"
-
-
-#endif

@@ -290,20 +290,12 @@
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="w32"
-			>
-			<File
-				RelativePath="..\..\..\src\kernel\W32\PH_DynamicLibraryW32.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\kernel\W32\PH_DynamicLibraryW32.h"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_Defs.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernel\PH_DynamicLibrary.cpp"
 			>
 		</File>
 		<File
