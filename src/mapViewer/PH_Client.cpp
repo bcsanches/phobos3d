@@ -11,9 +11,15 @@
 #include <PH_Window.h>
 #include <PH_WorldManager.h>
 
+PH_GAME_PLUGIN_ENTRY_POINT;
+
 namespace Phobos
 {
-	PH_DEFINE_DEFAULT_SINGLETON(Client);
+	PH_DEFINE_DEFAULT_SINGLETON(Client);	
+
+	PH_GAME_PLUGIN_REGISTER_MODULE(Client);
+
+	PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
 
 	Client_c::Client_c():
 		CoreModule_c("Client"),		

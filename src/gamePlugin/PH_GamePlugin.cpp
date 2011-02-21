@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  October 2010
+  February 2011
 
   Copyright (C) 2005-2010 Bruno Crivelari Sanches
 
@@ -22,57 +22,65 @@ Phobos 3d
 
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
-#include "PH_MapViewerPlugin.h"
+#include "PH_GamePlugin.h"
+
+#include <boost/foreach.hpp>
 
 #include <PH_Core.h>
 #include <PH_CoreModuleManager.h>
-#include <PH_Plugin.h>
 #include <PH_ProcVector.h>
 
-#include "PH_Client.h"
-
 namespace Phobos
-{
-	class MapViewerPlugin_c: public IPluginInstance_c
+{	
+	GamePlugin_c &GamePlugin_c::GetInstance()
 	{
-		public:
-			void Init();
-			void Finalize();
+		static GamePlugin_c plugin;
 
-		private:
-			ProcVector_c clProcs;
-			CoreModuleManagerPtr_t ipManager;
-	};
-
-	void MapViewerPlugin_c::Init()
-	{
-		ipManager = CoreModuleManager_c::Create("MapViewer");
-
-		Core_c::GetInstance()->AddModule(ipManager);
-
-		ClientPtr_t client = Client_c::CreateInstance();
-		clProcs.AddProc(Client_c::ReleaseInstance);
-		ipManager->AddModule(client);		
-
-		ipManager->LaunchBootModule("mapViewer.cfg");
+		return plugin;
 	}
 
-	void MapViewerPlugin_c::Finalize()
+	void GamePlugin_c::Init()
+	{
+		ipManager = CoreModuleManager_c::Create("GamePlugin");
+
+		Core_c::GetInstance()->AddModule(ipManager);	
+
+		BOOST_FOREACH(Register_s &info, vecModules)
+		{
+			ipManager->AddModule(info.pfnCreate());
+		}
+
+		ipManager->LaunchBootModule("game.cfg");
+	}
+
+	void GamePlugin_c::Finalize()
 	{
 		Core_c::GetInstance()->RemoveModule(*ipManager);		
 
-		clProcs.CallAll();
-		clProcs.Clear();
+		BOOST_FOREACH(Register_s &info, vecModules)
+		{
+			info.pfnRelease();
+		}
 
 		ipManager.reset();
 	}
-}
 
-Phobos::IPluginInstance_c *PH_PluginEntryPoint(void)
-{
-	using namespace Phobos;
+	void GamePlugin_c::AddModule(const Register_s &module)
+	{
+		vecModules.push_back(module);
+	}
 
-	static MapViewerPlugin_c plugin;
+	GamePlugin_c::Register_s::Register_s(CreateInstanceProc_t createProc, ReleaseInstanceProc_t releaseProc):
+		pfnCreate(createProc),
+		pfnRelease(releaseProc)
+	{
+		GamePlugin_c::GetInstance().AddModule(*this);
+	}
 
-	return &plugin;
+	GamePlugin_c::Register_s::Register_s(const Register_s &rhs):
+		pfnCreate(rhs.pfnCreate),
+		pfnRelease(rhs.pfnRelease)
+	{
+		//empty
+	}
 }

@@ -1,8 +1,8 @@
 /*
 Phobos 3d
-  October 2010
+  February 2011
 
-  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+  Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages
@@ -23,16 +23,24 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_MAP_VIEWER_PLUGIN_H
-#define PH_MAP_VIEWER_PLUGIN_H
+#ifndef PH_GAME_PLUGIN_API_H
+#define PH_GAME_PLUGIN_API_H
 
-#include "PH_MapViewerAPI.h"
+#ifdef PH_WIN32
+	#ifdef PH_GAME_PLUGIN_EXPORTS
+		#define PH_GAME_PLUGIN_API __declspec(dllexport)
+	#else
+		#define PH_GAME_PLUGIN_API
+	#endif
 
-namespace Phobos
-{
-	class IPluginInstance_c;
-}
-
-PH_MAP_VIEWER_API_PROC Phobos::IPluginInstance_c *PH_PluginEntryPoint(void);
+	#define PH_GAME_PLUGIN_API_PROC extern "C" PH_GAME_PLUGIN_API	
+	#define PH_GAME_PLUGIN_ENTRY_POINT_PROC extern "C" __declspec(dllexport)
+#elif define PH_LINUX
+	#define PH_GAME_PLUGIN_API
+	#define PH_GAME_PLUGIN_API_PROC extern "C"
+	#define PH_GAME_PLUGIN_ENTRY_POINT_PROC extern "C"
+#else
+	#error "Platform not defined"
+#endif
 
 #endif

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="PH_MapViewer"
-	ProjectGUID="{7140556A-9950-459F-B430-B307D4D3CED9}"
-	RootNamespace="PH_MapViewer"
+	Name="PH_GamePlugin"
+	ProjectGUID="{F63138FB-C3AE-4A8D-880C-8AD7A4F17FE3}"
+	RootNamespace="PH_GamePlugin"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -18,9 +18,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\bin"
+			OutputDirectory="..\..\..\lib\"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)\..\..\..\include\gamePlugin&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_CHECK_ASSERT;PH_WIN32;PH_MSVC;PH_DEBUG"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gamePlugin&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_GAME_PLUGIN_EXPORTS;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -60,20 +60,11 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib"
-				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				ImportLibrary="..\..\..\lib\$(TargetName).lib"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)_d.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -85,17 +76,14 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\bin"
+			OutputDirectory="..\..\..\lib\"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -118,8 +106,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)\..\..\..\include\gamePlugin&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_IGNORE_ASSERT;PH_MSVC;PH_WIN32;PH_RELEASE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gamePlugin&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;PH_GAME_PLUGIN_EXPORTS;PH_WIN32;PH_MSVC;PH_IGNORE_ASSERT;PH_RELEASE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,22 +124,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib"
-				OutputFile="$(OutDir)\$(ProjectName).dll"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="..\..\..\lib\$(TargetName).lib"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -163,9 +139,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -174,23 +147,35 @@
 	</References>
 	<Files>
 		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath="..\..\..\src\gamePlugin\PH_GamePlugin.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath="..\..\..\include\gamePlugin\PH_GamePlugin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gamePlugin\PH_GamePluginAPI.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath="..\..\..\src\mapViewer\PH_Client.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\mapViewer\PH_Client.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\mapViewer\PH_MapViewerAPI.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

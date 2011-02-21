@@ -29,6 +29,7 @@ Phobos 3d
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
+#include <PH_GamePlugin.h>
 #include <PH_Singleton.h>
 #include <PH_WorldManager.h>
 
@@ -43,6 +44,7 @@ namespace Phobos
 		PH_DECLARE_SINGLETON_METHODS(Client);
 
 		public:
+			PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL;
 
 		protected:
 			void OnFixedUpdate();
