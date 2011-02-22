@@ -224,7 +224,7 @@
 	"PH_Path.h"
 	<windows.h>
 
-1297955539 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_DynamicLibrary.h
+1298036095 /home/cronosts/Programação/Projects/Phobos3D/phobos3d/include/kernel/PH_DynamicLibrary.h
 	<boost/noncopyable.hpp>
 	"PH_KernelAPI.h"
 	"PH_String.h"
@@ -234,4 +234,11 @@
 	"PH_Exception.h"
 	"PH_Path.h"
 	<dlfcn.h>
+
+1298379630 source:/home/cronosts/Programação/Projects/Phobos3D/phobos3d/src/kernel/PH_DynamicLibrary.cpp
+	"PH_DynamicLibrary.h"
+	"PH_Exception.h"
+	"PH_Path.h"
+	<dlfcn.h>
+	<windows.h>
 

@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="../../../include/kernel/PH_Context.h" open="0" top="0" tabpos="0">
-		<Cursor position="1730" topLine="45" />
+	<File name="../../../include/kernel/PH_Context.h" open="1" top="0" tabpos="1">
+		<Cursor position="1730" topLine="39" />
 	</File>
-	<File name="../../../include/kernel/PH_Defs.h" open="0" top="0" tabpos="0">
-		<Cursor position="1346" topLine="42" />
+	<File name="../../../include/kernel/PH_ContextCmd.h" open="1" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="../../../include/kernel/PH_DynamicLibrary.h" open="0" top="0" tabpos="0">
-		<Cursor position="1288" topLine="29" />
+	<File name="../../../include/kernel/PH_ContextItem.h" open="1" top="0" tabpos="3">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="../../../include/kernel/PH_Error.h" open="0" top="0" tabpos="0">
-		<Cursor position="2186" topLine="21" />
+	<File name="../../../include/kernel/PH_ContextUtils.h" open="1" top="0" tabpos="4">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="../../../include/kernel/PH_EventListener.h" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="26" />
+	<File name="../../../include/kernel/PH_ContextVar.h" open="1" top="0" tabpos="5">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="../../../include/kernel/PH_EventManager.h" open="1" top="0" tabpos="2">
-		<Cursor position="2418" topLine="116" />
+	<File name="../../../include/kernel/PH_Defs.h" open="1" top="0" tabpos="6">
+		<Cursor position="1346" topLine="21" />
 	</File>
-	<File name="../../../include/kernel/PH_EventManagerFwd.h" open="1" top="1" tabpos="4">
+	<File name="../../../include/kernel/PH_DynamicLibrary.h" open="1" top="0" tabpos="7">
+		<Cursor position="1510" topLine="35" />
+	</File>
+	<File name="../../../include/kernel/PH_Enum.h" open="1" top="0" tabpos="8">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/PH_Error.h" open="1" top="0" tabpos="9">
+		<Cursor position="2139" topLine="38" />
+	</File>
+	<File name="../../../include/kernel/PH_EventListener.h" open="1" top="0" tabpos="10">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/PH_EventListenerFwd.h" open="1" top="0" tabpos="11">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/PH_EventManager.h" open="1" top="0" tabpos="12">
+		<Cursor position="2418" topLine="100" />
+	</File>
+	<File name="../../../include/kernel/PH_EventManagerFwd.h" open="1" top="0" tabpos="13">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/PH_Exception.h" open="1" top="0" tabpos="14">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/PH_GenericFactory.h" open="1" top="0" tabpos="15">
+		<Cursor position="0" topLine="60" />
+	</File>
+	<File name="../../../include/kernel/PH_IContext.h" open="1" top="1" tabpos="16">
 		<Cursor position="0" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/PH_InputActions.h" open="0" top="0" tabpos="0">
@@ -29,7 +56,7 @@
 		<Cursor position="0" topLine="98" />
 	</File>
 	<File name="../../../include/kernel/PH_KernelAPI.h" open="0" top="0" tabpos="0">
-		<Cursor position="1066" topLine="8" />
+		<Cursor position="1270" topLine="22" />
 	</File>
 	<File name="../../../include/kernel/PH_Node.h" open="0" top="0" tabpos="0">
 		<Cursor position="364" topLine="45" />
@@ -49,14 +76,11 @@
 	<File name="../../../include/kernel/PH_Window.h" open="0" top="0" tabpos="0">
 		<Cursor position="1382" topLine="18" />
 	</File>
-	<File name="../../../include/kernel/W32/PH_EventManagerW32.h" open="1" top="0" tabpos="3">
-		<Cursor position="418" topLine="11" />
+	<File name="../../../include/kernel/W32/PH_EventManagerW32.h" open="0" top="0" tabpos="3">
+		<Cursor position="98" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/W32/PH_WindowW32.h" open="0" top="0" tabpos="0">
 		<Cursor position="155" topLine="31" />
-	</File>
-	<File name="../../../src/kernel/LINUX/PH_EventManager.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="6415" topLine="237" />
 	</File>
 	<File name="../../../src/kernel/PH_Context.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="8773" topLine="52" />
@@ -75,6 +99,12 @@
 	</File>
 	<File name="../../../src/kernel/PH_Window.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="85" topLine="0" />
+	</File>
+	<File name="../../../src/kernel/SDL/PH_EventManager.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="143" topLine="36" />
+	</File>
+	<File name="../../../src/kernel/SDL/PH_Window.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="104" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="143" topLine="12" />

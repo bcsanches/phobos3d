@@ -73,10 +73,10 @@
 		<Unit filename="../../../include/kernel/PH_String.h" />
 		<Unit filename="../../../include/kernel/PH_Types.h" />
 		<Unit filename="../../../include/kernel/PH_Window.h" />
+		<Unit filename="../../../include/kernel/SDL/PH_EventManagerSDL.h" />
+		<Unit filename="../../../include/kernel/SDL/PH_WindowSDL.h" />
 		<Unit filename="../../../include/kernel/W32/PH_EventManagerW32.h" />
 		<Unit filename="../../../include/kernel/W32/PH_WindowW32.h" />
-		<Unit filename="../../../src/kernel/LINUX/PH_EventManager.cpp" />
-		<Unit filename="../../../src/kernel/LINUX/PH_Window.cpp" />
 		<Unit filename="../../../src/kernel/PH_Context.cpp" />
 		<Unit filename="../../../src/kernel/PH_ContextCmd.cpp" />
 		<Unit filename="../../../src/kernel/PH_ContextItem.cpp" />
@@ -96,6 +96,8 @@
 		<Unit filename="../../../src/kernel/PH_String.cpp" />
 		<Unit filename="../../../src/kernel/PH_Window.cpp" />
 		<Unit filename="../../../src/kernel/ProcVector.cpp" />
+		<Unit filename="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" />
+		<Unit filename="../../../src/kernel/SDL/PH_WindowSDL.cpp" />
 		<Unit filename="../../../src/kernel/W32/PH_EventManagerW32.cpp" />
 		<Unit filename="../../../src/kernel/W32/PH_WindowW32.cpp" />
 		<Extensions>
