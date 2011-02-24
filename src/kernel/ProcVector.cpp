@@ -36,7 +36,7 @@ namespace Phobos
 
 	void ProcVector_c::CallAll()
 	{
-		BOOST_FOREACH(Proc_t proc, vecProcs)
+		BOOST_REVERSE_FOREACH(Proc_t proc, vecProcs)
 		{
 			proc();
 		}

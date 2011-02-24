@@ -37,7 +37,7 @@ namespace Phobos
 	class PH_INPUT_API InputDeviceListener_c
 	{
 		public:			
-			virtual void InputEvent(const InputEvent_s &event) = 0;					
+			virtual void InputEvent(const InputEvent_s &event) = 0;
 
 			PH_DECLARE_LISTENER_HOOK;
 	};

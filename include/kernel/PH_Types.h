@@ -92,6 +92,14 @@ struct Rect_s
 		tOrigin[0] = tOrigin[1] = 0;
 	}
 
+	inline Rect_s(T x, T y, T width, T height)	
+	{
+		tOrigin[0] = x;
+		tOrigin[1] = y;
+		tWidth = width;
+		tHeight = height;
+	}
+
 	inline Rect_s(const Rect_s &rhs):
 		tWidth(rhs.tWidth),
 		tHeight(rhs.tHeight)
