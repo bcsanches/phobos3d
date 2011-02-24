@@ -130,3 +130,4 @@ glob:project/visual8/Sample_01/Sample_01.vcproj.mordor.bcsanches.user
 glob:project/visual8/Sample_02/Debug/
 glob:project/visual8/Sample_02/Sample_02.log
 glob:project/visual8/Sample_02/Sample_02.vcproj.mordor.bcsanches.user
+glob:project/visual8/KernelTest/KernelTest.vcproj.bcsnote.bcsanches.user

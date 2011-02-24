@@ -237,6 +237,18 @@
 				RelativePath="..\..\..\include\kernel\PH_EventManagerFwd.h"
 				>
 			</File>
+			<Filter
+				Name="w32"
+				>
+				<File
+					RelativePath="..\..\..\src\kernel\W32\PH_EventManagerW32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\kernel\W32\PH_EventManagerW32.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="object"
@@ -272,14 +284,6 @@
 			<Filter
 				Name="w32"
 				>
-				<File
-					RelativePath="..\..\..\src\kernel\W32\PH_EventManagerW32.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\kernel\W32\PH_EventManagerW32.h"
-					>
-				</File>
 				<File
 					RelativePath="..\..\..\src\kernel\W32\PH_WindowW32.cpp"
 					>
