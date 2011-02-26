@@ -1,247 +1,357 @@
-#include "W32/PH_EventManagerW32.h"
+#include "SDL/PH_EventManagerSDL.h"
 
 #include "PH_Exception.h"
 #include "PH_InputActions.h"
 
-#include <windows.h>
-#include <windowsX.h>
-
 namespace Phobos
 {
-	struct WinToKeyCode_s
+	struct SDLToKeyCode_s
 	{
-		UInt16_t u16Win;
+		UInt16_t u16SDL;
 		UInt16_t u16Phobos;
 	};
 
-	static WinToKeyCode_s stWinToKeyCode_g[] = 
+	static SDLToKeyCode_s stSDLToKeyCode_g[] =
 	{
-		{0, 0},									//0x00
-		{0, 0},									//0x01
-		{0, 0},									//0x02
-		{0, 0}, 								//0x03
-		{0, 0},									//0x04
-		{0, 0},									//0x05
-		{0, 0},									//0x06
-		{0, 0},									//0x07
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
 
-		{VK_BACK,		KB_BACKSPACE},			//0x08
-		{VK_TAB,		KB_TAB},				//0x09
+	    //começa a partir do 8
 
-		{0, 0},									//0x0A
-		{0, 0},									//0x0B
+        {SDLK_BACKSPACE,	 KB_BACKSPACE},
+        {SDLK_TAB,		     KB_TAB},
 
-		{VK_CLEAR, 		KB_CLEAR},				//0x0C
-		{VK_RETURN, 	KB_ENTER},				//0x0D,
+        {0, 0},
+        {0, 0},
 
-		{0, 0},									//0x0E
-		{0, 0},									//0x0F
+        {SDLK_CLEAR,		 KB_CLEAR},
+        {SDLK_RETURN,		 KB_ENTER},
 
-		{VK_SHIFT, 		KB_SHIFT},				//0x10	
-		{VK_CONTROL, 	KB_CONTROL},			//0x11	
-		{VK_MENU, 		KB_ALT},				//0x12
-		{VK_PAUSE, 		KB_PAUSE},				//0x13
-		{VK_CAPITAL, 	KB_CAPS_LOCK},			//0x14
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
 
-		{0, 0},									//0x15
-		{0, 0},									//0x16
-		{0, 0},									//0x17
-		{0, 0},									//0x18
-		{0, 0},									//0x19
-		{0, 0},									//0x1A
+        {SDLK_PAUSE,		 KB_PAUSE},
 
-		{VK_ESCAPE, 	KB_ESCAPE},				//0x1B
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
 
-		{0, 0},									//0x1C
-		{0, 0},									//0x1D
-		{0, 0},									//0x1E
-		{0, 0},									//0x1F
+        {SDLK_ESCAPE,		 KB_ESCAPE},
 
-		{VK_SPACE, 		KB_SPACE},				//0x20
-		{VK_PRIOR, 		KB_PAGE_UP},			//0x21
-		{VK_NEXT, 		KB_PAGE_DOWN},			//0x22
-		{VK_END, 		KB_END},				//0x23
-		{VK_HOME, 		KB_HOME},				//0x24
-		{VK_LEFT,		KB_LEFT_ARROW},			//0X25
-		{VK_UP,			KB_UP_ARROW},			//0X26
-		{VK_RIGHT,		KB_RIGHT_ARROW},		//0X27
-		{VK_DOWN,		KB_DOWN_ARROW},			//0X28
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
 
-		{0, 0},									//0X29
-		{0, 0},									//0X2A
-		{0, 0},									//0X2B
+        {SDLK_SPACE,		 KB_SPACE},
+        {SDLK_EXCLAIM,		 0},//TODO: possivel char '!'
+        {SDLK_QUOTEDBL,		 0},
+        {SDLK_HASH,		 0},
+        {SDLK_DOLLAR,		 0},
 
-		{VK_SNAPSHOT, 	KB_PRINT_SCREEN},		//0X2C
-		{VK_INSERT, 	KB_INSERT},				//0X2D
-		{VK_DELETE, 	KB_DELETE},				//0X2E
+        {0, 0},
 
-		{0, 0},									//0X2F
+        {SDLK_AMPERSAND,		 0},
+        {SDLK_QUOTE,		 0},
+        {SDLK_LEFTPAREN,		 0},
+        {SDLK_RIGHTPAREN,		 0},
+        {SDLK_ASTERISK,		 0},
+        {SDLK_PLUS,		 0},
+        {SDLK_COMMA,		 0},
+        {SDLK_MINUS,		 0},
+        {SDLK_PERIOD,		 0},
+        {SDLK_SLASH,		 0},
+        {SDLK_0,	    '0'},
+        {SDLK_1,	    '1'},
+        {SDLK_2,		'2'},
+        {SDLK_3,		'3'},
+        {SDLK_4,		'4'},
+        {SDLK_5,		'5'},
+        {SDLK_6,		'6'},
+        {SDLK_7,		'7'},
+        {SDLK_8,		'8'},
+        {SDLK_9,		'9'},
 
-		{'0', 			'0'},					//0X30
-		{'1', 			'1'},					//0X31
-		{'2', 			'2'},					//0X32
-		{'3', 			'3'},					//0X33
-		{'4', 			'4'},					//0X34
-		{'5', 			'5'},					//0X35
-		{'6', 			'6'},					//0X36
-		{'7', 			'7'},					//0X37
-		{'8', 			'8'},					//0X38
-		{'9', 			'9'},					//0X39	
+        {SDLK_COLON,		 0}, //TODO: possivel char
+        {SDLK_SEMICOLON,	 0},
+        {SDLK_LESS,		     0},
+        {SDLK_EQUALS,		 0},
+        {SDLK_GREATER,		 0},
+        {SDLK_QUESTION,		 0},
+        {SDLK_AT	,		 0},
 
-		{0, 0},									//0X3A
-		{0, 0},									//0X3B
-		{0, 0},									//0X3C
-		{0, 0},									//0X3D
-		{0, 0},									//0X3E
-		{0, 0},									//0X3F
-		{0, 0},									//0X40
 
-		{'A',			'a'},					//0x41
-		{'B',			'b'},					//0x42
-		{'C',			'c'},					//0x43
-		{'D',			'd'},					//0x44
-		{'E',			'e'},					//0x45
-		{'F',			'f'},					//0x46
-		{'G',			'g'},					//0x47
-		{'H',			'h'},					//0x48
-		{'I',			'i'},					//0x49
-		{'J',			'j'},					//0x4A
-		{'K',			'k'},					//0x4B
-		{'L',			'l'},					//0x4C
-		{'M',			'm'},					//0x4D
-		{'N',			'n'},					//0x4E
-		{'O',			'o'},					//0x4F
-		{'P',			'p'},					//0x50
-		{'Q',			'q'},					//0x51
-		{'R',			'r'},					//0x52
-		{'S',			's'},					//0x53
-		{'T',			't'},					//0x54
-		{'U',			'u'},					//0x55
-		{'V',			'v'},					//0x56
-		{'W',			'w'},					//0x57
-		{'X',			'x'},					//0x58
-		{'Y',			'y'},					//0x59
-		{'Z',			'z'},					//0x5A
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
 
-		{0, 0},									//0X5B
-		{0, 0},									//0X5C
-		{0, 0},									//0X5D
-		{0, 0},									//0X5E	
-		{0, 0},									//0X5F
 
-		{VK_NUMPAD0, 	KB_KP_INSERT},			//0X60
-		{VK_NUMPAD1, 	KB_KP_END},				//0X61
-		{VK_NUMPAD2, 	KB_KP_DOWN_ARROW},		//0X62
-		{VK_NUMPAD3, 	KB_KP_PAGE_DOWN},		//0X63
-		{VK_NUMPAD4, 	KB_KP_LEFT_ARROW},		//0X64
-		{VK_NUMPAD5, 	KB_KP_5},				//0X65
-		{VK_NUMPAD6, 	KB_KP_RIGHT_ARROW},		//0X66
-		{VK_NUMPAD7, 	KB_KP_HOME},			//0X67
-		{VK_NUMPAD8, 	KB_KP_UP_ARROW},		//0X68
-		{VK_NUMPAD9, 	KB_KP_PAGE_UP},			//0X69
-		{VK_MULTIPLY, 	KB_KP_MUL},				//0X6A
-		{VK_ADD, 		KB_KP_PLUS},			//0X6B
-		{VK_SEPARATOR, 	KB_KP_ENTER},			//0X6C
-		{VK_SUBTRACT, 	KB_KP_MINUS},			//0X6D
-		{VK_DECIMAL, 	KB_KP_DELETE},			//0X6E
-		{VK_DIVIDE, 	KB_KP_SLASH},			//0X6F
+        /*
+           Skip uppercase letters
+         */
+        {SDLK_LEFTBRACKET	, 0},
+        {SDLK_BACKSLASH,		 0},
+        {SDLK_RIGHTBRACKET	, 0},
+        {SDLK_CARET,		 0},
+        {SDLK_UNDERSCORE,		 0},
+        {SDLK_BACKQUOTE,		 0},
+        {SDLK_a,		 'a'},
+        {SDLK_b,		 'b'},
+        {SDLK_c,		 'c'},
+        {SDLK_d,		 'd'},
+        {SDLK_e,		 'e'},
+        {SDLK_f,		 'f'},
+        {SDLK_g,		 'g'},
+        {SDLK_h,		 'h'},
+        {SDLK_i,		 'i'},
+        {SDLK_j,		 'j'},
+        {SDLK_k,		 'k'},
+        {SDLK_l,		 'l'},
+        {SDLK_m,		 'm'},
+        {SDLK_n,		 'n'},
+        {SDLK_o,		 'o'},
+        {SDLK_p,		 'p'},
+        {SDLK_q,		 'q'},
+        {SDLK_r,		 'r'},
+        {SDLK_s,		 's'},
+        {SDLK_t,		 't'},
+        {SDLK_u,		 'u'},
+        {SDLK_v,		 'v'},
+        {SDLK_w,		 'w'},
+        {SDLK_x,		 'x'},
+        {SDLK_y,		 'y'},
+        {SDLK_z,		 'z'}, //122
 
-		{VK_F1, 		KB_F1},					//0X70
-		{VK_F2, 		KB_F2},					//0X71
-		{VK_F3,			KB_F3},					//0X72
-		{VK_F4,			KB_F4},					//0X73
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
 
-		{VK_F5, 		KB_F5},					//0X74
-		{VK_F6,			KB_F6},					//0X75
-		{VK_F7,			KB_F7},					//0X76
-		{VK_F8,			KB_F8},					//0X77
 
-		{VK_F9, 		KB_F9},					//0X78
-		{VK_F10, 		KB_F10},				//0X79
-		{VK_F11, 		KB_F11},				//0X7A
-		{VK_F12,		KB_F12},				//0X7B
+        {SDLK_DELETE,		 0}, //127
 
-		{0, 0},									//0X7C
-		{0, 0},									//0X7D
-		{0, 0},									//0X7E
-		{0, 0},									//0X7F
-		{0, 0},									//0X80
-		{0, 0},									//0X81
-		{0, 0},									//0X82
-		{0, 0},									//0X83
-		{0, 0},									//0X84
-		{0, 0},									//0X85
-		{0, 0},									//0X86
-		{0, 0},									//0X87
-		{0, 0},									//0X88
-		{0, 0},									//0X89
-		{0, 0},									//0X8A
-		{0, 0},									//0X8B
-		{0, 0},									//0X8C
-		{0, 0},									//0X8D
-		{0, 0},									//0X8E
-		{0, 0},									//0X8F
 
-		{VK_NUMLOCK, 	KB_NUM_LOCK},			//0X90
-		{VK_SCROLL, 	KB_SCROLL_LOCK},		//0X91
+        {SDLK_WORLD_0,		 0},		/* 0xA0 */
+        {SDLK_WORLD_1,		 0},
+        {SDLK_WORLD_2,		 0},
+        {SDLK_WORLD_3,		 0},
+        {SDLK_WORLD_4,		 0},
+        {SDLK_WORLD_5,		 0},
+        {SDLK_WORLD_6,		 0},
+        {SDLK_WORLD_7,		 0},
+        {SDLK_WORLD_8,		 0},
+        {SDLK_WORLD_9,		 0},
+        {SDLK_WORLD_10,		 0},
+        {SDLK_WORLD_11,		 0},
+        {SDLK_WORLD_12,		 0},
+        {SDLK_WORLD_13,		 0},
+        {SDLK_WORLD_14,		 0},
+        {SDLK_WORLD_15,		 0},
+        {SDLK_WORLD_16,		 0},
+        {SDLK_WORLD_17,		 0},
+        {SDLK_WORLD_18,		 0},
+        {SDLK_WORLD_19,		 0},
+        {SDLK_WORLD_20,		 0},
+        {SDLK_WORLD_21,		 0},
+        {SDLK_WORLD_22,		 0},
+        {SDLK_WORLD_23,		 0},
+        {SDLK_WORLD_24,		 0},
+        {SDLK_WORLD_25,		 0},
+        {SDLK_WORLD_26,		 0},
+        {SDLK_WORLD_27,		 0},
+        {SDLK_WORLD_28,		 0},
+        {SDLK_WORLD_29,		 0},
+        {SDLK_WORLD_30,		 0},
+        {SDLK_WORLD_31,		 0},
+        {SDLK_WORLD_32,		 0},
+        {SDLK_WORLD_33,		 0},
+        {SDLK_WORLD_34,		 0},
+        {SDLK_WORLD_35,		 0},
+        {SDLK_WORLD_36,		 0},
+        {SDLK_WORLD_37,		 0},
+        {SDLK_WORLD_38,		 0},
+        {SDLK_WORLD_39,		 0},
+        {SDLK_WORLD_40,		 0},
+        {SDLK_WORLD_41,		 0},
+        {SDLK_WORLD_42,		 0},
+        {SDLK_WORLD_43,		 0},
+        {SDLK_WORLD_44,		 0},
+        {SDLK_WORLD_45,		 0},
+        {SDLK_WORLD_46,		 0},
+        {SDLK_WORLD_47,		 0},
+        {SDLK_WORLD_48,		 0},
+        {SDLK_WORLD_49,		 0},
+        {SDLK_WORLD_50,		 0},
+        {SDLK_WORLD_51,		 0},
+        {SDLK_WORLD_52,		 0},
+        {SDLK_WORLD_53,		 0},
+        {SDLK_WORLD_54,		 0},
+        {SDLK_WORLD_55,		 0},
+        {SDLK_WORLD_56,		 0},
+        {SDLK_WORLD_57,		 0},
+        {SDLK_WORLD_58,		 0},
+        {SDLK_WORLD_59,		 0},
+        {SDLK_WORLD_60,		 0},
+        {SDLK_WORLD_61,		 0},
+        {SDLK_WORLD_62,		 0},
+        {SDLK_WORLD_63,		 0},
+        {SDLK_WORLD_64,		 0},
+        {SDLK_WORLD_65,		 0},
+        {SDLK_WORLD_66,		 0},
+        {SDLK_WORLD_67,		 0},
+        {SDLK_WORLD_68,		 0},
+        {SDLK_WORLD_69,		 0},
+        {SDLK_WORLD_70,		 0},
+        {SDLK_WORLD_71,		 0},
+        {SDLK_WORLD_72,		 0},
+        {SDLK_WORLD_73,		 0},
+        {SDLK_WORLD_74,		 0},
+        {SDLK_WORLD_75,		 0},
+        {SDLK_WORLD_76,		 0},
+        {SDLK_WORLD_77,		 0},
+        {SDLK_WORLD_78,		 0},
+        {SDLK_WORLD_79,		 0},
+        {SDLK_WORLD_80,		 0},
+        {SDLK_WORLD_81,		 0},
+        {SDLK_WORLD_82,		 0},
+        {SDLK_WORLD_83,		 0},
+        {SDLK_WORLD_84,		 0},
+        {SDLK_WORLD_85,		 0},
+        {SDLK_WORLD_86,		 0},
+        {SDLK_WORLD_87,		 0},
+        {SDLK_WORLD_88,		 0},
+        {SDLK_WORLD_89,		 0},
+        {SDLK_WORLD_90,		 0},
+        {SDLK_WORLD_91,		 0},
+        {SDLK_WORLD_92,		 0},
+        {SDLK_WORLD_93,		 0},
+        {SDLK_WORLD_94,		 0},
+        {SDLK_WORLD_95,		 0},		/* 0xFF */
 
-		{0, 0},									//0X92
-		{0, 0},									//0X93
-		{0, 0},									//0X94
-		{0, 0},									//0X95
-		{0, 0},									//0X96
-		{0, 0},									//0X97
-		{0, 0},									//0X98
-		{0, 0},									//0X99
-		{0, 0},									//0X9A
-		{0, 0},									//0X9B
-		{0, 0},									//0X9C
-		{0, 0},									//0X9D
-		{0, 0},									//0X9E
-		{0, 0},									//0X9F
 
-		{VK_LSHIFT, 	KB_LEFT_SHIFT},		//0XA0
-		{VK_RSHIFT, 	KB_RIGHT_SHIFT},		//0XA1
-		{VK_LCONTROL, 	KB_LEFT_CONTROL},	//0XA2
-		{VK_RCONTROL, 	KB_RIGHT_CONTROL},	//0XA3
+        {SDLK_KP0,		 KB_KP_INSERT}, //256
+        {SDLK_KP1,		 KB_KP_END},
+        {SDLK_KP2,		 KB_KP_DOWN_ARROW},
+        {SDLK_KP3,		 KB_KP_PAGE_DOWN},
+        {SDLK_KP4,		 KB_KP_LEFT_ARROW},
+        {SDLK_KP5,		 KB_KP_5},
+        {SDLK_KP6,		 KB_KP_RIGHT_ARROW},
+        {SDLK_KP7,		 KB_KP_HOME},
+        {SDLK_KP8,		 KB_KP_UP_ARROW},
+        {SDLK_KP9,		 KB_KP_PAGE_UP},
 
-		{0, 0},									//0XA4
-		{0, 0},									//0XA5
-		{0, 0},									//0XA6
-		{0, 0},									//0XA7
-		{0, 0},									//0XA8
-		{0, 0},									//0XA9
-		{0, 0},									//0XAA
-		{0, 0},									//0XAB
-		{0, 0},									//0XAC
-		{0, 0},									//0XAD
-		{0, 0},									//0XAE
-		{0, 0},									//0XAF
-		{0, 0},									//0XB0
-		{0, 0},									//0XB1
-		{0, 0},									//0XB2
-		{0, 0},									//0XB3
-		{0, 0},									//0XB4
-		{0, 0},									//0XB5
-		{0, 0},									//0XB6
-		{0, 0},									//0XB7
-		{0, 0},									//0XB8
-		{0, 0},									//0XB9
-		{0, 0},									//0XBA
-		{'=','='},								//0XBB
-		{0, 0},									//0XBC
-		{'-','-'},								//0XBD
-		{0, 0},									//0XBE
-		{0, 0},									//0XBF
-		{'`', '`'}								//0XC0
+        {SDLK_KP_PERIOD,		 0}, //TODO: não tem ponto ?
+        {SDLK_KP_DIVIDE,	 KB_KP_SLASH},
+        {SDLK_KP_MULTIPLY,   KB_KP_MUL},
+        {SDLK_KP_MINUS,		 KB_KP_MINUS},
+        {SDLK_KP_PLUS,		 KB_KP_PLUS},
+        {SDLK_KP_ENTER,		 KB_KP_ENTER},
+        {SDLK_KP_EQUALS,		 0},
+
+
+        {SDLK_UP,		 KB_UP_ARROW},
+        {SDLK_DOWN,		 KB_DOWN_ARROW},
+        {SDLK_RIGHT,	 KB_RIGHT_ARROW},
+        {SDLK_LEFT,		 KB_LEFT_ARROW},
+        {SDLK_INSERT,	 KB_INSERT},
+        {SDLK_HOME,		 KB_HOME},
+        {SDLK_END,		 KB_END},
+        {SDLK_PAGEUP,	 KB_PAGE_UP},
+        {SDLK_PAGEDOWN,	 KB_PAGE_DOWN},
+
+
+        {SDLK_F1,		 KB_F1},
+        {SDLK_F2,		 KB_F2},
+        {SDLK_F3,		 KB_F3},
+        {SDLK_F4,		 KB_F4},
+        {SDLK_F5,		 KB_F5},
+        {SDLK_F6,		 KB_F6},
+        {SDLK_F7,		 KB_F7},
+        {SDLK_F8,		 KB_F8},
+        {SDLK_F9,		 KB_F9},
+        {SDLK_F10,		 KB_F10},
+        {SDLK_F11,		 KB_F11},
+        {SDLK_F12,		 KB_F12},
+        {SDLK_F13,		 0},
+        {SDLK_F14,		 0},
+        {SDLK_F15,		 0}, //296
+
+
+        {SDLK_NUMLOCK,		 KB_NUM_LOCK}, //300
+        {SDLK_CAPSLOCK,		 KB_CAPS_LOCK},
+        {SDLK_SCROLLOCK,	 KB_SCROLL_LOCK},
+        {SDLK_RSHIFT,		 KB_RIGHT_SHIFT},
+        {SDLK_LSHIFT,		 KB_LEFT_SHIFT},
+        {SDLK_RCTRL,		 KB_RIGHT_CONTROL},
+        {SDLK_LCTRL,		 KB_LEFT_CONTROL},
+        {SDLK_RALT,		     KB_ALT}, //TODO: Left Right ?
+        {SDLK_LALT,		     KB_ALT},
+        {SDLK_RMETA,		 0},
+        {SDLK_LMETA,		 0},
+        {SDLK_LSUPER,		 0},		/**< Left "Windows" key */
+        {SDLK_RSUPER,		 0},		/**< Right "Windows" key */
+        {SDLK_MODE,		     0},		/**< "Alt Gr" key */
+        {SDLK_COMPOSE,		 0},		/**< Multi-key compose key */
+
+
+        {SDLK_HELP,		 0},
+        {SDLK_PRINT,	 0},
+        {SDLK_SYSREQ,	 0},
+        {SDLK_BREAK,	 0},
+        {SDLK_MENU,		 0},
+        {SDLK_POWER,	 0},		/**< Power Macintosh power key */
+        {SDLK_EURO,		 0},		/**< Some european keyboards */
+        {SDLK_UNDO,		 0},		/**< Atari keyboard has Undo */
+
+        {SDLK_LAST, 0}
 	};
 
 	//
 	//Creation HACK
 	//
-	static EventManagerPtr_t CreateInstanceLocalImpl(const String_c &name)
+	EventManagerPtr_t CreateInstanceLocalImpl(const String_c &name)
 	{
-		return EventManagerPtr_t(new EventManagerW32_c(name));
+		return EventManagerPtr_t(new EventManagerSDL_c(name));
 	}
 
 	EventManagerPtr_t EventManager_c::CreateInstanceImpl(const String_c &name)
@@ -257,10 +367,10 @@ namespace Phobos
 
 	inline bool IsValidWinToPhobosKeyCode(WPARAM v)
 	{
-		if(v >= (sizeof(stWinToKeyCode_g) / sizeof(stWinToKeyCode_g[0])))
+		if(v >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
 			return(false);
 
-		if((stWinToKeyCode_g[v].u16Phobos == 0) && (stWinToKeyCode_g[v].u16Win == 0))
+		if((stSDLToKeyCode_g[v].u16Phobos == 0) && (stSDLToKeyCode_g[v].u16SDL == 0))
 			return(false);
 
 		return(true);
@@ -269,7 +379,7 @@ namespace Phobos
 	bool BuildKeyboardEvent(Event_s &event, MSG &msg)
 	{
 		event.eType = EVENT_TYPE_KEYBOARD;
-		event.pParam = &msg;		
+		event.pParam = &msg;
 
 		switch(msg.message)
 		{
@@ -287,7 +397,7 @@ namespace Phobos
 
 			case WM_KEYUP:
 				if(!IsValidWinToPhobosKeyCode(msg.wParam))
-					return(false);			
+					return(false);
 
 				event.stKeyboard.eType = KEYBOARD_KEY_UP;
 				event.stKeyboard.u16Code = (UInt16_t) stWinToKeyCode_g[msg.wParam].u16Phobos;
@@ -296,7 +406,7 @@ namespace Phobos
 			case WM_CHAR:
 				event.stKeyboard.eType = KEYBOARD_CHAR;
 				event.stKeyboard.u16Code = (UInt16_t) msg.wParam;
-				break;			
+				break;
 		}
 
 		return true;
@@ -308,12 +418,12 @@ namespace Phobos
 		event.pParam = &msg;
 
 		switch(msg.message)
-		{	
+		{
 			case WM_MOUSEMOVE:
 				event.stMouse.eType = MOUSE_MOVE;
 				event.stMouse.u16ButtonId = MOUSE_THUMB;
-				event.stMouse.u16X = GET_X_LPARAM(msg.lParam); 
-				event.stMouse.u16Y = GET_Y_LPARAM(msg.lParam); 
+				event.stMouse.u16X = GET_X_LPARAM(msg.lParam);
+				event.stMouse.u16Y = GET_Y_LPARAM(msg.lParam);
 				break;
 
 			case WM_LBUTTONDOWN:
@@ -344,8 +454,8 @@ namespace Phobos
 			case WM_MBUTTONUP:
 				event.stMouse.u16ButtonId = MOUSE_MBUTTON;
 				event.stMouse.eType = MOUSE_BUTTON_UP;
-				break;			
-		}		
+				break;
+		}
 	}
 
 	void BuildSystemEvent(Event_s &event, MSG &msg)
@@ -357,14 +467,14 @@ namespace Phobos
 		{
 			case WM_QUIT:
 				event.stSystem.eType = SYSTEM_QUIT;
-				break;		
+				break;
 
-			case WM_ACTIVATEAPP:												
+			case WM_ACTIVATEAPP:
 				event.stSystem.eType = SYSTEM_ACTIVATE;
 				event.stSystem.fActive = LOWORD(msg.wParam) != WA_INACTIVE;
 				event.stSystem.fMinimized = HIWORD(msg.wParam) ? true : false;
 				break;
-		}		
+		}
 	}
 
 	//
@@ -380,7 +490,7 @@ namespace Phobos
 	}
 
 	void EventManagerW32_c::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{	
+	{
 		switch(uMsg)
 		{
 			case WM_ACTIVATE:
@@ -400,11 +510,11 @@ namespace Phobos
 	void EventManagerW32_c::Update()
 	{
 		Event_s	event;
-		MSG		msg; 
+		MSG		msg;
 
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{		
-			TranslateMessage(&msg); 		
+		{
+			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
 			switch(msg.message)
@@ -417,16 +527,16 @@ namespace Phobos
 				case WM_ACTIVATE:
 				case WM_ACTIVATEAPP:
 					BuildSystemEvent(event, msg);
-					this->NotityListeners(event);											
+					this->NotityListeners(event);
 					break;
 
 				case WM_KEYDOWN:
 				case WM_KEYUP:
-				case WM_CHAR:					
+				case WM_CHAR:
 					if(!BuildKeyboardEvent(event, msg))
 						continue;
 
-					this->NotityListeners(event);					
+					this->NotityListeners(event);
 					break;
 
 				case WM_MOUSEMOVE:
@@ -435,11 +545,11 @@ namespace Phobos
 				case WM_RBUTTONDOWN:
 				case WM_RBUTTONUP:
 				case WM_MBUTTONDOWN:
-				case WM_MBUTTONUP:					
-					BuildMouseEvent(event, msg);							
-					this->NotityListeners(event);								
-					break;			
+				case WM_MBUTTONUP:
+					BuildMouseEvent(event, msg);
+					this->NotityListeners(event);
+					break;
 			}
-		}		
+		}
 	}
 }
