@@ -35,7 +35,7 @@
 		<Cursor position="0" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/PH_EventManager.h" open="0" top="0" tabpos="12">
-		<Cursor position="2418" topLine="100" />
+		<Cursor position="2136" topLine="94" />
 	</File>
 	<File name="../../../include/kernel/PH_EventManagerFwd.h" open="0" top="0" tabpos="13">
 		<Cursor position="0" topLine="0" />
@@ -50,7 +50,7 @@
 		<Cursor position="0" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/PH_InputActions.h" open="0" top="0" tabpos="0">
-		<Cursor position="477" topLine="30" />
+		<Cursor position="1280" topLine="98" />
 	</File>
 	<File name="../../../include/kernel/PH_Kernel.h" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="98" />
@@ -77,7 +77,10 @@
 		<Cursor position="1382" topLine="18" />
 	</File>
 	<File name="../../../include/kernel/SDL/PH_EventManagerSDL.h" open="0" top="0" tabpos="0">
-		<Cursor position="258" topLine="0" />
+		<Cursor position="28" topLine="0" />
+	</File>
+	<File name="../../../include/kernel/SDL/PH_WindowSDL.h" open="0" top="0" tabpos="0">
+		<Cursor position="351" topLine="21" />
 	</File>
 	<File name="../../../include/kernel/W32/PH_EventManagerW32.h" open="0" top="0" tabpos="3">
 		<Cursor position="98" topLine="0" />
@@ -103,7 +106,13 @@
 	<File name="../../../src/kernel/PH_Window.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="85" topLine="0" />
 	</File>
+	<File name="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="12092" topLine="493" />
+	</File>
+	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="202" topLine="0" />
+	</File>
 	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="143" topLine="12" />
+		<Cursor position="8601" topLine="284" />
 	</File>
 </CodeBlocks_layout_file>

@@ -365,188 +365,197 @@ namespace Phobos
 	//
 	//
 
-	inline bool IsValidWinToPhobosKeyCode(WPARAM v)
+	inline bool IsValidSDLToPhobosKeyCode(SDLKey key)
 	{
-		if(v >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
+		if(key >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
 			return(false);
 
-		if((stSDLToKeyCode_g[v].u16Phobos == 0) && (stSDLToKeyCode_g[v].u16SDL == 0))
+		if((stSDLToKeyCode_g[key].u16Phobos == 0) && (stSDLToKeyCode_g[key].u16SDL == 0))
 			return(false);
 
 		return(true);
 	}
 
-	bool BuildKeyboardEvent(Event_s &event, MSG &msg)
+	bool BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
 	{
 		event.eType = EVENT_TYPE_KEYBOARD;
-		event.pParam = &msg;
+		event.pParam = &sdl_event;
 
-		switch(msg.message)
+		switch(sdl_event.type)
 		{
-			case WM_KEYDOWN:
+			case SDL_KEYDOWN:
 				//Is it a repeat key?
-				if(msg.lParam & (1 << 30))
-					return(false);
+				//if(msg.lParam & (1 << 30))
+					//return(false);
 
-				if(!IsValidWinToPhobosKeyCode(msg.wParam))
+				if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
 					return(false);
 
 				event.stKeyboard.eType = KEYBOARD_KEY_DOWN;
-				event.stKeyboard.u16Code = (UInt16_t) stWinToKeyCode_g[msg.wParam].u16Phobos;
+				event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
 				break;
 
-			case WM_KEYUP:
-				if(!IsValidWinToPhobosKeyCode(msg.wParam))
+			case SDL_KEYUP:
+				if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
 					return(false);
 
 				event.stKeyboard.eType = KEYBOARD_KEY_UP;
-				event.stKeyboard.u16Code = (UInt16_t) stWinToKeyCode_g[msg.wParam].u16Phobos;
+				event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
 				break;
 
-			case WM_CHAR:
+
+            //TODO: esse aki eu nem sei pronde vai
+			/*case WM_CHAR:
 				event.stKeyboard.eType = KEYBOARD_CHAR;
 				event.stKeyboard.u16Code = (UInt16_t) msg.wParam;
 				break;
+				*/
 		}
 
 		return true;
 	}
 
-	void BuildMouseEvent(Event_s &event, MSG &msg)
+	void BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
 	{
 		event.eType = EVENT_TYPE_MOUSE;
-		event.pParam = &msg;
+		event.pParam = &sdl_event;
 
-		switch(msg.message)
+		switch(sdl_event.type)
 		{
-			case WM_MOUSEMOVE:
+			case SDL_MOUSEMOTION:
 				event.stMouse.eType = MOUSE_MOVE;
-				event.stMouse.u16ButtonId = MOUSE_THUMB;
-				event.stMouse.u16X = GET_X_LPARAM(msg.lParam);
-				event.stMouse.u16Y = GET_Y_LPARAM(msg.lParam);
+				//TODO: verify
+				event.stMouse.u16ButtonId = sdl_event.motion.state;
+				event.stMouse.u16X = sdl_event.motion.x;
+				event.stMouse.u16Y = sdl_event.motion.y;
 				break;
 
-			case WM_LBUTTONDOWN:
-				event.stMouse.u16ButtonId = MOUSE_LBUTTON;
+			case SDL_MOUSEBUTTONDOWN:
+
+                switch(sdl_event.button.button)
+                {
+                    case SDL_BUTTON_LEFT:
+
+                        event.stMouse.u16ButtonId = MOUSE_LBUTTON;
+
+                        break;
+
+                    case SDL_BUTTON_RIGHT:
+
+                        event.stMouse.u16ButtonId = MOUSE_RBUTTON;
+
+                        break;
+
+                    case SDL_BUTTON_MIDDLE:
+
+                        event.stMouse.u16ButtonId = MOUSE_MBUTTON;
+
+                        break;
+                }
+
+
 				event.stMouse.eType = MOUSE_BUTTON_DOWN;
+
 				break;
 
-			case WM_LBUTTONUP:
-				event.stMouse.u16ButtonId = MOUSE_LBUTTON;
+            case SDL_MOUSEBUTTONUP:
+
+                switch(sdl_event.button.button)
+                {
+                    case SDL_BUTTON_LEFT:
+
+                        event.stMouse.u16ButtonId = MOUSE_LBUTTON;
+
+                        break;
+
+                    case SDL_BUTTON_RIGHT:
+
+                        event.stMouse.u16ButtonId = MOUSE_RBUTTON;
+
+                        break;
+
+                    case SDL_BUTTON_MIDDLE:
+
+                        event.stMouse.u16ButtonId = MOUSE_MBUTTON;
+
+                        break;
+                }
+
+
 				event.stMouse.eType = MOUSE_BUTTON_UP;
-				break;
 
-			case WM_RBUTTONDOWN:
-				event.stMouse.u16ButtonId = MOUSE_RBUTTON;
-				event.stMouse.eType = MOUSE_BUTTON_DOWN;
-				break;
+                break;
 
-			case WM_RBUTTONUP:
-				event.stMouse.u16ButtonId = MOUSE_RBUTTON;
-				event.stMouse.eType = MOUSE_BUTTON_UP;
-				break;
 
-			case WM_MBUTTONDOWN:
-				event.stMouse.u16ButtonId = MOUSE_MBUTTON;
-				event.stMouse.eType = MOUSE_BUTTON_DOWN;
-				break;
-
-			case WM_MBUTTONUP:
-				event.stMouse.u16ButtonId = MOUSE_MBUTTON;
-				event.stMouse.eType = MOUSE_BUTTON_UP;
-				break;
+            default:
+                break;
 		}
 	}
 
-	void BuildSystemEvent(Event_s &event, MSG &msg)
+	void BuildSystemEvent(Event_s &event, SDL_Event& sdl_event)
 	{
 		event.eType = EVENT_TYPE_SYSTEM;
-		event.pParam = &msg;
+		event.pParam = &sdl_event;
 
-		switch(msg.message)
+		switch(sdl_event.type)
 		{
-			case WM_QUIT:
+			case SDL_QUIT:
 				event.stSystem.eType = SYSTEM_QUIT;
 				break;
 
-			case WM_ACTIVATEAPP:
+			/*
+			case SDL_AP:
 				event.stSystem.eType = SYSTEM_ACTIVATE;
 				event.stSystem.fActive = LOWORD(msg.wParam) != WA_INACTIVE;
 				event.stSystem.fMinimized = HIWORD(msg.wParam) ? true : false;
 				break;
+
+            */
 		}
 	}
 
 	//
 	//
-	//EventManagerW32
+	//EventManagerSDL
 	//
 	//
 
-	EventManagerW32_c::EventManagerW32_c(const String_c &name):
+	EventManagerSDL_c::EventManagerSDL_c(const String_c &name):
 		EventManager_c(name)
 	{
 		//empty
 	}
 
-	void EventManagerW32_c::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{
-		switch(uMsg)
-		{
-			case WM_ACTIVATE:
-				Event_s	event;
-				event.eType = EVENT_TYPE_SYSTEM;
-				event.pParam = NULL;
-				event.stSystem.eType = SYSTEM_ACTIVATE;
-				event.stSystem.fActive = LOWORD(wParam) != WA_INACTIVE;
-				event.stSystem.fMinimized = HIWORD(wParam) ? true : false;
-
-				//dispatch to all handlers
-				this->NotityListeners(event);
-				break;
-		}
-	}
-
-	void EventManagerW32_c::Update()
+	void EventManagerSDL_c::Update()
 	{
 		Event_s	event;
-		MSG		msg;
+		SDL_Event sdl_evento;
 
-		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		while(SDL_PollEvent(&sdl_evento))
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-
-			switch(msg.message)
+			switch(sdl_evento.type)
 			{
-				case WM_CLOSE:
-					PostQuitMessage(0);
-					break;
 
-				case WM_QUIT:
-				case WM_ACTIVATE:
-				case WM_ACTIVATEAPP:
-					BuildSystemEvent(event, msg);
+				case SDL_QUIT:
+				//case WM_ACTIVATE:
+				//case WM_ACTIVATEAPP:
+					BuildSystemEvent(event, sdl_evento);
 					this->NotityListeners(event);
 					break;
 
-				case WM_KEYDOWN:
-				case WM_KEYUP:
-				case WM_CHAR:
-					if(!BuildKeyboardEvent(event, msg))
+				case SDL_KEYDOWN:
+				case SDL_KEYUP:
+				//case WM_CHAR:
+					if(!BuildKeyboardEvent(event, sdl_evento))
 						continue;
 
 					this->NotityListeners(event);
 					break;
 
-				case WM_MOUSEMOVE:
-				case WM_LBUTTONDOWN:
-				case WM_LBUTTONUP:
-				case WM_RBUTTONDOWN:
-				case WM_RBUTTONUP:
-				case WM_MBUTTONDOWN:
-				case WM_MBUTTONUP:
-					BuildMouseEvent(event, msg);
+				case SDL_MOUSEMOTION:
+				case SDL_MOUSEBUTTONDOWN:
+				case SDL_MOUSEBUTTONUP:
+					BuildMouseEvent(event, sdl_evento);
 					this->NotityListeners(event);
 					break;
 			}
