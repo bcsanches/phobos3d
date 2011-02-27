@@ -2,7 +2,7 @@
 #define PH_WINDOW_SDL_H
 
 #include "PH_Window.h"
-//#include "W32/PH_EventManagerW32.h"
+#include "SDL/PH_EventManagerSDL.h"
 
 //#include <windows.h>
 #include <SDL/SDL.h>
@@ -42,7 +42,7 @@ namespace Phobos
 			friend WindowPtr_t Window_c::Create(const String_c &name);
 
 		private:
-			//EventManagerW32Ptr_t ipEventManager;
+			EventManagerSDLPtr_t ipEventManager;
 
 			Rect_s<size_t> rect;
 	};

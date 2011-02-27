@@ -83,7 +83,7 @@
 		<Cursor position="351" topLine="21" />
 	</File>
 	<File name="../../../include/kernel/W32/PH_EventManagerW32.h" open="0" top="0" tabpos="3">
-		<Cursor position="98" topLine="0" />
+		<Cursor position="183" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/W32/PH_WindowW32.h" open="0" top="0" tabpos="0">
 		<Cursor position="155" topLine="31" />
@@ -107,7 +107,7 @@
 		<Cursor position="85" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="12092" topLine="493" />
+		<Cursor position="13018" topLine="543" />
 	</File>
 	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="202" topLine="0" />

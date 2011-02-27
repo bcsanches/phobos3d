@@ -63,6 +63,6 @@ namespace Phobos
 
 	void WindowSDL_c::SetEventManager(EventManagerPtr_t manager)
 	{
-		//ipEventManager = boost::static_pointer_cast<EventManagerW32_c>(manager);
+		ipEventManager = boost::static_pointer_cast<EventManagerSDL_c>(manager);
 	}
 }

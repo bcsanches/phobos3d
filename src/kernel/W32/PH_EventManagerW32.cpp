@@ -14,7 +14,7 @@ namespace Phobos
 		UInt16_t u16Phobos;
 	};
 
-	static WinToKeyCode_s stWinToKeyCode_g[] = 
+	static WinToKeyCode_s stWinToKeyCode_g[] =
 	{
 		{0, 0},									//0x00
 		{0, 0},									//0x01
@@ -37,8 +37,8 @@ namespace Phobos
 		{0, 0},									//0x0E
 		{0, 0},									//0x0F
 
-		{VK_SHIFT, 		KB_SHIFT},				//0x10	
-		{VK_CONTROL, 	KB_CONTROL},			//0x11	
+		{VK_SHIFT, 		KB_SHIFT},				//0x10
+		{VK_CONTROL, 	KB_CONTROL},			//0x11
 		{VK_MENU, 		KB_ALT},				//0x12
 		{VK_PAUSE, 		KB_PAUSE},				//0x13
 		{VK_CAPITAL, 	KB_CAPS_LOCK},			//0x14
@@ -86,7 +86,7 @@ namespace Phobos
 		{'6', 			'6'},					//0X36
 		{'7', 			'7'},					//0X37
 		{'8', 			'8'},					//0X38
-		{'9', 			'9'},					//0X39	
+		{'9', 			'9'},					//0X39
 
 		{0, 0},									//0X3A
 		{0, 0},									//0X3B
@@ -126,7 +126,7 @@ namespace Phobos
 		{0, 0},									//0X5B
 		{0, 0},									//0X5C
 		{0, 0},									//0X5D
-		{0, 0},									//0X5E	
+		{0, 0},									//0X5E
 		{0, 0},									//0X5F
 
 		{VK_NUMPAD0, 	KB_KP_INSERT},			//0X60
@@ -269,7 +269,7 @@ namespace Phobos
 	bool BuildKeyboardEvent(Event_s &event, MSG &msg)
 	{
 		event.eType = EVENT_TYPE_KEYBOARD;
-		event.pParam = &msg;		
+		event.pParam = &msg;
 
 		switch(msg.message)
 		{
@@ -287,7 +287,7 @@ namespace Phobos
 
 			case WM_KEYUP:
 				if(!IsValidWinToPhobosKeyCode(msg.wParam))
-					return(false);			
+					return(false);
 
 				event.stKeyboard.eType = KEYBOARD_KEY_UP;
 				event.stKeyboard.u16Code = (UInt16_t) stWinToKeyCode_g[msg.wParam].u16Phobos;
@@ -296,7 +296,7 @@ namespace Phobos
 			case WM_CHAR:
 				event.stKeyboard.eType = KEYBOARD_CHAR;
 				event.stKeyboard.u16Code = (UInt16_t) msg.wParam;
-				break;			
+				break;
 		}
 
 		return true;
@@ -308,12 +308,12 @@ namespace Phobos
 		event.pParam = &msg;
 
 		switch(msg.message)
-		{	
+		{
 			case WM_MOUSEMOVE:
 				event.stMouse.eType = MOUSE_MOVE;
 				event.stMouse.u16ButtonId = MOUSE_THUMB;
-				event.stMouse.u16X = GET_X_LPARAM(msg.lParam); 
-				event.stMouse.u16Y = GET_Y_LPARAM(msg.lParam); 
+				event.stMouse.u16X = GET_X_LPARAM(msg.lParam);
+				event.stMouse.u16Y = GET_Y_LPARAM(msg.lParam);
 				break;
 
 			case WM_LBUTTONDOWN:
@@ -344,8 +344,8 @@ namespace Phobos
 			case WM_MBUTTONUP:
 				event.stMouse.u16ButtonId = MOUSE_MBUTTON;
 				event.stMouse.eType = MOUSE_BUTTON_UP;
-				break;			
-		}		
+				break;
+		}
 	}
 
 	void BuildSystemEvent(Event_s &event, MSG &msg)
@@ -357,14 +357,14 @@ namespace Phobos
 		{
 			case WM_QUIT:
 				event.stSystem.eType = SYSTEM_QUIT;
-				break;		
+				break;
 
-			case WM_ACTIVATEAPP:												
+			case WM_ACTIVATEAPP:
 				event.stSystem.eType = SYSTEM_ACTIVATE;
 				event.stSystem.fActive = LOWORD(msg.wParam) != WA_INACTIVE;
 				event.stSystem.fMinimized = HIWORD(msg.wParam) ? true : false;
 				break;
-		}		
+		}
 	}
 
 	//
@@ -380,7 +380,7 @@ namespace Phobos
 	}
 
 	void EventManagerW32_c::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{	
+	{
 		switch(uMsg)
 		{
 			case WM_ACTIVATE:
@@ -400,11 +400,11 @@ namespace Phobos
 	void EventManagerW32_c::Update()
 	{
 		Event_s	event;
-		MSG		msg; 
+		MSG		msg;
 
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{		
-			TranslateMessage(&msg); 		
+		{
+			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
 			switch(msg.message)
@@ -417,16 +417,16 @@ namespace Phobos
 				case WM_ACTIVATE:
 				case WM_ACTIVATEAPP:
 					BuildSystemEvent(event, msg);
-					this->NotityListeners(event);											
+					this->NotityListeners(event);
 					break;
 
 				case WM_KEYDOWN:
 				case WM_KEYUP:
-				case WM_CHAR:					
+				case WM_CHAR:
 					if(!BuildKeyboardEvent(event, msg))
 						continue;
 
-					this->NotityListeners(event);					
+					this->NotityListeners(event);
 					break;
 
 				case WM_MOUSEMOVE:
@@ -435,11 +435,11 @@ namespace Phobos
 				case WM_RBUTTONDOWN:
 				case WM_RBUTTONUP:
 				case WM_MBUTTONDOWN:
-				case WM_MBUTTONUP:					
-					BuildMouseEvent(event, msg);							
-					this->NotityListeners(event);								
-					break;			
+				case WM_MBUTTONUP:
+					BuildMouseEvent(event, msg);
+					this->NotityListeners(event);
+					break;
 			}
-		}		
+		}
 	}
 }

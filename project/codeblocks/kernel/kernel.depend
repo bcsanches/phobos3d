@@ -473,3 +473,26 @@
 	"PH_Defs.h"
 	"PH_KernelAPI.h"
 
+1298761127 source:/home/cronosts/Programming/Projects/phobos3d/src/kernel/SDL/PH_EventManagerSDL.cpp
+	"SDL/PH_EventManagerSDL.h"
+	"PH_Exception.h"
+	"PH_InputActions.h"
+
+1298750318 /home/cronosts/Programming/Projects/phobos3d/include/kernel/SDL/PH_EventManagerSDL.h
+	"PH_EventManager.h"
+	<SDL/SDL.h>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_InputActions.h
+
+1298768728 source:/home/cronosts/Programming/Projects/phobos3d/src/kernel/SDL/PH_WindowSDL.cpp
+	"SDL/PH_WindowSDL.h"
+	"PH_Error.h"
+	"PH_Exception.h"
+	<string>
+
+1298768785 /home/cronosts/Programming/Projects/phobos3d/include/kernel/SDL/PH_WindowSDL.h
+	"PH_Window.h"
+	"SDL/PH_EventManagerSDL.h"
+	<SDL/SDL.h>
+	<SDL/SDL_syswm.h>
+
