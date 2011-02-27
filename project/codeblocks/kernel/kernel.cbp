@@ -98,8 +98,12 @@
 		<Unit filename="../../../src/kernel/ProcVector.cpp" />
 		<Unit filename="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" />
 		<Unit filename="../../../src/kernel/SDL/PH_WindowSDL.cpp" />
-		<Unit filename="../../../src/kernel/W32/PH_EventManagerW32.cpp" />
-		<Unit filename="../../../src/kernel/W32/PH_WindowW32.cpp" />
+		<Unit filename="../../../src/kernel/W32/PH_EventManagerW32.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="../../../src/kernel/W32/PH_WindowW32.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
 			<envvars />
 			<code_completion />
