@@ -17,7 +17,7 @@
 		<Cursor position="0" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/PH_Defs.h" open="0" top="0" tabpos="6">
-		<Cursor position="1346" topLine="21" />
+		<Cursor position="1616" topLine="42" />
 	</File>
 	<File name="../../../include/kernel/PH_DynamicLibrary.h" open="0" top="0" tabpos="7">
 		<Cursor position="1510" topLine="29" />
@@ -83,10 +83,10 @@
 		<Cursor position="108" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/W32/PH_EventManagerW32.h" open="0" top="0" tabpos="3">
-		<Cursor position="98" topLine="0" />
+		<Cursor position="120" topLine="0" />
 	</File>
 	<File name="../../../include/kernel/W32/PH_WindowW32.h" open="0" top="0" tabpos="0">
-		<Cursor position="155" topLine="31" />
+		<Cursor position="135" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/PH_Context.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="8773" topLine="52" />
@@ -116,6 +116,9 @@
 		<Cursor position="1109" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="10706" topLine="0" />
+		<Cursor position="37" topLine="19" />
+	</File>
+	<File name="../../../src/kernel/W32/PH_WindowW32.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="81" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

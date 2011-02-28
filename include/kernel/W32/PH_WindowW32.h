@@ -27,7 +27,7 @@ namespace Phobos
 			WindowW32_c(const String_c &name);
 			~WindowW32_c();
 
-		private:			
+		private:
 			static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 		private:

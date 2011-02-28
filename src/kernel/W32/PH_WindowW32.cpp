@@ -23,13 +23,13 @@ namespace Phobos
 	}
 
 	WindowW32_c::~WindowW32_c(void)
-	{	
+	{
 		if(NULL != hWnd)
-			DestroyWindow(hWnd);		
+			DestroyWindow(hWnd);
 	}
 
 	void WindowW32_c::Open(const String_c &name, const Rect_s<size_t> &rect)
-	{		
+	{
 		this->CreateWindowClass();
 
 		RECT wrect;
@@ -53,7 +53,7 @@ namespace Phobos
 			LONG fix = wrect.top * -1;
 			wrect.top += fix;
 			wrect.bottom += fix;
-		}	
+		}
 
 		hWnd = CreateWindow(
 			WINDOW_CLASS_NAME,		//Window class name
@@ -67,7 +67,7 @@ namespace Phobos
 			NULL,					//No menu
 			GetModuleHandle(NULL),	//HInstance
 			0						//LPARAM
-		);		
+		);
 
 		if(NULL == hWnd)
 		{
@@ -75,54 +75,54 @@ namespace Phobos
 
 			std::stringstream stream;
 			stream << "Erro creating window: " << error;
-			PH_RAISE(NATIVE_API_FAILED_EXCEPTION, "WindowW32_c::Open", stream.str());			
+			PH_RAISE(NATIVE_API_FAILED_EXCEPTION, "WindowW32_c::Open", stream.str());
 		}
 		else
-		{			
-			SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG>(this));			
+		{
+			SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG>(this));
 
 			//if(eventManagerW32)
 				//eventManagerW32->SetWnd(hWnd);
 
 			ShowWindow(hWnd, SW_RESTORE);
-			UpdateWindow(hWnd);			
+			UpdateWindow(hWnd);
 		}
 	}
 
-	void WindowW32_c::CreateWindowClass(void) 
-	{ 
+	void WindowW32_c::CreateWindowClass(void)
+	{
 		if(fWindowClassRegistered)
 			return;
 
-		WNDCLASSEX	wcx; 	
+		WNDCLASSEX	wcx;
 
-		ZeroMemory(&wcx, sizeof(wcx));		
+		ZeroMemory(&wcx, sizeof(wcx));
 
-		// Fill in the window class structure with parameters 
-		// that describe the main window. 
-		wcx.cbSize = sizeof(wcx);						// size of structure 
-		wcx.style = CS_HREDRAW | CS_VREDRAW;			// redraw if size changes 
-		wcx.lpfnWndProc = WindowW32_c::MainWndProc;		// points to window procedure 
-		wcx.cbClsExtra = 0;								// no extra class memory 
-		wcx.cbWndExtra = 0;								// no extra window memory 
-		wcx.hInstance = GetModuleHandle(NULL);			// handle to instance 
-		wcx.hIcon = NULL;								// predefined app. icon 
-		wcx.hCursor = NULL;								// predefined arrow 
-		wcx.hbrBackground = NULL;						// white background brush 
-		wcx.lpszMenuName =  NULL;						// name of menu resource 
-		wcx.lpszClassName = WINDOW_CLASS_NAME;			// name of window class 
+		// Fill in the window class structure with parameters
+		// that describe the main window.
+		wcx.cbSize = sizeof(wcx);						// size of structure
+		wcx.style = CS_HREDRAW | CS_VREDRAW;			// redraw if size changes
+		wcx.lpfnWndProc = WindowW32_c::MainWndProc;		// points to window procedure
+		wcx.cbClsExtra = 0;								// no extra class memory
+		wcx.cbWndExtra = 0;								// no extra window memory
+		wcx.hInstance = GetModuleHandle(NULL);			// handle to instance
+		wcx.hIcon = NULL;								// predefined app. icon
+		wcx.hCursor = NULL;								// predefined arrow
+		wcx.hbrBackground = NULL;						// white background brush
+		wcx.lpszMenuName =  NULL;						// name of menu resource
+		wcx.lpszClassName = WINDOW_CLASS_NAME;			// name of window class
 		wcx.hIconSm = NULL;
 
-		// Register the window class. 
+		// Register the window class.
 		if(!RegisterClassEx(&wcx))
 		{
 			std::stringstream stream;
 			stream << "Error registering window class: " << GetLastError();
 			PH_RAISE(NATIVE_API_FAILED_EXCEPTION, "WindowW32_c::CreateWindowClass", stream.str());
-		}		
+		}
 
 		fWindowClassRegistered = true;
-	} 
+	}
 
 	size_t WindowW32_c::GetWidth(void) const
 	{
@@ -190,21 +190,21 @@ namespace Phobos
 	LRESULT WindowW32_c::MainWndMethod(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if(ipEventManager)
-			ipEventManager->OnWindowMessage(hwnd, uMsg, wParam, lParam);		
+			ipEventManager->OnWindowMessage(hwnd, uMsg, wParam, lParam);
 
 		return(::DefWindowProc(hwnd, uMsg, wParam, lParam));
 	}
 
 	LRESULT CALLBACK WindowW32_c::MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{	
+	{
 		switch(uMsg)
 		{
 			case WM_CLOSE:
 				PostQuitMessage(0);
 				break;
-		}			
+		}
 
-		WindowW32_c *wnd = reinterpret_cast<WindowW32_c *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));		
+		WindowW32_c *wnd = reinterpret_cast<WindowW32_c *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
 		if(wnd)
 			return(wnd->MainWndMethod(hwnd, uMsg, wParam, lParam));
