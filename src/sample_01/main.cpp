@@ -81,8 +81,8 @@ void Sample_c::Event(struct Event_s &event)
 			if(event.stSystem.eType == SYSTEM_QUIT)
 			{
 				fQuit = true;
-				break;	
-			}	
+				break;
+			}
 			break;
 	}
 }
@@ -91,7 +91,7 @@ void Sample_c::Run()
 {
 	while(!fQuit)
 	{
-		ipEventManager->Update();		
+		ipEventManager->Update();
 	}
 }
 

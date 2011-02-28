@@ -34,7 +34,12 @@ Phobos 3d
 		#define PH_INPUT_API
 	#endif
 
-	#define PH_INPUT_API_PROC extern "C" PH_INPUT_API	
+	#define PH_INPUT_API_PROC extern "C" PH_INPUT_API
+
+#elif (defined PH_LINUX)
+
+    #define PH_INPUT_API
+
 #endif
 
 

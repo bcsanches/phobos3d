@@ -11,6 +11,25 @@ namespace Phobos
 		UInt16_t u16Phobos;
 	};
 
+	struct SDLToMouseButton_s
+	{
+	    UInt16_t u16SDL;
+	    UInt16_t u16Phobos;
+	};
+
+	static SDLToMouseButton_s SDLToMouseButton_g[] =
+	{
+	    {0, 0},
+	    {SDL_BUTTON_LEFT,   MOUSE_LBUTTON},
+	    {SDL_BUTTON_MIDDLE, MOUSE_MBUTTON},
+	    {SDL_BUTTON_RIGHT,  MOUSE_RBUTTON},
+
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
+	    {0, 0},
+	};
+
 	static SDLToKeyCode_s stSDLToKeyCode_g[] =
 	{
 	    {0, 0},
@@ -316,6 +335,10 @@ namespace Phobos
         {SDLK_F14,		 0},
         {SDLK_F15,		 0}, //296
 
+        {0, 0},
+        {0, 0},
+        {0, 0},
+
 
         {SDLK_NUMLOCK,		 KB_NUM_LOCK}, //300
         {SDLK_CAPSLOCK,		 KB_CAPS_LOCK},
@@ -384,9 +407,6 @@ namespace Phobos
 		switch(sdl_event.type)
 		{
 			case SDL_KEYDOWN:
-				//Is it a repeat key?
-				//if(msg.lParam & (1 << 30))
-					//return(false);
 
 				if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
 					return(false);
@@ -423,65 +443,24 @@ namespace Phobos
 		switch(sdl_event.type)
 		{
 			case SDL_MOUSEMOTION:
+
 				event.stMouse.eType = MOUSE_MOVE;
-				//TODO: verify
-				event.stMouse.u16ButtonId = sdl_event.motion.state;
 				event.stMouse.u16X = sdl_event.motion.x;
 				event.stMouse.u16Y = sdl_event.motion.y;
+                event.stMouse.u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].u16Phobos;
+
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
 
-                switch(sdl_event.button.button)
-                {
-                    case SDL_BUTTON_LEFT:
-
-                        event.stMouse.u16ButtonId = MOUSE_LBUTTON;
-
-                        break;
-
-                    case SDL_BUTTON_RIGHT:
-
-                        event.stMouse.u16ButtonId = MOUSE_RBUTTON;
-
-                        break;
-
-                    case SDL_BUTTON_MIDDLE:
-
-                        event.stMouse.u16ButtonId = MOUSE_MBUTTON;
-
-                        break;
-                }
-
-
+                event.stMouse.u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].u16Phobos;
 				event.stMouse.eType = MOUSE_BUTTON_DOWN;
 
 				break;
 
             case SDL_MOUSEBUTTONUP:
 
-                switch(sdl_event.button.button)
-                {
-                    case SDL_BUTTON_LEFT:
-
-                        event.stMouse.u16ButtonId = MOUSE_LBUTTON;
-
-                        break;
-
-                    case SDL_BUTTON_RIGHT:
-
-                        event.stMouse.u16ButtonId = MOUSE_RBUTTON;
-
-                        break;
-
-                    case SDL_BUTTON_MIDDLE:
-
-                        event.stMouse.u16ButtonId = MOUSE_MBUTTON;
-
-                        break;
-                }
-
-
+                event.stMouse.u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].u16Phobos;
 				event.stMouse.eType = MOUSE_BUTTON_UP;
 
                 break;
@@ -503,14 +482,12 @@ namespace Phobos
 				event.stSystem.eType = SYSTEM_QUIT;
 				break;
 
-			/*
-			case SDL_AP:
+			case SDL_APPMOUSEFOCUS:
+			case SDL_APPACTIVE:
 				event.stSystem.eType = SYSTEM_ACTIVATE;
-				event.stSystem.fActive = LOWORD(msg.wParam) != WA_INACTIVE;
-				event.stSystem.fMinimized = HIWORD(msg.wParam) ? true : false;
+				event.stSystem.fActive = true;
+				event.stSystem.fMinimized = false;
 				break;
-
-            */
 		}
 	}
 
@@ -537,15 +514,13 @@ namespace Phobos
 			{
 
 				case SDL_QUIT:
-				//case WM_ACTIVATE:
-				//case WM_ACTIVATEAPP:
+                case SDL_ACTIVEEVENT:
 					BuildSystemEvent(event, sdl_evento);
 					this->NotityListeners(event);
 					break;
 
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
-				//case WM_CHAR:
 					if(!BuildKeyboardEvent(event, sdl_evento))
 						continue;
 
