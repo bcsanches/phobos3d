@@ -40,16 +40,15 @@
 			<Add option="-DPH_GCC" />
 			<Add option="-DPH_DEBUG" />
 			<Add option="-DPH_CHECK_ASSERT" />
-			<Add option="-DBOOST_TEST_STATIC_LINK" />
-			<Add option="-DBOOST_TEST_MAIN" />
+			<Add option="-DBOOST_TEST_DYN_LINK" />
 			<Add directory="../../../include/kernel" />
 			<Add directory="../../../include/kernelTest" />
 		</Compiler>
 		<Linker>
-			<Add option="-lboost_unit_test_framework" />
-			<Add option="-lboost_system" />
-			<Add option="-lboost_filesystem" />
 			<Add library="../kernel/bin/Debug/kernel.so" />
+			<Add library="/usr/lib/libboost_filesystem.so" />
+			<Add library="/usr/lib/libboost_system.so" />
+			<Add library="/usr/lib/libboost_unit_test_framework.so" />
 		</Linker>
 		<Unit filename="../../../include/kernelTest/SimpleLogListener.h" />
 		<Unit filename="../../../src/kernelTest/ContextCmdTest.cpp" />

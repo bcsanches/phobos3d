@@ -41,6 +41,7 @@
 		<Linker>
 			<Add option="-lSDLmain -lSDL" />
 			<Add library="/usr/lib/libSDL.so" />
+			<Add library="/usr/lib/libboost_system.so" />
 		</Linker>
 		<Unit filename="../../../include/kernel/PH_Context.h" />
 		<Unit filename="../../../include/kernel/PH_ContextCmd.h" />

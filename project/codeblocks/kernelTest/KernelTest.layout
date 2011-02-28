@@ -5,7 +5,7 @@
 		<Cursor position="1077" topLine="28" />
 	</File>
 	<File name="../../../src/kernelTest/ContextCmdTest.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1251" topLine="13" />
+		<Cursor position="996" topLine="24" />
 	</File>
 	<File name="../../../src/kernelTest/ContextItemTest.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1066" topLine="18" />
@@ -13,7 +13,13 @@
 	<File name="../../../src/kernelTest/EventManagerTest.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="257" topLine="24" />
 	</File>
-	<File name="../../../src/kernelTest/main.cpp" open="1" top="1" tabpos="0">
-		<Cursor position="1011" topLine="11" />
+	<File name="../../../src/kernelTest/KernelTest.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1328" topLine="35" />
+	</File>
+	<File name="../../../src/kernelTest/ObjectManagerTest.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="60" />
+	</File>
+	<File name="../../../src/kernelTest/main.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1047" topLine="11" />
 	</File>
 </CodeBlocks_layout_file>
