@@ -386,7 +386,7 @@ namespace Phobos
 	//
 	//
 
-	inline bool IsValidSDLToPhobosKeyCode(SDLKey key)
+	inline bool EventManagerSDL_c::IsValidSDLToPhobosKeyCode(SDLKey key)
 	{
 		if(key >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
 			return(false);
@@ -397,7 +397,7 @@ namespace Phobos
 		return(true);
 	}
 
-	bool BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
+	bool EventManagerSDL_c::BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
 	{
 		event.eType = EVENT_TYPE_KEYBOARD;
 		event.pParam = &sdl_event;
@@ -410,6 +410,8 @@ namespace Phobos
                 {
                     event.stKeyboard.eType = KEYBOARD_CHAR;
                     event.stKeyboard.u16Code = sdl_event.key.keysym.unicode;
+
+                    this->NotityListeners(event);
                 }
 
                 if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
@@ -435,7 +437,7 @@ namespace Phobos
 		return true;
 	}
 
-	void BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
+	void EventManagerSDL_c::BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
 	{
 		event.eType = EVENT_TYPE_MOUSE;
 		event.pParam = &sdl_event;
@@ -471,7 +473,7 @@ namespace Phobos
 		}
 	}
 
-	void BuildSystemEvent(Event_s &event, SDL_Event& sdl_event)
+	void EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Event& sdl_event)
 	{
 		event.eType = EVENT_TYPE_SYSTEM;
 		event.pParam = &sdl_event;
