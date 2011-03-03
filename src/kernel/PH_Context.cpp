@@ -80,9 +80,9 @@ namespace Phobos
 	// =====================================================
 
 	Context_c::Context_c(void):
+        cmdHelp("help"),
 		cmdEcho("echo"),
 		cmdListCmds("listCmds"),
-		cmdHelp("help"),
 		cmdListVars("listVars"),
 		cmdSet("set"),
 		cmdIf("if"),

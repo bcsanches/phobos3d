@@ -109,9 +109,9 @@ namespace Phobos
 			void CmdSet(const StringVector_t &args, Context_c &);
 			void CmdIf(const StringVector_t &args, Context_c &);
 
+            ContextCmd_c cmdHelp;
 			ContextCmd_c cmdEcho;
 			ContextCmd_c cmdListCmds;
-			ContextCmd_c cmdHelp;
 			ContextCmd_c cmdListVars;
 			ContextCmd_c cmdSet;
 			ContextCmd_c cmdIf;
