@@ -40,8 +40,6 @@ namespace Phobos
 	    {0, 0},
 	    {0, 0},
 
-	    //começa a partir do 8
-
         {SDLK_BACKSPACE,	 KB_BACKSPACE},
         {SDLK_TAB,		     KB_TAB},
 
@@ -79,21 +77,21 @@ namespace Phobos
         {SDLK_SPACE,		 KB_SPACE},
         {SDLK_EXCLAIM,		 0},//TODO: possivel char '!'
         {SDLK_QUOTEDBL,		 0},
-        {SDLK_HASH,		 0},
+        {SDLK_HASH,		     0},
         {SDLK_DOLLAR,		 0},
 
         {0, 0},
 
-        {SDLK_AMPERSAND,		 0},
-        {SDLK_QUOTE,		 0},
-        {SDLK_LEFTPAREN,		 0},
-        {SDLK_RIGHTPAREN,		 0},
-        {SDLK_ASTERISK,		 0},
-        {SDLK_PLUS,		 0},
-        {SDLK_COMMA,		 0},
-        {SDLK_MINUS,		 0},
-        {SDLK_PERIOD,		 0},
-        {SDLK_SLASH,		 0},
+        {SDLK_AMPERSAND,	0},
+        {SDLK_QUOTE,		0},
+        {SDLK_LEFTPAREN,	0},
+        {SDLK_RIGHTPAREN,	0},
+        {SDLK_ASTERISK,		0},
+        {SDLK_PLUS,		    0},
+        {SDLK_COMMA,		0},
+        {SDLK_MINUS,		0},
+        {SDLK_PERIOD,		0},
+        {SDLK_SLASH,		0},
         {SDLK_0,	    '0'},
         {SDLK_1,	    '1'},
         {SDLK_2,		'2'},
@@ -147,12 +145,12 @@ namespace Phobos
         /*
            Skip uppercase letters
          */
-        {SDLK_LEFTBRACKET	, 0},
-        {SDLK_BACKSLASH,		 0},
-        {SDLK_RIGHTBRACKET	, 0},
-        {SDLK_CARET,		 0},
-        {SDLK_UNDERSCORE,		 0},
-        {SDLK_BACKQUOTE,		 0},
+        {SDLK_LEFTBRACKET,      0},
+        {SDLK_BACKSLASH,		0},
+        {SDLK_RIGHTBRACKET,     0},
+        {SDLK_CARET,		    0},
+        {SDLK_UNDERSCORE,		0},
+        {SDLK_BACKQUOTE,		0},
         {SDLK_a,		 'a'},
         {SDLK_b,		 'b'},
         {SDLK_c,		 'c'},
@@ -299,13 +297,13 @@ namespace Phobos
         {SDLK_KP8,		 KB_KP_UP_ARROW},
         {SDLK_KP9,		 KB_KP_PAGE_UP},
 
-        {SDLK_KP_PERIOD,		 0}, //TODO: não tem ponto ?
+        {SDLK_KP_PERIOD,		'.'},
         {SDLK_KP_DIVIDE,	 KB_KP_SLASH},
         {SDLK_KP_MULTIPLY,   KB_KP_MUL},
         {SDLK_KP_MINUS,		 KB_KP_MINUS},
         {SDLK_KP_PLUS,		 KB_KP_PLUS},
         {SDLK_KP_ENTER,		 KB_KP_ENTER},
-        {SDLK_KP_EQUALS,		 0},
+        {SDLK_KP_EQUALS,		 '='},
 
 
         {SDLK_UP,		 KB_UP_ARROW},
@@ -408,11 +406,20 @@ namespace Phobos
 		{
 			case SDL_KEYDOWN:
 
-				if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
-					return(false);
+                if(sdl_event.key.keysym.unicode != 0)
+                {
+                    event.stKeyboard.eType = KEYBOARD_CHAR;
+                    event.stKeyboard.u16Code = sdl_event.key.keysym.unicode;
+                }
+                else
+                {
+                    if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
+                        return(false);
 
-				event.stKeyboard.eType = KEYBOARD_KEY_DOWN;
-				event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
+                    event.stKeyboard.eType = KEYBOARD_KEY_DOWN;
+                    event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
+                }
+
 				break;
 
 			case SDL_KEYUP:
@@ -423,13 +430,8 @@ namespace Phobos
 				event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
 				break;
 
-
-            //TODO: esse aki eu nem sei pronde vai
-			/*case WM_CHAR:
-				event.stKeyboard.eType = KEYBOARD_CHAR;
-				event.stKeyboard.u16Code = (UInt16_t) msg.wParam;
-				break;
-				*/
+            default:
+                break;
 		}
 
 		return true;
@@ -447,7 +449,7 @@ namespace Phobos
 				event.stMouse.eType = MOUSE_MOVE;
 				event.stMouse.u16X = sdl_event.motion.x;
 				event.stMouse.u16Y = sdl_event.motion.y;
-                event.stMouse.u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].u16Phobos;
+                event.stMouse.u16ButtonId = MOUSE_THUMB;
 
 				break;
 
@@ -506,22 +508,22 @@ namespace Phobos
 	void EventManagerSDL_c::Update()
 	{
 		Event_s	event;
-		SDL_Event sdl_evento;
+		SDL_Event sdl_event;
 
-		while(SDL_PollEvent(&sdl_evento))
+		while(SDL_PollEvent(&sdl_event))
 		{
-			switch(sdl_evento.type)
+			switch(sdl_event.type)
 			{
 
 				case SDL_QUIT:
                 case SDL_ACTIVEEVENT:
-					BuildSystemEvent(event, sdl_evento);
+					BuildSystemEvent(event, sdl_event);
 					this->NotityListeners(event);
 					break;
 
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
-					if(!BuildKeyboardEvent(event, sdl_evento))
+					if(!BuildKeyboardEvent(event, sdl_event))
 						continue;
 
 					this->NotityListeners(event);
@@ -530,7 +532,7 @@ namespace Phobos
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
-					BuildMouseEvent(event, sdl_evento);
+					BuildMouseEvent(event, sdl_event);
 					this->NotityListeners(event);
 					break;
 			}

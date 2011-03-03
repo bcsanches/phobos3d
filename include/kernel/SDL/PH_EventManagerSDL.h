@@ -14,8 +14,6 @@ namespace Phobos
 		public:
 			void Update();
 
-			//void OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 		protected:
 
 		private:

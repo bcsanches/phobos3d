@@ -29,6 +29,8 @@ namespace Phobos
 
 	    SDL_Init(SDL_INIT_VIDEO);
 
+	    SDL_EnableUNICODE(1);
+
 	    SDL_WM_SetCaption(name.c_str(), NULL);
 
 	    SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, 0);

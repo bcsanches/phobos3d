@@ -13,7 +13,15 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DPH_LINUX" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_CHECK_ASSERT" />
+					<Add option="-DPH_GCC" />
+					<Add directory="../../../include/kernel" />
 				</Compiler>
+				<Linker>
+					<Add library="../kernel/bin/Debug/kernel.so" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Sample_01" prefix_auto="1" extension_auto="1" />
@@ -31,6 +39,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../../src/sample_01/main.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
