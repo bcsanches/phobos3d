@@ -84,6 +84,9 @@ void Sample_c::Event(struct Event_s &event)
 				break;
 			}
 			break;
+
+        default:
+            break;
 	}
 }
 
