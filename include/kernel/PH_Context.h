@@ -38,7 +38,7 @@ namespace Phobos
 
 		\ingroup context
 
-		This class take care of a single context. With this class the user can 
+		This class take care of a single context. With this class the user can
 		create dynamic cmds and variables and execute those cmds.
 
 		The PH_Context_c create those default cmds:
@@ -48,11 +48,11 @@ namespace Phobos
 	*/
 
 	class PH_KERNEL_API Context_c: public IContext_c
-	{	
-		public:		
+	{
+		public:
 			// =====================================================
 			// PUBLIC METHODS
-			// =====================================================		
+			// =====================================================
 			Context_c(void);
 
 			void AddContextVar(class ContextVar_c &var);
@@ -80,16 +80,16 @@ namespace Phobos
 		private:
 			// =====================================================
 			// PRIVATE METHODS
-			// =====================================================	
+			// =====================================================
 			ContextVar_c *TryGetContextVar(const String_c &name);
 			const ContextCmd_c *TryGetContextCmd(const String_c &name) const;
 			ContextCmd_c *TryGetContextCmd(const String_c &name);
-			
+
 			bool GetCmdLine(String_c &dest, const String_c &src, size_t &currentPos);
 			bool ParseCmdLine(StringVector_t &args, const String_c &cmdLine);
 			void ParseCmdParam(String_c &result, const String_c &param);
 
-			void ExecuteCmdLine(StringVector_t &args);			
+			void ExecuteCmdLine(StringVector_t &args);
 
 			// =====================================================
 			// PRIVATE ATRIBUTES
@@ -97,24 +97,24 @@ namespace Phobos
 			typedef boost::intrusive::set<ContextCmd_c, boost::intrusive::constant_time_size<false> > ContextCmdSet_t;
 			typedef boost::intrusive::set<ContextVar_c, boost::intrusive::constant_time_size<false> > ContextVarSet_t;
 			ContextCmdSet_t setCommands;
-			ContextVarSet_t setVariables;			
-		
+			ContextVarSet_t setVariables;
+
 		private:
 			// =====================================================
 			// STATIC PRIVATE METHODS
-			// =====================================================						
+			// =====================================================
 			void CmdEcho(const StringVector_t &args, Context_c &);
 			void CmdListCmds(const StringVector_t &args, Context_c &);
 			void CmdListVars(const StringVector_t &args, Context_c &);
 			void CmdSet(const StringVector_t &args, Context_c &);
 			void CmdIf(const StringVector_t &args, Context_c &);
 
-			ContextCmd_c cmdHelp;
 			ContextCmd_c cmdEcho;
 			ContextCmd_c cmdListCmds;
+			ContextCmd_c cmdHelp;
 			ContextCmd_c cmdListVars;
 			ContextCmd_c cmdSet;
-			ContextCmd_c cmdIf;		
+			ContextCmd_c cmdIf;
 
 			ContextVar_c	varDebug;
 			ContextVar_c	varRelease;

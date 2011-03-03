@@ -37,8 +37,8 @@ namespace Phobos
 	#define IS_NUMBER_START(X) ((X == '-') || IS_NUMBER(X))
 
 	Parser_c::Parser_c(void):
+        pclStream(NULL),
 		fLookAhead(false),
-		pclStream(NULL),
 		fTokenAhead(false)
 	{
 	}
@@ -70,7 +70,7 @@ namespace Phobos
 		if(fLookAhead)
 		{
 			fLookAhead = false;
-			
+
 			out = chLookAhead;
 
 			return true;
@@ -106,7 +106,7 @@ namespace Phobos
 			RETURN_TOKEN(TOKEN_EOF);
 
 		do
-		{	
+		{
 			switch(ch)
 			{
 				case '\n':
@@ -124,7 +124,7 @@ namespace Phobos
 					strToken += ch;
 					RETURN_TOKEN(TOKEN_SEMI_COLON);
 					break;
-				
+
 				case '{':
 					strToken+=ch;
 					RETURN_TOKEN(TOKEN_OPEN_BRACE);
@@ -147,7 +147,7 @@ namespace Phobos
 
 				case '/':
 					//-------------------------
-					(*pclStream)>>ch;					
+					(*pclStream)>>ch;
 
 					if((!(pclStream->good())) || (ch != '/'))
 					{
@@ -162,7 +162,7 @@ namespace Phobos
 						e = pclStream->good();
 						if(e != true)
 							RETURN_TOKEN(TOKEN_EOF);
-					} while(ch != '\n');		
+					} while(ch != '\n');
 					break;
 
 				case '\"':
@@ -193,7 +193,7 @@ namespace Phobos
 								gotDot = true;
 							}
 
-							strToken += ch;												
+							strToken += ch;
 
 							(*pclStream)>>ch;
 
@@ -215,7 +215,7 @@ namespace Phobos
 							strToken += ch;
 
 							(*pclStream)>>ch;
-							
+
 							e = pclStream->good();
 
 							if(e != true)
@@ -223,13 +223,13 @@ namespace Phobos
 								//This is a expected EOF
 								RETURN_TOKEN(TOKEN_ID);
 							}
-			
+
 						} while(IS_ID(ch));
 
 						this->SetLookAhead(ch);
 						RETURN_TOKEN(TOKEN_ID);
 					}
-				
+
 			}
 			(*pclStream)>>ch;
 
@@ -259,7 +259,7 @@ namespace Phobos
 			{"open brace",			TOKEN_OPEN_BRACE},
 			{"close brace",			TOKEN_CLOSE_BRACE},
 			{"open parenthesis",	TOKEN_OPEN_PAREN},
-			{"close parenthesis",	TOKEN_CLOSE_PAREN}, 		
+			{"close parenthesis",	TOKEN_CLOSE_PAREN},
 			{"EOF",					TOKEN_EOF},
 			{"parse error",			TOKEN_ERROR},
 			{NULL,					TOKEN_ERROR}

@@ -34,13 +34,13 @@ namespace Phobos
 	using namespace std;
 
 	Exception_c::Exception_c(int errorCode, const String_c &typeName, const String_c &moduleName, const String_c &extraInfo, const char *fileName, unsigned int line):
+		iLine(line),
 		iError(errorCode),
 		strTypeName(typeName),
+        strDescription(extraInfo),
 		strModuleName(moduleName),
-		strDescription(extraInfo),
-		strFile(fileName),	
-		iLine(line)
-	{	
+		strFile(fileName)
+	{
 	}
 
 	Exception_c::Exception_c(const Exception_c &rhs):
@@ -70,7 +70,7 @@ namespace Phobos
 	{
 		if(strFullDesc.empty())
 		{
-			stringstream stream;			
+			stringstream stream;
 
 			stream << "[" << strModuleName << "; " << strFile << ":" << iLine << "] " << strTypeName << ": " << strDescription << endl;
 
