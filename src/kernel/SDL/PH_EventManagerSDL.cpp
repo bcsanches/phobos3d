@@ -411,14 +411,12 @@ namespace Phobos
                     event.stKeyboard.eType = KEYBOARD_CHAR;
                     event.stKeyboard.u16Code = sdl_event.key.keysym.unicode;
                 }
-                else
-                {
-                    if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
-                        return(false);
 
-                    event.stKeyboard.eType = KEYBOARD_KEY_DOWN;
-                    event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
-                }
+                if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
+                    return(false);
+
+                event.stKeyboard.eType = KEYBOARD_KEY_DOWN;
+                event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
 
 				break;
 
