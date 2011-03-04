@@ -28,7 +28,7 @@ Phobos 3d
 
 #include <boost/bind.hpp>
 
-#define PH_CONTEXT_CMD_BIND(M, T) boost::bind(M, T, _1, _2)
-#define PH_CONTEXT_VAR_BIND(M, T) boost::bind(M, T, _1, _2, _3)
+#define PH_CONTEXT_CMD_BIND(METHOD, OBJ) boost::bind(METHOD, OBJ, _1, _2)
+#define PH_CONTEXT_VAR_BIND(METHOD, OBJ) boost::bind(METHOD, OBJ, _1, _2, _3)
 
 #endif

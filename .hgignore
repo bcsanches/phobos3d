@@ -131,3 +131,9 @@ glob:project/visual8/Sample_02/Debug/
 glob:project/visual8/Sample_02/Sample_02.log
 glob:project/visual8/Sample_02/Sample_02.vcproj.mordor.bcsanches.user
 glob:project/visual8/KernelTest/KernelTest.vcproj.bcsnote.bcsanches.user
+glob:project/visual8/PH_GamePlugin/PH_GamePlugin.vcproj.bcsnote.bcsanches.user
+glob:project/visual8/Sample_01/Sample_01.vcproj.bcsnote.bcsanches.user
+glob:project/visual8/Sample_02/Sample_02.vcproj.bcsnote.bcsanches.user
+glob:project/visual8/Sample_03/Debug/
+glob:project/visual8/Sample_03/Sample_02.log
+glob:project/visual8/Sample_03/Sample_03.vcproj.bcsnote.bcsanches.user
