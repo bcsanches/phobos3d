@@ -81,6 +81,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_03", "Sample_03\Samp
 		{BAA51278-01DB-4D9E-9FAB-733D6EC68E4D} = {BAA51278-01DB-4D9E-9FAB-733D6EC68E4D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_04", "Sample_04\Sample_04.vcproj", "{F789C65B-9487-4147-906C-842DE3431DB6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A} = {C7F4C75C-1492-4CCC-B0F6-03509E3C4A9A}
+		{BAA51278-01DB-4D9E-9FAB-733D6EC68E4D} = {BAA51278-01DB-4D9E-9FAB-733D6EC68E4D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -143,6 +149,10 @@ Global
 		{A74B1A1F-382A-4582-A7B9-ADDBFD96AE9D}.Debug|Win32.Build.0 = Debug|Win32
 		{A74B1A1F-382A-4582-A7B9-ADDBFD96AE9D}.Release|Win32.ActiveCfg = Release|Win32
 		{A74B1A1F-382A-4582-A7B9-ADDBFD96AE9D}.Release|Win32.Build.0 = Release|Win32
+		{F789C65B-9487-4147-906C-842DE3431DB6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F789C65B-9487-4147-906C-842DE3431DB6}.Debug|Win32.Build.0 = Debug|Win32
+		{F789C65B-9487-4147-906C-842DE3431DB6}.Release|Win32.ActiveCfg = Release|Win32
+		{F789C65B-9487-4147-906C-842DE3431DB6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

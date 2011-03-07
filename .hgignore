@@ -137,3 +137,6 @@ glob:project/visual8/Sample_02/Sample_02.vcproj.bcsnote.bcsanches.user
 glob:project/visual8/Sample_03/Debug/
 glob:project/visual8/Sample_03/Sample_02.log
 glob:project/visual8/Sample_03/Sample_03.vcproj.bcsnote.bcsanches.user
+glob:project/visual8/Sample_04/Debug/
+glob:project/visual8/Sample_04/Sample_04.log
+glob:project/visual8/Sample_04/Sample_04.vcproj.bcsnote.bcsanches.user
