@@ -15,7 +15,7 @@ copy %OGRE_VC8_BIN%\release\Plugin_ParticleFX.dll c:\temp\release\
 copy %OGRE_VC8_BIN%\release\Plugin_CgProgramManager.dll c:\temp\release\
 copy %OGRE_VC8_BIN%\release\cg.dll c:\temp\release\
 
-copy ..\work\engineMain\autoexec.cfg c:\temp\release\
-copy ..\work\engineMain\mapViewer.cfg c:\temp\release\
-xcopy /s ..\work\engineMain\resources\*.* c:\temp\release\resources\
+copy ..\work\mapViewerSample\autoexec.cfg c:\temp\release\
+copy ..\work\mapViewerSample\game.cfg c:\temp\release\
+xcopy /s ..\work\mapViewerSample\resources\*.* c:\temp\release\resources\
                                           
