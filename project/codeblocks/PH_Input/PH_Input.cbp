@@ -7,24 +7,29 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/PH_Input" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/Input" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DPH_LINUX" />
+					<Add option="-DPH_DEBUG" />
+					<Add option="-DPH_CHECK_ASSERT" />
+					<Add option="-DPH_GCC" />
 					<Add directory="../../../include/kernel" />
 					<Add directory="../../../include/input" />
 				</Compiler>
 				<Linker>
+					<Add option="-lSDLmain -lSDL" />
 					<Add library="../kernel/bin/Debug/kernel.so" />
+					<Add library="/usr/lib/libSDL.so" />
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/PH_Input" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/Input" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
-				<Option type="1" />
+				<Option type="3" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
@@ -36,10 +41,8 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-DPH_LINUX" />
-			<Add option="-DPH_DEBUG" />
-			<Add option="-DPH_CHECK_ASSERT" />
-			<Add option="-DPH_GCC" />
+			<Add directory="../../../include/input" />
+			<Add directory="../../../include/kernel" />
 		</Compiler>
 		<Unit filename="../../../include/input/PH_Button.h" />
 		<Unit filename="../../../include/input/PH_InputAPI.h" />

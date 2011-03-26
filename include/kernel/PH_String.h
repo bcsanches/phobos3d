@@ -42,13 +42,13 @@ namespace Phobos
 		STRING_TRIM_LEFT = 0x01,
 		STRING_TRIM_RIGHT = 0x02,
 		STRING_TRIM_BOTH = STRING_TRIM_LEFT | STRING_TRIM_RIGHT
-	};	
+	};
 
 	PH_KERNEL_API std::size_t StringReplaceAll(String_c &str, char search, char replace);
 	PH_KERNEL_API void StringReplaceAll(String_c &out, const String_c &src, char search, char replace);
 
 	PH_KERNEL_API int StringToInt(const String_c &str);
-	PH_KERNEL_API Float_t StringToFloat(const String_c &str);	
+	PH_KERNEL_API Float_t StringToFloat(const String_c &str);
 
 	PH_KERNEL_API bool StringToBoolean(const String_c &a);
 
@@ -60,7 +60,7 @@ namespace Phobos
 
 		return stream.str();
 	}
-	
+
 	inline String_c PointerToString(const void *value)
 	{
 		std::stringstream stream;

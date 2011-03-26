@@ -16,11 +16,13 @@
 					<Add option="-DPH_LINUX" />
 					<Add option="-DPH_GCC" />
 					<Add option="-DPH_CHECK_ASSERT" />
-					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_DEBUG" />
 					<Add directory="../../../include/kernel" />
+					<Add directory="../../../include/input" />
 				</Compiler>
 				<Linker>
 					<Add library="../kernel/bin/Debug/kernel.so" />
+					<Add library="../PH_Input/bin/Debug/Input.so" />
 				</Linker>
 			</Target>
 			<Target title="Release">
