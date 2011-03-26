@@ -42,17 +42,17 @@ namespace Phobos
 
 	InputMapper_c::InputMapper_c(const String_c &name, Context_c &context):
 		Node_c(name),
+		rclContext(context),
 		fDisable(false),
 		cmdBind("bind"),
-		cmdUnbind("unbind"),
-		rclContext(context)
-	{		
-		InputManagerPtr_t manager = InputManager_c::GetInstance();		
-		
-		manager->AddListener(*this);	
+		cmdUnbind("unbind")
+	{
+		InputManagerPtr_t manager = InputManager_c::GetInstance();
+
+		manager->AddListener(*this);
 
 		cmdBind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdBind, this));
-		cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdUnbind, this));	
+		cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdUnbind, this));
 
 		rclContext.AddContextCmd(cmdBind);
 		rclContext.AddContextCmd(cmdUnbind);
@@ -64,21 +64,21 @@ namespace Phobos
 	}
 
 	void InputMapper_c::Execute(const std::string &cmd)
-	{		
+	{
 		rclContext.Execute(cmd);
 	}
 
 	InputMapper_c::DeviceMapper_c::DeviceMapper_c(InputMapper_c &mapper, InputDevicePtr_t device):
-		rclInputMapper(mapper),
-		ipInputDevice(device)
+		ipInputDevice(device),
+		rclInputMapper(mapper)
 	{
 		ipInputDevice->AddListener(*this);
 	}
-					
+
 	InputMapper_c::DeviceMapper_c::DeviceMapper_c(const DeviceMapper_c &rhs):
-		rclInputMapper(rhs.rclInputMapper),
+		mapActions(rhs.mapActions),
 		ipInputDevice(rhs.ipInputDevice),
-		mapActions(rhs.mapActions)
+		rclInputMapper(rhs.rclInputMapper)
 	{
 		if(rhs.hkListener.is_linked())
 			ipInputDevice->AddListener(*this);
@@ -104,7 +104,7 @@ namespace Phobos
 
 		Command syntax:
 
-			If the command is preceed by the '+' symbol it will only be called when the 
+			If the command is preceed by the '+' symbol it will only be called when the
 			button state is IM_InputManager_c::BUTTON_STATE_DOWN. In this case, the
 			InputMapper_c will automatically call the same command preceed by '=' and
 			'-' when a event IM_InputManager_c::BUTTON_STATE_UPDATE and IM_InputManager_c::BUTTON_STATE_UP
@@ -118,13 +118,13 @@ namespace Phobos
 
 	*/
 	void InputMapper_c::Bind(const String_c &devicePathName, const String_c &actionName, const String_c &cmd)
-	{				
+	{
 		this->GetDeviceMapper(devicePathName).Bind(actionName, cmd);
 	}
 
 	void InputMapper_c::Unbind(const String_c &devicePathName, const String_c &actionName)
-	{	
-		this->GetDeviceMapper(devicePathName).Unbind(actionName);		
+	{
+		this->GetDeviceMapper(devicePathName).Unbind(actionName);
 	}
 
 	void InputMapper_c::InputManagerEvent(const InputManagerEvent_s &event)
@@ -155,22 +155,22 @@ namespace Phobos
 	}
 
 	void InputMapper_c::DeviceMapper_c::AddEventButtonInfo(std::stringstream &stream, const InputEvent_s &event) const
-	{		
-		stream << ' ' << 
-			INPUT_EVENT_BUTTON << ' ' << 
-			event.stButton.uId << ' ' << 
+	{
+		stream << ' ' <<
+			INPUT_EVENT_BUTTON << ' ' <<
+			event.stButton.uId << ' ' <<
 			event.stButton.fpPression << ' ' <<
 			event.stButton.eState << ' ' <<
 			ipInputDevice->GetName();
 	}
-	
+
 	void InputMapper_c::DeviceMapper_c::OnInputEventButton(const InputEvent_s &event)
-	{		
+	{
 		ActionBindMap_t::iterator it =	mapActions.find(event.stButton.uId);
 
 		if(it == mapActions.end())
 			return;
-		
+
 		ActionBind_s &bind = it->second;
 		std::stringstream	stream;
 
@@ -180,7 +180,7 @@ namespace Phobos
 				stream << bind.strCommand;
 				this->AddEventButtonInfo(stream, event);
 
-				rclInputMapper.Execute(stream.str());				
+				rclInputMapper.Execute(stream.str());
 				break;
 
 			case BUTTON_STATE_UPDATE:
@@ -190,7 +190,7 @@ namespace Phobos
 					this->AddEventButtonInfo(stream, event);
 
 					rclInputMapper.Execute(stream.str());
-				}			
+				}
 				break;
 
 			case BUTTON_STATE_UP:
@@ -200,9 +200,9 @@ namespace Phobos
 					this->AddEventButtonInfo(stream, event);
 
 					rclInputMapper.Execute(stream.str());
-				}			
+				}
 				break;
-		}		
+		}
 	}
 
 	void InputMapper_c::DeviceMapper_c::OnInputEventThumb(const InputEvent_s &event)
@@ -211,7 +211,7 @@ namespace Phobos
 
 		if(it == mapActions.end())
 			return;
-		
+
 		ActionBind_s &bind = it->second;
 		std::stringstream	stream;
 
@@ -230,12 +230,12 @@ namespace Phobos
 		This is called by a IM_ContextManager_c command.
 
 	*/
-	void InputMapper_c::CmdBind(const StringVector_t &args, Context_c &) 
+	void InputMapper_c::CmdBind(const StringVector_t &args, Context_c &)
 	{
 		//We need four parameters: bind device action cmd
 		if(args.size() < 4)
 		{
-			Kernel_c::GetInstance().LogMessage("Usage: bind <devicePathName> <actionName> <cmd>\nExample: bind kb0 UP_ARROW forward");			
+			Kernel_c::GetInstance().LogMessage("Usage: bind <devicePathName> <actionName> <cmd>\nExample: bind kb0 UP_ARROW forward");
 
 			return;
 		}
@@ -270,7 +270,7 @@ namespace Phobos
 			catch(Exception_c &e)
 			{
 				Kernel_c::GetInstance().LogMessage(e.what());
-			}			
+			}
 		}
 	}
 
@@ -288,10 +288,10 @@ namespace Phobos
 	}
 
 	void InputMapper_c::DeviceMapper_c::InputEvent(const InputEvent_s &event)
-	{				
+	{
 		if(rclInputMapper.IsDisabled())
 			return;
-		
+
 		switch(event.eType)
 		{
 			case INPUT_EVENT_BUTTON:
@@ -306,11 +306,11 @@ namespace Phobos
 				break;
 		}
 	}
-	
+
 	void InputMapper_c::DeviceMapper_c::Bind(const String_c &action, const String_c &cmd)
-	{		
+	{
 		UInt_t actionId = this->GetActionId(action);
-		mapActions[actionId] = ActionBind_s(cmd, action, actionId);		
+		mapActions[actionId] = ActionBind_s(cmd, action, actionId);
 	}
 
 	void InputMapper_c::DeviceMapper_c::Unbind(const String_c &action)

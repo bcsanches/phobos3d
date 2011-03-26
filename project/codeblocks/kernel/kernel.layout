@@ -112,8 +112,8 @@
 	<File name="../../../src/kernel/PH_Log.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1880" topLine="32" />
 	</File>
-	<File name="../../../src/kernel/PH_Parser.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1518" topLine="30" />
+	<File name="../../../src/kernel/PH_Parser.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="5391" topLine="253" />
 	</File>
 	<File name="../../../src/kernel/PH_Path.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="8086" topLine="450" />
@@ -122,10 +122,10 @@
 		<Cursor position="85" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="10036" topLine="401" />
+		<Cursor position="12811" topLine="531" />
 	</File>
 	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="632" topLine="31" />
+		<Cursor position="767" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="37" topLine="19" />

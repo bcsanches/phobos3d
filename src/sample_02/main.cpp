@@ -92,9 +92,12 @@ void Sample_c::Event(struct Event_s &event)
 			if(event.stSystem.eType == SYSTEM_QUIT)
 			{
 				fQuit = true;
-				break;	
-			}	
+				break;
+			}
 			break;
+
+        default:
+            break;
 	}
 }
 
@@ -106,6 +109,9 @@ void Sample_c::InputManagerEvent(const InputManagerEvent_s &event)
 			if(event.ipDevice->GetDeviceType() == INPUT_DEVICE_KEYBOARD)
 				event.ipDevice->AddListener(*this);
 			break;
+
+        default:
+            break;
 	}
 }
 
@@ -116,14 +122,17 @@ void Sample_c::InputEvent(const InputEvent_s &event)
 		case INPUT_EVENT_BUTTON:
 			if((event.stButton.eState == BUTTON_STATE_DOWN) && (event.stButton.uId == KB_ESCAPE))
 				fQuit = true;
-	}	
+
+        default:
+            break;
+	}
 }
 
 void Sample_c::Run()
 {
 	while(!fQuit)
 	{
-		ipEventManager->Update();		
+		ipEventManager->Update();
 		ipInputManager->Update();
 	}
 }

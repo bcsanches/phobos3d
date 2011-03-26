@@ -36,7 +36,7 @@ Phobos 3d
 #include "PH_InputDevice.h"
 
 namespace Phobos
-{		
+{
 	enum InputManagerEventType_e
 	{
 		INPUT_MANAGER_EVENT_DEVICE_ATTACHED,
@@ -49,8 +49,9 @@ namespace Phobos
 		InputDevicePtr_t	ipDevice;
 
 		inline InputManagerEvent_s(InputManagerEventType_e type, InputDevicePtr_t device):
-			ipDevice(device),
-			eType(type)
+			eType(type),
+			ipDevice(device)
+
 		{
 		}
 	};
@@ -66,18 +67,18 @@ namespace Phobos
 			PH_DECLARE_LISTENER_HOOK;
 	};
 
-	PH_DECLARE_SINGLETON_PTR(InputManager);	
+	PH_DECLARE_SINGLETON_PTR(InputManager);
 
 	class PH_INPUT_API InputManager_c: public Node_c
-	{	
-		PH_DECLARE_NAMED_SINGLETON_METHODS(InputManager)		
+	{
+		PH_DECLARE_NAMED_SINGLETON_METHODS(InputManager)
 
 		public:
 			// =====================================================
 			// PUBLIC METHODS
 			// =====================================================
-			virtual void Update(void);		
-			
+			virtual void Update(void);
+
 			void AddListenerToDevice(const String_c &deviceName,  InputDeviceListener_c &listener);
 
 			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
@@ -90,7 +91,7 @@ namespace Phobos
 			// PROTECTED METHODS
 			// =====================================================
 			InputManager_c(const String_c &name);
-			~InputManager_c(void);		
+			~InputManager_c(void);
 
 			virtual void PollDevices(void) = 0;
 
@@ -101,24 +102,24 @@ namespace Phobos
 			// =====================================================
 			// PRIVATE METHODS
 			// =====================================================
-			void UpdateDevices(void);					
+			void UpdateDevices(void);
 
 		public:
 			// =====================================================
 			// STATIC PUBLIC METHODS
 			// =====================================================
 			static const String_c &GetDeviceTypeName(InputDeviceTypes_e type);
-			static void BuildDeviceName(String_c &out, InputDeviceTypes_e type, UInt_t id);		
+			static void BuildDeviceName(String_c &out, InputDeviceTypes_e type, UInt_t id);
 
 		private:
 			// =====================================================
 			// STATIC PRIVATE METHODS
 			// =====================================================
-			static InputManagerPtr_t CreateInstanceImpl(const String_c &name);		
+			static InputManagerPtr_t CreateInstanceImpl(const String_c &name);
 
 		private:
 			PH_DECLARE_LISTENER_LIST(InputManagerListener_c, lstListeners);
-	};	
+	};
 }
 
 

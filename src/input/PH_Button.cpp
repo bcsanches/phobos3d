@@ -32,11 +32,11 @@ Phobos 3d
 namespace Phobos
 {
 	Button_c::Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context):
+		fValue(0),
 		cmdUp(up),
 		cmdDown(down),
-		cmdUpdate(update),
-		fValue(0)
-	{		
+		cmdUpdate(update)
+	{
 		cmdUp.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
 		cmdDown.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
 		cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
@@ -49,7 +49,7 @@ namespace Phobos
 	{
 		context.AddContextCmd(cmdUp);
 		context.AddContextCmd(cmdDown);
-		context.AddContextCmd(cmdUpdate);	
+		context.AddContextCmd(cmdUpdate);
 	}
 
 	void Button_c::Disable()

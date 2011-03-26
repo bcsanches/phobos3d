@@ -75,7 +75,7 @@ namespace Phobos
         {0, 0},
 
         {SDLK_SPACE,		 KB_SPACE},
-        {SDLK_EXCLAIM,		 0},//TODO: possivel char '!'
+        {SDLK_EXCLAIM,		 0},
         {SDLK_QUOTEDBL,		 0},
         {SDLK_HASH,		     0},
         {SDLK_DOLLAR,		 0},
@@ -103,7 +103,7 @@ namespace Phobos
         {SDLK_8,		'8'},
         {SDLK_9,		'9'},
 
-        {SDLK_COLON,		 0}, //TODO: possivel char
+        {SDLK_COLON,		 0},
         {SDLK_SEMICOLON,	 0},
         {SDLK_LESS,		     0},
         {SDLK_EQUALS,		 0},
@@ -408,7 +408,7 @@ namespace Phobos
 
                 if(sdl_event.key.keysym.unicode != 0)
                 {
-                    event.stKeyboard.eType = KEYBOARD_CHAR;
+                    event.stKeyboard.eType   = KEYBOARD_CHAR;
                     event.stKeyboard.u16Code = sdl_event.key.keysym.unicode;
 
                     this->NotityListeners(event);
@@ -417,7 +417,7 @@ namespace Phobos
                 if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
                     return(false);
 
-                event.stKeyboard.eType = KEYBOARD_KEY_DOWN;
+                event.stKeyboard.eType   = KEYBOARD_KEY_DOWN;
                 event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
 
 				break;
@@ -426,7 +426,7 @@ namespace Phobos
 				if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
 					return(false);
 
-				event.stKeyboard.eType = KEYBOARD_KEY_UP;
+				event.stKeyboard.eType   = KEYBOARD_KEY_UP;
 				event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
 				break;
 
@@ -446,10 +446,10 @@ namespace Phobos
 		{
 			case SDL_MOUSEMOTION:
 
-				event.stMouse.eType = MOUSE_MOVE;
-				event.stMouse.u16X = sdl_event.motion.x;
-				event.stMouse.u16Y = sdl_event.motion.y;
-                event.stMouse.u16ButtonId = MOUSE_THUMB;
+				event.stMouse.eType         = MOUSE_MOVE;
+				event.stMouse.u16X          = sdl_event.motion.x;
+				event.stMouse.u16Y          = sdl_event.motion.y;
+                event.stMouse.u16ButtonId   = MOUSE_THUMB;
 
 				break;
 
@@ -467,29 +467,34 @@ namespace Phobos
 
                 break;
 
-
             default:
                 break;
 		}
 	}
 
-	void EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Event& sdl_event)
+	void EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
 	{
-		event.eType = EVENT_TYPE_SYSTEM;
-		event.pParam = &sdl_event;
+        event.eType = EVENT_TYPE_SYSTEM;
+        event.pParam = &sdl_event;
 
 		switch(sdl_event.type)
 		{
 			case SDL_QUIT:
+
 				event.stSystem.eType = SYSTEM_QUIT;
+
 				break;
 
-			case SDL_APPMOUSEFOCUS:
 			case SDL_APPACTIVE:
+
 				event.stSystem.eType = SYSTEM_ACTIVATE;
 				event.stSystem.fActive = true;
 				event.stSystem.fMinimized = false;
+
 				break;
+
+            default:
+                break;
 		}
 	}
 
@@ -514,26 +519,31 @@ namespace Phobos
 		{
 			switch(sdl_event.type)
 			{
-
 				case SDL_QUIT:
-                case SDL_ACTIVEEVENT:
+				case SDL_ACTIVEEVENT:
+
 					BuildSystemEvent(event, sdl_event);
 					this->NotityListeners(event);
+
 					break;
 
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
+
 					if(!BuildKeyboardEvent(event, sdl_event))
 						continue;
 
 					this->NotityListeners(event);
+
 					break;
 
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
+
 					BuildMouseEvent(event, sdl_event);
 					this->NotityListeners(event);
+
 					break;
 			}
 		}

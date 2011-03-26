@@ -41,7 +41,7 @@ namespace Phobos
 	static const String_c strMouseName_gl("mouse");
 	static const String_c strPadName_gl("pad");
 
-	PH_DEFINE_SINGLETON_VAR(InputManager);	
+	PH_DEFINE_SINGLETON_VAR(InputManager);
 
 	InputManagerPtr_t InputManager_c::CreateInstance(const String_c &name)
 	{
@@ -62,7 +62,7 @@ namespace Phobos
 	}
 
 	void InputManager_c::ReleaseInstance()
-	{	
+	{
 		PH_ASSERT_MSG(ipInstance_gl, "[InputManager_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
 
 		ipInstance_gl->RemoveSelf();
@@ -83,7 +83,7 @@ namespace Phobos
 	{
 		this->PollDevices();
 
-		this->UpdateDevices();		
+		this->UpdateDevices();
 	}
 
 	/**
@@ -104,29 +104,30 @@ namespace Phobos
 		String_c name;
 
 		InputManager_c::BuildDeviceName(name, deviceType, id);
-		
+
 		//Because children is private we can control the types that are added
 		//so we can safely do a static cast
-		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(name));		
+		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(name));
 	}
 
 	InputDevicePtr_t InputManager_c::GetDevice(const InputDeviceTypes_e deviceType)
-	{				
+	{
 		//Because children is private we can control the types that are added
 		//so we can safely do a static cast
-		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(this->GetDeviceTypeName(deviceType)));		
+		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(this->GetDeviceTypeName(deviceType)));
 	}
 
 	/**
 
-	
+
 
 	*/
 	void InputManager_c::AttachDevice(InputDevicePtr_t device, UInt_t id)
 	{
-		InputDeviceTypes_e	type = device->GetDeviceType();
-		Kernel_c			&kernel = Kernel_c::GetInstance();
-		//String_c			tempName;		
+		//InputDeviceTypes_e	type = device->GetDeviceType();
+		//Kernel_c			&kernel = Kernel_c::GetInstance();
+
+		//String_c			tempName;
 
 
 		//Set the name of the device (concat: name + id)
@@ -134,18 +135,18 @@ namespace Phobos
 		//device->SetName(tempName);
 
 		this->AddPrivateChild(device);
-		
+
 		//SEND ATTACH EVENT
-		InputManagerEvent_s event(INPUT_MANAGER_EVENT_DEVICE_ATTACHED, device);		
+		InputManagerEvent_s event(INPUT_MANAGER_EVENT_DEVICE_ATTACHED, device);
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&InputManagerListener_c::InputManagerEvent, _1, event));
 	}
 
-	
+
 	void InputManager_c::AddListenerToDevice(const String_c &deviceName, InputDeviceListener_c &listener)
-	{	
+	{
 		InputDevicePtr_t ptr = boost::static_pointer_cast<InputDevice_c>(this->GetChild(deviceName));
-		
+
 		ptr->AddListener(listener);
 	}
 
