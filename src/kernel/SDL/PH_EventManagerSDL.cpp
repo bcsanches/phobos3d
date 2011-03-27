@@ -474,7 +474,7 @@ namespace Phobos
 
 	void EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
 	{
-        event.eType = EVENT_TYPE_SYSTEM;
+        event.eType  = EVENT_TYPE_SYSTEM;
         event.pParam = &sdl_event;
 
 		switch(sdl_event.type)
@@ -485,7 +485,7 @@ namespace Phobos
 
 				break;
 
-			case SDL_APPACTIVE:
+			case SDL_ACTIVEEVENT:
 
 				event.stSystem.eType = SYSTEM_ACTIVATE;
 				event.stSystem.fActive = true;
