@@ -509,7 +509,7 @@ namespace Phobos
 
 	void EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
 	{
-        event.eType = EVENT_TYPE_SYSTEM;
+        event.eType  = EVENT_TYPE_SYSTEM;
         event.pParam = &sdl_event;
 
 		switch(sdl_event.type)

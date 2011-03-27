@@ -73,8 +73,8 @@ namespace Phobos
 	{
 		const std::locale& loc=std::locale();
 		for(string::const_iterator it = src.begin(), end = src.end(); it != end; ++it)
-		{			
-			if(!std::isspace(*it, loc))		
+		{
+			if(!std::isspace(*it, loc))
 				return false;
 		}
 
@@ -87,7 +87,7 @@ namespace Phobos
 		size_t startPos = pos;
 
 		size_t len = 0;
-		
+
 		out.clear();
 		for(;pos < sz; ++pos)
 		{
@@ -95,24 +95,24 @@ namespace Phobos
 			{
 				len = pos - startPos;
 				if(len == 0)
-				{				
+				{
 					startPos = pos + 1;
 					continue;
 				}
 
 				++pos;
-				goto COPY_SUB;			
+				goto COPY_SUB;
 			}
 		}
 
 		//When the loop ends normally, we need to compute len
 		len = pos - startPos;
-		
+
 		//end of the string?
 		if((pos >= sz) && (len == 0))
 			return(false);
-		
-		//no split char found, check if we can return he full string	
+
+		//no split char found, check if we can return he full string
 		if(startPos == 0)
 		{
 			out = src;
@@ -125,8 +125,8 @@ namespace Phobos
 		}
 
 		if(outPos)
-			*outPos = pos; 
-		
+			*outPos = pos;
+
 		return(true);
 	}
 
@@ -135,7 +135,7 @@ namespace Phobos
 		return atoi(str.c_str());
 	}
 
-	inline Float_t StringToFloat(const String_c &str)
+	Float_t StringToFloat(const String_c &str)
 	{
 		//check this if types changes
 		BOOST_STATIC_ASSERT(sizeof(Float_t) == sizeof(float));
