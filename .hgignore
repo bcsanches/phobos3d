@@ -143,3 +143,17 @@ glob:project/visual8/Sample_04/Sample_04.vcproj.bcsnote.bcsanches.user
 glob:project/visual8/Sample_02/Release/
 glob:project/visual8/Sample_03/Release/
 glob:project/visual8/Sample_04/Release/
+glob:project/visual8/Sample_03/Sample_03.vcproj.mordor.bcsanches.user
+glob:project/visual8/Sample_04/Sample_04.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/PH_Input/Debug/
+glob:project/visual8_SDL/PH_Input/PH_Input.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/PH_Kernel/Debug/
+glob:project/visual8_SDL/PH_Kernel/PH_Kernel.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/Phobos.ncb
+glob:project/visual8_SDL/Phobos.suo
+glob:project/visual8_SDL/Sample_01/Debug/
+glob:project/visual8_SDL/Sample_01/Sample_01.log
+glob:project/visual8_SDL/Sample_01/Sample_01.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/Sample_02/Debug/
+glob:project/visual8_SDL/Sample_02/Sample_02.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/Sample_02/Sample_02.log
