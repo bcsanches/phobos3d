@@ -120,7 +120,7 @@ void Sample_c::InputEvent(const InputEvent_s &event)
 	switch(event.eType)
 	{
 		case INPUT_EVENT_BUTTON:
-			if((event.stButton.eState == BUTTON_STATE_DOWN) && (event.stButton.uId == KB_BACKSPACE))
+			if((event.stButton.eState == BUTTON_STATE_DOWN) && (event.stButton.uId == KB_ESCAPE))
 				fQuit = true;
 
         default:

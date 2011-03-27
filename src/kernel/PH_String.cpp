@@ -130,7 +130,7 @@ namespace Phobos
 		return(true);
 	}
 
-	inline int StringToInt(const String_c &str)
+	int StringToInt(const String_c &str)
 	{
 		return atoi(str.c_str());
 	}
