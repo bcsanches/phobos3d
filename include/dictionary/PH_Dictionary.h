@@ -27,6 +27,7 @@ Phobos 3d
 #define PH_DICTIONARY_H
 
 #include <boost/unordered_map.hpp>
+#include <stdio.h>
 
 #include <PH_Node.h>
 
@@ -34,7 +35,7 @@ Phobos 3d
 #include "PH_DictionaryFwd.h"
 
 namespace Phobos
-{	
+{
 	class Parser_c;
 
 	class PH_DICTIONARY_API Dictionary_c: public Node_c
@@ -68,11 +69,11 @@ namespace Phobos
 
 		private:
 			Dictionary_c(const String_c &name);
-			~Dictionary_c();			
+			~Dictionary_c();
 
-			static const String_c *TryGetValue(const Dictionary_c *current, const String_c &key);			
+			static const String_c *TryGetValue(const Dictionary_c *current, const String_c &key);
 
-		private:			
+		private:
 			StringMap_t mapValues;
 
 			String_c strInherit;

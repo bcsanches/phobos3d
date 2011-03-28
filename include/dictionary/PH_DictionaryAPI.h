@@ -33,9 +33,15 @@ Phobos 3d
 		#define PH_DICTIONARY_API
 	#endif
 
-	#define PH_DICTIONARY_API_PROC extern "C" PH_DICTIONARY_API	
+	#define PH_DICTIONARY_API_PROC extern "C" PH_DICTIONARY_API
 #else
-	#error "Platform not defined"
+
+    #ifdef PH_LINUX
+        #define PH_DICTIONARY_API
+    #else
+        #error "Platform not defined"
+    #endif
+
 #endif
 
 #endif
