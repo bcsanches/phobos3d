@@ -45,7 +45,7 @@ class Sample_c: EventListener_c
 
 		void Run();
 
-		void Event(struct Event_s &event);		
+		void Event(struct Event_s &event);
 
 	private:
 		ProcVector_c		clSingletons;
@@ -55,8 +55,8 @@ class Sample_c: EventListener_c
 		InputMapperPtr_t	ipInputMapper;
 
 		Context_c			clMainContext;
-		
-		ContextVar_c		varQuit;		
+
+		ContextVar_c		varQuit;
 };
 
 Sample_c::Sample_c():
@@ -77,11 +77,11 @@ Sample_c::Sample_c():
 	ipEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
 
 	ipInputManager = InputManager_c::CreateInstance("InputManager");
-	clSingletons.AddProc(&InputManager_c::ReleaseInstance);	
+	clSingletons.AddProc(&InputManager_c::ReleaseInstance);
 
 	clMainContext.AddContextVar(varQuit);
 
-	ipInputMapper = InputMapper_c::Create("InputMapper", clMainContext);	
+	ipInputMapper = InputMapper_c::Create("InputMapper", clMainContext);
 
 	//Force an update to allow device attachment
 	ipInputManager->Update();
@@ -104,9 +104,12 @@ void Sample_c::Event(struct Event_s &event)
 			if(event.stSystem.eType == SYSTEM_QUIT)
 			{
 				varQuit.SetValue("true");
-				break;	
-			}	
+				break;
+			}
 			break;
+
+        default:
+            break;
 	}
 }
 
@@ -114,8 +117,8 @@ void Sample_c::Run()
 {
 	while(!varQuit.GetBoolean())
 	{
-		ipEventManager->Update();		
-		ipInputManager->Update();		
+		ipEventManager->Update();
+		ipInputManager->Update();
 	}
 }
 

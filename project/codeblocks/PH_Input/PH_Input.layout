@@ -38,7 +38,7 @@
 		<Cursor position="0" topLine="39" />
 	</File>
 	<File name="../../../include/input/SDL/PH_InputManagerSDL.h" open="0" top="0" tabpos="0">
-		<Cursor position="1289" topLine="28" />
+		<Cursor position="428" topLine="7" />
 	</File>
 	<File name="../../../include/input/SDL/PH_KeyboardInputDeviceSDL.h" open="0" top="0" tabpos="0">
 		<Cursor position="1179" topLine="28" />
@@ -71,7 +71,7 @@
 		<Cursor position="2043" topLine="34" />
 	</File>
 	<File name="../../../src/input/SDL/PH_InputManagerSDL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1425" topLine="32" />
+		<Cursor position="1294" topLine="26" />
 	</File>
 	<File name="../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1573" topLine="19" />
