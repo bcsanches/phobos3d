@@ -38,7 +38,7 @@ namespace Phobos
 		private:
 			InputManagerSDL_c(const String_c &name);
 
-			friend InputManagerPtr_t CreateInstanceLocalImpl(const String_c &name);
+			friend class InputManager_c;
 
 		private:
 			bool fPooled;

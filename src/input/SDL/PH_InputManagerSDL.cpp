@@ -34,14 +34,9 @@ Phobos 3d
 
 namespace Phobos
 {
-	InputManagerPtr_t CreateInstanceLocalImpl(const String_c &name)
-	{
-		return InputManagerPtr_t(new InputManagerSDL_c(name));
-	}
-
 	InputManagerPtr_t InputManager_c::CreateInstanceImpl(const String_c &name)
 	{
-		return CreateInstanceLocalImpl(name);
+		return InputManagerPtr_t(new InputManagerSDL_c(name));
 	}
 
 	InputManagerSDL_c::InputManagerSDL_c(const String_c &name):

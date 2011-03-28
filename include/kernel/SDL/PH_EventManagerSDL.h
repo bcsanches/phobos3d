@@ -19,7 +19,7 @@ namespace Phobos
 		private:
 			EventManagerSDL_c(const String_c &name);
 
-			friend EventManagerPtr_t CreateInstanceLocalImpl(const String_c &name);
+			friend class EventManager_c;
 
             inline bool IsValidSDLToPhobosKeyCode(SDLKey key);
             bool BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event);

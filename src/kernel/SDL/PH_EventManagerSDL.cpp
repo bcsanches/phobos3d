@@ -56,7 +56,7 @@ namespace Phobos
         {0, 0},									//16
         {0, 0},									//17
         {0, 0},									//18
-        {SDLK_PAUSE,		 KB_PAUSE},			//19        
+        {SDLK_PAUSE,		 KB_PAUSE},			//19
 
         {0, 0},									//20
         {0, 0},									//21
@@ -65,7 +65,7 @@ namespace Phobos
         {0, 0},									//24
         {0, 0},									//25
         {0, 0},									//26
-        {SDLK_ESCAPE,		 KB_ESCAPE},		//27        
+        {SDLK_ESCAPE,		 KB_ESCAPE},		//27
 
         {0, 0},									//28
         {0, 0},									//29
@@ -232,7 +232,7 @@ namespace Phobos
         {SDLK_WORLD_6,		 0},				//166
         {SDLK_WORLD_7,		 0},				//167
         {SDLK_WORLD_8,		 0},				//168
-        {SDLK_WORLD_9,		 0},				//169 
+        {SDLK_WORLD_9,		 0},				//169
         {SDLK_WORLD_10,		 0},				//170
         {SDLK_WORLD_11,		 0},				//171
         {SDLK_WORLD_12,		 0},				//172
@@ -318,7 +318,7 @@ namespace Phobos
         {SDLK_WORLD_92,		 0},				//252
         {SDLK_WORLD_93,		 0},				//253
         {SDLK_WORLD_94,		 0},				//254
-        {SDLK_WORLD_95,		 0},				//255        
+        {SDLK_WORLD_95,		 0},				//255
 
 
         {SDLK_KP0,		 KB_KP_INSERT},			//256
@@ -405,14 +405,9 @@ namespace Phobos
 	//
 	//Creation HACK
 	//
-	EventManagerPtr_t CreateInstanceLocalImpl(const String_c &name)
-	{
-		return EventManagerPtr_t(new EventManagerSDL_c(name));
-	}
-
 	EventManagerPtr_t EventManager_c::CreateInstanceImpl(const String_c &name)
 	{
-		return CreateInstanceLocalImpl(name);
+		return EventManagerPtr_t(new EventManagerSDL_c(name));
 	}
 
 	//

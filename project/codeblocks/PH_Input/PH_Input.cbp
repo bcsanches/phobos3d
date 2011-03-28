@@ -74,16 +74,13 @@
 		<Unit filename="../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp" />
 		<Unit filename="../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp" />
 		<Unit filename="../../../src/input/W32/PH_InputManagerW32.cpp">
-			<Option compile="0" />
-			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="../../../src/input/W32/PH_KeyboardInputDeviceW32.cpp">
-			<Option compile="0" />
-			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="../../../src/input/W32/PH_MouseInputDeviceW32.cpp">
-			<Option compile="0" />
-			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Extensions>
 			<envvars />

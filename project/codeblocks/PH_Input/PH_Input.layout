@@ -20,7 +20,7 @@
 		<Cursor position="0" topLine="40" />
 	</File>
 	<File name="../../../include/input/PH_InputManager.h" open="0" top="0" tabpos="0">
-		<Cursor position="1576" topLine="40" />
+		<Cursor position="3518" topLine="106" />
 	</File>
 	<File name="../../../include/input/PH_InputManagerListener.h" open="0" top="0" tabpos="0">
 		<Cursor position="123" topLine="0" />
@@ -32,16 +32,16 @@
 		<Cursor position="47" topLine="28" />
 	</File>
 	<File name="../../../include/input/PH_MouseInputDevice.h" open="0" top="0" tabpos="0">
-		<Cursor position="1507" topLine="33" />
+		<Cursor position="1507" topLine="28" />
 	</File>
 	<File name="../../../include/input/PH_Thumb.h" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="39" />
 	</File>
 	<File name="../../../include/input/SDL/PH_InputManagerSDL.h" open="0" top="0" tabpos="0">
-		<Cursor position="1385" topLine="27" />
+		<Cursor position="1289" topLine="28" />
 	</File>
 	<File name="../../../include/input/SDL/PH_KeyboardInputDeviceSDL.h" open="0" top="0" tabpos="0">
-		<Cursor position="1334" topLine="24" />
+		<Cursor position="1179" topLine="28" />
 	</File>
 	<File name="../../../include/input/SDL/PH_MouseInputDeviceSDL.h" open="0" top="0" tabpos="0">
 		<Cursor position="2000" topLine="19" />
@@ -59,22 +59,22 @@
 		<Cursor position="1055" topLine="0" />
 	</File>
 	<File name="../../../src/input/PH_InputManager.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4274" topLine="147" />
+		<Cursor position="1588" topLine="36" />
 	</File>
 	<File name="../../../src/input/PH_InputMapper.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2315" topLine="70" />
 	</File>
 	<File name="../../../src/input/PH_KeyboardInputDevice.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="465" topLine="99" />
+		<Cursor position="2123" topLine="132" />
 	</File>
 	<File name="../../../src/input/PH_MouseInputDevice.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2043" topLine="34" />
 	</File>
 	<File name="../../../src/input/SDL/PH_InputManagerSDL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1328" topLine="42" />
+		<Cursor position="1425" topLine="32" />
 	</File>
 	<File name="../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1242" topLine="70" />
+		<Cursor position="1573" topLine="19" />
 	</File>
 	<File name="../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2422" topLine="77" />
