@@ -6,9 +6,8 @@
 	"PH_DictionaryManager.h"
 	"PH_DictionaryUtils.h"
 
-1301343970 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_Dictionary.h
+1301492814 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_Dictionary.h
 	<boost/unordered_map.hpp>
-	<stdio.h>
 	<PH_Node.h>
 	"PH_DictionaryAPI.h"
 	"PH_DictionaryFwd.h"

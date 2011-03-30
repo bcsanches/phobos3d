@@ -27,7 +27,6 @@ Phobos 3d
 #define PH_DICTIONARY_H
 
 #include <boost/unordered_map.hpp>
-#include <stdio.h>
 
 #include <PH_Node.h>
 

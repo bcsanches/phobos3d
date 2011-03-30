@@ -30,6 +30,7 @@ Phobos 3d
 
 #include "PH_DictionaryManager.h"
 #include "PH_DictionaryUtils.h"
+#include <stdio.h>
 
 namespace Phobos
 {
@@ -37,14 +38,14 @@ namespace Phobos
 	{
 		return new Dictionary_c(name);
 	}
-		
+
 	Dictionary_c::Dictionary_c(const String_c &name):
 		Node_c(name),
 		pclInherit(NULL)
 	{
 		//empty
 	}
-	
+
 	Dictionary_c::~Dictionary_c()
 	{
 		//empty
@@ -71,7 +72,7 @@ namespace Phobos
 		for(;;)
 		{
 			token = parser.GetToken(&tokenValue);
-			if(token == TOKEN_CLOSE_BRACE)			
+			if(token == TOKEN_CLOSE_BRACE)
 				break;
 
 			if(token != TOKEN_ID)
@@ -87,8 +88,8 @@ namespace Phobos
 			{
 				case TOKEN_ID:
 				case TOKEN_NUMBER:
-				case TOKEN_STRING:			
-					this->AddValue(tokenValue, value);					
+				case TOKEN_STRING:
+					this->AddValue(tokenValue, value);
 					break;
 
 				default:
@@ -102,10 +103,10 @@ namespace Phobos
 		}
 	}
 
-	const String_c &Dictionary_c::GetValue(const String_c &key) const 
+	const String_c &Dictionary_c::GetValue(const String_c &key) const
 	{
 		const String_c *foundValue = TryGetValue(this, key);
-		if(!foundValue)			
+		if(!foundValue)
 		{
 			std::stringstream stream;
 			stream << "Value " << key << " does not exists in " << this->GetName();
@@ -120,7 +121,7 @@ namespace Phobos
 		const String_c *foundValue = TryGetValue(this, key);
 		if(!foundValue)
 			return false;
-	
+
 		value = *foundValue;
 		return true;
 	}
@@ -162,7 +163,7 @@ namespace Phobos
 				pclInherit = boost::static_pointer_cast<Dictionary_c>(this->GetParent()->GetChild(strInherit)).get();
 			else
 				pclInherit = DictionaryManager_c::GetInstance()->GetDictionary(strBaseHive, strInherit).get();
-		}		
+		}
 
 		return pclInherit;
 	}
@@ -173,7 +174,7 @@ namespace Phobos
 	}
 
 	float Dictionary_c::GetFloat(const String_c &key) const
-	{		
+	{
 		return StringToFloat(this->GetValue(key));
 	}
 
@@ -184,10 +185,10 @@ namespace Phobos
 			StringMap_t::const_iterator it = current->mapValues.find(key);
 			if(it != current->mapValues.end())
 			{
-				return &it->second;				
+				return &it->second;
 			}
 
-			current = current->GetInherited();			
+			current = current->GetInherited();
 		}
 		while(current);
 
