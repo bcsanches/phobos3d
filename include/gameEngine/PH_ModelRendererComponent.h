@@ -42,10 +42,13 @@ namespace Phobos
 			~ModelRendererComponent_c();				
 
 			virtual void OnLoad(const Dictionary_c &dictionary);
+			virtual void OnLoadFinished();
 
 		private:
 			Ogre::SceneNode *pclSceneNode;
 			Ogre::Entity *pclMeshEntity;
+
+			String_c	strParentNode;
 	};
 }
 

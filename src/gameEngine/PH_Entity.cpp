@@ -25,13 +25,15 @@ Phobos 3d
 
 #include "PH_Entity.h"
 #include "PH_EntityComponentFactory.h"
+#include "PH_EntityFactory.h"
+#include "PH_EntityKeys.h"
 
 #include <PH_Dictionary.h>
 
-#include "PH_EntityKeys.h"
-
 namespace Phobos
 {
+	PH_FULL_ENTITY_CREATOR("Entity", Entity_c);
+
 	Entity_c::Entity_c(const String_c &name):
 		Node_c(name, PRIVATE_CHILDREN)
 	{
@@ -41,7 +43,7 @@ namespace Phobos
 	{
 		strClassName = dict.GetInherited()->GetName();
 
-		const String_c *components = dict.TryGetValue("Components");
+		const String_c *components = dict.TryGetValue(PH_ENTITY_KEY_COMPONENTS);
 		if(components)
 		{
 			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
@@ -55,5 +57,24 @@ namespace Phobos
 		}
 
 		this->OnLoad(dict);
+
+		for(NodeMap_t::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		{
+			EntityComponentPtr_t component = boost::static_pointer_cast<EntityComponent_c>(it->second);
+
+			component->Load(dict);
+		}
+	}
+
+	void Entity_c::LoadFinished()
+	{
+		this->OnLoadFinished();
+
+		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
+		{
+			EntityComponentPtr_t component = boost::static_pointer_cast<EntityComponent_c>(it->second);
+
+			component->LoadFinished();
+		}
 	}
 }

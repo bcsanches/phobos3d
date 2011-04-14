@@ -60,8 +60,13 @@ namespace Phobos
 			Ogre::SceneManager *CreateSceneManager(Ogre::SceneTypeMask typeMask);
 			void DestroySceneManager(Ogre::SceneManager *manager);
 
-			Ogre::SceneNode *CreateSceneNode(void);
+			void ClearScene();
+			
+			//Ogre::SceneNode *GetOrCreateSceneNode(const String_c &name);
+			Ogre::SceneNode *CreateSceneNode(const String_c &name);
+			Ogre::SceneNode *CreateSceneNode();
 			void DestroySceneNode(Ogre::SceneNode *node);
+			Ogre::SceneNode *GetSceneNode(const String_c &name);
 
 			Ogre::Entity	*CreateEntity(const String_c &meshName, UInt32_t flags = 0);
 			Ogre::Entity	*CreateEntity(const String_c &entityName, const String_c &meshName, UInt32_t flags = 0);

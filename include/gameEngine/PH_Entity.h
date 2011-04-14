@@ -39,20 +39,25 @@ namespace Phobos
 	class PH_GAME_ENGINE_API Entity_c: public Node_c
 	{
 		public:
-			void Load(const Dictionary_c &dictionary);
+			static EntityPtr_t Create(const String_c &name);
 
-			inline const String_c &GetClassName() const;
+			void Load(const Dictionary_c &dictionary);
+			void LoadFinished();
+
+			inline const String_c &GetEntityClassName() const;
 
 		protected:
 			Entity_c(const String_c &name);
 
 			virtual void OnLoad(const Dictionary_c &dictionary) {};
 
+			virtual void OnLoadFinished() {};
+
 		private:
 			String_c strClassName;
 	};
 
-	inline const String_c &Entity_c::GetClassName() const
+	inline const String_c &Entity_c::GetEntityClassName() const
 	{
 		return strClassName;
 	}

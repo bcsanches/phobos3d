@@ -157,3 +157,7 @@ glob:project/visual8_SDL/Sample_01/Sample_01.vcproj.mordor.bcsanches.user
 glob:project/visual8_SDL/Sample_02/Debug/
 glob:project/visual8_SDL/Sample_02/Sample_02.vcproj.mordor.bcsanches.user
 glob:project/visual8_SDL/Sample_02/Sample_02.log
+glob:project/visual8_SDL/PH_Input/PH_Input.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_Kernel/PH_Kernel.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/Sample_01/Sample_01.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/Sample_02/Sample_02.vcproj.bcsnote.bcsanches.user

@@ -61,6 +61,8 @@ BOOST_AUTO_TEST_CASE(dictionary_basic)
 	stream <<	"className=Entity;" << endl;
 	stream <<	"health=100;" << endl;
 	stream <<	"description=\"bla bla\";" << endl;
+	stream <<   "Composed.Property=\"test\";" << endl;
+	stream <<   "Composed.Property.test2=\"test2\";" << endl;
 	stream << "}" << endl;
 	stream << endl << endl;
 	stream << "RigidBody PlayerCapsule" << endl;

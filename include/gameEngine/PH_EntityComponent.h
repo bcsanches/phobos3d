@@ -41,10 +41,13 @@ namespace Phobos
 		public:
 			void Load(const Dictionary_c &dictionary);
 
+			void LoadFinished();
+
 		protected:
 			EntityComponent_c(const String_c &name);
 
 			virtual void OnLoad(const Dictionary_c &dictionary) {};
+			virtual void OnLoadFinished() {};
 	};
 }
 

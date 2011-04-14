@@ -42,8 +42,6 @@ Phobos 3d
 #include "PH_EntityKeys.h"
 #include "PH_MapLoader.h"
 
-#define SCENE_MANAGER_NAME "SceneManager"
-
 namespace Phobos
 {
 	PH_ENTITY_CREATOR("WorldEntity", WorldEntity_c);
@@ -54,6 +52,7 @@ namespace Phobos
 		Ogre::SceneNode *pclSceneNode;
 		Ogre::Light *pclLight;
 		bool fParent;
+		String_c strName;
 
 		TempStaticObject_s():
 			pclEntity(NULL),
@@ -120,9 +119,9 @@ namespace Phobos
 
 	void WorldEntity_c::Load(const MapLoader_c &loader)
 	{
-		DictionaryHivePtr_t hive = loader.GetStaticEntitiesHive();
+		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
 
-		for(Node_c::const_iterator it = hive->begin(), end = hive->end(); it != end; ++it)
+		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
 
@@ -143,7 +142,7 @@ namespace Phobos
 				}
 
 				StaticObject_s object;
-				if(!this->LoadStaticObject(object, type, *dict))
+				if(!this->LoadStaticObject(object, name, type, *dict))
 					continue;
 
 				mapStaticObjects.insert(objIt, std::make_pair(name, object));
@@ -194,11 +193,12 @@ namespace Phobos
 		return false;
 	}
 	                    
-	bool WorldEntity_c::LoadStaticObject(StaticObject_s &object, const String_c &type, const Dictionary_c &dict)
+	bool WorldEntity_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict)
 	{
 		TempStaticObject_s temp;
 
-		temp.fParent = dict.TryGetValue("parentnode", object.strParent) && (object.strParent.compare(SCENE_MANAGER_NAME) != 0);
+		temp.fParent = dict.TryGetValue(PH_ENTITY_KEY_PARENT_NODE, object.strParent) && (object.strParent.compare(PH_WORLD_SCENE_MANAGER_NAME) != 0);
+		temp.strName = name;
 
 		if(type.compare("Node Object") == 0)
 		{
@@ -224,7 +224,7 @@ namespace Phobos
 
 	void WorldEntity_c::LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
-		temp.pclSceneNode = Render_c::GetInstance()->CreateSceneNode();
+		temp.pclSceneNode = Render_c::GetInstance()->CreateSceneNode(temp.strName);
 
 		temp.pclSceneNode->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
 		temp.pclSceneNode->setOrientation(DictionaryGetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));

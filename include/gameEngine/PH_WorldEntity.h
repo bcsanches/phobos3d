@@ -32,6 +32,8 @@ Phobos 3d
 
 #include "PH_Entity.h"
 
+#define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
+
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(WorldEntity);
@@ -66,7 +68,7 @@ namespace Phobos
 			~WorldEntity_c();
 
 			bool LoadGlobalObject(const String_c &type, const Dictionary_c &dict);
-			bool LoadStaticObject(StaticObject_s &object, const String_c &type, const Dictionary_c &dict);
+			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict);
 
 			void LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict);
 			void LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict);

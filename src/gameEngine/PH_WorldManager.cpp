@@ -57,7 +57,7 @@ namespace Phobos
 
 	void WorldManager_c::LoadMap(const String_c &mapName)
 	{
-		this->RemoveAllChildren();
+		this->RemoveAllChildren();		
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
 
@@ -68,6 +68,13 @@ namespace Phobos
 		this->AddPrivateChild(world);
 
 		this->LoadEntities();
+
+		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		{
+			EntityPtr_t entity = boost::static_pointer_cast<Entity_c>(it->second);
+
+			entity->LoadFinished();
+		}
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
 	}	
@@ -93,17 +100,17 @@ namespace Phobos
 
 	void WorldManager_c::LoadEntities()
 	{
-		DictionaryHivePtr_t hive = clMapLoader.GetDynamicEntitiesHive();
+		const DictionaryHive_c &hive = clMapLoader.GetDynamicEntitiesHive();
 		EntityFactory_c &factory = EntityFactory_c::GetInstance();		
 
-		for(Node_c::const_iterator it = hive->begin(), end = hive->end(); it != end; ++it)
+		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
-
+			
 			EntityPtr_t ptr = factory.Create(dict->GetValue(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
 			ptr->Load(*dict);
 
-			this->AddPrivateChild(ptr);
+			this->AddPrivateChild(ptr);			
 		}
 	}
 
@@ -112,7 +119,7 @@ namespace Phobos
 		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
 			EntityPtr_t entity = boost::static_pointer_cast<Entity_c>(it->second);
-			if(entity->GetClassName().compare(className) == 0)
+			if(entity->GetEntityClassName().compare(className) == 0)
 				return entity;
 		}
 
