@@ -1,0 +1,530 @@
+# depslib dependency file v1.0
+1298692938 source:/home/cronosts/Programming/Projects/phobos3d/src/engineCoreTest/CoreTest.cpp
+	<boost/test/unit_test.hpp>
+	<PH_Console.h>
+	<PH_Core.h>
+	<PH_CoreModule.h>
+	<PH_Exception.h>
+	<PH_Kernel.h>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Console.h
+	"PH_CoreModule.h"
+	<boost/circular_buffer.hpp>
+	<OgrePrerequisites.h>
+	<OgreRectangle2D.h>
+	<PH_Context.h>
+	<PH_InputManager.h>
+	<PH_InputMapper.h>
+	<PH_Log.h>
+	"PH_EngineCoreAPI.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModule.h
+	<PH_Node.h>
+	"PH_CoreModuleFwd.h"
+	"PH_EngineCoreAPI.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Node.h
+	<map>
+	<boost/range/iterator.hpp>
+	"PH_NodeFwd.h"
+	"PH_Object.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_NodeFwd.h
+	<boost/intrusive_ptr.hpp>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Object.h
+	"PH_RefCounter.h"
+	"PH_String.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounter.h
+	<boost/detail/atomic_count.hpp>
+	"PH_Defs.h"
+	"PH_KernelAPI.h"
+	"PH_RefCounterFwd.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Defs.h
+
+1301110642 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_KernelAPI.h
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounterFwd.h
+	<boost/intrusive_ptr.hpp>
+
+1301110636 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_String.h
+	<string>
+	<sstream>
+	"PH_Defs.h"
+	"PH_KernelAPI.h"
+	"PH_Types.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Types.h
+	<cstring>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleFwd.h
+	<boost/intrusive_ptr.hpp>
+
+1303521361 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EngineCoreAPI.h
+
+1288808687 /usr/include/OGRE/OgrePrerequisites.h
+	"OgrePlatform.h"
+	<string>
+	"Threading/OgreThreadDefines.h"
+	"OgreStdHeaders.h"
+	"OgreMemoryAllocatorConfig.h"
+
+1288808687 /usr/include/OGRE/OgrePlatform.h
+	"OgreConfig.h"
+	<_mingw.h>
+
+1288808687 /usr/include/OGRE/OgreConfig.h
+	"OgreBuildSettings.h"
+
+1299123962 /usr/include/OGRE/OgreBuildSettings.h
+
+1288808687 /usr/include/OGRE/Threading/OgreThreadDefines.h
+	"OgreThreadDefinesNone.h"
+	"OgreThreadDefinesBoost.h"
+	"OgreThreadDefinesPoco.h"
+	"OgreThreadDefinesTBB.h"
+
+1288808687 /usr/include/OGRE/Threading/OgreThreadDefinesBoost.h
+
+1288808687 /usr/include/OGRE/OgreStdHeaders.h
+	<cassert>
+	<cstdio>
+	<cstdlib>
+	<ctime>
+	<cstring>
+	<cstdarg>
+	<cmath>
+	<vector>
+	<map>
+	<string>
+	<set>
+	<list>
+	<deque>
+	<queue>
+	<bitset>
+	<tr1/unordered_map>
+	<tr1/unordered_set>
+	<ext/hash_map>
+	<ext/hash_set>
+	<unordered_map>
+	<unordered_set>
+	<hash_set>
+	<hash_map>
+	<algorithm>
+	<functional>
+	<limits>
+	<fstream>
+	<iostream>
+	<iomanip>
+	<sstream>
+	<sys/types.h>
+	<sys/stat.h>
+	<unistd.h>
+	<unistd.h>
+	<dlfcn.h>
+	<unistd.h>
+	<sys/param.h>
+	<CoreFoundation/CoreFoundation.h>
+	"Threading/OgreThreadHeaders.h"
+
+1288808687 /usr/include/OGRE/Threading/OgreThreadHeaders.h
+	"OgreThreadHeadersBoost.h"
+	"OgreThreadHeadersPoco.h"
+	"OgreThreadHeadersTBB.h"
+
+1288808687 /usr/include/OGRE/Threading/OgreThreadHeadersBoost.h
+	<boost/thread/tss.hpp>
+	<boost/thread/recursive_mutex.hpp>
+	<boost/thread/condition.hpp>
+	<boost/thread/thread.hpp>
+	<boost/thread/shared_mutex.hpp>
+	<boost/thread/locks.hpp>
+
+1288808687 /usr/include/OGRE/OgreMemoryAllocatorConfig.h
+	"OgreMemoryAllocatedObject.h"
+	"OgreMemoryAllocatedObject.h"
+	"OgreMemorySTLAllocator.h"
+	"OgreMemoryNedPooling.h"
+	"OgreMemoryNedAlloc.h"
+	"OgreMemoryStdAlloc.h"
+
+1288808687 /usr/include/OGRE/OgreMemoryAllocatedObject.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreMemorySTLAllocator.h
+	"OgrePrerequisites.h"
+	"OgreHeaderPrefix.h"
+	"OgreHeaderSuffix.h"
+
+1288808687 /usr/include/OGRE/OgreHeaderPrefix.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreHeaderSuffix.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreMemoryNedPooling.h
+
+1288808687 /usr/include/OGRE/OgreMemoryNedAlloc.h
+
+1288808687 /usr/include/OGRE/OgreMemoryStdAlloc.h
+	<memory>
+	<limits>
+	"OgreAlignedAllocator.h"
+	"OgreMemoryTracker.h"
+
+1288808687 /usr/include/OGRE/OgreAlignedAllocator.h
+
+1288808687 /usr/include/OGRE/OgreMemoryTracker.h
+	<tr1/unordered_map>
+	<ext/hash_map>
+
+1288808687 /usr/include/OGRE/OgreRectangle2D.h
+	"OgrePrerequisites.h"
+	"OgreSimpleRenderable.h"
+
+1288808687 /usr/include/OGRE/OgreSimpleRenderable.h
+	"OgrePrerequisites.h"
+	"OgreMovableObject.h"
+	"OgreRenderable.h"
+	"OgreAxisAlignedBox.h"
+	"OgreMaterial.h"
+
+1288808687 /usr/include/OGRE/OgreMovableObject.h
+	"OgrePrerequisites.h"
+	"OgreRenderQueue.h"
+	"OgreAxisAlignedBox.h"
+	"OgreSphere.h"
+	"OgreShadowCaster.h"
+	"OgreFactoryObj.h"
+	"OgreAnimable.h"
+	"OgreAny.h"
+	"OgreUserObjectBindings.h"
+
+1288808687 /usr/include/OGRE/OgreRenderQueue.h
+	"OgreHeaderPrefix.h"
+	"OgrePrerequisites.h"
+	"OgreIteratorWrappers.h"
+	"OgreHeaderSuffix.h"
+
+1288808687 /usr/include/OGRE/OgreIteratorWrappers.h
+	"OgrePrerequisites.h"
+	"OgreIteratorWrapper.h"
+	"OgreIteratorRange.h"
+
+1288808687 /usr/include/OGRE/OgreIteratorWrapper.h
+
+1288808687 /usr/include/OGRE/OgreIteratorRange.h
+	<boost/range.hpp>
+
+1288808687 /usr/include/OGRE/OgreAxisAlignedBox.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+	"OgreMatrix4.h"
+
+1288808687 /usr/include/OGRE/OgreVector3.h
+	"OgrePrerequisites.h"
+	"OgreMath.h"
+	"OgreQuaternion.h"
+
+1288808687 /usr/include/OGRE/OgreMath.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreQuaternion.h
+	"OgrePrerequisites.h"
+	"OgreMath.h"
+
+1288808687 /usr/include/OGRE/OgreMatrix4.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+	"OgreMatrix3.h"
+	"OgreVector4.h"
+	"OgrePlane.h"
+
+1288808687 /usr/include/OGRE/OgreMatrix3.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+
+1288808687 /usr/include/OGRE/OgreVector4.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+
+1288808687 /usr/include/OGRE/OgrePlane.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+
+1288808687 /usr/include/OGRE/OgreSphere.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+
+1288808687 /usr/include/OGRE/OgreShadowCaster.h
+	"OgrePrerequisites.h"
+	"OgreRenderable.h"
+
+1288808687 /usr/include/OGRE/OgreRenderable.h
+	"OgrePrerequisites.h"
+	"OgreCommon.h"
+	"OgreRenderOperation.h"
+	"OgreMatrix4.h"
+	"OgreMaterial.h"
+	"OgrePlane.h"
+	"OgreGpuProgram.h"
+	"OgreVector4.h"
+	"OgreException.h"
+	"OgreUserObjectBindings.h"
+
+1288808687 /usr/include/OGRE/OgreCommon.h
+	"OgreString.h"
+	<utility>
+	<sstream>
+
+1288808687 /usr/include/OGRE/OgreString.h
+	"OgrePrerequisites.h"
+	<tr1/unordered_map>
+	<ext/hash_map>
+
+1288808687 /usr/include/OGRE/OgreRenderOperation.h
+	"OgrePrerequisites.h"
+	"OgreVertexIndexData.h"
+
+1288808687 /usr/include/OGRE/OgreVertexIndexData.h
+	"OgrePrerequisites.h"
+	"OgreHardwareVertexBuffer.h"
+	"OgreHardwareIndexBuffer.h"
+
+1288808687 /usr/include/OGRE/OgreHardwareVertexBuffer.h
+	"OgrePrerequisites.h"
+	"OgreHardwareBuffer.h"
+	"OgreSharedPtr.h"
+	"OgreColourValue.h"
+
+1288808687 /usr/include/OGRE/OgreHardwareBuffer.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreSharedPtr.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreColourValue.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreHardwareIndexBuffer.h
+	"OgrePrerequisites.h"
+	"OgreHardwareBuffer.h"
+	"OgreSharedPtr.h"
+
+1288808687 /usr/include/OGRE/OgreMaterial.h
+	"OgrePrerequisites.h"
+	"OgreResource.h"
+	"OgreIteratorWrappers.h"
+	"OgreCommon.h"
+	"OgreColourValue.h"
+	"OgreBlendMode.h"
+
+1288808687 /usr/include/OGRE/OgreResource.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreSharedPtr.h"
+	"OgreStringInterface.h"
+	"OgreAtomicWrappers.h"
+
+1288808687 /usr/include/OGRE/OgreStringInterface.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreCommon.h"
+
+1288808687 /usr/include/OGRE/OgreAtomicWrappers.h
+	<signal.h>
+	"OgrePrerequisites.h"
+	"OgreException.h"
+	<windows.h>
+	<intrin.h>
+
+1288808687 /usr/include/OGRE/OgreException.h
+	"OgrePrerequisites.h"
+	"OgreHeaderPrefix.h"
+	"OgreString.h"
+	<exception>
+	"OgreHeaderSuffix.h"
+
+1288808687 /usr/include/OGRE/OgreBlendMode.h
+	"OgrePrerequisites.h"
+	"OgreColourValue.h"
+
+1288808687 /usr/include/OGRE/OgreGpuProgram.h
+	"OgrePrerequisites.h"
+	"OgreResource.h"
+	"OgreSharedPtr.h"
+	"OgreIteratorWrappers.h"
+	"OgreSerializer.h"
+	"OgreRenderOperation.h"
+	"OgreGpuProgramParams.h"
+
+1288808687 /usr/include/OGRE/OgreSerializer.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreDataStream.h"
+
+1288808687 /usr/include/OGRE/OgreDataStream.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreSharedPtr.h"
+	<istream>
+
+1288808687 /usr/include/OGRE/OgreGpuProgramParams.h
+	"OgrePrerequisites.h"
+	"OgreSharedPtr.h"
+	"OgreIteratorWrappers.h"
+	"OgreSerializer.h"
+	"OgreRenderOperation.h"
+	"OgreAny.h"
+
+1288808687 /usr/include/OGRE/OgreAny.h
+	"OgrePrerequisites.h"
+	"OgreException.h"
+	"OgreString.h"
+	<algorithm>
+	<typeinfo>
+
+1288808687 /usr/include/OGRE/OgreUserObjectBindings.h
+	"OgrePrerequisites.h"
+	"OgreAny.h"
+
+1288808687 /usr/include/OGRE/OgreFactoryObj.h
+	"OgrePrerequisites.h"
+
+1288808687 /usr/include/OGRE/OgreAnimable.h
+	"OgrePrerequisites.h"
+	"OgreVector2.h"
+	"OgreVector3.h"
+	"OgreVector4.h"
+	"OgreQuaternion.h"
+	"OgreColourValue.h"
+	"OgreSharedPtr.h"
+	"OgreStringVector.h"
+	"OgreException.h"
+	"OgreAny.h"
+
+1288808687 /usr/include/OGRE/OgreVector2.h
+	"OgrePrerequisites.h"
+	"OgreMath.h"
+
+1288808687 /usr/include/OGRE/OgreStringVector.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreSharedPtr.h"
+
+1299184673 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Context.h
+	"PH_ContextCmd.h"
+	"PH_ContextVar.h"
+	"PH_IContext.h"
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextCmd.h
+	"PH_ContextItem.h"
+	"PH_Defs.h"
+	<boost/function.hpp>
+	<vector>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextItem.h
+	<boost/intrusive/set.hpp>
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextVar.h
+	"PH_ContextItem.h"
+	"PH_Defs.h"
+	<boost/function.hpp>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_IContext.h
+	<PH_String.h>
+
+1301107309 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputManager.h
+	"PH_InputAPI.h"
+	<PH_Node.h>
+	<PH_Singleton.h>
+	<PH_Types.h>
+	"PH_InputDefs.h"
+	"PH_InputDevice.h"
+
+1301110241 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputAPI.h
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Singleton.h
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDefs.h
+	<PH_Types.h>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDevice.h
+	<PH_Node.h>
+	<PH_Types.h>
+	<PH_String.h>
+	"PH_InputDefs.h"
+	"PH_InputDeviceFwd.h"
+	"PH_InputDeviceListener.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceFwd.h
+	<boost/intrusive_ptr.hpp>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceListener.h
+	<PH_Listener.h>
+	"PH_InputAPI.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Listener.h
+	<boost/intrusive/list.hpp>
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputMapper.h
+	<boost/ptr_container/ptr_map.hpp>
+	<PH_Context.h>
+	<PH_Node.h>
+	"PH_InputDevice.h"
+	"PH_InputManager.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Log.h
+	<iostream>
+	<fstream>
+	<boost/intrusive/list.hpp>
+	<boost/utility.hpp>
+	"PH_Defs.h"
+	"PH_Listener.h"
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1303522889 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Core.h
+	<set>
+	<vector>
+	<PH_ContextCmd.h>
+	"PH_CoreModuleManager.h"
+	"PH_CoreTimer.h"
+	"PH_EngineCoreAPI.h"
+
+1303522669 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleManager.h
+	<vector>
+	<set>
+	"PH_CoreModule.h"
+	"PH_EngineCoreAPI.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreTimer.h
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Exception.h
+	<exception>
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Kernel.h
+	"PH_KernelAPI.h"
+	"PH_Log.h"
+	"PH_ObjectManager.h"
+	"PH_String.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ObjectManager.h
+	<boost/utility.hpp>
+	"PH_KernelAPI.h"
+	"PH_Node.h"
+	"PH_PathFwd.h"
+
+1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_PathFwd.h
+
+1298692938 source:/home/cronosts/Programming/Projects/phobos3d/src/engineCoreTest/main.cpp
+	<boost/test/unit_test.hpp>
+

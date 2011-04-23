@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="EngineCoreTest" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/EngineCoreTest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DPH_LINUX" />
+					<Add option="-DPH_GCC" />
+					<Add option="-DPH_DEBUG" />
+					<Add option="-DPH_CHECK_ASSERT" />
+				</Compiler>
+				<Linker>
+					<Add library="../kernel/bin/Debug/kernel.so" />
+					<Add library="../PH_Input/bin/Debug/Input.so" />
+					<Add library="../Dictionary/bin/Debug/Dictionary.so" />
+					<Add library="../EngineCore/bin/Debug/EngineCore.so" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/EngineCoreTest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DBOOST_TEST_DYN_LINK" />
+			<Add directory="../../../include/engineCore" />
+			<Add directory="../../../include/kernel" />
+			<Add directory="/usr/include/OGRE" />
+			<Add directory="../../../include/input" />
+		</Compiler>
+		<Linker>
+			<Add library="/usr/lib/libboost_unit_test_framework.so" />
+			<Add library="/usr/lib/libboost_filesystem.so" />
+			<Add library="/usr/lib/libOgreMain.so" />
+			<Add library="/usr/lib/libboost_system.so" />
+		</Linker>
+		<Unit filename="../../../src/engineCoreTest/CoreTest.cpp" />
+		<Unit filename="../../../src/engineCoreTest/main.cpp" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

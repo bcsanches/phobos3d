@@ -55,13 +55,13 @@ class TestModule_c: public CoreModule_c
 			return TestModulePtr_t(new TestModule_c());
 		}
 
-		virtual void OnUpdate() 
+		virtual void OnUpdate()
 		{
 			++iUpdateCount;
 			eSequenceMarkerUpdate_gl= TEST_MODULE;
 		}
 
-		virtual void OnFixedUpdate() 
+		virtual void OnFixedUpdate()
 		{
 			++iFixedUpdateCount;
 			eSequenceMarkerFixedUpdate_gl= TEST_MODULE;
@@ -72,24 +72,24 @@ class TestModule_c: public CoreModule_c
 			++iPrepareToBootCount;
 		}
 
-		virtual void OnBoot() 
+		virtual void OnBoot()
 		{
 			++iBootCount;
 		}
 
-		virtual void OnFinalize() 
+		virtual void OnFinalize()
 		{
 			++iFinalizeCount;
 		}
 
 	protected:
-		TestModule_c(): 
+		TestModule_c():
 			CoreModule_c("test"),
 			iFixedUpdateCount(0),
 			iUpdateCount(0),
 			iBootCount(0),
-			iFinalizeCount(0),
-			iPrepareToBootCount(0)
+			iPrepareToBootCount(0),
+			iFinalizeCount(0)
 		{
 			++iCount;
 		}
@@ -97,7 +97,7 @@ class TestModule_c: public CoreModule_c
 		~TestModule_c()
 		{
 			--iCount;
-		}		
+		}
 
 	public:
 		static int iCount;
@@ -123,43 +123,43 @@ class TestModule2_c: public CoreModule_c
 			return TestModule2Ptr_t(new TestModule2_c());
 		}
 
-		virtual void OnUpdate() 
-		{			
+		virtual void OnUpdate()
+		{
 			eSequenceMarkerUpdate_gl= TEST_MODULE_2;
 		}
 
-		virtual void OnFixedUpdate() 
-		{			
+		virtual void OnFixedUpdate()
+		{
 			eSequenceMarkerFixedUpdate_gl= TEST_MODULE_2;
 		}
 
-		virtual void OnBoot() 
+		virtual void OnBoot()
 		{
-			
+
 		}
 
-		virtual void OnFinalize() 
+		virtual void OnFinalize()
 		{
-			
+
 		}
 
 	protected:
-		TestModule2_c(): 
+		TestModule2_c():
 			CoreModule_c("test2")
-		{			
+		{
 		}
 
 		~TestModule2_c()
-		{			
-		}					
+		{
+		}
 };
 
 static TestModulePtr_t CreateAndRegisterTestModule()
 {
 	CorePtr_t core = Core_c::GetInstance();
-	
+
 	TestModulePtr_t ptr = TestModule_c::CreateInstance();
-	BOOST_REQUIRE(TestModule_c::iCount == 1);	
+	BOOST_REQUIRE(TestModule_c::iCount == 1);
 
 	core->AddModule(ptr);
 
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 {
 	CoreInstance_s instance;
 
-	CorePtr_t core = Core_c::GetInstance();	
+	CorePtr_t core = Core_c::GetInstance();
 
 	BOOST_CHECK_THROW(core->PauseTimer(CORE_SYS_TIMER), InvalidParameterException_c);
 
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 	{
 		TestModulePtr_t tmp = CreateAndRegisterTestModule();
 		testModule = tmp.get();
-	
+
 		BOOST_REQUIRE(TestModule_c::iCount == 1);
 
 		core->FixedUpdate(1);
@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 
 		//Fire PrepareToBootEvent
 		core->FixedUpdate(1);
-		BOOST_CHECK(testModule->iPrepareToBootCount == 0);		
+		BOOST_CHECK(testModule->iPrepareToBootCount == 0);
 
 		core->Update(1, 0.2f);
 		BOOST_CHECK(testModule->iFixedUpdateCount == 3);
@@ -252,27 +252,27 @@ BOOST_AUTO_TEST_CASE(core_basic)
 		core->FixedUpdate(1);
 
 		//Force boot dispatch
-		core->FixedUpdate(1);		
+		core->FixedUpdate(1);
 		BOOST_CHECK(testModule->iBootCount);
 
 		core->AddModuleToDestroyList(*testModule);
 		BOOST_REQUIRE(TestModule_c::iCount == 1);
 
 		core->FixedUpdate(1);
-		BOOST_REQUIRE(TestModule_c::iCount == 1);	
+		BOOST_REQUIRE(TestModule_c::iCount == 1);
 		BOOST_CHECK(testModule->iFixedUpdateCount == 7);
-		BOOST_CHECK(testModule->iUpdateCount == 2);		
+		BOOST_CHECK(testModule->iUpdateCount == 2);
 
 		BOOST_REQUIRE_THROW(core->AddModuleToDestroyList(*testModule), ObjectNotFoundException_c);
 	}
 
-	BOOST_REQUIRE(TestModule_c::iCount == 0);	
+	BOOST_REQUIRE(TestModule_c::iCount == 0);
 
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpFrameTime == 1);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalTicks == 8);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].uFrameCount == 8);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalRenderFrameTime == 2);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpDelta == 0.2f);	
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpDelta == 0.2f);
 
 	core->PauseTimer(CORE_GAME_TIMER);
 	core->FixedUpdate(2);
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalTicks == 8);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].uFrameCount == 8);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpTotalRenderFrameTime == 2);
-	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpDelta == 0.2f);	
+	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_GAME_TIMER].fpDelta == 0.2f);
 
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime == 2);
 	BOOST_CHECK(core->GetSimInfo().stTimers[CORE_SYS_TIMER].fpTotalTicks == 10);
@@ -296,7 +296,7 @@ BOOST_AUTO_TEST_CASE(core_sorting)
 	CoreInstance_s instance;
 
 	TestModulePtr_t test = CreateAndRegisterTestModule();
-	
+
 	TestModule2Ptr_t ptr = TestModule2_c::CreateInstance();
 
 	CorePtr_t core = Core_c::GetInstance();
@@ -318,5 +318,5 @@ BOOST_AUTO_TEST_CASE(core_sorting)
 	BOOST_CHECK(eSequenceMarkerFixedUpdate_gl == TEST_MODULE_2);
 
 	core->Update(1, 0);
-	BOOST_CHECK(eSequenceMarkerUpdate_gl == TEST_MODULE_2);	
+	BOOST_CHECK(eSequenceMarkerUpdate_gl == TEST_MODULE_2);
 }
