@@ -60,7 +60,12 @@ namespace Phobos
 
 	void *WindowSDL_c::GetHandler() const
 	{
-		return NULL;
+		SDL_SysWMinfo pInfo;
+		SDL_VERSION(&pInfo.version);
+
+		SDL_GetWMInfo(&pInfo);
+
+		return pInfo.window;
 	}
 
 	void WindowSDL_c::SetEventManager(EventManagerPtr_t manager)

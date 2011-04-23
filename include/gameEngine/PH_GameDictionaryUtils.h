@@ -23,8 +23,8 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_DICTIONARY_UTILS_H
-#define PH_DICTIONARY_UTILS_H
+#ifndef PH_GAME_DICTIONARY_UTILS_H
+#define PH_GAME_DICTIONARY_UTILS_H
 
 #include <PH_Dictionary.h>
 

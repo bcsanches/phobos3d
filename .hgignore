@@ -161,3 +161,16 @@ glob:project/visual8_SDL/PH_Input/PH_Input.vcproj.bcsnote.bcsanches.user
 glob:project/visual8_SDL/PH_Kernel/PH_Kernel.vcproj.bcsnote.bcsanches.user
 glob:project/visual8_SDL/Sample_01/Sample_01.vcproj.bcsnote.bcsanches.user
 glob:project/visual8_SDL/Sample_02/Sample_02.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_Dictionary/Debug/
+glob:project/visual8_SDL/PH_Dictionary/PH_Dictionary.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_EngineCore/Debug/
+glob:project/visual8_SDL/PH_EngineMain/Debug/
+glob:project/visual8_SDL/PH_GameEngine/Debug/
+glob:project/visual8_SDL/Sample_03/Debug/
+glob:project/visual8_SDL/Sample_03/Sample_03.log
+glob:project/visual8_SDL/Sample_03/Sample_03.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/Sample_04/Debug/
+glob:project/visual8_SDL/Sample_04/Sample_04.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_EngineCore/PH_EngineCore.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_EngineMain/PH_EngineMain.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_GameEngine/PH_GameEngine.vcproj.bcsnote.bcsanches.user

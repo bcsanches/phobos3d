@@ -30,7 +30,7 @@ Phobos 3d
 #include <PH_Dictionary.h>
 #include <PH_Render.h>
 
-#include "PH_DictionaryUtils.h"
+#include "PH_GameDictionaryUtils.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_WorldEntity.h"
