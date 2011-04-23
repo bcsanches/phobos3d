@@ -107,19 +107,8 @@ namespace Phobos
         {SDLK_EQUALS,		 0},				//61
         {SDLK_GREATER,		 0},				//62
         {SDLK_QUESTION,		 0},				//63
-        {SDLK_AT	,		 0},				//54
-
-
-        {0, 0},									//55
-        {0, 0},									//56
-        {0, 0},									//57
-        {0, 0},									//58
-        {0, 0},									//59
-        {0, 0},									//60
-        {0, 0},									//61
-        {0, 0},									//62
-        {0, 0},									//63
-        {0, 0},									//64
+        {SDLK_AT	,		 0},				//64
+ 
         {0, 0},									//65
         {0, 0},									//66
         {0, 0},									//67
@@ -155,7 +144,7 @@ namespace Phobos
         {SDLK_RIGHTBRACKET,     0},				//93
         {SDLK_CARET,		    0},				//94
         {SDLK_UNDERSCORE,		0},				//95
-        {SDLK_BACKQUOTE,		0},				//96
+        {SDLK_BACKQUOTE,		'`'},			//96
         {SDLK_a,		 'a'},					//97
         {SDLK_b,		 'b'},					//98
         {SDLK_c,		 'c'},					//99
