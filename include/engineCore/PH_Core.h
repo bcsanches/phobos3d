@@ -81,40 +81,7 @@ namespace Phobos
 			void CmdToggleTimerPause(const StringVector_t &args, Context_c &);
 			void CmdListModules(const StringVector_t &args, Context_c &);
 
-		private:
-			struct ModuleInfo_s
-			{
-				UInt32_t u32Priority;
-				CoreModulePtr_t ipModule;
-
-				inline ModuleInfo_s(CoreModulePtr_t module, UInt32_t priority):
-					u32Priority(priority),
-					ipModule(module)
-				{
-				}
-
-				inline ModuleInfo_s(const ModuleInfo_s &rhs):
-					u32Priority(rhs.u32Priority),
-					ipModule(rhs.ipModule)
-				{
-				}
-
-				inline bool operator<(const ModuleInfo_s &rhs) const
-				{
-					return rhs.u32Priority < u32Priority;
-				}
-
-				inline bool operator==(const CoreModule_c &module) const
-				{
-					return ipModule.get() == &module;
-				}
-
-				inline bool operator==(const CoreModulePtr_t module) const
-				{
-					return ipModule == module;
-				}
-			};
-
+		private:			
 			static const String_c DEFAULT_NAME;
 			static CorePtr_t ipInstance_gl;
 
