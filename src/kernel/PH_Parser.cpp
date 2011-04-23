@@ -144,6 +144,10 @@ namespace Phobos
 					strToken += ch;
 					RETURN_TOKEN(TOKEN_CLOSE_PAREN);
 					break;
+				case '.':
+					strToken += ch;
+					RETURN_TOKEN(TOKEN_DOT);
+					break;
 
 				case '/':
 					//-------------------------

@@ -36,5 +36,10 @@ namespace Phobos
 	void EntityComponent_c::Load(const Dictionary_c &dictionary)
 	{
 		this->OnLoad(dictionary);
-	}					
+	}		
+
+	void EntityComponent_c::LoadFinished()
+	{
+		this->OnLoadFinished();
+	}
 }

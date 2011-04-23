@@ -63,25 +63,43 @@ namespace Phobos
 
 	void Dictionary_c::Load(Parser_c &parser)
 	{
-		String_c tokenValue;
-		ParserTokens_e token = parser.GetToken(&tokenValue);
+		String_c idName;
+		String_c value;
+
+		ParserTokens_e token = parser.GetToken(&value);
 
 		if(token != TOKEN_OPEN_BRACE)
-			PH_RaiseDictionaryParseException(parser, TOKEN_OPEN_BRACE, token, tokenValue, "Dictionary_c::Load");
+			PH_RaiseDictionaryParseException(parser, TOKEN_OPEN_BRACE, token, value, "Dictionary_c::Load");
 
 		for(;;)
 		{
-			token = parser.GetToken(&tokenValue);
+			token = parser.GetToken(&value);
 			if(token == TOKEN_CLOSE_BRACE)
 				break;
 
-			if(token != TOKEN_ID)
-				PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "Dictionary_c::Load");
+			idName.clear();
+			//Accepts name in the format:
+			//model=
+			//RenderCompoenent.model=
+			for(;;)
+			{
+				if(token != TOKEN_ID)
+					PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, value, "Dictionary_c::Load");
+			
+				idName.append(value);
+				token = parser.GetToken(&value);
+				if(token == TOKEN_DOT)
+				{
+					idName.append(value);
+					token = parser.GetToken(&value);
+					continue;
+				}
 
-			String_c value;
-			token = parser.GetToken(&value);
-			if(token != TOKEN_EQUAL)
-				PH_RaiseDictionaryParseException(parser, TOKEN_EQUAL, token, tokenValue, "Dictionary_c::Load");
+				if(token == TOKEN_EQUAL)
+					break;
+
+				PH_RaiseDictionaryParseException(parser, TOKEN_EQUAL, token, value, "Dictionary_c::Load");				
+			}
 
 			token = parser.GetToken(&value);
 			switch(token)
@@ -89,17 +107,17 @@ namespace Phobos
 				case TOKEN_ID:
 				case TOKEN_NUMBER:
 				case TOKEN_STRING:
-					this->AddValue(tokenValue, value);
+					this->AddValue(idName, value);
 					break;
 
 				default:
-					PH_RaiseDictionaryParseException(parser, TOKEN_STRING, token, tokenValue, "Dictionary_c::Load");
+					PH_RaiseDictionaryParseException(parser, TOKEN_STRING, token, idName, "Dictionary_c::Load");
 					break;
 			}
 
 			token = parser.GetToken(&value);
 			if(token != TOKEN_SEMI_COLON)
-				PH_RaiseDictionaryParseException(parser, TOKEN_SEMI_COLON, token, tokenValue, "Dictionary_c::Load");
+				PH_RaiseDictionaryParseException(parser, TOKEN_SEMI_COLON, token, value, "Dictionary_c::Load");
 		}
 	}
 

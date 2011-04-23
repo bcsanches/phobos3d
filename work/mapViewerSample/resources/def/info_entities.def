@@ -3,10 +3,10 @@ EntityDef InfoPlayerStart
   className=PointEntity;  
 }
 
-EntityDef Fire
+EntityDef SkeletonTorch
 {
-  className=Entity;
-  components="ModelRenderer|ParticleSystem|Light";
+  className=Entity;  
+  components="ModelRenderer";               
 }
 
 EntityDef Target

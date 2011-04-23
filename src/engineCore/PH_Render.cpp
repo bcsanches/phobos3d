@@ -259,11 +259,42 @@ namespace Phobos
 		spRoot->destroySceneManager(manager);
 	}
 
-	Ogre::SceneNode *Render_c::CreateSceneNode()
+	void Render_c::ClearScene()
+	{
+		pclMainSceneManager->clearScene();
+	}
+
+	/*
+	//If this method is activated, we need to rename the others, because it does not attach the node to a scene
+	Ogre::SceneNode *Render_c::GetOrCreateSceneNode(const String_c &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
-		return (pclMainSceneManager->getRootSceneNode()->createChildSceneNode());
+		if(pclMainSceneManager->hasSceneNode(name))
+			return pclMainSceneManager->getSceneNode(name);
+		else
+			return pclMainSceneManager->createSceneNode(name);
+	}*/
+
+	Ogre::SceneNode *Render_c::GetSceneNode(const String_c &name)
+	{
+		PH_ASSERT_VALID(pclMainSceneManager);	
+
+		return pclMainSceneManager->getSceneNode(name);
+	}
+
+	Ogre::SceneNode *Render_c::CreateSceneNode(const String_c &name)
+	{
+		PH_ASSERT_VALID(pclMainSceneManager);	
+		
+		return pclMainSceneManager->getRootSceneNode()->createChildSceneNode(name);
+	}
+
+	Ogre::SceneNode *Render_c::CreateSceneNode()
+	{
+		PH_ASSERT_VALID(pclMainSceneManager);	
+		
+		return pclMainSceneManager->getRootSceneNode()->createChildSceneNode();
 	}
 
 	void Render_c::DestroySceneNode(Ogre::SceneNode *node)
@@ -271,7 +302,7 @@ namespace Phobos
 		PH_ASSERT_VALID(pclMainSceneManager);
 		PH_ASSERT_VALID(node);
 
-		pclMainSceneManager->destroySceneNode(node->getName());
+		pclMainSceneManager->destroySceneNode(node->getName());		
 	}
 
 	Ogre::Entity* Render_c::CreateEntity(const String_c &meshName, UInt32_t flags)

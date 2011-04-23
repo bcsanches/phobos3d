@@ -99,6 +99,9 @@ namespace Phobos
 
 			void AddPrivateChild(NodePtr_t node);
 
+			inline NodeMap_t::iterator begin();
+			inline NodeMap_t::iterator end();
+
 		private:
 			void GetThisPath_r(Path_c &out);
 
@@ -115,6 +118,16 @@ namespace Phobos
 	}
 
 	inline Node_c::NodeMap_t::const_iterator Node_c::end() const
+	{
+		return mapNodes.end();
+	}
+
+	inline Node_c::NodeMap_t::iterator Node_c::begin()
+	{
+		return mapNodes.begin();
+	}
+
+	inline Node_c::NodeMap_t::iterator Node_c::end()
 	{
 		return mapNodes.end();
 	}

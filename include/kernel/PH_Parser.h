@@ -45,7 +45,8 @@ namespace Phobos
 		TOKEN_EQUAL,
 		TOKEN_SEMI_COLON,
 		TOKEN_ERROR,
-		TOKEN_EOF
+		TOKEN_EOF,
+		TOKEN_DOT
 	};
 
 	class PH_KERNEL_API Parser_c

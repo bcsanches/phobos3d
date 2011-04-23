@@ -33,6 +33,7 @@ Phobos 3d
 #include "PH_DictionaryUtils.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
+#include "PH_WorldEntity.h"
 
 namespace Phobos
 {
@@ -60,7 +61,7 @@ namespace Phobos
 
 		RenderPtr_t render = Render_c::GetInstance();
 
-		pclSceneNode = render->CreateSceneNode();
+		pclSceneNode = render->CreateSceneNode(this->GetName());
 		pclMeshEntity = render->CreateEntity(meshName);
 
 		pclSceneNode->attachObject(pclMeshEntity);
@@ -71,6 +72,23 @@ namespace Phobos
 		pclSceneNode->setOrientation(Ogre::Quaternion(values));
 
 		pclSceneNode->setPosition(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
+		pclSceneNode->setScale(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_SCALE));
 		pclSceneNode->setOrientation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+
+		strParentNode = dictionary.GetValue(PH_ENTITY_KEY_PARENT_NODE);
+	}
+
+	void ModelRendererComponent_c::OnLoadFinished()
+	{
+		EntityComponent_c::OnLoadFinished();
+
+		if(strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
+		{
+			RenderPtr_t render = Render_c::GetInstance();
+
+			pclSceneNode->getParent()->removeChild(pclSceneNode);
+
+			render->GetSceneNode(strParentNode)->addChild(pclSceneNode);
+		}
 	}
 }
