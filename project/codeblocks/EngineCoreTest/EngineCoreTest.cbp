@@ -19,10 +19,10 @@
 					<Add option="-DPH_CHECK_ASSERT" />
 				</Compiler>
 				<Linker>
+					<Add library="../EngineCore/bin/Debug/EngineCore.so" />
 					<Add library="../kernel/bin/Debug/kernel.so" />
 					<Add library="../PH_Input/bin/Debug/Input.so" />
 					<Add library="../Dictionary/bin/Debug/Dictionary.so" />
-					<Add library="../EngineCore/bin/Debug/EngineCore.so" />
 				</Linker>
 			</Target>
 			<Target title="Release">

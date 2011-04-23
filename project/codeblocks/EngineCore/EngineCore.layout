@@ -1,4 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
+	<File name="../../../include/engineCore/PH_BootModule.h" open="0" top="0" tabpos="0">
+		<Cursor position="1523" topLine="44" />
+	</File>
+	<File name="../../../include/engineCore/PH_Console.h" open="0" top="0" tabpos="0">
+		<Cursor position="1201" topLine="35" />
+	</File>
+	<File name="../../../include/engineCore/PH_Core.h" open="0" top="0" tabpos="0">
+		<Cursor position="3229" topLine="117" />
+	</File>
+	<File name="../../../include/engineCore/PH_CoreModule.h" open="0" top="0" tabpos="0">
+		<Cursor position="1052" topLine="21" />
+	</File>
+	<File name="../../../include/engineCore/PH_CoreModuleManager.h" open="0" top="0" tabpos="0">
+		<Cursor position="1969" topLine="84" />
+	</File>
+	<File name="../../../include/engineCore/PH_EngineCoreAPI.h" open="0" top="0" tabpos="0">
+		<Cursor position="1334" topLine="24" />
+	</File>
+	<File name="../../../include/engineCore/PH_Render.h" open="0" top="0" tabpos="0">
+		<Cursor position="5588" topLine="160" />
+	</File>
+	<File name="../../../src/engineCore/PH_BootModule.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1493" topLine="33" />
+	</File>
+	<File name="../../../src/engineCore/PH_Console.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2750" topLine="99" />
+	</File>
+	<File name="../../../src/engineCore/PH_Core.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2335" topLine="36" />
+	</File>
+	<File name="../../../src/engineCore/PH_EventManagerModule.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2410" topLine="73" />
+	</File>
+	<File name="../../../src/engineCore/PH_Plugin.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1418" topLine="24" />
+	</File>
+	<File name="../../../src/engineCore/PH_Render.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="252" topLine="69" />
+	</File>
 </CodeBlocks_layout_file>

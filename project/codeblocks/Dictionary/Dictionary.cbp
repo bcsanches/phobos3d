@@ -44,6 +44,9 @@
 			<Add directory="../../../include/kernel" />
 			<Add directory="../../../include/dictionary" />
 		</Compiler>
+		<Linker>
+			<Add library="/usr/lib/libboost_filesystem.so" />
+		</Linker>
 		<Unit filename="../../../include/dictionary/PH_Dictionary.h" />
 		<Unit filename="../../../include/dictionary/PH_DictionaryAPI.h" />
 		<Unit filename="../../../include/dictionary/PH_DictionaryFwd.h" />
