@@ -118,6 +118,15 @@ namespace Phobos
 
 			ContextVar_c	varDebug;
 			ContextVar_c	varRelease;
+			ContextVar_c    varLinux;
+			ContextVar_c    varLinuxDebug;
+			ContextVar_c    varLinuxRelease;
+			ContextVar_c    varWindows;
+			ContextVar_c    varWindowsDebug;
+			ContextVar_c    varWindowsRelease;
+			ContextVar_c    varSDL;
+			ContextVar_c    varSDLDebug;
+			ContextVar_c    varSDLRelease;
 	};
 
 	// =====================================================

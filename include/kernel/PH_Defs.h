@@ -56,4 +56,8 @@ Phobos 3d
 	#error "Phobos: please define PH_MSVC or PH_GCC"
 	#endif
 
+	#if ((!defined PH_NATIVE) && (!defined PH_SDL))
+	#error "Phobos: please define PH_SDL or PH_NATIVE"
+	#endif
+
 #endif

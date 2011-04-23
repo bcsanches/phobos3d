@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(ProjectDir)\..\..\..\include\kernel;$(ProjectDir)\..\..\..\include\input"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_CHECK_ASSERT;PH_MSVC;PH_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_CHECK_ASSERT;PH_MSVC;PH_DEBUG;PH_SDL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

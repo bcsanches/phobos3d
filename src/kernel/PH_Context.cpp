@@ -88,11 +88,50 @@ namespace Phobos
 		cmdIf("if"),
 	#ifdef PH_DEBUG
 		varDebug("dvDebug", "true"),
-		varRelease("dvRelease", "false")
+		varRelease("dvRelease", "false"),
 	#else
 		varDebug("dvDebug", "false"),
-		varRelease("dvRelease", "true")
+		varRelease("dvRelease", "true"),
 	#endif
+	#ifdef PH_LINUX
+		varLinux("dvLinux", "true"),
+		#ifdef PH_DEBUG
+			varLinuxDebug("dvLinuxDebug", "true"),
+			varLinuxRelease("dvLinuxRelease", "false"),
+		#else
+			varLinuxDebug("dvLinuxDebug", "false"),
+			varLinuxRelease("dvLinuxRelease", "true"),
+		#endif
+		varWindows("dvWindows", "false"),
+		varWindowsDebug("dvWindowsDebug", "false"),
+		varWindowsRelease("dvWindowsRelease", "false"),
+	#else
+		varLinux("dvLinux", "false"),
+		varLinuxDebug("dvLinuxDebug", "false"),
+		varLinuxRelease("dvLinuxRelease", "false"),
+		varWindows("dvWindows", "true"),
+		#ifdef PH_DEBUG
+			varWindowsDebug("dvWindowsDebug", "true"),
+			varWindowsRelease("dvWindowsRelease", "false"),
+		#else
+			varWindowsDebug("dvWindowsDebug", "false"),
+			varWindowsRelease("dvWindowsRelease", "true"),
+		#endif		
+	#endif
+	#ifdef PH_SDL
+		varSDL("dvSDL", "true"),
+		#ifdef PH_DEBUG
+			varSDLDebug("dvSDLDebug", "true"),
+			varSDLRelease("dvSDLRelease", "false")
+		#else
+			varSDLDebug("dvSDLDebug", "false"),
+			varSDLRelease("dvSDLRelease", "true")
+		#endif	
+	#else 
+		varSDL("dvSDL", "false"),
+		varSDLDebug("dvSDLDebug", "false"),
+		varSDLRelease("dvSDLRelease", "false")
+	#endif	
 	{
 		cmdEcho.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdEcho, this));
 		cmdHelp.SetProc(PH_CONTEXT_CMD_BIND(&Context_c::CmdListCmds, this));
@@ -110,6 +149,12 @@ namespace Phobos
 
 		this->AddContextVar(varDebug);
 		this->AddContextVar(varRelease);
+		this->AddContextVar(varLinux);
+		this->AddContextVar(varLinuxDebug);
+		this->AddContextVar(varWindows);
+		this->AddContextVar(varWindowsDebug);
+		this->AddContextVar(varSDL);
+		this->AddContextVar(varSDLDebug);
 	}
 
 	void Context_c::AddContextVar(ContextVar_c &var)

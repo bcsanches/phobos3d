@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_MSVC;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_MSVC;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;PH_SDL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

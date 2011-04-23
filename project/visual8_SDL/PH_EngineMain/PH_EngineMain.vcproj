@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_MSVC;PH_CHECK_ASSERT;PH_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_MSVC;PH_CHECK_ASSERT;PH_DEBUG;PH_SDL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
