@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="EngineCore" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/EngineCore" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DPH_LINUX" />
+					<Add option="-DPH_DEBUG" />
+					<Add option="-DPH_GCC" />
+					<Add option="-DPH_CHECK_ASSERT" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/EngineCore" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="../../../include/engineCore" />
+			<Add directory="../../../include/kernel" />
+			<Add directory="../../../include/input" />
+			<Add directory="../../../include/dictionary" />
+			<Add directory="/usr/include/OGRE" />
+		</Compiler>
+		<Unit filename="../../../include/engineCore/PH_BootModule.h" />
+		<Unit filename="../../../include/engineCore/PH_Console.h" />
+		<Unit filename="../../../include/engineCore/PH_Core.h" />
+		<Unit filename="../../../include/engineCore/PH_CoreModule.h" />
+		<Unit filename="../../../include/engineCore/PH_CoreModuleFwd.h" />
+		<Unit filename="../../../include/engineCore/PH_CoreModuleManager.h" />
+		<Unit filename="../../../include/engineCore/PH_CoreTimer.h" />
+		<Unit filename="../../../include/engineCore/PH_EngineCoreAPI.h" />
+		<Unit filename="../../../include/engineCore/PH_EventManagerModule.h" />
+		<Unit filename="../../../include/engineCore/PH_Interpolator.h" />
+		<Unit filename="../../../include/engineCore/PH_MathFunctions.h" />
+		<Unit filename="../../../include/engineCore/PH_OgreUtils.h" />
+		<Unit filename="../../../include/engineCore/PH_Plugin.h" />
+		<Unit filename="../../../include/engineCore/PH_PluginManager.h" />
+		<Unit filename="../../../include/engineCore/PH_Render.h" />
+		<Unit filename="../../../include/engineCore/PH_Transform.h" />
+		<Unit filename="../../../src/engineCore/PH_BootModule.cpp" />
+		<Unit filename="../../../src/engineCore/PH_Console.cpp" />
+		<Unit filename="../../../src/engineCore/PH_Core.cpp" />
+		<Unit filename="../../../src/engineCore/PH_CoreModule.cpp" />
+		<Unit filename="../../../src/engineCore/PH_CoreModuleManager.cpp" />
+		<Unit filename="../../../src/engineCore/PH_EventManagerModule.cpp" />
+		<Unit filename="../../../src/engineCore/PH_OgreUtils.cpp" />
+		<Unit filename="../../../src/engineCore/PH_Plugin.cpp" />
+		<Unit filename="../../../src/engineCore/PH_PluginManager.cpp" />
+		<Unit filename="../../../src/engineCore/PH_Render.cpp" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

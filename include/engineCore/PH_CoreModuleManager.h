@@ -32,25 +32,25 @@ namespace Phobos
 
 	class PH_ENGINE_CORE_API CoreModuleManager_c: public CoreModule_c
 	{
-		public:			
+		public:
 			static CoreModuleManagerPtr_t Create(const String_c &name);
 
-			void AddModule(CoreModulePtr_t module, UInt32_t priority = NORMAL_PRIORITY);			
+			void AddModule(CoreModulePtr_t module, UInt32_t priority = NORMAL_PRIORITY);
 			void AddModuleToDestroyList(CoreModule_c &module);
 			void RemoveModule(CoreModule_c &module);
-						
+
 			void OnEvent(CoreEvents_e event);
 
 			void LaunchBootModule(const String_c &cfgName);
 
-			void LogCoreModules();			
+			void LogCoreModules();
 
-		protected:			
+		protected:
 			CoreModuleManager_c(const String_c &name, ChildrenMode_e=PRIVATE_CHILDREN);
-			~CoreModuleManager_c();		
+			~CoreModuleManager_c();
 
 			virtual void OnUpdate();
-			virtual void OnFixedUpdate();					
+			virtual void OnFixedUpdate();
 			virtual void OnPrepareToBoot();
 			virtual void OnBoot();
 			virtual void OnFinalize();
@@ -58,10 +58,10 @@ namespace Phobos
 
 			void CallCoreModuleProc(CoreModuleProc_t proc);
 
-		private:			
+		private:
 			void UpdateDestroyList();
 			void DispatchEvents();
-			void SortModules();						
+			void SortModules();
 
 		protected:
 			struct ModuleInfo_s
@@ -75,14 +75,14 @@ namespace Phobos
 				}
 
 				inline ModuleInfo_s(CoreModulePtr_t module, UInt32_t priority):
-					ipModule(module),
-					u32Priority(priority)
+					u32Priority(priority),
+					ipModule(module)
 				{
 				}
 
 				inline ModuleInfo_s(const ModuleInfo_s &rhs):
-					ipModule(rhs.ipModule),
-					u32Priority(rhs.u32Priority)
+					u32Priority(rhs.u32Priority),
+					ipModule(rhs.ipModule)
 				{
 				}
 
@@ -101,18 +101,18 @@ namespace Phobos
 					return ipModule == module;
 				}
 			};
-			
+
 			typedef std::vector<ModuleInfo_s>	ModulesVector_t;
-			ModulesVector_t						vecModules;			
+			ModulesVector_t						vecModules;
 
 			typedef std::set<CoreModulePtr_t>	ModulesSet_t;
-			ModulesSet_t						setModulesToDestroy;			
+			ModulesSet_t						setModulesToDestroy;
 
 			typedef std::vector<CoreEvents_e>	EventsVector_t;
 			EventsVector_t						vecEvents;
-			
+
 			bool								fLaunchedBoot;
-			bool								fPendingSort;	
+			bool								fPendingSort;
 			bool								fPendingRemoveErase;
 	};
 }

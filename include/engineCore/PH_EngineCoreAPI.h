@@ -33,9 +33,13 @@ Phobos 3d
 		#define PH_ENGINE_CORE_API
 	#endif
 
-	#define PH_ENGINE_CORE_API_PROC extern "C" PH_ENGINE_CORE_API	
+	#define PH_ENGINE_CORE_API_PROC extern "C" PH_ENGINE_CORE_API
 #else
-	#error "Platform not defined"
+    #ifdef PH_LINUX
+        #define PH_ENGINE_CORE_API
+    #else
+        #error "Platform not defined"
+    #endif
 #endif
 
 #endif

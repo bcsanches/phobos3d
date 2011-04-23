@@ -38,9 +38,9 @@ Phobos 3d
 namespace Phobos
 {
 	class Context_c;
-	class Core_c;	
+	class Core_c;
 
-	typedef boost::intrusive_ptr<Core_c> CorePtr_t;	
+	typedef boost::intrusive_ptr<Core_c> CorePtr_t;
 
 	struct CoreSimInfo_s
 	{
@@ -63,19 +63,19 @@ namespace Phobos
 
 			inline void SetFrameRate(Float_t rate);
 
-			inline const CoreSimInfo_s &GetSimInfo(void) const;					
-						
+			inline const CoreSimInfo_s &GetSimInfo(void) const;
+
 			void CreateDefaultCmds(Context_c &context);
 
 			void PauseTimer(CoreTimerTypes_e timer);
 			void UnpauseTimer(CoreTimerTypes_e timer);
 			void ToggleTimerPause(CoreTimerTypes_e timer);
 
-			void ResetTimer(CoreTimerTypes_e timer);					
+			void ResetTimer(CoreTimerTypes_e timer);
 
-		private:			
+		private:
 			Core_c(const String_c &name);
-			~Core_c();			
+			~Core_c();
 
 			void CmdTime(const StringVector_t &args, Context_c &);
 			void CmdToggleTimerPause(const StringVector_t &args, Context_c &);
@@ -88,14 +88,14 @@ namespace Phobos
 				CoreModulePtr_t ipModule;
 
 				inline ModuleInfo_s(CoreModulePtr_t module, UInt32_t priority):
-					ipModule(module),
-					u32Priority(priority)
+					u32Priority(priority),
+					ipModule(module)
 				{
 				}
 
 				inline ModuleInfo_s(const ModuleInfo_s &rhs):
-					ipModule(rhs.ipModule),
-					u32Priority(rhs.u32Priority)
+					u32Priority(rhs.u32Priority),
+					ipModule(rhs.ipModule)
 				{
 				}
 

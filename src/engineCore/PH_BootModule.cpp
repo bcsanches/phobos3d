@@ -41,8 +41,8 @@ namespace Phobos
 	BootModule_c::BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager):
 		CoreModule_c("BootModule"),
 		strCfgName(cfgName),
-		fUpdateDone(false),
 		iFixedUpdateCount(0),
+		fUpdateDone(false),
 		fPrepareFired(false),
 		fBootFired(false),
 		rclManager(manager)
@@ -54,10 +54,10 @@ namespace Phobos
 		++iFixedUpdateCount;
 
 		if(fUpdateDone && (iFixedUpdateCount > 2))
-		{			
+		{
 			//First time, tell the system that we are ready to go
 			if(!fPrepareFired)
-			{				
+			{
 				rclManager.OnEvent(CORE_EVENT_PREPARE_TO_BOOT);
 				fPrepareFired = true;
 
@@ -72,13 +72,13 @@ namespace Phobos
 					Console_c::GetInstance()->ExecuteFromFile(strCfgName);
 				}
 				catch(FileNotFoundException_c &e)
-				{					
+				{
 					Kernel_c::GetInstance().LogStream() << "[BootModule_c::OnFixedUpdate] Warning, boot failed: " << e.what();
 				}
 
 				//Time to boot and game over for us
 				rclManager.OnEvent(CORE_EVENT_BOOT);
-				
+
 				fBootFired = true;
 
 				rclManager.RemoveModule(*this);

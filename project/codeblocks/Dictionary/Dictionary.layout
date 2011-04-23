@@ -2,7 +2,7 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
 	<File name="../../../include/dictionary/PH_Dictionary.h" open="0" top="0" tabpos="0">
-		<Cursor position="1106" topLine="19" />
+		<Cursor position="1088" topLine="19" />
 	</File>
 	<File name="../../../include/dictionary/PH_DictionaryAPI.h" open="0" top="0" tabpos="0">
 		<Cursor position="1391" topLine="27" />
@@ -23,6 +23,6 @@
 		<Cursor position="363" topLine="11" />
 	</File>
 	<File name="../../../src/dictionary/PH_Dictionary.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4222" topLine="143" />
+		<Cursor position="1000" topLine="24" />
 	</File>
 </CodeBlocks_layout_file>

@@ -85,9 +85,9 @@ namespace Phobos
 		ipInstance_gl.reset();
 	}
 
-	Console_c::Console_c(void):	
-		CoreModule_c("Console"),		
-		pclRect(NULL),	
+	Console_c::Console_c(void):
+		CoreModule_c("Console"),
+		pclRect(NULL),
 		pclTextBox(NULL),
 		pclOverlay(NULL),
 		pclRenderInfoOverlay(NULL),
@@ -99,14 +99,14 @@ namespace Phobos
 		cmdLs("ls"),
 		cmdCd("cd"),
 		cmdDumpTable("dumpTable"),
-		fIgnoreFirstChar(false),
-		fIgnoredLastChar(false),
+		strCurrentNodePathName("/"),
 		fActive(true),
-		strCurrentNodePathName("/")
+		fIgnoreFirstChar(false),
+		fIgnoredLastChar(false)
 	{
-		Kernel_c &kernel = Kernel_c::GetInstance();
-		
-		InputManager_c::CreateInstance("InputManager")->AddListener(*this);		
+		//Kernel_c &kernel = Kernel_c::GetInstance();
+
+		InputManager_c::CreateInstance("InputManager")->AddListener(*this);
 
 		Kernel_c::GetInstance().AddLogListener(*this);
 
@@ -120,22 +120,22 @@ namespace Phobos
 		cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdDumpTable, this));
 
 		clContext.AddContextVar(varMaterialName);
-		clContext.AddContextVar(varShowRenderInfo);	
+		clContext.AddContextVar(varShowRenderInfo);
 
 		clContext.AddContextCmd(cmdLs);
-		clContext.AddContextCmd(cmdCd);		
+		clContext.AddContextCmd(cmdCd);
 		clContext.AddContextCmd(cmdDumpTable);
 	}
 
 	Console_c::~Console_c(void)
-	{		
+	{
 		InputManager_c::ReleaseInstance();
 	}
 
 	void Console_c::OnFixedUpdate()
 	{
 		InputManager_c::GetInstance()->Update();
-	}	
+	}
 
 	void Console_c::OnUpdate(void)
 	{
@@ -157,17 +157,17 @@ namespace Phobos
 
 		bool visible = true;
 
-		if(fActive)		
+		if(fActive)
 		{
 			if(fpHeight < CONSOLE_HEIGHT)
 			{
 				fpHeight += Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
 				fUIMoved = true;
 				if(fpHeight >= CONSOLE_HEIGHT)
-				{					
+				{
 					fpHeight = CONSOLE_HEIGHT;
 				}
-			}		
+			}
 		}
 		else if(fpHeight > 0)
 		{
@@ -175,9 +175,9 @@ namespace Phobos
 			fUIMoved = true;
 
 			if(fpHeight <= 0)
-			{				
-				pclOverlay->hide();				
-				fpHeight = 0;			
+			{
+				pclOverlay->hide();
+				fpHeight = 0;
 			}
 		}
 		else
@@ -186,7 +186,7 @@ namespace Phobos
 		}
 
 		if(visible)
-		{		
+		{
 			//pclTextBox->setPosition(0,(fHeight-1)*0.5);
 			//pclRect->setCorners(-1,1+fHeight,1,1-fHeight);
 			if(fUIMoved)
@@ -195,35 +195,35 @@ namespace Phobos
 				fUIMoved = false;
 			}
 
-			if(fTextBufferChanged || fEditBoxChanged)			
+			if(fTextBufferChanged || fEditBoxChanged)
 			{
-				Ogre::String text; 
-	      
+				Ogre::String text;
+
 				size_t i = 0;
 				TextList_t::iterator end = lstText.end();
 				for(TextList_t::iterator it = lstText.begin(); it != end; ++it, ++i)
 				{
 					if(i == CONSOLE_LINE_COUNT)
-						break;		
+						break;
 
 					const String_c &str = (*it);
 
 					if(str.length() > CONSOLE_LINE_LENGHT)
-					{						
+					{
 						text.append(str, 0, CONSOLE_LINE_LENGHT);
 					}
 					else
 						text += str;
 
-					text += "\n";			
+					text += "\n";
 				}
-			
+
 				text += "] ";
 				text += clEditBox.GetStr();
 
 				try
 				{
-				
+
 					pclTextBox->setCaption(text);
 				}
 				catch(...)
@@ -232,14 +232,14 @@ namespace Phobos
 					//the fucking conversion to utf8 sometimes throw exceptions
 				}
 
-				fTextBufferChanged = fEditBoxChanged = false;				
+				fTextBufferChanged = fEditBoxChanged = false;
 			}
 		}
 	}
 
 	void Console_c::OnRenderReady(void)
 	{
-		using namespace Ogre;	
+		using namespace Ogre;
 
 		fpHeight = 0;
 
@@ -248,7 +248,7 @@ namespace Phobos
 			RenderPtr_t render = Render_c::GetInstance();
 
 			pclSceneManager = render->CreateSceneManager(Ogre::ST_GENERIC);
-			pclCamera = pclSceneManager->createCamera("PH_ConsoleCamera");		
+			pclCamera = pclSceneManager->createCamera("PH_ConsoleCamera");
 
 			// Create background rectangle covering the whole screen
 			OverlayManager& overlayManager = OverlayManager::getSingleton();
@@ -266,19 +266,19 @@ namespace Phobos
 			pclRect->setMetricsMode(Ogre::GMM_RELATIVE);
 			pclRect->setPosition(0, -CONSOLE_HEIGHT);
 			pclRect->setDimensions(1, CONSOLE_HEIGHT);
-			pclRect->setMaterialName(varMaterialName.GetValue());		
-		
-	   		
-			pclOverlay=overlayManager.create("Console");   
+			pclRect->setMaterialName(varMaterialName.GetValue());
+
+
+			pclOverlay=overlayManager.create("Console");
 			pclOverlay->add2D(pclRect);
 			pclRect->addChild(pclTextBox);
-		
+
 			pclOverlay->setZOrder(650);
-			pclOverlay->show();   	
+			pclOverlay->show();
 
 			pclRenderInfoOverlay = overlayManager.getByName("Core/RenderInfoOverlay");
 			pclRenderInfoOverlay->show();
-		
+
 			render->AddViewport(pclCamera, INT_MIN);
 		}
 		catch(Ogre::Exception &)
@@ -287,7 +287,7 @@ namespace Phobos
 			//LogOgreException("Console_c::OnRenderReady", e);
 			throw;
 		}
-	}	
+	}
 
 	void Console_c::OnChar(Char_t ch)
 	{
@@ -335,12 +335,12 @@ namespace Phobos
 	}
 
 	void Console_c::OnEnter(void)
-	{		
-		const String_c &cmdLine = clEditBox.GetStr();		
-		
+	{
+		const String_c &cmdLine = clEditBox.GetStr();
+
 		Kernel_c::GetInstance().LogStream() << "> " << cmdLine;
 
-		clContext.Execute(cmdLine);		
+		clContext.Execute(cmdLine);
 
 		this->AddToHistory(cmdLine);
 
@@ -349,29 +349,29 @@ namespace Phobos
 
 	void Console_c::ToggleConsole(void)
 	{
-		const Char_t *msg;		
+		const Char_t *msg;
 
 		//if just turning on, ignore first input
 		fActive = !fActive;
 		if(fActive)
 		{
-			fIgnoreFirstChar = true;			
+			fIgnoreFirstChar = true;
 			msg = "enabled";
 
 			ipInputMapper->Disable();
 
 			if(pclOverlay)
-				pclOverlay->show();		
+				pclOverlay->show();
 		}
 		else
 		{
 			msg = "disabled";
 
-			ipInputMapper->Enable();	
+			ipInputMapper->Enable();
 		}
 
 		std::string tmp("Console ");
-		tmp.append(msg);		
+		tmp.append(msg);
 		Kernel_c::GetInstance().LogMessage(tmp);
 	}
 
@@ -379,22 +379,22 @@ namespace Phobos
 	{
 		String_c line;
 		size_t splitPos = 0;
-			
+
 		while(StringSplitBy(line, str, '\n', splitPos, &splitPos))
 		{
 			lstText.push_back(line);
-		} 	
-	
-		fTextBufferChanged = true;		
+		}
+
+		fTextBufferChanged = true;
 	}
-		
+
 	void Console_c::Message(const String_c &msg)
 	{
 		this->Print(msg);
 	}
 
 	void Console_c::AddToHistory(const String_c &str)
-	{	
+	{
 		if(!lstHistory.empty() && lstHistory.front().compare(str) == 0)
 			return;
 
@@ -418,7 +418,7 @@ namespace Phobos
 	bool Console_c::GetNextCommand(String_c &str)
 	{
 		if(!lstHistory.empty() && (itPrevCmd != lstHistory.begin()))
-		{		
+		{
 			--itPrevCmd;
 			str = *itPrevCmd;
 
@@ -434,7 +434,7 @@ namespace Phobos
 
 		if(this->GetPreviousCommand(tmp))
 		{
-			fEditBoxChanged = true;			
+			fEditBoxChanged = true;
 			clEditBox.SetStr(tmp);
 		}
 	}
@@ -449,17 +449,17 @@ namespace Phobos
 			clEditBox.SetStr(tmp);
 		}
 	}
-	
+
 	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)
-	{		
+	{
 		std::stringstream stream;
 
 		switch(event.eType)
 		{
 			case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-				stream << "[Console_c::InputManagerEvent] Device " << event.ipDevice->GetName() << " attached.";								
-				if(event.ipDevice->GetDeviceType() == INPUT_DEVICE_KEYBOARD)				
-					event.ipDevice->AddListener(*this);			
+				stream << "[Console_c::InputManagerEvent] Device " << event.ipDevice->GetName() << " attached.";
+				if(event.ipDevice->GetDeviceType() == INPUT_DEVICE_KEYBOARD)
+					event.ipDevice->AddListener(*this);
 				break;
 
 			case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
@@ -471,15 +471,15 @@ namespace Phobos
 	}
 
 	void Console_c::InputEvent(const InputEvent_s &event)
-	{			
+	{
 		switch(event.eType)
 		{
 			case INPUT_EVENT_CHAR:
 				if(this->IsActive())
-					this->OnChar(static_cast<Char_t>(event.stChar.u16Char));			
+					this->OnChar(static_cast<Char_t>(event.stChar.u16Char));
 				break;
 
-			case INPUT_EVENT_BUTTON:	
+			case INPUT_EVENT_BUTTON:
 				if(event.stButton.eState == BUTTON_STATE_DOWN)
 				{
 					if(event.stButton.uId == CONSOLE_KEY)
@@ -493,9 +493,12 @@ namespace Phobos
 					}
 				}
 				break;
+
+            default:
+                break;
 		}
 	}
-	
+
 	void Console_c::UpdateRenderInfo()
 	{
 		using namespace Ogre;
@@ -508,8 +511,8 @@ namespace Phobos
 		static String batches = "Batch Count: ";
 
 		// update stats when necessary
-		try 
-		{		
+		try
+		{
 			OverlayElement* guiAvg = OverlayManager::getSingleton().getOverlayElement("Core/AverageFps");
 			OverlayElement* guiCurr = OverlayManager::getSingleton().getOverlayElement("Core/CurrFps");
 			OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("Core/BestFps");
@@ -534,15 +537,15 @@ namespace Phobos
 		}
 		catch(...) { /* ignore */ }
 	}
-		
+
 	void Console_c::CmdLs(const StringVector_t &args, Context_c &)
-	{	
+	{
 		Kernel_c	&kernel = Kernel_c::GetInstance();
 		NodePtr_t	currentNode;
 
 		if(args.size() > 1)
 		{
-			Path_c path(args[1]);			
+			Path_c path(args[1]);
 
 			if(path.IsRelative())
 			{
@@ -568,14 +571,14 @@ namespace Phobos
 				currentNode = kernel.LookupObject(Path_c(strCurrentNodePathName));
 			}
 			catch(ObjectNotFoundException_c &)
-			{			
+			{
 				kernel.LogStream() << "[Console_c::CmdLs] Invalid node (" << strCurrentNodePathName << "), going to root";
 
-				strCurrentNodePathName = "/";				
+				strCurrentNodePathName = "/";
 				return;
 			}
-		}	
-		
+		}
+
 		std::stringstream stream;
 
 		stream << "\t.\n\t..\n";
@@ -584,41 +587,41 @@ namespace Phobos
 			stream << "\t" << pair.second->GetName() << "\n";
 		}
 
-		kernel.LogMessage(stream.str());			
+		kernel.LogMessage(stream.str());
 	}
 
 	void Console_c::CmdCd(const StringVector_t &args, Context_c &)
 	{
-		if(args.size() == 2)			
-		{		
+		if(args.size() == 2)
+		{
 			Kernel_c	&kernel = Kernel_c::GetInstance();
 			NodePtr_t	currentNode;
 			Path_c		path(args[1]);
-			
+
 			if(path.IsRelative())
-			{		
+			{
 				path = strCurrentNodePathName;
 				path.AddName(args[1]);
 			}
 
 			try
 			{
-				currentNode = kernel.LookupObject(path);						
+				currentNode = kernel.LookupObject(path);
 				currentNode->GetThisPath(path);
 
 				//if we are at root, we set the path manually, otherwise the path will be empty
 				if(currentNode->GetParent() == NULL)
 					strCurrentNodePathName = '/';
 				else
-					strCurrentNodePathName = path.GetStr();		
+					strCurrentNodePathName = path.GetStr();
 			}
 			catch(const Exception_c &)
-			{							
+			{
 				kernel.LogStream() << "[Console_c::CmdCd] Invalid dir " << args[1];
 			}
-		}	
+		}
 		else
-			Kernel_c::GetInstance().LogMessage("[Console_c::CmdCd] Insuficient parameters");		
+			Kernel_c::GetInstance().LogMessage("[Console_c::CmdCd] Insuficient parameters");
 	}
 
 	void Console_c::CmdDumpTable(const StringVector_t &args, Context_c &)
@@ -643,7 +646,7 @@ namespace Phobos
 				stream << "[Console_c::CmdDumpTable] Insuficient parameters, usage: dumpTable <path>\n";
 				return;
 			}
-			
+
 			for(Dictionary_c::StringMapConstIterator_t it = dict->begin(), end = dict->end(); it != end; ++it)
 			{
 				stream << it->first << " = " << it->second << "\n";
@@ -696,7 +699,7 @@ namespace Phobos
 	}
 
 	inline void Console_c::EditBox_c::Clear(void)
-	{		
+	{
 		strStr.clear();
 		uCursorPos = 0;
 	}

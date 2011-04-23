@@ -60,7 +60,7 @@ namespace Phobos
 	void EventManagerModule_c::ReleaseInstance()
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
-		
+
 		ipInstance_gl.reset();
 	}
 
@@ -83,6 +83,9 @@ namespace Phobos
 			case SYSTEM_QUIT:
 				Console_c::GetInstance()->Execute("quit");
 				break;
+
+            default:
+                break;
 		}
-	}	
+	}
 }

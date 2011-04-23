@@ -63,7 +63,7 @@ namespace Phobos
 		ipInstance_gl->RemoveSelf();
 		ipInstance_gl.reset();
 	}
-			
+
 	CorePtr_t Core_c::GetInstance()
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[Core_c::GetInstance]: Instance does not exists, use CreateInstance");
@@ -73,10 +73,10 @@ namespace Phobos
 
 	Core_c::Core_c(const Phobos::String_c &name):
 		CoreModuleManager_c(name, PRIVATE_CHILDREN),
-		fLaunchedBoot(false),
 		cmdTime("time"),
+		cmdToggleTimerPause("toggleTimerPause"),
 		cmdListModules("listModules"),
-		cmdToggleTimerPause("toggleTimerPause")
+		fLaunchedBoot(false)
 	{
 		MemoryZero(&stSimInfo, sizeof(stSimInfo));
 	}
@@ -87,7 +87,7 @@ namespace Phobos
 	}
 
 	void Core_c::Shutdown()
-	{		
+	{
 		this->OnFinalize();
 	}
 
@@ -103,11 +103,11 @@ namespace Phobos
 			stSimInfo.stTimers[i].fpDelta = delta;
 		}
 
-		CoreModuleManager_c::OnUpdate();	
+		CoreModuleManager_c::OnUpdate();
 	}
 
 	void Core_c::FixedUpdate(Float_t seconds)
-	{		
+	{
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
 			if(stSimInfo.stTimers[i].IsPaused())
@@ -118,17 +118,17 @@ namespace Phobos
 			++stSimInfo.stTimers[i].uFrameCount;
 		}
 
-		CoreModuleManager_c::OnFixedUpdate();		
+		CoreModuleManager_c::OnFixedUpdate();
 	}
 
 	void Core_c::CreateDefaultCmds(Context_c &context)
 	{
-		cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdTime, this));		
+		cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdTime, this));
 		cmdToggleTimerPause.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdToggleTimerPause, this));
 		cmdListModules.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdListModules, this));
 
 		context.AddContextCmd(cmdTime);
-		context.AddContextCmd(cmdToggleTimerPause);	
+		context.AddContextCmd(cmdToggleTimerPause);
 		context.AddContextCmd(cmdListModules);
 	}
 
@@ -138,7 +138,7 @@ namespace Phobos
 
 		if(timer == CORE_SYS_TIMER)
 		{
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core_c::PauseTimer", "Cant pause sys timer");			
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core_c::PauseTimer", "Cant pause sys timer");
 		}
 
 		stSimInfo.stTimers[timer].Pause();
@@ -179,7 +179,7 @@ namespace Phobos
 		stream	<< "[IM_Core] Current time:"<<endl<<"\tfpTotalTics: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpTotalTicks<<endl
 				<<"\tfpFrameTime: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpFrameTime<<endl
 				<<"\tFrameCount: "<<stSimInfo.stTimers[CORE_SYS_TIMER].uFrameCount;
-		
+
 		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 
@@ -206,15 +206,15 @@ namespace Phobos
 
 			stream << "[Core_c::CmdToggleTimerPause] togglePause usage error, usage: togglePause ";
 			for(int i = 0;pauseInfo[i].pstrzName; ++i)
-			{				
-				stream << pauseInfo[i].pstrzName << '|';				
-			}		
+			{
+				stream << pauseInfo[i].pstrzName << '|';
+			}
 
 			Kernel_c::GetInstance().LogMessage(stream.str());
 			return;
 		}
 
-		const String_c &timerName(args[1]);		
+		const String_c &timerName(args[1]);
 
 		for(int i = 0;pauseInfo[i].pstrzName; ++i)
 		{
@@ -236,6 +236,6 @@ namespace Phobos
 
 	void Core_c::CmdListModules(const StringVector_t &args, Context_c &)
 	{
-		this->LogCoreModules();	
+		this->LogCoreModules();
 	}
 }
