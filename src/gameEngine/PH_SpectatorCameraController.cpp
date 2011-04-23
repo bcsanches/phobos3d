@@ -18,20 +18,20 @@ namespace Phobos
 {
 	SpectatorCameraController_c::SpectatorCameraController_c(Context_c *context):
 		clMoveButton("-moveBwd", "+moveBwd", "=moveBwd", "-moveFwd", "+moveFwd", "=moveFwd", context),
+		clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),
 		clStrafeButton("-strafeRight", "+strafeRight", "=strafeRight", "-strafeLeft", "+strafeLeft", "=strafeLeft", context),
 		clTurnButton( "-turnRight", "+turnRight", "=turnRight", "-turnLeft", "+turnLeft", "=turnLeft", context),
 		clLookButton("-lookUp", "+lookUp", "=lookUp", "-lookDown", "+lookDown", "=lookDown", context),
-		clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),	
 		clMouseThumb(PH_MOUSE_THUMB_CMD_NAME, context),
-		fpTurnSpeed(70),
 		fpMoveSpeed(8),
+		fpTurnSpeed(70),
 		fpMouseSensitivity(0.3f)
 	{
 		clMouseThumb.Disable();
 	}
 
 	IPlayerCmdPtr_t SpectatorCameraController_c::CreateCmd()
-	{		
+	{
 		const Float_t ticks = Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime;
 
 		const Float_t fwd = clMoveButton.GetValue() * ticks * fpMoveSpeed;
@@ -46,7 +46,7 @@ namespace Phobos
 		return IPlayerCmdPtr_t(new SpectatorCameraCmd_c(
 			fwd,
 			strafe,
-			upDown, 
+			upDown,
 			turnAngle,
 			lookAngle
 			));
@@ -56,7 +56,7 @@ namespace Phobos
 	{
 		ConsolePtr_t console = Console_c::GetInstance();
 
-		clMoveButton.Enable(*console);		
+		clMoveButton.Enable(*console);
 		clStrafeButton.Enable(*console);
 		clMoveUpDown.Enable(*console);
 		clTurnButton.Enable(*console);
@@ -69,12 +69,12 @@ namespace Phobos
 		clStrafeButton.Disable();
 		clMoveUpDown.Disable();
 		clTurnButton.Disable();
-		clLookButton.Disable();	
+		clLookButton.Disable();
 	}
 
 	void SpectatorCameraController_c::EnableMouse()
 	{
-		clMouseThumb.Enable(*Console_c::GetInstance());		
+		clMouseThumb.Enable(*Console_c::GetInstance());
 	}
 
 	void SpectatorCameraController_c::DisableMouse()
@@ -86,12 +86,12 @@ namespace Phobos
 	{
 		fpMoveSpeed = v;
 	}
-	
+
 	void SpectatorCameraController_c::SetTurnSpeed(Float_t v)
 	{
 		fpTurnSpeed = v;
 	}
-	
+
 	void SpectatorCameraController_c::SetMouseSensitivity(Float_t v)
 	{
 		if(v <= 0)

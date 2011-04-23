@@ -33,9 +33,14 @@ Phobos 3d
 		#define PH_GAME_ENGINE_API
 	#endif
 
-	#define PH_GAME_ENGINE_API_PROC extern "C" PH_GAME_ENGINE_API	
+	#define PH_GAME_ENGINE_API_PROC extern "C" PH_GAME_ENGINE_API
 #else
-	#error "Platform not defined"
+    #ifdef PH_LINUX
+        #define PH_GAME_ENGINE_API
+        #define PH_GAME_ENGINE_API_PROC extern "C" PH_GAME_ENGINE_API
+    #else
+        #error "Platform not defined"
+    #endif
 #endif
 
 #endif
