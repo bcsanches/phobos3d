@@ -75,7 +75,7 @@ namespace Phobos
 
 		~TempStaticObject_s()
 		{
-			RenderPtr_t &render = Render_c::GetInstance();
+			RenderPtr_t render = Render_c::GetInstance();
 
 			if(pclSceneNode)
 				render->DestroySceneNode(pclSceneNode);
@@ -100,8 +100,8 @@ namespace Phobos
 
 	WorldEntity_c::~WorldEntity_c()
 	{
-		RenderPtr_t &render = Render_c::GetInstance();
-		
+		RenderPtr_t render = Render_c::GetInstance();
+
 		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
 		{
 			StaticObject_s &object = pair.second;
@@ -126,7 +126,7 @@ namespace Phobos
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
 
 			try
-			{				
+			{
 				const String_c &name = dict->GetValue("name");
 				const String_c &type = dict->GetValue("typename");
 
@@ -177,7 +177,7 @@ namespace Phobos
 
 	bool WorldEntity_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
 	{
-		if((type.compare("Caelum Object") == 0) ||		   
+		if((type.compare("Caelum Object") == 0) ||
 		   (type.compare("Viewport Object") == 0))
 		{
 			return true;
@@ -192,7 +192,7 @@ namespace Phobos
 
 		return false;
 	}
-	                    
+
 	bool WorldEntity_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict)
 	{
 		TempStaticObject_s temp;
@@ -216,7 +216,7 @@ namespace Phobos
 		{
 			Kernel_c::GetInstance().LogStream() << "[WorldEntity_c::LoadStaticObject] Error, unknown static object type: " << type << "\n";
 			return false;
-		}		
+		}
 
 		temp.Commit(object);
 		return true;
@@ -232,15 +232,15 @@ namespace Phobos
 
 	void WorldEntity_c::LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
-		this->LoadNodeObject(temp, dict);		
+		this->LoadNodeObject(temp, dict);
 
 		temp.pclEntity = Render_c::GetInstance()->CreateEntity(dict.GetValue("meshfile"));
 		temp.pclEntity->setCastShadows(dict.GetBool("castshadows"));
 		temp.pclSceneNode->attachObject(temp.pclEntity);
 	}
-			
+
 	void WorldEntity_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)
-	{		
+	{
 		temp.pclLight = Render_c::GetInstance()->CreateLight();
 
 		if(temp.fParent)
@@ -253,7 +253,7 @@ namespace Phobos
 
 		switch(dict.GetInt("lighttype"))
 		{
-			case 0:				
+			case 0:
 				temp.pclLight->setType(Ogre::Light::LT_POINT);
 				if(!temp.fParent)
 					temp.pclLight->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
@@ -264,7 +264,7 @@ namespace Phobos
 				break;
 
 			case 2:
-				{					
+				{
 					temp.pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
 
 					if(!temp.fParent)
@@ -292,10 +292,10 @@ namespace Phobos
 		temp.pclLight->setDiffuseColour(DictionaryGetColour(dict, "diffuse"));
 
 		if(!temp.fParent)
-			temp.pclLight->setDirection(DictionaryGetVector3(dict, "direction"));			
+			temp.pclLight->setDirection(DictionaryGetVector3(dict, "direction"));
 
 		temp.pclLight->setPowerScale(dict.GetFloat("power"));
-		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));		
+		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));
 	}
 
 	void WorldEntity_c::OnLoad(const Dictionary_c &dictionary)

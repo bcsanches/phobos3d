@@ -35,7 +35,7 @@ Phobos 3d
 
 namespace Phobos
 {
-	typedef boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > ObjectCreatorAutoUnlinkHook_t;	
+	typedef boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > ObjectCreatorAutoUnlinkHook_t;
 
 	template <typename T>
 	class ObjectCreator_c: public ObjectCreatorAutoUnlinkHook_t
@@ -56,7 +56,7 @@ namespace Phobos
 
 			inline bool operator<(const ObjectCreator_c &rhs) const
             {
-                return strName.compare(rhs.strName) < 0;    
+                return strName.compare(rhs.strName) < 0;
             }
 
 		private:
@@ -70,7 +70,7 @@ namespace Phobos
 		public:
 			static GenericFactory_c &GetInstance();
 
-			T Create(const String_c &className, const String_c &name) const;			
+			T Create(const String_c &className, const String_c &name) const;
 
 		private:
 			GenericFactory_c();
@@ -81,16 +81,16 @@ namespace Phobos
 		private:
 			typedef boost::intrusive::set<ObjectCreator_c<T>, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
             ObjectCreatorSet_t setObjectCreators;
-	};	
+	};
 
 	template<typename T>
 	struct ObjectCreatorComp_s
     {
         bool operator()(const String_c &name, const ObjectCreator_c<T> &res) const
         {
-            return name.compare(res.GetName()) < 0;    
+            return name.compare(res.GetName()) < 0;
         }
- 
+
         bool operator()(const ObjectCreator_c<T> &res, const String_c &name) const
         {
             return res.GetName().compare(name) < 0;
@@ -117,7 +117,7 @@ namespace Phobos
 	{
 		return pfnCreateProc(name);
 	}
-	
+
 	template <typename T>
 	GenericFactory_c<T> &GenericFactory_c<T>::GetInstance()
 	{
@@ -141,7 +141,7 @@ namespace Phobos
 	template <typename T>
 	T GenericFactory_c<T>::Create(const String_c &className, const String_c &name) const
 	{
-		ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
+		typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
 		if(it == setObjectCreators.end())
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
 
