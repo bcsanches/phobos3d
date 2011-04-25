@@ -13,12 +13,8 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-DPH_LINUX" />
-					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_DEBUG" />
 					<Add option="-DPH_CHECK_ASSERT" />
-					<Add option="-DPH_GCC" />
-					<Add directory="../../../include/kernel" />
-					<Add directory="../../../include/input" />
 				</Compiler>
 				<Linker>
 					<Add library="../kernel/bin/Debug/kernel.so" />
@@ -32,14 +28,23 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_IGNORE_ASSERT" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../kernel/bin/Release/kernel.so" />
+					<Add library="../PH_Input/bin/Release/Input.so" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-DPH_LINUX" />
+			<Add option="-DPH_SDL" />
+			<Add option="-DPH_GCC" />
+			<Add directory="../../../include/kernel" />
+			<Add directory="../../../include/input" />
 		</Compiler>
 		<Unit filename="../../../src/sample_04/main.cpp" />
 		<Extensions>

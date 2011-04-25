@@ -13,11 +13,8 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-DPH_LINUX" />
 					<Add option="-DPH_RELEASE" />
 					<Add option="-DPH_CHECK_ASSERT" />
-					<Add option="-DPH_GCC" />
-					<Add directory="../../../include/kernel" />
 				</Compiler>
 				<Linker>
 					<Add library="../kernel/bin/Debug/kernel.so" />
@@ -30,14 +27,21 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_IGNORE_ASSERT" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../kernel/bin/Release/kernel.so" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-DPH_LINUX" />
+			<Add option="-DPH_GCC" />
+			<Add option="-DPH_SDL" />
+			<Add directory="../../../include/kernel" />
 		</Compiler>
 		<Unit filename="../../../src/sample_01/main.cpp" />
 		<Extensions>
