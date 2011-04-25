@@ -15,10 +15,8 @@
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-DPH_LINUX" />
 					<Add option="-DPH_DEBUG" />
 					<Add option="-DPH_CHECK_ASSERT" />
-					<Add option="-DPH_GCC" />
 				</Compiler>
 				<Linker>
 					<Add library="../kernel/bin/Debug/kernel.so" />
@@ -33,14 +31,20 @@
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_IGNORE_ASSERT" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../kernel/bin/Release/kernel.so" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-DPH_LINUX" />
+			<Add option="-DPH_GCC" />
+			<Add option="-DPH_SDL" />
 			<Add directory="../../../include/kernel" />
 			<Add directory="../../../include/dictionary" />
 		</Compiler>
