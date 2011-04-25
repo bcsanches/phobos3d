@@ -13,9 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-DPH_LINUX" />
 					<Add option="-DPH_DEBUG" />
-					<Add option="-DPH_GCC" />
 					<Add option="-DPH_CHECK_ASSERT" />
 				</Compiler>
 				<Linker>
@@ -31,20 +29,31 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_IGNORE_ASSERT" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../kernel/bin/Release/kernel.so" />
+					<Add library="../PH_Input/bin/Release/Input.so" />
+					<Add library="../Dictionary/bin/Release/Dictionary.so" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-DPH_LINUX" />
+			<Add option="-DPH_SDL" />
+			<Add option="-DPH_GCC" />
 			<Add directory="../../../include/engineCore" />
 			<Add directory="../../../include/kernel" />
 			<Add directory="../../../include/input" />
 			<Add directory="../../../include/dictionary" />
 			<Add directory="/usr/include/OGRE" />
 		</Compiler>
+		<Linker>
+			<Add library="/usr/lib/libOgreMain.so" />
+		</Linker>
 		<Unit filename="../../../include/engineCore/PH_BootModule.h" />
 		<Unit filename="../../../include/engineCore/PH_Console.h" />
 		<Unit filename="../../../include/engineCore/PH_Core.h" />

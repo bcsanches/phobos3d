@@ -31,9 +31,16 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_IGNORE_ASSERT" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../kernel/bin/Release/kernel.so" />
+					<Add library="../PH_Input/bin/Release/Input.so" />
+					<Add library="../Dictionary/bin/Release/Dictionary.so" />
+					<Add library="../EngineCore/bin/Release/EngineCore.so" />
+					<Add library="../GameEngine/bin/Release/GameEngine.so" />
 				</Linker>
 			</Target>
 		</Build>
@@ -41,6 +48,7 @@
 			<Add option="-Wall" />
 			<Add option="-DPH_LINUX" />
 			<Add option="-DPH_GCC" />
+			<Add option="-DPH_SDL" />
 			<Add directory="/usr/include/OGRE" />
 			<Add directory="../../../include/kernel" />
 			<Add directory="../../../include/input" />

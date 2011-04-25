@@ -13,8 +13,6 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-DPH_LINUX" />
-					<Add option="-DPH_GCC" />
 					<Add option="-DPH_DEBUG" />
 					<Add option="-DPH_CHECK_ASSERT" />
 				</Compiler>
@@ -32,15 +30,24 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DPH_RELEASE" />
+					<Add option="-DPH_IGNORE_ASSERT" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../kernel/bin/Release/kernel.so" />
+					<Add library="../PH_Input/bin/Release/Input.so" />
+					<Add library="../Dictionary/bin/Release/Dictionary.so" />
+					<Add library="../EngineCore/bin/Release/EngineCore.so" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-DBOOST_TEST_DYN_LINK" />
+			<Add option="-DPH_LINUX" />
+			<Add option="-DPH_GCC" />
+			<Add option="-DPH_SDL" />
 			<Add directory="../../../include/engineCore" />
 			<Add directory="../../../include/kernel" />
 			<Add directory="/usr/include/OGRE" />
@@ -49,7 +56,6 @@
 		<Linker>
 			<Add library="/usr/lib/libboost_unit_test_framework.so" />
 			<Add library="/usr/lib/libboost_filesystem.so" />
-			<Add library="/usr/lib/libOgreMain.so" />
 			<Add library="/usr/lib/libboost_system.so" />
 		</Linker>
 		<Unit filename="../../../src/engineCoreTest/CoreTest.cpp" />

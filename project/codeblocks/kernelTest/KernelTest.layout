@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Debug" />
+	<ActiveTarget name="Release" />
 	<File name="../../../include/kernelTest/SimpleLogListener.h" open="0" top="0" tabpos="0">
 		<Cursor position="1077" topLine="28" />
 	</File>
 	<File name="../../../src/kernelTest/ContextCmdTest.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="996" topLine="24" />
+		<Cursor position="1441" topLine="0" />
 	</File>
 	<File name="../../../src/kernelTest/ContextItemTest.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1066" topLine="18" />
@@ -14,10 +14,13 @@
 		<Cursor position="257" topLine="24" />
 	</File>
 	<File name="../../../src/kernelTest/KernelTest.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1364" topLine="36" />
+		<Cursor position="1096" topLine="21" />
 	</File>
 	<File name="../../../src/kernelTest/ObjectManagerTest.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="60" />
+	</File>
+	<File name="../../../src/kernelTest/ParserTest.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="2775" topLine="36" />
 	</File>
 	<File name="../../../src/kernelTest/main.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1047" topLine="11" />
