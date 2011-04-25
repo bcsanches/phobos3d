@@ -37,6 +37,7 @@ Phobos 3d
 #else
 
     #define PH_KERNEL_API
+    #define PH_KERNEL_API_PROC extern "C" PH_KERNEL_API
 
 #endif
 

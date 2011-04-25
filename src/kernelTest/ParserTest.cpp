@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(parser_test)
 	parser.SetStream(&str);
 
 	String_c token;
-	
+
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
 	BOOST_REQUIRE(token.compare("123") == 0);
 
@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(parser_test)
 
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ID);
 	BOOST_REQUIRE(token.compare("end") == 0);
-	
+
 	//
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
 	BOOST_REQUIRE(token.compare(".25") == 0);

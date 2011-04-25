@@ -65,7 +65,11 @@ namespace Phobos
 
 		SDL_GetWMInfo(&pInfo);
 
-		return pInfo.window;
+		#ifdef PH_LINUX
+            return NULL;
+        #else
+            return pInfo.window;
+        #endif
 	}
 
 	void WindowSDL_c::SetEventManager(EventManagerPtr_t manager)
