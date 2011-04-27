@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="PH_Input"
-	ProjectGUID="{BAA51278-01DB-4D9E-9FAB-733D6EC68E4D}"
-	RootNamespace="PH_Input"
+	Name="PH_MapViewer"
+	ProjectGUID="{80AF7AEE-A9E3-4CD8-87D4-9B8A040A4EEC}"
+	RootNamespace="PH_MapViewer"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\input"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_INPUT_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)\..\..\..\include\gamePlugin&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -65,7 +65,6 @@
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -92,7 +91,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -117,8 +116,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include\kernel;..\..\..\include\input"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_INPUT_EXPORTS;PH_WIN32;PH_RELEASE;PH_MSVC;PH_IGNORE_ASSERT"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_MAPVIEWER_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -169,108 +167,16 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="w32"
-			>
-			<File
-				RelativePath="..\..\..\src\input\W32\PH_InputManagerW32.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\input\W32\PH_InputManagerW32.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\input\W32\PH_KeyboardInputDeviceW32.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\input\W32\PH_KeyboardInputDeviceW32.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\input\W32\PH_MouseInputDeviceW32.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\input\W32\PH_MouseInputDeviceW32.h"
-				>
-			</File>
-		</Filter>
 		<File
-			RelativePath="..\..\..\src\input\PH_Button.cpp"
+			RelativePath="..\..\..\src\mapViewer\PH_Client.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\input\PH_Button.h"
+			RelativePath="..\..\..\include\mapViewer\PH_Client.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\input\PH_InputAPI.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputDefs.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\input\PH_InputDevice.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputDevice.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputDeviceFwd.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputDeviceListener.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputEvent.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\input\PH_InputManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputManager.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\input\PH_InputMapper.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_InputMapper.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\input\PH_KeyboardInputDevice.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_KeyboardInputDevice.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\input\PH_MouseInputDevice.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_MouseInputDevice.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\input\PH_Thumb.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\input\PH_Thumb.h"
+			RelativePath="..\..\..\include\mapViewer\PH_MapViewerAPI.h"
 			>
 		</File>
 	</Files>
