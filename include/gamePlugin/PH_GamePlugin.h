@@ -73,9 +73,9 @@ namespace Phobos
 #define PH_GAME_PLUGIN_REGISTER_MODULE(X)\
 	static Phobos::GamePlugin_c::Register_s X##Register_gl(X##_c::CreateModule, X##_c::ReleaseInstance);
 
-#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static CoreModulePtr_t CreateModule();
+#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::CoreModulePtr_t CreateModule();
 #define PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(X)	\
-	CoreModulePtr_t X##_c::CreateModule()			\
+	Phobos::CoreModulePtr_t X##_c::CreateModule()			\
 	{												\
 		return CreateInstance();					\
 	}
