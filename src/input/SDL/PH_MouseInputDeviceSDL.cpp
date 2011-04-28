@@ -40,7 +40,7 @@ namespace Phobos
 
 	MouseInputDeviceSDL_c::MouseInputDeviceSDL_c(const String_c &name):
 		MouseInputDevice_c(name),
-		//fHasClipRect(false),
+		fClipToWindow(false),
 		fAppActive(true)
 	{
 		EventManager_c::GetInstance()->AddListener(*this, EVENT_TYPE_MOUSE);
@@ -54,33 +54,34 @@ namespace Phobos
 	}
 
 	void MouseInputDeviceSDL_c::Update(void)
-	{
-	    /*
+	{	    
 		//if the mouse is clipped, send update
-		if(hClipWindow && fAppActive)
+		if(fClipToWindow && fAppActive)
 		{
-			POINT		cursorPos;
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			SDL_WarpMouse(iWindowCenter[0], iWindowCenter[1]);
 
-			::GetCursorPos (&cursorPos);
-			::SetCursorPos(iWindowCenter[0], iWindowCenter[1]);
+			x -= iWindowCenter[0];
+			y -= iWindowCenter[1];
+
+			if((x == iPreviousMousePosition[0]) && (y == iPreviousMousePosition[1]))
+				return;
+
+			iPreviousMousePosition[0] = x;
+			iPreviousMousePosition[1] = y;
 
 			InputEvent_s inputEvent;
 
 			inputEvent.eType = INPUT_EVENT_THUMB;
 			inputEvent.stThumb.uId = MOUSE_THUMB;
-			inputEvent.stThumb.fpAxis[0] = (Float_t)(cursorPos.x - iWindowCenter[0]);
-			inputEvent.stThumb.fpAxis[1] = (Float_t)(cursorPos.y - iWindowCenter[1]);
+			inputEvent.stThumb.fpAxis[0] = static_cast<Float_t>(x);
+			inputEvent.stThumb.fpAxis[1] = static_cast<Float_t>(y);
 
 			inputEvent.ipDevice = InputDevicePtr_t(this);
 
 			this->DispatchEvent(inputEvent);
-		}
-		*/
-
-		/*
-            como não preciso travar o mouse no centro axo q isso não é
-            necessário nessa classe.
-        */
+		}		
 	}
 
 
@@ -95,6 +96,8 @@ namespace Phobos
 					switch(event.stMouse.eType)
 					{
 						case MOUSE_MOVE:
+							if(fClipToWindow)
+								return;
 
 							inputEvent.eType = INPUT_EVENT_THUMB;
 							inputEvent.stThumb.uId = MOUSE_THUMB;
@@ -139,13 +142,13 @@ namespace Phobos
 						{
 							fAppActive = false;
 
-							this->ClipToWindow(0);
+							this->Disable();
 						}
 						else
 						{
 							fAppActive = true;
 
-							this->Unclip();
+							this->Enable();
 						}
 						break;
 
@@ -171,12 +174,45 @@ namespace Phobos
 
 	void MouseInputDeviceSDL_c::ClipToWindow(void *window)
 	{
+		fClipToWindow = true;
 	    SDL_WM_GrabInput(SDL_GRAB_ON);
+
+		this->Enable();
 	}
 
 	void MouseInputDeviceSDL_c::Unclip(void)
 	{
 	    SDL_WM_GrabInput(SDL_GRAB_OFF);
+
+		this->Disable();
+		fClipToWindow = false;
+	}
+
+	void MouseInputDeviceSDL_c::Enable()
+	{
+		SDL_Surface *surface = SDL_GetVideoSurface();
+
+		iWindowCenter[0] = surface->w / 2;
+		iWindowCenter[1] = surface->h / 2;
+
+		iPreviousMousePosition[0] = 0;
+		iPreviousMousePosition[1] = 0;
+
+		SDL_WarpMouse(iWindowCenter[0], iWindowCenter[1]);
+
+		//The warp some times does not get processed before the loop
+		//so grab the mouse position and use it as current state
+		SDL_GetMouseState(iPreviousMousePosition, iPreviousMousePosition+1);
+
+		iPreviousMousePosition[0] -= iWindowCenter[0];
+		iPreviousMousePosition[1] -= iWindowCenter[1];
+
+		SDL_ShowCursor(SDL_DISABLE);		
+	}
+	
+	void MouseInputDeviceSDL_c::Disable()
+	{
+		SDL_ShowCursor(SDL_ENABLE);
 	}
 
 	MouseInputDeviceSDL_c::SytemEventListner_c::SytemEventListner_c():

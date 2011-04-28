@@ -79,8 +79,9 @@ namespace Phobos
 			//RECT		stOldClipRect;
 			//bool		fHasClipRect;
 
-			//int			iWindowCenter[2];
-			//HWND		hClipWindow;
+			int			iWindowCenter[2];
+			int			iPreviousMousePosition[2];
+			bool		fClipToWindow;
             bool		fAppActive;
             SDL_Event event;
 	};

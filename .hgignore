@@ -184,3 +184,5 @@ glob:project/visual8_SDL/PH_MapViewer/Debug/
 glob:project/visual8_SDL/PH_MapViewer/PH_MapViewer.vcproj.mordor.bcsanches.user
 glob:project/visual8_SDL/Sample_04/Sample_04.vcproj.mordor.bcsanches.user
 glob:project/visual8_SDL/Sample_03/Sample_03.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/PH_GamePlugin/PH_GamePlugin.vcproj.bcsnote.bcsanches.user
+glob:project/visual8_SDL/PH_MapViewer/PH_MapViewer.vcproj.bcsnote.bcsanches.user
