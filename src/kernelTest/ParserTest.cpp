@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(parser_test)
 	str << "{}()//comment"<< endl;
 	str << "bla" << endl << "bli" << endl;
 	str << "end" << endl;
-	str << ".25" << endl;
+	str << "0.25" << endl;
 	str << ".." << endl;
 	str << "/bla" << endl << "id" << endl;
 
@@ -89,10 +89,11 @@ BOOST_AUTO_TEST_CASE(parser_test)
 
 	//
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
-	BOOST_REQUIRE(token.compare(".25") == 0);
+	BOOST_REQUIRE(token.compare("0.25") == 0);
 
 	//.. line
-	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ERROR);
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_DOT);
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_DOT);
 
 	//bugged comment /bla
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_ERROR);
