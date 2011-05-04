@@ -107,7 +107,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gamePlugin&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;PH_GAME_PLUGIN_EXPORTS;PH_WIN32;PH_MSVC;PH_IGNORE_ASSERT;PH_RELEASE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;PH_GAME_PLUGIN_EXPORTS;PH_WIN32;PH_MSVC;PH_IGNORE_ASSERT;PH_RELEASE;PH_NATIVE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"

@@ -36,6 +36,10 @@ Phobos 3d
 namespace Phobos
 {
 	PH_FULL_ENTITY_COMPONENT_CREATOR("LinearMover", LinearMoverComponent_c);	
+
+	PH_DEFINE_ENTITY_OUTPUT(LinearMoverComponent_c, PositionChanged);
+
+	EntityOutputManager_c LinearMoverComponent_c::clOutputManager_gl;
 		
 	LinearMoverComponent_c::LinearMoverComponent_c(const String_c &name):
 		EntityComponent_c(name)

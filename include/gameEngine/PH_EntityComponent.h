@@ -28,6 +28,7 @@ Phobos 3d
 
 #include <PH_Node.h>
 
+#include "PH_EntityIO.h"
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
@@ -36,7 +37,7 @@ namespace Phobos
 
 	class Dictionary_c;
 
-	class PH_GAME_ENGINE_API EntityComponent_c: public Node_c
+	class PH_GAME_ENGINE_API EntityComponent_c: public Node_c, public EntityIO_c
 	{
 		public:
 			void Load(const Dictionary_c &dictionary);

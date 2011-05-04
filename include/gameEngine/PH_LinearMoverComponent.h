@@ -35,13 +35,21 @@ namespace Phobos
 	class LinearMoverComponent_c: public EntityComponent_c
 	{
 		public:
-			static EntityComponentPtr_t Create(const String_c &name);
+			static EntityComponentPtr_t Create(const String_c &name);			
 
 		protected:
 			LinearMoverComponent_c(const String_c &name);
 			~LinearMoverComponent_c();				
 
 			virtual void OnLoad(const Dictionary_c &dictionary);
+
+		protected:
+			static EntityOutputManager_c clOutputManager_gl;
+
+		private:
+			PH_BEGIN_ENTITY_OUTPUT_DECLARATION(LinearMoverComponent_c)
+				PH_DECLARE_ENTITY_OUTPUT(PositionChanged);
+			PH_END_ENTITY_OUTPUT_DECLARATION
 	};
 }
 
