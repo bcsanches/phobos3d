@@ -31,18 +31,20 @@ Phobos 3d
 #include <boost/bind.hpp>
 #include <boost/signal.hpp>
 
+#include <PH_Node.h>
 #include <PH_String.h>
 
 namespace Phobos
 {
 	class EntityEvent_c;
 
-	class EntityIO_c
+	class EntityIO_c: public Node_c
 	{
-		public:
-			EntityIO_c() {}
-			virtual ~EntityIO_c() {}
+		protected:
+			explicit EntityIO_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
+			explicit EntityIO_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);
 
+		public:
 			typedef boost::signal1<void, EntityEvent_c &> OutputSignal_t;
 	};
 
@@ -88,27 +90,37 @@ namespace Phobos
 					manager.AddConnector(outputName, proc);
 				}
 		};
+
+		class AutoInputRegister_c
+		{
+			public:
+				AutoInputRegister_c(EntityInputManager_c &manager, const String_c &inputName, InputProc_t proc)
+				{
+					manager.AddSlot(inputName, proc);
+				}				
+		};
 	}
 }
 
-#define PH_BEGIN_ENTITY_OUTPUT_DECLARATION(CLASS)				\
-	class CLASS##OutputManager_c: public EntityOutputManager_c	\
-	{															\
-		public:													\
-			CLASS##OutputManager_c();							\
-	};
+#define PH_DECLARE_ENTITY_INPUT(NAME)		\
+	void Input_##NAME(EntityEvent_c &ev);	\
+	static Phobos::EntityIO::AutoInputRegister_c clAutoInputRegister##NAME##_gl;
 
-#define PH_DECLARE_ENTITY_OUTPUT(NAME)							\
-	OutputSignal_t sig##NAME;									\
+#define PH_BEGIN_ENTITY_INPUT(CLASS, NAME)																				\
+	Phobos::EntityIO::AutoInputRegister_c CLASS::clAutoInputRegister##NAME##_gl(CLASS::clInputManager_gl, "##NAME", reinterpret_cast<InputProc_t>(&CLASS::Input_##NAME));	\
+	void CLASS::Input_##NAME(EntityEvent_c &event)
+
+#define PH_DECLARE_ENTITY_OUTPUT(NAME)												\
+	OutputSignal_t sig##NAME;														\
+	static Phobos::EntityIO::AutoOutputRegister_c clAutoOutputRegister##NAME##_gl;	\
 	void Connect_##NAME(EntityIO_c &other, InputProc_t proc);
 
-#define PH_DEFINE_ENTITY_OUTPUT(CLASS, NAME)						\
-	void CLASS::Connect_##NAME(EntityIO_c &other, InputProc_t proc)	\
-	{																\
-		sig##NAME.connect(boost::bind(proc, &other, _1));			\
+#define PH_DEFINE_ENTITY_OUTPUT(CLASS, NAME)																																\
+	Phobos::EntityIO::AutoOutputRegister_c CLASS::clAutoOutputRegister##NAME##_gl(CLASS::clOutputManager_gl, "##NAME", reinterpret_cast<OutputProcConnector_t>(&##CLASS::Connect_##NAME));	\
+	void CLASS::Connect_##NAME(EntityIO_c &other, InputProc_t proc)																											\
+	{																																										\
+		sig##NAME.connect(boost::bind(proc, &other, _1));																													\
 	}
-
-#define PH_END_ENTITY_OUTPUT_DECLARATION
 
 #endif
 

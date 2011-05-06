@@ -29,6 +29,16 @@ Phobos 3d
 
 namespace Phobos
 {
+	EntityIO_c::EntityIO_c(const String_c &name, ChildrenMode_e mode):
+		Node_c(name, mode)
+	{
+	}
+
+	EntityIO_c::EntityIO_c(const Char_t *name, ChildrenMode_e mode):
+		Node_c(name, mode)
+	{
+	}
+
 	EntityOutputManager_c::EntityOutputManager_c()
 	{
 		//empty

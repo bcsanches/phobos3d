@@ -26,8 +26,7 @@ Phobos 3d
 #ifndef PH_ENTITY_H
 #define PH_ENTITY_H
 
-#include <PH_Node.h>
-
+#include "PH_EntityIO.h"
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
@@ -36,7 +35,7 @@ namespace Phobos
 
 	PH_DECLARE_NODE_PTR(Entity);
 
-	class PH_GAME_ENGINE_API Entity_c: public Node_c
+	class PH_GAME_ENGINE_API Entity_c: public EntityIO_c
 	{
 		public:
 			static EntityPtr_t Create(const String_c &name);

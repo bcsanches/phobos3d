@@ -45,6 +45,12 @@ namespace Phobos
 			virtual void OnLoadFinished();
 
 		private:
+			PH_DECLARE_ENTITY_INPUT(SetPosition);			
+
+		protected:
+			static EntityInputManager_c clInputManager_gl;
+
+		private:
 			Ogre::SceneNode *pclSceneNode;
 			Ogre::Entity *pclMeshEntity;
 

@@ -46,10 +46,8 @@ namespace Phobos
 		protected:
 			static EntityOutputManager_c clOutputManager_gl;
 
-		private:
-			PH_BEGIN_ENTITY_OUTPUT_DECLARATION(LinearMoverComponent_c)
-				PH_DECLARE_ENTITY_OUTPUT(PositionChanged);
-			PH_END_ENTITY_OUTPUT_DECLARATION
+		private:			
+			PH_DECLARE_ENTITY_OUTPUT(PositionChanged);
 	};
 }
 

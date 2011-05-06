@@ -35,7 +35,7 @@ namespace Phobos
 	PH_FULL_ENTITY_CREATOR("Entity", Entity_c);
 
 	Entity_c::Entity_c(const String_c &name):
-		Node_c(name, PRIVATE_CHILDREN)
+		EntityIO_c(name, PRIVATE_CHILDREN)
 	{
 	}
 
