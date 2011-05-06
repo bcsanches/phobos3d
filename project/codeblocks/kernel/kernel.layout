@@ -98,7 +98,7 @@
 		<Cursor position="135" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/PH_Context.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2346" topLine="73" />
+		<Cursor position="2818" topLine="85" />
 	</File>
 	<File name="../../../src/kernel/PH_DynamicLibrary.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="3525" topLine="0" />
@@ -114,6 +114,9 @@
 	</File>
 	<File name="../../../src/kernel/PH_Log.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1880" topLine="32" />
+	</File>
+	<File name="../../../src/kernel/PH_Node.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2461" topLine="71" />
 	</File>
 	<File name="../../../src/kernel/PH_ObjectManager.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2206" topLine="69" />

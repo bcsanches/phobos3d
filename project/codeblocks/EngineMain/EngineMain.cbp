@@ -58,6 +58,7 @@
 		</Compiler>
 		<Linker>
 			<Add library="/usr/lib/libOgreMain.so" />
+			<Add library="/usr/lib/libboost_signals.so" />
 		</Linker>
 		<Unit filename="../../../src/engineMain/PH_EngineMain.cpp" />
 		<Extensions>

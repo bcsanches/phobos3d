@@ -48,13 +48,13 @@ namespace Phobos
 {
 	class EngineMain_c
 	{
-		public:			
+		public:
 			EngineMain_c();
 			~EngineMain_c();
 
 			void MainLoop(void);
 
-		private:			
+		private:
 			inline Float_t ConvertMSecToSeconds(UInt_t msec);
 			inline Float_t GetUpdateTime(void);
 			inline Float_t GetMinFrameTime(void);
@@ -80,7 +80,7 @@ namespace Phobos
 		fStop(false)
 	{
 		Kernel_c::CreateInstance("phobos.log");
-		CorePtr_t core = Core_c::CreateInstance();	
+		CorePtr_t core = Core_c::CreateInstance();
 		clSingletons.AddProc(Core_c::ReleaseInstance);
 
 		DictionaryManagerPtr_t dictionaryManager = DictionaryManager_c::CreateInstance();
@@ -122,8 +122,8 @@ namespace Phobos
 	{
 		Core_c::GetInstance()->Shutdown();
 
-		clSingletons.CallAll();		
-		
+		clSingletons.CallAll();
+
 		Kernel_c::ReleaseInstance();
 	}
 
@@ -144,7 +144,7 @@ namespace Phobos
 		if(updateTime > 0)
 			return(1.0f / updateTime);
 		else
-		{			
+		{
 			Kernel_c::GetInstance().LogStream() << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0";
 			varEngineFPS.SetValue("60");
 
@@ -157,7 +157,7 @@ namespace Phobos
 		Float_t minFrameTime = varMinFrameTime.GetFloat();
 
 		if(minFrameTime > 0.05)
-		{			
+		{
 			Kernel_c::GetInstance().LogStream() << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
 			varMinFrameTime.SetValue("0.01");
 
@@ -175,14 +175,14 @@ namespace Phobos
 	void EngineMain_c::MainLoop(void)
 	{
 		Float_t			executionTime = 0;
-		unsigned int	lastTicks;					
+		unsigned int	lastTicks;
 		Float_t			updateTime = GetUpdateTime();
 
-		CorePtr_t core = Core_c::GetInstance();					
+		CorePtr_t core = Core_c::GetInstance();
 
 		lastTicks = clTimer.getMilliseconds();
-		do 
-		{		
+		do
+		{
 			core->SetFrameRate(updateTime);
 
 			UInt_t ticks = clTimer.getMilliseconds();
@@ -191,7 +191,7 @@ namespace Phobos
 
 			if(varFixedTime.GetBoolean())
 				lastFrameTime = updateTime;
-			
+
 			if(lastFrameTime < GetMinFrameTime())
 			{
 				boost::this_thread::sleep(boost::posix_time::milliseconds(1));
@@ -208,11 +208,11 @@ namespace Phobos
 				//this happens on debug mode while stopped on break points
 				if(executionTime > 20)
 					executionTime = updateTime;
-			#endif		
+			#endif
 
 			//update the game on fixed time steps
 			while(executionTime >= updateTime)
-			{			
+			{
 				//fixed Update
 				core->FixedUpdate(updateTime);
 
@@ -221,7 +221,7 @@ namespace Phobos
 				//printf("%f\n", executionTime);
 				executionTime -= updateTime;
 			}
-			Float_t delta = (Float_t) executionTime / (Float_t) updateTime;		
+			Float_t delta = (Float_t) executionTime / (Float_t) updateTime;
 			//printf("%f\n", delta);
 			//Now update other modules as fast as we can
 			core->Update(totalFrameTime, delta);
@@ -234,14 +234,14 @@ namespace Phobos
 }
 
 int main(int, char **)
-{	
+{
 	Phobos::EngineMain_c engine;
 
 #ifndef PH_DEBUG
 	try
 #endif
 	{
-		engine.MainLoop();		
+		engine.MainLoop();
 	}
 #ifndef PH_DEBUG
 	catch(std::exception &e)

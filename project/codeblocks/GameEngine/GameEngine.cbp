@@ -62,13 +62,15 @@
 		<Linker>
 			<Add library="/usr/lib/libtinyxml.so" />
 		</Linker>
-		<Unit filename="../../../include/gameEngine/PH_DictionaryUtils.h" />
 		<Unit filename="../../../include/gameEngine/PH_Entity.h" />
 		<Unit filename="../../../include/gameEngine/PH_EntityComponent.h" />
 		<Unit filename="../../../include/gameEngine/PH_EntityComponentFactory.h" />
+		<Unit filename="../../../include/gameEngine/PH_EntityEvent.h" />
 		<Unit filename="../../../include/gameEngine/PH_EntityFactory.h" />
+		<Unit filename="../../../include/gameEngine/PH_EntityIO.h" />
 		<Unit filename="../../../include/gameEngine/PH_EntityKeys.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameCamera.h" />
+		<Unit filename="../../../include/gameEngine/PH_GameDictionaryUtils.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameEngineAPI.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameEnginePlugin.h" />
 		<Unit filename="../../../include/gameEngine/PH_IPlayerController.h" />
@@ -83,7 +85,9 @@
 		<Unit filename="../../../src/gameEngine/PH_Entity.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_EntityComponent.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_EntityComponentFactory.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_EntityEvent.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_EntityFactory.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_EntityIO.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_GameCamera.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_GameEnginePlugin.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_LinearMoverComponent.cpp" />
