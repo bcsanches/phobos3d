@@ -44,7 +44,7 @@ namespace Phobos
 			virtual void OnLoad(const Dictionary_c &dictionary);
 
 		protected:
-			static EntityOutputManager_c clOutputManager_gl;
+			PH_DECLARE_ENTITY_OUTPUT_MANAGER;
 
 		private:			
 			PH_DECLARE_ENTITY_OUTPUT(PositionChanged);

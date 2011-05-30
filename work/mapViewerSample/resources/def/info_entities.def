@@ -13,4 +13,6 @@ EntityDef Target
 {
   className=Entity;
   components="ModelRenderer|LinearMover";
+  
+  LinearMover_Connect(PositionChanged, ModelRenderer, Position);
 }

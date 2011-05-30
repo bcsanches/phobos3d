@@ -116,10 +116,28 @@ namespace Phobos
 	void Connect_##NAME(EntityIO_c &other, InputProc_t proc);
 
 #define PH_DEFINE_ENTITY_OUTPUT(CLASS, NAME)																																\
-	Phobos::EntityIO::AutoOutputRegister_c CLASS::clAutoOutputRegister##NAME##_gl(CLASS::clOutputManager_gl, "##NAME", reinterpret_cast<OutputProcConnector_t>(&##CLASS::Connect_##NAME));	\
+	Phobos::EntityIO::AutoOutputRegister_c CLASS::clAutoOutputRegister##NAME##_gl(CLASS::GetOutputManager(), "##NAME", reinterpret_cast<OutputProcConnector_t>(&##CLASS::Connect_##NAME));	\
 	void CLASS::Connect_##NAME(EntityIO_c &other, InputProc_t proc)																											\
 	{																																										\
 		sig##NAME.connect(boost::bind(proc, &other, _1));																													\
+	}
+
+#define PH_DECLARE_ENTITY_OUTPUT_MANAGER static EntityOutputManager_c &GetOutputManager();
+#define PH_DEFINE_ENTITY_OUTPUT_MANAGER(CLASS)				\
+	EntityOutputManager_c &##CLASS::GetOutputManager()		\
+	{														\
+		static EntityOutputManager_c clOutputManager_gl;	\
+															\
+		return clOutputManager_gl;							\
+	}
+
+#define PH_DECLARE_ENTITY_INPUT_MANAGER static EntityInputManager_c &GetInputManager();
+#define PH_DEFINE_ENTITY_INPUT_MANAGER(CLASS)				\
+	EntityInputManager_c &##CLASS::GetInputManager()		\
+	{														\
+		static EntityInputManager_c clInputManager_gl;	\
+															\
+		return clInputManager_gl;							\
 	}
 
 #endif
