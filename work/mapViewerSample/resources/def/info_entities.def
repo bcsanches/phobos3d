@@ -9,10 +9,13 @@ EntityDef SkeletonTorch
   components="ModelRenderer";               
 }
 
-EntityDef Target
+EntityDef Platform
 {
   className=Entity;
   components="ModelRenderer|LinearMover";
-  
-  LinearMover_Connect(PositionChanged, ModelRenderer, Position);
+}
+
+EntityDef PathCorner
+{
+    className=PointEntity;
 }
