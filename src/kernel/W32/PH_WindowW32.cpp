@@ -182,6 +182,11 @@ namespace Phobos
 		return hWnd;
 	}
 
+	bool WindowW32_c::HasGLContext()
+	{
+	    return false;
+	}
+
 	void WindowW32_c::SetEventManager(EventManagerPtr_t manager)
 	{
 		ipEventManager = boost::static_pointer_cast<EventManagerW32_c>(manager);

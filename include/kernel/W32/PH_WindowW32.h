@@ -21,6 +21,8 @@ namespace Phobos
 
 			virtual void *GetHandler() const;
 
+			virtual bool HasGLContext();
+
 			virtual void SetEventManager(EventManagerPtr_t manager);
 
 		private:

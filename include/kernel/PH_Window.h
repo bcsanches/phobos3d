@@ -44,11 +44,12 @@ namespace Phobos
 
 			virtual void Open(const String_c &name, const Rect_s<size_t> &rect) = 0;
 			virtual void *GetHandler() const = 0;
+			virtual bool HasGLContext() = 0;
 
 			virtual void SetEventManager(EventManagerPtr_t manager) = 0;
 
 		protected:
-			Window_c(const String_c &name);					
+			Window_c(const String_c &name);
 	};
 
 };

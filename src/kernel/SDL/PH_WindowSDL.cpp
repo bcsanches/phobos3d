@@ -60,15 +60,25 @@ namespace Phobos
 
 	void *WindowSDL_c::GetHandler() const
 	{
-		SDL_SysWMinfo pInfo;
-		SDL_VERSION(&pInfo.version);
+	    #ifdef PH_WIN32
 
-		SDL_GetWMInfo(&pInfo);
+            SDL_SysWMinfo pInfo;
+            SDL_VERSION(&pInfo.version);
+            SDL_GetWMInfo(&pInfo);
 
-		#ifdef PH_LINUX
-            return NULL;
-        #else
             return pInfo.window;
+
+        #else
+            return NULL;
+        #endif
+	}
+
+	bool WindowSDL_c::HasGLContext()
+	{
+	    #ifdef PH_WIN32
+            return false;
+        #else
+            return true;
         #endif
 	}
 

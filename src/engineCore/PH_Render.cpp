@@ -77,10 +77,10 @@ namespace Phobos
 		PH_ASSERT_VALID(ipInstance_gl);
 
 		return(ipInstance_gl);
-	}	
+	}
 
 	Render_c::Render_c(void):
-		CoreModule_c("Render"),		
+		CoreModule_c("Render"),
 		varRScreenX("dvRScreenX", "800"),
 		varRScreenY("dvRScreenY", "600"),
 		varRVSync("dvRVSync", "1"),
@@ -96,9 +96,9 @@ namespace Phobos
 		pclOgreWindow(NULL),
 		pclMainSceneManager(NULL),
 		eShadowMode(Ogre::SHADOWTYPE_NONE)
-	{	
+	{
 		Kernel_c &kernel = Kernel_c::GetInstance();
-		
+
 		kernel.LogMessage("[Render] Initializing");
 
 		cmdOgreLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&Render_c::CmdOgreLoadPlugin, this));
@@ -110,9 +110,9 @@ namespace Phobos
 		cmdSetShadowFarDistance.SetProc(PH_CONTEXT_CMD_BIND(&Render_c::CmdSetShadowFarDistance, this));
 
 		//varRCaelum.SetCallback(VarCallback_t(this, &Render_c::VarRCaelumChanged));
-	
+
 		kernel.LogMessage("[Render] Initializing Ogre");
-		spRoot.reset(new Ogre::Root("", ""));	
+		spRoot.reset(new Ogre::Root("", ""));
 		Ogre::Log *log = Ogre::LogManager::getSingleton().getDefaultLog();
 		log->setDebugOutputEnabled(false);
 		log->addListener(&clOgreLogListener_gl);
@@ -121,10 +121,10 @@ namespace Phobos
 	}
 
 	Render_c::~Render_c(void)
-	{			
+	{
 		//we must make sure that caelum is destroyed before ogre :(
 		//clCaelum.Shutdown();
-		
+
 		if(ipWindow)
 		{
 			//EventManager_c::GetInstance()->RemoveListener(*(ipWindow.get()));
@@ -143,9 +143,9 @@ namespace Phobos
 		Kernel_c	&kernel(Kernel_c::GetInstance());
 		kernel.LogMessage("[Render_c::OnBoot] Starting");
 
-		ipWindow = Window_c::Create("RenderWindow");		
-				
-		Rect_s<UInt_t> r;	
+		ipWindow = Window_c::Create("RenderWindow");
+
+		Rect_s<UInt_t> r;
 
 		r.tOrigin[0] = 0;
 		r.tOrigin[1] = 0;
@@ -155,11 +155,11 @@ namespace Phobos
 		bool vsync = varRVSync.GetBoolean();
 
 		kernel.LogMessage("[Render_c::OnBoot] Opening render window");
-		ipWindow->Open("Phobos Engine", r);		
+		ipWindow->Open("Phobos Engine", r);
 
 		ipWindow->SetEventManager(EventManager_c::GetInstance());
-	
-		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());	
+
+		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());
 		Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
 
 		kernel.LogMessage("[Render_c::OnBoot] Searching render system");
@@ -178,8 +178,8 @@ namespace Phobos
 		}
 
 		if(!foundRenderSystem)
-		{			
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render_c::OnBoot", "Render system " + varRRenderSystem.GetValue() + "not available");						
+		{
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render_c::OnBoot", "Render system " + varRRenderSystem.GetValue() + "not available");
 		}
 
 		kernel.LogMessage("[Render_c::OnBoot] render system found, initializing Ogre");
@@ -188,39 +188,44 @@ namespace Phobos
 		Ogre::NameValuePairList opts;
 
 		std::stringstream tmp;
-		tmp << r.tWidth << 'x' << r.tHeight;	
+		tmp << r.tWidth << 'x' << r.tHeight;
 		opts["resolution"] = tmp.str();
 		opts["fullscreen"] = fullScreen ? "true" : "false";
 		opts["vsync"] = vsync ? "true" : "false";
-	
-		opts["externalWindowHandle"] = PointerToString(ipWindow->GetHandler());
+
+        void* hglc = ipWindow->GetHandler();
+
+        if (hglc != NULL)
+            opts["externalWindowHandle"] = PointerToString(hglc);
+        else
+            opts["currentGLContext"] = "true";
 
 		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");
-		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);			
-		
+		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);
+
 		kernel.LogMessage("[Render_c::OnBoot] Initializing all resource groups");
-		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();		
+		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
 		kernel.LogMessage("[Render_c::OnBoot] Creating SceneManager");
 		pclMainSceneManager = spRoot->createSceneManager(Ogre::ST_GENERIC);
 
 		this->SetShadowMode(eShadowMode);
-	
+
 		pclMainSceneManager->setShadowFarDistance(1000);
 
 		kernel.LogMessage("[Render_c::OnBoot] Ready.");
-		Core_c::GetInstance()->OnEvent(CORE_EVENT_RENDER_READY);		
+		Core_c::GetInstance()->OnEvent(CORE_EVENT_RENDER_READY);
 	}
 
 	void Render_c::OnUpdate(void)
 	{
 		if(!ipWindow)
-			return;		
-	
-		//clAnimationManager.Update();	
+			return;
+
+		//clAnimationManager.Update();
 		//clCaelum.Update(IM_GetGameTimer().fRenderFrameTime);
 
-		spRoot->renderOneFrame();		
+		spRoot->renderOneFrame();
 	}
 
 	void Render_c::OnPrepareToBoot()
@@ -241,7 +246,7 @@ namespace Phobos
 		console->AddContextVar(varRVSync);
 		console->AddContextVar(varRRenderSystem);
 		console->AddContextVar(varRCaelum);
-	}	
+	}
 
 	//
 	//
@@ -278,22 +283,22 @@ namespace Phobos
 
 	Ogre::SceneNode *Render_c::GetSceneNode(const String_c &name)
 	{
-		PH_ASSERT_VALID(pclMainSceneManager);	
+		PH_ASSERT_VALID(pclMainSceneManager);
 
 		return pclMainSceneManager->getSceneNode(name);
 	}
 
 	Ogre::SceneNode *Render_c::CreateSceneNode(const String_c &name)
 	{
-		PH_ASSERT_VALID(pclMainSceneManager);	
-		
+		PH_ASSERT_VALID(pclMainSceneManager);
+
 		return pclMainSceneManager->getRootSceneNode()->createChildSceneNode(name);
 	}
 
 	Ogre::SceneNode *Render_c::CreateSceneNode()
 	{
-		PH_ASSERT_VALID(pclMainSceneManager);	
-		
+		PH_ASSERT_VALID(pclMainSceneManager);
+
 		return pclMainSceneManager->getRootSceneNode()->createChildSceneNode();
 	}
 
@@ -302,7 +307,7 @@ namespace Phobos
 		PH_ASSERT_VALID(pclMainSceneManager);
 		PH_ASSERT_VALID(node);
 
-		pclMainSceneManager->destroySceneNode(node->getName());		
+		pclMainSceneManager->destroySceneNode(node->getName());
 	}
 
 	Ogre::Entity* Render_c::CreateEntity(const String_c &meshName, UInt32_t flags)
@@ -373,7 +378,7 @@ namespace Phobos
 
 	Ogre::Camera *Render_c::CreateCamera(const String_c &name)
 	{
-		PH_ASSERT_VALID(pclMainSceneManager);	
+		PH_ASSERT_VALID(pclMainSceneManager);
 
 		return(pclMainSceneManager->createCamera(name));
 	}
@@ -431,7 +436,7 @@ namespace Phobos
 	void Render_c::RemoveViewport(int ZOrder)
 	{
 		PH_ASSERT_VALID(pclOgreWindow);
-	
+
 		pclOgreWindow->removeViewport(ZOrder);
 	}
 
@@ -453,7 +458,7 @@ namespace Phobos
 
 		if(IM_ErrorHandler_t e = clCaelum.Load(fileName, *pclMainSceneManager) != IM_SUCCESS)
 			return e;
-	
+
 		clCaelum.Listen(*pclOgreWindow);
 
 		return IM_SUCCESS;
@@ -492,13 +497,13 @@ namespace Phobos
 
 		if(args.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Missing parameter type, usage: setShadowMode [none|stencil_additive|stencil_modulative]");			
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Missing parameter type, usage: setShadowMode [none|stencil_additive|stencil_modulative]");
 
 			return;
 		}
 
 		Ogre::ShadowTechnique tech;
-	
+
 		if(!clShadowType_gl.GetValue(tech,args[1]))
 		{
 			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Parameter " + args[1] + " is invalid");
@@ -506,19 +511,19 @@ namespace Phobos
 			return;
 		}
 
-		this->SetShadowMode(tech);		
+		this->SetShadowMode(tech);
 	}
 
 	void Render_c::CmdSetShadowFarDistance(const StringVector_t &args, Context_c &)
 	{
 		if(args.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowFarDistance] Missing distance parameter, usage: setShadowFarDistance <value>");		
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowFarDistance] Missing distance parameter, usage: setShadowFarDistance <value>");
 		}
 		else
 		{
 			pclMainSceneManager->setShadowFarDistance(StringToFloat(args[1]));
-		}		
+		}
 	}
 
 	void Render_c::SetShadowMode(Ogre::ShadowTechnique tech)
@@ -552,12 +557,12 @@ namespace Phobos
 		size_t sz = args.size();
 		if(sz < 4)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreAddResourceLocation] ERROR: insuficient parameters, usage: ogreAddResourceLocation <name> <type> <group> [<recursive>]");			
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreAddResourceLocation] ERROR: insuficient parameters, usage: ogreAddResourceLocation <name> <type> <group> [<recursive>]");
 
 			return;
 		}
 
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(args[1], args[2], args[3], (sz == 5) ? true : false);		
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(args[1], args[2], args[3], (sz == 5) ? true : false);
 	}
 
 	void Render_c::CmdOgreInitialiseResourceGroup(const StringVector_t &args, Context_c &)
@@ -582,7 +587,7 @@ namespace Phobos
 
 				if(manager.resourceGroupExists(name) && manager.isResourceGroupInitialised(name))
 				{
-					Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreInitialiseResourceGroup] Warning: ResourceGroup " + name + "is being initialised again, clearing it first");					
+					Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreInitialiseResourceGroup] Warning: ResourceGroup " + name + "is being initialised again, clearing it first");
 					manager.clearResourceGroup(name);
 				}
 
@@ -590,9 +595,9 @@ namespace Phobos
 			}
 			catch(Ogre::Exception &e)
 			{
-				LogOgreException("Render_c::CmdOgreInitialiseResourceGroup", e);				
+				LogOgreException("Render_c::CmdOgreInitialiseResourceGroup", e);
 			}
-		}		
+		}
 	}
 
 	//
@@ -605,12 +610,12 @@ namespace Phobos
 	{
 		if(container.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreLoadPlugin] ERROR: insuficient parameters, usage: ogreLoadPlugin <pluginName>");			
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdOgreLoadPlugin] ERROR: insuficient parameters, usage: ogreLoadPlugin <pluginName>");
 
 			return;
 		}
 
-		spRoot->loadPlugin(container[1]);		
+		spRoot->loadPlugin(container[1]);
 	}
 
 	void Render_c::CmdScreenshot(const StringVector_t &container, Context_c &)
@@ -621,12 +626,12 @@ namespace Phobos
 			{
 				Ogre::String str(pclOgreWindow->writeContentsToTimestampedFile("screenshots/screen", ".jpg"));
 
-				Kernel_c::GetInstance().LogMessage("Created " + str + "");				
+				Kernel_c::GetInstance().LogMessage("Created " + str + "");
 			}
 			catch(Ogre::Exception &e)
 			{
-				LogOgreException("Render_c::CmdScreenshot", e);				
+				LogOgreException("Render_c::CmdScreenshot", e);
 			}
-		}		
+		}
 	}
 }

@@ -36,9 +36,9 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-DPH_LINUX" />
 			<Add option="-DPH_GCC" />
 			<Add option="-DPH_SDL" />
+			<Add option="-DPH_LINUX" />
 			<Add directory="../../../include/kernel" />
 		</Compiler>
 		<Linker>
