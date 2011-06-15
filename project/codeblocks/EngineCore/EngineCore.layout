@@ -37,7 +37,7 @@
 	<File name="../../../src/engineCore/PH_Plugin.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1418" topLine="24" />
 	</File>
-	<File name="../../../src/engineCore/PH_Render.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="252" topLine="69" />
+	<File name="../../../src/engineCore/PH_Render.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="8475" topLine="281" />
 	</File>
 </CodeBlocks_layout_file>

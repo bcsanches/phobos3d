@@ -56,7 +56,7 @@ namespace Phobos
 	//Keeps a list with all Signals from a object
 	class EntityOutputManager_c
 	{
-		public:	
+		public:
 			EntityOutputManager_c();
 
 			void AddConnector(const String_c &name, OutputProcConnector_t proc);
@@ -78,7 +78,7 @@ namespace Phobos
 		private:
 			typedef std::map<String_c, InputProc_t> InputMap_t;
 			InputMap_t mapInputs;
-	};	
+	};
 
 	namespace EntityIO
 	{
@@ -97,7 +97,7 @@ namespace Phobos
 				AutoInputRegister_c(EntityInputManager_c &manager, const String_c &inputName, InputProc_t proc)
 				{
 					manager.AddSlot(inputName, proc);
-				}				
+				}
 		};
 	}
 }
@@ -116,7 +116,7 @@ namespace Phobos
 	void Connect_##NAME(EntityIO_c &other, InputProc_t proc);
 
 #define PH_DEFINE_ENTITY_OUTPUT(CLASS, NAME)																																\
-	Phobos::EntityIO::AutoOutputRegister_c CLASS::clAutoOutputRegister##NAME##_gl(CLASS::GetOutputManager(), "##NAME", reinterpret_cast<OutputProcConnector_t>(&##CLASS::Connect_##NAME));	\
+	Phobos::EntityIO::AutoOutputRegister_c CLASS::clAutoOutputRegister##NAME##_gl(CLASS::GetOutputManager(), "##NAME", reinterpret_cast<OutputProcConnector_t>(&CLASS::Connect_##NAME));	\
 	void CLASS::Connect_##NAME(EntityIO_c &other, InputProc_t proc)																											\
 	{																																										\
 		sig##NAME.connect(boost::bind(proc, &other, _1));																													\
@@ -124,7 +124,7 @@ namespace Phobos
 
 #define PH_DECLARE_ENTITY_OUTPUT_MANAGER static EntityOutputManager_c &GetOutputManager();
 #define PH_DEFINE_ENTITY_OUTPUT_MANAGER(CLASS)				\
-	EntityOutputManager_c &##CLASS::GetOutputManager()		\
+	EntityOutputManager_c& CLASS::GetOutputManager()		\
 	{														\
 		static EntityOutputManager_c clOutputManager_gl;	\
 															\
@@ -133,7 +133,7 @@ namespace Phobos
 
 #define PH_DECLARE_ENTITY_INPUT_MANAGER static EntityInputManager_c &GetInputManager();
 #define PH_DEFINE_ENTITY_INPUT_MANAGER(CLASS)				\
-	EntityInputManager_c &##CLASS::GetInputManager()		\
+	EntityInputManager_c& CLASS::GetInputManager()		\
 	{														\
 		static EntityInputManager_c clInputManager_gl;	\
 															\
