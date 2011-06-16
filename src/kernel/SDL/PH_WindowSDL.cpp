@@ -33,7 +33,11 @@ namespace Phobos
 
 	    SDL_WM_SetCaption(name.c_str(), NULL);
 
-	    SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, 0);
+        #ifdef PH_WIN32
+            SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, 0);
+        #else
+            SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, SDL_OPENGL);
+        #endif
 
 	    this->rect = rect;
 

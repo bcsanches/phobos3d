@@ -193,11 +193,12 @@ namespace Phobos
 		opts["fullscreen"] = fullScreen ? "true" : "false";
 		opts["vsync"] = vsync ? "true" : "false";
 
-        void* hglc = ipWindow->GetHandler();
+        void* handler = ipWindow->GetHandler();
 
-        if (hglc != NULL)
-            opts["externalWindowHandle"] = PointerToString(hglc);
-        else
+        if (handler != NULL)
+            opts["externalWindowHandle"] = PointerToString(handler);
+
+        if (ipWindow->HasGLContext())
             opts["currentGLContext"] = "true";
 
 		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");

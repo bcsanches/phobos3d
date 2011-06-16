@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Release" />
+	<ActiveTarget name="Debug" />
 	<File name="../../../include/kernel/PH_Context.h" open="0" top="0" tabpos="1">
 		<Cursor position="1495" topLine="42" />
 	</File>
@@ -136,7 +136,7 @@
 	<File name="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="12264" topLine="0" />
 	</File>
-	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="1" top="0" tabpos="1">
+	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="441" topLine="12" />
 	</File>
 	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
