@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  February 2011
+  June 2011
 
   Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
@@ -23,29 +23,26 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_ENTITY_COMPONENT_FACTORY_H
-#define PH_ENTITY_COMPONENT_FACTORY_H
+#ifndef PH_ATTRIBUTE_MANAGER_H
+#define PH_ATTRIBUTE_MANAGER_H
 
-#include <PH_GenericFactory.h>
+#include <PH_Node.h>
+#include <PH_Singleton.h>
 
-#include "PH_EntityComponent.h"
+#include "PH_AttributeSystemAPI.h"
 
 namespace Phobos
 {
-	class Entity_c;
+	PH_DECLARE_SINGLETON_PTR(AttributeManager);
 
-	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
-	typedef GenericFactory_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> > EntityComponentFactory_c;
+	class PH_ATTRIBUTE_SYSTEM_API AttributeManager_c: public Node_c
+	{
+		PH_DECLARE_SINGLETON_METHODS(AttributeManager);
+
+		private:
+			AttributeManager_c();
+			~AttributeManager_c();
+	};
 }
-
-#define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
-	static ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
-
-#define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)							\
-	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);									\
-	EntityComponentPtr_t TYPE::Create(const String_c &name, Entity_c &owner)	\
-	{																			\
-		return new TYPE(name, owner);											\
-	}
 
 #endif

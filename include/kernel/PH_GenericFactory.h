@@ -37,24 +37,43 @@ namespace Phobos
 {
 	typedef boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > ObjectCreatorAutoUnlinkHook_t;
 
-	template <typename T>
-	class ObjectCreator_c: public ObjectCreatorAutoUnlinkHook_t
+	template <typename T, typename Y>
+	class ObjectCreatorBase_c: public ObjectCreatorAutoUnlinkHook_t
 	{
 		public:
 			typedef T ObjectType_t;
-			typedef ObjectType_t (*ObjectCreatorProc_t)(const String_c &name);
+			typedef Y ObjectCreatorProc_t;
 
 		public:
-			ObjectCreator_c(const String_c &name, ObjectCreatorProc_t proc);
+			ObjectCreatorBase_c(const String_c &name, ObjectCreatorProc_t proc):
+				strName(name),
+				pfnCreateProc(proc)
+			{
+				if(proc == NULL)
+				{
+					std::stringstream stream;
+					stream << "creator proc cant be null, entity " << name;
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[ObjectCreatorBase_c::ObjectCreatorBase_c]", stream.str());
+				}
+			}
 
-			T Create(const String_c &name) const;
+			T Create(const String_c &name) const
+			{
+				return pfnCreateProc(name);
+			}
+
+			template <typename Z>
+			T Create(const String_c &name, Z param) const
+			{
+				return pfnCreateProc(name, param);
+			}
 
 			inline const String_c &GetName() const
 			{
 				return strName;
 			}
 
-			inline bool operator<(const ObjectCreator_c &rhs) const
+			inline bool operator<(const ObjectCreatorBase_c &rhs) const
             {
                 return strName.compare(rhs.strName) < 0;
             }
@@ -65,58 +84,77 @@ namespace Phobos
 	};
 
 	template <typename T>
+	class ObjectCreator_c: public ObjectCreatorBase_c<T, T(*)(const String_c &)>
+	{
+		public:						
+			typedef ObjectCreatorBase_c<T, ObjectCreatorProc_t> BaseType_t;
+
+		public:
+			ObjectCreator_c(const String_c &name, ObjectCreatorProc_t proc):
+				BaseType_t(name, proc)				
+			{				
+				GenericFactory_c<ObjectCreator_c<T> >::GetInstance().Register(*this);
+			}
+	};
+
+	template <typename T, typename Y>
+	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>
+	{		
+		public:
+			ObjectCreator1_c(const String_c &name, ObjectCreatorProc_t proc):
+				ObjectCreatorBase_c(name, proc)				
+			{				
+				GenericFactory_c<ObjectCreator1_c >::GetInstance().Register(*this);
+			}
+	};
+
+	template <typename T>
 	class GenericFactory_c: boost::noncopyable
 	{
 		public:
+			typedef typename T::ObjectType_t ObjectType_t;
+
 			static GenericFactory_c &GetInstance();
 
-			T Create(const String_c &className, const String_c &name) const;
+			ObjectType_t Create(const String_c &className, const String_c &name) const;
+
+			template <typename Y>
+			ObjectType_t Create(const String_c &className, const String_c &name, Y &param) const
+			{
+				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
+				if(it == setObjectCreators.end())
+					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
+
+				return it->Create(name, param);
+			}
 
 		private:
 			GenericFactory_c();
 
-			friend class ObjectCreator_c<T>;
-			void Register(ObjectCreator_c<T> &creator);
+			//friend class ObjectCreator_c<T>;
+			friend T;
+			//void Register(ObjectCreator_c<T> &creator);
+			void Register(T &creator);
 
 		private:
-			typedef boost::intrusive::set<ObjectCreator_c<T>, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+			//typedef boost::intrusive::set<ObjectCreator_c<T>, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
             ObjectCreatorSet_t setObjectCreators;
 	};
 
 	template<typename T>
 	struct ObjectCreatorComp_s
     {
-        bool operator()(const String_c &name, const ObjectCreator_c<T> &res) const
+        bool operator()(const String_c &name, const T &res) const
         {
             return name.compare(res.GetName()) < 0;
         }
 
-        bool operator()(const ObjectCreator_c<T> &res, const String_c &name) const
+        bool operator()(const T &res, const String_c &name) const
         {
             return res.GetName().compare(name) < 0;
         }
     };
-
-	template<typename T>
-	ObjectCreator_c<T>::ObjectCreator_c(const String_c &name, ObjectCreatorProc_t proc):
-		strName(name),
-		pfnCreateProc(proc)
-	{
-		GenericFactory_c<T>::GetInstance().Register(*this);
-
-		if(proc == NULL)
-		{
-			std::stringstream stream;
-			stream << "creator proc cant be null, entity " << name;
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[ObjectCreator_c::ObjectCreator_c]", stream.str());
-		}
-	}
-
-	template<typename T>
-	T ObjectCreator_c<T>::Create(const String_c &name) const
-	{
-		return pfnCreateProc(name);
-	}
 
 	template <typename T>
 	GenericFactory_c<T> &GenericFactory_c<T>::GetInstance()
@@ -133,13 +171,13 @@ namespace Phobos
 	}
 
 	template <typename T>
-	void GenericFactory_c<T>::Register(ObjectCreator_c<T> &creator)
+	void GenericFactory_c<T>::Register(T &creator)
 	{
 		setObjectCreators.insert(creator);
 	}
 
 	template <typename T>
-	T GenericFactory_c<T>::Create(const String_c &className, const String_c &name) const
+	typename GenericFactory_c<T>::ObjectType_t GenericFactory_c<T>::Create(const String_c &className, const String_c &name) const
 	{
 		typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
 		if(it == setObjectCreators.end())
@@ -147,6 +185,7 @@ namespace Phobos
 
 		return it->Create(name);
 	}
+
 }
 
 

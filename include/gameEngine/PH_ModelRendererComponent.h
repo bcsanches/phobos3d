@@ -2,7 +2,7 @@
 Phobos 3d
   February 2011
 
-  Copyright (C) 2005-2010 Bruno Crivelari Sanches
+  Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages
@@ -35,10 +35,10 @@ namespace Phobos
 	class ModelRendererComponent_c: public EntityComponent_c
 	{
 		public:
-			static EntityComponentPtr_t Create(const String_c &name);
+			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
 		protected:
-			ModelRendererComponent_c(const String_c &name);
+			ModelRendererComponent_c(const String_c &name, Entity_c &owner);
 			~ModelRendererComponent_c();				
 
 			virtual void OnLoad(const Dictionary_c &dictionary);

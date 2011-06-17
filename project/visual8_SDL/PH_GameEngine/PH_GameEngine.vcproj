@@ -248,6 +248,14 @@
 				RelativePath="..\..\..\include\gameEngine\PH_ModelRendererComponent.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_TransformComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_TransformComponent.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="spectator"

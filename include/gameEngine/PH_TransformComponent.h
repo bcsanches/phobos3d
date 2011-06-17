@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  February 2011
+  June 2011
 
   Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
@@ -23,29 +23,30 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_ENTITY_COMPONENT_FACTORY_H
-#define PH_ENTITY_COMPONENT_FACTORY_H
-
-#include <PH_GenericFactory.h>
+#ifndef PH_TRANSFORM_COMPONENT_H
+#define PH_TRANSFORM_COMPONENT_H
 
 #include "PH_EntityComponent.h"
 
+#include <PH_TransformProperty.h>
+
 namespace Phobos
 {
-	class Entity_c;
+	class TransformComponent_c: public EntityComponent_c
+	{
+		public:
+			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
-	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
-	typedef GenericFactory_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> > EntityComponentFactory_c;
+		protected:
+			TransformComponent_c(const String_c &name, Entity_c &owner);
+			~TransformComponent_c();
+
+			virtual void OnLoad(const Dictionary_c &dictionary);
+
+		private:
+			TransformProperty_c propTransform;
+	};
 }
 
-#define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
-	static ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
-
-#define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)							\
-	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);									\
-	EntityComponentPtr_t TYPE::Create(const String_c &name, Entity_c &owner)	\
-	{																			\
-		return new TYPE(name, owner);											\
-	}
 
 #endif

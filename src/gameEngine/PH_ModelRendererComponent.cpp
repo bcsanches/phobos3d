@@ -37,12 +37,12 @@ Phobos 3d
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR("ModelRenderer", ModelRendererComponent_c);	
+	PH_FULL_ENTITY_COMPONENT_CREATOR("ModelRenderer", ModelRendererComponent_c);
 
 	EntityInputManager_c ModelRendererComponent_c::clInputManager_gl;
 		
-	ModelRendererComponent_c::ModelRendererComponent_c(const String_c &name):
-		EntityComponent_c(name),
+	ModelRendererComponent_c::ModelRendererComponent_c(const String_c &name, Entity_c &owner):
+		EntityComponent_c(name, owner),
 		pclSceneNode(NULL),
 		pclMeshEntity(NULL)
 	{		

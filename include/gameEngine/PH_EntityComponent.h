@@ -34,6 +34,7 @@ namespace Phobos
 	PH_DECLARE_NODE_PTR(EntityComponent);
 
 	class Dictionary_c;
+	class Entity_c;
 
 	class PH_GAME_ENGINE_API EntityComponent_c: public EntityIO_c
 	{
@@ -43,10 +44,13 @@ namespace Phobos
 			void LoadFinished();
 
 		protected:
-			EntityComponent_c(const String_c &name);
+			EntityComponent_c(const String_c &name, Entity_c &owner);
 
 			virtual void OnLoad(const Dictionary_c &dictionary) {};
 			virtual void OnLoadFinished() {};
+
+		private:
+			Entity_c &rclEntity;
 	};
 }
 

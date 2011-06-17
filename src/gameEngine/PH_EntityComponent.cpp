@@ -27,8 +27,9 @@ Phobos 3d
 
 namespace Phobos
 {
-	EntityComponent_c::EntityComponent_c(const String_c &name):
-		EntityIO_c(name)
+	EntityComponent_c::EntityComponent_c(const String_c &name, Entity_c &owner):
+		EntityIO_c(name),
+		rclEntity(owner)
 	{
 		//empty
 	}

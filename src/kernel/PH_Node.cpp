@@ -32,6 +32,25 @@ Phobos 3d
 
 namespace Phobos
 {
+	struct NodePropertyComp_s
+	{
+		bool operator()(const char *name, const NodeProperty_c &rhs) const
+		{
+			if(name == rhs.GetName())
+				return 0;
+			else
+				return strcmp(name, rhs.GetName()) < 0;
+		}
+
+		bool operator()(const NodeProperty_c &rhs, const char *name) const
+		{
+			if(name == rhs.GetName())
+				return 0;
+			else
+				return strcmp(rhs.GetName(), name) < 0;
+		}
+	};
+
 	NodePtr_t Node_c::Create(const String_c &name)
 	{
 		return NodePtr_t(new Node_c(name));
@@ -189,5 +208,33 @@ namespace Phobos
 		}
 
 		out.AddName(this->GetName());
+	}
+
+	void Node_c::AddProperty(NodeProperty_c &prop)
+	{
+		NodePropertySet_t::iterator it = setProperties.lower_bound(prop.GetName(), NodePropertyComp_s());
+		if((it != setProperties.end()) && (!setProperties.key_comp()(prop, *it)))
+		{
+			std::stringstream stream;
+			stream << "Node " << this->GetName() << " already contains property named " << prop.GetName();
+
+			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "Node_c::AddProperty", stream.str());
+		}
+
+		setProperties.insert(it, prop);
+	}
+	
+	void Node_c::RemoveProperty(const char *name)
+	{
+		NodePropertySet_t::iterator it = setProperties.find(name, NodePropertyComp_s());
+		if(it == setProperties.end())
+		{
+			std::stringstream stream;
+			stream << "Node " << this->GetName() << " does not contains property named " << name;
+
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Node_c::AddProperty", stream.str());
+		}
+
+		setProperties.erase(it);
 	}
 }

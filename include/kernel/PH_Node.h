@@ -30,11 +30,14 @@ Phobos 3d
 
 #include <map>
 
+#include <boost/intrusive/set.hpp>
+
 #ifdef PH_NODE_FOREACH
 #include <boost/range/iterator.hpp>
 #endif
 
 #include "PH_NodeFwd.h"
+#include "PH_NodeProperty.h"
 #include "PH_Object.h"
 
 #define PH_DECLARE_NODE_PTR(X)						\
@@ -69,6 +72,8 @@ namespace Phobos
 			typedef NodeMap_t::iterator iterator;
 			typedef NodeMap_t::const_iterator const_iterator;
 
+			typedef boost::intrusive::set<NodeProperty_c, boost::intrusive::constant_time_size<false> > NodePropertySet_t;
+
 		public:			
 			static NodePtr_t Create(const String_c &name);
 			static NodePtr_t Create(const Char_t *name);
@@ -90,7 +95,10 @@ namespace Phobos
 
 			inline NodeMap_t::const_iterator begin() const;
 			inline NodeMap_t::const_iterator end() const;
-			inline const NodeMap_t &GetNodes() const;			
+			inline const NodeMap_t &GetNodes() const;	
+
+			void AddProperty(NodeProperty_c &prop);
+			void RemoveProperty(const char *name);
 
 		protected:
 			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
@@ -105,7 +113,9 @@ namespace Phobos
 		private:
 			void GetThisPath_r(Path_c &out);
 
-		private:											
+		private:			
+			NodePropertySet_t setProperties;
+
 			NodeMap_t mapNodes;
 			Node_c *pclParent;
 

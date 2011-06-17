@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-  February 2011
+  June 2011
 
   Copyright (C) 2005-2011 Bruno Crivelari Sanches
 
@@ -23,29 +23,25 @@ Phobos 3d
   Bruno Crivelari Sanches bcsanches@gmail.com
 */
 
-#ifndef PH_ENTITY_COMPONENT_FACTORY_H
-#define PH_ENTITY_COMPONENT_FACTORY_H
+#ifndef PH_ATTRIBUTE_SYSTEM_API_H
+#define PH_ATTRIBUTE_SYSTEM_API_H
 
-#include <PH_GenericFactory.h>
+#ifdef PH_WIN32
+	#ifdef PH_ATTRIBUTE_SYSTEM_EXPORTS
+		#define PH_ATTRIBUTE_SYSTEM_API __declspec(dllexport)
+	#else
+		#define PH_ATTRIBUTE_SYSTEM_API
+	#endif
 
-#include "PH_EntityComponent.h"
+	#define PH_ATTRIBUTE_SYSTEM_API_PROC extern "C" PH_ATTRIBUTE_SYSTEM_API
+#else
 
-namespace Phobos
-{
-	class Entity_c;
+    #ifdef PH_LINUX
+        #define PH_ATTRIBUTE_SYSTEM_API
+    #else
+        #error "Platform not defined"
+    #endif
 
-	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
-	typedef GenericFactory_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> > EntityComponentFactory_c;
-}
-
-#define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
-	static ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
-
-#define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)							\
-	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);									\
-	EntityComponentPtr_t TYPE::Create(const String_c &name, Entity_c &owner)	\
-	{																			\
-		return new TYPE(name, owner);											\
-	}
+#endif
 
 #endif

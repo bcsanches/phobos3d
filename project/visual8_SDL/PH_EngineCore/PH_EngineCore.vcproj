@@ -273,6 +273,10 @@
 			RelativePath="..\..\..\include\engineCore\PH_Transform.h"
 			>
 		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_TransformProperty.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

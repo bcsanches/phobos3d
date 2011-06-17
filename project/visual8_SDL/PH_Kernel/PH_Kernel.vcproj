@@ -190,42 +190,74 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\src\kernel\PH_Context.cpp"
+		<Filter
+			Name="node"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_Context.h"
+			<File
+				RelativePath="..\..\..\src\kernel\PH_Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_Node.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_NodeFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_NodeProperty.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\kernel\PH_ObjectManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_ObjectManager.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="context"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\kernel\PH_ContextCmd.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_ContextCmd.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\kernel\PH_ContextItem.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_ContextItem.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_ContextUtils.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\kernel\PH_ContextVar.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_ContextVar.h"
-			>
-		</File>
+			<File
+				RelativePath="..\..\..\src\kernel\PH_Context.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_Context.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\kernel\PH_ContextCmd.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_ContextCmd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\kernel\PH_ContextItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_ContextItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_ContextUtils.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\kernel\PH_ContextVar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_ContextVar.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_Defs.h"
 			>
@@ -323,31 +355,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\kernel\PH_Node.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_Node.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_NodeFwd.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\kernel\PH_Object.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_Object.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\kernel\PH_ObjectManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_ObjectManager.h"
 			>
 		</File>
 		<File

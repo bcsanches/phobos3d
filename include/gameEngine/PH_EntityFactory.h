@@ -32,7 +32,8 @@ Phobos 3d
 
 namespace Phobos
 {
-	typedef GenericFactory_c<EntityPtr_t> EntityFactory_c;
+	//typedef GenericFactory_c<EntityPtr_t> EntityFactory_c;
+	typedef GenericFactory_c<ObjectCreator_c<EntityPtr_t> > EntityFactory_c;
 }
 
 #define PH_ENTITY_CREATOR(NAME, TYPE)										\
