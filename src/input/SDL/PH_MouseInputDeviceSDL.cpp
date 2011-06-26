@@ -190,6 +190,9 @@ namespace Phobos
 
 	void MouseInputDeviceSDL_c::Enable()
 	{
+		if(!fClipToWindow)
+			return;
+
 		SDL_Surface *surface = SDL_GetVideoSurface();
 
 		iWindowCenter[0] = surface->w / 2;
