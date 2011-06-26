@@ -52,7 +52,7 @@ namespace Phobos
 
 			virtual void OnLoadFinished() {};
 
-		private:
+		private:			
 			String_c strClassName;
 	};
 

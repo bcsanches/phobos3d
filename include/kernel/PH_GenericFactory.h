@@ -62,12 +62,6 @@ namespace Phobos
 				return pfnCreateProc(name);
 			}
 
-			template <typename Z>
-			T Create(const String_c &name, Z param) const
-			{
-				return pfnCreateProc(name, param);
-			}
-
 			inline const String_c &GetName() const
 			{
 				return strName;
@@ -80,6 +74,8 @@ namespace Phobos
 
 		private:
 			String_c strName;
+
+		protected:
 			ObjectCreatorProc_t pfnCreateProc;
 	};
 
@@ -101,10 +97,15 @@ namespace Phobos
 	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>
 	{		
 		public:
-			ObjectCreator1_c(const String_c &name, ObjectCreatorProc_t proc):
+			ObjectCreator1_c(const String_c &name,  T(*proc)(const String_c &, Y ) ):
 				ObjectCreatorBase_c(name, proc)				
 			{				
-				GenericFactory_c<ObjectCreator1_c >::GetInstance().Register(*this);
+				GenericFactory1_c<ObjectCreator1_c, Y >::GetInstance().Register(*this);
+			}
+							
+			T Create(const String_c &name, Y param) const
+			{
+				return pfnCreateProc(name, param);
 			}
 	};
 
@@ -114,12 +115,46 @@ namespace Phobos
 		public:
 			typedef typename T::ObjectType_t ObjectType_t;
 
-			static GenericFactory_c &GetInstance();
+			static GenericFactory_c &GetInstance()
+			{
+				static GenericFactory_c<T> clInstance_gl;
 
-			ObjectType_t Create(const String_c &className, const String_c &name) const;
+				return clInstance_gl;
+			}
 
-			template <typename Y>
-			ObjectType_t Create(const String_c &className, const String_c &name, Y &param) const
+			ObjectType_t Create(const String_c &className, const String_c &name) const
+			{
+				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
+				if(it == setObjectCreators.end())
+					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
+
+				return it->Create(name);
+			}			
+
+		protected:
+			GenericFactory_c();
+			
+			friend T;			
+			void Register(T &creator);
+
+		protected:
+			//typedef boost::intrusive::set<ObjectCreator_c<T>, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+            ObjectCreatorSet_t setObjectCreators;
+	};
+
+	template <typename T, typename Y>
+	class GenericFactory1_c: public GenericFactory_c<T>
+	{	
+		public:
+			static GenericFactory1_c &GetInstance()
+			{
+				static GenericFactory1_c clInstance_gl;
+
+				return clInstance_gl;
+			}
+
+			ObjectType_t Create(const String_c &className, const String_c &name, Y param) const
 			{
 				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
 				if(it == setObjectCreators.end())
@@ -127,19 +162,6 @@ namespace Phobos
 
 				return it->Create(name, param);
 			}
-
-		private:
-			GenericFactory_c();
-
-			//friend class ObjectCreator_c<T>;
-			friend T;
-			//void Register(ObjectCreator_c<T> &creator);
-			void Register(T &creator);
-
-		private:
-			//typedef boost::intrusive::set<ObjectCreator_c<T>, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
-			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
-            ObjectCreatorSet_t setObjectCreators;
 	};
 
 	template<typename T>
@@ -156,13 +178,6 @@ namespace Phobos
         }
     };
 
-	template <typename T>
-	GenericFactory_c<T> &GenericFactory_c<T>::GetInstance()
-	{
-		static GenericFactory_c<T> clInstance_gl;
-
-		return clInstance_gl;
-	}
 
 	template <typename T>
 	GenericFactory_c<T>::GenericFactory_c()
@@ -175,17 +190,6 @@ namespace Phobos
 	{
 		setObjectCreators.insert(creator);
 	}
-
-	template <typename T>
-	typename GenericFactory_c<T>::ObjectType_t GenericFactory_c<T>::Create(const String_c &className, const String_c &name) const
-	{
-		typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
-		if(it == setObjectCreators.end())
-			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
-
-		return it->Create(name);
-	}
-
 }
 
 

@@ -35,7 +35,7 @@ namespace Phobos
 	class Entity_c;
 
 	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
-	typedef GenericFactory_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &> > EntityComponentFactory_c;
+	typedef GenericFactory1_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &>, Entity_c & > EntityComponentFactory_c;
 }
 
 #define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\

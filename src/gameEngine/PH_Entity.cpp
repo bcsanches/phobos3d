@@ -50,9 +50,10 @@ namespace Phobos
 
 			String_c componentName;
 			size_t pos = 0;
+			
 			while(StringSplitBy(componentName, *components, '|', pos, &pos))
 			{				
-				//this->AddPrivateChild(factory.Create(componentName, componentName, *this));
+				this->AddPrivateChild(factory.Create(componentName, componentName, *this));
 			}
 		}
 
