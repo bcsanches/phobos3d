@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-June 2011
+September 2010
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,26 +14,27 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ENTITY_EVENT_H
-#define PH_ENTITY_EVENT_H
+#include "PH_ProcVector.h"
 
-#include <PH_Types.h>
+#include <boost/foreach.hpp>
 
 namespace Phobos
 {
-	class Entity_c;
-
-	class EntityEvent_c
+	void ProcVector_c::AddProc(Proc_t proc)
 	{
-		public:
-			EntityEvent_c(UInt_t type, Entity_c &activator, Entity_c &caller);
+		vecProcs.push_back(proc);
+	}
 
-		private:
-			Entity_c &rclActivator;
-			Entity_c &rclCaller;
-
-			UInt_t	uType;
-	};
+	void ProcVector_c::CallAll()
+	{
+		BOOST_REVERSE_FOREACH(Proc_t proc, vecProcs)
+		{
+			proc();
+		}
+	}
+			
+	void ProcVector_c::Clear()
+	{
+		vecProcs.clear();
+	}
 }
-
-#endif

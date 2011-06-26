@@ -242,10 +242,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\input\PH_InputManagerListener.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\input\PH_InputMapper.cpp"
 			>
 		</File>

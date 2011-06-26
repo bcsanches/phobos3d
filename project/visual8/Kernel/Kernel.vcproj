@@ -387,6 +387,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\kernel\PH_ProcVector.cpp"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\kernel\PH_ProcVector.h"
 			>
 		</File>
@@ -416,10 +420,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_Types.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\kernel\ProcVector.cpp"
 			>
 		</File>
 	</Files>

@@ -233,6 +233,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GameCamera.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_LinearMoverComponent.cpp"
 				>
 			</File>
@@ -297,10 +301,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_GameCamera.h"
-			>
-		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h"
 			>

@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)\..\..\..\include\gamePlugin&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_CHECK_ASSERT;PH_WIN32;PH_MSVC;PH_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_CHECK_ASSERT;PH_WIN32;PH_MSVC;PH_DEBUG;PH_NATIVE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

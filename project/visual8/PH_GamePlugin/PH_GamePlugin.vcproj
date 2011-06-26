@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\gamePlugin&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\kernel&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_GAME_PLUGIN_EXPORTS;PH_MSVC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_GAME_PLUGIN_EXPORTS;PH_MSVC;PH_NATIVE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
