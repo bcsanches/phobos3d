@@ -114,21 +114,32 @@ namespace Phobos
 
 			ObjectType_t Create(const String_c &className, const String_c &name) const
 			{
-				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
-				if(it == setObjectCreators.end())
-					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
-
-				return it->Create(name);
+				return this->GetObjectCreator(className).Create(name);				
 			}			
 
 		protected:
-			GenericFactory_c();
+			GenericFactory_c()
+			{
+				//empty
+			}
 			
 			friend T;			
-			void Register(T &creator);
 
-		protected:
-			//typedef boost::intrusive::set<ObjectCreator_c<T>, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+			void Register(T &creator)
+			{
+				setObjectCreators.insert(creator);
+			}
+
+			const T &GetObjectCreator(const String_c &className) const
+			{
+				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
+				if(it == setObjectCreators.end())
+					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", className);
+
+				return *it;
+			}
+
+		protected:			
 			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
             ObjectCreatorSet_t setObjectCreators;
 	};
@@ -146,11 +157,7 @@ namespace Phobos
 
 			ObjectType_t Create(const String_c &className, const String_c &name, Y param) const
 			{
-				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
-				if(it == setObjectCreators.end())
-					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", name);
-
-				return it->Create(name, param);
+				return this->GetObjectCreator(className).Create(name, param);
 			}
 	};
 
@@ -167,19 +174,6 @@ namespace Phobos
             return res.GetName().compare(name) < 0;
         }
     };
-
-
-	template <typename T>
-	GenericFactory_c<T>::GenericFactory_c()
-	{
-		//empty
-	}
-
-	template <typename T>
-	void GenericFactory_c<T>::Register(T &creator)
-	{
-		setObjectCreators.insert(creator);
-	}
 }
 
 

@@ -104,6 +104,7 @@ namespace Phobos
 		clSingletons.AddProc(Render_c::ReleaseInstance);
 		core->AddModule(render, LOWEST_PRIORITY);
 
+		core->RegisterCommands(*console);
 		dictionaryManager->RegisterCommands(*console);
 
 		core->LaunchBootModule("autoexec.cfg");

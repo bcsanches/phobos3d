@@ -112,7 +112,7 @@ namespace Phobos
 		CoreModuleManager_c::OnFixedUpdate();
 	}
 
-	void Core_c::CreateDefaultCmds(Context_c &context)
+	void Core_c::RegisterCommands(IContext_c &context)
 	{
 		cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdTime, this));
 		cmdToggleTimerPause.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdToggleTimerPause, this));

@@ -18,6 +18,8 @@ subject to the following restrictions:
 
 #include "PH_Entity.h"
 #include "PH_EntityComponentFactory.h"
+#include "PH_EntityKeys.h"
+#include "PH_GameDictionaryUtils.h"
 
 namespace Phobos
 {
@@ -35,7 +37,8 @@ namespace Phobos
 	}
 
 	void TransformComponent_c::OnLoad(const Dictionary_c &dictionary)
-	{
-
+	{	
+		propTransform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+		propTransform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));		
 	}
 }

@@ -59,11 +59,6 @@ namespace Phobos
 
 		pclSceneNode->attachObject(pclMeshEntity);
 
-		Float_t values[4];
-		dictionary.Get4Float(values, "orientation");
-
-		pclSceneNode->setOrientation(Ogre::Quaternion(values));
-
 		pclSceneNode->setPosition(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
 		pclSceneNode->setScale(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_SCALE));
 		pclSceneNode->setOrientation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));

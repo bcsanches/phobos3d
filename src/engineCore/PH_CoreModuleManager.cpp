@@ -224,15 +224,25 @@ namespace Phobos
 		using namespace std;
 		stringstream stream;
 
-		stream << "Core modules: " << endl;		
+		stream << "Core modules start: " << endl;		
 		BOOST_FOREACH(ModuleInfo_s &m, vecModules)
 		{			
 			if(!m.ipModule)
-				continue;
+				continue;			
 
 			stream << '\t' << m.ipModule->GetName() << ' ' << m.u32Priority << endl;			
+
+			CoreModuleManagerPtr_t subModule = boost::dynamic_pointer_cast<CoreModuleManager_c>(m.ipModule);
+			if(subModule)
+			{
+				Kernel_c::GetInstance().LogMessage(stream.str());
+				subModule->LogCoreModules();
+
+				stream.str("");
+			}
 		}
 
+		stream << "core modules finished." << endl;
 		Kernel_c::GetInstance().LogMessage(stream.str());
 	}
 }
