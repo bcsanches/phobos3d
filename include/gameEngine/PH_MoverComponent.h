@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-February 2011
+July 2011
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,40 +14,21 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_MODEL_RENDERER_COMPONENT_H
-#define PH_MODEL_RENDERER_COMPONENT_H
+#ifndef PH_MOVER_COMPONENT_H
+#define PH_MOVER_COMPONENT_H
 
 #include "PH_EntityComponent.h"
 
-#include <OgreSceneNode.h>
-
 namespace Phobos
 {
-	class ModelRendererComponent_c: public EntityComponent_c
-	{
+	class MoverComponent_c: public EntityComponent_c
+	{		
 		public:
-			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
-
-			void Update();
+			virtual void FixedUpdate() = 0;
 
 		protected:
-			ModelRendererComponent_c(const String_c &name, Entity_c &owner);
-			~ModelRendererComponent_c();				
-
-			virtual void OnLoad(const Dictionary_c &dictionary);
-			virtual void OnLoadFinished();
-
-		private:
-			PH_DECLARE_ENTITY_INPUT(SetPosition);			
-
-		protected:
-			static EntityInputManager_c clInputManager_gl;
-
-		private:
-			Ogre::SceneNode *pclSceneNode;
-			Ogre::Entity *pclMeshEntity;
-
-			String_c	strParentNode;
+			MoverComponent_c(const String_c &name, Entity_c &owner);
+			~MoverComponent_c();
 	};
 }
 

@@ -239,11 +239,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_LinearMoverComponent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_LinearMoverComponent.h"
+				RelativePath="..\..\..\include\gameEngine\PH_GenericComponentManager.h"
 				>
 			</File>
 			<File
@@ -252,6 +248,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_ModelRendererComponent.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_ModelRendererManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_ModelRendererManager.h"
 				>
 			</File>
 			<File
@@ -303,6 +307,34 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="mover"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_LinearMoverComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_LinearMoverComponent.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_MoverComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_MoverComponent.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_MoverManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_MoverManager.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h"
 			>
@@ -317,6 +349,10 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameEnginePlugin.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_HandleManager.h"
 			>
 		</File>
 		<File

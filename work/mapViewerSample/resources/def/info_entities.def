@@ -6,13 +6,13 @@ EntityDef InfoPlayerStart
 EntityDef SkeletonTorch
 {
   className=Entity;  
-  components="ModelRenderer";               
+  components="ModelRenderer|Transform";               
 }
 
 EntityDef Platform
 {
   className=Entity;
-  components="ModelRenderer|LinearMover";
+  components="ModelRenderer|LinearMover|Transform";
 }
 
 EntityDef PathCorner

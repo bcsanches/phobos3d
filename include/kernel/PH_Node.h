@@ -92,6 +92,14 @@ namespace Phobos
 			void AddProperty(NodeProperty_c &prop);
 			void RemoveProperty(const char *name);
 
+			NodeProperty_c &GetProperty(const char *name);
+
+			template <typename T>
+			inline T &GetCustomProperty(const char *name)
+			{
+				return static_cast<T &>(this->GetProperty(name));
+			}
+
 		protected:
 			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
 			explicit Node_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);		
@@ -104,6 +112,8 @@ namespace Phobos
 
 		private:
 			void GetThisPath_r(Path_c &out);
+
+			NodePropertySet_t::iterator GetPropertyIterator(const char *name);
 
 		private:			
 			NodePropertySet_t setProperties;

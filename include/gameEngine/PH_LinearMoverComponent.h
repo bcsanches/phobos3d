@@ -17,16 +17,16 @@ subject to the following restrictions:
 #ifndef PH_LINEAR_MOVER_COMPONENT_H
 #define PH_LINEAR_MOVER_COMPONENT_H
 
-#include "PH_EntityComponent.h"
-
-#include <OgreSceneNode.h>
+#include "PH_MoverComponent.h"
 
 namespace Phobos
 {
-	class LinearMoverComponent_c: public EntityComponent_c
+	class LinearMoverComponent_c: public MoverComponent_c
 	{
 		public:
-			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);			
+			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);	
+
+			virtual void FixedUpdate();
 
 		protected:
 			LinearMoverComponent_c(const String_c &name, Entity_c &owner);

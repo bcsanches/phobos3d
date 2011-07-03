@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-February 2011
+July 2011
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,42 +14,27 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_MODEL_RENDERER_COMPONENT_H
-#define PH_MODEL_RENDERER_COMPONENT_H
+#ifndef PH_MODEL_RENDERER_MANAGER_H
+#define PH_MODEL_RENDERER_MANAGER_H
 
-#include "PH_EntityComponent.h"
-
-#include <OgreSceneNode.h>
+#include "PH_GenericComponentManager.h"
 
 namespace Phobos
-{
-	class ModelRendererComponent_c: public EntityComponent_c
+{		
+	PH_DECLARE_SINGLETON_PTR(ModelRendererManager);
+
+	class ModelRendererComponent_c;
+
+	class PH_GAME_ENGINE_API ModelRendererManager_c: public GenericComponentManager_c<ModelRendererComponent_c>
 	{
-		public:
-			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
-
-			void Update();
-
+		PH_DECLARE_SINGLETON_METHODS(ModelRendererManager);
+		
 		protected:
-			ModelRendererComponent_c(const String_c &name, Entity_c &owner);
-			~ModelRendererComponent_c();				
+			ModelRendererManager_c();
+			~ModelRendererManager_c();
 
-			virtual void OnLoad(const Dictionary_c &dictionary);
-			virtual void OnLoadFinished();
-
-		private:
-			PH_DECLARE_ENTITY_INPUT(SetPosition);			
-
-		protected:
-			static EntityInputManager_c clInputManager_gl;
-
-		private:
-			Ogre::SceneNode *pclSceneNode;
-			Ogre::Entity *pclMeshEntity;
-
-			String_c	strParentNode;
+			virtual void OnUpdate();
 	};
 }
-
 
 #endif

@@ -17,6 +17,7 @@ subject to the following restrictions:
 #ifndef PH_ENTITY_COMPONENT_H
 #define PH_ENTITY_COMPONENT_H
 
+#include "PH_Entity.h"
 #include "PH_EntityIO.h"
 #include "PH_GameEngineAPI.h"
 
@@ -24,8 +25,7 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(EntityComponent);
 
-	class Dictionary_c;
-	class Entity_c;
+	class Dictionary_c;	
 
 	class PH_GAME_ENGINE_API EntityComponent_c: public EntityIO_c
 	{
@@ -34,15 +34,28 @@ namespace Phobos
 
 			void LoadFinished();
 
+			inline Handle_s GetEntityHandle() const;
+
 		protected:
 			EntityComponent_c(const String_c &name, Entity_c &owner);
 
 			virtual void OnLoad(const Dictionary_c &dictionary) {};
 			virtual void OnLoadFinished() {};
 
+			template <typename T>
+			inline T &GetCustomEntityProperty(const char *name)
+			{
+				return rclEntity.GetCustomProperty<T>(name);
+			}
+
 		private:
 			Entity_c &rclEntity;
 	};
+
+	inline Handle_s EntityComponent_c::GetEntityHandle() const
+	{
+		return rclEntity.GetHandle();
+	}
 }
 
 #endif

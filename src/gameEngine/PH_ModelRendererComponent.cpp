@@ -20,10 +20,12 @@ subject to the following restrictions:
 
 #include <PH_Dictionary.h>
 #include <PH_Render.h>
+#include <PH_TransformProperty.h>
 
 #include "PH_GameDictionaryUtils.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
+#include "PH_ModelRendererManager.h"
 #include "PH_WorldEntity.h"
 
 namespace Phobos
@@ -37,7 +39,7 @@ namespace Phobos
 		pclSceneNode(NULL),
 		pclMeshEntity(NULL)
 	{		
-		//empty
+		ModelRendererManager_c::GetInstance()->Register(*this);
 	}
 
 	ModelRendererComponent_c::~ModelRendererComponent_c()
@@ -46,6 +48,8 @@ namespace Phobos
 
 		render->DestroyEntity(pclMeshEntity);
 		render->DestroySceneNode(pclSceneNode);
+
+		ModelRendererManager_c::GetInstance()->Unregister(*this);
 	}
 
 	void ModelRendererComponent_c::OnLoad(const Dictionary_c &dictionary)
@@ -78,6 +82,14 @@ namespace Phobos
 
 			render->GetSceneNode(strParentNode)->addChild(pclSceneNode);
 		}
+	}
+
+	void ModelRendererComponent_c::Update()
+	{
+		TransformProperty_c &prop = this->GetCustomEntityProperty<TransformProperty_c>("transform");
+
+		pclSceneNode->setPosition(prop.GetOrigin());
+		pclSceneNode->setOrientation(prop.GetRotation());
 	}
 
 	PH_BEGIN_ENTITY_INPUT(ModelRendererComponent_c, SetPosition)

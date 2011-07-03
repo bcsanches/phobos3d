@@ -19,6 +19,7 @@ subject to the following restrictions:
 #include <OgreEntity.h>
 
 #include <PH_Dictionary.h>
+#include <PH_TransformProperty.h>
 
 #include "PH_DictionaryUtils.h"
 #include "PH_EntityComponentFactory.h"
@@ -33,7 +34,7 @@ namespace Phobos
 	PH_DEFINE_ENTITY_OUTPUT(LinearMoverComponent_c, PositionChanged);	
 		
 	LinearMoverComponent_c::LinearMoverComponent_c(const String_c &name, Entity_c &owner):
-		EntityComponent_c(name, owner)
+		MoverComponent_c(name, owner)
 	{		
 		//empty
 	}
@@ -46,5 +47,12 @@ namespace Phobos
 	void LinearMoverComponent_c::OnLoad(const Dictionary_c &dictionary)
 	{
 		//empty
+	}
+
+	void LinearMoverComponent_c::FixedUpdate()
+	{
+		TransformProperty_c &prop = this->GetCustomEntityProperty<TransformProperty_c>("transform");
+
+		prop.SetOrigin(prop.GetOrigin() + Ogre::Vector3(0.01f, 0, 0));
 	}
 }

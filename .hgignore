@@ -200,3 +200,9 @@ glob:project/visual8_SDL/Sample_01/Release/
 glob:project/visual8_SDL/Sample_02/Release/
 glob:project/visual8_SDL/Sample_03/Release/
 glob:project/visual8_SDL/Sample_04/Release/
+glob:project/visual8/KernelTest/context_file.cfg
+glob:project/visual8/KernelTest/eventManager_basic.log
+glob:project/visual8/KernelTest/logTest.log
+glob:project/visual8/KernelTest/phobos.log
+glob:project/visual8_SDL/UT_GameEngine/Debug/
+glob:project/visual8_SDL/UT_GameEngine/UT_GameEngine.vcproj.mordor.bcsanches.user

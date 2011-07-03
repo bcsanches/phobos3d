@@ -50,6 +50,7 @@ namespace Phobos
 	void WorldManager_c::LoadMap(const String_c &mapName)
 	{
 		this->RemoveAllChildren();		
+		clEntityManager.Clear();
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
 
@@ -100,9 +101,13 @@ namespace Phobos
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
 			
 			EntityPtr_t ptr = factory.Create(dict->GetValue(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
+
+			Handle_s h = clEntityManager.AddObject(ptr.get());
+			ptr->SetHandle(h);
+
 			ptr->Load(*dict);
 
-			this->AddPrivateChild(ptr);			
+			this->AddPrivateChild(ptr);						
 		}
 	}
 

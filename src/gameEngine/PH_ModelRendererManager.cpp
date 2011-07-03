@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-February 2011
+July 2011
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,42 +14,29 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_MODEL_RENDERER_COMPONENT_H
-#define PH_MODEL_RENDERER_COMPONENT_H
 
-#include "PH_EntityComponent.h"
+#include "PH_ModelRendererManager.h"
 
-#include <OgreSceneNode.h>
+#include "PH_ModelRendererComponent.h"
 
 namespace Phobos
 {
-	class ModelRendererComponent_c: public EntityComponent_c
+	PH_DEFINE_DEFAULT_SINGLETON(ModelRendererManager);	
+
+	ModelRendererManager_c::ModelRendererManager_c():
+		GenericComponentManager_c("ModelRendererManager")
 	{
-		public:
-			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
+		//empty
+	}
 
-			void Update();
-
-		protected:
-			ModelRendererComponent_c(const String_c &name, Entity_c &owner);
-			~ModelRendererComponent_c();				
-
-			virtual void OnLoad(const Dictionary_c &dictionary);
-			virtual void OnLoadFinished();
-
-		private:
-			PH_DECLARE_ENTITY_INPUT(SetPosition);			
-
-		protected:
-			static EntityInputManager_c clInputManager_gl;
-
-		private:
-			Ogre::SceneNode *pclSceneNode;
-			Ogre::Entity *pclMeshEntity;
-
-			String_c	strParentNode;
-	};
+	ModelRendererManager_c::~ModelRendererManager_c()
+	{
+		//empty
+	}
+	
+	void ModelRendererManager_c::OnUpdate()
+	{
+		this->CallForAll(&ModelRendererComponent_c::Update);		
+	}
 }
 
-
-#endif

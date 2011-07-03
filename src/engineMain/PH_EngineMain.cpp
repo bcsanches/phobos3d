@@ -27,6 +27,8 @@ subject to the following restrictions:
 #include <PH_DictionaryManager.h>
 #include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
+#include <PH_ModelRendererManager.h>
+#include <PH_MoverManager.h>
 #include <PH_PluginManager.h>
 #include <PH_ProcVector.h>
 #include <PH_Render.h>
@@ -99,6 +101,14 @@ namespace Phobos
 		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
 		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
 		core->AddModule(worldManager);
+
+		MoverManagerPtr_t moverManager = MoverManager_c::CreateInstance();
+		clSingletons.AddProc(MoverManager_c::ReleaseInstance);
+		core->AddModule(moverManager);
+
+		ModelRendererManagerPtr_t modelRendererManager = ModelRendererManager_c::CreateInstance();
+		clSingletons.AddProc(ModelRendererManager_c::ReleaseInstance);
+		core->AddModule(modelRendererManager, LOWEST_PRIORITY+1);
 
 		RenderPtr_t render = Render_c::CreateInstance();
 		clSingletons.AddProc(Render_c::ReleaseInstance);

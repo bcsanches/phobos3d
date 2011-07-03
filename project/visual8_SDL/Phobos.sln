@@ -71,6 +71,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_MapViewer", "PH_MapViewe
 		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UT_GameEngine", "UT_GameEngine\UT_GameEngine.vcproj", "{8FF0F511-0DA3-42B3-B2E2-24EB016C14F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -125,6 +130,10 @@ Global
 		{80AF7AEE-A9E3-4CD8-87D4-9B8A040A4EEC}.Debug|Win32.Build.0 = Debug|Win32
 		{80AF7AEE-A9E3-4CD8-87D4-9B8A040A4EEC}.Release|Win32.ActiveCfg = Release|Win32
 		{80AF7AEE-A9E3-4CD8-87D4-9B8A040A4EEC}.Release|Win32.Build.0 = Release|Win32
+		{8FF0F511-0DA3-42B3-B2E2-24EB016C14F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8FF0F511-0DA3-42B3-B2E2-24EB016C14F3}.Debug|Win32.Build.0 = Debug|Win32
+		{8FF0F511-0DA3-42B3-B2E2-24EB016C14F3}.Release|Win32.ActiveCfg = Release|Win32
+		{8FF0F511-0DA3-42B3-B2E2-24EB016C14F3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

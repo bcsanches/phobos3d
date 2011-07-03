@@ -214,8 +214,8 @@ namespace Phobos
 
 		setProperties.insert(it, prop);
 	}
-	
-	void Node_c::RemoveProperty(const char *name)
+
+	Node_c::NodePropertySet_t::iterator Node_c::GetPropertyIterator(const char *name)
 	{
 		NodePropertySet_t::iterator it = setProperties.find(name, NodePropertyComp_s());
 		if(it == setProperties.end())
@@ -226,6 +226,16 @@ namespace Phobos
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Node_c::AddProperty", stream.str());
 		}
 
-		setProperties.erase(it);
+		return it;
+	}
+	
+	void Node_c::RemoveProperty(const char *name)
+	{		
+		setProperties.erase(this->GetPropertyIterator(name));
+	}
+
+	NodeProperty_c &Node_c::GetProperty(const char *name)
+	{
+		return *(this->GetPropertyIterator(name));
 	}
 }

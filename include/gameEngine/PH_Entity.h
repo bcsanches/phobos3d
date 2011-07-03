@@ -19,6 +19,7 @@ subject to the following restrictions:
 
 #include "PH_EntityIO.h"
 #include "PH_GameEngineAPI.h"
+#include "PH_HandleManager.h"
 
 namespace Phobos
 {
@@ -36,6 +37,9 @@ namespace Phobos
 
 			inline const String_c &GetEntityClassName() const;
 
+			inline void SetHandle(Handle_s handle);
+			const Handle_s GetHandle() const;
+
 		protected:
 			Entity_c(const String_c &name);
 
@@ -45,11 +49,25 @@ namespace Phobos
 
 		private:			
 			String_c strClassName;
+
+			Handle_s hHandle;
+
+
 	};
 
 	inline const String_c &Entity_c::GetEntityClassName() const
 	{
 		return strClassName;
+	}
+
+	inline void Entity_c::SetHandle(Handle_s handle)
+	{
+		hHandle = handle;
+	}
+
+	inline const Handle_s Entity_c::GetHandle() const
+	{
+		return hHandle;
 	}
 }
 

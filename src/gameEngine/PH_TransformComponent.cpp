@@ -23,7 +23,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR("TransformComponent", TransformComponent_c);	
+	PH_FULL_ENTITY_COMPONENT_CREATOR("Transform", TransformComponent_c);	
 
 	TransformComponent_c::TransformComponent_c(const String_c &name, Entity_c &owner):
 		EntityComponent_c(name, owner),

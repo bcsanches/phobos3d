@@ -31,6 +31,8 @@ namespace Phobos
 {	
 	PH_DECLARE_SINGLETON_PTR(WorldManager);
 
+	typedef HandleManager_c<Entity_c> EntityManager_c;
+
 	class WorldManagerListener_c
 	{
 		public:
@@ -52,7 +54,9 @@ namespace Phobos
 
 			EntityPtr_t TryGetEntityByType(const String_c &className);
 
-			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);
+			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);	
+
+			inline UInt_t GetNumActiveEntities() const;
 
 		protected:		
 			void OnPrepareToBoot();
@@ -68,12 +72,19 @@ namespace Phobos
 			void CmdLoadMap(const StringVector_t &args, Context_c &);
 
 		private:
+			EntityManager_c clEntityManager;
+
 			MapLoader_c		clMapLoader;
 
 			ContextCmd_c	cmdLoadMap;	
 
 			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);			
 	};
+
+	inline UInt_t WorldManager_c::GetNumActiveEntities() const
+	{
+		return clEntityManager.GetNumActiveObjects();
+	}
 }
 
 #endif
