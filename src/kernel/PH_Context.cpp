@@ -144,6 +144,7 @@ namespace Phobos
 		this->AddContextVar(varLinuxDebug);
 		this->AddContextVar(varWindows);
 		this->AddContextVar(varWindowsDebug);
+		this->AddContextVar(varWindowsRelease);
 		this->AddContextVar(varSDL);
 		this->AddContextVar(varSDLDebug);
 	}

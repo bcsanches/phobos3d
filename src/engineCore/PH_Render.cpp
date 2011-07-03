@@ -159,6 +159,7 @@ namespace Phobos
 		for(r_it = renderSystems.begin(); r_it != end; ++r_it)
 		{
 			const std::string &name((*r_it)->getName());
+			kernel.LogMessage("\tFound: " + name);
 
 			if(name.find(varRRenderSystem.GetValue()) >= 0)
 			{
@@ -170,7 +171,7 @@ namespace Phobos
 
 		if(!foundRenderSystem)
 		{
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render_c::OnBoot", "Render system " + varRRenderSystem.GetValue() + "not available");
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render_c::OnBoot", "Render system " + varRRenderSystem.GetValue() + " not available");
 		}
 
 		kernel.LogMessage("[Render_c::OnBoot] render system found, initializing Ogre");

@@ -34,7 +34,7 @@ namespace Phobos
 
 			inline Float_t GetValue(void) const
 			{
-				return(fValue);
+				return(fpValue);
 			}
 
 			void Enable(IContext_c &context);
@@ -44,7 +44,7 @@ namespace Phobos
 			void CmdProc(const StringVector_t &args, Context_c & );
 
 		private:
-			Float_t fValue;
+			Float_t fpValue;
 
 			ContextCmd_c cmdUp;
 			ContextCmd_c cmdDown;

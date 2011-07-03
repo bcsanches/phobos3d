@@ -23,7 +23,7 @@ subject to the following restrictions:
 namespace Phobos
 {
 	Button_c::Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context):
-		fValue(0),
+		fpValue(0),
 		cmdUp(up),
 		cmdDown(down),
 		cmdUpdate(update)
@@ -49,14 +49,14 @@ namespace Phobos
 		cmdDown.Unlink();
 		cmdUpdate.Unlink();
 
-		fValue = 0;
+		fpValue = 0;
 	}
 
 	void Button_c::CmdProc(const StringVector_t &args, Context_c & )
 	{
 		PH_ASSERT(args.size() >= 4);
 
-		fValue = StringToFloat(args[3]);
+		fpValue = StringToFloat(args[3]);
 	}
 
 	AxisButton_c::AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context):

@@ -28,7 +28,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Context_c;
+	class IContext_c;
 	class Core_c;
 
 	typedef boost::intrusive_ptr<Core_c> CorePtr_t;
@@ -56,7 +56,7 @@ namespace Phobos
 
 			inline const CoreSimInfo_s &GetSimInfo(void) const;
 
-			void CreateDefaultCmds(Context_c &context);
+			void RegisterCommands(IContext_c &context);
 
 			void PauseTimer(CoreTimerTypes_e timer);
 			void UnpauseTimer(CoreTimerTypes_e timer);

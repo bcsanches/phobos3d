@@ -17,9 +17,9 @@
 		...
 		UInt: u *
 		SInt: s *
-		Float32: d32
-		Float64: d64
-		Float: d *				
+		Float32: fp32
+		Float64: fp64
+		Float: fp *				
 		Char: c *
 		Size_t: sz
 		Bool_t: f

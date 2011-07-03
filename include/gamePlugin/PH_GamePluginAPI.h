@@ -26,7 +26,7 @@ subject to the following restrictions:
 
 	#define PH_GAME_PLUGIN_API_PROC extern "C" PH_GAME_PLUGIN_API	
 	#define PH_GAME_PLUGIN_ENTRY_POINT_PROC extern "C" __declspec(dllexport)
-#elif define PH_LINUX
+#elif defined PH_LINUX
 	#define PH_GAME_PLUGIN_API
 	#define PH_GAME_PLUGIN_API_PROC extern "C"
 	#define PH_GAME_PLUGIN_ENTRY_POINT_PROC extern "C"
