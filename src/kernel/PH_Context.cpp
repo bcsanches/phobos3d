@@ -473,7 +473,7 @@ namespace Phobos
 
 	void Context_c::ExecuteFromFile(const String_c &fileName)
 	{
-		ifstream input(fileName.c_str(), ios_base::in);
+		ifstream input(fileName.c_str(), ios_base::in);		
 
 		if(input.fail())
 			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "Context_c::ExecuteFromFile", "'" + fileName + "' not found");
