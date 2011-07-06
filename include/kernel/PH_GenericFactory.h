@@ -59,16 +59,16 @@ namespace Phobos
 				return this->GetObjectCreator(className).Create(name);
 			}
 
-		protected:
-			GenericFactory_c()
-			{
-				//empty
-			}
-
 			void Register(T &creator)
 			{
 				setObjectCreators.insert(creator);
 			}
+
+		protected:
+			GenericFactory_c()
+			{
+				//empty
+			}			
 
 			const T &GetObjectCreator(const String_c &className) const
 			{
@@ -150,8 +150,10 @@ namespace Phobos
 	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>
 	{
 		public:
+			typedef ObjectCreatorBase_c<T, T(*)(const String_c &, Y )> BaseType_t;
+
 			ObjectCreator1_c(const String_c &name,  T(*proc)(const String_c &, Y ) ):
-				ObjectCreatorBase_c<T, T(*)(const String_c &)>(name, proc)
+				BaseType_t(name, proc)
 			{
 				GenericFactory1_c<ObjectCreator1_c, Y >::GetInstance().Register(*this);
 			}
