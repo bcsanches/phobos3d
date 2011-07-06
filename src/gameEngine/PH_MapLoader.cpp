@@ -17,7 +17,10 @@ subject to the following restrictions:
 
 #include "PH_MapLoader.h"
 
-#include <tinyxml.h>
+#include <iostream>
+#include <vector>
+
+#include <rapidxml.hpp>
 
 #include <PH_Dictionary.h>
 #include <PH_DictionaryHive.h>
@@ -38,21 +41,22 @@ namespace Phobos
 		ipDynamicEntitiesHive = manager->CreateCustomHive("DynamicEntities");
 	}
 
-	static bool ContainsCustomProperties(TiXmlElement &element)
+	static bool ContainsCustomProperties(rapidxml::xml_node<> &element)
 	{
-		TiXmlHandle handle(&element);
-
-		return handle.FirstChildElement(CUSTOM_PROPERTY_NODE_NAME).FirstChildElement(PROPERTY_NODE_NAME).ToElement() ? true : false;		
+		if(rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME))
+			return custom->first_node(PROPERTY_NODE_NAME) != NULL;
+		else
+			return false;
 	}
 
-	static void LoadProperties(DictionaryPtr_t dict, const TiXmlElement &element)
+	static void LoadProperties(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
 	{
 		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
 
-		for(const TiXmlElement *elem = element.FirstChildElement(PROPERTY_NODE_NAME); elem; elem = elem->NextSiblingElement(PROPERTY_NODE_NAME))
+		for(const rapidxml::xml_node<> *elem = element.first_node(PROPERTY_NODE_NAME); elem; elem = elem->next_sibling(PROPERTY_NODE_NAME))
 		{
-			const char *name = elem->Attribute("id");
-			const char *value = elem->Attribute("value");
+			const rapidxml::xml_attribute<> *name = elem->first_attribute("id");
+			const rapidxml::xml_attribute<> *value = elem->first_attribute("value");
 
 			if(name == NULL)
 			{
@@ -66,18 +70,18 @@ namespace Phobos
 				continue;
 			}
 
-			dict->AddValue(name, value);
+			dict->AddValue(name->value(), value->value());
 		}
 	}
 
-	static void LoadDictionary(DictionaryPtr_t dict, const TiXmlElement &element)
+	static void LoadDictionary(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
 	{
-		for(const TiXmlAttribute *atr = element.FirstAttribute(); atr; atr = atr->Next())
+		for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
 		{
-			dict->AddValue(atr->Name(), atr->Value());			
+			dict->AddValue(atr->name(), atr->value());
 		}		
 
-		const TiXmlElement *custom = element.FirstChildElement(CUSTOM_PROPERTY_NODE_NAME);
+		const rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME);
 
 		LoadProperties(dict, element);
 
@@ -87,31 +91,37 @@ namespace Phobos
 
 	void MapLoader_c::LoadOgitor(const String_c &fileName)
 	{		
-		TiXmlDocument doc(fileName.c_str());	
+		rapidxml::xml_document<> doc;
 
-		if(!doc.LoadFile())
-		{
-			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "MapLoader_c::LoadOgitor", doc.ErrorDesc());
-		}	
+		std::ifstream input(fileName.c_str(), std::ios_base::in);
+
+		if(input.fail())			
+			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "MapLoader_c::LoadOgitor", "'" + fileName + "' not found");
+
+		std::vector<char> fileData( (std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
+		fileData.push_back('\0');
+		
+		doc.parse<0>(&fileData[0] );	
 
 		ipStaticEntitiesHive->RemoveAllChildren();
-		ipDynamicEntitiesHive->RemoveAllChildren();
-		
-		TiXmlHandle root(doc.FirstChildElement());
+		ipDynamicEntitiesHive->RemoveAllChildren();		
 
-		for(TiXmlElement *elem = root.FirstChild("OBJECT").Element();elem; elem = elem->NextSiblingElement())
+		rapidxml::xml_node<> *root = doc.first_node();
+		if(root == NULL)
+			PH_RAISE(PARSER_EXCEPTION, "MapLoader_c::LoadOgitor", "'" + fileName + "' appears to be empty");		
+
+		for(rapidxml::xml_node<> *elem = root->first_node("OBJECT");elem; elem = elem->next_sibling())
 		{			
 			try
 			{
-				const char *name = elem->Attribute("name");
-				if(name == NULL)
+				rapidxml::xml_attribute<> *nameAttribute = elem->first_attribute("name");
+				if(nameAttribute == NULL)
 				{
 					Kernel_c::GetInstance().LogMessage("[MapLoader_c::LoadOgitor] Object without name, ignored");
 					continue;
 				}
-
-				//DictionaryPtr_t dict = (ContainsSpawnClass(*elem) ? ipStaticEntitiesHive : ipDynamicEntitiesHive)->CreateDictionary(
-				DictionaryPtr_t dict = Dictionary_c::Create(name);
+				
+				DictionaryPtr_t dict = Dictionary_c::Create(nameAttribute->value());
 
 				LoadDictionary(dict, *elem);
 
@@ -124,12 +134,13 @@ namespace Phobos
 		}
 
 		//load project data
-		if(TiXmlElement *project = root.FirstChild("PROJECT").Element())
+		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
 		{
 			//caelum path?
-			if(TiXmlElement *caelumDir = project->FirstChildElement("CAELUMDIR"))
+			if(rapidxml::xml_node<> *caelumDir = project->first_node("CAELUMDIR"))
 			{
-				strCaelumDir = caelumDir->Attribute("value");
+				if(rapidxml::xml_attribute<> *caelumValueAtr =caelumDir->first_attribute("value"))
+					strCaelumDir = caelumValueAtr->value();
 			}
 		}
 	}
