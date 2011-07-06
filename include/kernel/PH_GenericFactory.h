@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -25,6 +25,66 @@ subject to the following restrictions:
 
 namespace Phobos
 {
+
+	template <typename T>
+	class GenericFactory_c: boost::noncopyable
+	{
+	    public:
+            template<typename A>
+            struct ObjectCreatorComp_s
+            {
+                bool operator()(const String_c &name, const A &res) const
+                {
+                    return name.compare(res.GetName()) < 0;
+                }
+
+                bool operator()(const A &res, const String_c &name) const
+                {
+                    return res.GetName().compare(name) < 0;
+                }
+            };
+
+		public:
+			typedef typename T::ObjectType_t ObjectType_t;
+
+			static GenericFactory_c &GetInstance()
+			{
+				static GenericFactory_c<T> clInstance_gl;
+
+				return clInstance_gl;
+			}
+
+			ObjectType_t Create(const String_c &className, const String_c &name) const
+			{
+				return this->GetObjectCreator(className).Create(name);
+			}
+
+		protected:
+			GenericFactory_c()
+			{
+				//empty
+			}
+
+			void Register(T &creator)
+			{
+				setObjectCreators.insert(creator);
+			}
+
+			const T &GetObjectCreator(const String_c &className) const
+			{
+				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
+				if(it == setObjectCreators.end())
+					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", className);
+
+				return *it;
+			}
+
+		protected:
+			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+            ObjectCreatorSet_t setObjectCreators;
+	};
+
+
 	typedef boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > ObjectCreatorAutoUnlinkHook_t;
 
 	template <typename T, typename Y>
@@ -72,81 +132,39 @@ namespace Phobos
 	template <typename T>
 	class ObjectCreator_c: public ObjectCreatorBase_c<T, T(*)(const String_c &)>
 	{
-		public:						
-			typedef ObjectCreatorBase_c<T, ObjectCreatorProc_t> BaseType_t;
+		public:
+			typedef ObjectCreatorBase_c<T, T(*)(const String_c&)> BaseType_t;
 
 		public:
-			ObjectCreator_c(const String_c &name, ObjectCreatorProc_t proc):
-				BaseType_t(name, proc)				
-			{				
+			ObjectCreator_c(const String_c &name, T(*proc)(const String_c &)):
+				BaseType_t(name, proc)
+			{
 				GenericFactory_c<ObjectCreator_c<T> >::GetInstance().Register(*this);
 			}
 	};
 
+	template<typename T, typename Y>
+        class GenericFactory1_c;
+
 	template <typename T, typename Y>
 	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>
-	{		
+	{
 		public:
 			ObjectCreator1_c(const String_c &name,  T(*proc)(const String_c &, Y ) ):
-				ObjectCreatorBase_c(name, proc)				
-			{				
+				ObjectCreatorBase_c<T, T(*)(const String_c &)>(name, proc)
+			{
 				GenericFactory1_c<ObjectCreator1_c, Y >::GetInstance().Register(*this);
 			}
-							
+
 			T Create(const String_c &name, Y param) const
 			{
 				return pfnCreateProc(name, param);
 			}
 	};
 
-	template <typename T>
-	class GenericFactory_c: boost::noncopyable
-	{
-		public:
-			typedef typename T::ObjectType_t ObjectType_t;
-
-			static GenericFactory_c &GetInstance()
-			{
-				static GenericFactory_c<T> clInstance_gl;
-
-				return clInstance_gl;
-			}
-
-			ObjectType_t Create(const String_c &className, const String_c &name) const
-			{
-				return this->GetObjectCreator(className).Create(name);				
-			}			
-
-		protected:
-			GenericFactory_c()
-			{
-				//empty
-			}
-			
-			friend T;			
-
-			void Register(T &creator)
-			{
-				setObjectCreators.insert(creator);
-			}
-
-			const T &GetObjectCreator(const String_c &className) const
-			{
-				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
-				if(it == setObjectCreators.end())
-					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", className);
-
-				return *it;
-			}
-
-		protected:			
-			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
-            ObjectCreatorSet_t setObjectCreators;
-	};
-
 	template <typename T, typename Y>
 	class GenericFactory1_c: public GenericFactory_c<T>
-	{	
+	{
 		public:
 			static GenericFactory1_c &GetInstance()
 			{
@@ -175,6 +193,14 @@ namespace Phobos
         }
     };
 }
+
+template<typename T>
+class template_w
+{
+    public:
+
+        typedef T wrapper;
+};
 
 
 

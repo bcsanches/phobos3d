@@ -71,6 +71,7 @@
 		<Unit filename="../../../include/kernel/PH_MemoryFunctions.h" />
 		<Unit filename="../../../include/kernel/PH_Node.h" />
 		<Unit filename="../../../include/kernel/PH_NodeFwd.h" />
+		<Unit filename="../../../include/kernel/PH_NodeProperty.h" />
 		<Unit filename="../../../include/kernel/PH_Object.h" />
 		<Unit filename="../../../include/kernel/PH_ObjectManager.h" />
 		<Unit filename="../../../include/kernel/PH_Parser.h" />
@@ -85,8 +86,6 @@
 		<Unit filename="../../../include/kernel/PH_Window.h" />
 		<Unit filename="../../../include/kernel/SDL/PH_EventManagerSDL.h" />
 		<Unit filename="../../../include/kernel/SDL/PH_WindowSDL.h" />
-		<Unit filename="../../../include/kernel/W32/PH_EventManagerW32.h" />
-		<Unit filename="../../../include/kernel/W32/PH_WindowW32.h" />
 		<Unit filename="../../../src/kernel/PH_Context.cpp" />
 		<Unit filename="../../../src/kernel/PH_ContextCmd.cpp" />
 		<Unit filename="../../../src/kernel/PH_ContextItem.cpp" />
@@ -102,18 +101,12 @@
 		<Unit filename="../../../src/kernel/PH_ObjectManager.cpp" />
 		<Unit filename="../../../src/kernel/PH_Parser.cpp" />
 		<Unit filename="../../../src/kernel/PH_Path.cpp" />
+		<Unit filename="../../../src/kernel/PH_ProcVector.cpp" />
 		<Unit filename="../../../src/kernel/PH_RefCounter.cpp" />
 		<Unit filename="../../../src/kernel/PH_String.cpp" />
 		<Unit filename="../../../src/kernel/PH_Window.cpp" />
-		<Unit filename="../../../src/kernel/ProcVector.cpp" />
 		<Unit filename="../../../src/kernel/SDL/PH_EventManagerSDL.cpp" />
 		<Unit filename="../../../src/kernel/SDL/PH_WindowSDL.cpp" />
-		<Unit filename="../../../src/kernel/W32/PH_EventManagerW32.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="../../../src/kernel/W32/PH_WindowW32.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Extensions>
 			<envvars />
 			<code_completion />

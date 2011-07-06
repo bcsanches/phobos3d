@@ -137,7 +137,7 @@
 		<Cursor position="12264" topLine="0" />
 	</File>
 	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="441" topLine="12" />
+		<Cursor position="718" topLine="26" />
 	</File>
 	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="9184" topLine="352" />
