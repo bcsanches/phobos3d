@@ -28,16 +28,22 @@
 	<File name="../../../src/engineCore/PH_Console.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2750" topLine="99" />
 	</File>
-	<File name="../../../src/engineCore/PH_Core.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2335" topLine="36" />
+	<File name="../../../src/engineCore/PH_Core.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="2750" topLine="49" />
 	</File>
-	<File name="../../../src/engineCore/PH_EventManagerModule.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2410" topLine="73" />
+	<File name="../../../src/engineCore/PH_CoreModuleManager.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="2738" topLine="132" />
+	</File>
+	<File name="../../../src/engineCore/PH_EventManagerModule.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="1647" topLine="31" />
 	</File>
 	<File name="../../../src/engineCore/PH_Plugin.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1418" topLine="24" />
+		<Cursor position="1398" topLine="29" />
+	</File>
+	<File name="../../../src/engineCore/PH_PluginManager.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2191" topLine="75" />
 	</File>
 	<File name="../../../src/engineCore/PH_Render.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="6027" topLine="191" />
+		<Cursor position="7065" topLine="344" />
 	</File>
 </CodeBlocks_layout_file>

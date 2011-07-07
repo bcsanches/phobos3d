@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="../../../include/mapViewer/PH_Client.h" open="0" top="0" tabpos="0">
+		<Cursor position="2282" topLine="57" />
+	</File>
+	<File name="../../../src/mapViewer/PH_Client.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1436" topLine="35" />
+	</File>
+</CodeBlocks_layout_file>

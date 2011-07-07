@@ -1,22 +1,60 @@
 # depslib dependency file v1.0
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_Entity.cpp
-	"PH_Entity.h"
-	"PH_EntityComponentFactory.h"
-	"PH_EntityFactory.h"
-	"PH_EntityKeys.h"
-	<PH_Dictionary.h>
+1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/mapViewer/PH_Client.cpp
+	"PH_Client.h"
+	<PH_Console.h>
+	<PH_ContextUtils.h>
+	<PH_Error.h>
+	<PH_Exception.h>
+	<PH_Kernel.h>
+	<PH_MouseInputDevice.h>
+	<PH_PointEntity.h>
+	<PH_Render.h>
+	<PH_Window.h>
+	<PH_WorldManager.h>
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_Entity.h
-	"PH_EntityIO.h"
-	"PH_GameEngineAPI.h"
-	"PH_HandleManager.h"
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/mapViewer/PH_Client.h
+	<PH_ContextCmd.h>
+	<PH_ContextVar.h>
+	<PH_CoreModule.h>
+	<PH_GamePlugin.h>
+	<PH_Singleton.h>
+	<PH_WorldManager.h>
+	"PH_SpectatorCamera.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityIO.h
-	<map>
-	<boost/bind.hpp>
-	<boost/signal.hpp>
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextCmd.h
+	"PH_ContextItem.h"
+	"PH_Defs.h"
+	<boost/function.hpp>
+	<vector>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextItem.h
+	<boost/intrusive/set.hpp>
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_KernelAPI.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_String.h
+	<string>
+	<sstream>
+	"PH_Defs.h"
+	"PH_KernelAPI.h"
+	"PH_Types.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Defs.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Types.h
+	<cstring>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextVar.h
+	"PH_ContextItem.h"
+	"PH_Defs.h"
+	<boost/function.hpp>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModule.h
 	<PH_Node.h>
-	<PH_String.h>
+	"PH_CoreModuleFwd.h"
+	"PH_EngineCoreAPI.h"
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Node.h
 	<map>
@@ -47,22 +85,61 @@
 	"PH_KernelAPI.h"
 	"PH_RefCounterFwd.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Defs.h
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_KernelAPI.h
-
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounterFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_String.h
-	<string>
-	<sstream>
-	"PH_Defs.h"
-	"PH_KernelAPI.h"
-	"PH_Types.h"
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleFwd.h
+	<boost/intrusive_ptr.hpp>
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Types.h
-	<cstring>
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EngineCoreAPI.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gamePlugin/PH_GamePlugin.h
+	"PH_GamePluginAPI.h"
+	<PH_CoreModuleManager.h>
+	<PH_Plugin.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gamePlugin/PH_GamePluginAPI.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleManager.h
+	<vector>
+	<set>
+	"PH_CoreModule.h"
+	"PH_EngineCoreAPI.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Plugin.h
+	<PH_Node.h>
+	<PH_DynamicLibrary.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_DynamicLibrary.h
+	<boost/noncopyable.hpp>
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Singleton.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldManager.h
+	<PH_ContextCmd.h>
+	<PH_CoreModule.h>
+	<PH_Listener.h>
+	<PH_Singleton.h>
+	"PH_Entity.h"
+	"PH_GameEngineAPI.h"
+	"PH_MapLoader.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Listener.h
+	<boost/intrusive/list.hpp>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_Entity.h
+	"PH_EntityIO.h"
+	"PH_GameEngineAPI.h"
+	"PH_HandleManager.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityIO.h
+	<map>
+	<boost/bind.hpp>
+	<boost/signal.hpp>
+	<PH_Node.h>
+	<PH_String.h>
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameEngineAPI.h
 
@@ -75,30 +152,12 @@
 	"PH_KernelAPI.h"
 	"PH_String.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityComponentFactory.h
-	<PH_GenericFactory.h>
-	"PH_EntityComponent.h"
-
-1309969157 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_GenericFactory.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MapLoader.h
 	<boost/noncopyable.hpp>
-	<boost/intrusive/set.hpp>
-	<PH_Defs.h>
-	<PH_Exception.h>
 	<PH_String.h>
+	<PH_DictionaryHive.h>
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityComponent.h
-	"PH_Entity.h"
-	"PH_EntityIO.h"
-	"PH_GameEngineAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityFactory.h
-	<PH_GenericFactory.h>
-	"PH_Entity.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityKeys.h
-
-1310013281 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_Dictionary.h
-	<boost/unordered_map.hpp>
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHive.h
 	<PH_Node.h>
 	"PH_DictionaryAPI.h"
 	"PH_DictionaryFwd.h"
@@ -108,29 +167,10 @@
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryFwd.h
 	<PH_Node.h>
 
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_EntityComponent.cpp
-	"PH_EntityComponent.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_EntityComponentFactory.cpp
-	"PH_EntityComponentFactory.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_EntityEvent.cpp
-	"PH_EntityEvent.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityEvent.h
-	<PH_Types.h>
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_EntityFactory.cpp
-	"PH_EntityFactory.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_EntityIO.cpp
-	"PH_EntityIO.h"
-	<PH_Exception.h>
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_GameCamera.cpp
-	"PH_GameCamera.h"
-	<PH_Render.h>
-	<PH_Transform.h>
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_SpectatorCamera.h
+	<boost/noncopyable.hpp>
+	<PH_GameCamera.h>
+	"PH_SpectatorCameraController.h"
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameCamera.h
 	<boost/noncopyable.hpp>
@@ -281,70 +321,82 @@
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Interpolator.h
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Render.h
-	<boost/scoped_ptr.hpp>
-	<OgrePrerequisites.h>
-	<OgreSceneManager.h>
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_SpectatorCameraController.h
+	<PH_Button.h>
+	<PH_Thumb.h>
+	<PH_Types.h>
+	"PH_IPlayerController.h"
+	"PH_GameEngineAPI.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_Button.h
+	<PH_Types.h>
 	<PH_ContextCmd.h>
-	<PH_ContextVar.h>
-	<PH_Window.h>
+	"PH_InputAPI.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputAPI.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_Thumb.h
+	<PH_Error.h>
+	<PH_ContextCmd.h>
+	"PH_InputAPI.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_IPlayerController.h
+	<boost/intrusive_ptr.hpp>
+	<PH_RefCounter.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Console.h
 	"PH_CoreModule.h"
+	<boost/circular_buffer.hpp>
+	<OgrePrerequisites.h>
+	<OgreRectangle2D.h>
+	<PH_Context.h>
+	<PH_InputManager.h>
+	<PH_InputMapper.h>
+	<PH_Log.h>
+	"PH_EngineCoreAPI.h"
 
-1304879284 /usr/include/OGRE/OgreSceneManager.h
+1304879284 /usr/include/OGRE/OgreRectangle2D.h
 	"OgrePrerequisites.h"
-	"OgreString.h"
-	"OgreSceneNode.h"
-	"OgrePlane.h"
-	"OgreQuaternion.h"
-	"OgreColourValue.h"
-	"OgreCommon.h"
-	"OgreSceneQuery.h"
-	"OgreAutoParamDataSource.h"
-	"OgreAnimationState.h"
-	"OgreRenderQueue.h"
-	"OgreRenderQueueSortingGrouping.h"
-	"OgreRectangle2D.h"
-	"OgrePixelFormat.h"
-	"OgreResourceGroupManager.h"
-	"OgreTexture.h"
-	"OgreShadowCameraSetup.h"
-	"OgreShadowTextureManager.h"
-	"OgreCamera.h"
-	"OgreInstancedGeometry.h"
-	"OgreLodListener.h"
-	"OgreRenderSystem.h"
+	"OgreSimpleRenderable.h"
 
-1304879284 /usr/include/OGRE/OgreString.h
+1304879284 /usr/include/OGRE/OgreSimpleRenderable.h
 	"OgrePrerequisites.h"
-	<tr1/unordered_map>
-	<ext/hash_map>
-
-1304879284 /usr/include/OGRE/OgreSceneNode.h
-	"OgrePrerequisites.h"
-	"OgreNode.h"
-	"OgreIteratorWrappers.h"
-	"OgreAxisAlignedBox.h"
-
-1304879284 /usr/include/OGRE/OgreNode.h
-	"OgrePrerequisites.h"
-	"OgreCommon.h"
-	"OgreMatrix3.h"
-	"OgreMatrix4.h"
-	"OgreQuaternion.h"
-	"OgreString.h"
+	"OgreMovableObject.h"
 	"OgreRenderable.h"
-	"OgreIteratorWrappers.h"
-	"OgreMesh.h"
+	"OgreAxisAlignedBox.h"
+	"OgreMaterial.h"
+
+1304879284 /usr/include/OGRE/OgreMovableObject.h
+	"OgrePrerequisites.h"
+	"OgreRenderQueue.h"
+	"OgreAxisAlignedBox.h"
+	"OgreSphere.h"
+	"OgreShadowCaster.h"
+	"OgreFactoryObj.h"
+	"OgreAnimable.h"
+	"OgreAny.h"
 	"OgreUserObjectBindings.h"
 
-1304879284 /usr/include/OGRE/OgreCommon.h
-	"OgreString.h"
-	<utility>
-	<sstream>
+1304879284 /usr/include/OGRE/OgreRenderQueue.h
+	"OgreHeaderPrefix.h"
+	"OgrePrerequisites.h"
+	"OgreIteratorWrappers.h"
+	"OgreHeaderSuffix.h"
 
-1304879284 /usr/include/OGRE/OgreMatrix3.h
+1304879284 /usr/include/OGRE/OgreIteratorWrappers.h
+	"OgrePrerequisites.h"
+	"OgreIteratorWrapper.h"
+	"OgreIteratorRange.h"
+
+1304879284 /usr/include/OGRE/OgreIteratorWrapper.h
+
+1304879284 /usr/include/OGRE/OgreIteratorRange.h
+	<boost/range.hpp>
+
+1304879284 /usr/include/OGRE/OgreAxisAlignedBox.h
 	"OgrePrerequisites.h"
 	"OgreVector3.h"
+	"OgreMatrix4.h"
 
 1304879284 /usr/include/OGRE/OgreMatrix4.h
 	"OgrePrerequisites.h"
@@ -353,6 +405,10 @@
 	"OgreVector4.h"
 	"OgrePlane.h"
 
+1304879284 /usr/include/OGRE/OgreMatrix3.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+
 1304879284 /usr/include/OGRE/OgreVector4.h
 	"OgrePrerequisites.h"
 	"OgreVector3.h"
@@ -360,6 +416,14 @@
 1304879284 /usr/include/OGRE/OgrePlane.h
 	"OgrePrerequisites.h"
 	"OgreVector3.h"
+
+1304879284 /usr/include/OGRE/OgreSphere.h
+	"OgrePrerequisites.h"
+	"OgreVector3.h"
+
+1304879284 /usr/include/OGRE/OgreShadowCaster.h
+	"OgrePrerequisites.h"
+	"OgreRenderable.h"
 
 1304879284 /usr/include/OGRE/OgreRenderable.h
 	"OgrePrerequisites.h"
@@ -372,6 +436,16 @@
 	"OgreVector4.h"
 	"OgreException.h"
 	"OgreUserObjectBindings.h"
+
+1304879284 /usr/include/OGRE/OgreCommon.h
+	"OgreString.h"
+	<utility>
+	<sstream>
+
+1304879284 /usr/include/OGRE/OgreString.h
+	"OgrePrerequisites.h"
+	<tr1/unordered_map>
+	<ext/hash_map>
 
 1304879284 /usr/include/OGRE/OgreRenderOperation.h
 	"OgrePrerequisites.h"
@@ -436,16 +510,6 @@
 	<exception>
 	"OgreHeaderSuffix.h"
 
-1304879284 /usr/include/OGRE/OgreIteratorWrappers.h
-	"OgrePrerequisites.h"
-	"OgreIteratorWrapper.h"
-	"OgreIteratorRange.h"
-
-1304879284 /usr/include/OGRE/OgreIteratorWrapper.h
-
-1304879284 /usr/include/OGRE/OgreIteratorRange.h
-	<boost/range.hpp>
-
 1304879284 /usr/include/OGRE/OgreBlendMode.h
 	"OgrePrerequisites.h"
 	"OgreColourValue.h"
@@ -489,6 +553,158 @@
 	"OgrePrerequisites.h"
 	"OgreAny.h"
 
+1304879284 /usr/include/OGRE/OgreFactoryObj.h
+	"OgrePrerequisites.h"
+
+1304879284 /usr/include/OGRE/OgreAnimable.h
+	"OgrePrerequisites.h"
+	"OgreVector2.h"
+	"OgreVector3.h"
+	"OgreVector4.h"
+	"OgreQuaternion.h"
+	"OgreColourValue.h"
+	"OgreSharedPtr.h"
+	"OgreStringVector.h"
+	"OgreException.h"
+	"OgreAny.h"
+
+1304879284 /usr/include/OGRE/OgreVector2.h
+	"OgrePrerequisites.h"
+	"OgreMath.h"
+
+1304879284 /usr/include/OGRE/OgreStringVector.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreSharedPtr.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Context.h
+	"PH_ContextCmd.h"
+	"PH_ContextVar.h"
+	"PH_IContext.h"
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_IContext.h
+	<PH_String.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputManager.h
+	"PH_InputAPI.h"
+	<PH_Node.h>
+	<PH_Singleton.h>
+	<PH_Types.h>
+	"PH_InputDefs.h"
+	"PH_InputDevice.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDefs.h
+	<PH_Types.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDevice.h
+	<PH_Node.h>
+	<PH_Types.h>
+	<PH_String.h>
+	"PH_InputDefs.h"
+	"PH_InputDeviceFwd.h"
+	"PH_InputDeviceListener.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceFwd.h
+	<boost/intrusive_ptr.hpp>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceListener.h
+	<PH_Listener.h>
+	"PH_InputAPI.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputMapper.h
+	<boost/ptr_container/ptr_map.hpp>
+	<PH_Context.h>
+	<PH_Node.h>
+	"PH_InputDevice.h"
+	"PH_InputManager.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Log.h
+	<iostream>
+	<fstream>
+	<boost/intrusive/list.hpp>
+	<boost/utility.hpp>
+	"PH_Defs.h"
+	"PH_Listener.h"
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextUtils.h
+	<boost/bind.hpp>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Kernel.h
+	"PH_KernelAPI.h"
+	"PH_Log.h"
+	"PH_ObjectManager.h"
+	"PH_String.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ObjectManager.h
+	<boost/utility.hpp>
+	"PH_KernelAPI.h"
+	"PH_Node.h"
+	"PH_PathFwd.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_PathFwd.h
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_MouseInputDevice.h
+	"PH_InputDevice.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_PointEntity.h
+	"PH_Entity.h"
+	<PH_Transform.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Render.h
+	<boost/scoped_ptr.hpp>
+	<OgrePrerequisites.h>
+	<OgreSceneManager.h>
+	<PH_ContextCmd.h>
+	<PH_ContextVar.h>
+	<PH_Window.h>
+	"PH_CoreModule.h"
+
+1304879284 /usr/include/OGRE/OgreSceneManager.h
+	"OgrePrerequisites.h"
+	"OgreString.h"
+	"OgreSceneNode.h"
+	"OgrePlane.h"
+	"OgreQuaternion.h"
+	"OgreColourValue.h"
+	"OgreCommon.h"
+	"OgreSceneQuery.h"
+	"OgreAutoParamDataSource.h"
+	"OgreAnimationState.h"
+	"OgreRenderQueue.h"
+	"OgreRenderQueueSortingGrouping.h"
+	"OgreRectangle2D.h"
+	"OgrePixelFormat.h"
+	"OgreResourceGroupManager.h"
+	"OgreTexture.h"
+	"OgreShadowCameraSetup.h"
+	"OgreShadowTextureManager.h"
+	"OgreCamera.h"
+	"OgreInstancedGeometry.h"
+	"OgreLodListener.h"
+	"OgreRenderSystem.h"
+
+1304879284 /usr/include/OGRE/OgreSceneNode.h
+	"OgrePrerequisites.h"
+	"OgreNode.h"
+	"OgreIteratorWrappers.h"
+	"OgreAxisAlignedBox.h"
+
+1304879284 /usr/include/OGRE/OgreNode.h
+	"OgrePrerequisites.h"
+	"OgreCommon.h"
+	"OgreMatrix3.h"
+	"OgreMatrix4.h"
+	"OgreQuaternion.h"
+	"OgreString.h"
+	"OgreRenderable.h"
+	"OgreIteratorWrappers.h"
+	"OgreMesh.h"
+	"OgreUserObjectBindings.h"
+
 1304879284 /usr/include/OGRE/OgreMesh.h
 	"OgrePrerequisites.h"
 	"OgreResource.h"
@@ -502,11 +718,6 @@
 	"OgreAnimationTrack.h"
 	"OgrePose.h"
 	"OgreDataStream.h"
-
-1304879284 /usr/include/OGRE/OgreAxisAlignedBox.h
-	"OgrePrerequisites.h"
-	"OgreVector3.h"
-	"OgreMatrix4.h"
 
 1304879284 /usr/include/OGRE/OgreVertexBoneAssignment.h
 	"OgrePrerequisites.h"
@@ -525,11 +736,6 @@
 	"OgreVector3.h"
 	"OgreIteratorWrappers.h"
 	"OgreStringVector.h"
-
-1304879284 /usr/include/OGRE/OgreStringVector.h
-	"OgrePrerequisites.h"
-	"OgreString.h"
-	"OgreSharedPtr.h"
 
 1304879284 /usr/include/OGRE/OgreAnimationTrack.h
 	"OgrePrerequisites.h"
@@ -556,22 +762,6 @@
 	"OgreHardwareVertexBuffer.h"
 	"OgreIteratorWrappers.h"
 
-1304879284 /usr/include/OGRE/OgreAnimable.h
-	"OgrePrerequisites.h"
-	"OgreVector2.h"
-	"OgreVector3.h"
-	"OgreVector4.h"
-	"OgreQuaternion.h"
-	"OgreColourValue.h"
-	"OgreSharedPtr.h"
-	"OgreStringVector.h"
-	"OgreException.h"
-	"OgreAny.h"
-
-1304879284 /usr/include/OGRE/OgreVector2.h
-	"OgrePrerequisites.h"
-	"OgreMath.h"
-
 1304879284 /usr/include/OGRE/OgrePose.h
 	"OgrePrerequisites.h"
 	"OgreString.h"
@@ -586,10 +776,6 @@
 	"OgreRay.h"
 	"OgreRenderOperation.h"
 	"OgrePlaneBoundedVolume.h"
-
-1304879284 /usr/include/OGRE/OgreSphere.h
-	"OgrePrerequisites.h"
-	"OgreVector3.h"
 
 1304879284 /usr/include/OGRE/OgreRay.h
 	"OgrePrerequisites.h"
@@ -620,30 +806,6 @@
 	"OgreMovableObject.h"
 	"OgrePlaneBoundedVolume.h"
 	"OgreShadowCameraSetup.h"
-
-1304879284 /usr/include/OGRE/OgreMovableObject.h
-	"OgrePrerequisites.h"
-	"OgreRenderQueue.h"
-	"OgreAxisAlignedBox.h"
-	"OgreSphere.h"
-	"OgreShadowCaster.h"
-	"OgreFactoryObj.h"
-	"OgreAnimable.h"
-	"OgreAny.h"
-	"OgreUserObjectBindings.h"
-
-1304879284 /usr/include/OGRE/OgreRenderQueue.h
-	"OgreHeaderPrefix.h"
-	"OgrePrerequisites.h"
-	"OgreIteratorWrappers.h"
-	"OgreHeaderSuffix.h"
-
-1304879284 /usr/include/OGRE/OgreShadowCaster.h
-	"OgrePrerequisites.h"
-	"OgreRenderable.h"
-
-1304879284 /usr/include/OGRE/OgreFactoryObj.h
-	"OgrePrerequisites.h"
 
 1304879284 /usr/include/OGRE/OgreShadowCameraSetup.h
 	"OgrePrerequisites.h"
@@ -755,17 +917,6 @@
 
 1304879284 /usr/include/OGRE/OgreRadixSort.h
 	"OgrePrerequisites.h"
-
-1304879284 /usr/include/OGRE/OgreRectangle2D.h
-	"OgrePrerequisites.h"
-	"OgreSimpleRenderable.h"
-
-1304879284 /usr/include/OGRE/OgreSimpleRenderable.h
-	"OgrePrerequisites.h"
-	"OgreMovableObject.h"
-	"OgreRenderable.h"
-	"OgreAxisAlignedBox.h"
-	"OgreMaterial.h"
 
 1304879284 /usr/include/OGRE/OgreResourceGroupManager.h
 	"OgrePrerequisites.h"
@@ -908,22 +1059,6 @@
 	"OgreStringVector.h"
 	"OgreString.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextCmd.h
-	"PH_ContextItem.h"
-	"PH_Defs.h"
-	<boost/function.hpp>
-	<vector>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextItem.h
-	<boost/intrusive/set.hpp>
-	"PH_KernelAPI.h"
-	"PH_String.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextVar.h
-	"PH_ContextItem.h"
-	"PH_Defs.h"
-	<boost/function.hpp>
-
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Window.h
 	<boost/utility.hpp>
 	"PH_Node.h"
@@ -939,353 +1074,6 @@
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventListener.h
 	"PH_Listener.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Listener.h
-	<boost/intrusive/list.hpp>
-
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventManagerFwd.h
 	<boost/intrusive_ptr.hpp>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModule.h
-	<PH_Node.h>
-	"PH_CoreModuleFwd.h"
-	"PH_EngineCoreAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleFwd.h
-	<boost/intrusive_ptr.hpp>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EngineCoreAPI.h
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_LinearMoverComponent.cpp
-	"PH_LinearMoverComponent.h"
-	<OgreEntity.h>
-	<PH_Dictionary.h>
-	<PH_TransformProperty.h>
-	"PH_DictionaryUtils.h"
-	"PH_EntityComponentFactory.h"
-	"PH_EntityKeys.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_LinearMoverComponent.h
-	"PH_MoverComponent.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MoverComponent.h
-	"PH_EntityComponent.h"
-
-1304879284 /usr/include/OGRE/OgreEntity.h
-	"OgrePrerequisites.h"
-	"OgreCommon.h"
-	"OgreString.h"
-	"OgreMovableObject.h"
-	"OgreQuaternion.h"
-	"OgreVector3.h"
-	"OgreHardwareBufferManager.h"
-	"OgreMesh.h"
-	"OgreRenderable.h"
-	"OgreResourceGroupManager.h"
-
-1304879284 /usr/include/OGRE/OgreHardwareBufferManager.h
-	"OgrePrerequisites.h"
-	"OgreSingleton.h"
-	"OgreHardwareVertexBuffer.h"
-	"OgreHardwareIndexBuffer.h"
-	"OgreRenderToVertexBuffer.h"
-
-1304879284 /usr/include/OGRE/OgreRenderToVertexBuffer.h
-	"OgrePrerequisites.h"
-	"OgreMaterial.h"
-	"OgreRenderOperation.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_TransformProperty.h
-	<PH_NodeProperty.h>
-	"PH_Transform.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryUtils.h
-	<PH_Parser.h>
-	<PH_String.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Parser.h
-	"PH_Types.h"
-	"PH_String.h"
-	<istream>
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_MapLoader.cpp
-	"PH_MapLoader.h"
-	<iostream>
-	<vector>
-	<rapidxml.hpp>
-	<PH_Dictionary.h>
-	<PH_DictionaryHive.h>
-	<PH_DictionaryManager.h>
-	<PH_Exception.h>
-	<PH_Kernel.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MapLoader.h
-	<boost/noncopyable.hpp>
-	<PH_String.h>
-	<PH_DictionaryHive.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHive.h
-	<PH_Node.h>
-	"PH_DictionaryAPI.h"
-	"PH_DictionaryFwd.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryManager.h
-	<PH_ContextCmd.h>
-	<PH_Node.h>
-	<PH_Singleton.h>
-	<istream>
-	"PH_DictionaryAPI.h"
-	"PH_DictionaryFwd.h"
-	"PH_DictionaryHiveFwd.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Singleton.h
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHiveFwd.h
-	<PH_Node.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Kernel.h
-	"PH_KernelAPI.h"
-	"PH_Log.h"
-	"PH_ObjectManager.h"
-	"PH_String.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Log.h
-	<iostream>
-	<fstream>
-	<boost/intrusive/list.hpp>
-	<boost/utility.hpp>
-	"PH_Defs.h"
-	"PH_Listener.h"
-	"PH_KernelAPI.h"
-	"PH_String.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ObjectManager.h
-	<boost/utility.hpp>
-	"PH_KernelAPI.h"
-	"PH_Node.h"
-	"PH_PathFwd.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_PathFwd.h
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_ModelRendererComponent.cpp
-	"PH_ModelRendererComponent.h"
-	<OgreEntity.h>
-	<PH_Dictionary.h>
-	<PH_Render.h>
-	<PH_TransformProperty.h>
-	"PH_GameDictionaryUtils.h"
-	"PH_EntityComponentFactory.h"
-	"PH_EntityKeys.h"
-	"PH_ModelRendererManager.h"
-	"PH_WorldEntity.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_ModelRendererComponent.h
-	"PH_EntityComponent.h"
-	<OgreSceneNode.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameDictionaryUtils.h
-	<PH_Dictionary.h>
-	<OgreColourValue.h>
-	<OgreVector3.h>
-	<OgreQuaternion.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_ModelRendererManager.h
-	"PH_GenericComponentManager.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GenericComponentManager.h
-	<PH_CoreModule.h>
-	<PH_Exception.h>
-	"PH_GameEngineAPI.h"
-	"PH_WorldManager.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldManager.h
-	<PH_ContextCmd.h>
-	<PH_CoreModule.h>
-	<PH_Listener.h>
-	<PH_Singleton.h>
-	"PH_Entity.h"
-	"PH_GameEngineAPI.h"
-	"PH_MapLoader.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldEntity.h
-	<OgrePrerequisites.h>
-	"PH_GameEngineAPI.h"
-	"PH_Entity.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_ModelRendererManager.cpp
-	"PH_ModelRendererManager.h"
-	"PH_ModelRendererComponent.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_MoverComponent.cpp
-	"PH_MoverComponent.h"
-	"PH_MoverManager.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MoverManager.h
-	"PH_GenericComponentManager.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_MoverManager.cpp
-	"PH_MoverManager.h"
-	"PH_MoverComponent.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_PointEntity.cpp
-	"PH_PointEntity.h"
-	"PH_GameDictionaryUtils.h"
-	"PH_EntityFactory.h"
-	"PH_EntityKeys.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_PointEntity.h
-	"PH_Entity.h"
-	<PH_Transform.h>
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_SpectatorCamera.cpp
-	"PH_SpectatorCamera.h"
-	<PH_Core.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_SpectatorCamera.h
-	<boost/noncopyable.hpp>
-	<PH_GameCamera.h>
-	"PH_SpectatorCameraController.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_SpectatorCameraController.h
-	<PH_Button.h>
-	<PH_Thumb.h>
-	<PH_Types.h>
-	"PH_IPlayerController.h"
-	"PH_GameEngineAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_Button.h
-	<PH_Types.h>
-	<PH_ContextCmd.h>
-	"PH_InputAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputAPI.h
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_Thumb.h
-	<PH_Error.h>
-	<PH_ContextCmd.h>
-	"PH_InputAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_IPlayerController.h
-	<boost/intrusive_ptr.hpp>
-	<PH_RefCounter.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Core.h
-	<set>
-	<vector>
-	<PH_ContextCmd.h>
-	"PH_CoreModuleManager.h"
-	"PH_CoreTimer.h"
-	"PH_EngineCoreAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleManager.h
-	<vector>
-	<set>
-	"PH_CoreModule.h"
-	"PH_EngineCoreAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreTimer.h
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_SpectatorCameraController.cpp
-	"PH_SpectatorCameraController.h"
-	<PH_Console.h>
-	<PH_Core.h>
-	<PH_CoreTimer.h>
-	<PH_Exception.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Console.h
-	"PH_CoreModule.h"
-	<boost/circular_buffer.hpp>
-	<OgrePrerequisites.h>
-	<OgreRectangle2D.h>
-	<PH_Context.h>
-	<PH_InputManager.h>
-	<PH_InputMapper.h>
-	<PH_Log.h>
-	"PH_EngineCoreAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Context.h
-	"PH_ContextCmd.h"
-	"PH_ContextVar.h"
-	"PH_IContext.h"
-	"PH_KernelAPI.h"
-	"PH_String.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_IContext.h
-	<PH_String.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputManager.h
-	"PH_InputAPI.h"
-	<PH_Node.h>
-	<PH_Singleton.h>
-	<PH_Types.h>
-	"PH_InputDefs.h"
-	"PH_InputDevice.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDefs.h
-	<PH_Types.h>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDevice.h
-	<PH_Node.h>
-	<PH_Types.h>
-	<PH_String.h>
-	"PH_InputDefs.h"
-	"PH_InputDeviceFwd.h"
-	"PH_InputDeviceListener.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceFwd.h
-	<boost/intrusive_ptr.hpp>
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceListener.h
-	<PH_Listener.h>
-	"PH_InputAPI.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputMapper.h
-	<boost/ptr_container/ptr_map.hpp>
-	<PH_Context.h>
-	<PH_Node.h>
-	"PH_InputDevice.h"
-	"PH_InputManager.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_TransformComponent.cpp
-	"PH_TransformComponent.h"
-	"PH_Entity.h"
-	"PH_EntityComponentFactory.h"
-	"PH_EntityKeys.h"
-	"PH_GameDictionaryUtils.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_TransformComponent.h
-	"PH_EntityComponent.h"
-	<PH_TransformProperty.h>
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_WorldEntity.cpp
-	"PH_WorldEntity.h"
-	<boost/foreach.hpp>
-	<OgreEntity.h>
-	<OgreLight.h>
-	<OgreSceneNode.h>
-	<PH_Dictionary.h>
-	<PH_DictionaryHive.h>
-	<PH_Exception.h>
-	<PH_Kernel.h>
-	<PH_Render.h>
-	"PH_GameDictionaryUtils.h"
-	"PH_EntityFactory.h"
-	"PH_EntityKeys.h"
-	"PH_MapLoader.h"
-
-1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/gameEngine/PH_WorldManager.cpp
-	"PH_WorldManager.h"
-	<boost/bind.hpp>
-	<PH_Console.h>
-	<PH_ContextUtils.h>
-	<PH_Dictionary.h>
-	<PH_DictionaryManager.h>
-	<PH_Error.h>
-	<PH_Exception.h>
-	<PH_Kernel.h>
-	"PH_EntityFactory.h"
-	"PH_EntityKeys.h"
-	"PH_WorldEntity.h"
-
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextUtils.h
-	<boost/bind.hpp>
 

@@ -95,7 +95,6 @@
 		<Unit filename="../../../src/gameEngine/PH_EntityFactory.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_EntityIO.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_GameCamera.cpp" />
-		<Unit filename="../../../src/gameEngine/PH_GameEnginePlugin.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_LinearMoverComponent.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_MapLoader.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_ModelRendererComponent.cpp" />

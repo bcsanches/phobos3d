@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -32,22 +32,22 @@ PH_GAME_PLUGIN_ENTRY_POINT;
 
 namespace Phobos
 {
-	PH_DEFINE_DEFAULT_SINGLETON(Client);	
+	PH_DEFINE_DEFAULT_SINGLETON(Client);
 
 	PH_GAME_PLUGIN_REGISTER_MODULE(Client);
 
 	PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
 
 	Client_c::Client_c():
-		CoreModule_c("Client"),		
-		cmdNullMouseThumb(PH_MOUSE_THUMB_CMD_NAME),
+		CoreModule_c("Client"),
 		cmdToggleMouseCursorClip("toggleMouseCursorClip"),
+		cmdNullMouseThumb(PH_MOUSE_THUMB_CMD_NAME),
 		varMouseSensitivity("dvMouseSensitivity", "0.1"),
 		varSpectatorMoveSpeed("dvSpectatorMoveSpeed", "2.0"),
 		varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),
-		fMapLoaded(false),
-		fMouseClipped(false)
-	{				
+		fMouseClipped(false),
+		fMapLoaded(false)
+	{
 		cmdToggleMouseCursorClip.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdToggleMouseCursorClip, this));
 		cmdNullMouseThumb.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdNullMouseThumb, this));
 
@@ -57,7 +57,7 @@ namespace Phobos
 	}
 
 	void Client_c::OnRenderReady()
-	{		
+	{
 	}
 
 	void Client_c::OnFixedUpdate()
@@ -79,7 +79,7 @@ namespace Phobos
 	void Client_c::OnPrepareToBoot()
 	{
 		ConsolePtr_t console = Console_c::GetInstance();
-		
+
 		console->AddContextCmd(cmdToggleMouseCursorClip);
 		console->AddContextCmd(cmdNullMouseThumb);
 
@@ -105,9 +105,9 @@ namespace Phobos
 
 		return info;
 	}
-	
+
 	void Client_c::ClipMouseCursor()
-	{		
+	{
 		ConfigInfo_s info = this->GetConfig();
 
 		info.ipMouse->ClipToWindow(info.pWindowHandler);
@@ -129,7 +129,7 @@ namespace Phobos
 	}
 
 	void Client_c::OnMapUnloaded()
-	{		
+	{
 		if(fMapLoaded)
 		{
 			fMapLoaded = false;
@@ -138,7 +138,7 @@ namespace Phobos
 	}
 
 	void Client_c::OnMapLoaded()
-	{			
+	{
 		WorldManagerPtr_t worldManager = WorldManager_c::GetInstance();
 		PointEntityPtr_t player = boost::static_pointer_cast<PointEntity_c>(worldManager->TryGetEntityByType("InfoPlayerStart"));
 		if(!player)
@@ -154,7 +154,7 @@ namespace Phobos
 		clSpectatorCamera.EnableController();
 
 		if(!fMouseClipped)
-			this->ClipMouseCursor();		
+			this->ClipMouseCursor();
 	}
 
 	void Client_c::CmdNullMouseThumb(const StringVector_t &, Context_c &  )
@@ -167,19 +167,19 @@ namespace Phobos
 		if(fMouseClipped)
 			this->UnclipMouseCursor();
 		else
-			this->ClipMouseCursor();		
-	}	
+			this->ClipMouseCursor();
+	}
 
 	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
-	{		
+	{
 		clSpectatorCamera.SetMoveSpeed(StringToFloat(newValue));
 	}
-	
+
 	void Client_c::VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
 	{
 		clSpectatorCamera.SetTurnSpeed(StringToFloat(newValue));
 	}
-	
+
 	void Client_c::VarMouseSensitivityChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
 	{
 		clSpectatorCamera.SetMouseSensitivity(StringToFloat(newValue));

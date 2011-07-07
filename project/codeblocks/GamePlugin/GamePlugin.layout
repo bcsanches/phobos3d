@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="../../../include/gamePlugin/PH_GamePlugin.h" open="0" top="0" tabpos="0">
+		<Cursor position="1074" topLine="12" />
+	</File>
+	<File name="../../../include/gamePlugin/PH_GamePluginAPI.h" open="0" top="0" tabpos="0">
+		<Cursor position="1302" topLine="19" />
+	</File>
+	<File name="../../../src/gamePlugin/PH_GamePlugin.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="742" topLine="9" />
+	</File>
+</CodeBlocks_layout_file>
