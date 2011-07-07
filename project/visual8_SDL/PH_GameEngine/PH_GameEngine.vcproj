@@ -344,14 +344,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\gameEngine\PH_GameEnginePlugin.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_GameEnginePlugin.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\include\gameEngine\PH_HandleManager.h"
 			>
 		</File>
