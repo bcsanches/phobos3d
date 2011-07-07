@@ -68,8 +68,6 @@ namespace Phobos
 	{
 		strName = name;
 
-		std::cout<<"\n\n\n\n"<<name<<"\n\n\n\n";
-
 		String_c tmp;
 		Path_c::ConvertToPlatform(tmp, name);
 
