@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -76,7 +76,7 @@ namespace Phobos
 			{
 				if(token != TOKEN_ID)
 					PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, value, "Dictionary_c::Load");
-			
+
 				idName.append(value);
 				token = parser.GetToken(&value);
 				if(token == TOKEN_DOT)
@@ -89,7 +89,7 @@ namespace Phobos
 				if(token == TOKEN_EQUAL)
 					break;
 
-				PH_RaiseDictionaryParseException(parser, TOKEN_EQUAL, token, value, "Dictionary_c::Load");				
+				PH_RaiseDictionaryParseException(parser, TOKEN_EQUAL, token, value, "Dictionary_c::Load");
 			}
 
 			token = parser.GetToken(&value);
@@ -147,14 +147,14 @@ namespace Phobos
 		return value.compare("true") == 0 ? true : false;
 	}
 
-	void Dictionary_c::Get4Float(const float values[4], const String_c &key) const
+	void Dictionary_c::Get4Float(float values[4], const String_c &key) const
 	{
 		const String_c &value = this->GetValue(key);
 
 		sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
 	}
 
-	void Dictionary_c::Get3Float(const float values[3], const String_c &key) const
+	void Dictionary_c::Get3Float(float values[3], const String_c &key) const
 	{
 		const String_c &value = this->GetValue(key);
 

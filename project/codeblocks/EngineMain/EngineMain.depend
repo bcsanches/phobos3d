@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1304698388 source:/home/cronosts/Programming/Projects/phobos3d/src/engineMain/PH_EngineMain.cpp
+1309879266 source:/home/cronosts/Programming/Projects/phobos3d/src/engineMain/PH_EngineMain.cpp
 	<sstream>
 	<boost/thread.hpp>
 	<OgreTimer.h>
@@ -10,6 +10,8 @@
 	<PH_DictionaryManager.h>
 	<PH_EventManagerModule.h>
 	<PH_Kernel.h>
+	<PH_ModelRendererManager.h>
+	<PH_MoverManager.h>
 	<PH_PluginManager.h>
 	<PH_ProcVector.h>
 	<PH_Render.h>
@@ -37,7 +39,7 @@
 1304879284 /usr/include/OGRE/OgreConfig.h
 	"OgreBuildSettings.h"
 
-1306265336 /usr/include/OGRE/OgreBuildSettings.h
+1305381893 /usr/include/OGRE/OgreBuildSettings.h
 
 1304879284 /usr/include/OGRE/Threading/OgreThreadDefines.h
 	"OgreThreadDefinesNone.h"
@@ -142,7 +144,7 @@
 1304879284 /usr/include/OGRE/GLX/OgreTimerImp.h
 	"../OgrePrerequisites.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Console.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Console.h
 	"PH_CoreModule.h"
 	<boost/circular_buffer.hpp>
 	<OgrePrerequisites.h>
@@ -153,51 +155,53 @@
 	<PH_Log.h>
 	"PH_EngineCoreAPI.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModule.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModule.h
 	<PH_Node.h>
 	"PH_CoreModuleFwd.h"
 	"PH_EngineCoreAPI.h"
 
-1303524715 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Node.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Node.h
 	<map>
+	<boost/intrusive/set.hpp>
 	<boost/range/iterator.hpp>
 	"PH_NodeFwd.h"
+	"PH_NodeProperty.h"
 	"PH_Object.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_NodeFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_NodeFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Object.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Object.h
 	"PH_RefCounter.h"
 	"PH_String.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounter.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounter.h
 	<boost/detail/atomic_count.hpp>
 	"PH_Defs.h"
 	"PH_KernelAPI.h"
 	"PH_RefCounterFwd.h"
 
-1303689411 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Defs.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Defs.h
 
-1303693151 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_KernelAPI.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_KernelAPI.h
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounterFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_RefCounterFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1301110636 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_String.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_String.h
 	<string>
 	<sstream>
 	"PH_Defs.h"
 	"PH_KernelAPI.h"
 	"PH_Types.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Types.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Types.h
 	<cstring>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1303521361 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EngineCoreAPI.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EngineCoreAPI.h
 
 1304879284 /usr/include/OGRE/OgreRectangle2D.h
 	"OgrePrerequisites.h"
@@ -433,33 +437,33 @@
 	"OgreString.h"
 	"OgreSharedPtr.h"
 
-1303689411 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Context.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Context.h
 	"PH_ContextCmd.h"
 	"PH_ContextVar.h"
 	"PH_IContext.h"
 	"PH_KernelAPI.h"
 	"PH_String.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextCmd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextCmd.h
 	"PH_ContextItem.h"
 	"PH_Defs.h"
 	<boost/function.hpp>
 	<vector>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextItem.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextItem.h
 	<boost/intrusive/set.hpp>
 	"PH_KernelAPI.h"
 	"PH_String.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextVar.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextVar.h
 	"PH_ContextItem.h"
 	"PH_Defs.h"
 	<boost/function.hpp>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_IContext.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_IContext.h
 	<PH_String.h>
 
-1301107309 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputManager.h
 	"PH_InputAPI.h"
 	<PH_Node.h>
 	<PH_Singleton.h>
@@ -467,14 +471,14 @@
 	"PH_InputDefs.h"
 	"PH_InputDevice.h"
 
-1301110241 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputAPI.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputAPI.h
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Singleton.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Singleton.h
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDefs.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDefs.h
 	<PH_Types.h>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDevice.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDevice.h
 	<PH_Node.h>
 	<PH_Types.h>
 	<PH_String.h>
@@ -482,24 +486,24 @@
 	"PH_InputDeviceFwd.h"
 	"PH_InputDeviceListener.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceListener.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputDeviceListener.h
 	<PH_Listener.h>
 	"PH_InputAPI.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Listener.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Listener.h
 	<boost/intrusive/list.hpp>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputMapper.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/input/PH_InputMapper.h
 	<boost/ptr_container/ptr_map.hpp>
 	<PH_Context.h>
 	<PH_Node.h>
 	"PH_InputDevice.h"
 	"PH_InputManager.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Log.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Log.h
 	<iostream>
 	<fstream>
 	<boost/intrusive/list.hpp>
@@ -509,10 +513,10 @@
 	"PH_KernelAPI.h"
 	"PH_String.h"
 
-1300224574 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextUtils.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextUtils.h
 	<boost/bind.hpp>
 
-1303528888 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Core.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Core.h
 	<set>
 	<vector>
 	<PH_ContextCmd.h>
@@ -520,15 +524,15 @@
 	"PH_CoreTimer.h"
 	"PH_EngineCoreAPI.h"
 
-1303522669 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreModuleManager.h
 	<vector>
 	<set>
 	"PH_CoreModule.h"
 	"PH_EngineCoreAPI.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreTimer.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_CoreTimer.h
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryManager.h
 	<PH_ContextCmd.h>
 	<PH_Node.h>
 	<PH_Singleton.h>
@@ -537,63 +541,63 @@
 	"PH_DictionaryFwd.h"
 	"PH_DictionaryHiveFwd.h"
 
-1301343470 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryAPI.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryAPI.h
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryFwd.h
 	<PH_Node.h>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHiveFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHiveFwd.h
 	<PH_Node.h>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EventManagerModule.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_EventManagerModule.h
 	"PH_CoreModule.h"
 	"PH_Core.h"
 	<PH_EventManager.h>
 	<PH_EventManagerFwd.h>
 	<PH_Error.h>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventManager.h
 	<boost/utility.hpp>
 	"PH_EventListener.h"
 	"PH_EventManagerFwd.h"
 	"PH_KernelAPI.h"
 	"PH_Node.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventListener.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventListener.h
 	"PH_Listener.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventManagerFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventManagerFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Error.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Error.h
 	<crtdbg.h>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Kernel.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Kernel.h
 	"PH_KernelAPI.h"
 	"PH_Log.h"
 	"PH_ObjectManager.h"
 	"PH_String.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ObjectManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ObjectManager.h
 	<boost/utility.hpp>
 	"PH_KernelAPI.h"
 	"PH_Node.h"
 	"PH_PathFwd.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_PathFwd.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_PathFwd.h
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_PluginManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_PluginManager.h
 	<list>
 	<PH_ContextCmd.h>
 	"PH_CoreModule.h"
 	"PH_EngineCoreAPI.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ProcVector.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ProcVector.h
 	<vector>
 	"PH_Defs.h"
 	"PH_KernelAPI.h"
 
-1303524715 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Render.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Render.h
 	<boost/scoped_ptr.hpp>
 	<OgrePrerequisites.h>
 	<OgreSceneManager.h>
@@ -987,12 +991,12 @@
 	"OgreStringVector.h"
 	"OgreString.h"
 
-1308161301 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Window.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Window.h
 	<boost/utility.hpp>
 	"PH_Node.h"
 	"PH_EventManager.h"
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldManager.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldManager.h
 	<PH_ContextCmd.h>
 	<PH_CoreModule.h>
 	<PH_Listener.h>
@@ -1001,26 +1005,53 @@
 	"PH_GameEngineAPI.h"
 	"PH_MapLoader.h"
 
-1304722627 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_Entity.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_Entity.h
 	"PH_EntityIO.h"
 	"PH_GameEngineAPI.h"
+	"PH_HandleManager.h"
 
-1303526601 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameEngineAPI.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameEngineAPI.h
 
-1303524715 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MapLoader.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MapLoader.h
 	<boost/noncopyable.hpp>
 	<PH_String.h>
 	<PH_DictionaryHive.h>
 
-1298692938 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHive.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/dictionary/PH_DictionaryHive.h
 	<PH_Node.h>
 	"PH_DictionaryAPI.h"
 	"PH_DictionaryFwd.h"
 
-1308166119 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityIO.h
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityIO.h
 	<map>
 	<boost/bind.hpp>
 	<boost/signal.hpp>
 	<PH_Node.h>
 	<PH_String.h>
+
+1309879469 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_NodeProperty.h
+	<boost/intrusive/set.hpp>
+	<cstring>
+	"PH_Error.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_ModelRendererManager.h
+	"PH_GenericComponentManager.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GenericComponentManager.h
+	<PH_CoreModule.h>
+	<PH_Exception.h>
+	"PH_GameEngineAPI.h"
+	"PH_WorldManager.h"
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Exception.h
+	<exception>
+	"PH_KernelAPI.h"
+	"PH_String.h"
+
+1310013221 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_HandleManager.h
+	<PH_Exception.h>
+	<PH_Types.h>
+
+1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MoverManager.h
+	"PH_GenericComponentManager.h"
 

@@ -68,7 +68,7 @@ namespace Phobos
 			GenericFactory_c()
 			{
 				//empty
-			}			
+			}
 
 			const T &GetObjectCreator(const String_c &className) const
 			{
@@ -175,7 +175,7 @@ namespace Phobos
 				return clInstance_gl;
 			}
 
-			ObjectType_t Create(const String_c &className, const String_c &name, Y param) const
+			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className, const String_c &name, Y param) const
 			{
 				return this->GetObjectCreator(className).Create(name, param);
 			}

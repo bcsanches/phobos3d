@@ -73,13 +73,19 @@
 		<Unit filename="../../../include/gameEngine/PH_GameDictionaryUtils.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameEngineAPI.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameEnginePlugin.h" />
+		<Unit filename="../../../include/gameEngine/PH_GenericComponentManager.h" />
+		<Unit filename="../../../include/gameEngine/PH_HandleManager.h" />
 		<Unit filename="../../../include/gameEngine/PH_IPlayerController.h" />
 		<Unit filename="../../../include/gameEngine/PH_LinearMoverComponent.h" />
 		<Unit filename="../../../include/gameEngine/PH_MapLoader.h" />
 		<Unit filename="../../../include/gameEngine/PH_ModelRendererComponent.h" />
+		<Unit filename="../../../include/gameEngine/PH_ModelRendererManager.h" />
+		<Unit filename="../../../include/gameEngine/PH_MoverComponent.h" />
+		<Unit filename="../../../include/gameEngine/PH_MoverManager.h" />
 		<Unit filename="../../../include/gameEngine/PH_PointEntity.h" />
 		<Unit filename="../../../include/gameEngine/PH_SpectatorCamera.h" />
 		<Unit filename="../../../include/gameEngine/PH_SpectatorCameraController.h" />
+		<Unit filename="../../../include/gameEngine/PH_TransformComponent.h" />
 		<Unit filename="../../../include/gameEngine/PH_WorldEntity.h" />
 		<Unit filename="../../../include/gameEngine/PH_WorldManager.h" />
 		<Unit filename="../../../src/gameEngine/PH_Entity.cpp" />
@@ -93,9 +99,13 @@
 		<Unit filename="../../../src/gameEngine/PH_LinearMoverComponent.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_MapLoader.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_ModelRendererComponent.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_ModelRendererManager.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_MoverComponent.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_MoverManager.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_PointEntity.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_SpectatorCamera.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_SpectatorCameraController.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_TransformComponent.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_WorldEntity.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_WorldManager.cpp" />
 		<Extensions>

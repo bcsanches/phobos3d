@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -32,8 +32,8 @@ namespace Phobos
 		}
 
 		Handle_s(UInt32_t index, UInt32_t counter):
-			u20Counter(counter),
-			u12Index(index)
+            u12Index(index),
+			u20Counter(counter)
 		{
 			//empty
 		}
@@ -49,7 +49,7 @@ namespace Phobos
 
 	template <typename T>
 	class HandleManager_c
-	{		
+	{
 		public:
 			enum { MAX_ENTRIES = 4096 };
 
@@ -104,7 +104,7 @@ namespace Phobos
 				arstObjects[index].ptObject = NULL;
 				arstObjects[index].u12NextFreeItem = uNextFreeItem;
 				uNextFreeItem = index;
-			
+
 				--uActiveObjects;
 			}
 

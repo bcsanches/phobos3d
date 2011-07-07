@@ -43,8 +43,8 @@
 	<File name="../../../include/kernel/PH_Exception.h" open="0" top="0" tabpos="14">
 		<Cursor position="1906" topLine="62" />
 	</File>
-	<File name="../../../include/kernel/PH_GenericFactory.h" open="0" top="0" tabpos="15">
-		<Cursor position="0" topLine="60" />
+	<File name="../../../include/kernel/PH_GenericFactory.h" open="1" top="0" tabpos="3">
+		<Cursor position="5042" topLine="164" />
 	</File>
 	<File name="../../../include/kernel/PH_IContext.h" open="0" top="0" tabpos="16">
 		<Cursor position="274" topLine="29" />
@@ -66,6 +66,9 @@
 	</File>
 	<File name="../../../include/kernel/PH_Node.h" open="0" top="0" tabpos="0">
 		<Cursor position="364" topLine="45" />
+	</File>
+	<File name="../../../include/kernel/PH_NodeProperty.h" open="0" top="0" tabpos="0">
+		<Cursor position="2224" topLine="45" />
 	</File>
 	<File name="../../../include/kernel/PH_Parser.h" open="0" top="0" tabpos="0">
 		<Cursor position="1757" topLine="63" />
@@ -90,12 +93,6 @@
 	</File>
 	<File name="../../../include/kernel/SDL/PH_WindowSDL.h" open="0" top="0" tabpos="0">
 		<Cursor position="210" topLine="5" />
-	</File>
-	<File name="../../../include/kernel/W32/PH_EventManagerW32.h" open="0" top="0" tabpos="3">
-		<Cursor position="120" topLine="0" />
-	</File>
-	<File name="../../../include/kernel/W32/PH_WindowW32.h" open="0" top="0" tabpos="0">
-		<Cursor position="377" topLine="12" />
 	</File>
 	<File name="../../../src/kernel/PH_Context.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2818" topLine="85" />
@@ -138,11 +135,5 @@
 	</File>
 	<File name="../../../src/kernel/SDL/PH_WindowSDL.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="718" topLine="26" />
-	</File>
-	<File name="../../../src/kernel/W32/PH_EventManagerW32.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="9184" topLine="352" />
-	</File>
-	<File name="../../../src/kernel/W32/PH_WindowW32.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4561" topLine="174" />
 	</File>
 </CodeBlocks_layout_file>

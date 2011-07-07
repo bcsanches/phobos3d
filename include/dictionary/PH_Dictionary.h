@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -45,8 +45,8 @@ namespace Phobos
 
 			bool GetBool(const String_c &key) const;
 
-			void Get4Float(const float values[4], const String_c &key) const;
-			void Get3Float(const float values[3], const String_c &key) const;
+			void Get4Float(float values[4], const String_c &key) const;
+			void Get3Float(float values[3], const String_c &key) const;
 			int GetInt(const String_c &key) const;
 			float GetFloat(const String_c &key) const;
 
