@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -48,6 +48,14 @@ namespace Phobos
 	    SDL_EnableUNICODE(1);
 
 	    SDL_WM_SetCaption(name.c_str(), NULL);
+
+	    #ifdef PH_LINUX
+            SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+            SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+            SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+            SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+            SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+	    #endif
 
         #ifdef PH_WIN32
             SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, 0);

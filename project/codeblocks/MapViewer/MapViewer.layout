@@ -2,9 +2,12 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
 	<File name="../../../include/mapViewer/PH_Client.h" open="0" top="0" tabpos="0">
-		<Cursor position="2282" topLine="57" />
+		<Cursor position="2358" topLine="60" />
+	</File>
+	<File name="../../../include/mapViewer/PH_MapViewerAPI.h" open="0" top="0" tabpos="0">
+		<Cursor position="873" topLine="15" />
 	</File>
 	<File name="../../../src/mapViewer/PH_Client.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1436" topLine="35" />
+		<Cursor position="1386" topLine="164" />
 	</File>
 </CodeBlocks_layout_file>

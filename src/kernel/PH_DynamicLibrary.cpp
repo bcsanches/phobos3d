@@ -71,6 +71,12 @@ namespace Phobos
 		String_c tmp;
 		Path_c::ConvertToPlatform(tmp, name);
 
+		#ifdef PH_LINUX
+            Path_c path(tmp);
+            path.SetExtension(".so");
+            tmp = path.GetStr();
+        #endif
+
 		if(pHandle != NULL)
 			CloseLib(pHandle);
 
