@@ -21,6 +21,8 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 #include <OgreSceneManager.h>
+#include <OgreTerrainGroup.h>
+#include <OgreTerrainPrerequisites.h>
 
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
@@ -75,8 +77,12 @@ namespace Phobos
 			Ogre::ParticleSystem *CreateParticleSystem(const String_c &name, const String_c &templateName);
 			void DestroyParticleSystem(Ogre::ParticleSystem *ps);
 
+			Ogre::TerrainGroup *CreateTerrainGroup(Ogre::Terrain::Alignment align, UInt16_t terrainSize, Float_t terrainWorldSize);
+			void DestroyTerrainGroup(Ogre::TerrainGroup *group);
+
 			void SetSkyBox(bool enable, const String_c &materialName, Float_t distance = 5000, bool drawFirst = true, const Ogre::Quaternion &orientation = Ogre::Quaternion::IDENTITY);
 			void SetAmbientColor(const Ogre::ColourValue &value);
+			Ogre::ColourValue GetAmbientColor() const;
 
 			Ogre::Viewport *AddViewport(Ogre::Camera *camera, int ZOrder = 0);
 			void RemoveViewport(int ZOrder);
@@ -88,7 +94,7 @@ namespace Phobos
 
 			void SetShadowMode(Ogre::ShadowTechnique tech);
 
-			void *GetWindowHandler();
+			void *GetWindowHandler();			
 
 		protected:
 			// =====================================================

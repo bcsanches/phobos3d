@@ -188,23 +188,28 @@ namespace Phobos
 	{
 		size_t pos;
 
-		return(this->FindExtensionPos(pos));
+		return(this->FindExtensionPos(pos, strPath));
 	}
 
-	bool Path_c::GetExtension(String_c &out) const
+	bool Path_c::GetExtension(String_c &out, const String_c &path)
 	{
 		size_t pos;
 
-		if(this->FindExtensionPos(pos))
+		if(Path_c::FindExtensionPos(pos, path))
 		{
-			size_t sz = strPath.length();
+			size_t sz = path.length();
 
-			out.assign(strPath, pos+1, sz - (pos + 1));
+			out.assign(path, pos+1, sz - (pos + 1));
 
 			return(true);
 		}
 
 		return(false);
+	}
+
+	bool Path_c::GetExtension(String_c &out) const
+	{
+		return Path_c::GetExtension(out, strPath);
 	}
 
 	/**
@@ -382,9 +387,9 @@ namespace Phobos
 		}
 	}
 
-	bool Path_c::FindExtensionPos(size_t &out) const
+	bool Path_c::FindExtensionPos(size_t &out, const String_c &path)
 	{
-		size_t len =	strPath.length();
+		size_t len =	path.length();
 
 		//No extension (empty path)?
 		if(len < 1)
@@ -392,7 +397,7 @@ namespace Phobos
 
 		for(size_t i = len; i > 0; --i)
 		{
-			Char_t ch = strPath[i];
+			Char_t ch = path[i];
 			if(ch == '.')
 			{
 				out = i;
@@ -404,13 +409,13 @@ namespace Phobos
 		}
 
 		out = 0;
-		return strPath[0] == '.' ? true : false;
+		return path[0] == '.' ? true : false;
 	}
 
 	bool Path_c::StripExtension(void)
 	{
 		size_t pos;
-		if(!this->FindExtensionPos(pos))
+		if(!this->FindExtensionPos(pos, strPath))
 			return false;
 
 		//extension found, now remove it

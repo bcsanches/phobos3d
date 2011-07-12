@@ -28,6 +28,7 @@ subject to the following restrictions:
 #include <PH_EventManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Path.h>
 #include <PH_String.h>
 
 #include "PH_Core.h"
@@ -35,7 +36,6 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-
 	RenderPtr_t Render_c::ipInstance_gl;
 
 	class OgreLogListener_c: public Ogre::LogListener
@@ -214,6 +214,35 @@ namespace Phobos
 	{
 		if(!ipWindow)
 			return;
+		
+		//Need to clear pending dirty hash because of multiple scene managers
+		//http://www.ogre3d.org/forums/viewtopic.php?p=189032#189032
+		if(!Ogre::Pass::getDirtyHashList().empty() || !Ogre::Pass::getPassGraveyard().empty())
+		{
+			Ogre::SceneManagerEnumerator::SceneManagerIterator scenesIter = spRoot->getSceneManagerIterator();
+  
+			while(scenesIter.hasMoreElements())
+			{
+				Ogre::SceneManager* pScene = scenesIter.getNext();
+				if(pScene)
+				{
+					Ogre::RenderQueue* pQueue = pScene->getRenderQueue();
+					if(pQueue)
+					{
+						Ogre::RenderQueue::QueueGroupIterator groupIter = pQueue->_getQueueGroupIterator();
+						while(groupIter.hasMoreElements())
+						{
+							Ogre::RenderQueueGroup* pGroup = groupIter.getNext();
+							if(pGroup)
+								pGroup->clear(false);
+						}
+					}
+				}
+			}
+  
+			// Now trigger the pending pass updates
+			Ogre::Pass::processPendingPassUpdates();
+		}		
 
 		//clAnimationManager.Update();
 		//clCaelum.Update(IM_GetGameTimer().fRenderFrameTime);
@@ -313,7 +342,21 @@ namespace Phobos
 
 	Ogre::Entity *Render_c::CreateEntity(const String_c &entityName, const String_c &meshName, UInt32_t flags)
 	{
-		Ogre::Entity *ent = pclMainSceneManager->createEntity(entityName, meshName);
+		String_c tmpPath;		
+		String_c extension;
+
+		const String_c *meshNameToUse = &meshName;
+
+		//Newer ogitor does nto include .mesh in mesh names, so fix it here
+		bool found = Path_c::GetExtension(extension, meshName);		 
+		if((found && extension != "mesh") || (!found))
+		{
+			tmpPath = meshName;
+			tmpPath.append(".mesh");
+			meshNameToUse = &tmpPath;
+		}
+
+		Ogre::Entity *ent = pclMainSceneManager->createEntity(entityName, *meshNameToUse);
 
 		if(ent == NULL)
 			return NULL;
@@ -405,6 +448,18 @@ namespace Phobos
 		pclMainSceneManager->destroyParticleSystem(ps);
 	}
 
+	Ogre::TerrainGroup *Render_c::CreateTerrainGroup(Ogre::Terrain::Alignment align, UInt16_t terrainSize, Float_t terrainWorldSize)
+	{
+		PH_ASSERT_VALID(pclMainSceneManager);
+
+		return new Ogre::TerrainGroup(pclMainSceneManager, align, terrainSize, terrainWorldSize);
+	}
+
+	void Render_c::DestroyTerrainGroup(Ogre::TerrainGroup *group)
+	{
+		delete group;
+	}
+
 	void Render_c::SetSkyBox(bool enable, const String_c &materialName, Float_t distance, bool drawFirst, const Ogre::Quaternion& orientation)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
@@ -417,6 +472,13 @@ namespace Phobos
 		PH_ASSERT_VALID(pclMainSceneManager);
 
 		pclMainSceneManager->setAmbientLight(value);
+	}
+
+	Ogre::ColourValue Render_c::GetAmbientColor() const
+	{
+		PH_ASSERT_VALID(pclMainSceneManager);
+
+		return pclMainSceneManager->getAmbientLight();
 	}
 
 	Ogre::Viewport *Render_c::AddViewport(Ogre::Camera *camera, int ZOrder)

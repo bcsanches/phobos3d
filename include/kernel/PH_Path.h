@@ -115,10 +115,11 @@ namespace Phobos
 			bool StripExtension(void);
 			void SetExtension(const String_c &newExtension);
 
+			static bool GetExtension(String_c &out, const String_c &path);
 			static void ConvertToPlatform(String_c &out, const String_c &in);
 
 		private:
-			bool FindExtensionPos(size_t &out) const;
+			static bool FindExtensionPos(size_t &out, const String_c &path);
 
 			void FixPath();
 

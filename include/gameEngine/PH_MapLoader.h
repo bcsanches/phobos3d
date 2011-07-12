@@ -34,11 +34,10 @@ namespace Phobos
 			inline const DictionaryHive_c &GetStaticEntitiesHive() const;
 			inline const DictionaryHive_c &GetDynamicEntitiesHive() const;
 
-		private:
-			String_c strCaelumDir;
-
+		private:			
 			DictionaryHivePtr_t ipStaticEntitiesHive;
 			DictionaryHivePtr_t	ipDynamicEntitiesHive;
+			DictionaryHivePtr_t ipCurrentLevelHive;
 	};
 
 	inline const DictionaryHive_c &MapLoader_c::GetStaticEntitiesHive() const

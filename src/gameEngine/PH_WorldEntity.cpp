@@ -23,6 +23,7 @@ subject to the following restrictions:
 
 #include <PH_Dictionary.h>
 #include <PH_DictionaryHive.h>
+#include <PH_DictionaryManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Render.h>
@@ -84,13 +85,24 @@ namespace Phobos
 	}
 
 	WorldEntity_c::WorldEntity_c(const String_c &name):
-		Entity_c(name)
+		Entity_c(name),
+		pclTerrainGroup(NULL),
+		pclTerrainOptions(NULL),
+		pclTerrainGroupDictionary(NULL),
+		pclTerrainPageDictionary(NULL),
+		pclTerrainLight(NULL)
 	{
 	}
 
 	WorldEntity_c::~WorldEntity_c()
 	{
 		RenderPtr_t render = Render_c::GetInstance();
+		
+		if(pclTerrainGroup)
+			render->DestroyTerrainGroup(pclTerrainGroup);
+
+		if(pclTerrainOptions)
+			delete pclTerrainOptions;
 
 		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
 		{
@@ -163,6 +175,18 @@ namespace Phobos
 				object.pclSceneNode->getParent()->removeChild(object.pclSceneNode);
 			it->second.pclSceneNode->addChild(object.pclSceneNode);
 		}
+
+		if(pclTerrainGroupDictionary != NULL)
+		{
+			this->LoadTerrainGroup(*pclTerrainGroupDictionary);
+			pclTerrainGroupDictionary = NULL;			
+		}
+
+		if(pclTerrainPageDictionary != NULL)
+		{
+			this->LoadTerrainPage(*pclTerrainPageDictionary);
+			pclTerrainPageDictionary = NULL;
+		}		
 	}
 
 	bool WorldEntity_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
@@ -179,8 +203,55 @@ namespace Phobos
 
 			return true;
 		}
+		else if(type.compare("Terrain Group Object") == 0)
+		{
+			pclTerrainGroupDictionary = &dict;			
+			
+			return true;
+		}
+		else if(type.compare("Terrain Page Object") == 0)
+		{
+			pclTerrainPageDictionary = &dict;			
+
+			return true;
+		}
 
 		return false;
+	}
+
+	void WorldEntity_c::LoadTerrainGroup(const Dictionary_c &dict)
+	{
+		pclTerrainOptions = new Ogre::TerrainGlobalOptions();
+
+		pclTerrainOptions->setMaxPixelError(dict.GetFloat("tuning::maxpixelerror"));
+		pclTerrainOptions->setLightMapSize(dict.GetInt("lightmap::texturesize"));		
+		pclTerrainOptions->setCompositeMapSize(dict.GetInt("tuning::compositemaptexturesize"));
+		pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));		
+		pclTerrainOptions->setLayerBlendMapSize(dict.GetInt("blendmap::texturesize"));
+
+		RenderPtr_t render = Render_c::GetInstance();
+
+		//u16TerrainSize = dict.GetInt("pagemapsize");
+		//pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, u16TerrainSize, dict.GetFloat("pageworldsize"));
+		pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, dict.GetInt("pagemapsize"), dict.GetFloat("pageworldsize"));
+		pclTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+		pclTerrainGroup->setFilenameConvention("Page", "ogt");	
+
+		if(pclTerrainLight != NULL)
+		{
+			pclTerrainOptions->setLightMapDirection(pclTerrainLight->getDirection());
+			pclTerrainOptions->setCompositeMapAmbient(render->GetAmbientColor());
+			pclTerrainOptions->setCompositeMapDiffuse(pclTerrainLight->getDiffuseColour());
+		}
+	}
+
+	void WorldEntity_c::LoadTerrainPage(const Dictionary_c &dict)
+	{	
+		DictionaryHivePtr_t levelInfo = DictionaryManager_c::GetInstance()-> GetDictionaryHive("LevelInfo");
+		
+		String_c name = levelInfo->GetDictionary("LevelFile")->GetValue("Path") + "/" + levelInfo->GetDictionary("Project")->GetValue("TerrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		pclTerrainGroup->defineTerrain(0, 0, name);
+		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
 
 	bool WorldEntity_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict)
@@ -209,6 +280,11 @@ namespace Phobos
 		}
 
 		temp.Commit(object);
+
+		//Check if we have a directional light after commit, to avoid dangling pointers
+		if((object.pclLight != NULL) && (object.pclLight->getType() == Ogre::Light::LT_DIRECTIONAL))
+			pclTerrainLight = object.pclLight;
+
 		return true;
 	}
 
@@ -250,7 +326,7 @@ namespace Phobos
 				break;
 
 			case 1:
-				temp.pclLight->setType(Ogre::Light::LT_DIRECTIONAL);
+				temp.pclLight->setType(Ogre::Light::LT_DIRECTIONAL);				
 				break;
 
 			case 2:

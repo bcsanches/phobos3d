@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OGITORSCENE version="2">
+  <PROJECT>
+    <SCENEMANAGER value="OctreeSceneManager"></SCENEMANAGER>
+    <TERRAINDIR value="Terrain"></TERRAINDIR>
+    <HYDRAXDIR value="Hydrax"></HYDRAXDIR>
+    <CAELUMDIR value="Caelum"></CAELUMDIR>
+    <PAGEDGEOMETRYDIR value="PagedGeometry"></PAGEDGEOMETRYDIR>
+    <RESOURCEDIRECTORIES>
+      <DIRECTORY type="FileSystem" value="../../Materials"></DIRECTORY>
+      <DIRECTORY type="FileSystem" value="../../Models"></DIRECTORY>
+    </RESOURCEDIRECTORIES>
+  <CAMERASPEED value="1"></CAMERASPEED>
+  <CAMERAPOSITIONS count="0">
+    <OPTION id="0" position="-21.2876 6.66214 -26.2297" orientation="0.226506 -0.0160789 -0.97143 -0.0690009"></OPTION>
+  </CAMERAPOSITIONS>
+    <LAYERS>
+      <LAYER id="0" name="Layer 0" visible="true"></LAYER>
+      <LAYER id="1" name="Layer 1" visible="true"></LAYER>
+      <LAYER id="2" name="Layer 2" visible="true"></LAYER>
+      <LAYER id="3" name="Layer 3" visible="true"></LAYER>
+      <LAYER id="4" name="Layer 4" visible="true"></LAYER>
+      <LAYER id="5" name="Layer 5" visible="true"></LAYER>
+      <LAYER id="6" name="Layer 6" visible="true"></LAYER>
+      <LAYER id="7" name="Layer 7" visible="true"></LAYER>
+      <LAYER id="8" name="Layer 8" visible="true"></LAYER>
+      <LAYER id="9" name="Layer 9" visible="true"></LAYER>
+      <LAYER id="10" name="Layer 10" visible="true"></LAYER>
+      <LAYER id="11" name="Layer 11" visible="true"></LAYER>
+      <LAYER id="12" name="Layer 12" visible="true"></LAYER>
+      <LAYER id="13" name="Layer 13" visible="true"></LAYER>
+      <LAYER id="14" name="Layer 14" visible="true"></LAYER>
+      <LAYER id="15" name="Layer 15" visible="true"></LAYER>
+      <LAYER id="16" name="Layer 16" visible="true"></LAYER>
+      <LAYER id="17" name="Layer 17" visible="true"></LAYER>
+      <LAYER id="18" name="Layer 18" visible="true"></LAYER>
+      <LAYER id="19" name="Layer 19" visible="true"></LAYER>
+      <LAYER id="20" name="Layer 20" visible="true"></LAYER>
+      <LAYER id="21" name="Layer 21" visible="true"></LAYER>
+      <LAYER id="22" name="Layer 22" visible="true"></LAYER>
+      <LAYER id="23" name="Layer 23" visible="true"></LAYER>
+      <LAYER id="24" name="Layer 24" visible="true"></LAYER>
+      <LAYER id="25" name="Layer 25" visible="true"></LAYER>
+      <LAYER id="26" name="Layer 26" visible="true"></LAYER>
+      <LAYER id="27" name="Layer 27" visible="true"></LAYER>
+      <LAYER id="28" name="Layer 28" visible="true"></LAYER>
+      <LAYER id="29" name="Layer 29" visible="true"></LAYER>
+      <LAYER id="30" name="Layer 30" visible="true"></LAYER>
+    </LAYERS>
+  <LAYERCOUNT value="1"></LAYERCOUNT>
+  <SELECTIONRECTCOLOUR value="0.498039 0 1 1"></SELECTIONRECTCOLOUR>
+  <SELECTIONCOLOUR value="1 1 1 1"></SELECTIONCOLOUR>
+  <HIGHLIGHTCOLOUR value="0.909804 0.188235 0.188235 1"></HIGHLIGHTCOLOUR>
+  <SELECTHIGHLIGHTCOLOUR value="0.188235 0.909804 0.188235 1"></SELECTHIGHLIGHTCOLOUR>
+  <GRIDCOLOUR value="1 1 1 1"></GRIDCOLOUR>
+  <GRIDSPACING value="1"></GRIDSPACING>
+  <SNAPANGLE value="0"></SNAPANGLE>
+  <WALKAROUNDHEIGHT value="0"></WALKAROUNDHEIGHT>
+  <VOLUMESELECTIONDEPTH value="0"></VOLUMESELECTIONDEPTH>
+  <OBJECTCOUNT value="0"></OBJECTCOUNT>
+  </PROJECT>
+  <OBJECT object_id="539353600" name="SceneManager" typename="OctreeSceneManager">
+    <PROPERTY id="ambient" type="11" value="0.25098 0.25098 0.25098 1"></PROPERTY>
+    <PROPERTY id="configfile" type="7" value=""></PROPERTY>
+    <PROPERTY id="fog::colour" type="11" value="0.5 0.5 0.5 1"></PROPERTY>
+    <PROPERTY id="fog::density" type="6" value="0"></PROPERTY>
+    <PROPERTY id="fog::end" type="6" value="1000"></PROPERTY>
+    <PROPERTY id="fog::mode" type="2" value="0"></PROPERTY>
+    <PROPERTY id="fog::start" type="6" value="0"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 0 0"></PROPERTY>
+    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
+    <PROPERTY id="scenemanagertype" type="7" value="OctreeSceneManager"></PROPERTY>
+    <PROPERTY id="shadows::enabled" type="12" value="true"></PROPERTY>
+    <PROPERTY id="shadows::renderingdistance" type="2" value="1000"></PROPERTY>
+    <PROPERTY id="shadows::resolutionfar" type="2" value="512"></PROPERTY>
+    <PROPERTY id="shadows::resolutionmiddle" type="2" value="1024"></PROPERTY>
+    <PROPERTY id="shadows::resolutionnear" type="2" value="1024"></PROPERTY>
+    <PROPERTY id="shadows::technique" type="2" value="37"></PROPERTY>
+    <PROPERTY id="skybox::active" type="12" value="false"></PROPERTY>
+    <PROPERTY id="skybox::distance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="skybox::material" type="7" value=""></PROPERTY>
+    <PROPERTY id="skydome::active" type="12" value="false"></PROPERTY>
+    <PROPERTY id="skydome::material" type="7" value=""></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
+    <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
+    <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="0.226508 -0.0160791 -0.971441 -0.0690018"></PROPERTY>
+    <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
+    <PROPERTY id="camera::position" type="9" value="-21.2876 6.66214 -26.2297"></PROPERTY>
+    <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
+    <PROPERTY id="colour" type="11" value="0 0 0 1"></PROPERTY>
+    <PROPERTY id="compositorcount" type="2" value="0"></PROPERTY>
+    <PROPERTY id="index" type="2" value="1"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="overlays" type="12" value="true"></PROPERTY>
+    <PROPERTY id="placement" type="10" value="0 0 1 1"></PROPERTY>
+    <PROPERTY id="shadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="skies" type="12" value="true"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="949339264" name="Light#0" typename="Light Object" parentnode="SceneManager">
+    <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="0.721569 0.721569 0.721569 1"></PROPERTY>
+    <PROPERTY id="direction" type="9" value="0 -0.515039 -0.857167"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
+    <PROPERTY id="lighttype" type="2" value="1"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.267239 0.96363 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="-19.6428 33.9723 47.774"></PROPERTY>
+    <PROPERTY id="power" type="6" value="1"></PROPERTY>
+    <PROPERTY id="specular" type="11" value="0 0 0 1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="361339136" name="Terrain Group" typename="Terrain Group Object" parentnode="SceneManager">
+    <PROPERTY id="blendmap::texturesize" type="2" value="1024"></PROPERTY>
+    <PROPERTY id="colourmap::enabled" type="12" value="false"></PROPERTY>
+    <PROPERTY id="colourmap::texturesize" type="2" value="128"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightmap::texturesize" type="2" value="1024"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="pagemapsize" type="2" value="129"></PROPERTY>
+    <PROPERTY id="pagenameprefix" type="7" value="Page"></PROPERTY>
+    <PROPERTY id="pageworldsize" type="6" value="512"></PROPERTY>
+    <PROPERTY id="pg::densitymapsize" type="2" value="1024"></PROPERTY>
+    <PROPERTY id="pg::detaildistance" type="2" value="240"></PROPERTY>
+    <PROPERTY id="pg::pagesize" type="2" value="40"></PROPERTY>
+    <PROPERTY id="tuning::compositemapdistance" type="2" value="2000"></PROPERTY>
+    <PROPERTY id="tuning::compositemaptexturesize" type="2" value="1024"></PROPERTY>
+    <PROPERTY id="tuning::maxbatchsize" type="2" value="65"></PROPERTY>
+    <PROPERTY id="tuning::maxpixelerror" type="2" value="3"></PROPERTY>
+    <PROPERTY id="tuning::minbatchsize" type="2" value="33"></PROPERTY>
+    <PROPERTY id="tuning::skirtsize" type="2" value="10"></PROPERTY>
+    <PROPERTY id="tuning::userayboxdistancecalculation" type="12" value="false"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="500900256" name="Ogre#0Copy#0#0#0" typename="Entity Object" parentnode="SceneManager">
+    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Ogre"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 0.645762 0"></PROPERTY>
+    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="0.25 0.25 0.25"></PROPERTY>
+    <PROPERTY id="subentity0::material" type="7" value="ogre.mat/SOLID/TEX/ogre.tex.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity1::material" type="7" value="ogre.mat/ALPHA/TEX/ogre.tex.jpg/VertCol/TWOSIDE"></PROPERTY>
+    <PROPERTY id="subentity1::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity2::material" type="7" value="Material.001/SOLID/TEX/ogreahead.tex.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity2::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+      <PROPERTY id="inherit" type="7" value="InfoPlayerStart" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="449720736" name="highlanderhouse#0" typename="Entity Object" parentnode="SceneManager">
+    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="highlanderhouse.01"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="6.49916 0.0265255 -4.42187"></PROPERTY>
+    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
+    <PROPERTY id="subentity0::material" type="7" value="house.01.crossbeams/SOLID/TEX/highlander.house.01.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity1::material" type="7" value="house.01.rooftiles/SOLID/TEX/highlander.house.01.jpg/VertCol/TWOSIDE"></PROPERTY>
+    <PROPERTY id="subentity1::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity2::material" type="7" value="house.01.rooftiles/SOLID/TEX/highlander.house.01.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity2::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity3::material" type="7" value="highlanderhouse.01.ma/SOLID/TEX/highlander.house.01.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity3::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity4::material" type="7" value="house.01.mortar/SOLID/TEX/highlander.house.01.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity4::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity5::material" type="7" value="house.01.stepston/SOLID/TEX/highlander.house.01.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity5::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentitycount" type="2" value="6"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="155552848" name="Page0x0" typename="Terrain Page Object" parentnode="Terrain Group">
+    <PROPERTY id="colourmap::enabled" type="12" value="false"></PROPERTY>
+    <PROPERTY id="colourmap::texturesize" type="2" value="128"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="layer0::diffusespecular" type="7" value="desert_4_diffusespecular.dds"></PROPERTY>
+    <PROPERTY id="layer0::normalheight" type="7" value="desert_4_normalheight.dds"></PROPERTY>
+    <PROPERTY id="layer0::worldsize" type="6" value="100"></PROPERTY>
+    <PROPERTY id="layercount" type="2" value="1"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="pagex" type="2" value="0"></PROPERTY>
+    <PROPERTY id="pagey" type="2" value="0"></PROPERTY>
+    <PROPERTY id="pg::layer0::active" type="12" value="false"></PROPERTY>
+    <PROPERTY id="pg::layer0::animate" type="12" value="true"></PROPERTY>
+    <PROPERTY id="pg::layer0::density" type="6" value="3"></PROPERTY>
+    <PROPERTY id="pg::layer0::fadetech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer0::grasstech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer0::material" type="7" value=""></PROPERTY>
+    <PROPERTY id="pg::layer0::maxsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer0::minsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer0::swaydistribution" type="6" value="10"></PROPERTY>
+    <PROPERTY id="pg::layer0::swaylength" type="6" value="0.2"></PROPERTY>
+    <PROPERTY id="pg::layer0::swayspeed" type="6" value="0.5"></PROPERTY>
+    <PROPERTY id="pg::layer1::active" type="12" value="false"></PROPERTY>
+    <PROPERTY id="pg::layer1::animate" type="12" value="true"></PROPERTY>
+    <PROPERTY id="pg::layer1::density" type="6" value="3"></PROPERTY>
+    <PROPERTY id="pg::layer1::fadetech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer1::grasstech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer1::material" type="7" value=""></PROPERTY>
+    <PROPERTY id="pg::layer1::maxsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer1::minsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer1::swaydistribution" type="6" value="10"></PROPERTY>
+    <PROPERTY id="pg::layer1::swaylength" type="6" value="0.2"></PROPERTY>
+    <PROPERTY id="pg::layer1::swayspeed" type="6" value="0.5"></PROPERTY>
+    <PROPERTY id="pg::layer2::active" type="12" value="false"></PROPERTY>
+    <PROPERTY id="pg::layer2::animate" type="12" value="true"></PROPERTY>
+    <PROPERTY id="pg::layer2::density" type="6" value="3"></PROPERTY>
+    <PROPERTY id="pg::layer2::fadetech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer2::grasstech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer2::material" type="7" value=""></PROPERTY>
+    <PROPERTY id="pg::layer2::maxsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer2::minsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer2::swaydistribution" type="6" value="10"></PROPERTY>
+    <PROPERTY id="pg::layer2::swaylength" type="6" value="0.2"></PROPERTY>
+    <PROPERTY id="pg::layer2::swayspeed" type="6" value="0.5"></PROPERTY>
+    <PROPERTY id="pg::layer3::active" type="12" value="false"></PROPERTY>
+    <PROPERTY id="pg::layer3::animate" type="12" value="true"></PROPERTY>
+    <PROPERTY id="pg::layer3::density" type="6" value="3"></PROPERTY>
+    <PROPERTY id="pg::layer3::fadetech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer3::grasstech" type="2" value="1"></PROPERTY>
+    <PROPERTY id="pg::layer3::material" type="7" value=""></PROPERTY>
+    <PROPERTY id="pg::layer3::maxsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer3::minsize" type="8" value="1 1"></PROPERTY>
+    <PROPERTY id="pg::layer3::swaydistribution" type="6" value="10"></PROPERTY>
+    <PROPERTY id="pg::layer3::swaylength" type="6" value="0.2"></PROPERTY>
+    <PROPERTY id="pg::layer3::swayspeed" type="6" value="0.5"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 0 0"></PROPERTY>
+    <PROPERTY id="tempdensitymodified" type="12" value="false"></PROPERTY>
+    <PROPERTY id="tempmodified" type="12" value="false"></PROPERTY>
+    <PROPERTY id="tuning::maxbatchsize" type="2" value="65"></PROPERTY>
+    <PROPERTY id="tuning::minbatchsize" type="2" value="33"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+</OGITORSCENE>

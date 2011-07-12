@@ -46,13 +46,11 @@ namespace Phobos
 
 	void LinearMoverComponent_c::OnLoad(const Dictionary_c &dictionary)
 	{
-		//empty
+		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
 	}
 
 	void LinearMoverComponent_c::FixedUpdate()
-	{
-		TransformProperty_c &prop = this->GetCustomEntityProperty<TransformProperty_c>("transform");
-
-		prop.SetOrigin(prop.GetOrigin() + Ogre::Vector3(0.01f, 0, 0));
+	{		
+		pprpTransform->SetOrigin(pprpTransform->GetOrigin() + Ogre::Vector3(0.01f, 0, 0));
 	}
 }

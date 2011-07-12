@@ -37,7 +37,8 @@ namespace Phobos
 	ModelRendererComponent_c::ModelRendererComponent_c(const String_c &name, Entity_c &owner):
 		EntityComponent_c(name, owner),
 		pclSceneNode(NULL),
-		pclMeshEntity(NULL)
+		pclMeshEntity(NULL),
+		pprpTransform(NULL)
 	{		
 		ModelRendererManager_c::GetInstance()->Register(*this);
 	}
@@ -82,14 +83,14 @@ namespace Phobos
 
 			render->GetSceneNode(strParentNode)->addChild(pclSceneNode);
 		}
+
+		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
 	}
 
 	void ModelRendererComponent_c::Update()
-	{
-		TransformProperty_c &prop = this->GetCustomEntityProperty<TransformProperty_c>("transform");
-
-		pclSceneNode->setPosition(prop.GetOrigin());
-		pclSceneNode->setOrientation(prop.GetRotation());
+	{		
+		pclSceneNode->setPosition(pprpTransform->GetOrigin());
+		pclSceneNode->setOrientation(pprpTransform->GetRotation());
 	}
 
 	PH_BEGIN_ENTITY_INPUT(ModelRendererComponent_c, SetPosition)

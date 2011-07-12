@@ -27,6 +27,7 @@ subject to the following restrictions:
 #include <PH_DictionaryManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Path.h>
 
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"
@@ -37,11 +38,25 @@ namespace Phobos
 	{
 		DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
 
+		ipCurrentLevelHive = manager->CreateCustomHive("LevelInfo");
 		ipStaticEntitiesHive = manager->CreateCustomHive("StaticEntities");
-		ipDynamicEntitiesHive = manager->CreateCustomHive("DynamicEntities");
+		ipDynamicEntitiesHive = manager->CreateCustomHive("DynamicEntities");		
 	}
 
-	static bool ContainsCustomProperties(rapidxml::xml_node<> &element)
+	static const char *GetChildNodeValue(const rapidxml::xml_node<> &element, const char *nodeName)
+	{		
+		if(rapidxml::xml_node<> *child = element.first_node(nodeName))
+		{
+			if(rapidxml::xml_attribute<> *valueAtr =child->first_attribute("value"))
+			{
+				return valueAtr->value();
+			}
+		}
+
+		return NULL;
+	}
+
+	static bool ContainsCustomProperties(const rapidxml::xml_node<> &element)
 	{
 		if(rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME))
 			return custom->first_node(PROPERTY_NODE_NAME) != NULL;
@@ -103,6 +118,7 @@ namespace Phobos
 		
 		doc.parse<0>(&fileData[0] );	
 
+		ipCurrentLevelHive->RemoveAllChildren();
 		ipStaticEntitiesHive->RemoveAllChildren();
 		ipDynamicEntitiesHive->RemoveAllChildren();		
 
@@ -133,15 +149,32 @@ namespace Phobos
 			}			
 		}
 
+		DictionaryPtr_t dict = Dictionary_c::Create("Project");
+
 		//load project data
 		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
 		{
-			//caelum path?
-			if(rapidxml::xml_node<> *caelumDir = project->first_node("CAELUMDIR"))
-			{
-				if(rapidxml::xml_attribute<> *caelumValueAtr =caelumDir->first_attribute("value"))
-					strCaelumDir = caelumValueAtr->value();
-			}
+			if(const char *caelumDir = GetChildNodeValue(*project, "CAELUMDIR"))
+				dict->AddValue("CaelumDir", caelumDir);			
+
+			if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
+				dict->AddValue("TerrainDir", terrainDir);
 		}
+		ipCurrentLevelHive->AddDictionary(dict);
+
+		//fill out basic level data
+		dict = Dictionary_c::Create("LevelFile");
+
+		dict->AddValue("PathName", fileName);
+
+		Path_c path(fileName);
+		Path_c filePath, onlyFileName;
+		path.ExtractPathAndFilename(&filePath, &onlyFileName);
+
+		dict->AddValue("Path", filePath.GetStr());
+		dict->AddValue("FileName", onlyFileName.GetStr());
+
+		ipCurrentLevelHive->AddDictionary(dict);
+		
 	}
 }

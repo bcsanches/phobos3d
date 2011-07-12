@@ -23,6 +23,8 @@ subject to the following restrictions:
 
 namespace Phobos
 {
+	class TransformProperty_c;
+
 	class ModelRendererComponent_c: public EntityComponent_c
 	{
 		public:
@@ -48,6 +50,8 @@ namespace Phobos
 			Ogre::Entity *pclMeshEntity;
 
 			String_c	strParentNode;
+
+			TransformProperty_c *pprpTransform;
 	};
 }
 

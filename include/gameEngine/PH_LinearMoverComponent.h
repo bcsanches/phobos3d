@@ -21,6 +21,8 @@ subject to the following restrictions:
 
 namespace Phobos
 {
+	class TransformProperty_c;
+
 	class LinearMoverComponent_c: public MoverComponent_c
 	{
 		public:
@@ -39,6 +41,8 @@ namespace Phobos
 
 		private:			
 			PH_DECLARE_ENTITY_OUTPUT(PositionChanged);
+
+			TransformProperty_c *pprpTransform;
 	};
 }
 

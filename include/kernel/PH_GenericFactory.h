@@ -144,7 +144,7 @@ namespace Phobos
 	};
 
 	template<typename T, typename Y>
-        class GenericFactory1_c;
+	class GenericFactory1_c;
 
 	template <typename T, typename Y>
 	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>

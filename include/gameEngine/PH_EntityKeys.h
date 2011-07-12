@@ -25,4 +25,6 @@ subject to the following restrictions:
 #define PH_ENTITY_KEY_COMPONENTS "components"
 #define PH_ENTITY_KEY_PARENT_NODE "parentnode"
 
+#define PH_ENTITY_PROP_TRANSFORM "transform"
+
 #endif

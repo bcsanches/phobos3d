@@ -18,6 +18,8 @@ subject to the following restrictions:
 #define PH_WORLD_ENTITY_H
 
 #include <OgrePrerequisites.h>
+#include <OgreTerrainGroup.h>
+#include <OgreTerrainPrerequisites.h>
 
 #include "PH_GameEngineAPI.h"
 
@@ -65,9 +67,22 @@ namespace Phobos
 			void LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict);
 			void LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict);
 
+			void LoadTerrainGroup(const Dictionary_c &dict);
+			void LoadTerrainPage(const Dictionary_c &dict);
+
 		private:
 			typedef std::map<String_c, StaticObject_s> StaticObjectsMap_t;
 			StaticObjectsMap_t mapStaticObjects;
+
+			Ogre::TerrainGroup			*pclTerrainGroup;
+			Ogre::TerrainGlobalOptions	*pclTerrainOptions;
+
+			//UInt16_t					u16TerrainSize;
+
+			const Ogre::Light			*pclTerrainLight;
+
+			const Dictionary_c	*pclTerrainGroupDictionary;
+			const Dictionary_c	*pclTerrainPageDictionary;
 	};
 }
 
