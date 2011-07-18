@@ -70,6 +70,7 @@ namespace Phobos
 			void LoadEntities();
 
 			void CmdLoadMap(const StringVector_t &args, Context_c &);
+			void CmdDumpFactoryCreators(const StringVector_t &args, Context_c &);
 
 		private:
 			EntityManager_c clEntityManager;
@@ -77,6 +78,7 @@ namespace Phobos
 			MapLoader_c		clMapLoader;
 
 			ContextCmd_c	cmdLoadMap;	
+			ContextCmd_c	cmdDumpFactoryCreators;
 
 			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);			
 	};

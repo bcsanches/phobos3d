@@ -56,6 +56,25 @@ namespace Phobos
 		return NULL;
 	}
 
+	static bool IsEditorOnly(const rapidxml::xml_node<> &element)
+	{
+		if(rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME))
+		{
+			for(const rapidxml::xml_node<> *elem = custom->first_node(PROPERTY_NODE_NAME); elem; elem = elem->next_sibling(PROPERTY_NODE_NAME))
+			{
+				const rapidxml::xml_attribute<> *name = elem->first_attribute("id");
+				if(strcmp(name->value(), "editorOnly") == 0)
+				{
+					const rapidxml::xml_attribute<> *value = elem->first_attribute("value");
+					if(strcmp(value->value(), "true")==0)
+						return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	static bool ContainsCustomProperties(const rapidxml::xml_node<> &element)
 	{
 		if(rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME))
@@ -136,12 +155,16 @@ namespace Phobos
 					Kernel_c::GetInstance().LogMessage("[MapLoader_c::LoadOgitor] Object without name, ignored");
 					continue;
 				}
+
+				bool customProperties = ContainsCustomProperties(*elem);
+				if(customProperties && IsEditorOnly(*elem))
+					continue;
 				
 				DictionaryPtr_t dict = Dictionary_c::Create(nameAttribute->value());
 
 				LoadDictionary(dict, *elem);
 
-				(ContainsCustomProperties(*elem) ? ipDynamicEntitiesHive : ipStaticEntitiesHive)->AddDictionary(dict);				
+				(customProperties ? ipDynamicEntitiesHive : ipStaticEntitiesHive)->AddDictionary(dict);				
 			}
 			catch(Exception_c &e)
 			{

@@ -24,15 +24,21 @@ subject to the following restrictions:
 namespace Phobos
 {
 	//typedef GenericFactory_c<EntityPtr_t> EntityFactory_c;
-	typedef GenericFactory_c<ObjectCreator_c<EntityPtr_t> > EntityFactory_c;
+	//typedef GenericFactory_c<ObjectCreator_c<EntityPtr_t> > EntityFactory_c;
+
+	class PH_GAME_ENGINE_API EntityFactory_c: public GenericFactory0_c<ObjectCreator_c<EntityPtr_t, EntityFactory_c> >
+	{
+		public:
+			static EntityFactory_c &GetInstance();			
+	};
 }
 
 #define PH_ENTITY_CREATOR(NAME, TYPE)										\
-	static ObjectCreator_c<EntityPtr_t> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+	static Phobos::ObjectCreator_c<Phobos::EntityPtr_t, Phobos::EntityFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
 
 #define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  		\
 	PH_ENTITY_CREATOR(NAME, TYPE);					\
-	EntityPtr_t TYPE::Create(const String_c &name)	\
+	Phobos::EntityPtr_t TYPE::Create(const Phobos::String_c &name)	\
 	{												\
 		return new TYPE(name);						\
 	}

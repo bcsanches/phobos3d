@@ -37,9 +37,11 @@ namespace Phobos
 
 	WorldManager_c::WorldManager_c():
 		CoreModule_c("WorldManager", PRIVATE_CHILDREN),
-		cmdLoadMap("loadMap")
+		cmdLoadMap("loadMap"),
+		cmdDumpFactoryCreators("dumpFactoryCreators")
 	{
 		cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdLoadMap, this));
+		cmdDumpFactoryCreators.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdDumpFactoryCreators, this));
 	}
 
 	WorldManager_c::~WorldManager_c()
@@ -71,26 +73,7 @@ namespace Phobos
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
 	}	
-
-	void WorldManager_c::CmdLoadMap(const StringVector_t &args, Context_c &)
-	{
-		if(args.size() < 2)
-		{
-			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] Insuficient parameters, usage: loadMap <mapName>");
-
-			return;
-		}
-
-		try
-		{			
-			this->LoadMap(args[1]);			
-		}
-		catch(Exception_c &ex)
-		{
-			Kernel_c::GetInstance().LogMessage(ex.what());			
-		}
-	}
-
+	
 	void WorldManager_c::LoadEntities()
 	{
 		const DictionaryHive_c &hive = clMapLoader.GetDynamicEntitiesHive();
@@ -128,6 +111,7 @@ namespace Phobos
 		ConsolePtr_t console = Console_c::GetInstance();
 
 		console->AddContextCmd(cmdLoadMap);
+		console->AddContextCmd(cmdDumpFactoryCreators);
 	}
 
 	void WorldManager_c::OnBoot()
@@ -138,6 +122,40 @@ namespace Phobos
 	void WorldManager_c::OnFinalize()
 	{
 		this->RemoveAllChildren();
+	}
+
+	void WorldManager_c::CmdLoadMap(const StringVector_t &args, Context_c &)
+	{
+		if(args.size() < 2)
+		{
+			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] Insuficient parameters, usage: loadMap <mapName>");
+
+			return;
+		}
+
+		try
+		{			
+			this->LoadMap(args[1]);			
+		}
+		catch(Exception_c &ex)
+		{
+			Kernel_c::GetInstance().LogMessage(ex.what());			
+		}
+	}
+
+	void WorldManager_c::CmdDumpFactoryCreators(const StringVector_t &args, Context_c &)
+	{
+		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
+
+		stream << "Entity Factory creators:\n";
+
+		EntityFactory_c &factory = EntityFactory_c::GetInstance();
+		for(EntityFactory_c::ObjectCreatorSet_t::const_iterator it = factory.begin(), end = factory.end(); it != end; ++it)
+		{
+			stream << "\t" << it->GetName() << "\n";
+		}
+
+		stream << "End.";
 	}
 
 	PH_DEFINE_LISTENER_PROCS(WorldManager_c, WorldManagerListener_c, lstListeners);

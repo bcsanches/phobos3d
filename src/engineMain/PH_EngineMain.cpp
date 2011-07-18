@@ -85,22 +85,15 @@ namespace Phobos
 
 		ConsolePtr_t console = Console_c::CreateInstance();
 		clSingletons.AddProc(Console_c::ReleaseInstance);
-		core->AddModule(console);
-
-		PluginManagerPtr_t pluginManager = PluginManager_c::CreateInstance();
-		clSingletons.AddProc(PluginManager_c::ReleaseInstance);
-		core->AddModule(pluginManager);
-
-		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&EngineMain_c::CmdQuit, this));
-		console->AddContextCmd(cmdQuit);
-
-		console->AddContextVar(varFixedTime);
-		console->AddContextVar(varEngineFPS);
-		console->AddContextVar(varMinFrameTime);
+		core->AddModule(console);		
 
 		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
 		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
 		core->AddModule(worldManager);
+
+		PluginManagerPtr_t pluginManager = PluginManager_c::CreateInstance();
+		clSingletons.AddProc(PluginManager_c::ReleaseInstance);
+		core->AddModule(pluginManager, NORMAL_PRIORITY-1);		
 
 		MoverManagerPtr_t moverManager = MoverManager_c::CreateInstance();
 		clSingletons.AddProc(MoverManager_c::ReleaseInstance);
@@ -116,6 +109,13 @@ namespace Phobos
 
 		core->RegisterCommands(*console);
 		dictionaryManager->RegisterCommands(*console);
+
+		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&EngineMain_c::CmdQuit, this));
+		console->AddContextCmd(cmdQuit);
+
+		console->AddContextVar(varFixedTime);
+		console->AddContextVar(varEngineFPS);
+		console->AddContextVar(varMinFrameTime);
 
 		core->LaunchBootModule("autoexec.cfg");
 	}

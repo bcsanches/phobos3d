@@ -15,3 +15,13 @@ subject to the following restrictions:
 */
 
 #include "PH_EntityComponentFactory.h"
+
+namespace Phobos
+{
+	EntityComponentFactory_c &EntityComponentFactory_c::GetInstance()
+	{
+		static EntityComponentFactory_c clInstance_gl;
+
+		return clInstance_gl;
+	}
+}

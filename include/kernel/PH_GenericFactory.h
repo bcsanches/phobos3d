@@ -44,24 +44,33 @@ namespace Phobos
                 }
             };
 
+			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+
 		public:
 			typedef typename T::ObjectType_t ObjectType_t;
 
+			/*
 			static GenericFactory_c &GetInstance()
 			{
 				static GenericFactory_c<T> clInstance_gl;
 
 				return clInstance_gl;
 			}
-
-			ObjectType_t Create(const String_c &className, const String_c &name) const
-			{
-				return this->GetObjectCreator(className).Create(name);
-			}
+			*/			
 
 			void Register(T &creator)
 			{
 				setObjectCreators.insert(creator);
+			}
+
+			typename ObjectCreatorSet_t::const_iterator begin() const
+			{
+				return setObjectCreators.begin();
+			}
+
+			typename ObjectCreatorSet_t::const_iterator end() const
+			{
+				return setObjectCreators.end();
 			}
 
 		protected:
@@ -79,8 +88,7 @@ namespace Phobos
 				return *it;
 			}
 
-		protected:
-			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+		protected:			
             ObjectCreatorSet_t setObjectCreators;
 	};
 
@@ -129,33 +137,35 @@ namespace Phobos
 			ObjectCreatorProc_t pfnCreateProc;
 	};
 
-	template <typename T>
+	template <typename T, typename FACTORY>
 	class ObjectCreator_c: public ObjectCreatorBase_c<T, T(*)(const String_c &)>
 	{
 		public:
 			typedef ObjectCreatorBase_c<T, T(*)(const String_c&)> BaseType_t;
 
-		public:
+		public:			
 			ObjectCreator_c(const String_c &name, T(*proc)(const String_c &)):
 				BaseType_t(name, proc)
 			{
-				GenericFactory_c<ObjectCreator_c<T> >::GetInstance().Register(*this);
+				//GenericFactory_c<ObjectCreator_c<T> >::GetInstance().Register(*this);
+				FACTORY::GetInstance().Register(*this);
 			}
 	};
 
 	template<typename T, typename Y>
 	class GenericFactory1_c;
 
-	template <typename T, typename Y>
+	template <typename T, typename Y, typename FACTORY>
 	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>
 	{
 		public:
 			typedef ObjectCreatorBase_c<T, T(*)(const String_c &, Y )> BaseType_t;
-
+			
 			ObjectCreator1_c(const String_c &name,  T(*proc)(const String_c &, Y ) ):
 				BaseType_t(name, proc)
 			{
-				GenericFactory1_c<ObjectCreator1_c, Y >::GetInstance().Register(*this);
+				//GenericFactory1_c<ObjectCreator1_c, Y >::GetInstance().Register(*this);
+				FACTORY::GetInstance().Register(*this);
 			}
 
 			T Create(const String_c &name, Y param) const
@@ -164,17 +174,21 @@ namespace Phobos
 			}
 	};
 
+	template <typename T>
+	class GenericFactory0_c: public GenericFactory_c<T>
+	{
+		public:		
+			ObjectType_t Create(const String_c &className, const String_c &name) const
+			{
+				return this->GetObjectCreator(className).Create(name);
+			}
+
+	};
+
 	template <typename T, typename Y>
 	class GenericFactory1_c: public GenericFactory_c<T>
 	{
 		public:
-			static GenericFactory1_c &GetInstance()
-			{
-				static GenericFactory1_c clInstance_gl;
-
-				return clInstance_gl;
-			}
-
 			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className, const String_c &name, Y param) const
 			{
 				return this->GetObjectCreator(className).Create(name, param);
