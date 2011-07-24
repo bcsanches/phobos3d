@@ -81,6 +81,64 @@ namespace Phobos
 			T tCurrent;
 			T tLast;
 	};
+
+	template <typename T>
+	class LinearInterpolator_c
+	{
+		public:
+			LinearInterpolator_c():
+				fpStartTime(0),
+				fpDuration(0),
+				fpCurrentTime(0)
+			{
+			}
+
+			LinearInterpolator_c(const float startTime, const float duration, const T &startValue, const T &endValue):				
+			{						
+				this->Start(startTime, duration, startValue, endValue);
+			}
+
+			void Start(const float startTime, const float duration, const T &startValue, const T &endValue)
+			{
+				fpStartTime = startTime;
+				fpDuration = duration;
+				fpCurrentTime = fpStartTime;
+				tStartValue = startValue;
+				tEndValue = endValue;
+				tCurrentValue = startValue;
+			}
+
+			T GetValue(Float_t time)
+			{
+				if(time != fpCurrentTime)
+				{
+					float delta = time - fpStartTime;
+					if(delta <= 0)
+					{
+						tCurrentValue = tStartValue;
+					}
+					else if(delta >= fpDuration)
+					{
+						tCurrentValue = tEndValue;
+					}
+					else
+					{
+						tCurrentValue = tStartValue + (tEndValue - tStartValue) * (delta / fpDuration);
+					}
+				}
+
+				return tCurrentValue;
+			}
+
+		private:
+			Float_t fpStartTime;
+			Float_t fpDuration;
+			Float_t fpCurrentTime;
+
+			T		tStartValue;
+			T		tEndValue;
+			T		tCurrentValue;
+	};
 }
 
 #endif

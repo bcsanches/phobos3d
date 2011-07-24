@@ -54,7 +54,8 @@ namespace Phobos
 
 			inline void SetFrameRate(Float_t rate);
 
-			inline const CoreSimInfo_s &GetSimInfo(void) const;
+			inline const CoreSimInfo_s &GetSimInfo() const;
+			inline const CoreTimer_s &GetGameTimer() const;
 
 			void RegisterCommands(IContext_c &context);
 
@@ -85,9 +86,14 @@ namespace Phobos
 			bool			fLaunchedBoot;
 	};
 
-	inline const CoreSimInfo_s &Core_c::GetSimInfo(void) const
+	inline const CoreSimInfo_s &Core_c::GetSimInfo() const
 	{
 		return(stSimInfo);
+	}
+
+	inline const CoreTimer_s &Core_c::GetGameTimer() const
+	{
+		return stSimInfo.stTimers[CORE_GAME_TIMER];
 	}
 
 	inline void Core_c::SetFrameRate(Float_t rate)

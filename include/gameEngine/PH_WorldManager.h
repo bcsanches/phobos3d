@@ -18,6 +18,8 @@ subject to the following restrictions:
 #ifndef PH_WORLD_MANAGER_H
 #define PH_WORLD_MANAGER_H
 
+#include <list>
+
 #include <PH_ContextCmd.h>
 #include <PH_CoreModule.h>
 #include <PH_Listener.h>
@@ -32,6 +34,8 @@ namespace Phobos
 	PH_DECLARE_SINGLETON_PTR(WorldManager);
 
 	typedef HandleManager_c<Entity_c> EntityManager_c;
+
+	class EntityIO_c;
 
 	class WorldManagerListener_c
 	{
@@ -50,6 +54,9 @@ namespace Phobos
 		PH_DECLARE_SINGLETON_METHODS(WorldManager);
 
 		public:
+			typedef std::list<EntityIO_c*> EntityIOList_t;
+
+		public:
 			void LoadMap(const String_c &mapName);
 
 			EntityPtr_t TryGetEntityByType(const String_c &className);
@@ -58,16 +65,27 @@ namespace Phobos
 
 			inline UInt_t GetNumActiveEntities() const;
 
+			void AddToFixedUpdateList(EntityIO_c &io);
+			void AddToUpdateList(EntityIO_c &io);
+
+			void RemoveFromFixedUpdateList(EntityIO_c &io);
+			void RemoveFromUpdateList(EntityIO_c &io);
+
 		protected:		
-			void OnPrepareToBoot();
-			void OnBoot();
-			void OnFinalize();
+			virtual void OnBoot();
+			virtual void OnFinalize();
+			virtual void OnFixedUpdate();
+			virtual void OnPrepareToBoot();
+			virtual void OnUpdate();
 
 		private:
 			WorldManager_c();
 			~WorldManager_c();				
 
 			void LoadEntities();
+
+			inline bool RemoveFromList(EntityIOList_t &list, EntityIO_c &io);
+			inline void CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)());
 
 			void CmdLoadMap(const StringVector_t &args, Context_c &);
 			void CmdDumpFactoryCreators(const StringVector_t &args, Context_c &);
@@ -80,7 +98,10 @@ namespace Phobos
 			ContextCmd_c	cmdLoadMap;	
 			ContextCmd_c	cmdDumpFactoryCreators;
 
-			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);			
+			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);						
+
+			EntityIOList_t lstFixedUpdate;
+			EntityIOList_t lstUpdate;
 	};
 
 	inline UInt_t WorldManager_c::GetNumActiveEntities() const

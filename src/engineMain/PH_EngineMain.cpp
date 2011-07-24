@@ -26,6 +26,7 @@ subject to the following restrictions:
 #include <PH_Core.h>
 #include <PH_DictionaryManager.h>
 #include <PH_EventManagerModule.h>
+#include <PH_GameEventManager.h>
 #include <PH_Kernel.h>
 #include <PH_ModelRendererManager.h>
 #include <PH_MoverManager.h>
@@ -90,6 +91,10 @@ namespace Phobos
 		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
 		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
 		core->AddModule(worldManager);
+
+		GameEventManagerPtr_t gameEventManager = GameEventManager_c::CreateInstance();
+		clSingletons.AddProc(GameEventManager_c::ReleaseInstance);
+		core->AddModule(gameEventManager);
 
 		PluginManagerPtr_t pluginManager = PluginManager_c::CreateInstance();
 		clSingletons.AddProc(PluginManager_c::ReleaseInstance);

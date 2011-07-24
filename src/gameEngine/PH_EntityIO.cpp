@@ -18,16 +18,85 @@ subject to the following restrictions:
 
 #include <PH_Exception.h>
 
+#include "PH_GameEventManager.h"
+#include "PH_WorldManager.h"
+
 namespace Phobos
 {
 	EntityIO_c::EntityIO_c(const String_c &name, ChildrenMode_e mode):
-		Node_c(name, mode)
+		Node_c(name, mode),
+		fFixedUpdateEnabled(false),
+		fUpdateEnabled(false)
 	{
 	}
 
 	EntityIO_c::EntityIO_c(const Char_t *name, ChildrenMode_e mode):
-		Node_c(name, mode)
+		Node_c(name, mode),
+		fFixedUpdateEnabled(false),
+		fUpdateEnabled(false)
 	{
+	}
+
+	EntityIO_c::~EntityIO_c()
+	{
+		GameEventManager_c::GetInstance()->CancelEvents(*this);		
+
+		if(fFixedUpdateEnabled || fUpdateEnabled)
+		{
+			WorldManagerPtr_t world = WorldManager_c::GetInstance();
+
+			if(fFixedUpdateEnabled)
+				world->RemoveFromFixedUpdateList(*this);
+
+			if(fUpdateEnabled)
+				world->RemoveFromUpdateList(*this);
+		}
+	}
+
+	void EntityIO_c::FixedUpdate()
+	{
+		this->OnFixedUpdate();
+	}
+
+	void EntityIO_c::Update()
+	{
+		this->OnUpdate();
+	}
+
+	void EntityIO_c::EnableFixedUpdate()
+	{
+		if(fFixedUpdateEnabled)
+			return;
+
+		WorldManager_c::GetInstance()->AddToFixedUpdateList(*this);
+		fFixedUpdateEnabled = true;
+	}
+
+	void EntityIO_c::EnableUpdate()
+	{
+		if(fUpdateEnabled)
+			return;
+
+		WorldManager_c::GetInstance()->AddToUpdateList(*this);
+		fUpdateEnabled = true;
+	}
+
+	void EntityIO_c::DisableFixedUpdate()
+	{
+		if(!fFixedUpdateEnabled)
+			return;
+
+		WorldManager_c::GetInstance()->RemoveFromFixedUpdateList(*this);
+		fFixedUpdateEnabled = false;
+	}
+
+	void EntityIO_c::DisableUpdate()
+	{
+		if(!fUpdateEnabled)
+			return;
+
+		WorldManager_c::GetInstance()->RemoveFromUpdateList(*this);
+		fUpdateEnabled = false;
 	}
 
 	EntityOutputManager_c::EntityOutputManager_c()

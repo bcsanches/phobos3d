@@ -124,6 +124,61 @@ namespace Phobos
 		this->RemoveAllChildren();
 	}
 
+	void WorldManager_c::CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)())
+	{
+		for(EntityIOList_t::iterator it = list.begin();it != list.end();)
+		{
+			EntityIOList_t::iterator workIt = it++;
+
+			(*workIt->*proc)();
+		}
+	}
+
+	void WorldManager_c::OnFixedUpdate()
+	{
+		this->CallEntityIOProc(lstFixedUpdate, &EntityIO_c::FixedUpdate);
+	}
+
+	void WorldManager_c::OnUpdate()
+	{
+		this->CallEntityIOProc(lstUpdate, &EntityIO_c::Update);
+	}
+
+	void WorldManager_c::AddToFixedUpdateList(EntityIO_c &io)
+	{
+		lstFixedUpdate.push_back(&io);
+	}
+
+	void WorldManager_c::AddToUpdateList(EntityIO_c &io)
+	{
+		lstUpdate.push_back(&io);
+	}
+
+	bool WorldManager_c::RemoveFromList(EntityIOList_t &list, EntityIO_c &io)
+	{
+		for(EntityIOList_t::iterator it = list.begin(), end = list.end();it != end; ++it)
+		{
+			if(*it == &io)
+			{
+				list.erase(it);
+				return true;
+			}
+		}
+
+		return false;		
+	}
+
+
+	void WorldManager_c::RemoveFromFixedUpdateList(EntityIO_c &io)
+	{
+		PH_VERIFY_MSG(this->RemoveFromList(lstFixedUpdate, io), "Entity not in FixedUpdate list");
+	}
+
+	void WorldManager_c::RemoveFromUpdateList(EntityIO_c &io)
+	{
+		PH_VERIFY_MSG(this->RemoveFromList(lstUpdate, io), "Entity not in Update list");
+	}
+
 	void WorldManager_c::CmdLoadMap(const StringVector_t &args, Context_c &)
 	{
 		if(args.size() < 2)

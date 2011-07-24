@@ -335,6 +335,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="event"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_GameEvent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GameEvent.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_GameEventManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GameEventManager.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h"
 			>

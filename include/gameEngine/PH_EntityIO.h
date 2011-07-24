@@ -25,18 +25,39 @@ subject to the following restrictions:
 #include <PH_Node.h>
 #include <PH_String.h>
 
+#include "PH_GameEngineAPI.h"
+
 namespace Phobos
 {
 	class EntityEvent_c;
 
-	class EntityIO_c: public Node_c
+	class PH_GAME_ENGINE_API EntityIO_c: public Node_c
 	{
 		protected:
 			explicit EntityIO_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
 			explicit EntityIO_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);
+			
+			~EntityIO_c();
 
 		public:
 			typedef boost::signal1<void, EntityEvent_c &> OutputSignal_t;
+
+		public:
+			void FixedUpdate();
+			void Update();
+
+		protected:
+			virtual void OnFixedUpdate() {}
+			virtual void OnUpdate() {}
+
+			void EnableFixedUpdate();
+			void EnableUpdate();
+			void DisableFixedUpdate();
+			void DisableUpdate();
+
+		private:
+			bool fFixedUpdateEnabled;
+			bool fUpdateEnabled;
 	};
 
 	typedef void (EntityIO_c::*InputProc_t)(EntityEvent_c &);

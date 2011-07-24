@@ -172,6 +172,22 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="math"
+			>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_Interpolator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\PH_Transform.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\src\engineCore\PH_BootModule.cpp"
 			>
@@ -233,14 +249,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\engineCore\PH_Interpolator.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\engineCore\PH_OgreUtils.cpp"
 			>
 		</File>
@@ -270,10 +278,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\engineCore\PH_Render.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\engineCore\PH_Transform.h"
 			>
 		</File>
 		<File
