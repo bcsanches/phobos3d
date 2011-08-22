@@ -33,6 +33,8 @@ subject to the following restrictions:
 #include "PH_EntityKeys.h"
 #include "PH_MapLoader.h"
 
+#include "PH_GameEventManager.h"
+
 namespace Phobos
 {
 	PH_ENTITY_CREATOR("WorldEntity", WorldEntity_c);
@@ -121,6 +123,7 @@ namespace Phobos
 
 	void WorldEntity_c::Load(const MapLoader_c &loader)
 	{
+
 		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)

@@ -51,8 +51,10 @@ namespace Phobos
 	}
 
 	void GameEventManager_c::Schedule(EntityIO_c &receiver, GameEvent_c::EventProc_t proc, Float_t delay)
-	{
-		mapEvents.insert(std::make_pair(delay + Core_c::GetInstance()->GetGameTimer().fpTotalTicks, GameEvent_c(receiver, proc)));
+	{	
+		PH_ASSERT_VALID(proc);
+
+		mapEvents.insert(std::make_pair(delay + Core_c::GetInstance()->GetGameTimer().fpTotalTicks, GameEvent_c(receiver, proc)));		
 	}
 
 	void GameEventManager_c::CancelEvents(const EntityIO_c &receiver)

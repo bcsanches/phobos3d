@@ -326,8 +326,7 @@ namespace Phobos
 
 	void Render_c::DestroySceneNode(Ogre::SceneNode *node)
 	{
-		PH_ASSERT_VALID(pclMainSceneManager);
-		PH_ASSERT_VALID(node);
+		PH_ASSERT_VALID(pclMainSceneManager);		
 
 		pclMainSceneManager->destroySceneNode(node->getName());
 	}

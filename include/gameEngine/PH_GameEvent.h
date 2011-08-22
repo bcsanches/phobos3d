@@ -19,11 +19,14 @@ subject to the following restrictions:
 
 #include <PH_Types.h>
 
-namespace Phobos
-{
-	class EntityIO_c;
+#include "PH_GameEngineAPI.h"
+#include "PH_EntityIO.h"
 
-	class GameEvent_c
+#define PH_MAKE_EVENT_PROC(X) reinterpret_cast<Phobos::GameEvent_c::EventProc_t>(X)
+
+namespace Phobos
+{	
+	class PH_GAME_ENGINE_API GameEvent_c
 	{
 		public:
 			typedef void (EntityIO_c::*EventProc_t)();

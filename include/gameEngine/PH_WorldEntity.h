@@ -70,6 +70,8 @@ namespace Phobos
 			void LoadTerrainGroup(const Dictionary_c &dict);
 			void LoadTerrainPage(const Dictionary_c &dict);
 
+			void Proc() {};
+
 		private:
 			typedef std::map<String_c, StaticObject_s> StaticObjectsMap_t;
 			StaticObjectsMap_t mapStaticObjects;
