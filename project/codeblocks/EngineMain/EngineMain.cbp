@@ -55,10 +55,12 @@
 			<Add directory="../../../include/dictionary" />
 			<Add directory="../../../include/gameEngine" />
 			<Add directory="../../../include/engineCore" />
+			<Add directory="/usr/include/OGRE/Terrain" />
 		</Compiler>
 		<Linker>
 			<Add library="/usr/lib/libOgreMain.so" />
 			<Add library="/usr/lib/libboost_signals.so" />
+			<Add library="/usr/lib/libOgreTerrain.so" />
 		</Linker>
 		<Unit filename="../../../src/engineMain/PH_EngineMain.cpp" />
 		<Extensions>

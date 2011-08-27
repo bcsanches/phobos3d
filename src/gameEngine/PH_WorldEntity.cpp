@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -90,16 +90,16 @@ namespace Phobos
 		Entity_c(name),
 		pclTerrainGroup(NULL),
 		pclTerrainOptions(NULL),
+		pclTerrainLight(NULL),
 		pclTerrainGroupDictionary(NULL),
-		pclTerrainPageDictionary(NULL),
-		pclTerrainLight(NULL)
+		pclTerrainPageDictionary(NULL)
 	{
 	}
 
 	WorldEntity_c::~WorldEntity_c()
 	{
 		RenderPtr_t render = Render_c::GetInstance();
-		
+
 		if(pclTerrainGroup)
 			render->DestroyTerrainGroup(pclTerrainGroup);
 
@@ -182,14 +182,14 @@ namespace Phobos
 		if(pclTerrainGroupDictionary != NULL)
 		{
 			this->LoadTerrainGroup(*pclTerrainGroupDictionary);
-			pclTerrainGroupDictionary = NULL;			
+			pclTerrainGroupDictionary = NULL;
 		}
 
 		if(pclTerrainPageDictionary != NULL)
 		{
 			this->LoadTerrainPage(*pclTerrainPageDictionary);
 			pclTerrainPageDictionary = NULL;
-		}		
+		}
 	}
 
 	bool WorldEntity_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
@@ -208,13 +208,13 @@ namespace Phobos
 		}
 		else if(type.compare("Terrain Group Object") == 0)
 		{
-			pclTerrainGroupDictionary = &dict;			
-			
+			pclTerrainGroupDictionary = &dict;
+
 			return true;
 		}
 		else if(type.compare("Terrain Page Object") == 0)
 		{
-			pclTerrainPageDictionary = &dict;			
+			pclTerrainPageDictionary = &dict;
 
 			return true;
 		}
@@ -227,9 +227,9 @@ namespace Phobos
 		pclTerrainOptions = new Ogre::TerrainGlobalOptions();
 
 		pclTerrainOptions->setMaxPixelError(dict.GetFloat("tuning::maxpixelerror"));
-		pclTerrainOptions->setLightMapSize(dict.GetInt("lightmap::texturesize"));		
+		pclTerrainOptions->setLightMapSize(dict.GetInt("lightmap::texturesize"));
 		pclTerrainOptions->setCompositeMapSize(dict.GetInt("tuning::compositemaptexturesize"));
-		pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));		
+		pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));
 		pclTerrainOptions->setLayerBlendMapSize(dict.GetInt("blendmap::texturesize"));
 
 		RenderPtr_t render = Render_c::GetInstance();
@@ -238,7 +238,7 @@ namespace Phobos
 		//pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, u16TerrainSize, dict.GetFloat("pageworldsize"));
 		pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, dict.GetInt("pagemapsize"), dict.GetFloat("pageworldsize"));
 		pclTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
-		pclTerrainGroup->setFilenameConvention("Page", "ogt");	
+		pclTerrainGroup->setFilenameConvention("Page", "ogt");
 
 		if(pclTerrainLight != NULL)
 		{
@@ -249,9 +249,9 @@ namespace Phobos
 	}
 
 	void WorldEntity_c::LoadTerrainPage(const Dictionary_c &dict)
-	{	
+	{
 		DictionaryHivePtr_t levelInfo = DictionaryManager_c::GetInstance()-> GetDictionaryHive("LevelInfo");
-		
+
 		String_c name = levelInfo->GetDictionary("LevelFile")->GetValue("Path") + "/" + levelInfo->GetDictionary("Project")->GetValue("TerrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
@@ -329,7 +329,7 @@ namespace Phobos
 				break;
 
 			case 1:
-				temp.pclLight->setType(Ogre::Light::LT_DIRECTIONAL);				
+				temp.pclLight->setType(Ogre::Light::LT_DIRECTIONAL);
 				break;
 
 			case 2:

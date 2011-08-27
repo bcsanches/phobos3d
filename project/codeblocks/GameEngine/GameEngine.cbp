@@ -74,6 +74,8 @@
 		<Unit filename="../../../include/gameEngine/PH_GameDictionaryUtils.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameEngineAPI.h" />
 		<Unit filename="../../../include/gameEngine/PH_GameEnginePlugin.h" />
+		<Unit filename="../../../include/gameEngine/PH_GameEvent.h" />
+		<Unit filename="../../../include/gameEngine/PH_GameEventManager.h" />
 		<Unit filename="../../../include/gameEngine/PH_GenericComponentManager.h" />
 		<Unit filename="../../../include/gameEngine/PH_HandleManager.h" />
 		<Unit filename="../../../include/gameEngine/PH_IPlayerController.h" />
@@ -96,6 +98,8 @@
 		<Unit filename="../../../src/gameEngine/PH_EntityFactory.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_EntityIO.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_GameCamera.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_GameEvent.cpp" />
+		<Unit filename="../../../src/gameEngine/PH_GameEventManager.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_LinearMoverComponent.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_MapLoader.cpp" />
 		<Unit filename="../../../src/gameEngine/PH_ModelRendererComponent.cpp" />
