@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1310015987 source:/home/cronosts/Programming/Projects/phobos3d/src/engineMain/PH_EngineMain.cpp
+1312321196 source:/home/cronosts/Programming/Projects/phobos3d/src/engineMain/PH_EngineMain.cpp
 	<sstream>
 	<boost/thread.hpp>
 	<OgreTimer.h>
@@ -9,6 +9,7 @@
 	<PH_Core.h>
 	<PH_DictionaryManager.h>
 	<PH_EventManagerModule.h>
+	<PH_GameEventManager.h>
 	<PH_Kernel.h>
 	<PH_ModelRendererManager.h>
 	<PH_MoverManager.h>
@@ -516,7 +517,7 @@
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_ContextUtils.h
 	<boost/bind.hpp>
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Core.h
+1312321196 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Core.h
 	<set>
 	<vector>
 	<PH_ContextCmd.h>
@@ -569,7 +570,7 @@
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_EventManagerFwd.h
 	<boost/intrusive_ptr.hpp>
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Error.h
+1312321196 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Error.h
 	<crtdbg.h>
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_Kernel.h
@@ -597,10 +598,12 @@
 	"PH_Defs.h"
 	"PH_KernelAPI.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Render.h
+1311345980 /home/cronosts/Programming/Projects/phobos3d/include/engineCore/PH_Render.h
 	<boost/scoped_ptr.hpp>
 	<OgrePrerequisites.h>
 	<OgreSceneManager.h>
+	<OgreTerrainGroup.h>
+	<OgreTerrainPrerequisites.h>
 	<PH_ContextCmd.h>
 	<PH_ContextVar.h>
 	<PH_Window.h>
@@ -996,7 +999,8 @@
 	"PH_Node.h"
 	"PH_EventManager.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldManager.h
+1312321196 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_WorldManager.h
+	<list>
 	<PH_ContextCmd.h>
 	<PH_CoreModule.h>
 	<PH_Listener.h>
@@ -1012,7 +1016,7 @@
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameEngineAPI.h
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MapLoader.h
+1311345980 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MapLoader.h
 	<boost/noncopyable.hpp>
 	<PH_String.h>
 	<PH_DictionaryHive.h>
@@ -1022,12 +1026,13 @@
 	"PH_DictionaryAPI.h"
 	"PH_DictionaryFwd.h"
 
-1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityIO.h
+1312321196 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_EntityIO.h
 	<map>
 	<boost/bind.hpp>
 	<boost/signal.hpp>
 	<PH_Node.h>
 	<PH_String.h>
+	"PH_GameEngineAPI.h"
 
 1309879469 /home/cronosts/Programming/Projects/phobos3d/include/kernel/PH_NodeProperty.h
 	<boost/intrusive/set.hpp>
@@ -1054,4 +1059,53 @@
 
 1309879266 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_MoverManager.h
 	"PH_GenericComponentManager.h"
+
+1312321196 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameEventManager.h
+	<map>
+	<PH_CoreModule.h>
+	<PH_Singleton.h>
+	"PH_GameEngineAPI.h"
+	"PH_GameEvent.h"
+
+1314061381 /home/cronosts/Programming/Projects/phobos3d/include/gameEngine/PH_GameEvent.h
+	<PH_Types.h>
+	"PH_GameEngineAPI.h"
+	"PH_EntityIO.h"
+
+1304879284 /usr/include/OGRE/Terrain/OgreTerrainGroup.h
+	"OgreTerrainPrerequisites.h"
+	"OgreTerrain.h"
+	"OgreWorkQueue.h"
+	"OgreIteratorWrappers.h"
+
+1304879284 /usr/include/OGRE/Terrain/OgreTerrainPrerequisites.h
+	"OgrePrerequisites.h"
+
+1304879284 /usr/include/OGRE/Terrain/OgreTerrain.h
+	"OgreTerrainPrerequisites.h"
+	"OgreCommon.h"
+	"OgreVector3.h"
+	"OgreAxisAlignedBox.h"
+	"OgreSceneManager.h"
+	"OgreTerrainMaterialGenerator.h"
+	"OgreTerrainLayerBlendMap.h"
+	"OgreWorkQueue.h"
+
+1304879284 /usr/include/OGRE/Terrain/OgreTerrainMaterialGenerator.h
+	"OgreTerrainPrerequisites.h"
+	"OgrePixelFormat.h"
+	"OgreMaterial.h"
+	"OgreTexture.h"
+
+1304879284 /usr/include/OGRE/Terrain/OgreTerrainLayerBlendMap.h
+	"OgreTerrainPrerequisites.h"
+	"OgreCommon.h"
+	"OgreVector3.h"
+	"OgreDataStream.h"
+
+1304879284 /usr/include/OGRE/OgreWorkQueue.h
+	"OgrePrerequisites.h"
+	"OgreAtomicWrappers.h"
+	"OgreAny.h"
+	"OgreSharedPtr.h"
 

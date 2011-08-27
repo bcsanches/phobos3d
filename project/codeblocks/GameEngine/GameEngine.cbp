@@ -58,6 +58,7 @@
 			<Add directory="../../../include/engineCore" />
 			<Add directory="../../../include/gameEngine" />
 			<Add directory="/usr/include/OGRE" />
+			<Add directory="/usr/include/OGRE/Terrain" />
 		</Compiler>
 		<Linker>
 			<Add library="/usr/lib/libtinyxml.so" />

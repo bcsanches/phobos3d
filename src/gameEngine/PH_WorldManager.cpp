@@ -5,8 +5,8 @@ Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -32,8 +32,8 @@ subject to the following restrictions:
 #include "PH_WorldEntity.h"
 
 namespace Phobos
-{	
-	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);	
+{
+	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);
 
 	WorldManager_c::WorldManager_c():
 		CoreModule_c("WorldManager", PRIVATE_CHILDREN),
@@ -51,7 +51,7 @@ namespace Phobos
 
 	void WorldManager_c::LoadMap(const String_c &mapName)
 	{
-		this->RemoveAllChildren();		
+		this->RemoveAllChildren();
 		clEntityManager.Clear();
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
@@ -72,17 +72,17 @@ namespace Phobos
 		}
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
-	}	
-	
+	}
+
 	void WorldManager_c::LoadEntities()
 	{
 		const DictionaryHive_c &hive = clMapLoader.GetDynamicEntitiesHive();
-		EntityFactory_c &factory = EntityFactory_c::GetInstance();		
+		EntityFactory_c &factory = EntityFactory_c::GetInstance();
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
-			
+
 			EntityPtr_t ptr = factory.Create(dict->GetValue(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
 
 			Handle_s h = clEntityManager.AddObject(ptr.get());
@@ -90,7 +90,7 @@ namespace Phobos
 
 			ptr->Load(*dict);
 
-			this->AddPrivateChild(ptr);						
+			this->AddPrivateChild(ptr);
 		}
 	}
 
@@ -165,7 +165,7 @@ namespace Phobos
 			}
 		}
 
-		return false;		
+		return false;
 	}
 
 
@@ -189,12 +189,12 @@ namespace Phobos
 		}
 
 		try
-		{			
-			this->LoadMap(args[1]);			
+		{
+			this->LoadMap(args[1]);
 		}
 		catch(Exception_c &ex)
 		{
-			Kernel_c::GetInstance().LogMessage(ex.what());			
+			Kernel_c::GetInstance().LogMessage(ex.what());
 		}
 	}
 
