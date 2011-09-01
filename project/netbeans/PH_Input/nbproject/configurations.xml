@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="69">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>../../../src/input/PH_Button.cpp</itemPath>
+    <itemPath>../../../include/input/PH_Button.h</itemPath>
+    <itemPath>../../../include/input/PH_InputAPI.h</itemPath>
+    <itemPath>../../../include/input/PH_InputDefs.h</itemPath>
+    <itemPath>../../../src/input/PH_InputDevice.cpp</itemPath>
+    <itemPath>../../../include/input/PH_InputDevice.h</itemPath>
+    <itemPath>../../../include/input/PH_InputDeviceFwd.h</itemPath>
+    <itemPath>../../../include/input/PH_InputDeviceListener.h</itemPath>
+    <itemPath>../../../include/input/PH_InputEvent.h</itemPath>
+    <itemPath>../../../src/input/PH_InputManager.cpp</itemPath>
+    <itemPath>../../../include/input/PH_InputManager.h</itemPath>
+    <itemPath>../../../src/input/SDL/PH_InputManagerSDL.cpp</itemPath>
+    <itemPath>../../../include/input/SDL/PH_InputManagerSDL.h</itemPath>
+    <itemPath>../../../src/input/PH_InputMapper.cpp</itemPath>
+    <itemPath>../../../include/input/PH_InputMapper.h</itemPath>
+    <itemPath>../../../src/input/PH_KeyboardInputDevice.cpp</itemPath>
+    <itemPath>../../../include/input/PH_KeyboardInputDevice.h</itemPath>
+    <itemPath>../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp</itemPath>
+    <itemPath>../../../include/input/SDL/PH_KeyboardInputDeviceSDL.h</itemPath>
+    <itemPath>../../../src/input/PH_MouseInputDevice.cpp</itemPath>
+    <itemPath>../../../include/input/PH_MouseInputDevice.h</itemPath>
+    <itemPath>../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp</itemPath>
+    <itemPath>../../../include/input/SDL/PH_MouseInputDeviceSDL.h</itemPath>
+    <itemPath>../../../src/input/PH_Thumb.cpp</itemPath>
+    <itemPath>../../../include/input/PH_Thumb.h</itemPath>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="2">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>../../../include/kernel</pElem>
+            <pElem>../../../include/input</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>PH_DEBUG</Elem>
+            <Elem>PH_LINUX</Elem>
+            <Elem>PH_GCC</Elem>
+            <Elem>PH_NATIVE</Elem>
+            <Elem>PH_CHECK_ASSERT</Elem>
+          </preprocessorList>
+        </ccTool>
+        <linkerTool>
+          <output>../../../bin/libPH_Inputd.so</output>
+        </linkerTool>
+      </compileType>
+    </conf>
+    <conf name="Release" type="2">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
