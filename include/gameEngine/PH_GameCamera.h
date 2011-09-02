@@ -42,6 +42,9 @@ namespace Phobos
 
 			void SetNearClipDistance(const Float_t distance);
 
+			void Enable();
+			void Disable();
+
 		private:
 			Ogre::SceneNode	*pclRootNode;
 			Ogre::Camera	*pclCamera;

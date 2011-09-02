@@ -15,8 +15,8 @@ subject to the following restrictions:
 */
 
 
-#ifndef PH_IPLAYER_CONTROLLER_H
-#define PH_IPLAYER_CONTROLLER_H
+#ifndef PH_IPLAYER_COMMAND_PRODUCER_H
+#define PH_IPLAYER_COMMAND_PRODUCER_H
 
 #include <boost/intrusive_ptr.hpp>
 
@@ -31,13 +31,13 @@ namespace Phobos
 
 	typedef boost::intrusive_ptr<IPlayerCmd_c> IPlayerCmdPtr_t;
 
-	class IPlayerController_c
+	class IPlayerCommandProducer_c
 	{
 		public:
 			virtual IPlayerCmdPtr_t CreateCmd() = 0;
 
-			virtual void EnableController() = 0;
-			virtual void DisableController() = 0;
+			virtual void Enable() = 0;
+			virtual void Disable() = 0;
 
 			virtual void EnableMouse() = 0;
 			virtual void DisableMouse() = 0;

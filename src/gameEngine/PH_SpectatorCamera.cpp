@@ -28,7 +28,7 @@ namespace Phobos
 
 	void SpectatorCamera_c::FixedUpdate()
 	{
-		SpectatorCameraCmdPtr_t cmd = boost::static_pointer_cast<SpectatorCameraCmd_c>(clCameraController.CreateCmd());
+		SpectatorCameraCmdPtr_t cmd = boost::static_pointer_cast<SpectatorCameraCmd_c>(clCameraCommandProducer.CreateCmd());
 
 		using namespace Ogre;
 
@@ -72,23 +72,35 @@ namespace Phobos
 		dLook = transform.GetRotation().getPitch().valueDegrees();
 	}
 
-	void SpectatorCamera_c::EnableController()
+	void SpectatorCamera_c::EnableProducer()
 	{
-		clCameraController.EnableController();
+		clCameraCommandProducer.Enable();
 	}
 	
-	void SpectatorCamera_c::DisableController()
+	void SpectatorCamera_c::DisableProducer()
 	{
-		clCameraController.DisableController();
+		clCameraCommandProducer.Disable();
 	}
 
 	void SpectatorCamera_c::EnableMouse()
 	{
-		clCameraController.EnableMouse();
+		clCameraCommandProducer.EnableMouse();
 	}
 
 	void SpectatorCamera_c::DisableMouse()
 	{
-		clCameraController.DisableMouse();
+		clCameraCommandProducer.DisableMouse();
+	}
+
+	void SpectatorCamera_c::Enable()
+	{
+		clCamera.Enable();
+		clCameraCommandProducer.Enable();
+	}
+
+	void SpectatorCamera_c::Disable()
+	{
+		clCamera.Disable();
+		clCameraCommandProducer.Disable();
 	}
 }

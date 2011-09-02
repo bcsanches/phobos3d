@@ -93,7 +93,7 @@ namespace Phobos
 			{
 			}
 
-			LinearInterpolator_c(const float startTime, const float duration, const T &startValue, const T &endValue)
+			LinearInterpolator_c(const float startTime, const float duration, const T &startValue, const T &endValue)			
 			{
 				this->Start(startTime, duration, startValue, endValue);
 			}

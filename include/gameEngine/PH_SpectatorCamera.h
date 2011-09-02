@@ -21,7 +21,7 @@ subject to the following restrictions:
 
 #include <PH_GameCamera.h>
 
-#include "PH_SpectatorCameraController.h"
+#include "PH_SpectatorCameraCommandProducer.h"
 
 namespace Phobos
 {
@@ -33,11 +33,14 @@ namespace Phobos
 			void FixedUpdate();
 			void Update();
 
-			void EnableController();
-			void DisableController();
+			void EnableProducer();
+			void DisableProducer();
 
 			void EnableMouse();
 			void DisableMouse();
+
+			void Enable();
+			void Disable();
 
 			inline void SetMouseSensitivity(Float_t value);
 			inline void SetMoveSpeed(Float_t value);
@@ -46,8 +49,8 @@ namespace Phobos
 			void SetTransform(const Transform_c &transform);
 
 		private:
-			GameCamera_c				clCamera;
-			SpectatorCameraController_c clCameraController;
+			GameCamera_c						clCamera;
+			SpectatorCameraCommandProducer_c	clCameraCommandProducer;
 
 			Transform_c					clCurrentTransform;
 
@@ -61,17 +64,17 @@ namespace Phobos
 
 	inline void SpectatorCamera_c::SetMouseSensitivity(Float_t value)
 	{
-		clCameraController.SetMouseSensitivity(value);
+		clCameraCommandProducer.SetMouseSensitivity(value);
 	}
 
 	inline void SpectatorCamera_c::SetMoveSpeed(Float_t value)
 	{
-		clCameraController.SetMoveSpeed(value);
+		clCameraCommandProducer.SetMoveSpeed(value);
 	}
 
 	inline void SpectatorCamera_c::SetTurnSpeed(Float_t value)
 	{
-		clCameraController.SetTurnSpeed(value);
+		clCameraCommandProducer.SetTurnSpeed(value);
 	}
 }
 

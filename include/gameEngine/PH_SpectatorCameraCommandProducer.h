@@ -14,14 +14,14 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_SPECTATOR_CAMERA_CONTROLLER_H
-#define PH_SPECTATOR_CAMERA_CONTROLLER_H
+#ifndef PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
+#define PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 
 #include <PH_Button.h>
 #include <PH_Thumb.h>
 #include <PH_Types.h>
 
-#include "PH_IPlayerController.h"
+#include "PH_IPlayerCommandProducer.h"
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
@@ -84,15 +84,15 @@ namespace Phobos
 
 	#define PH_MOUSE_THUMB_CMD_NAME "mouseThumb"
 
-	class PH_GAME_ENGINE_API SpectatorCameraController_c: public IPlayerController_c
+	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer_c
 	{
 		public:
-			SpectatorCameraController_c(Context_c *context = NULL);
+			SpectatorCameraCommandProducer_c(Context_c *context = NULL);
 
 			virtual IPlayerCmdPtr_t CreateCmd();
 
-			virtual void EnableController();
-			virtual void DisableController();
+			virtual void Enable();
+			virtual void Disable();
 
 			virtual void EnableMouse();
 			virtual void DisableMouse();

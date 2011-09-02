@@ -54,6 +54,8 @@ namespace Phobos
 		varSpectatorMoveSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorMoveSpeedChanged, this));
 		varSpectatorTurnSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorTurnSpeedChanged, this));
 		varMouseSensitivity.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarMouseSensitivityChanged, this));
+
+		clSpectatorCamera.Disable();
 	}
 
 	void Client_c::OnRenderReady()
@@ -133,7 +135,7 @@ namespace Phobos
 		if(fMapLoaded)
 		{
 			fMapLoaded = false;
-			clSpectatorCamera.DisableController();
+			clSpectatorCamera.Disable();
 		}
 	}
 
@@ -151,7 +153,7 @@ namespace Phobos
 		}
 
 		fMapLoaded = true;
-		clSpectatorCamera.EnableController();
+		clSpectatorCamera.Enable();
 
 		if(!fMouseClipped)
 			this->ClipMouseCursor();

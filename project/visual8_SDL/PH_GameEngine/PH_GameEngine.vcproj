@@ -279,11 +279,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_SpectatorCameraController.cpp"
+				RelativePath="..\..\..\src\gameEngine\PH_SpectatorCameraCommandProducer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\gameEngine\PH_SpectatorCameraController.h"
+				RelativePath="..\..\..\include\gameEngine\PH_SpectatorCameraCommandProducer.h"
 				>
 			</File>
 		</Filter>
@@ -368,7 +368,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\gameEngine\PH_IPlayerController.h"
+			RelativePath="..\..\..\include\gameEngine\PH_IPlayerCommandProducer.h"
 			>
 		</File>
 		<File

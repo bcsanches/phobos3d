@@ -14,7 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_SpectatorCameraController.h"
+#include "PH_SpectatorCameraCommandProducer.h"
 
 #include <PH_Console.h>
 #include <PH_Core.h>
@@ -23,7 +23,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	SpectatorCameraController_c::SpectatorCameraController_c(Context_c *context):
+	SpectatorCameraCommandProducer_c::SpectatorCameraCommandProducer_c(Context_c *context):
 		clMoveButton("-moveBwd", "+moveBwd", "=moveBwd", "-moveFwd", "+moveFwd", "=moveFwd", context),
 		clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),
 		clStrafeButton("-strafeRight", "+strafeRight", "=strafeRight", "-strafeLeft", "+strafeLeft", "=strafeLeft", context),
@@ -37,7 +37,7 @@ namespace Phobos
 		clMouseThumb.Disable();
 	}
 
-	IPlayerCmdPtr_t SpectatorCameraController_c::CreateCmd()
+	IPlayerCmdPtr_t SpectatorCameraCommandProducer_c::CreateCmd()
 	{
 		const Float_t ticks = Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime;
 
@@ -59,7 +59,7 @@ namespace Phobos
 			));
 	}
 
-	void SpectatorCameraController_c::EnableController()
+	void SpectatorCameraCommandProducer_c::Enable()
 	{
 		ConsolePtr_t console = Console_c::GetInstance();
 
@@ -70,7 +70,7 @@ namespace Phobos
 		clLookButton.Enable(*console);
 	}
 
-	void SpectatorCameraController_c::DisableController()
+	void SpectatorCameraCommandProducer_c::Disable()
 	{
 		clMoveButton.Disable();
 		clStrafeButton.Disable();
@@ -79,30 +79,30 @@ namespace Phobos
 		clLookButton.Disable();
 	}
 
-	void SpectatorCameraController_c::EnableMouse()
+	void SpectatorCameraCommandProducer_c::EnableMouse()
 	{
 		clMouseThumb.Enable(*Console_c::GetInstance());
 	}
 
-	void SpectatorCameraController_c::DisableMouse()
+	void SpectatorCameraCommandProducer_c::DisableMouse()
 	{
 		clMouseThumb.Disable();
 	}
 
-	void SpectatorCameraController_c::SetMoveSpeed(Float_t v)
+	void SpectatorCameraCommandProducer_c::SetMoveSpeed(Float_t v)
 	{
 		fpMoveSpeed = v;
 	}
 
-	void SpectatorCameraController_c::SetTurnSpeed(Float_t v)
+	void SpectatorCameraCommandProducer_c::SetTurnSpeed(Float_t v)
 	{
 		fpTurnSpeed = v;
 	}
 
-	void SpectatorCameraController_c::SetMouseSensitivity(Float_t v)
+	void SpectatorCameraCommandProducer_c::SetMouseSensitivity(Float_t v)
 	{
 		if(v <= 0)
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "SpectatorCameraController_c::SetMouseSensitivity", "Mouse sensitivity must be greater than zero");
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "SpectatorCameraCommandProducer_c::SetMouseSensitivity", "Mouse sensitivity must be greater than zero");
 
 		fpMouseSensitivity = v;
 	}

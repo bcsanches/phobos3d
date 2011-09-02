@@ -76,4 +76,14 @@ namespace Phobos
 	{
 		pclCamera->setNearClipDistance(distance);
 	}
+
+	void GameCamera_c::Enable()
+	{
+		pclRootNode->attachObject(pclCamera);
+	}
+	
+	void GameCamera_c::Disable()
+	{
+		pclRootNode->detachObject(pclCamera);
+	}
 }
