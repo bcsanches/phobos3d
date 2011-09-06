@@ -12,7 +12,7 @@
     </RESOURCEDIRECTORIES>
   <CAMERASPEED value="1"></CAMERASPEED>
   <CAMERAPOSITIONS count="0">
-    <OPTION id="0" position="-7.03321 10.7116 -20.3346" orientation="0.356749 -0.0434389 -0.926366 -0.11265"></OPTION>
+    <OPTION id="0" position="-5.68959 3.46977 2.47212" orientation="0.629407 -0.0309303 -0.775528 -0.0380249"></OPTION>
   </CAMERAPOSITIONS>
     <LAYERS>
       <LAYER id="0" name="Layer 0" visible="true"></LAYER>
@@ -60,7 +60,7 @@
   <OBJECTCOUNT value="0"></OBJECTCOUNT>
   </PROJECT>
   <OBJECT object_id="151554912" name="SceneManager" typename="OctreeSceneManager">
-    <PROPERTY id="ambient" type="11" value="0.0627451 0.0627451 0.0627451 1"></PROPERTY>
+    <PROPERTY id="ambient" type="11" value="0.54902 0.54902 0.54902 1"></PROPERTY>
     <PROPERTY id="configfile" type="7" value=""></PROPERTY>
     <PROPERTY id="fog::colour" type="11" value="0.5 0.5 0.5 1"></PROPERTY>
     <PROPERTY id="fog::density" type="6" value="0"></PROPERTY>
@@ -93,9 +93,9 @@
   <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
     <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
     <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
-    <PROPERTY id="camera::orientation" type="13" value="0.356759 -0.0434402 -0.926394 -0.112654"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="0.629419 -0.0309309 -0.775543 -0.0380256"></PROPERTY>
     <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
-    <PROPERTY id="camera::position" type="9" value="-7.03321 10.7116 -20.3346"></PROPERTY>
+    <PROPERTY id="camera::position" type="9" value="-5.68959 3.46977 2.47212"></PROPERTY>
     <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
     <PROPERTY id="colour" type="11" value="0 0 0 1"></PROPERTY>
     <PROPERTY id="compositorcount" type="2" value="0"></PROPERTY>
@@ -171,24 +171,6 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="683187392" name="luzFogo#0" typename="Light Object" parentnode="SceneManager">
-    <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
-    <PROPERTY id="direction" type="9" value="0.241921 0 0.970296"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
-    <PROPERTY id="lighttype" type="2" value="0"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="0.992546 0 0.121869 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="-3.49571 0.660184 -1.59117"></PROPERTY>
-    <PROPERTY id="power" type="6" value="1"></PROPERTY>
-    <PROPERTY id="specular" type="11" value="0.960784 0.866667 0.152941 1"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
   <OBJECT object_id="735007744" name="LuzTeto" typename="Light Object" parentnode="SceneManager">
     <PROPERTY id="attenuation" type="10" value="100 1 0.5 0"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
@@ -207,12 +189,52 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
+  <OBJECT object_id="683187392" name="luzFogo#0" typename="Light Object" parentnode="SceneManager">
+    <PROPERTY id="attenuation" type="10" value="2 1 0.5 0"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="diffuse" type="11" value="1 0.0823529 0.0196078 1"></PROPERTY>
+    <PROPERTY id="direction" type="9" value="0.241921 0 0.970296"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="lightrange" type="9" value="15 30 1"></PROPERTY>
+    <PROPERTY id="lighttype" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.992546 0 0.121869 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="-3.49571 0.660184 -1.59117"></PROPERTY>
+    <PROPERTY id="power" type="6" value="1"></PROPERTY>
+    <PROPERTY id="specular" type="11" value="0.960784 0.866667 0.152941 1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="721915392" name="skeltorch#0" typename="Entity Object" parentnode="nodeCassa#0">
+    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="skeltorch"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.992005 0 0.126199 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="4.03887 0.268306 1.74266"></PROPERTY>
+    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="0.5 0.5 0.5"></PROPERTY>
+    <PROPERTY id="subentity0::material" type="7" value="Objects/TallTorch"></PROPERTY>
+    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity1::material" type="7" value="Objects/TallTorch"></PROPERTY>
+    <PROPERTY id="subentity1::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity2::material" type="7" value="Objects/TallTorch"></PROPERTY>
+    <PROPERTY id="subentity2::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
   <OBJECT object_id="303048800" name="Barrel#0Copy#1" typename="Entity Object" parentnode="NodeCasa">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="2.0941 1.31464 0.381593"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -230,7 +252,7 @@
     <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="0 0.262238 0.91105"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -248,9 +270,27 @@
     <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="0 0.262238 0.91105"></PROPERTY>
+    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
+    <PROPERTY id="subentity0::material" type="7" value="RustyBarrel"></PROPERTY>
+    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentitycount" type="2" value="1"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
+  <OBJECT object_id="966612736" name="Barrel#0Copy#1#0" typename="Entity Object" parentnode="nodeCassa#0">
+    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="2.0941 1.31464 0.381593"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
     <PROPERTY id="subentity0::material" type="7" value="RustyBarrel"></PROPERTY>
@@ -266,7 +306,7 @@
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Ogre.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Ogre"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="0 0.919526 -0.0285218"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -280,48 +320,8 @@
     <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="inherit" type="7" value="InfoPlayerStart"></PROPERTY>
-      <PROPERTY id="baseHive" type="7" value="EntityDef"></PROPERTY>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="721915392" name="skeltorch#0" typename="Entity Object" parentnode="nodeCassa#0">
-    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="skeltorch.mesh"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="0.992005 0 0.126199 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="4.03887 0.268306 1.74266"></PROPERTY>
-    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
-    <PROPERTY id="scale" type="9" value="0.5 0.5 0.5"></PROPERTY>
-    <PROPERTY id="subentity0::material" type="7" value="Objects/TallTorch"></PROPERTY>
-    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentity1::material" type="7" value="Objects/TallTorch"></PROPERTY>
-    <PROPERTY id="subentity1::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentity2::material" type="7" value="Objects/TallTorch"></PROPERTY>
-    <PROPERTY id="subentity2::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
-    </CUSTOMPROPERTIES>
-  </OBJECT>
-
-  <OBJECT object_id="966612736" name="Barrel#0Copy#1#0" typename="Entity Object" parentnode="nodeCassa#0">
-    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
-    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
-    <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="2.0941 1.31464 0.381593"></PROPERTY>
-    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
-    <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
-    <PROPERTY id="subentity0::material" type="7" value="RustyBarrel"></PROPERTY>
-    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentitycount" type="2" value="1"></PROPERTY>
-    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
-    <CUSTOMPROPERTIES>
+      <PROPERTY id="inherit" type="7" value="InfoPlayerStart" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 
@@ -330,7 +330,7 @@
     <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="23.341 6.31105 1.56557"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -340,17 +340,17 @@
     <PROPERTY id="subentitycount" type="2" value="1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="inherit" type="7" value="Platform"></PROPERTY>
-      <PROPERTY id="baseHive" type="7" value="EntityDef"></PROPERTY>
+      <PROPERTY id="inherit" type="7" value="Platform" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="426557216" name="Barrel#0" typename="Entity Object" parentnode="NodeCasa">
+  <OBJECT object_id="821680384" name="Barrel#0#0" typename="Entity Object" parentnode="nodeCassa#0">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="2.09348 0.257023 0.368459"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -363,12 +363,12 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="821680384" name="Barrel#0#0" typename="Entity Object" parentnode="nodeCassa#0">
+  <OBJECT object_id="426557216" name="Barrel#0" typename="Entity Object" parentnode="NodeCasa">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Barrel.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Barrel"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="2.09348 0.257023 0.368459"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -386,7 +386,7 @@
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="highlanderhouse.01.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="highlanderhouse.01"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="0 0 0"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -414,7 +414,7 @@
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="highlanderhouse.01.mesh"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="highlanderhouse.01"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
     <PROPERTY id="position" type="9" value="0 0 0"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
@@ -447,9 +447,9 @@
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="inherit" type="7" value="PathCorner"></PROPERTY>
-      <PROPERTY id="baseHive" type="7" value="EntityDef"></PROPERTY>
-      <PROPERTY id="target" type="7" value="Marker#0"></PROPERTY>
+      <PROPERTY id="inherit" type="7" value="PathCorner" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="target" type="7" value="Marker#0" autooptiontype="0"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 
@@ -463,9 +463,9 @@
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="inherit" type="7" value="PathCorner"></PROPERTY>
-      <PROPERTY id="baseHive" type="7" value="EntityDef"></PROPERTY>
-      <PROPERTY id="target" type="7" value="Marker#1"></PROPERTY>
+      <PROPERTY id="inherit" type="7" value="PathCorner" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="target" type="7" value="Marker#1" autooptiontype="0"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 

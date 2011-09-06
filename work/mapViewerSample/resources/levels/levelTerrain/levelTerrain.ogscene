@@ -12,7 +12,7 @@
     </RESOURCEDIRECTORIES>
   <CAMERASPEED value="1"></CAMERASPEED>
   <CAMERAPOSITIONS count="0">
-    <OPTION id="0" position="-21.2876 6.66214 -26.2297" orientation="0.226506 -0.0160789 -0.97143 -0.0690009"></OPTION>
+    <OPTION id="0" position="-27.7274 18.9028 4.6589" orientation="-0.60602 0.228844 0.712683 0.269172"></OPTION>
   </CAMERAPOSITIONS>
     <LAYERS>
       <LAYER id="0" name="Layer 0" visible="true"></LAYER>
@@ -93,9 +93,9 @@
   <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
     <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
     <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
-    <PROPERTY id="camera::orientation" type="13" value="0.226508 -0.0160791 -0.971441 -0.0690018"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="-0.606039 0.228852 0.712706 0.26918"></PROPERTY>
     <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
-    <PROPERTY id="camera::position" type="9" value="-21.2876 6.66214 -26.2297"></PROPERTY>
+    <PROPERTY id="camera::position" type="9" value="-27.7274 18.9028 4.6589"></PROPERTY>
     <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
     <PROPERTY id="colour" type="11" value="0 0 0 1"></PROPERTY>
     <PROPERTY id="compositorcount" type="2" value="0"></PROPERTY>
@@ -136,9 +136,9 @@
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="lightmap::texturesize" type="2" value="1024"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="pagemapsize" type="2" value="129"></PROPERTY>
+    <PROPERTY id="pagemapsize" type="2" value="257"></PROPERTY>
     <PROPERTY id="pagenameprefix" type="7" value="Page"></PROPERTY>
-    <PROPERTY id="pageworldsize" type="6" value="512"></PROPERTY>
+    <PROPERTY id="pageworldsize" type="6" value="1024"></PROPERTY>
     <PROPERTY id="pg::densitymapsize" type="2" value="1024"></PROPERTY>
     <PROPERTY id="pg::detaildistance" type="2" value="240"></PROPERTY>
     <PROPERTY id="pg::pagesize" type="2" value="40"></PROPERTY>
@@ -210,9 +210,9 @@
     <PROPERTY id="colourmap::enabled" type="12" value="false"></PROPERTY>
     <PROPERTY id="colourmap::texturesize" type="2" value="128"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
-    <PROPERTY id="layer0::diffusespecular" type="7" value="desert_4_diffusespecular.dds"></PROPERTY>
-    <PROPERTY id="layer0::normalheight" type="7" value="desert_4_normalheight.dds"></PROPERTY>
-    <PROPERTY id="layer0::worldsize" type="6" value="100"></PROPERTY>
+    <PROPERTY id="layer0::diffusespecular" type="7" value="dirt_grayrocky_diffusespecular.dds"></PROPERTY>
+    <PROPERTY id="layer0::normalheight" type="7" value="dirt_grayrocky_normalheight.dds"></PROPERTY>
+    <PROPERTY id="layer0::worldsize" type="6" value="16"></PROPERTY>
     <PROPERTY id="layercount" type="2" value="1"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
     <PROPERTY id="pagex" type="2" value="0"></PROPERTY>

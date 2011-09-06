@@ -1,0 +1,64 @@
+void PH_MainDiffuse_vp(    
+    float4 position        : POSITION,    // Vertex position in model space
+    float2 texCoord0    : TEXCOORD0,    // Texture UV set 0
+ 
+    // Outputs
+    out float4 oPosition    : POSITION,    // Transformed vertex position
+    out float2 uv0        : TEXCOORD0,    // UV0
+ 
+    // Model Level Inputs
+    uniform float4x4 worldViewProj)
+{
+    // Calculate output position
+    oPosition = mul(worldViewProj, position);
+ 
+    // Simply copy the input vertex UV to the output
+    uv0 = texCoord0;
+}
+ 
+void PH_MainDiffuse_fp(
+    // Pixel Inputs
+    float2 uv0        : TEXCOORD0,    // UV interpolated for current pixel
+ 
+    // Outputs
+    out float4 color    : COLOR,    // Output color we want to write
+ 
+    // Model Level Inputs
+    uniform sampler2D texture)        // Texture we're going to use
+{
+    // Just sample texture using supplied UV
+    color = tex2D(texture, uv0);    
+}
+
+ 
+void PH_MainAmbientDiffuse_fp(
+    // Pixel Inputs
+    float2 uv0        : TEXCOORD0,    // UV interpolated for current pixel
+    
+    float4 ambientLightColour: COLOR,
+ 
+    // Outputs
+    out float4 color    : COLOR,    // Output color we want to write
+ 
+    // Model Level Inputs
+    uniform sampler2D texture)        // Texture we're going to use
+{
+    // Just sample texture using supplied UV
+    color = tex2D(texture, uv0) * ambientLightColour;    
+}
+
+void PH_MainDiffuseLighting_fp(
+    // Pixel Inputs
+    float2 uv0        : TEXCOORD0,    // UV interpolated for current pixel
+    
+    float4 ambientLightColour: COLOR,
+ 
+    // Outputs
+    out float4 color    : COLOR,    // Output color we want to write
+ 
+    // Model Level Inputs
+    uniform sampler2D texture)        // Texture we're going to use
+{
+    // Just sample texture using supplied UV
+    color = tex2D(texture, uv0) * ambientLightColour;    
+}
