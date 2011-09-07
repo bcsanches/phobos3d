@@ -24,7 +24,6 @@ subject to the following restrictions:
 #include <PH_Kernel.h>
 #include <PH_MouseInputDevice.h>
 #include <PH_PointEntity.h>
-#include <PH_Render.h>
 #include <PH_Window.h>
 #include <PH_WorldManager.h>
 
@@ -39,27 +38,20 @@ namespace Phobos
 	PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
 
 	Client_c::Client_c():
-		CoreModule_c("Client"),
-		cmdToggleMouseCursorClip("toggleMouseCursorClip"),
-		cmdNullMouseThumb(PH_MOUSE_THUMB_CMD_NAME),
+		BaseClient_c("Client"),
+		cmdToggleMouseCursorClip("toggleMouseCursorClip"),		
 		varMouseSensitivity("dvMouseSensitivity", "0.1"),
 		varSpectatorMoveSpeed("dvSpectatorMoveSpeed", "2.0"),
-		varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),
-		fMouseClipped(false),
+		varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),		
 		fMapLoaded(false)
 	{
-		cmdToggleMouseCursorClip.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdToggleMouseCursorClip, this));
-		cmdNullMouseThumb.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdNullMouseThumb, this));
+		cmdToggleMouseCursorClip.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdToggleMouseCursorClip, this));		
 
 		varSpectatorMoveSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorMoveSpeedChanged, this));
 		varSpectatorTurnSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorTurnSpeedChanged, this));
 		varMouseSensitivity.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarMouseSensitivityChanged, this));
 
 		clSpectatorCamera.Disable();
-	}
-
-	void Client_c::OnRenderReady()
-	{
 	}
 
 	void Client_c::OnFixedUpdate()
@@ -80,55 +72,18 @@ namespace Phobos
 
 	void Client_c::OnPrepareToBoot()
 	{
+		BaseClient_c::OnPrepareToBoot();
+
 		ConsolePtr_t console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdToggleMouseCursorClip);
-		console->AddContextCmd(cmdNullMouseThumb);
+		console->AddContextCmd(cmdToggleMouseCursorClip);		
 
 		console->AddContextVar(varMouseSensitivity);
 		console->AddContextVar(varSpectatorMoveSpeed);
 		console->AddContextVar(varSpectatorTurnSpeed);
 
 		WorldManager_c::GetInstance()->AddListener(*this);
-	}
-
-	struct ConfigInfo_s
-	{
-		MouseInputDevicePtr_t ipMouse;
-		void *pWindowHandler;
-	};
-
-	ConfigInfo_s Client_c::GetConfig()
-	{
-		ConfigInfo_s info;
-
-		info.pWindowHandler = Render_c::GetInstance()->GetWindowHandler();
-		info.ipMouse = boost::static_pointer_cast<MouseInputDevice_c>(InputManager_c::GetInstance()->GetDevice(INPUT_DEVICE_MOUSE));
-
-		return info;
-	}
-
-	void Client_c::ClipMouseCursor()
-	{
-		ConfigInfo_s info = this->GetConfig();
-
-		info.ipMouse->ClipToWindow(info.pWindowHandler);
-
-		cmdNullMouseThumb.Unlink();
-		clSpectatorCamera.EnableMouse();
-		fMouseClipped = true;
-	}
-
-	void Client_c::UnclipMouseCursor()
-	{
-		ConfigInfo_s info = this->GetConfig();
-
-		info.ipMouse->Unclip();
-
-		clSpectatorCamera.DisableMouse();
-		Console_c::GetInstance()->AddContextCmd(cmdNullMouseThumb);
-		fMouseClipped = false;
-	}
+	}	
 
 	void Client_c::OnMapUnloaded()
 	{
@@ -155,18 +110,13 @@ namespace Phobos
 		fMapLoaded = true;
 		clSpectatorCamera.Enable();
 
-		if(!fMouseClipped)
+		if(!this->IsMouseClipped())
 			this->ClipMouseCursor();
-	}
-
-	void Client_c::CmdNullMouseThumb(const StringVector_t &, Context_c &  )
-	{
-		//empty
-	}
+	}	
 
 	void Client_c::CmdToggleMouseCursorClip(const StringVector_t &, Context_c &  )
 	{
-		if(fMouseClipped)
+		if(this->IsMouseClipped())
 			this->UnclipMouseCursor();
 		else
 			this->ClipMouseCursor();

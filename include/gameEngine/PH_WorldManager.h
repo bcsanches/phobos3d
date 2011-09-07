@@ -58,6 +58,7 @@ namespace Phobos
 
 		public:
 			void LoadMap(const String_c &mapName);
+			void UnloadMap();
 
 			EntityPtr_t TryGetEntityByType(const String_c &className);
 
@@ -88,6 +89,7 @@ namespace Phobos
 			inline void CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)());
 
 			void CmdLoadMap(const StringVector_t &args, Context_c &);
+			void CmdUnloadMap(const StringVector_t &args, Context_c &);
 			void CmdDumpFactoryCreators(const StringVector_t &args, Context_c &);
 
 		private:
@@ -96,9 +98,10 @@ namespace Phobos
 			MapLoader_c		clMapLoader;
 
 			ContextCmd_c	cmdLoadMap;	
+			ContextCmd_c	cmdUnloadMap;	
 			ContextCmd_c	cmdDumpFactoryCreators;
 
-			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);						
+			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);
 
 			EntityIOList_t lstFixedUpdate;
 			EntityIOList_t lstUpdate;

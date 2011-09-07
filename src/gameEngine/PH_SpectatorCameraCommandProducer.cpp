@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "PH_SpectatorCameraCommandProducer.h"
 
 #include <PH_Console.h>
+#include <PH_ContextUtils.h>
 #include <PH_Core.h>
 #include <PH_CoreTimer.h>
 #include <PH_Exception.h>
@@ -32,8 +33,11 @@ namespace Phobos
 		clMouseThumb(PH_MOUSE_THUMB_CMD_NAME, context),
 		fpMoveSpeed(8),
 		fpTurnSpeed(70),
-		fpMouseSensitivity(0.3f)
+		fpMouseSensitivity(0.3f),
+		cmdNullMouseThumb(PH_MOUSE_THUMB_CMD_NAME),
+		fMouseActive(false)
 	{
+		cmdNullMouseThumb.SetProc(PH_CONTEXT_CMD_BIND(&SpectatorCameraCommandProducer_c::CmdNullMouseThumb, this));
 		clMouseThumb.Disable();
 	}
 
@@ -68,6 +72,15 @@ namespace Phobos
 		clMoveUpDown.Enable(*console);
 		clTurnButton.Enable(*console);
 		clLookButton.Enable(*console);
+		
+		ContextVar_c *var = console->TryGetContextVar(PH_PLAYER_CMD_MOUSE_CLIPPED_VAR);
+		if(var != NULL)
+		{
+			if(var->GetBoolean())
+				this->EnableMouse();
+
+			var->AddListener(*this);
+		}
 	}
 
 	void SpectatorCameraCommandProducer_c::Disable()
@@ -76,17 +89,44 @@ namespace Phobos
 		clStrafeButton.Disable();
 		clMoveUpDown.Disable();
 		clTurnButton.Disable();
-		clLookButton.Disable();
+		clLookButton.Disable();		
+
+		ContextVar_c *var = Console_c::GetInstance()->TryGetContextVar(PH_PLAYER_CMD_MOUSE_CLIPPED_VAR);
+		if (var != NULL)
+			var->RemoveListener(*this);
+
+		this->DisableMouse();
+		cmdNullMouseThumb.Unlink();
 	}
 
-	void SpectatorCameraCommandProducer_c::EnableMouse()
+	void SpectatorCameraCommandProducer_c::OnVariableValueChanged(const ContextVar_c &var)
 	{
-		clMouseThumb.Enable(*Console_c::GetInstance());
+		if(var.GetBoolean())
+			this->EnableMouse();		
+		else
+			this->DisableMouse();
 	}
 
 	void SpectatorCameraCommandProducer_c::DisableMouse()
 	{
+		if(!fMouseActive)
+			return;
+
 		clMouseThumb.Disable();
+		Console_c::GetInstance()->AddContextCmd(cmdNullMouseThumb);
+
+		fMouseActive = false;
+	}
+
+	void SpectatorCameraCommandProducer_c::EnableMouse()
+	{
+		if(fMouseActive)
+			return;
+
+		cmdNullMouseThumb.Unlink();
+		clMouseThumb.Enable(*Console_c::GetInstance());
+
+		fMouseActive = true;
 	}
 
 	void SpectatorCameraCommandProducer_c::SetMoveSpeed(Float_t v)
@@ -105,5 +145,10 @@ namespace Phobos
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "SpectatorCameraCommandProducer_c::SetMouseSensitivity", "Mouse sensitivity must be greater than zero");
 
 		fpMouseSensitivity = v;
+	}
+
+	void SpectatorCameraCommandProducer_c::CmdNullMouseThumb(const StringVector_t &args, Context_c &)
+	{
+		//empty
 	}
 }

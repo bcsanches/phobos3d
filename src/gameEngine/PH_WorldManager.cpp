@@ -38,9 +38,11 @@ namespace Phobos
 	WorldManager_c::WorldManager_c():
 		CoreModule_c("WorldManager", PRIVATE_CHILDREN),
 		cmdLoadMap("loadMap"),
+		cmdUnloadMap("unloadMap"),
 		cmdDumpFactoryCreators("dumpFactoryCreators")
 	{
 		cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdLoadMap, this));
+		cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdUnloadMap, this));
 		cmdDumpFactoryCreators.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdDumpFactoryCreators, this));
 	}
 
@@ -49,12 +51,17 @@ namespace Phobos
 
 	}
 
-	void WorldManager_c::LoadMap(const String_c &mapName)
+	void WorldManager_c::UnloadMap()
 	{
 		this->RemoveAllChildren();
 		clEntityManager.Clear();
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
+	}
+
+	void WorldManager_c::LoadMap(const String_c &mapName)
+	{
+		this->UnloadMap();
 
 		clMapLoader.LoadOgitor(mapName);
 
@@ -111,6 +118,7 @@ namespace Phobos
 		ConsolePtr_t console = Console_c::GetInstance();
 
 		console->AddContextCmd(cmdLoadMap);
+		console->AddContextCmd(cmdUnloadMap);
 		console->AddContextCmd(cmdDumpFactoryCreators);
 	}
 
@@ -196,6 +204,11 @@ namespace Phobos
 		{
 			Kernel_c::GetInstance().LogMessage(ex.what());
 		}
+	}
+
+	void WorldManager_c::CmdUnloadMap(const StringVector_t &args, Context_c &)
+	{
+		this->UnloadMap();
 	}
 
 	void WorldManager_c::CmdDumpFactoryCreators(const StringVector_t &args, Context_c &)

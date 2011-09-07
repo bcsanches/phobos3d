@@ -18,6 +18,7 @@ subject to the following restrictions:
 #define PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 
 #include <PH_Button.h>
+#include <PH_ContextVar.h>
 #include <PH_Thumb.h>
 #include <PH_Types.h>
 
@@ -84,7 +85,7 @@ namespace Phobos
 
 	#define PH_MOUSE_THUMB_CMD_NAME "mouseThumb"
 
-	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer_c
+	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer_c, ContextVarListener_c
 	{
 		public:
 			SpectatorCameraCommandProducer_c(Context_c *context = NULL);
@@ -102,16 +103,24 @@ namespace Phobos
 			void SetMouseSensitivity(Float_t v);
 
 		private:
+			void OnVariableValueChanged(const class ContextVar_c &var);
+
+			void CmdNullMouseThumb(const StringVector_t &args, Context_c &);			
+
+		private:
 			AxisButton_c	clMoveButton;
 			AxisButton_c	clMoveUpDown;
 			AxisButton_c	clStrafeButton;
 			AxisButton_c	clTurnButton;
 			AxisButton_c	clLookButton;		
 			Thumb_c			clMouseThumb;
+			ContextCmd_c	cmdNullMouseThumb;
 
 			Float_t			fpMoveSpeed;
 			Float_t			fpTurnSpeed;
 			Float_t			fpMouseSensitivity;
+
+			bool			fMouseActive;
 	};
 }
 

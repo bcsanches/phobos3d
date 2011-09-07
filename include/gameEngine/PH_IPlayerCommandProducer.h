@@ -22,6 +22,19 @@ subject to the following restrictions:
 
 #include <PH_RefCounter.h>
 
+/*
+	Mouse can be clipped or not to the screen.
+
+	When it is clipped, the cursor is hidden and not visible. Also the input system will try to keep 
+	it centered on screen.
+
+	When not clipped its movement is ignored by the input system.
+
+	A dynamic variable (console variable) can be created with the MOUSE_CLIPPED_VAR name and will be monitored
+	by the Command Producer.
+*/
+#define PH_PLAYER_CMD_MOUSE_CLIPPED_VAR "dvMouseClipped"
+
 namespace Phobos
 {
 	class IPlayerCmd_c: public RefCounter_c

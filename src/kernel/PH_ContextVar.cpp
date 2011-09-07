@@ -15,6 +15,8 @@ subject to the following restrictions:
 */
 #include "PH_ContextVar.h"
 
+#include <boost/bind.hpp>
+
 namespace Phobos
 {
 	void ContextVar_c::SetValue(const String_c &newValue)
@@ -22,6 +24,10 @@ namespace Phobos
 		if(pfnCallback)
 			pfnCallback(*this, strValue, newValue);			
 
-		strValue = newValue;		
+		strValue = newValue;
+
+		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&ContextVarListener_c::OnVariableValueChanged, _1, boost::ref(*this)));
 	}
+
+	PH_DEFINE_LISTENER_PROCS(ContextVar_c, ContextVarListener_c, lstListeners);
 }

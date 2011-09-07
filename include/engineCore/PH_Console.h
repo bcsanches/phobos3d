@@ -107,6 +107,7 @@ namespace Phobos
 
 			inline const ContextVar_c &GetContextVar(const String_c &name) const;
 			inline const ContextVar_c *TryGetContextVar(const String_c &name) const;
+			inline ContextVar_c *TryGetContextVar(const String_c &name);
 
 			void Print(const String_c &text);		
 
@@ -233,6 +234,11 @@ namespace Phobos
 	inline const ContextVar_c &Console_c::GetContextVar(const String_c &name) const
 	{
 		return clContext.GetContextVar(name);
+	}
+
+	inline ContextVar_c *Console_c::TryGetContextVar(const String_c &name)
+	{
+		return clContext.TryGetContextVar(name);
 	}
 
 	inline const ContextVar_c *Console_c::TryGetContextVar(const String_c &name) const

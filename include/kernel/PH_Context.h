@@ -64,6 +64,7 @@ namespace Phobos
 
 			const ContextVar_c &GetContextVar(const String_c &name) const;
 			const ContextVar_c *TryGetContextVar(const String_c &name) const;
+			ContextVar_c *TryGetContextVar(const String_c &name);
 
 			void Execute(const String_c &cmdBuffer);
 			void ExecuteFromFile(const String_c &fileName);
@@ -71,8 +72,7 @@ namespace Phobos
 		private:
 			// =====================================================
 			// PRIVATE METHODS
-			// =====================================================
-			ContextVar_c *TryGetContextVar(const String_c &name);
+			// =====================================================			
 			const ContextCmd_c *TryGetContextCmd(const String_c &name) const;
 			ContextCmd_c *TryGetContextCmd(const String_c &name);
 

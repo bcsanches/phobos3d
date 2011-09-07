@@ -20,18 +20,18 @@ subject to the following restrictions:
 
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
-#include <PH_CoreModule.h>
 #include <PH_GamePlugin.h>
 #include <PH_Singleton.h>
 #include <PH_WorldManager.h>
 
+#include "PH_BaseClient.h"
 #include "PH_SpectatorCamera.h"
 
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(Client);
 
-	class Client_c: public CoreModule_c, private WorldManagerListener_c
+	class Client_c: public BaseClient_c, private WorldManagerListener_c
 	{
 		PH_DECLARE_SINGLETON_METHODS(Client);
 
@@ -40,8 +40,7 @@ namespace Phobos
 
 		protected:
 			void OnFixedUpdate();
-			void OnUpdate();
-			void OnRenderReady();
+			void OnUpdate();			
 			void OnPrepareToBoot();
 
 		private:
@@ -49,12 +48,8 @@ namespace Phobos
 
 			void OnMapUnloaded();
 			void OnMapLoaded();
-
-			void ClipMouseCursor();
-			void UnclipMouseCursor();
 			
-			void CmdToggleMouseCursorClip(const StringVector_t &args, Context_c &);
-			void CmdNullMouseThumb(const StringVector_t &args, Context_c &);
+			void CmdToggleMouseCursorClip(const StringVector_t &args, Context_c &);			
 
 			void VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue);
 			void VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue);
@@ -63,16 +58,14 @@ namespace Phobos
 			struct ConfigInfo_s GetConfig();
 
 		private:					
-			ContextCmd_c		cmdToggleMouseCursorClip;
-			ContextCmd_c		cmdNullMouseThumb;
+			ContextCmd_c		cmdToggleMouseCursorClip;			
 			ContextVar_c		varMouseSensitivity;
 
 			ContextVar_c		varSpectatorMoveSpeed;
 			ContextVar_c		varSpectatorTurnSpeed;
 
 			SpectatorCamera_c	clSpectatorCamera;
-
-			bool fMouseClipped;
+			
 			bool fMapLoaded;
 	};
 }

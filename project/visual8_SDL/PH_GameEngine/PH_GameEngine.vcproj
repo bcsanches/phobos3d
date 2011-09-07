@@ -356,6 +356,14 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath="..\..\..\src\gameEngine\PH_BaseClient.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_BaseClient.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h"
 			>
 		</File>

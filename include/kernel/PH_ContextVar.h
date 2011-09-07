@@ -19,11 +19,23 @@ subject to the following restrictions:
 
 #include "PH_ContextItem.h"
 #include "PH_Defs.h"
+#include "PH_Listener.h"
 
 #include <boost/function.hpp>
 
 namespace Phobos
 {
+	class ContextVarListener_c
+	{
+		public:
+			virtual ~ContextVarListener_c() {};
+
+			virtual void OnVariableValueChanged(const class ContextVar_c &var) = 0;
+
+		public:
+			PH_DECLARE_LISTENER_HOOK;
+	};
+
 	/**
 		This callback is called when the variable value changes, the parameters are:
 			var -> reference to the variable that is being changed
@@ -57,12 +69,16 @@ namespace Phobos
 
 			inline void SetCallback(const VarCallback_t &newCallback);
 
+			PH_DECLARE_LISTENER_PROCS(ContextVarListener_c);	
+
 		private:
 			// =====================================================
 			// PRIVATE TYPES
 			// =====================================================
 			String_c		strValue;
 			VarCallback_t	pfnCallback;
+
+			PH_DECLARE_LISTENER_LIST(ContextVarListener_c, lstListeners);
 	};
 
 	// =====================================================
