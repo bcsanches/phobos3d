@@ -22,16 +22,14 @@ subject to the following restrictions:
 namespace Phobos
 {
 	GameCamera_c::GameCamera_c():
-		iViewportZOrder(-1)
+		iViewportZOrder(-1),
+		fpNearPlane(1)
 	{
 		RenderPtr_t render = Render_c::GetInstance();
-
+				
 		pclRootNode = render->CreateSceneNode();
-		pclCamera = render->CreateCamera();	
 
-		pclRootNode->attachObject(pclCamera);	
-	
-		pclCamera->setOrientation(Ogre::Quaternion(Ogre::Angle(180), Ogre::Vector3::UNIT_Y));	
+		this->CreateCamera();				
 	}
 
 	GameCamera_c::~GameCamera_c()
@@ -74,16 +72,53 @@ namespace Phobos
 
 	void GameCamera_c::SetNearClipDistance(const Float_t distance)
 	{
+		fpNearPlane = distance;
 		pclCamera->setNearClipDistance(distance);
 	}
 
 	void GameCamera_c::Enable()
 	{
-		pclRootNode->attachObject(pclCamera);
+		//PH_ASSERT(pclCamera == NULL);
+
+		//this->CreateCamera();
+		this->EnableViewport(iViewportZOrder);
 	}
 	
 	void GameCamera_c::Disable()
 	{
+		RenderPtr_t render = Render_c::GetInstance();
+		/*
 		pclRootNode->detachObject(pclCamera);
+		
+		if(iViewportZOrder >= 0)
+			render->RemoveViewport(iViewportZOrder);
+
+		if(pclCamera)
+			render->DestroyCamera(pclCamera);
+
+		pclCamera = NULL;
+		*/
+		if(iViewportZOrder >= 0)
+			render->RemoveViewport(iViewportZOrder);
+	}
+
+	void GameCamera_c::AddCameraListener(Ogre::Camera::Listener &listener)
+	{
+		pclCamera->addListener(&listener);
+	}
+
+	void GameCamera_c::CreateCamera()
+	{
+		RenderPtr_t render = Render_c::GetInstance();
+		
+		pclCamera = render->CreateCamera();	
+
+		pclRootNode->attachObject(pclCamera);
+
+		if(iViewportZOrder >= 0)
+			Render_c::GetInstance()->AddViewport(pclCamera, iViewportZOrder);
+
+		pclCamera->setOrientation(Ogre::Quaternion(Ogre::Angle(180), Ogre::Vector3::UNIT_Y));	
+		pclCamera->setNearClipDistance(fpNearPlane);
 	}
 }

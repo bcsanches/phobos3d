@@ -242,6 +242,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\kernel\PH_ContextCmdFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\kernel\PH_ContextFwd.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\kernel\PH_ContextItem.cpp"
 				>
 			</File>

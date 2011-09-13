@@ -284,6 +284,10 @@
 			RelativePath="..\..\..\include\engineCore\PH_TransformProperty.h"
 			>
 		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_TransformPropertyFwd.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

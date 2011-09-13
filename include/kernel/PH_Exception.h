@@ -209,7 +209,7 @@ namespace Phobos
 
 #	ifndef PH_RAISE
 #		define PH_RAISE(error, module, extraInfo)	\
-		throw Phobos::ExceptionFactory_c::Create(ExceptionErrorType_s<error>(), module, extraInfo, __FILE__, __LINE__);
+		throw Phobos::ExceptionFactory_c::Create(Phobos::ExceptionErrorType_s<error>(), module, extraInfo, __FILE__, __LINE__);
 #	endif
 
 #endif

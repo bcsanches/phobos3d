@@ -21,16 +21,35 @@ subject to the following restrictions:
 
 #include <OgreSceneNode.h>
 
+#define PH_MODEL_RENDERER_COMPONENT_NAME "ModelRenderer"
+
 namespace Phobos
 {
 	class TransformProperty_c;
 
-	class ModelRendererComponent_c: public EntityComponent_c
+	class PH_GAME_ENGINE_API ModelRendererComponent_c: public EntityComponent_c
 	{
 		public:
 			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
 			void Update();
+
+			void AttachObjectToBone(
+				const Char_t *boneName, 
+				Ogre::MovableObject &movable, 
+				const Ogre::Quaternion &offsetOrientation = Ogre::Quaternion::IDENTITY, 
+				const Ogre::Vector3 &offsetPosition = Ogre::Vector3::ZERO
+			);
+
+			void AttachObjectToBone(
+				const String_c &boneName, 
+				Ogre::MovableObject &movable, 
+				const Ogre::Quaternion &offsetOrientation = Ogre::Quaternion::IDENTITY, 
+				const Ogre::Vector3 &offsetPosition = Ogre::Vector3::ZERO
+			);
+
+			Ogre::Bone &GetBone(const char *boneName);
+			Ogre::Bone &GetBone(const String_c &boneName);
 
 		protected:
 			ModelRendererComponent_c(const String_c &name, Entity_c &owner);

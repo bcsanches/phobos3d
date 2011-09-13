@@ -203,6 +203,14 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath="..\..\..\src\input\PH_AxisButton.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\input\PH_AxisButton.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\input\PH_Button.cpp"
 			>
 		</File>

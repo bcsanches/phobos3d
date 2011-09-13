@@ -30,7 +30,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR("ModelRenderer", ModelRendererComponent_c);
+	PH_FULL_ENTITY_COMPONENT_CREATOR(PH_MODEL_RENDERER_COMPONENT_NAME, ModelRendererComponent_c);
 
 	EntityInputManager_c ModelRendererComponent_c::clInputManager_gl;
 		
@@ -91,6 +91,36 @@ namespace Phobos
 	{		
 		pclSceneNode->setPosition(pprpTransform->GetOrigin());
 		pclSceneNode->setOrientation(pprpTransform->GetRotation());
+	}
+
+	void ModelRendererComponent_c::AttachObjectToBone(
+				const Char_t *boneName, 
+				Ogre::MovableObject &movable, 
+				const Ogre::Quaternion &offsetOrientation, 
+				const Ogre::Vector3 &offsetPosition
+			)
+	{
+		pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
+	}
+
+	void ModelRendererComponent_c::AttachObjectToBone(
+				const String_c &boneName, 
+				Ogre::MovableObject &movable, 
+				const Ogre::Quaternion &offsetOrientation, 
+				const Ogre::Vector3 &offsetPosition
+			)
+	{
+		pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
+	}
+
+	Ogre::Bone &ModelRendererComponent_c::GetBone(const char *boneName)
+	{
+		return *pclMeshEntity->getSkeleton()->getBone(boneName);
+	}
+
+	Ogre::Bone &ModelRendererComponent_c::GetBone(const String_c &boneName)
+	{
+		return *pclMeshEntity->getSkeleton()->getBone(boneName);
 	}
 
 	PH_BEGIN_ENTITY_INPUT(ModelRendererComponent_c, SetPosition)

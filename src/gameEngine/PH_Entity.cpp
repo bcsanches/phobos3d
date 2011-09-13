@@ -26,12 +26,15 @@ namespace Phobos
 	PH_FULL_ENTITY_CREATOR("Entity", Entity_c);
 
 	Entity_c::Entity_c(const String_c &name):
-		EntityIO_c(name, PRIVATE_CHILDREN)
+		EntityIO_c(name, PRIVATE_CHILDREN),
+		pclDictionary(NULL)
 	{
 	}
 
 	void Entity_c::Load(const Dictionary_c &dict)
 	{
+		pclDictionary = &dict;
+
 		strClassName = dict.GetInherited()->GetName();
 
 		const String_c *components = dict.TryGetValue(PH_ENTITY_KEY_COMPONENTS);
@@ -68,5 +71,10 @@ namespace Phobos
 
 			component->LoadFinished();
 		}
+	}
+
+	EntityComponent_c &Entity_c::GetComponent(const char *typeName)
+	{
+		return static_cast<EntityComponent_c &>(*this->GetChild(typeName));			
 	}
 }

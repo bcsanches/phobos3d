@@ -14,48 +14,26 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_Button.h"
-
-#include <PH_Context.h>
-#include <PH_ContextUtils.h>
-#include <PH_Error.h>
+#include "PH_AxisButton.h"
 
 namespace Phobos
-{
-	Button_c::Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context):
-		fpValue(0),
-		cmdUp(up),
-		cmdDown(down),
-		cmdUpdate(update)
+{	
+	AxisButton_c::AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context):
+		clButtonA(upA, downA, updateA, context),
+		clButtonB(upB, downB, updateB, context)
 	{
-		cmdUp.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
-		cmdDown.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
-		cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
-
-		if(context)
-			this->Enable(*context);
+		//empty
 	}
 
-	void Button_c::Enable(IContext_c &context)
+	void AxisButton_c::Enable(IContext_c &context)
 	{
-		context.AddContextCmd(cmdUp);
-		context.AddContextCmd(cmdDown);
-		context.AddContextCmd(cmdUpdate);
+		clButtonA.Enable(context);
+		clButtonB.Enable(context);
 	}
 
-	void Button_c::Disable()
+	void AxisButton_c::Disable()
 	{
-		cmdUp.Unlink();
-		cmdDown.Unlink();
-		cmdUpdate.Unlink();
-
-		fpValue = 0;
+		clButtonA.Disable();
+		clButtonB.Disable();
 	}
-
-	void Button_c::CmdProc(const StringVector_t &args, Context_c & )
-	{
-		PH_ASSERT(args.size() >= 4);
-
-		fpValue = StringToFloat(args[3]);
-	}	
 }

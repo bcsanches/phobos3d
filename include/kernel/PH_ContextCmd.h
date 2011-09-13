@@ -17,18 +17,11 @@ subject to the following restrictions:
 #ifndef PH_CONTEXT_CMD_H
 #define PH_CONTEXT_CMD_H
 
+#include "PH_ContextCmdFwd.h"
 #include "PH_ContextItem.h"
-#include "PH_Defs.h"
-
-#include <boost/function.hpp>
-#include <vector>
 
 namespace Phobos
-{
-	class Context_c;
-	typedef std::vector<String_c> StringVector_t;
-	typedef boost::function2<void, const StringVector_t &, Context_c &> CmdProc_t;
-
+{	
 	class PH_KERNEL_API ContextCmd_c: public ContextItem_c
 	{	
 		public:

@@ -14,6 +14,9 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_TRANSFORM_PROPERTY_H
+#define PH_TRANSFORM_PROPERTY_H
+
 #include <PH_NodeProperty.h>
 
 #include "PH_Transform.h"
@@ -81,5 +84,12 @@ namespace Phobos
 			{
 				clTransform.Rotate(axis, angle);
 			}
+
+			inline const Transform_c &GetTransform() const
+			{
+				return clTransform;
+			}
 	};
 }
+
+#endif

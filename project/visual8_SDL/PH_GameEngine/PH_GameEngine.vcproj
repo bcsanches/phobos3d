@@ -143,6 +143,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -191,6 +192,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gameEngine\PH_EntityFwd.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\gameEngine\PH_EntityKeys.h"
 				>
 			</File>
@@ -228,14 +233,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_EntityComponentFactory.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\gameEngine\PH_GameCamera.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_GameCamera.h"
 				>
 			</File>
 			<File
@@ -364,6 +361,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\gameEngine\PH_GameCamera.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_GameCamera.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h"
 			>
 		</File>
@@ -373,6 +378,10 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_HandleManager.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gameEngine\PH_IGameController.h"
 			>
 		</File>
 		<File

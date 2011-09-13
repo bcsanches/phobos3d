@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-October 2011
+September 2011
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -13,54 +13,22 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 */
+#ifndef PH_CONTEXT_CMD_FWD_H
+#define PH_CONTEXT_CMD_FWD_H
 
+#include "PH_String.h"
+#include "PH_Types.h"
 
-#ifndef PH_GAME_CAMERA_H
-#define PH_GAME_CAMERA_H
-
-#include <boost/noncopyable.hpp>
-
-#include <OgrePrerequisites.h>
-#include <OgreCamera.h>
-
-#include <PH_Transform.h>
-
-#include "PH_GameEngineAPI.h"
+#include <boost/function.hpp>
+#include <vector>
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API GameCamera_c: boost::noncopyable
-	{
-		public:
-			GameCamera_c();
-			~GameCamera_c();
+	class Context_c;
+	class ContextCmd_c;	
 
-			void EnableViewport(int ZOrder = 0);
-
-			void SetTransform(const Transform_c &t);
-
-			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
-
-			void SetNearClipDistance(const Float_t distance);
-
-			void Enable();
-			void Disable();
-
-			void AddCameraListener(Ogre::Camera::Listener &listener);
-
-		private:
-			void CreateCamera();
-
-		private:
-			Ogre::SceneNode	*pclRootNode;
-			Ogre::Camera	*pclCamera;
-
-			int iViewportZOrder;
-
-			Float_t fpNearPlane;
-			Float_t fpFarPlane;
-	};
+	typedef std::vector<String_c> StringVector_t;
+	typedef boost::function2<void, const StringVector_t &, Context_c &> CmdProc_t;
 }
 
 #endif
-

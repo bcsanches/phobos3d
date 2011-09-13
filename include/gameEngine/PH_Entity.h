@@ -24,6 +24,7 @@ subject to the following restrictions:
 namespace Phobos
 {
 	class Dictionary_c;
+	class EntityComponent_c;
 
 	PH_DECLARE_NODE_PTR(Entity);
 
@@ -47,12 +48,15 @@ namespace Phobos
 
 			virtual void OnLoadFinished() {};
 
+			EntityComponent_c &GetComponent(const char *typeName);
+
+			inline const Dictionary_c &GetDictionary() const;
+
 		private:			
-			String_c strClassName;
+			String_c			strClassName;
+			const Dictionary_c	*pclDictionary;
 
 			Handle_s hHandle;
-
-
 	};
 
 	inline const String_c &Entity_c::GetEntityClassName() const
@@ -68,6 +72,11 @@ namespace Phobos
 	inline const Handle_s Entity_c::GetHandle() const
 	{
 		return hHandle;
+	}
+
+	inline const Dictionary_c &Entity_c::GetDictionary() const
+	{
+		return *pclDictionary;
 	}
 }
 

@@ -17,6 +17,7 @@ subject to the following restrictions:
 #ifndef PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 #define PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 
+#include <PH_AxisButton.h>
 #include <PH_Button.h>
 #include <PH_ContextVar.h>
 #include <PH_Thumb.h>

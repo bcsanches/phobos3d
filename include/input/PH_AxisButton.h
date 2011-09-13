@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-October 2011
+October 2010
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -15,52 +15,30 @@ subject to the following restrictions:
 */
 
 
-#ifndef PH_GAME_CAMERA_H
-#define PH_GAME_CAMERA_H
+#ifndef PH_AXIS_BUTTON_H
+#define PH_AXIS_BUTTON_H
 
-#include <boost/noncopyable.hpp>
-
-#include <OgrePrerequisites.h>
-#include <OgreCamera.h>
-
-#include <PH_Transform.h>
-
-#include "PH_GameEngineAPI.h"
+#include "PH_Button.h"
 
 namespace Phobos
-{
-	class PH_GAME_ENGINE_API GameCamera_c: boost::noncopyable
+{		
+	class PH_INPUT_API AxisButton_c
 	{
 		public:
-			GameCamera_c();
-			~GameCamera_c();
+			AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context = NULL);
 
-			void EnableViewport(int ZOrder = 0);
-
-			void SetTransform(const Transform_c &t);
-
-			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
-
-			void SetNearClipDistance(const Float_t distance);
-
-			void Enable();
+			void Enable(IContext_c &context);
 			void Disable();
 
-			void AddCameraListener(Ogre::Camera::Listener &listener);
+			inline Float_t GetValue() const
+			{
+				return(clButtonB.GetValue() - clButtonA.GetValue());
+			}
 
-		private:
-			void CreateCamera();
-
-		private:
-			Ogre::SceneNode	*pclRootNode;
-			Ogre::Camera	*pclCamera;
-
-			int iViewportZOrder;
-
-			Float_t fpNearPlane;
-			Float_t fpFarPlane;
+		private:		
+			Button_c	clButtonA;
+			Button_c	clButtonB;
 	};
 }
 
 #endif
-

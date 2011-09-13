@@ -20,12 +20,13 @@ subject to the following restrictions:
 #include <boost/noncopyable.hpp>
 
 #include <PH_GameCamera.h>
+#include <PH_IGameController.h>
 
 #include "PH_SpectatorCameraCommandProducer.h"
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API SpectatorCamera_c: boost::noncopyable
+	class PH_GAME_ENGINE_API SpectatorCamera_c: public IGameController_c, boost::noncopyable
 	{
 		public:
 			SpectatorCamera_c();
