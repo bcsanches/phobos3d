@@ -61,7 +61,7 @@ namespace Phobos
 	template <typename T>
 	inline T MathPositive(const T v1)
 	{
-		return std::max(v1, -v1);
+		return std::abs(v1, -v1);
 	}
 
 	inline Ogre::Degree ClipDegree(Ogre::Degree angle)

@@ -176,6 +176,10 @@
 			Name="math"
 			>
 			<File
+				RelativePath="..\..\..\include\engineCore\PH_Accelerometer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\engineCore\PH_Interpolator.h"
 				>
 			</File>

@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_INTERPOLATOR_H
 #define PH_INTERPOLATOR_H
 
+#include <PH_Types.h>
+
 namespace Phobos
 {
 	template <typename T>
@@ -108,6 +110,12 @@ namespace Phobos
 				tCurrentValue = startValue;
 			}
 
+			void Update(Float_t ticks)
+			{
+				//Force a value update
+				this->GetValue(fpCurrentTime + ticks);
+			}
+
 			T GetValue(Float_t time)
 			{
 				if(time != fpCurrentTime)
@@ -125,9 +133,21 @@ namespace Phobos
 					{
 						tCurrentValue = tStartValue + (tEndValue - tStartValue) * (delta / fpDuration);
 					}
+
+					fpCurrentTime = time;
 				}
 
 				return tCurrentValue;
+			}
+
+			T GetCurrentValue() const
+			{
+				return tCurrentValue;
+			}
+
+			Float_t GetCurrentTime() const
+			{
+				return fpCurrentTime;
 			}
 
 		private:
