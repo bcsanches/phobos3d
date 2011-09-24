@@ -12,6 +12,9 @@ namespace Phobos
 
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
+
+			virtual void Enable() = 0;
+			virtual void Disable() = 0;
 	};
 }
 

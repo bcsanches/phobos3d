@@ -209,3 +209,6 @@ glob:project/visual8_SDL/UT_GameEngine/UT_GameEngine.vcproj.mordor.bcsanches.use
 glob:project/visual8_SDL/PH_EngineMain/Release/
 glob:project/visual8_SDL/PH_GameEngine/Release/
 glob:project/visual8_SDL/UT_GameEngine/Release/
+glob:project/visual8_SDL/UT_EngineCore/Debug/
+glob:project/visual8_SDL/UT_EngineCore/Release/
+glob:project/visual8_SDL/UT_EngineCore/UT_EngineCore.vcproj.mordor.bcsanches.user
