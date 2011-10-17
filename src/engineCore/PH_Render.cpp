@@ -558,12 +558,20 @@ namespace Phobos
 
 		Ogre::ShadowTechnique tech;
 
-		if(!clShadowType_gl.GetValue(tech,args[1]))
+		if(!clShadowType_gl.TryGetValue(tech,args[1]))
 		{
 			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Parameter " + args[1] + " is invalid");
 
 			return;
 		}
+
+		if(tech == eShadowMode)
+			return;
+
+		eShadowMode = tech;
+
+		if(pclMainSceneManager == NULL)
+			return;
 
 		this->SetShadowMode(tech);
 	}

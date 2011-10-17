@@ -30,7 +30,7 @@ namespace Phobos
 			{
 			}
 
-			bool GetValue(T &out, I v)
+			bool TryGetValue(T &out, I v)
 			{
 				for(size_t i = 0;pstEnumTable[i].pstrzName; ++i)
 				{
@@ -45,7 +45,7 @@ namespace Phobos
 				return(false);
 			}
 
-			bool GetValue(T &out, const String_c &str)
+			bool TryGetValue(T &out, const String_c &str)
 			{
 				for(size_t i = 0;pstEnumTable[i].pstrzName; ++i)
 				{
@@ -64,7 +64,7 @@ namespace Phobos
 				return(this->GetName((I)v));
 			}
 
-			const Char_t *GetName(const I v)
+			const Char_t *TryGetName(const I v)
 			{
 				for(size_t i = 0;pstEnumTable[i].pstrzName; ++i)
 				{

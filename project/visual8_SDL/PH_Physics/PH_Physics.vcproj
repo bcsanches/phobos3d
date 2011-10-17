@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="PH_EngineMain"
-	ProjectGUID="{1E61C529-FEC4-4680-B2BE-8E29FC9DF496}"
-	RootNamespace="PH_EngineMain"
+	Name="PH_Physics"
+	ProjectGUID="{3FA8D77E-EE95-4D57-A8C1-CFBD895B8B46}"
+	RootNamespace="PH_Physics"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\physics&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_MSVC;PH_CHECK_ASSERT;PH_DEBUG;PH_SDL"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include\physics\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary\&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_PHYSICS_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_SDL;PH_MSVC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,11 +61,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib"
-				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
+				AdditionalDependencies="BulletDynamics.lib BulletCollision.lib LinearMath.lib OgreMain_d.lib"
+				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="C:\develop\libs\bullet-2.78\msvc\2008\lib\debug"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -94,7 +96,7 @@
 			Name="Release|Win32"
 			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -117,8 +119,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_WIN32;PH_IGNORE_ASSERT;PH_MSVC;PH_RELEASE;PH_SDL"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include\physics\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_PHYSICS_EXPORTS;PH_RELEASE;PH_IGNORE_ASSERT;PH_SDL;PH_WIN32;PH_MSVC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,12 +138,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib"
+				AdditionalDependencies="BulletDynamics.lib"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="C:\develop\libs\bullet-2.78\msvc\2008\lib\release"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -170,10 +175,48 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\..\..\src\engineMain\PH_EngineMain.cpp"
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-		</File>
+			<File
+				RelativePath="..\..\..\src\physics\PH_PhysicsManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\physics\PH_RigidBodyComponent.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath="..\..\..\include\physics\PH_PhysicsAPI.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\physics\PH_PhysicsManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\physics\PH_PhysicsUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\physics\PH_RigidBodyComponent.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

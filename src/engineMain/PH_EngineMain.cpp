@@ -30,6 +30,7 @@ subject to the following restrictions:
 #include <PH_Kernel.h>
 #include <PH_ModelRendererManager.h>
 #include <PH_MoverManager.h>
+#include <PH_PhysicsManager.h>
 #include <PH_PluginManager.h>
 #include <PH_ProcVector.h>
 #include <PH_Render.h>
@@ -103,6 +104,10 @@ namespace Phobos
 		MoverManagerPtr_t moverManager = MoverManager_c::CreateInstance();
 		clSingletons.AddProc(MoverManager_c::ReleaseInstance);
 		core->AddModule(moverManager);
+
+		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::CreateInstance();
+		clSingletons.AddProc(Physics::PhysicsManager_c::ReleaseInstance);
+		core->AddModule(physicsManager, LOWEST_PRIORITY+2);
 
 		ModelRendererManagerPtr_t modelRendererManager = ModelRendererManager_c::CreateInstance();
 		clSingletons.AddProc(ModelRendererManager_c::ReleaseInstance);

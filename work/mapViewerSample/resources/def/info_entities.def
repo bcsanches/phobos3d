@@ -12,7 +12,12 @@ EntityDef SkeletonTorch
 EntityDef Platform
 {
   className=Entity;
-  components="ModelRenderer|LinearMover|Transform";
+  components="ModelRenderer|LinearMover|Transform|RigidBody";
+  
+  colliderType = "box";
+  boxDimensions = "1 1 1";
+  
+  mass = 5;
 }
 
 EntityDef PathCorner
