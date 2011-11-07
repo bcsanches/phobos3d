@@ -21,9 +21,9 @@ subject to the following restrictions:
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
 
-#include "PH_GameEngineAPI.h"
-
 #include "PH_Entity.h"
+#include "PH_GameEngineAPI.h"
+#include "PH_PhysicsManager.h"
 
 #define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
 
@@ -55,6 +55,18 @@ namespace Phobos
 				Ogre::SceneNode *pclSceneNode;
 				Ogre::Entity *pclEntity;
 				Ogre::Light *pclLight;
+
+				Physics::PhysicsManager_c::CollisionShapeSharedPtr_t spCollisionShape;
+				btRigidBody *pclRigidBody;
+
+				inline StaticObject_s():
+					pclSceneNode(NULL),
+					pclEntity(NULL),
+					pclLight(NULL),
+					pclRigidBody(NULL)
+				{
+					//empty
+				}
 			};
 
 			WorldEntity_c(const String_c &name);

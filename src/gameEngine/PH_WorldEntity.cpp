@@ -27,6 +27,7 @@ subject to the following restrictions:
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Render.h>
+#include <PH_Transform.h>
 
 #include "PH_GameDictionaryUtils.h"
 #include "PH_EntityFactory.h"
@@ -43,14 +44,15 @@ namespace Phobos
 	{
 		Ogre::Entity *pclEntity;
 		Ogre::SceneNode *pclSceneNode;
-		Ogre::Light *pclLight;
+		Ogre::Light *pclLight;		
+
 		bool fParent;
 		String_c strName;
 
 		TempStaticObject_s():
 			pclEntity(NULL),
 			pclSceneNode(NULL),
-			pclLight(NULL),
+			pclLight(NULL),						
 			fParent(false)
 		{
 		}
@@ -59,11 +61,11 @@ namespace Phobos
 		{
 			object.pclEntity = pclEntity;
 			object.pclSceneNode = pclSceneNode;
-			object.pclLight = pclLight;
+			object.pclLight = pclLight;						
 
 			pclEntity = NULL;
 			pclLight = NULL;
-			pclSceneNode = NULL;
+			pclSceneNode = NULL;			
 		}
 
 		~TempStaticObject_s()
@@ -118,6 +120,9 @@ namespace Phobos
 
 			if(object.pclEntity)
 				render->DestroyEntity(object.pclEntity);
+
+			if(object.pclRigidBody)
+				delete object.pclRigidBody;
 		}
 	}
 
@@ -178,6 +183,29 @@ namespace Phobos
 				object.pclSceneNode->getParent()->removeChild(object.pclSceneNode);
 			it->second.pclSceneNode->addChild(object.pclSceneNode);
 		}
+
+		//configure physics
+		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
+
+		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
+		{
+			StaticObject_s &object = pair.second;
+
+			if(object.pclEntity == NULL)
+				continue;
+
+			//Why using those _ functions: http://89.151.96.106/forums/viewtopic.php?f=22&t=62386
+			//http://www.ogre3d.org/forums/viewtopic.php?p=221113
+			//http://www.ogre3d.org/tikiwiki/-SceneNode
+			Transform_c transform(
+				object.pclSceneNode->_getDerivedPosition(), 
+				object.pclSceneNode->_getDerivedOrientation()
+			);
+
+			object.spCollisionShape = physicsManager->CreateMeshShape(*object.pclEntity->getMesh().get());
+			object.pclRigidBody = physicsManager->CreateRigidBody(transform, *object.spCollisionShape.get(), 0);
+		}		
+		
 
 		if(pclTerrainGroupDictionary != NULL)
 		{
@@ -305,7 +333,7 @@ namespace Phobos
 
 		temp.pclEntity = Render_c::GetInstance()->CreateEntity(dict.GetValue("meshfile"));
 		temp.pclEntity->setCastShadows(dict.GetBool("castshadows"));
-		temp.pclSceneNode->attachObject(temp.pclEntity);
+		temp.pclSceneNode->attachObject(temp.pclEntity);		
 	}
 
 	void WorldEntity_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)

@@ -1,0 +1,17 @@
+
+material Base_128
+{
+	technique
+	{
+		pass
+		{			
+			texture_unit
+			{
+				texture base128.png
+			}
+		}
+
+	}
+}
+
+

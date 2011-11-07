@@ -61,9 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2008\lib\debug&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="..\..\..\lib\$(TargetName).lib"
@@ -349,6 +350,38 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_GameEventManager.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="physics"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionMesh.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_PhysicsManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_PhysicsManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_PhysicsUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_RigidBodyComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_RigidBodyComponent.h"
 				>
 			</File>
 		</Filter>

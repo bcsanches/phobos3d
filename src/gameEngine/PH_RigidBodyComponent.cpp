@@ -16,12 +16,12 @@ subject to the following restrictions:
 
 #include "PH_RigidBodyComponent.h"
 
-#include <PH_EntityComponentFactory.h>
-#include <PH_EntityKeys.h>
 #include <PH_Enum.h>
-#include <PH_GameDictionaryUtils.h>
 #include <PH_Transform.h>
 
+#include "PH_EntityComponentFactory.h"
+#include "PH_EntityKeys.h"
+#include "PH_GameDictionaryUtils.h"
 #include "PH_PhysicsManager.h"
 
 namespace Phobos

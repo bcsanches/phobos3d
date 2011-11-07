@@ -14,6 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <PH_Core.h>
+
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtil.h"
 
@@ -28,6 +30,15 @@ namespace Phobos
 			pfnLessThanProc(proc)
 		{
 			uShapeInfo.stBox = info;
+		}
+
+		inline PhysicsManager_c::CollisionShapeComparator_s::CollisionShapeComparator_s(const Ogre::Mesh &mesh, CompareShapeProc_t proc):
+			eType(CST_MESH),
+			pfnLessThanProc(proc),
+			strMeshName(mesh.getName()),
+			spCollisionMesh(new CollisionMesh_c(mesh))
+		{
+
 		}
 
 		bool PhysicsManager_c::CollisionShapeComparator_s::operator<(const CollisionShapeComparator_s &rhs) const
@@ -58,6 +69,16 @@ namespace Phobos
 			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
 		}
 
+		void PhysicsManager_c::OnFixedUpdate()
+		{
+			if(!spWorld)
+				return;
+
+			const CoreTimer_s &timer = Core_c::GetInstance()->GetGameTimer();
+
+			spWorld->stepSimulation(timer.fpFrameTime);
+		}
+
 		btRigidBody *PhysicsManager_c::CreateRigidBody(const Transform_c &transform, btCollisionShape &shape, Float_t mass)
 		{
 			bool dynamic = mass != 0;
@@ -83,6 +104,20 @@ namespace Phobos
 			delete body;
 		}
 
+		PhysicsManager_c::CollisionShapeSharedPtr_t PhysicsManager_c::RetrieveCollisionShape(CollisionShapesMap_t::iterator &retIt, const CollisionShapeComparator_s &comparator)
+		{
+			retIt = mapCollisionShapes.lower_bound(comparator);
+
+			//found the element?
+			if((retIt == mapCollisionShapes.end()) || (mapCollisionShapes.key_comp()(comparator, retIt->first)))
+			{
+				//Inser the new shape in the map
+				retIt = mapCollisionShapes.insert(retIt, std::make_pair(comparator, CollisionShapeSharedPtr_t()));
+			}			
+
+			return retIt->second.lock();
+		}
+
 		inline PhysicsManager_c::CollisionShapeComparator_s PhysicsManager_c::CreateBoxComparator(Float_t x, Float_t y, Float_t z) const
 		{
 			BoxShapeInfo_s box = {x, y, z};
@@ -93,30 +128,18 @@ namespace Phobos
 		{
 			CollisionShapeComparator_s comparator = this->CreateBoxComparator(x, y, z);
 
-			CollisionShapesMap_t::iterator it = mapCollisionShapes.lower_bound(comparator);
+			CollisionShapesMap_t::iterator it;
+			CollisionShapeSharedPtr_t ptr = this->RetrieveCollisionShape(it, comparator);			
 
-			//found the element?
-			if((it != mapCollisionShapes.end()) && (!mapCollisionShapes.key_comp()(comparator, it->first)))
+			//Element does not exists?
+			if(ptr.get() == NULL)
 			{
-				CollisionShapeSharedPtr_t ptr = it->second.lock();
-
-				//found garbage?
-				if(ptr.get() == NULL)
-				{
-					ptr.reset(new btBoxShape(btVector3(x * 0.5f, y * 0.5f, z * 0.5f)));
-					it->second = ptr;
-				}
-				
-				return ptr;
+				//create it and store on the map
+				ptr.reset(new btBoxShape(btVector3(x * 0.5f, y * 0.5f, z * 0.5f)));
+				it->second = ptr;
 			}
-			else
-			{
-				CollisionShapeSharedPtr_t ptr(new btBoxShape(btVector3(x * 0.5f, y * 0.5f, z * 0.5f)));
 
-				mapCollisionShapes.insert(it, std::make_pair(comparator, ptr));
-
-				return ptr;
-			}
+			return ptr;			
 		}
 
 		bool PhysicsManager_c::CompareBoxShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs)
@@ -130,6 +153,34 @@ namespace Phobos
 			}
 
 			return false;
+		}
+
+		PhysicsManager_c::CollisionShapeComparator_s PhysicsManager_c::CreateMeshComparator(const Ogre::Mesh &mesh) const
+		{
+			return CollisionShapeComparator_s(mesh, PhysicsManager_c::CompareMeshShape);
+		}
+
+		PhysicsManager_c::CollisionShapeSharedPtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh)
+		{
+			CollisionShapeComparator_s comparator = this->CreateMeshComparator(mesh);
+
+			CollisionShapesMap_t::iterator it;
+			CollisionShapeSharedPtr_t ptr = this->RetrieveCollisionShape(it, comparator);			
+
+			//Element does not exists?
+			if(ptr.get() == NULL)
+			{
+				//create it and store on the map
+				ptr.reset(new btBvhTriangleMeshShape(&it->first.spCollisionMesh->GetMeshInterface(), true));
+				it->second = ptr;
+			}
+
+			return ptr;	
+		}
+
+		bool PhysicsManager_c::CompareMeshShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs)
+		{
+			return lhs.strMeshName < rhs.strMeshName;
 		}
 	}
 }

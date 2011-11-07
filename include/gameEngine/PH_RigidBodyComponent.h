@@ -14,24 +14,35 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_PHYSICS_API_H
-#define PH_PHYSICS_API_H
+#ifndef PH_GEOMETRY_COMPONENT_H
+#define PH_GEOMETRY_COMPONENT_H
 
-#ifdef PH_WIN32
-	#ifdef PH_PHYSICS_EXPORTS
-		#define PH_PHYSICS_API __declspec(dllexport)
-	#else
-		#define PH_PHYSICS_API
-	#endif
+#include "PH_EntityComponent.h"
+#include "PH_GameEngineAPI.h"
+#include "PH_PhysicsManager.h"
 
-	#define PH_PHYSICS_API_PROC extern "C" PH_PHYSICS_API
-#else
-    #ifdef PH_LINUX
-        #define PH_PHYSICS_API
-        #define PH_PHYSICS_API_PROC extern "C" PH_PHYSICS_API
-    #else
-        #error "Platform not defined"
-    #endif
-#endif
+#define PH_RIGID_BODY_COMPONENT_NAME "RigidBody"
+
+namespace Phobos
+{
+	namespace Physics
+	{
+		class PH_GAME_ENGINE_API RigidBodyComponent_c: public EntityComponent_c
+		{
+			public:
+				static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
+
+			protected:
+				RigidBodyComponent_c(const String_c &name, Entity_c &owner);
+				~RigidBodyComponent_c();
+
+				void OnLoad(const Dictionary_c &dictionary);
+
+			private:
+				PhysicsManager_c::CollisionShapeSharedPtr_t spCollisionShape;
+				btRigidBody *pclRigidBody;
+		};
+	}
+}
 
 #endif
