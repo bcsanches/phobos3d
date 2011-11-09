@@ -72,52 +72,52 @@ LDLIBSOPTIONS=
 ${OBJECTDIR}/_ext/1687502832/PH_MouseInputDevice.o: ../../../src/input/PH_MouseInputDevice.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_MouseInputDevice.o ../../../src/input/PH_MouseInputDevice.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_MouseInputDevice.o ../../../src/input/PH_MouseInputDevice.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_KeyboardInputDevice.o: ../../../src/input/PH_KeyboardInputDevice.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_KeyboardInputDevice.o ../../../src/input/PH_KeyboardInputDevice.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_KeyboardInputDevice.o ../../../src/input/PH_KeyboardInputDevice.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_Button.o: ../../../src/input/PH_Button.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_Button.o ../../../src/input/PH_Button.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_Button.o ../../../src/input/PH_Button.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_InputManager.o: ../../../src/input/PH_InputManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_InputManager.o ../../../src/input/PH_InputManager.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_InputManager.o ../../../src/input/PH_InputManager.cpp
 
 ${OBJECTDIR}/_ext/1758829188/PH_KeyboardInputDeviceSDL.o: ../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1758829188
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_KeyboardInputDeviceSDL.o ../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_KeyboardInputDeviceSDL.o ../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_InputMapper.o: ../../../src/input/PH_InputMapper.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_InputMapper.o ../../../src/input/PH_InputMapper.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_InputMapper.o ../../../src/input/PH_InputMapper.cpp
 
 ${OBJECTDIR}/_ext/1758829188/PH_InputManagerSDL.o: ../../../src/input/SDL/PH_InputManagerSDL.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1758829188
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_InputManagerSDL.o ../../../src/input/SDL/PH_InputManagerSDL.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_InputManagerSDL.o ../../../src/input/SDL/PH_InputManagerSDL.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_Thumb.o: ../../../src/input/PH_Thumb.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_Thumb.o ../../../src/input/PH_Thumb.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_Thumb.o ../../../src/input/PH_Thumb.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_InputDevice.o: ../../../src/input/PH_InputDevice.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_InputDevice.o ../../../src/input/PH_InputDevice.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_InputDevice.o ../../../src/input/PH_InputDevice.cpp
 
 ${OBJECTDIR}/_ext/1758829188/PH_MouseInputDeviceSDL.o: ../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1758829188
 	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_DEBUG -DPH_LINUX -DPH_GCC -DPH_NATIVE -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_MouseInputDeviceSDL.o ../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_MouseInputDeviceSDL.o ../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp
 
 # Subprojects
 .build-subprojects:
