@@ -74,116 +74,116 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-Release.mk dist/Release/GNU-Linux-x86/libPH_Kernel.so
+	"${MAKE}"  -f nbproject/Makefile-Release.mk ../../../bin/libPH_Kernel.so
 
-dist/Release/GNU-Linux-x86/libPH_Kernel.so: ${OBJECTFILES}
-	${MKDIR} -p dist/Release/GNU-Linux-x86
-	${LINK.cc} -shared -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libPH_Kernel.so -fPIC ${OBJECTFILES} ${LDLIBSOPTIONS} 
+../../../bin/libPH_Kernel.so: ${OBJECTFILES}
+	${MKDIR} -p ../../../bin
+	${LINK.cc} -shared -o ../../../bin/libPH_Kernel.so -fPIC ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/_ext/821979351/PH_ObjectManager.o: ../../../src/kernel/PH_ObjectManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ObjectManager.o ../../../src/kernel/PH_ObjectManager.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ObjectManager.o ../../../src/kernel/PH_ObjectManager.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_String.o: ../../../src/kernel/PH_String.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_String.o ../../../src/kernel/PH_String.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_String.o ../../../src/kernel/PH_String.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_DynamicLibrary.o: ../../../src/kernel/PH_DynamicLibrary.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_DynamicLibrary.o ../../../src/kernel/PH_DynamicLibrary.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_DynamicLibrary.o ../../../src/kernel/PH_DynamicLibrary.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_ContextVar.o: ../../../src/kernel/PH_ContextVar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ContextVar.o ../../../src/kernel/PH_ContextVar.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ContextVar.o ../../../src/kernel/PH_ContextVar.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_EventManager.o: ../../../src/kernel/PH_EventManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_EventManager.o ../../../src/kernel/PH_EventManager.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_EventManager.o ../../../src/kernel/PH_EventManager.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Kernel.o: ../../../src/kernel/PH_Kernel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Kernel.o ../../../src/kernel/PH_Kernel.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Kernel.o ../../../src/kernel/PH_Kernel.cpp
 
 ${OBJECTDIR}/_ext/1198965475/PH_WindowSDL.o: ../../../src/kernel/SDL/PH_WindowSDL.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1198965475
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1198965475/PH_WindowSDL.o ../../../src/kernel/SDL/PH_WindowSDL.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1198965475/PH_WindowSDL.o ../../../src/kernel/SDL/PH_WindowSDL.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_RefCounter.o: ../../../src/kernel/PH_RefCounter.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_RefCounter.o ../../../src/kernel/PH_RefCounter.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_RefCounter.o ../../../src/kernel/PH_RefCounter.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Exception.o: ../../../src/kernel/PH_Exception.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Exception.o ../../../src/kernel/PH_Exception.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Exception.o ../../../src/kernel/PH_Exception.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_ContextItem.o: ../../../src/kernel/PH_ContextItem.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ContextItem.o ../../../src/kernel/PH_ContextItem.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ContextItem.o ../../../src/kernel/PH_ContextItem.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Folders.o: ../../../src/kernel/PH_Folders.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Folders.o ../../../src/kernel/PH_Folders.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Folders.o ../../../src/kernel/PH_Folders.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Window.o: ../../../src/kernel/PH_Window.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Window.o ../../../src/kernel/PH_Window.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Window.o ../../../src/kernel/PH_Window.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Node.o: ../../../src/kernel/PH_Node.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Node.o ../../../src/kernel/PH_Node.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Node.o ../../../src/kernel/PH_Node.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Path.o: ../../../src/kernel/PH_Path.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Path.o ../../../src/kernel/PH_Path.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Path.o ../../../src/kernel/PH_Path.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Context.o: ../../../src/kernel/PH_Context.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Context.o ../../../src/kernel/PH_Context.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Context.o ../../../src/kernel/PH_Context.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Object.o: ../../../src/kernel/PH_Object.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Object.o ../../../src/kernel/PH_Object.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Object.o ../../../src/kernel/PH_Object.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_ContextCmd.o: ../../../src/kernel/PH_ContextCmd.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ContextCmd.o ../../../src/kernel/PH_ContextCmd.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ContextCmd.o ../../../src/kernel/PH_ContextCmd.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_ProcVector.o: ../../../src/kernel/PH_ProcVector.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ProcVector.o ../../../src/kernel/PH_ProcVector.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_ProcVector.o ../../../src/kernel/PH_ProcVector.cpp
 
 ${OBJECTDIR}/_ext/1198965475/PH_EventManagerSDL.o: ../../../src/kernel/SDL/PH_EventManagerSDL.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1198965475
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1198965475/PH_EventManagerSDL.o ../../../src/kernel/SDL/PH_EventManagerSDL.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1198965475/PH_EventManagerSDL.o ../../../src/kernel/SDL/PH_EventManagerSDL.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Parser.o: ../../../src/kernel/PH_Parser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Parser.o ../../../src/kernel/PH_Parser.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Parser.o ../../../src/kernel/PH_Parser.cpp
 
 ${OBJECTDIR}/_ext/821979351/PH_Log.o: ../../../src/kernel/PH_Log.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/821979351
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Log.o ../../../src/kernel/PH_Log.cpp
+	$(COMPILE.cc) -O2 -DPH_LINUX -DPH_GCC -DPH_SDL -DPH_RELEASE -DPH_IGNORE_ASSERT -I../../../include/kernel -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/821979351/PH_Log.o ../../../src/kernel/PH_Log.cpp
 
 # Subprojects
 .build-subprojects:
@@ -191,7 +191,7 @@ ${OBJECTDIR}/_ext/821979351/PH_Log.o: ../../../src/kernel/PH_Log.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r build/Release
-	${RM} dist/Release/GNU-Linux-x86/libPH_Kernel.so
+	${RM} ../../../bin/libPH_Kernel.so
 
 # Subprojects
 .clean-subprojects:

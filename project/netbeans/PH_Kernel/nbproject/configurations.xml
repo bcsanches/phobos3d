@@ -102,10 +102,10 @@
           </incDir>
           <preprocessorList>
             <Elem>PH_LINUX</Elem>
-            <Elem>PH_DEBUG</Elem>
+            <Elem>PH_GCC</Elem>
             <Elem>PH_SDL</Elem>
             <Elem>PH_CHECK_ASSERT</Elem>
-            <Elem>PH_GCC</Elem>
+            <Elem>PH_DEBUG</Elem>
           </preprocessorList>
         </ccTool>
         <linkerTool>
@@ -128,6 +128,16 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>../../../include/kernel</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>PH_LINUX</Elem>
+            <Elem>PH_GCC</Elem>
+            <Elem>PH_SDL</Elem>
+            <Elem>PH_RELEASE</Elem>
+            <Elem>PH_IGNORE_ASSERT</Elem>
+          </preprocessorList>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -135,6 +145,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>../../../bin/libPH_Kernel.so</output>
+        </linkerTool>
       </compileType>
     </conf>
   </confs>

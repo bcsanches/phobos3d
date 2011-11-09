@@ -11,7 +11,7 @@ CND_CONF=Release
 CND_DISTDIR=dist
 NBTMPDIR=build/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libPH_Kernel.so
+OUTPUT_PATH=../../../bin/libPH_Kernel.so
 OUTPUT_BASENAME=libPH_Kernel.so
 PACKAGE_TOP_DIR=libPHKernel.so/
 
