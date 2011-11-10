@@ -147,6 +147,9 @@
         </asmTool>
         <linkerTool>
           <output>../../../bin/libPH_Kernel.so</output>
+          <linkerLibItems>
+            <linkerLibLibItem>SDL</linkerLibLibItem>
+          </linkerLibItems>
         </linkerTool>
       </compileType>
     </conf>

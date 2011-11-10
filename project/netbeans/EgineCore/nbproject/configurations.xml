@@ -5,26 +5,40 @@
                    displayName="Arquivos de cabeçalho"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>../../../include/kernelTest/SimpleLogListener.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Accelerometer.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_BootModule.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Console.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Core.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_CoreModule.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_CoreModuleFwd.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_CoreModuleManager.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_CoreTimer.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_EngineCoreAPI.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_EventManagerModule.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Interpolator.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_MathFunctions.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_OgreUtils.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Plugin.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_PluginManager.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Render.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_Transform.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_TransformProperty.h</itemPath>
+      <itemPath>../../../include/engineCore/PH_TransformPropertyFwd.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Arquivos de código-fonte"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>../../../src/kernelTest/ContextCmdTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/ContextItemTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/ContextTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/ContextVarTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/EventManagerTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/KernelTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/LogTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/NodeTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/ObjectManagerTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/ParserTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/PathTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/StringTest.cpp</itemPath>
-      <itemPath>../../../src/kernelTest/StringTest.h</itemPath>
-      <itemPath>../../../src/kernelTest/main.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_BootModule.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_Console.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_Core.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_CoreModule.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_CoreModuleManager.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_EventManagerModule.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_OgreUtils.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_Plugin.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_PluginManager.cpp</itemPath>
+      <itemPath>../../../src/engineCore/PH_Render.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Arquivos de recurso"
@@ -43,12 +57,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
-  <sourceRootList>
-    <Elem>/home/cronosts/Programming/Projects/phobos3d/include/kernelTest</Elem>
-  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="1">
+    <conf name="Debug" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <compilerSet>GNU|GNU</compilerSet>
@@ -57,44 +68,37 @@
       <compileType>
         <ccTool>
           <incDir>
+            <pElem>../../../include/engineCore</pElem>
             <pElem>../../../include/kernel</pElem>
-            <pElem>../../../include/kernelTest</pElem>
+            <pElem>/usr/include/OGRE</pElem>
+            <pElem>../../../include/input</pElem>
+            <pElem>../../../include/dictionary</pElem>
+            <pElem>/usr/include/OGRE/Terrain</pElem>
           </incDir>
           <preprocessorList>
             <Elem>PH_LINUX</Elem>
             <Elem>PH_GCC</Elem>
             <Elem>PH_SDL</Elem>
-            <Elem>BOOST_TEST_DYN_LINK</Elem>
             <Elem>PH_DEBUG</Elem>
             <Elem>PH_CHECK_ASSERT</Elem>
           </preprocessorList>
         </ccTool>
         <linkerTool>
+          <output>../../../bin/libPH_EgineCored.so</output>
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>boost_system</linkerLibLibItem>
-            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
-            <linkerLibLibItem>boost_unit_test_framework</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
             <linkerLibLibItem>PH_Kerneld</linkerLibLibItem>
+            <linkerLibLibItem>PH_Inputd</linkerLibLibItem>
+            <linkerLibLibItem>PH_Dictionaryd</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
-        <requiredProjects>
-          <makeArtifact PL="/home/cronosts/Programming/Projects/phobos3d/project/netbeans/PH_Kernel"
-                        CT="2"
-                        CN="Debug"
-                        AC="false"
-                        BL="false"
-                        WD="/home/cronosts/Programming/Projects/phobos3d/project/netbeans/PH_Kernel"
-                        BC="${MAKE}  -f Makefile CONF=Debug"
-                        CC="${MAKE}  -f Makefile CONF=Debug clean"
-                        OP="../../../bin/libPH_Kerneld.so">
-          </makeArtifact>
-        </requiredProjects>
       </compileType>
     </conf>
-    <conf name="Release" type="1">
+    <conf name="Release" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <compilerSet>GNU|GNU</compilerSet>
@@ -107,14 +111,17 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
+            <pElem>../../../include/engineCore</pElem>
             <pElem>../../../include/kernel</pElem>
-            <pElem>../../../include/kernelTest</pElem>
+            <pElem>/usr/include/OGRE</pElem>
+            <pElem>../../../include/input</pElem>
+            <pElem>../../../include/dictionary</pElem>
+            <pElem>/usr/include/OGRE/Terrain</pElem>
           </incDir>
           <preprocessorList>
             <Elem>PH_LINUX</Elem>
             <Elem>PH_GCC</Elem>
             <Elem>PH_SDL</Elem>
-            <Elem>BOOST_TEST_DYN_LINK</Elem>
             <Elem>PH_RELEASE</Elem>
             <Elem>PH_IGNORE_ASSERT</Elem>
           </preprocessorList>
@@ -126,28 +133,18 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
+          <output>../../../bin/libPH_EgineCore.so</output>
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>boost_system</linkerLibLibItem>
-            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
-            <linkerLibLibItem>boost_unit_test_framework</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
             <linkerLibLibItem>PH_Kernel</linkerLibLibItem>
+            <linkerLibLibItem>PH_Input</linkerLibLibItem>
+            <linkerLibLibItem>PH_Dictionary</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
-        <requiredProjects>
-          <makeArtifact PL="/home/cronosts/Programming/Projects/phobos3d/project/netbeans/PH_Kernel"
-                        CT="2"
-                        CN="Release"
-                        AC="true"
-                        BL="false"
-                        WD="/home/cronosts/Programming/Projects/phobos3d/project/netbeans/PH_Kernel"
-                        BC="${MAKE}  -f Makefile CONF=Release"
-                        CC="${MAKE}  -f Makefile CONF=Release clean"
-                        OP="../../../bin/libPH_Kernel.so">
-          </makeArtifact>
-        </requiredProjects>
       </compileType>
     </conf>
   </confs>

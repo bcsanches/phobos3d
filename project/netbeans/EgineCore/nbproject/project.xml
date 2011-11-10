@@ -3,18 +3,14 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>KernelTest</name>
+            <name>EgineCore</name>
             <make-project-type>0</make-project-type>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
             <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
-            <make-dep-projects>
-                <make-dep-project>/home/cronosts/Programming/Projects/phobos3d/project/netbeans/PH_Kernel</make-dep-project>
-            </make-dep-projects>
-            <sourceRootList>
-                <sourceRootElem>/home/cronosts/Programming/Projects/phobos3d/include/kernelTest</sourceRootElem>
-            </sourceRootList>
+            <make-dep-projects/>
+            <sourceRootList/>
             <confList>
                 <confElem>Debug</confElem>
                 <confElem>Release</confElem>
