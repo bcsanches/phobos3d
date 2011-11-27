@@ -53,7 +53,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L../../../bin -lboost_filesystem -lboost_system -lPH_Kerneld
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

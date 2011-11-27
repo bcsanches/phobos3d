@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1687502832/PH_Button.o \
 	${OBJECTDIR}/_ext/1687502832/PH_InputManager.o \
 	${OBJECTDIR}/_ext/1758829188/PH_KeyboardInputDeviceSDL.o \
+	${OBJECTDIR}/_ext/1687502832/PH_AxisButton.o \
 	${OBJECTDIR}/_ext/1687502832/PH_InputMapper.o \
 	${OBJECTDIR}/_ext/1758829188/PH_InputManagerSDL.o \
 	${OBJECTDIR}/_ext/1687502832/PH_Thumb.o \
@@ -59,7 +60,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L../../../bin -lPH_Kerneld
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -93,6 +94,11 @@ ${OBJECTDIR}/_ext/1758829188/PH_KeyboardInputDeviceSDL.o: ../../../src/input/SDL
 	${MKDIR} -p ${OBJECTDIR}/_ext/1758829188
 	${RM} $@.d
 	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1758829188/PH_KeyboardInputDeviceSDL.o ../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp
+
+${OBJECTDIR}/_ext/1687502832/PH_AxisButton.o: ../../../src/input/PH_AxisButton.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832
+	${RM} $@.d
+	$(COMPILE.cc) -g -DPH_SDL -DPH_LINUX -DPH_GCC -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1687502832/PH_AxisButton.o ../../../src/input/PH_AxisButton.cpp
 
 ${OBJECTDIR}/_ext/1687502832/PH_InputMapper.o: ../../../src/input/PH_InputMapper.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1687502832

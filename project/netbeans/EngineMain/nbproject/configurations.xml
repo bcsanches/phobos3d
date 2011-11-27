@@ -5,22 +5,12 @@
                    displayName="Arquivos de cabeçalho"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>../../../include/dictionary/PH_Dictionary.h</itemPath>
-      <itemPath>../../../include/dictionary/PH_DictionaryAPI.h</itemPath>
-      <itemPath>../../../include/dictionary/PH_DictionaryFwd.h</itemPath>
-      <itemPath>../../../include/dictionary/PH_DictionaryHive.h</itemPath>
-      <itemPath>../../../include/dictionary/PH_DictionaryHiveFwd.h</itemPath>
-      <itemPath>../../../include/dictionary/PH_DictionaryManager.h</itemPath>
-      <itemPath>../../../include/dictionary/PH_DictionaryUtils.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Arquivos de código-fonte"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>../../../src/dictionary/PH_Dictionary.cpp</itemPath>
-      <itemPath>../../../src/dictionary/PH_DictionaryHive.cpp</itemPath>
-      <itemPath>../../../src/dictionary/PH_DictionaryManager.cpp</itemPath>
-      <itemPath>../../../src/dictionary/PH_DictionaryUtils.cpp</itemPath>
+      <itemPath>../../../src/engineMain/PH_EngineMain.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Arquivos de recurso"
@@ -41,7 +31,7 @@
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="2">
+    <conf name="Debug" type="1">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <compilerSet>GNU|GNU</compilerSet>
@@ -50,31 +40,42 @@
       <compileType>
         <ccTool>
           <incDir>
-            <pElem>../../../include/dictionary</pElem>
             <pElem>../../../include/kernel</pElem>
+            <pElem>../../../include/input</pElem>
+            <pElem>../../../include/gameEngine</pElem>
+            <pElem>../../../include/engineCore</pElem>
+            <pElem>../../../include/dictionary</pElem>
+            <pElem>/usr/include/OGRE</pElem>
+            <pElem>/usr/include/bullet</pElem>
+            <pElem>/usr/include/OGRE/Terrain</pElem>
           </incDir>
           <preprocessorList>
             <Elem>PH_LINUX</Elem>
             <Elem>PH_GCC</Elem>
             <Elem>PH_SDL</Elem>
-            <Elem>PH_CHECK_ASSERT</Elem>
             <Elem>PH_DEBUG</Elem>
+            <Elem>PH_CHECK_ASSERT</Elem>
           </preprocessorList>
         </ccTool>
         <linkerTool>
-          <output>../../../bin/libPH_Dictionaryd.so</output>
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
-            <linkerLibLibItem>boost_system</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
+            <linkerLibLibItem>PH_GameEngined</linkerLibLibItem>
+            <linkerLibLibItem>BulletCollision</linkerLibLibItem>
             <linkerLibLibItem>PH_Kerneld</linkerLibLibItem>
+            <linkerLibLibItem>PH_Inputd</linkerLibLibItem>
+            <linkerLibLibItem>PH_Dictionaryd</linkerLibLibItem>
+            <linkerLibLibItem>PH_EgineCored</linkerLibLibItem>
+            <linkerLibLibItem>PH_GameEngined</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
     </conf>
-    <conf name="Release" type="2">
+    <conf name="Release" type="1">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <compilerSet>GNU|GNU</compilerSet>
@@ -87,15 +88,21 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
-            <pElem>../../../include/dictionary</pElem>
             <pElem>../../../include/kernel</pElem>
+            <pElem>../../../include/input</pElem>
+            <pElem>../../../include/gameEngine</pElem>
+            <pElem>../../../include/engineCore</pElem>
+            <pElem>../../../include/dictionary</pElem>
+            <pElem>/usr/include/OGRE</pElem>
+            <pElem>/usr/include/bullet</pElem>
+            <pElem>/usr/include/OGRE/Terrain</pElem>
           </incDir>
           <preprocessorList>
             <Elem>PH_LINUX</Elem>
             <Elem>PH_GCC</Elem>
             <Elem>PH_SDL</Elem>
-            <Elem>PH_IGNORE_ASSERT</Elem>
             <Elem>PH_RELEASE</Elem>
+            <Elem>PH_IGNORE_ASSERT</Elem>
           </preprocessorList>
         </ccTool>
         <fortranCompilerTool>
@@ -105,14 +112,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>../../../bin/libPH_Dictionary.so</output>
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
-            <linkerLibLibItem>boost_system</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
+            <linkerLibLibItem>PH_GameEngined</linkerLibLibItem>
+            <linkerLibLibItem>BulletCollision</linkerLibLibItem>
             <linkerLibLibItem>PH_Kernel</linkerLibLibItem>
+            <linkerLibLibItem>PH_Input</linkerLibLibItem>
+            <linkerLibLibItem>PH_GameEngine</linkerLibLibItem>
+            <linkerLibLibItem>PH_EgineCore</linkerLibLibItem>
+            <linkerLibLibItem>PH_Dictionary</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

@@ -1,57 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
-    <logicalFolder name="f2" displayName="Headers" projectFiles="true">
-      <logicalFolder name="SDL" displayName="SDL" projectFiles="true">
-        <itemPath>../../../include/input/SDL/PH_InputManagerSDL.h</itemPath>
-        <itemPath>../../../include/input/SDL/PH_KeyboardInputDeviceSDL.h</itemPath>
-        <itemPath>../../../include/input/SDL/PH_MouseInputDeviceSDL.h</itemPath>
-      </logicalFolder>
-      <itemPath>../../../include/input/PH_AxisButton.h</itemPath>
-      <itemPath>../../../include/input/PH_Button.h</itemPath>
-      <itemPath>../../../include/input/PH_InputAPI.h</itemPath>
-      <itemPath>../../../include/input/PH_InputDefs.h</itemPath>
-      <itemPath>../../../include/input/PH_InputDevice.h</itemPath>
-      <itemPath>../../../include/input/PH_InputDeviceFwd.h</itemPath>
-      <itemPath>../../../include/input/PH_InputDeviceListener.h</itemPath>
-      <itemPath>../../../include/input/PH_InputEvent.h</itemPath>
-      <itemPath>../../../include/input/PH_InputManager.h</itemPath>
-      <itemPath>../../../include/input/PH_InputMapper.h</itemPath>
-      <itemPath>../../../include/input/PH_KeyboardInputDevice.h</itemPath>
-      <itemPath>../../../include/input/PH_MouseInputDevice.h</itemPath>
-      <itemPath>../../../include/input/PH_Thumb.h</itemPath>
+    <logicalFolder name="HeaderFiles"
+                   displayName="Arquivos de cabeçalho"
+                   projectFiles="true"
+                   kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>../../../include/gamePlugin/PH_GamePlugin.h</itemPath>
+      <itemPath>../../../include/gamePlugin/PH_GamePluginAPI.h</itemPath>
     </logicalFolder>
-    <logicalFolder name="f1" displayName="Sources" projectFiles="true">
-      <logicalFolder name="SDL" displayName="SDL" projectFiles="true">
-        <itemPath>../../../src/input/SDL/PH_InputManagerSDL.cpp</itemPath>
-        <itemPath>../../../src/input/SDL/PH_KeyboardInputDeviceSDL.cpp</itemPath>
-        <itemPath>../../../src/input/SDL/PH_MouseInputDeviceSDL.cpp</itemPath>
-      </logicalFolder>
-      <itemPath>../../../src/input/PH_AxisButton.cpp</itemPath>
-      <itemPath>../../../src/input/PH_Button.cpp</itemPath>
-      <itemPath>../../../src/input/PH_InputDevice.cpp</itemPath>
-      <itemPath>../../../src/input/PH_InputManager.cpp</itemPath>
-      <itemPath>../../../src/input/PH_InputMapper.cpp</itemPath>
-      <itemPath>../../../src/input/PH_KeyboardInputDevice.cpp</itemPath>
-      <itemPath>../../../src/input/PH_MouseInputDevice.cpp</itemPath>
-      <itemPath>../../../src/input/PH_Thumb.cpp</itemPath>
+    <logicalFolder name="SourceFiles"
+                   displayName="Arquivos de código-fonte"
+                   projectFiles="true"
+                   kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>../../../src/gamePlugin/PH_GamePlugin.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Arquivos de recurso"
+                   projectFiles="true"
+                   kind="SOURCE_LOGICAL_FOLDER">
     </logicalFolder>
     <logicalFolder name="TestFiles"
-                   displayName="Test Files"
+                   displayName="Arquivos de testes"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
-                   displayName="Important Files"
+                   displayName="Arquivos importantes"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
-  <sourceRootList>
-    <Elem>../../../include/input/SDL</Elem>
-    <Elem>../../../src/input/SDL</Elem>
-  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="2">
@@ -63,24 +42,32 @@
       <compileType>
         <ccTool>
           <incDir>
+            <pElem>../../../include/gamePlugin</pElem>
             <pElem>../../../include/kernel</pElem>
             <pElem>../../../include/input</pElem>
+            <pElem>../../../include/dictionary</pElem>
+            <pElem>../../../include/engineCore</pElem>
+            <pElem>../../../include/gameEngine</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>PH_SDL</Elem>
             <Elem>PH_LINUX</Elem>
             <Elem>PH_GCC</Elem>
+            <Elem>PH_SDL</Elem>
             <Elem>PH_DEBUG</Elem>
             <Elem>PH_CHECK_ASSERT</Elem>
           </preprocessorList>
         </ccTool>
         <linkerTool>
-          <output>../../../bin/libPH_Inputd.so</output>
+          <output>../../../bin/libPH_GamePlugind.so</output>
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>PH_Kerneld</linkerLibLibItem>
+            <linkerLibLibItem>PH_Inputd</linkerLibLibItem>
+            <linkerLibLibItem>PH_GameEngined</linkerLibLibItem>
+            <linkerLibLibItem>PH_EgineCored</linkerLibLibItem>
+            <linkerLibLibItem>PH_Dictionaryd</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -98,13 +85,17 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
+            <pElem>../../../include/gamePlugin</pElem>
             <pElem>../../../include/kernel</pElem>
             <pElem>../../../include/input</pElem>
+            <pElem>../../../include/dictionary</pElem>
+            <pElem>../../../include/engineCore</pElem>
+            <pElem>../../../include/gameEngine</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>PH_SDL</Elem>
             <Elem>PH_LINUX</Elem>
             <Elem>PH_GCC</Elem>
+            <Elem>PH_SDL</Elem>
             <Elem>PH_RELEASE</Elem>
             <Elem>PH_IGNORE_ASSERT</Elem>
           </preprocessorList>
@@ -116,12 +107,16 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>../../../bin/libPH_Input.so</output>
+          <output>../../../bin/libPH_GamePlugin.so</output>
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>PH_Kernel</linkerLibLibItem>
+            <linkerLibLibItem>PH_Input</linkerLibLibItem>
+            <linkerLibLibItem>PH_EgineCore</linkerLibLibItem>
+            <linkerLibLibItem>PH_Dictionary</linkerLibLibItem>
+            <linkerLibLibItem>PG_GameEngine</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
