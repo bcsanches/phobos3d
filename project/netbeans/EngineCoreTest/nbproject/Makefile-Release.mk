@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../../bin -Wl,-rpath /home/cronosts/Programming/Projects/phobos3d/work/engineMain -lboost_unit_test_framework -lboost_filesystem -lboost_system -lPH_Kernel -lPH_Input -lPH_EgineCore -lPH_Dictionary
+LDLIBSOPTIONS=-L../../../bin -lboost_unit_test_framework -lboost_filesystem -lboost_system -lPH_Kernel -lPH_Input -lPH_EgineCore -lPH_Dictionary
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

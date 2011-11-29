@@ -114,9 +114,6 @@
           <linkerAddLib>
             <pElem>../../../bin</pElem>
           </linkerAddLib>
-          <linkerDynSerch>
-            <pElem>/home/cronosts/Programming/Projects/phobos3d/work/engineMain</pElem>
-          </linkerDynSerch>
           <commandlineTool>g++</commandlineTool>
           <linkerLibItems>
             <linkerLibLibItem>boost_unit_test_framework</linkerLibLibItem>

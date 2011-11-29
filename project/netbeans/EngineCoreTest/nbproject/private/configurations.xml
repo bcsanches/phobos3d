@@ -24,12 +24,13 @@
       </gizmo_options>
       <runprofile version="6">
         <args></args>
-        <rundir></rundir>
-        <buildfirst>true</buildfirst>
+        <rundir>../../../work/engineMain</rundir>
+        <buildfirst>false</buildfirst>
         <console-type>0</console-type>
         <terminal-type>0</terminal-type>
         <remove-instrumentation>0</remove-instrumentation>
         <environment>
+          <variable name="LD_LIBRARY_PATH" value="../../bin:$LD_LIBRARY_PATH"/>
         </environment>
       </runprofile>
     </conf>
