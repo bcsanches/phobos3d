@@ -24,3 +24,14 @@ EntityDef PathCorner
 {
     className=PointEntity;
 }
+
+EntityDef Box1m
+{
+  className = Entity;
+  components = "ModelRenderer|Transform|RigidBody";
+  
+  colliderType = "box";
+  boxDimensions = "1 1 1";
+  
+  mass = 5;
+}

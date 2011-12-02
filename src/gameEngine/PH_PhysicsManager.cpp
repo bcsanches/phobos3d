@@ -18,6 +18,7 @@ subject to the following restrictions:
 
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtil.h"
+#include "PH_RigidBodyComponent.h"
 
 namespace Phobos
 {
@@ -54,7 +55,7 @@ namespace Phobos
 		}
 
 		PhysicsManager_c::PhysicsManager_c():
-			CoreModule_c("PhysicsManager", PRIVATE_CHILDREN)
+			GenericComponentManager_c("PhysicsManager", PRIVATE_CHILDREN)
 		{
 		}
 
@@ -76,7 +77,17 @@ namespace Phobos
 
 			const CoreTimer_s &timer = Core_c::GetInstance()->GetGameTimer();
 
-			spWorld->stepSimulation(timer.fpFrameTime);
+			GenericComponentManager_c::CallForAll(&RigidBodyComponent_c::SaveTransform);
+			spWorld->stepSimulation(timer.fpFrameTime, 32);
+		}
+
+		void PhysicsManager_c::OnUpdate()
+		{
+			//No world, no reason to update
+			if(!spWorld)
+				return;
+			
+			GenericComponentManager_c::CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
 		}
 
 		btRigidBody *PhysicsManager_c::CreateRigidBody(const Transform_c &transform, btCollisionShape &shape, Float_t mass)
@@ -102,6 +113,16 @@ namespace Phobos
 
 			delete body->getMotionState();
 			delete body;
+		}
+
+		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body)
+		{
+			spWorld->addRigidBody(&body);
+		}
+
+		void PhysicsManager_c::UnregisterRigidBody(btRigidBody &body)
+		{
+			spWorld->removeRigidBody(&body);
 		}
 
 		PhysicsManager_c::CollisionShapeSharedPtr_t PhysicsManager_c::RetrieveCollisionShape(CollisionShapesMap_t::iterator &retIt, const CollisionShapeComparator_s &comparator)

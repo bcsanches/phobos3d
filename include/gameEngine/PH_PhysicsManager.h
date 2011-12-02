@@ -26,12 +26,11 @@ subject to the following restrictions:
 
 #include <OgreMesh.h>
 
-#include <PH_CoreModule.h>
 #include <PH_Singleton.h>
 
 #include "PH_CollisionMesh.h"
 #include "PH_GameEngineAPI.h"
-
+#include "PH_GenericComponentManager.h"
 
 namespace Phobos
 {
@@ -39,9 +38,11 @@ namespace Phobos
 
 	namespace Physics
 	{		
+		class RigidBodyComponent_c;
+
 		PH_DECLARE_SINGLETON_PTR(PhysicsManager);
 
-		class PH_GAME_ENGINE_API PhysicsManager_c: public CoreModule_c
+		class PH_GAME_ENGINE_API PhysicsManager_c: public GenericComponentManager_c<RigidBodyComponent_c>
 		{
 			PH_DECLARE_SINGLETON_METHODS(PhysicsManager);
 
@@ -59,12 +60,16 @@ namespace Phobos
 				CollisionShapeSharedPtr_t CreateMeshShape(const Ogre::Mesh &mesh);
 
 				btRigidBody *CreateRigidBody(const Transform_c &transform, btCollisionShape &shape, Float_t mass);
-				void DestroyRigidBody(btRigidBody *body);				
+				void DestroyRigidBody(btRigidBody *body);
+
+				void RegisterRigidBody(btRigidBody &body);
+				void UnregisterRigidBody(btRigidBody &body);
 
 			protected:
 				virtual void OnBoot();
 
 				virtual void OnFixedUpdate();
+				virtual void OnUpdate();
 
 			private:
 				typedef boost::weak_ptr<btCollisionShape> CollisionShapeWeakPtr_t;				

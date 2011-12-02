@@ -20,11 +20,14 @@ subject to the following restrictions:
 #include "PH_EntityComponent.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_PhysicsManager.h"
+#include "PH_Transform.h"
 
 #define PH_RIGID_BODY_COMPONENT_NAME "RigidBody"
 
 namespace Phobos
 {
+	class TransformProperty_c;
+
 	namespace Physics
 	{
 		class PH_GAME_ENGINE_API RigidBodyComponent_c: public EntityComponent_c
@@ -32,15 +35,22 @@ namespace Phobos
 			public:
 				static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
+				void SaveTransform();
+				void UpdateTransform(Float_t delta);
+
 			protected:
 				RigidBodyComponent_c(const String_c &name, Entity_c &owner);
 				~RigidBodyComponent_c();
 
 				void OnLoad(const Dictionary_c &dictionary);
+				void OnLoadFinished();
 
 			private:
 				PhysicsManager_c::CollisionShapeSharedPtr_t spCollisionShape;
 				btRigidBody *pclRigidBody;
+
+				TransformProperty_c *pprpTransform;
+				Transform_c			clPreviousTransform;
 		};
 	}
 }

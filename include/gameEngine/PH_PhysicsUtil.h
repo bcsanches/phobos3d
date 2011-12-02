@@ -30,6 +30,16 @@ namespace Phobos
 			return btVector3(v.x, v.y, v.z);
 		}
 
+		inline Ogre::Vector3 MakeVector3(const btVector3 &v)
+		{
+			return Ogre::Vector3(v.x(), v.y(), v.z());
+		}
+
+		inline Ogre::Quaternion MakeQuaternion(const btQuaternion &q)
+		{
+			return Ogre::Quaternion(q.w(), q.x(), q.y(), q.z());
+		}
+
 		inline btQuaternion MakeQuaternion(const Ogre::Quaternion &q)
 		{
 			return btQuaternion(q.x, q.y, q.z, q.w);
@@ -38,6 +48,11 @@ namespace Phobos
 		inline btTransform MakeTransform(const Transform_c &transform)
 		{
 			return btTransform(MakeQuaternion(transform.GetRotation()), MakeVector3(transform.GetOrigin()));
+		}				
+
+		inline Transform_c MakeTransform(const btTransform &transform)
+		{
+			return Transform_c(MakeVector3(transform.getOrigin()), MakeQuaternion(transform.getRotation()));
 		}
 	}
 }

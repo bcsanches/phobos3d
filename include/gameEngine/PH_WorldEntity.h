@@ -44,6 +44,7 @@ namespace Phobos
 
 		protected:
 			virtual void OnLoad(const Dictionary_c &dictionary);
+			virtual void OnLoadFinished();
 
 		private:
 			friend struct TempStaticObject_s;
