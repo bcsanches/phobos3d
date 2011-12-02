@@ -108,6 +108,8 @@ namespace Phobos
 		if(pclTerrainOptions)
 			delete pclTerrainOptions;
 
+		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
+
 		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
 		{
 			StaticObject_s &object = pair.second;
@@ -122,7 +124,7 @@ namespace Phobos
 				render->DestroyEntity(object.pclEntity);
 
 			if(object.pclRigidBody)
-				delete object.pclRigidBody;
+				physicsManager->DestroyRigidBody(object.pclRigidBody);				
 		}
 	}
 
@@ -399,5 +401,20 @@ namespace Phobos
 	{
 		//should never be called
 		PH_RAISE(INVALID_OPERATION_EXCEPTION, "WorldEntity_c::OnLoad", "Not implemented");
+	}
+
+	void WorldEntity_c::OnLoadFinished()
+	{
+		Physics::PhysicsManagerPtr_t manager = Physics::PhysicsManager_c::GetInstance();
+
+		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
+		{
+			StaticObject_s &object = pair.second;
+
+			if(object.pclRigidBody == NULL)
+				continue;
+
+			manager->RegisterRigidBody(*object.pclRigidBody);
+		}
 	}
 }

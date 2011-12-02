@@ -51,8 +51,8 @@ namespace Phobos
 			}
 
 		protected:
-			GenericComponentManager_c(const String_c &name):
-				CoreModule_c(name)
+			GenericComponentManager_c(const String_c &name, ChildrenMode_e mode =PUBLIC_CHILDREN):
+				CoreModule_c(name, mode)
 			{
 				memset(arpclComponents, 0, sizeof(arpclComponents));
 			}
@@ -68,6 +68,22 @@ namespace Phobos
 						continue;
 
 					(arpclComponents[i]->*proc)();
+					++count;
+				}
+			}
+
+			template <typename P1>
+			void CallForAll1(void (T::*proc)(P1), P1 p1)
+			{
+				UInt_t count = 0;
+				UInt_t total = WorldManager_c::GetInstance()->GetNumActiveEntities();
+
+				for(int i = 0;i < EntityManager_c::MAX_ENTRIES && count < total; ++i)
+				{
+					if(arpclComponents[i] == NULL)
+						continue;
+
+					(arpclComponents[i]->*proc)(p1);
 					++count;
 				}
 			}

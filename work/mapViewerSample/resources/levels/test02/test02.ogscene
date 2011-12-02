@@ -12,7 +12,7 @@
     </RESOURCEDIRECTORIES>
   <CAMERASPEED value="1"></CAMERASPEED>
   <CAMERAPOSITIONS count="0">
-    <OPTION id="0" position="2.9689 1.14387 6.88628" orientation="-0.941035 -0.0483574 -0.334397 0.0171272"></OPTION>
+    <OPTION id="0" position="8.91861 3.90863 -0.441814" orientation="-0.663564 0.170754 -0.705373 -0.181589"></OPTION>
   </CAMERAPOSITIONS>
     <LAYERS>
       <LAYER id="0" name="Layer 0" visible="true"></LAYER>
@@ -74,7 +74,7 @@
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
     <PROPERTY id="scenemanagertype" type="7" value="OctreeSceneManager"></PROPERTY>
-    <PROPERTY id="shadows::enabled" type="12" value="false"></PROPERTY>
+    <PROPERTY id="shadows::enabled" type="12" value="true"></PROPERTY>
     <PROPERTY id="shadows::renderingdistance" type="2" value="1000"></PROPERTY>
     <PROPERTY id="shadows::resolutionfar" type="2" value="512"></PROPERTY>
     <PROPERTY id="shadows::resolutionmiddle" type="2" value="512"></PROPERTY>
@@ -93,9 +93,9 @@
   <OBJECT object_id="2000000002" name="Viewport1" typename="Viewport Object">
     <PROPERTY id="camera::clipdistance" type="8" value="1 3000"></PROPERTY>
     <PROPERTY id="camera::fov" type="6" value="1"></PROPERTY>
-    <PROPERTY id="camera::orientation" type="13" value="-0.941056 -0.0483585 -0.334404 0.0171276"></PROPERTY>
+    <PROPERTY id="camera::orientation" type="13" value="-0.663564 0.170754 -0.705374 -0.181589"></PROPERTY>
     <PROPERTY id="camera::polymode" type="2" value="3"></PROPERTY>
-    <PROPERTY id="camera::position" type="9" value="2.9689 1.14387 6.88628"></PROPERTY>
+    <PROPERTY id="camera::position" type="9" value="8.91861 3.90863 -0.441814"></PROPERTY>
     <PROPERTY id="camera::viewmode" type="2" value="0"></PROPERTY>
     <PROPERTY id="colour" type="11" value="0 0 0 1"></PROPERTY>
     <PROPERTY id="compositorcount" type="2" value="0"></PROPERTY>
@@ -141,6 +141,30 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
+  <OBJECT object_id="454512160" name="Ogre#0Copy#0#0" typename="Entity Object" parentnode="NodeCasa">
+    <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
+    <PROPERTY id="layer" type="2" value="0"></PROPERTY>
+    <PROPERTY id="locked" type="12" value="false"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Ogre"></PROPERTY>
+    <PROPERTY id="orientation" type="13" value="0.707107 0 0.707107 0"></PROPERTY>
+    <PROPERTY id="position" type="9" value="0 0.919526 -0.0285218"></PROPERTY>
+    <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="0.25 0.25 0.25"></PROPERTY>
+    <PROPERTY id="subentity0::material" type="7" value="ogre.mat/SOLID/TEX/ogre.tex.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity1::material" type="7" value="ogre.mat/ALPHA/TEX/ogre.tex.jpg/VertCol/TWOSIDE"></PROPERTY>
+    <PROPERTY id="subentity1::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentity2::material" type="7" value="Material.001/SOLID/TEX/ogreahead.tex.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="subentity2::visible" type="12" value="true"></PROPERTY>
+    <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
+    <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
+    <CUSTOMPROPERTIES>
+      <PROPERTY id="inherit" type="7" value="InfoPlayerStart" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
+    </CUSTOMPROPERTIES>
+  </OBJECT>
+
   <OBJECT object_id="531327232" name="Plane_10x10#0" typename="Entity Object" parentnode="SceneManager">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
@@ -159,38 +183,34 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="454512160" name="Ogre#0Copy#0#0" typename="Entity Object" parentnode="NodeCasa">
+  <OBJECT object_id="834620160" name="Box_1m#0" typename="Entity Object" parentnode="SceneManager">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
-    <PROPERTY id="meshfile" type="7" value="Ogre"></PROPERTY>
+    <PROPERTY id="meshfile" type="7" value="Box_1m"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="0 0.919526 -0.0285218"></PROPERTY>
+    <PROPERTY id="position" type="9" value="4.5 3 0"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
-    <PROPERTY id="scale" type="9" value="0.25 0.25 0.25"></PROPERTY>
-    <PROPERTY id="subentity0::material" type="7" value="ogre.mat/SOLID/TEX/ogre.tex.jpg/VertCol"></PROPERTY>
+    <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
+    <PROPERTY id="subentity0::material" type="7" value="Base_128"></PROPERTY>
     <PROPERTY id="subentity0::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentity1::material" type="7" value="ogre.mat/ALPHA/TEX/ogre.tex.jpg/VertCol/TWOSIDE"></PROPERTY>
-    <PROPERTY id="subentity1::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentity2::material" type="7" value="Material.001/SOLID/TEX/ogreahead.tex.jpg/VertCol"></PROPERTY>
-    <PROPERTY id="subentity2::visible" type="12" value="true"></PROPERTY>
-    <PROPERTY id="subentitycount" type="2" value="3"></PROPERTY>
+    <PROPERTY id="subentitycount" type="2" value="1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="inherit" type="7" value="InfoPlayerStart" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="inherit" type="7" value="Box1m" autooptiontype="0"></PROPERTY>
       <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="834620160" name="Box_1m#0" typename="Entity Object" parentnode="SceneManager">
+  <OBJECT object_id="905117952" name="Box_1m#0Copy#0" typename="Entity Object" parentnode="SceneManager">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
-    <PROPERTY id="castshadows" type="12" value="false"></PROPERTY>
+    <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>
     <PROPERTY id="locked" type="12" value="false"></PROPERTY>
     <PROPERTY id="meshfile" type="7" value="Box_1m"></PROPERTY>
     <PROPERTY id="orientation" type="13" value="1 0 0 0"></PROPERTY>
-    <PROPERTY id="position" type="9" value="4.5 0 0.5"></PROPERTY>
+    <PROPERTY id="position" type="9" value="4.5 0.5 0.5"></PROPERTY>
     <PROPERTY id="renderingdistance" type="6" value="5000"></PROPERTY>
     <PROPERTY id="scale" type="9" value="1 1 1"></PROPERTY>
     <PROPERTY id="subentity0::material" type="7" value="Base_128"></PROPERTY>

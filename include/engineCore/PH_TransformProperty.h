@@ -35,6 +35,11 @@ namespace Phobos
 				//empty
 			}			
 
+			inline void SetTransform(const Transform_c &transform)
+			{
+				clTransform = transform;
+			}
+
 			inline const Ogre::Vector3 &GetOrigin(void) const
 			{
 				return clTransform.GetOrigin();
