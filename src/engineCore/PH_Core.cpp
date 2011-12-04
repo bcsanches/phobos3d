@@ -210,16 +210,12 @@ namespace Phobos
 		for(int i = 0;pauseInfo[i].pstrzName; ++i)
 		{
 			if(timerName.compare(pauseInfo[i].pstrzName) == 0)
-			{
-				try
-				{
-					this->ToggleTimerPause(pauseInfo[i].eType);
-				}
-				catch(InvalidParameterException_c &)
-				{
-					//simple ignore pause on sys timer
-				}
+			{				
+				this->ToggleTimerPause(pauseInfo[i].eType);
 
+				std::stringstream stream;
+				stream << "[Core_c::CmdToggleTimerPause] " << (stSimInfo.stTimers[pauseInfo[i].eType].IsPaused() ? "Paused" : "Unpaused") << " " << pauseInfo[i].pstrzName;				
+				Kernel_c::GetInstance().LogMessage(stream.str());				
 				break;
 			}
 		}

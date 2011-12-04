@@ -76,6 +76,8 @@ namespace Phobos
 				return;
 
 			const CoreTimer_s &timer = Core_c::GetInstance()->GetGameTimer();
+			if(timer.IsPaused())
+				return;
 
 			GenericComponentManager_c::CallForAll(&RigidBodyComponent_c::SaveTransform);
 			spWorld->stepSimulation(timer.fpFrameTime, 32);
@@ -87,6 +89,7 @@ namespace Phobos
 			if(!spWorld)
 				return;
 			
+			//No pause check, to allow client interpolation
 			GenericComponentManager_c::CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
 		}
 

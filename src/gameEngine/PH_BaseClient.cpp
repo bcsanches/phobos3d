@@ -1,6 +1,7 @@
 #include "PH_BaseClient.h"
 
 #include <PH_Console.h>
+#include <PH_Core.h>
 #include <PH_Render.h>
 
 #include "PH_IPlayerCommandProducer.h"

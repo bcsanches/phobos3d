@@ -58,7 +58,7 @@ namespace Phobos
 			struct ConfigInfo_s GetConfig();
 
 		private:					
-			ContextCmd_c		cmdToggleMouseCursorClip;			
+			ContextCmd_c		cmdToggleMouseCursorClip;				
 			ContextVar_c		varMouseSensitivity;
 
 			ContextVar_c		varSpectatorMoveSpeed;

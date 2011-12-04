@@ -44,7 +44,7 @@ namespace Phobos
 			bool IsMouseClipped();
 
 			virtual void OnMouseClip() {};
-			virtual void OnMouseUnclip() {};
+			virtual void OnMouseUnclip() {};		
 
 		private:
 			ContextVar_c varMouseClipped;
