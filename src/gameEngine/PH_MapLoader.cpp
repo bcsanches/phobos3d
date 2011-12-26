@@ -83,6 +83,15 @@ namespace Phobos
 			return false;
 	}
 
+	static bool IsDynamicEntity(const rapidxml::xml_node<> &element)
+	{
+		if(ContainsCustomProperties(element))
+			return true;
+
+		const rapidxml::xml_attribute<> *attribute = element.first_attribute("typename");
+		return (strcmp(attribute->value(), "Marker Object") == 0) || (strcmp(attribute->value(), "Camera Object") == 0);
+	}
+
 	static void LoadProperties(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
 	{
 		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
@@ -156,15 +165,15 @@ namespace Phobos
 					continue;
 				}
 
-				bool customProperties = ContainsCustomProperties(*elem);
-				if(customProperties && IsEditorOnly(*elem))
+				bool dynamicEntity = IsDynamicEntity(*elem);
+				if(dynamicEntity && IsEditorOnly(*elem))
 					continue;
 				
 				DictionaryPtr_t dict = Dictionary_c::Create(nameAttribute->value());
 
 				LoadDictionary(dict, *elem);
 
-				(customProperties ? ipDynamicEntitiesHive : ipStaticEntitiesHive)->AddDictionary(dict);				
+				(dynamicEntity ? ipDynamicEntitiesHive : ipStaticEntitiesHive)->AddDictionary(dict);				
 			}
 			catch(Exception_c &e)
 			{
