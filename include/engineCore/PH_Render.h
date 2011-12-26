@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_RENDER_H
 #define PH_RENDER_H
 
+#include <list>
+
 #include <boost/scoped_ptr.hpp>
 
 #include <OgrePrerequisites.h>
@@ -155,6 +157,9 @@ namespace Phobos
 			Ogre::SceneManager					*pclMainSceneManager;
 
 			Ogre::ShadowTechnique				eShadowMode;
+
+			typedef std::list<String_c>			StringList_t;
+			StringList_t						lstPluginsName;
 
 		public:		
 			static RenderPtr_t CreateInstance();

@@ -148,6 +148,15 @@ namespace Phobos
 		kernel.LogMessage("[Render_c::OnBoot] Opening render window");
 		ipWindow->Open("Phobos Engine", r);
 
+		//We need to do a "lazy load" with Ogre plugins, to make sure the render plugins are only 
+		//loaded after screen is created.
+
+		//Loading plugin befire creating the screen, may cause problem in some platforms: ie linux opengl plugin
+		for(StringList_t::iterator it = lstPluginsName.begin(), end = lstPluginsName.end(); it != end; ++it)
+			spRoot->loadPlugin(*it);
+
+		lstPluginsName.clear();
+
 		ipWindow->SetEventManager(EventManager_c::GetInstance());
 
 		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());
@@ -677,7 +686,7 @@ namespace Phobos
 			return;
 		}
 
-		spRoot->loadPlugin(container[1]);
+		lstPluginsName.push_back(container[1]);		
 	}
 
 	void Render_c::CmdScreenshot(const StringVector_t &container, Context_c &)
