@@ -19,6 +19,7 @@ subject to the following restrictions:
 #include <OgreEntity.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
+#include <OgreException.h>
 
 #include <PH_Console.h>
 #include <PH_Context.h>
@@ -33,6 +34,9 @@ subject to the following restrictions:
 
 #include "PH_Core.h"
 #include "PH_OgreUtils.h"
+
+#include "OgreWindowEventUtilities.h"
+#include <SDL/SDL.h>
 
 namespace Phobos
 {
@@ -184,7 +188,8 @@ namespace Phobos
 		}
 
 		kernel.LogMessage("[Render_c::OnBoot] render system found, initializing Ogre");
-		spRoot->initialise(false);
+                spRoot->restoreConfig();
+                spRoot->initialise(false);
 
 		Ogre::NameValuePairList opts;
 
@@ -193,7 +198,8 @@ namespace Phobos
 		opts["resolution"] = tmp.str();
 		opts["fullscreen"] = fullScreen ? "true" : "false";
 		opts["vsync"] = vsync ? "true" : "false";
-
+                opts["vsync"] = "true";
+                
         void* handler = ipWindow->GetHandler();
 
         if (handler != NULL)
@@ -204,6 +210,8 @@ namespace Phobos
 
 		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");
 		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);
+
+                pclOgreWindow->setVisible(true);
 
 		kernel.LogMessage("[Render_c::OnBoot] Initializing all resource groups");
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
@@ -256,7 +264,7 @@ namespace Phobos
 		//clAnimationManager.Update();
 		//clCaelum.Update(IM_GetGameTimer().fRenderFrameTime);
 
-		spRoot->renderOneFrame();
+            spRoot->renderOneFrame();
 	}
 
 	void Render_c::OnPrepareToBoot()

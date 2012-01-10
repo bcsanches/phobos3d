@@ -126,13 +126,13 @@
             <linkerLibLibItem>PH_Inputd</linkerLibLibItem>
             <linkerLibLibItem>PH_EgineCored</linkerLibLibItem>
             <linkerLibLibItem>PH_Dictionaryd</linkerLibLibItem>
-            <linkerLibLibItem>OgreMain</linkerLibLibItem>
-            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
             <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
             <linkerLibLibItem>boost_signals</linkerLibLibItem>
             <linkerLibLibItem>boost_system</linkerLibLibItem>
             <linkerLibLibItem>BulletCollision</linkerLibLibItem>
             <linkerLibLibItem>BulletDynamics</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

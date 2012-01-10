@@ -229,13 +229,13 @@ namespace Phobos
 	}
 
 	void Console_c::OnRenderReady(void)
-	{
+        {
 		using namespace Ogre;
 
 		fpHeight = 0;
 
 		try
-		{
+		{  
 			RenderPtr_t render = Render_c::GetInstance();
 
 			pclSceneManager = render->CreateSceneManager(Ogre::ST_GENERIC);
@@ -277,7 +277,7 @@ namespace Phobos
 			//FIXME
 			//LogOgreException("Console_c::OnRenderReady", e);
 			throw;
-		}
+                }
 	}
 
 	void Console_c::OnChar(Char_t ch)
@@ -473,7 +473,7 @@ namespace Phobos
 			case INPUT_EVENT_BUTTON:
 				if(event.stButton.eState == BUTTON_STATE_DOWN)
 				{
-					if(event.stButton.uId == CONSOLE_KEY)
+					if(event.stButton.uId == CONSOLE_KEY || event.stButton.uId == '\'')
 						this->ToggleConsole();
 					else if(this->IsActive())
 					{

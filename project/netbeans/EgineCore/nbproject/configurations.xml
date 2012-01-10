@@ -89,11 +89,11 @@
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>OgreMain</linkerLibLibItem>
-            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
             <linkerLibLibItem>PH_Kerneld</linkerLibLibItem>
             <linkerLibLibItem>PH_Inputd</linkerLibLibItem>
             <linkerLibLibItem>PH_Dictionaryd</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

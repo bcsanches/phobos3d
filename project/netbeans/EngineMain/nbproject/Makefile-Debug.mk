@@ -50,7 +50,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../../bin -lOgreMain -lOgreTerrain -lPH_GameEngined -lBulletCollision -lPH_Kerneld -lPH_Inputd -lPH_Dictionaryd -lPH_EgineCored -lPH_GameEngined
+LDLIBSOPTIONS=-L../../../bin -lPH_GameEngined -lBulletCollision -lPH_Kerneld -lPH_Inputd -lPH_Dictionaryd -lPH_EgineCored -lPH_GameEngined -lOgreMain -lOgreTerrain
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

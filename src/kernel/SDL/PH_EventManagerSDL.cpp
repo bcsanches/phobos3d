@@ -98,7 +98,7 @@ namespace Phobos
         {0, 0},									//37
 
         {SDLK_AMPERSAND,	0},					//38
-        {SDLK_QUOTE,		0},					//39
+        {SDLK_QUOTE,		'\''},					//39
         {SDLK_LEFTPAREN,	0},					//40
         {SDLK_RIGHTPAREN,	0},					//41
         {SDLK_ASTERISK,		0},					//42

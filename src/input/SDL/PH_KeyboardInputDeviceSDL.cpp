@@ -48,7 +48,7 @@ namespace Phobos
 	{
 		PH_ASSERT(event.eType == EVENT_TYPE_KEYBOARD);
 
-		InputEvent_s inputEvent;
+                InputEvent_s inputEvent;
 
 		switch(event.stKeyboard.eType)
 		{

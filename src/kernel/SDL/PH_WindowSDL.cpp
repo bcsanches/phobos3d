@@ -37,7 +37,7 @@ namespace Phobos
 
 	WindowSDL_c::~WindowSDL_c(void)
 	{
-        SDL_Quit();
+            SDL_Quit();
 	}
 
 	void WindowSDL_c::Open(const String_c &name, const Rect_s<size_t> &rect)
@@ -47,21 +47,20 @@ namespace Phobos
 
 	    SDL_EnableUNICODE(1);
 
-	    SDL_WM_SetCaption(name.c_str(), NULL);
+            #ifdef PH_WIN32
+                SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, 0);
+            #else
+                SDL_SetVideoMode(rect.tWidth, rect.tHeight, 0, SDL_OPENGL);
+            #endif
 
-	    #ifdef PH_LINUX
-            SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
-            SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
-            SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
-            SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-            //SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-	    #endif
+            #ifdef PH_LINUX
+                SDL_GL_SetAttribute( SDL_GL_RED_SIZE,           8  );
+                SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,         8  );
+                SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,          8  );
+                SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,         16 );
+            #endif
 
-        #ifdef PH_WIN32
-            SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, 0);
-        #else
-            SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, SDL_OPENGL);
-        #endif
+            SDL_WM_SetCaption(name.c_str(), NULL);
 
 	    this->rect = rect;
 

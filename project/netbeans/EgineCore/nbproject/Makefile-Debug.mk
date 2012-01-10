@@ -59,7 +59,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../../bin -lOgreMain -lOgreTerrain -lPH_Kerneld -lPH_Inputd -lPH_Dictionaryd
+LDLIBSOPTIONS=-L../../../bin -lPH_Kerneld -lPH_Inputd -lPH_Dictionaryd -lOgreMain -lOgreTerrain
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

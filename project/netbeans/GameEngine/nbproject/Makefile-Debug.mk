@@ -47,9 +47,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/190592110/PH_EntityIO.o \
 	${OBJECTDIR}/_ext/190592110/PH_WorldManager.o \
 	${OBJECTDIR}/_ext/190592110/PH_EntityComponent.o \
-	${OBJECTDIR}/_ext/190592110/PH_SpectatorCameraCommandProducer.o \
 	${OBJECTDIR}/_ext/190592110/PH_CollisionMesh.o \
 	${OBJECTDIR}/_ext/190592110/PH_MoverManager.o \
+	${OBJECTDIR}/_ext/190592110/PH_SpectatorCameraCommandProducer.o \
 	${OBJECTDIR}/_ext/190592110/PH_MapLoader.o \
 	${OBJECTDIR}/_ext/190592110/PH_GameEvent.o \
 	${OBJECTDIR}/_ext/190592110/PH_EntityEvent.o \
@@ -74,7 +74,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../../bin -lPH_Kerneld -lPH_Inputd -lPH_EgineCored -lPH_Dictionaryd -lOgreMain -lOgreTerrain -lboost_filesystem -lboost_signals -lboost_system -lBulletCollision -lBulletDynamics
+LDLIBSOPTIONS=-L../../../bin -lPH_Kerneld -lPH_Inputd -lPH_EgineCored -lPH_Dictionaryd -lboost_filesystem -lboost_signals -lboost_system -lBulletCollision -lBulletDynamics -lOgreTerrain -lOgreMain
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -154,11 +154,6 @@ ${OBJECTDIR}/_ext/190592110/PH_EntityComponent.o: ../../../src/gameEngine/PH_Ent
 	${RM} $@.d
 	$(COMPILE.cc) -g -DPH_GCC -DPH_LINUX -DPH_SDL -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -I../../../include/dictionary -I../../../include/engineCore -I../../../include/gameEngine -I/usr/include/OGRE -I/usr/include/OGRE/Terrain -I/usr/include/bullet -I/home/cronosts/Programming/Libs/rapidxml-1.13 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/190592110/PH_EntityComponent.o ../../../src/gameEngine/PH_EntityComponent.cpp
 
-${OBJECTDIR}/_ext/190592110/PH_SpectatorCameraCommandProducer.o: ../../../src/gameEngine/PH_SpectatorCameraCommandProducer.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/190592110
-	${RM} $@.d
-	$(COMPILE.cc) -g -DPH_GCC -DPH_LINUX -DPH_SDL -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -I../../../include/dictionary -I../../../include/engineCore -I../../../include/gameEngine -I/usr/include/OGRE -I/usr/include/OGRE/Terrain -I/usr/include/bullet -I/home/cronosts/Programming/Libs/rapidxml-1.13 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/190592110/PH_SpectatorCameraCommandProducer.o ../../../src/gameEngine/PH_SpectatorCameraCommandProducer.cpp
-
 ${OBJECTDIR}/_ext/190592110/PH_CollisionMesh.o: ../../../src/gameEngine/PH_CollisionMesh.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/190592110
 	${RM} $@.d
@@ -168,6 +163,11 @@ ${OBJECTDIR}/_ext/190592110/PH_MoverManager.o: ../../../src/gameEngine/PH_MoverM
 	${MKDIR} -p ${OBJECTDIR}/_ext/190592110
 	${RM} $@.d
 	$(COMPILE.cc) -g -DPH_GCC -DPH_LINUX -DPH_SDL -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -I../../../include/dictionary -I../../../include/engineCore -I../../../include/gameEngine -I/usr/include/OGRE -I/usr/include/OGRE/Terrain -I/usr/include/bullet -I/home/cronosts/Programming/Libs/rapidxml-1.13 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/190592110/PH_MoverManager.o ../../../src/gameEngine/PH_MoverManager.cpp
+
+${OBJECTDIR}/_ext/190592110/PH_SpectatorCameraCommandProducer.o: ../../../src/gameEngine/PH_SpectatorCameraCommandProducer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/190592110
+	${RM} $@.d
+	$(COMPILE.cc) -g -DPH_GCC -DPH_LINUX -DPH_SDL -DPH_DEBUG -DPH_CHECK_ASSERT -I../../../include/kernel -I../../../include/input -I../../../include/dictionary -I../../../include/engineCore -I../../../include/gameEngine -I/usr/include/OGRE -I/usr/include/OGRE/Terrain -I/usr/include/bullet -I/home/cronosts/Programming/Libs/rapidxml-1.13 -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/190592110/PH_SpectatorCameraCommandProducer.o ../../../src/gameEngine/PH_SpectatorCameraCommandProducer.cpp
 
 ${OBJECTDIR}/_ext/190592110/PH_MapLoader.o: ../../../src/gameEngine/PH_MapLoader.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/190592110

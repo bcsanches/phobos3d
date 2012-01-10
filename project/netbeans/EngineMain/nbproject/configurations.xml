@@ -62,8 +62,6 @@
             <pElem>../../../bin</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>OgreMain</linkerLibLibItem>
-            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
             <linkerLibLibItem>PH_GameEngined</linkerLibLibItem>
             <linkerLibLibItem>BulletCollision</linkerLibLibItem>
             <linkerLibLibItem>PH_Kerneld</linkerLibLibItem>
@@ -71,6 +69,8 @@
             <linkerLibLibItem>PH_Dictionaryd</linkerLibLibItem>
             <linkerLibLibItem>PH_EgineCored</linkerLibLibItem>
             <linkerLibLibItem>PH_GameEngined</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OgreTerrain</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
