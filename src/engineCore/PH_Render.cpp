@@ -19,7 +19,6 @@ subject to the following restrictions:
 #include <OgreEntity.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
-#include <OgreException.h>
 
 #include <PH_Console.h>
 #include <PH_Context.h>
@@ -34,9 +33,6 @@ subject to the following restrictions:
 
 #include "PH_Core.h"
 #include "PH_OgreUtils.h"
-
-#include "OgreWindowEventUtilities.h"
-#include <SDL/SDL.h>
 
 namespace Phobos
 {
