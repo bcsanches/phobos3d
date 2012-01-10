@@ -198,7 +198,6 @@ namespace Phobos
 		opts["resolution"] = tmp.str();
 		opts["fullscreen"] = fullScreen ? "true" : "false";
 		opts["vsync"] = vsync ? "true" : "false";
-                opts["vsync"] = "true";
                 
         void* handler = ipWindow->GetHandler();
 
