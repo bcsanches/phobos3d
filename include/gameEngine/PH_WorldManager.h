@@ -60,7 +60,8 @@ namespace Phobos
 			void LoadMap(const String_c &mapName);
 			void UnloadMap();
 
-			EntityPtr_t TryGetEntityByType(const String_c &className);
+			EntityPtr_t TryGetEntityByType(const String_c &className) const;
+			EntityPtr_t GetEntityByName(const String_c &name) const;			
 
 			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);	
 
