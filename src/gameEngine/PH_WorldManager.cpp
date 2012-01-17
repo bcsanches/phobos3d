@@ -101,7 +101,7 @@ namespace Phobos
 		}
 	}
 
-	EntityPtr_t WorldManager_c::TryGetEntityByType(const String_c &className)
+	EntityPtr_t WorldManager_c::TryGetEntityByType(const String_c &className) const
 	{
 		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
@@ -111,6 +111,11 @@ namespace Phobos
 		}
 
 		return EntityPtr_t();
+	}
+
+	EntityPtr_t WorldManager_c::GetEntityByName(const String_c &name) const
+	{
+		return boost::static_pointer_cast<Entity_c>(this->GetChild(name));
 	}
 
 	void WorldManager_c::OnPrepareToBoot()
