@@ -38,6 +38,7 @@ namespace Phobos
 			void EnableViewport(int ZOrder = 0);
 
 			void SetTransform(const Transform_c &t);
+			void SetCameraTransform(const Transform_c &t);
 
 			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
 

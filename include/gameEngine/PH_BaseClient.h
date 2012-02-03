@@ -14,6 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
 #include <PH_MouseInputDevice.h>
@@ -41,12 +42,24 @@ namespace Phobos
 			void ClipMouseCursor();
 			void UnclipMouseCursor();
 
+			void RegisterToggleMouseCursorClipCmd();
+
+			void RegisterNullMouseThumbCmd();
+			void UnregisterNullMouseThumbCmd();
+
 			bool IsMouseClipped();
 
 			virtual void OnMouseClip() {};
 			virtual void OnMouseUnclip() {};		
 
 		private:
+			void CmdToggleMouseCursorClip(const Phobos::StringVector_t &args, Phobos::Context_c &);
+			void CmdNullMouseThumb(const Phobos::StringVector_t &args, Phobos::Context_c &);
+
+		private:
+			ContextCmd_c cmdToggleMouseCursorClip;
+			ContextCmd_c cmdNullMouseThumb;
+
 			ContextVar_c varMouseClipped;
 	};
 }

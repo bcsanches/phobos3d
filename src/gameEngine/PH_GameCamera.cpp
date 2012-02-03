@@ -65,6 +65,12 @@ namespace Phobos
 		pclRootNode->setOrientation(t.GetRotation());
 	}
 
+	void GameCamera_c::SetCameraTransform(const Transform_c &t)
+	{
+		pclCamera->setPosition(t.GetOrigin());
+		pclCamera->setOrientation(t.GetRotation());
+	}
+
 	void GameCamera_c::EnableFixedYawAxis(const Ogre::Vector3 &axis)
 	{
 		pclCamera->setFixedYawAxis(true, axis);
