@@ -21,6 +21,8 @@ subject to the following restrictions:
 #include <vector>
 
 #include <PH_ContextCmd.h>
+#include <PH_ContextVar.h>
+#include <PH_Timer.h>
 
 #include "PH_CoreModuleManager.h"
 #include "PH_CoreTimer.h"
@@ -47,9 +49,7 @@ namespace Phobos
 			static CorePtr_t CreateInstance();
 			static void ReleaseInstance();
 			static CorePtr_t GetInstance();
-
-			void Update(Float_t seconds, Float_t delta);
-			void FixedUpdate(Float_t seconds);
+			
 			void Shutdown(void);
 
 			inline void SetFrameRate(Float_t rate);
@@ -65,25 +65,44 @@ namespace Phobos
 
 			void ResetTimer(CoreTimerTypes_e timer);
 
+			///Starts the main loop, should be called by main, only once
+			void MainLoop();
+
+			///Called automatically by MainLoop
+			void Update(Float_t seconds, Float_t delta);
+			void FixedUpdate(Float_t seconds);
+
 		private:
 			Core_c(const String_c &name);
 			~Core_c();
 
+			inline Float_t GetUpdateTime(void);
+			inline Float_t GetMinFrameTime(void);			
+
 			void CmdTime(const StringVector_t &args, Context_c &);
 			void CmdToggleTimerPause(const StringVector_t &args, Context_c &);
 			void CmdListModules(const StringVector_t &args, Context_c &);
+			void CmdQuit(const StringVector_t &, Context_c &);
 
 		private:			
 			static const String_c DEFAULT_NAME;
 			static CorePtr_t ipInstance_gl;
 
-			CoreSimInfo_s						stSimInfo;
+			CoreSimInfo_s	stSimInfo;
 
 			ContextCmd_c	cmdTime;
 			ContextCmd_c	cmdToggleTimerPause;
 			ContextCmd_c	cmdListModules;
+			ContextCmd_c	cmdQuit;
+
+			ContextVar_c	varFixedTime;
+			ContextVar_c	varEngineFPS;
+			ContextVar_c	varMinFrameTime;
+
+			Timer_c			clTimer;
 
 			bool			fLaunchedBoot;
+			bool			fStopMainLoop;									
 	};
 
 	inline const CoreSimInfo_s &Core_c::GetSimInfo() const

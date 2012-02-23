@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "PH_Core.h"
 
 #include <boost/foreach.hpp>
+#include <boost/thread.hpp>
 #include <sstream>
 
 #include <PH_Context.h>
@@ -30,6 +31,9 @@ subject to the following restrictions:
 
 #include "PH_CoreModule.h"
 #include "PH_BootModule.h"
+
+#define UPDATE_TIME (1.0f / 60.0f)
+#define MIN_TIME (10.0f / 1000.0f)
 
 namespace Phobos
 {
@@ -67,7 +71,12 @@ namespace Phobos
 		cmdTime("time"),
 		cmdToggleTimerPause("toggleTimerPause"),
 		cmdListModules("listModules"),
-		fLaunchedBoot(false)
+		cmdQuit("quit"),
+		varFixedTime("dvFixedTime", "0"),
+		varEngineFPS("dvEngineFPS", "60"),
+		varMinFrameTime("dvMinFrameTime", "0.01"),
+		fLaunchedBoot(false),
+		fStopMainLoop(false)
 	{
 		MemoryZero(&stSimInfo, sizeof(stSimInfo));
 	}
@@ -80,6 +89,87 @@ namespace Phobos
 	void Core_c::Shutdown()
 	{
 		this->OnFinalize();
+	}
+
+	Float_t Core_c::GetUpdateTime(void)
+	{
+		const Float_t updateTime = varEngineFPS.GetFloat();
+
+		if(updateTime > 0)
+			return(1.0f / updateTime);
+		else
+		{
+			Kernel_c::GetInstance().LogStream() << "[Core_c::GetUpdateTime] Warning: Invalid update time: " << updateTime << ", must be > 0";
+			varEngineFPS.SetValue("60");
+
+			return(1.0f / UPDATE_TIME);
+		}
+	}
+
+	Float_t Core_c::GetMinFrameTime(void)
+	{
+		Float_t minFrameTime = varMinFrameTime.GetFloat();
+
+		if(minFrameTime > 0.05)
+		{
+			Kernel_c::GetInstance().LogStream() << "[Core_c::GetMinFrameTime] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
+			varMinFrameTime.SetValue("0.01");
+
+			minFrameTime = MIN_TIME;
+		}
+
+		return minFrameTime;
+	}
+
+	void Core_c::MainLoop()
+	{
+		Float_t			executionTime = 0;		
+		Float_t			updateTime = GetUpdateTime();
+		
+		clTimer.Reset();
+		do
+		{
+			this->SetFrameRate(updateTime);
+						
+			Float_t lastFrameTime = clTimer.Elapsed();
+
+			if(varFixedTime.GetBoolean())
+				lastFrameTime = updateTime;
+
+			if(lastFrameTime == 0.0f)
+			{
+				boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+				continue;
+			}					
+
+			//how long the simulation can run?
+			executionTime += lastFrameTime;
+			Float_t totalFrameTime = lastFrameTime;
+
+			#ifdef PH_DEBUG
+				//this happens on debug mode while stopped on break points
+				if(executionTime > 20)
+					executionTime = updateTime;
+			#endif
+
+			//update the game on fixed time steps
+			while(executionTime >= updateTime)
+			{
+				//fixed Update
+				this->FixedUpdate(updateTime);
+				
+				executionTime -= updateTime;
+			}
+			Float_t delta = (Float_t) executionTime / (Float_t) updateTime;
+			
+			//Now update other modules as fast as we can
+			this->Update(totalFrameTime, delta);
+
+			//update it after frame
+			updateTime = GetUpdateTime();
+			clTimer.SetMinInterval( GetMinFrameTime() );	
+
+		} while(!fStopMainLoop);
 	}
 
 	void Core_c::Update(Float_t seconds, Float_t delta)
@@ -117,10 +207,16 @@ namespace Phobos
 		cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdTime, this));
 		cmdToggleTimerPause.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdToggleTimerPause, this));
 		cmdListModules.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdListModules, this));
+		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdQuit, this));
 
 		context.AddContextCmd(cmdTime);
 		context.AddContextCmd(cmdToggleTimerPause);
 		context.AddContextCmd(cmdListModules);
+		context.AddContextCmd(cmdQuit);
+
+		context.AddContextVar(varFixedTime);
+		context.AddContextVar(varEngineFPS);
+		context.AddContextVar(varMinFrameTime);
 	}
 
 	void Core_c::PauseTimer(CoreTimerTypes_e timer)
@@ -224,5 +320,10 @@ namespace Phobos
 	void Core_c::CmdListModules(const StringVector_t &args, Context_c &)
 	{
 		this->LogCoreModules();
+	}
+
+	void Core_c::CmdQuit(const StringVector_t &, Context_c &)
+	{
+		fStopMainLoop = true;
 	}
 }

@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\kernel\SDL\PH_TimerSDL.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\kernel\SDL\PH_WindowSDL.cpp"
 				>
 			</File>
@@ -424,6 +428,10 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_String.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\kernel\PH_Timer.h"
 			>
 		</File>
 		<File

@@ -16,10 +16,6 @@ subject to the following restrictions:
 
 #include <sstream>
 
-#include <boost/thread.hpp>
-
-#include <OgreTimer.h>
-
 #include <PH_Console.h>
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
@@ -34,10 +30,8 @@ subject to the following restrictions:
 #include <PH_PluginManager.h>
 #include <PH_ProcVector.h>
 #include <PH_Render.h>
+#include <PH_Timer.h>
 #include <PH_WorldManager.h>
-
-#define UPDATE_TIME (1.0f / 60.0f)
-#define MIN_TIME (10.0f / 1000.0f)
 
 namespace Phobos
 {
@@ -47,32 +41,13 @@ namespace Phobos
 			EngineMain_c();
 			~EngineMain_c();
 
-			void MainLoop(void);
+			void MainLoop(void);					
 
-		private:
-			inline Float_t ConvertMSecToSeconds(UInt_t msec);
-			inline Float_t GetUpdateTime(void);
-			inline Float_t GetMinFrameTime(void);
-
-			void CmdQuit(const StringVector_t &, Context_c &);
-
-		private:
-			ContextVar_c	varFixedTime;
-			ContextVar_c	varEngineFPS;
-			ContextVar_c	varMinFrameTime;
-			ContextCmd_c	cmdQuit;
-			Ogre::Timer		clTimer;
-			bool			fStop;
-
+		private:			
 			ProcVector_c	clSingletons;
 	};
 
-	EngineMain_c::EngineMain_c():
-		varFixedTime("dvFixedTime", "0"),
-		varEngineFPS("dvEngineFPS", "60"),
-		varMinFrameTime("dvMinFrameTime", "0.01"),
-		cmdQuit("quit"),
-		fStop(false)
+	EngineMain_c::EngineMain_c()
 	{
 		Kernel_c::CreateInstance("phobos.log");
 		CorePtr_t core = Core_c::CreateInstance();
@@ -120,13 +95,6 @@ namespace Phobos
 		core->RegisterCommands(*console);
 		dictionaryManager->RegisterCommands(*console);
 
-		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&EngineMain_c::CmdQuit, this));
-		console->AddContextCmd(cmdQuit);
-
-		console->AddContextVar(varFixedTime);
-		console->AddContextVar(varEngineFPS);
-		console->AddContextVar(varMinFrameTime);
-
 		core->LaunchBootModule("autoexec.cfg");
 	}
 
@@ -137,47 +105,7 @@ namespace Phobos
 		clSingletons.CallAll();
 
 		Kernel_c::ReleaseInstance();
-	}
-
-	void EngineMain_c::CmdQuit(const StringVector_t &, Context_c &)
-	{
-		fStop = true;
-	}
-
-	inline Float_t EngineMain_c::ConvertMSecToSeconds(UInt_t msec)
-	{
-		return((Float_t) msec / 1000.0f);
-	}
-
-	inline Float_t EngineMain_c::GetUpdateTime(void)
-	{
-		const Float_t updateTime = varEngineFPS.GetFloat();
-
-		if(updateTime > 0)
-			return(1.0f / updateTime);
-		else
-		{
-			Kernel_c::GetInstance().LogStream() << "[MainLoop] Warning: Invalid update time: " << updateTime << ", must be > 0";
-			varEngineFPS.SetValue("60");
-
-			return(1.0f / UPDATE_TIME);
-		}
-	}
-
-	inline Float_t EngineMain_c::GetMinFrameTime(void)
-	{
-		Float_t minFrameTime = varMinFrameTime.GetFloat();
-
-		if(minFrameTime > 0.05)
-		{
-			Kernel_c::GetInstance().LogStream() << "[MainLoop] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
-			varMinFrameTime.SetValue("0.01");
-
-			minFrameTime = MIN_TIME;
-		}
-
-		return minFrameTime;
-	}
+	}			
 
 	/**
 
@@ -186,62 +114,7 @@ namespace Phobos
 	*/
 	void EngineMain_c::MainLoop(void)
 	{
-		Float_t			executionTime = 0;
-		unsigned int	lastTicks;
-		Float_t			updateTime = GetUpdateTime();
-
-		CorePtr_t core = Core_c::GetInstance();
-
-		lastTicks = clTimer.getMilliseconds();
-		do
-		{
-			core->SetFrameRate(updateTime);
-
-			UInt_t ticks = clTimer.getMilliseconds();
-
-			Float_t lastFrameTime = ConvertMSecToSeconds(ticks - lastTicks);
-
-			if(varFixedTime.GetBoolean())
-				lastFrameTime = updateTime;
-
-			if(lastFrameTime < GetMinFrameTime())
-			{
-				boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-				continue;
-			}
-
-			lastTicks = ticks;
-
-			//how long the simulation can run?
-			executionTime += lastFrameTime;
-			Float_t totalFrameTime = lastFrameTime;
-
-			#ifdef IM_DEBUG
-				//this happens on debug mode while stopped on break points
-				if(executionTime > 20)
-					executionTime = updateTime;
-			#endif
-
-			//update the game on fixed time steps
-			while(executionTime >= updateTime)
-			{
-				//fixed Update
-				core->FixedUpdate(updateTime);
-
-				//totalFrameTime += time;
-
-				//printf("%f\n", executionTime);
-				executionTime -= updateTime;
-			}
-			Float_t delta = (Float_t) executionTime / (Float_t) updateTime;
-			//printf("%f\n", delta);
-			//Now update other modules as fast as we can
-			core->Update(totalFrameTime, delta);
-
-			//update it after frame
-			updateTime = GetUpdateTime();
-
-		} while(!fStop);
+		Core_c::GetInstance()->MainLoop();
 	}
 }
 
