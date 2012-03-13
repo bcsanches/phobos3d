@@ -157,13 +157,42 @@ static TestModulePtr_t CreateAndRegisterTestModule()
 	return ptr;
 }
 
+class TestConsole_c: public Console_c
+{
+	public:
+		static ConsolePtr_t CreateInstance(void)
+		{
+			Console_c::UpdateInstance(new TestConsole_c());		
+
+			return Console_c::GetInstance();
+		}
+
+	protected:
+		TestConsole_c():
+			 Console_c("Console")
+		{
+		}
+
+		virtual void OnToggleConsole()
+		{
+		}
+
+		virtual void OnEditBoxChanged()
+		{
+		}
+
+		virtual void OnTextListChanged()
+		{
+		}
+};
+
 struct CoreInstance_s
 {
 	CoreInstance_s()
 	{
 		Kernel_c::CreateInstance("enginecoretest.log");
 		Core_c::CreateInstance();
-		Console_c::CreateInstance();
+		TestConsole_c::CreateInstance();
 	}
 
 	~CoreInstance_s()

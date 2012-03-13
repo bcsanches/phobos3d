@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-May 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+February 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,29 +14,18 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_CONSOLE_H
-#define PH_CONSOLE_H
-
 #include "PH_CoreModule.h"
 
 #include <boost/circular_buffer.hpp>
-
-#include <OgrePrerequisites.h>
-#include <OgreRectangle2D.h>
 
 #include <PH_Context.h>
 #include <PH_InputManager.h>
 #include <PH_InputMapper.h>
 #include <PH_Log.h>
 
-#include "PH_EngineCoreAPI.h"
-
 namespace Phobos
 {
-	class AxisButton_c;
-	class Button_c;
 	class Console_c;
-	class Thumb_c;
 
 	PH_DECLARE_NODE_PTR(Console);	
 
@@ -46,20 +35,8 @@ namespace Phobos
 		private LogListener_c, 
 		private InputManagerListener_c, 
 		private InputDeviceListener_c
-	{		
+	{
 		private:
-			// =====================================================
-			// PRIVATE TYPES
-			// =====================================================
-			enum ConsoleFlags_e
-			{
-				CONSOLE_FLAG_ACTIVE = 0x01,
-				CONSOLE_FLAG_IGNORE_FIRST_CHAR = 0x02,
-				CONSOLE_TEXT_BUFFER_CHANGED = 0x04,
-				CONSOLE_EDIT_BOX_CHANGED = 0x08,
-				CONSOLE_UI_MOVED = 0x10,
-			};	
-
 			class EditBox_c
 			{
 				public:
@@ -88,18 +65,15 @@ namespace Phobos
 
 			};
 
+		protected:
+			typedef boost::circular_buffer<String_c> TextList_t;
+
 		public:
-			// =====================================================
-			// PUBLIC METHODS
-			// =====================================================		
-			static ConsolePtr_t &CreateInstance(void);
-			static ConsolePtr_t &GetInstance(void);
-			static void ReleaseInstance(void);		
+			static ConsolePtr_t GetInstance(void);			
+			static void ReleaseInstance(void);
 
 			void Execute(const String_c &cmdLine);
 			void ExecuteFromFile(const String_c &fileName);
-
-			inline bool IsActive(void) const;
 
 			inline void AddContextVar(ContextVar_c &var);
 			inline void AddContextCmd(ContextCmd_c &cmd);
@@ -109,42 +83,43 @@ namespace Phobos
 			inline const ContextVar_c *TryGetContextVar(const String_c &name) const;
 			inline ContextVar_c *TryGetContextVar(const String_c &name);
 
-			void Print(const String_c &text);		
+			void Print(const String_c &text);
+
+			inline bool IsActive(void) const;
 
 		protected:
-			// =====================================================
-			// PROTECTED METHODS
-			// =====================================================
-			Console_c(void);
-			~Console_c(void);
+			Console_c(const String_c &name, ChildrenMode_e childrenMode=PUBLIC_CHILDREN);
+			virtual ~Console_c();
 
-			void OnFixedUpdate();
-			//void OnInit();
-			void OnUpdate();
-			void OnRenderReady();
+			virtual void OnToggleConsole() = 0;
+			virtual void OnEditBoxChanged() = 0;
+			virtual void OnTextListChanged() = 0;			
+
+			inline TextList_t::const_iterator ListTextBegin() const;
+			inline TextList_t::const_iterator ListTextEnd() const;
+
+			const String_c &EditBoxStr() const;
+
+		protected:
+			static void UpdateInstance(ConsolePtr_t console);
 
 		private:
-			// =====================================================
-			// PRIVATE METHODS
-			// =====================================================
-			void CreateDefaultCmds();
-				
+			void CmdCd(const StringVector_t &args, Context_c &);
+			void CmdLs(const StringVector_t &args, Context_c &);
+			void CmdDumpTable(const StringVector_t &args, Context_c &);
+
+			void ToggleConsole(void);
+
 			void OnChar(Char_t ch);
 			void OnEnter(void);		
 
 			void OnPreviousCommand(void);
 			void OnNextCommand(void);
 
-			void RegisterDefaultCmds(void);
-
-			void ToggleConsole(void);			
-
 			void AddToHistory(const String_c &str);
 
 			bool GetPreviousCommand(String_c &out);
 			bool GetNextCommand(String_c &out);
-
-			void UpdateRenderInfo();
 
 			//Log message handler
 			void Message(const String_c &message);
@@ -152,59 +127,33 @@ namespace Phobos
 			void InputManagerEvent(const InputManagerEvent_s &event);
 			void InputEvent(const InputEvent_s &event);
 
-			void CmdCd(const StringVector_t &args, Context_c &);
-			void CmdLs(const StringVector_t &args, Context_c &);
-			void CmdDumpTable(const StringVector_t &args, Context_c &);
-
-		private:
-			// =====================================================
-			// PRIVATE ATTRIBUTES
-			// =====================================================
-			//FIXME
-			//InputManagerPtr_t			ipInputManager;			
-
-			EditBox_c					clEditBox;			
-
+		private:			
 			Context_c					clContext;
 
 			InputMapperPtr_t			ipInputMapper;
 
-			Ogre::OverlayContainer		*pclRect;		
-			Ogre::OverlayElement		*pclTextBox;
-			Ogre::Overlay				*pclOverlay;
-			Ogre::SceneManager			*pclSceneManager;
-			Ogre::Camera				*pclCamera;
-			Ogre::Overlay				*pclRenderInfoOverlay;
+			ContextCmd_c				cmdLs;
+			ContextCmd_c				cmdCd;
+			ContextCmd_c				cmdDumpTable;
+			
+			String_c					strCurrentNodePathName;			
 
-			Float_t						fpHeight;
-
-			typedef boost::circular_buffer<String_c> TextList_t;
+			EditBox_c					clEditBox;
+			
 			TextList_t	lstText;
 			TextList_t	lstHistory;
 
 			TextList_t::iterator		itPrevCmd;
 
-			ContextVar_c				varMaterialName;
-			ContextVar_c				varShowRenderInfo;
-			ContextCmd_c				cmdLs;
-			ContextCmd_c				cmdCd;
-			ContextCmd_c				cmdDumpTable;
-
-			String_c					strCurrentNodePathName;
-
-			bool fActive;
 			bool fIgnoreFirstChar;
-			bool fIgnoredLastChar;
-			bool fTextBufferChanged;
-			bool fEditBoxChanged;
-			bool fUIMoved;							
+			bool fIgnoredLastChar;			
+			bool fActive;
 
 		private:
 			// =====================================================
 			// STATIC PRIVATE ATTRIBUTES
 			// =====================================================
 			static ConsolePtr_t ipInstance_gl;
-
 	};
 
 	// =====================================================
@@ -214,7 +163,7 @@ namespace Phobos
 	inline bool Console_c::IsActive(void) const
 	{		
 		return fActive;
-	}
+	}	
 
 	inline void Console_c::AddContextVar(ContextVar_c &var)
 	{
@@ -245,6 +194,14 @@ namespace Phobos
 	{
 		return clContext.TryGetContextVar(name);
 	}
-}
 
-#endif
+	inline Console_c::TextList_t::const_iterator Console_c::ListTextBegin() const
+	{
+		return lstText.begin();
+	}
+
+	inline Console_c::TextList_t::const_iterator Console_c::ListTextEnd() const
+	{
+		return lstText.end();
+	}	
+}

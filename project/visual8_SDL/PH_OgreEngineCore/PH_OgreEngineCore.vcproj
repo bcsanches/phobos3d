@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="UT_EngineCore"
-	ProjectGUID="{7BE29240-A5DB-4539-B53C-13C5B95BD04E}"
-	RootNamespace="UT_EngineCore"
+	Name="PH_OgreEngineCore"
+	ProjectGUID="{38679578-6B2C-4801-BD91-11BF34EC697B}"
+	RootNamespace="PH_OgreEngineCore"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\input&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_SDL;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\ogreEngineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary\&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_MSVC;PH_SDL;PH_CHECK_ASSERT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,9 +61,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib"
+				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -92,7 +94,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -115,8 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)..\..\..\include\input&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_RELEASE;PH_IGNORE_ASSERT;PH_MSVC;PH_SDL;PH_WIN32"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_OGREENGINECORE_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,7 +137,7 @@
 				Name="VCLinkerTool"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
@@ -167,36 +168,34 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+		<File
+			RelativePath="..\..\..\src\ogreEngineCore\PH_OgreConsole.cpp"
 			>
-			<File
-				RelativePath="..\..\..\src\engineCoreTest\AccelerometerTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\engineCoreTest\CoreTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\engineCoreTest\main.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_OgreConsole.h"
 			>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_OgreEngineCoreAPI.h"
 			>
-		</Filter>
+		</File>
+		<File
+			RelativePath="..\..\..\src\ogreEngineCore\PH_OgreUtils.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_OgreUtils.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\ogreEngineCore\PH_Render.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_Render.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

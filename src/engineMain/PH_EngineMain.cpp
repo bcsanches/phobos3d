@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include <sstream>
 
-#include <PH_Console.h>
+#include <PH_OgreConsole.h>
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
 #include <PH_Core.h>
@@ -60,7 +60,7 @@ namespace Phobos
 		clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
 		core->AddModule(eventManager);
 
-		ConsolePtr_t console = Console_c::CreateInstance();
+		ConsolePtr_t console = OgreConsole_c::CreateInstance();
 		clSingletons.AddProc(Console_c::ReleaseInstance);
 		core->AddModule(console);		
 

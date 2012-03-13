@@ -28,9 +28,10 @@ subject to the following restrictions:
 
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
+#include <PH_CoreModule.h>
 #include <PH_Window.h>
 
-#include "PH_CoreModule.h"
+#include "PH_OgreEngineCoreAPI.h"
 
 namespace Phobos
 {
@@ -39,7 +40,7 @@ namespace Phobos
 
 	typedef boost::intrusive_ptr<Render_c> RenderPtr_t;
 
-	class PH_ENGINE_CORE_API Render_c: public CoreModule_c
+	class PH_OGRE_ENGINE_CORE_API Render_c: public CoreModule_c
 	{		
 		public:
 			enum EntityMeshFlags_e
