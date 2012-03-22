@@ -25,30 +25,14 @@ subject to the following restrictions:
 #include "PH_OgreEngineCoreAPI.h"
 
 namespace Phobos
-{
-	class AxisButton_c;
-	class Button_c;
+{	
 	class OgreConsole_c;
-	class Thumb_c;
 
 	PH_DECLARE_NODE_PTR(OgreConsole);	
 
 	class PH_OGRE_ENGINE_CORE_API OgreConsole_c: 
 		public Console_c		
-	{		
-		private:
-			// =====================================================
-			// PRIVATE TYPES
-			// =====================================================
-			enum ConsoleFlags_e
-			{
-				CONSOLE_FLAG_ACTIVE = 0x01,
-				CONSOLE_FLAG_IGNORE_FIRST_CHAR = 0x02,
-				CONSOLE_TEXT_BUFFER_CHANGED = 0x04,
-				CONSOLE_EDIT_BOX_CHANGED = 0x08,
-				CONSOLE_UI_MOVED = 0x10,
-			};				
-
+	{
 		public:
 			// =====================================================
 			// PUBLIC METHODS
@@ -61,8 +45,7 @@ namespace Phobos
 			// =====================================================
 			OgreConsole_c(void);
 			~OgreConsole_c(void);
-
-			void OnFixedUpdate();			
+			
 			void OnUpdate();
 			void OnRenderReady();
 

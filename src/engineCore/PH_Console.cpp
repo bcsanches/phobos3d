@@ -53,6 +53,7 @@ namespace Phobos
 		cmdLs("ls"),
 		cmdCd("cd"),
 		cmdDumpTable("dumpTable"),
+		cmdToggleConsole("toggleConsole"),
 		lstText(CONSOLE_LINE_COUNT),
 		lstHistory(CONSOLE_HISTORY_COUNT),
 		strCurrentNodePathName("/"),
@@ -72,10 +73,12 @@ namespace Phobos
 		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
 		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
 		cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdDumpTable, this));
+		cmdToggleConsole.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdToggleConsole, this));
 
 		clContext.AddContextCmd(cmdLs);
 		clContext.AddContextCmd(cmdCd);
 		clContext.AddContextCmd(cmdDumpTable);
+		clContext.AddContextCmd(cmdToggleConsole);
 	}
 
 	Console_c::~Console_c()
@@ -221,6 +224,11 @@ namespace Phobos
 		}
 
 		this->OnTextListChanged();		
+	}
+
+	void Console_c::OnFixedUpdate()
+	{
+		InputManager_c::GetInstance()->Update();
 	}
 
 	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)
@@ -422,6 +430,11 @@ namespace Phobos
 		{
 			stream << e.what();
 		}
+	}
+
+	void Console_c::CmdToggleConsole(const StringVector_t &args, Context_c &)
+	{
+		this->ToggleConsole();
 	}
 
 	//

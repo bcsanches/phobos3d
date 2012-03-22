@@ -91,6 +91,8 @@ namespace Phobos
 			Console_c(const String_c &name, ChildrenMode_e childrenMode=PUBLIC_CHILDREN);
 			virtual ~Console_c();
 
+			virtual void OnFixedUpdate();
+
 			virtual void OnToggleConsole() = 0;
 			virtual void OnEditBoxChanged() = 0;
 			virtual void OnTextListChanged() = 0;			
@@ -107,6 +109,7 @@ namespace Phobos
 			void CmdCd(const StringVector_t &args, Context_c &);
 			void CmdLs(const StringVector_t &args, Context_c &);
 			void CmdDumpTable(const StringVector_t &args, Context_c &);
+			void CmdToggleConsole(const StringVector_t &args, Context_c &);
 
 			void ToggleConsole(void);
 
@@ -135,6 +138,7 @@ namespace Phobos
 			ContextCmd_c				cmdLs;
 			ContextCmd_c				cmdCd;
 			ContextCmd_c				cmdDumpTable;
+			ContextCmd_c				cmdToggleConsole;
 			
 			String_c					strCurrentNodePathName;			
 

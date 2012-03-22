@@ -18,11 +18,9 @@ subject to the following restrictions:
 
 #include <limits.h>
 
-#include <PH_Button.h>
 #include <PH_Core.h>
 #include <PH_Error.h>
 #include <PH_Kernel.h>
-#include <PH_Thumb.h>
 
 #include <OgreOverlayContainer.h>
 #include <OgreOverlayElement.h>
@@ -68,12 +66,7 @@ namespace Phobos
 	OgreConsole_c::~OgreConsole_c(void)
 	{
 		//empty
-	}
-
-	void OgreConsole_c::OnFixedUpdate()
-	{
-		InputManager_c::GetInstance()->Update();
-	}
+	}	
 
 	void OgreConsole_c::OnEditBoxChanged()
 	{
