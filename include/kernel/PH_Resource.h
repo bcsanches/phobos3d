@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-January 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+March 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,33 +14,19 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_MANAGER_H
+#define PH_MANAGER_H
 
-#include "PH_Exception.h"
-#include "PH_ObjectManager.h"
-#include "PH_Path.h"
+#include "PH_Node.h"
 
 namespace Phobos
 {
-	ObjectManager_c::ObjectManager_c():
-		ipRoot(Node_c::Create("/"))
-	{
-	}
+	PH_DECLARE_NODE_PTR(Resource);
 
-	void ObjectManager_c::AddObject(NodePtr_t ptr, const Path_c &strPath)
+	class PH_KERNEL_API Resource_c: public Node_c
 	{
-		if(strPath.IsOnlyRoot())
-			ipRoot->AddChild(ptr);
-		else
-			ipRoot->AddNode(ptr, strPath);
-	}
 
-	NodePtr_t ObjectManager_c::LookupObject(const Path_c &path) const
-	{
-		return ipRoot->LookupNode(path);
-	}
-
-	void ObjectManager_c::RemoveObject(NodePtr_t ptr)
-	{
-		ptr->RemoveSelf();
-	}
+	};
 }
+
+#endif

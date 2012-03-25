@@ -419,6 +419,18 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\kernel\PH_Resource.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernel\PH_ResourceManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\kernel\PH_ResourceManager.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\kernel\PH_Singleton.h"
 			>
 		</File>

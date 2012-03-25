@@ -76,6 +76,21 @@ namespace Phobos
 			NodePtr_t GetChild(const String_c &name) const;
 			NodePtr_t TryGetChild(const String_c &name) const;
 
+			NodePtr_t LookupNode(const Path_c &name) const;
+
+			/**
+				\returns: true if the process completed normally, false if an error ocurred. Note that a true
+				does not means the value was found, check if \param result is null or not to confirm. When false is returned, an
+				error ocurred, like an bad formed path
+
+
+				If the returned value is true, but \param result is still null, this means that the object was not found, but the 
+				request was processed without errors.
+			*/
+			bool TryLookupNode(NodePtr_t &result, const Path_c &name) const;
+
+			void AddNode(NodePtr_t ptr, const Path_c &path);
+
 			void RemoveSelf();
 
 			size_t GetNumChildren() const;
@@ -110,10 +125,18 @@ namespace Phobos
 			inline NodeMap_t::iterator begin();
 			inline NodeMap_t::iterator end();
 
+			inline NodePtr_t MakePointerFromThis() const
+			{
+				return NodePtr_t(const_cast<Node_c*>(this));
+			}
+
 		private:
 			void GetThisPath_r(Path_c &out);
 
 			NodePropertySet_t::iterator GetPropertyIterator(const char *name);
+
+			const Node_c *GetRoot() const;
+			Node_c *GetRoot();
 
 		private:			
 			NodePropertySet_t setProperties;

@@ -141,9 +141,9 @@ namespace Phobos
 	NodePtr_t Node_c::TryGetChild(const String_c &name) const
 	{
 		if((name.size() == 1) && (name[0] == '.'))
-			return NodePtr_t(const_cast<Node_c*>(this));
+			return this->MakePointerFromThis();
 		else if((name.size() == 2) && (name.compare("..") == 0))
-			return NodePtr_t(pclParent);
+			return pclParent->MakePointerFromThis();
 
 		NodeMap_t::const_iterator it = mapNodes.find(name);
 		if(it == mapNodes.end())
@@ -165,6 +165,142 @@ namespace Phobos
 		}
 		
 		return ptr;
+	}
+
+	void Node_c::AddNode(NodePtr_t ptr, const Path_c &path)
+	{
+		if(!path.IsRelative() && pclParent)
+		{
+			this->GetRoot()->AddNode(ptr, path);
+		}
+		else
+		{
+			Path_c::Iterator_c it;
+
+			//empty path?
+			String_c currentFolder;
+			if(!it.Init(path, &currentFolder))
+			{
+				this->AddChild(ptr);
+
+				return;
+			}
+
+			NodePtr_t currentNode = this->MakePointerFromThis();
+			for(;;)
+			{
+				NodePtr_t child = currentNode->TryGetChild(currentFolder);
+				if(!child)
+				{
+					//No path, lets create a default one
+					child = Node_c::Create(currentFolder);
+					currentNode->AddChild(child);
+				}
+				currentNode = child.get();
+
+				if(!it.GetNext(&currentFolder))
+					break;
+			}
+
+			currentNode->AddChild(ptr);
+		}
+	}
+
+	NodePtr_t Node_c::LookupNode(const Path_c &path) const
+	{
+		//If path is only "/"
+		if(path.IsOnlyRoot())
+			return this->GetRoot()->MakePointerFromThis();
+
+		if(!path.IsRelative() && pclParent)
+		{
+			//A full path and this node is not the root, so delegate this to the root
+			return this->GetRoot()->LookupNode(path);
+		}		
+
+		Path_c::Iterator_c it;
+
+		String_c folder;
+		if(!it.Init(path, &folder))
+		{
+			std::stringstream stream;
+
+			stream << "Invalid path: " << path;
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Node_c::LookupObject", stream.str());
+		}
+
+		NodePtr_t currentNode = this->MakePointerFromThis();
+		for(;;)
+		{			
+			NodePtr_t child = currentNode->GetChild(folder);			
+			if(!it.GetNext(&folder))
+				return child;				
+
+			currentNode = child.get();
+		}
+	}
+
+	bool Node_c::TryLookupNode(NodePtr_t &result, const Path_c &path) const
+	{
+		result.reset();
+
+		//If path is only "/"
+		if(path.IsOnlyRoot())
+		{
+			result = this->GetRoot()->MakePointerFromThis();
+
+			return true;
+		}
+
+		if(!path.IsRelative() && pclParent)
+		{
+			//A full path and this node is not the root, so delegate this to the root
+			return this->GetRoot()->TryLookupNode(result, path);
+		}		
+
+		Path_c::Iterator_c it;
+
+		String_c folder;
+		if(!it.Init(path, &folder))
+		{			
+			//Invalid path, nothing todo, return a NULL
+			return false;
+		}
+
+		NodePtr_t currentNode = this->MakePointerFromThis();
+		for(;;)
+		{			
+			NodePtr_t child = currentNode->TryGetChild(folder);
+			if(!child)
+			{
+				result = child;
+				return true;
+			}
+
+			if(!it.GetNext(&folder))
+			{
+				result = child;
+				
+				return true;
+			}
+
+			currentNode = child.get();
+		}		
+	}
+
+	const Node_c *Node_c::GetRoot() const
+	{
+		const Node_c *current = this;
+
+		while(current->pclParent)
+			current = current->pclParent;
+
+		return current;
+	}
+
+	Node_c *Node_c::GetRoot()
+	{
+		return const_cast<Node_c *>(((const Node_c *)(this))->GetRoot());
 	}
 
 	size_t Node_c::GetNumChildren() const

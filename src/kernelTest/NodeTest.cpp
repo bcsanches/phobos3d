@@ -147,3 +147,71 @@ BOOST_AUTO_TEST_CASE(node_private)
 
 	BOOST_REQUIRE_THROW(ptr->AddChild(child1), InvalidOperationException_c);
 }
+
+BOOST_AUTO_TEST_CASE(node_lookup)
+{
+	TestNodePtr_t ptr(new TestNode_c("root"));
+
+	TestNodePtr_t child(new TestNode_c("child0"));
+	TestNodePtr_t child1(new TestNode_c("child1"));
+	TestNodePtr_t child2(new TestNode_c("child2"));
+
+	ptr->AddChild(child);
+	ptr->AddChild(child1);
+
+	child1->AddChild(child2);
+
+	BOOST_REQUIRE_THROW(ptr->LookupNode(Path_c("")), InvalidParameterException_c);
+
+	BOOST_REQUIRE(child1->LookupNode(Path_c("/child0"))->GetName().compare("child0") == 0);
+	BOOST_REQUIRE(child1->LookupNode(Path_c("/"))->GetName().compare("root") == 0);
+	BOOST_REQUIRE(ptr->LookupNode(Path_c("/"))->GetName().compare("root") == 0);
+
+	BOOST_REQUIRE(ptr->LookupNode(Path_c("child1/child2"))->GetName().compare("child2") == 0);
+	BOOST_REQUIRE(child1->LookupNode(Path_c("child2"))->GetName().compare("child2") == 0);
+
+	BOOST_REQUIRE_THROW(ptr->LookupNode(Path_c("bla")), ObjectNotFoundException_c);
+
+
+	//
+	//Now check the "try" version
+	//
+
+	NodePtr_t result;
+
+	BOOST_REQUIRE(!ptr->TryLookupNode(result, Path_c("")));
+	BOOST_REQUIRE(!result);
+
+	BOOST_REQUIRE(child1->TryLookupNode(result, Path_c("/child0")));
+	BOOST_REQUIRE(result->GetName().compare("child0") == 0);
+
+	BOOST_REQUIRE(child1->TryLookupNode(result, Path_c("/")));
+	BOOST_REQUIRE(result->GetName().compare("root") == 0);
+
+	BOOST_REQUIRE(ptr->TryLookupNode(result, Path_c("/")));
+	BOOST_REQUIRE(result->GetName().compare("root") == 0);
+
+	BOOST_REQUIRE(ptr->TryLookupNode(result, Path_c("child1/child2")));
+	BOOST_REQUIRE(result->GetName().compare("child2") == 0);
+
+	BOOST_REQUIRE(child1->TryLookupNode(result, Path_c("child2")));
+	BOOST_REQUIRE(result->GetName().compare("child2") == 0);
+
+	BOOST_REQUIRE(ptr->TryLookupNode(result, Path_c("bla")));
+	BOOST_REQUIRE(!result);
+}
+
+BOOST_AUTO_TEST_CASE(node_addNode)
+{
+	TestNodePtr_t ptr(new TestNode_c("root"));
+	
+	TestNodePtr_t child(new TestNode_c("child0"));
+
+	ptr->AddNode(child, Path_c("children/"));
+	BOOST_REQUIRE(ptr->LookupNode(Path_c("/children/child0"))->GetName().compare("child0") == 0);
+	BOOST_REQUIRE(ptr->LookupNode(Path_c("/children"))->GetName().compare("children") == 0);
+
+	TestNodePtr_t child1(new TestNode_c("child1"));
+	ptr->AddNode(child1, Path_c("/"));
+	BOOST_REQUIRE(ptr->LookupNode(Path_c("/child1"))->GetName().compare("child1") == 0);
+}

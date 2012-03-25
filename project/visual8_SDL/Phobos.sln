@@ -99,6 +99,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_05", "Sample_05\Samp
 		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_KernelTest", "PH_KernelTest\PH_KernelTest.vcproj", "{54A50DCA-62F7-4A8F-944F-43D894165BEB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -169,6 +174,10 @@ Global
 		{913295D0-E6F6-4805-A79D-9947C9A61427}.Debug|Win32.Build.0 = Debug|Win32
 		{913295D0-E6F6-4805-A79D-9947C9A61427}.Release|Win32.ActiveCfg = Release|Win32
 		{913295D0-E6F6-4805-A79D-9947C9A61427}.Release|Win32.Build.0 = Release|Win32
+		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Debug|Win32.Build.0 = Debug|Win32
+		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Release|Win32.ActiveCfg = Release|Win32
+		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
