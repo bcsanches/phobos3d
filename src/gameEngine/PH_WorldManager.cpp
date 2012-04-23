@@ -90,7 +90,7 @@ namespace Phobos
 		{
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
 
-			EntityPtr_t ptr = factory.Create(dict->GetValue(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
+			EntityPtr_t ptr = factory.Create(dict->GetString(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
 
 			Handle_s h = clEntityManager.AddObject(ptr.get());
 			ptr->SetHandle(h);

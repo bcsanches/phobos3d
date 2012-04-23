@@ -1,0 +1,22 @@
+StaticEntities World
+{             
+  map = new CharMatrix(
+    "########",
+    "#......#",
+    "######.#",
+    "#......#",
+    "#.#.#.##",
+    "#.######",
+    "#......#",
+    "########"
+  );
+}
+
+DynamicEntities info_player_start
+{
+  tileX = 1;
+  tileY = 1;  
+  
+  faces = "right"; //or east
+}
+

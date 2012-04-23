@@ -218,3 +218,10 @@ glob:project/visual8_SDL/PH_Physics/Release/
 glob:project/visual8_SDL/PH_OgreEngineCore/Debug/
 glob:project/visual8_SDL/Sample_05/Debug/
 glob:project/visual8_SDL/PH_KernelTest/Debug/
+glob:project/visual8_SDL/PH_DictionaryTest/Debug/
+glob:project/visual8_SDL/PH_DictionaryTest/PH_DictionaryTest.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/PH_KernelTest/PH_KernelTest.vcproj.mordor.bcsanches.user
+glob:project/visual8_SDL/PH_DictionaryTest/dictionarytest.log
+glob:project/visual8_SDL/PH_KernelTest/context_file.cfg
+glob:project/visual8_SDL/PH_KernelTest/eventManager_basic.log
+glob:project/visual8_SDL/Sample_05/Sample_05.vcproj.mordor.bcsanches.user

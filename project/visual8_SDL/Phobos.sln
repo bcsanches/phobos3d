@@ -104,6 +104,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_KernelTest", "PH_KernelT
 		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_DictionaryTest", "PH_DictionaryTest\PH_DictionaryTest.vcproj", "{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}"
+	ProjectSection(ProjectDependencies) = postProject
+		{81AE5171-5ABB-4CF2-AE62-28803837188B} = {81AE5171-5ABB-4CF2-AE62-28803837188B}
+		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -178,6 +184,10 @@ Global
 		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Debug|Win32.Build.0 = Debug|Win32
 		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Release|Win32.ActiveCfg = Release|Win32
 		{54A50DCA-62F7-4A8F-944F-43D894165BEB}.Release|Win32.Build.0 = Release|Win32
+		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Debug|Win32.Build.0 = Debug|Win32
+		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Release|Win32.ActiveCfg = Release|Win32
+		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

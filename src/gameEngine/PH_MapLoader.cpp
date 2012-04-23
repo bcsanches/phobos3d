@@ -113,7 +113,7 @@ namespace Phobos
 				continue;
 			}
 
-			dict->AddValue(name->value(), value->value());
+			dict->AddString(name->value(), value->value());
 		}
 	}
 
@@ -121,7 +121,7 @@ namespace Phobos
 	{
 		for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
 		{
-			dict->AddValue(atr->name(), atr->value());
+			dict->AddString(atr->name(), atr->value());
 		}		
 
 		const rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME);
@@ -187,24 +187,24 @@ namespace Phobos
 		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
 		{
 			if(const char *caelumDir = GetChildNodeValue(*project, "CAELUMDIR"))
-				dict->AddValue("CaelumDir", caelumDir);			
+				dict->AddString("CaelumDir", caelumDir);			
 
 			if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
-				dict->AddValue("TerrainDir", terrainDir);
+				dict->AddString("TerrainDir", terrainDir);
 		}
 		ipCurrentLevelHive->AddDictionary(dict);
 
 		//fill out basic level data
 		dict = Dictionary_c::Create("LevelFile");
 
-		dict->AddValue("PathName", fileName);
+		dict->AddString("PathName", fileName);
 
 		Path_c path(fileName);
 		Path_c filePath, onlyFileName;
 		path.ExtractPathAndFilename(&filePath, &onlyFileName);
 
-		dict->AddValue("Path", filePath.GetStr());
-		dict->AddValue("FileName", onlyFileName.GetStr());
+		dict->AddString("Path", filePath.GetStr());
+		dict->AddString("FileName", onlyFileName.GetStr());
 
 		ipCurrentLevelHive->AddDictionary(dict);
 		

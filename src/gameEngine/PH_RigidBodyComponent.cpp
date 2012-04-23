@@ -89,10 +89,10 @@ namespace Phobos
 			Enum_c<PhysicsManager_c::CollisionShapeTypes_e,  ShapeTypeName_s> enumMap(stShapeTypeNameTable_gl);
 
 			PhysicsManager_c::CollisionShapeTypes_e type;
-			if(!enumMap.TryGetValue(type, dictionary.GetValue("colliderType")))
+			if(!enumMap.TryGetValue(type, dictionary.GetString("colliderType")))
 			{
 				std::stringstream stream;
-				stream << "Invalid colliderType " << dictionary.GetValue("colliderType") << " for entity " << this->GetName();
+				stream << "Invalid colliderType " << dictionary.GetString("colliderType") << " for entity " << this->GetName();
 				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "RigidBodyComponent_c::OnLoad", stream.str());
 			}
 

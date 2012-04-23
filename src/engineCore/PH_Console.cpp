@@ -421,10 +421,13 @@ namespace Phobos
 				return;
 			}
 
+			stream << "FIXME\n";
+			/*
 			for(Dictionary_c::StringMapConstIterator_t it = dict->begin(), end = dict->end(); it != end; ++it)
 			{
 				stream << it->first << " = " << it->second << "\n";
 			}
+			*/
 		}
 		catch(std::exception &e)
 		{

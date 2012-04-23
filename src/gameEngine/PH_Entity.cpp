@@ -37,7 +37,7 @@ namespace Phobos
 
 		strClassName = dict.GetInherited()->GetName();
 
-		const String_c *components = dict.TryGetValue(PH_ENTITY_KEY_COMPONENTS);
+		const String_c *components = dict.TryGetString(PH_ENTITY_KEY_COMPONENTS);
 		if(components)
 		{
 			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();

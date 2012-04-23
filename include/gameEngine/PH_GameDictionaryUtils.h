@@ -27,7 +27,7 @@ namespace Phobos
 {
 	inline Ogre::Vector3 DictionaryGetVector3(const Dictionary_c &dict, const String_c &key)
 	{		
-		const String_c &value = dict.GetValue(key);
+		const String_c &value = dict.GetString(key);
 
 		Ogre::Vector3 tmp;
 		sscanf(value.c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
@@ -37,7 +37,7 @@ namespace Phobos
 
 	inline Ogre::Quaternion DictionaryGetQuaternion(const Dictionary_c &dict, const String_c &key)
 	{
-		const String_c &value = dict.GetValue(key);
+		const String_c &value = dict.GetString(key);
 
 		Ogre::Quaternion q;
 		sscanf(value.c_str(), "%f %f %f %f", &q.w, &q.x, &q.y, &q.z);
@@ -47,7 +47,7 @@ namespace Phobos
 
 	inline Ogre::ColourValue DictionaryGetColour(const Dictionary_c &dict, const String_c &key)
 	{
-		const String_c &value = dict.GetValue(key);
+		const String_c &value = dict.GetString(key);
 
 		Ogre::ColourValue colour;
 

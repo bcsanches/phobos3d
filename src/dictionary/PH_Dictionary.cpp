@@ -23,8 +23,26 @@ subject to the following restrictions:
 #include "PH_DictionaryUtils.h"
 #include <stdio.h>
 
+#define INHERIT_KEY "inherit"
+#define BASE_HIVE_KEY "base_hive"
+
+#define NEW_KEYWORD "new"
+
 namespace Phobos
 {
+	static const char *parszStringOnlyKeys_g[] =
+	{
+		INHERIT_KEY,
+		BASE_HIVE_KEY,
+		NULL
+	};
+
+	static const char *parszKeywords_g[] = 
+	{
+		NEW_KEYWORD,
+		NULL
+	};
+
 	DictionaryPtr_t Dictionary_c::Create(const String_c &name)
 	{
 		return new Dictionary_c(name);
@@ -42,14 +60,123 @@ namespace Phobos
 		//empty
 	}
 
-	void Dictionary_c::AddValue(const String_c &key, const String_c &value)
+	void Dictionary_c::CheckInvalidKey(const String_c &key, const char *keys[], const char *message) const
 	{
-		mapValues[key] = value;
+		for(int i = 0;keys[i]; ++i)
+		{
+			if(key.compare(keys[i]) == 0)
+			{
+				std::stringstream stream;
+				stream << "Value " << key << " " << message;
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Dictionary_c::CheckInvalidKey", stream.str());
+			}
+		}
+	}
 
-		if(key.compare("inherit") == 0)
+	void Dictionary_c::CheckForKeyword(const String_c &key) const
+	{
+		this->CheckInvalidKey(key, parszKeywords_g, "cannot be a key because it is a reserved keyword");		
+	}
+
+	void Dictionary_c::AddString(const String_c &key, const String_c &value)
+	{	
+		CheckForKeyword(key);
+
+		mapValues[key] = Value_s(value);
+
+		if(key.compare(INHERIT_KEY) == 0)
 			strInherit = value;
-		if(key.compare("baseHive") == 0)
+		if(key.compare(BASE_HIVE_KEY) == 0)
 			strBaseHive = value;
+	}
+
+	void Dictionary_c::AddCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns)
+	{	
+		CheckForKeyword(key);
+		this->CheckInvalidKey(key, parszStringOnlyKeys_g, "should be string data, not matrix");
+
+		if(numRows * numColumns == 0)
+		{
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Dictionary_c::ParseSpecialValue", "Matrix cannot be empty");
+		}
+
+		if(numRows * numColumns != data.length())
+		{
+			std::stringstream stream;
+			stream << "Matrix data size (" << data.length() << ") does not match width (" << numColumns << ") and height (" << numRows << ") parameters";
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Dictionary_c::ParseSpecialValue", stream.str());
+		}		
+
+		mapValues[key] = Value_s(data, numRows, numColumns);
+	}
+
+	void Dictionary_c::ParseSpecialValue(const String_c &idName, Parser_c &parser)
+	{
+		String_c type;
+
+		ParserTokens_e token;
+		if((token = parser.GetToken(&type)) != TOKEN_ID)
+		{
+			PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, type, "Dictionary_c::ParseSpecialValue");
+		}
+
+		if(type.compare("CharMatrix") == 0)
+		{
+			if((token = parser.GetToken(NULL)) != TOKEN_OPEN_PAREN)
+			{
+				PH_RaiseDictionaryParseException(parser, TOKEN_OPEN_PAREN, token, type, "Dictionary_c::ParseSpecialValue");
+			}
+
+			String_c matrix;
+			String_c row;
+
+			UInt16_t numColumns = 0;
+			UInt16_t numRows = 0;
+
+			bool first = true;
+			for(;;)
+			{
+				token = parser.GetToken(&row);
+				if(token == TOKEN_CLOSE_PAREN)
+				{
+					if(first)
+					{
+						//do not allow empty matrix
+						PH_RaiseDictionaryParseException(parser, "matrix data", "closing parenthesis", "Dictionary_c::ParseSpecialValue");
+					}
+					
+					this->AddCharMatrix(idName, matrix, numRows, numColumns);
+					break;
+				}
+				else if(token == TOKEN_STRING)
+				{
+					if(first)
+					{
+						numColumns = row.length();
+
+						if(numColumns == 0)
+							PH_RAISE(PARSER_EXCEPTION, "Dictionary_c::ParseSpecialValue", "Matrix cannot be empty");
+
+						first = false;
+					}
+					else if(numColumns != row.length())
+					{
+						PH_RAISE(PARSER_EXCEPTION, "Dictionary_c::ParseSpecialValue", "Matrix rows should always have the same length");
+					}
+
+					matrix.append(row);
+					++numRows;
+				}
+				else
+				{
+					PH_RaiseDictionaryParseException(parser, TOKEN_STRING, token, row, "Dictionary_c::ParseSpecialValue");
+				}
+			}
+		}	
+		else
+		{
+			PH_RaiseDictionaryParseException(parser, " valid especial type, ie CharMatrix", type.c_str(), "Dictionary_c::ParseSpecialValue");
+		}
 	}
 
 	void Dictionary_c::Load(Parser_c &parser)
@@ -96,9 +223,17 @@ namespace Phobos
 			switch(token)
 			{
 				case TOKEN_ID:
+					if(value.compare("new") == 0)
+					{
+						this->ParseSpecialValue(idName, parser);
+						break;
+					}
+					//not special, just store it
+					//fall thought
+
 				case TOKEN_NUMBER:
 				case TOKEN_STRING:
-					this->AddValue(idName, value);
+					this->AddString(idName, value);
 					break;
 
 				default:
@@ -112,22 +247,14 @@ namespace Phobos
 		}
 	}
 
-	const String_c &Dictionary_c::GetValue(const String_c &key) const
+	const String_c &Dictionary_c::GetString(const String_c &key) const
 	{
-		const String_c *foundValue = TryGetValue(this, key);
-		if(!foundValue)
-		{
-			std::stringstream stream;
-			stream << "Value " << key << " does not exists in " << this->GetName();
-			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Dictionary_c::GetValue", stream.str());
-		}
-
-		return *foundValue;
+		return Dictionary_c::GetValue(this, key).strValue;		
 	}
 
-	bool Dictionary_c::TryGetValue(const String_c &key, String_c &value) const
+	bool Dictionary_c::TryGetString(const String_c &key, String_c &value) const
 	{
-		const String_c *foundValue = TryGetValue(this, key);
+		const String_c *foundValue = TryGetString(this, key);
 		if(!foundValue)
 			return false;
 
@@ -135,28 +262,28 @@ namespace Phobos
 		return true;
 	}
 
-	const String_c *Dictionary_c::TryGetValue(const String_c &key) const
+	const String_c *Dictionary_c::TryGetString(const String_c &key) const
 	{
-		return TryGetValue(this, key);
+		return TryGetString(this, key);
 	}
 
 	bool Dictionary_c::GetBool(const String_c &key) const
 	{
-		const String_c &value = this->GetValue(key);
+		const String_c &value = this->GetString(key);
 
 		return value.compare("true") == 0 ? true : false;
 	}
 
 	void Dictionary_c::Get4Float(float values[4], const String_c &key) const
 	{
-		const String_c &value = this->GetValue(key);
+		const String_c &value = this->GetString(key);
 
 		sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
 	}
 
 	void Dictionary_c::Get3Float(float values[3], const String_c &key) const
 	{
-		const String_c &value = this->GetValue(key);
+		const String_c &value = this->GetString(key);
 
 		sscanf(value.c_str(), "%f %f %f", &values[0], &values[1], &values[2]);
 	}
@@ -179,28 +306,61 @@ namespace Phobos
 
 	int Dictionary_c::GetInt(const String_c &key) const
 	{
-		return StringToInt(this->GetValue(key));
+		return StringToInt(this->GetString(key));
 	}
 
 	float Dictionary_c::GetFloat(const String_c &key) const
 	{
-		return StringToFloat(this->GetValue(key));
+		return StringToFloat(this->GetString(key));
 	}
 
-	const String_c *Dictionary_c::TryGetValue(const Dictionary_c *current, const String_c &key)
+	const Dictionary_c::MatrixDataHandle_c Dictionary_c::GetMatrix(const String_c &key) const
+	{
+		const Value_s &value = GetValue(this, key);
+
+		if(value.eType != CHAR_MATRIX)
+		{
+			std::stringstream stream;
+			stream << "Value " << key << " is not a matrix " << this->GetName();
+			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Dictionary_c::GetMatrix", stream.str());
+		}
+
+		return MatrixDataHandle_c(value);
+	}
+
+	const Dictionary_c::Value_s *Dictionary_c::TryGetValue(const Dictionary_c *current, const String_c &key)
 	{
 		do
 		{
-			StringMap_t::const_iterator it = current->mapValues.find(key);
+			ValueMap_t::const_iterator it = current->mapValues.find(key);
 			if(it != current->mapValues.end())
 			{
 				return &it->second;
 			}
 
 			current = current->GetInherited();
-		}
-		while(current);
+		} while(current);
 
 		return NULL;
 	}
+
+	const Dictionary_c::Value_s &Dictionary_c::GetValue(const Dictionary_c *current, const String_c &key)
+	{
+		const Value_s *foundValue = TryGetValue(current, key);
+		if(!foundValue)
+		{
+			std::stringstream stream;
+			stream << "Value " << key << " does not exists in " << current->GetName();
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Dictionary_c::GetString", stream.str());
+		}
+
+		return *foundValue;
+	}
+
+	const String_c *Dictionary_c::TryGetString(const Dictionary_c *current, const String_c &key)
+	{
+		const Value_s *value = TryGetValue(current, key);
+
+		return value != NULL ? &value->strValue : NULL;
+	}	
 }

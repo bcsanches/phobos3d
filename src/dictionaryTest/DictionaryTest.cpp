@@ -175,24 +175,192 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance)
 	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("EntityDef")->GetDictionary("SuperPlayer");
 
 	//now check overriding
-	BOOST_REQUIRE(infoPlayerStart->GetValue("health").compare("100") == 0);
-	BOOST_REQUIRE(superPlayer->GetValue("health").compare("200") == 0);
+	BOOST_REQUIRE(infoPlayerStart->GetString("health").compare("100") == 0);
+	BOOST_REQUIRE(superPlayer->GetString("health").compare("200") == 0);
 
 	//check parent relationship
-	BOOST_REQUIRE(infoPlayerStart->GetValue("weight").compare("2.0") == 0);
-	BOOST_REQUIRE(superPlayer->GetValue("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(infoPlayerStart->GetString("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(superPlayer->GetString("weight").compare("2.0") == 0);
 
 	//non existing value
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetValue("boost"), ObjectNotFoundException_c);
-	BOOST_REQUIRE(superPlayer->GetValue("boost").compare("2") == 0);
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE(superPlayer->GetString("boost").compare("2") == 0);
 
 	//bad inheritance
 	DictionaryPtr_t invalidPlayer = manager->GetDictionary("EntityDef", "InvalidPlayer");
 
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetValue("bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("bla"), ObjectNotFoundException_c);
 
 	//Check getters exceptions
 	BOOST_REQUIRE_THROW(manager->GetDictionaryHive("Bla"), ObjectNotFoundException_c);
 	BOOST_REQUIRE_THROW(manager->GetDictionary("Bla", "Bla"), ObjectNotFoundException_c);
 	BOOST_REQUIRE_THROW(manager->GetDictionary("EntityDef", "Bla"), ObjectNotFoundException_c);
+
+	BOOST_REQUIRE_THROW(infoPlayerStart->AddString("new", "invalid keyword"), InvalidParameterException_c);
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_parse_matrix)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "StaticEntities World" << endl;
+	stream << "{" << endl;
+	stream <<	"map = new CharMatrix(" << endl;
+	stream <<	"\"########\"," << endl;
+	stream <<	"\"#......#\"," << endl;
+    stream <<	"\"######.#\"," << endl;
+    stream <<	"\"#......#\"," << endl;
+    stream <<	"\"#.#.#.##\"," << endl;
+    stream <<	"\"#.######\"," << endl;
+    stream <<	"\"#......#\"," << endl;
+    stream <<	"\"########\"," << endl;
+	stream <<	"\"########\"," << endl; //exta line just to avoid width and height to be the same
+	stream <<	");" << endl;
+	stream << "}";
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	manager->Load(stream);
+
+	DictionaryPtr_t world = manager->GetDictionary("StaticEntities", "World");
+
+	Dictionary_c::MatrixDataHandle_c handle = world->GetMatrix("map");
+
+	BOOST_REQUIRE(handle(1, 1) == '.');
+	BOOST_REQUIRE(handle(4, 3) == '.');
+
+	BOOST_REQUIRE(handle.GetNumColumns() == 8);
+	BOOST_REQUIRE(handle.GetNumRows() == 9);
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
+{
+	KernelInstance_s instance;
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	{
+		//Invalid special type
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new Bla;" << endl;
+		stream << "}";
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+
+	{
+		//Invalid token type after new
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new 123;" << endl;
+		stream << "}";		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}		
+
+	{
+		//Expected ( after CharMatrix
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new CharMatrix;" << endl;
+		stream << "}";		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//Expected () data for CharMatrix
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new CharMatrix();" << endl;
+		stream << "}";		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//CharMatrix data cannot be empty
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new CharMatrix(\"\");" << endl;
+		stream << "}";		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//CharMatrix should be simetric
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new CharMatrix(\"123\",\"12\");" << endl;
+		stream << "}";		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		//CharMatrix should be formed by strings
+		stringstream stream;
+
+		stream << "StaticEntities World" << endl;
+		stream << "{" << endl;
+		stream <<	"map = new CharMatrix(1223);" << endl;
+		stream << "}";		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_add_matrix_errors)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "EntityDef InfoPlayerStart" << endl;
+	stream << "{" << endl;
+	stream <<	"className=Entity;" << endl;
+	stream <<	"health=100;" << endl;
+	stream <<	"weight=2.0;" << endl;
+	stream <<	"description=\"bla bla\";" << endl;
+	stream << "}" << endl;
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	manager->Load(stream);
+
+	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
+
+	//Cannot use inherit as matrix
+	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("inherit", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("new", "AB", 1, 1), InvalidParameterException_c);
+
+	//Matrix data does not match sizes
+	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException_c);
+
+	//Cannot have size == 0 data
+	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("inherit", "", 0, 0), InvalidParameterException_c);
+
+	//Not a matrix type
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetMatrix("weight"), InvalidOperationException_c);
+
+	//non existing
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetMatrix("bla"), ObjectNotFoundException_c);
 }

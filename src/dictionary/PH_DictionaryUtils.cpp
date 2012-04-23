@@ -30,4 +30,13 @@ namespace Phobos
 
 		PH_RAISE(PARSER_EXCEPTION, module, stream.str());
 	}
+
+	void PH_RaiseDictionaryParseException(const Parser_c &parser, const char *expected, const char *got, const char *module)
+	{
+		std::stringstream stream;
+
+		stream << "Expected " << expected << " but got " << got << std::endl;		
+
+		PH_RAISE(PARSER_EXCEPTION, module, stream.str());
+	}
 }

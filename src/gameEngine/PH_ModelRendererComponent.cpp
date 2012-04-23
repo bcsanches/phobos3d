@@ -55,7 +55,7 @@ namespace Phobos
 
 	void ModelRendererComponent_c::OnLoad(const Dictionary_c &dictionary)
 	{
-		const String_c &meshName = dictionary.GetValue(PH_ENTITY_KEY_MESH_FILE);
+		const String_c &meshName = dictionary.GetString(PH_ENTITY_KEY_MESH_FILE);
 
 		RenderPtr_t render = Render_c::GetInstance();
 
@@ -68,7 +68,7 @@ namespace Phobos
 		pclSceneNode->setScale(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_SCALE));
 		pclSceneNode->setOrientation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
 
-		strParentNode = dictionary.GetValue(PH_ENTITY_KEY_PARENT_NODE);
+		strParentNode = dictionary.GetString(PH_ENTITY_KEY_PARENT_NODE);
 	}
 
 	void ModelRendererComponent_c::OnLoadFinished()

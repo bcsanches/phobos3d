@@ -130,7 +130,6 @@ namespace Phobos
 
 	void WorldEntity_c::Load(const MapLoader_c &loader)
 	{
-
 		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
@@ -139,8 +138,8 @@ namespace Phobos
 
 			try
 			{
-				const String_c &name = dict->GetValue("name");
-				const String_c &type = dict->GetValue("typename");
+				const String_c &name = dict->GetString("name");
+				const String_c &type = dict->GetString("typename");
 
 				if(this->LoadGlobalObject(type, *dict))
 					continue;
@@ -282,7 +281,7 @@ namespace Phobos
 	{
 		DictionaryHivePtr_t levelInfo = DictionaryManager_c::GetInstance()-> GetDictionaryHive("LevelInfo");
 
-		String_c name = levelInfo->GetDictionary("LevelFile")->GetValue("Path") + "/" + levelInfo->GetDictionary("Project")->GetValue("TerrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		String_c name = levelInfo->GetDictionary("LevelFile")->GetString("Path") + "/" + levelInfo->GetDictionary("Project")->GetString("TerrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
@@ -291,7 +290,7 @@ namespace Phobos
 	{
 		TempStaticObject_s temp;
 
-		temp.fParent = dict.TryGetValue(PH_ENTITY_KEY_PARENT_NODE, object.strParent) && (object.strParent.compare(PH_WORLD_SCENE_MANAGER_NAME) != 0);
+		temp.fParent = dict.TryGetString(PH_ENTITY_KEY_PARENT_NODE, object.strParent) && (object.strParent.compare(PH_WORLD_SCENE_MANAGER_NAME) != 0);
 		temp.strName = name;
 
 		if(type.compare("Node Object") == 0)
@@ -333,7 +332,7 @@ namespace Phobos
 	{
 		this->LoadNodeObject(temp, dict);
 
-		temp.pclEntity = Render_c::GetInstance()->CreateEntity(dict.GetValue("meshfile"));
+		temp.pclEntity = Render_c::GetInstance()->CreateEntity(dict.GetString("meshfile"));
 		temp.pclEntity->setCastShadows(dict.GetBool("castshadows"));
 		temp.pclSceneNode->attachObject(temp.pclEntity);		
 	}
@@ -378,7 +377,7 @@ namespace Phobos
 				{
 					std::stringstream stream;
 
-					stream << "Invalid light type " << dict.GetInt("lighttype") << " for object " << dict.GetValue("name");
+					stream << "Invalid light type " << dict.GetInt("lighttype") << " for object " << dict.GetString("name");
 					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "WorldEntity_c::LoadLightObject", stream.str());
 				}
 				break;

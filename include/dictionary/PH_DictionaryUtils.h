@@ -20,4 +20,5 @@ subject to the following restrictions:
 namespace Phobos
 {	
 	void PH_RaiseDictionaryParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_c &token, const char *module);
+	void PH_RaiseDictionaryParseException(const Parser_c &parser, const char *expected, const char *got, const char *module);
 }
