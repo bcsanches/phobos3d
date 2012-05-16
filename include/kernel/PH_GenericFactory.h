@@ -47,16 +47,7 @@ namespace Phobos
 			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
 
 		public:
-			typedef typename T::ObjectType_t ObjectType_t;
-
-			/*
-			static GenericFactory_c &GetInstance()
-			{
-				static GenericFactory_c<T> clInstance_gl;
-
-				return clInstance_gl;
-			}
-			*/
+			typedef typename T::ObjectType_t ObjectType_t;			
 
 			void Register(T &creator)
 			{
@@ -115,11 +106,6 @@ namespace Phobos
 				}
 			}
 
-			T Create(const String_c &name) const
-			{
-				return pfnCreateProc(name);
-			}
-
 			inline const String_c &GetName() const
 			{
 				return strName;
@@ -138,37 +124,61 @@ namespace Phobos
 	};
 
 	template <typename T, typename FACTORY>
-	class ObjectCreator_c: public ObjectCreatorBase_c<T, T(*)(const String_c &)>
+	class ObjectCreator0_c: public ObjectCreatorBase_c<T, T(*)()>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, T(*)(const String_c&)> BaseType_t;
+			typedef ObjectCreatorBase_c<T, T(*)()> BaseType_t;
 
 		public:
-			ObjectCreator_c(const String_c &name, T(*proc)(const String_c &)):
+			ObjectCreator0_c(const String_c &name, T(*proc)()):
+				BaseType_t(name, proc)
+			{				
+				FACTORY::GetInstance().Register(*this);
+			}
+				
+			T Create() const
+			{
+				return pfnCreateProc();
+			}
+	};
+
+	template <typename T, typename PARAM1, typename FACTORY>
+	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const PARAM1 &)>
+	{
+		public:
+			typedef ObjectCreatorBase_c<T, T(*)(const PARAM1&)> BaseType_t;
+
+		public:
+			ObjectCreator1_c(const String_c &name, T(*proc)(const PARAM1 &)):
 				BaseType_t(name, proc)
 			{
 				//GenericFactory_c<ObjectCreator_c<T> >::GetInstance().Register(*this);
 				FACTORY::GetInstance().Register(*this);
 			}
+				
+			T Create(const PARAM1 &name) const
+			{
+				return pfnCreateProc(name);
+			}
 	};
 
-	template<typename T, typename Y>
-	class GenericFactory1_c;
+	template<typename T, typename PARAM1, typename PARAM2>
+	class GenericFactory2_c;
 
-	template <typename T, typename Y, typename FACTORY>
-	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T(*)(const String_c &, Y )>
+	template <typename T, typename PARAM1, typename PARAM2, typename FACTORY>
+	class ObjectCreator2_c: public ObjectCreatorBase_c<T, T(*)(const PARAM1 &, PARAM2 )>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, T(*)(const String_c &, Y )> BaseType_t;
+			typedef ObjectCreatorBase_c<T, T(*)(const PARAM1 &, PARAM2 )> BaseType_t;
 
-			ObjectCreator1_c(const String_c &name,  T(*proc)(const String_c &, Y ) ):
+			ObjectCreator2_c(const String_c &name,  T(*proc)(const PARAM1 &, PARAM2 ) ):
 				BaseType_t(name, proc)
 			{
-				//GenericFactory1_c<ObjectCreator1_c, Y >::GetInstance().Register(*this);
+				//GenericFactory2_c<ObjectCreator2_c, Y >::GetInstance().Register(*this);
 				FACTORY::GetInstance().Register(*this);
 			}
 
-			T Create(const String_c &name, Y param) const
+			T Create(const PARAM1 &name, PARAM2 param) const
 			{
 				return pfnCreateProc(name, param);
 			}
@@ -178,20 +188,30 @@ namespace Phobos
 	class GenericFactory0_c: public GenericFactory_c<T>
 	{
 		public:
-			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className, const String_c &name) const
+			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className) const
+			{
+				return this->GetObjectCreator(className).Create();
+			}
+	};
+
+	template <typename T, typename PARAM1>
+	class GenericFactory1_c: public GenericFactory_c<T>
+	{
+		public:
+			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className, const PARAM1 &name) const
 			{
 				return this->GetObjectCreator(className).Create(name);
 			}
 
 	};
 
-	template <typename T, typename Y>
-	class GenericFactory1_c: public GenericFactory_c<T>
+	template <typename T, typename PARAM1, typename PARAM2>
+	class GenericFactory2_c: public GenericFactory_c<T>
 	{
 		public:
-			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className, const String_c &name, Y param) const
+			typename GenericFactory_c<T>::ObjectType_t Create(const String_c &className, const PARAM1 &param1, PARAM2 param2) const
 			{
-				return this->GetObjectCreator(className).Create(name, param);
+				return this->GetObjectCreator(className).Create(param1, param2);
 			}
 	};
 
@@ -209,15 +229,5 @@ namespace Phobos
         }
     };
 }
-
-template<typename T>
-class template_w
-{
-    public:
-
-        typedef T wrapper;
-};
-
-
 
 #endif

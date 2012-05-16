@@ -1,4 +1,4 @@
-StaticEntities World
+DynamicEntities world
 {             
   map = new CharMatrix(
     "########",
@@ -12,11 +12,14 @@ StaticEntities World
   );
 }
 
-DynamicEntities info_player_start
+DynamicEntities infoPlayerStart
 {
   tileX = 1;
   tileY = 1;  
   
   faces = "right"; //or east
+  
+  baseHive="EntityDef";
+  inherit="InfoPlayerStart";
 }
 

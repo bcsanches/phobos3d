@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-September 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+May 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,33 +14,28 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ENTITY_FACTORY_H
-#define PH_ENTITY_FACTORY_H
 
-#include <PH_GenericFactory.h>
+#ifndef PH_TILE_WORLD_ENTITY_H
+#define PH_TILE_WORLD_ENTITY_H
 
 #include "PH_Entity.h"
 
 namespace Phobos
 {
-	//typedef GenericFactory_c<EntityPtr_t> EntityFactory_c;
-	//typedef GenericFactory_c<ObjectCreator_c<EntityPtr_t> > EntityFactory_c;
+	PH_DECLARE_NODE_PTR(TileWorldEntity);
 
-	class PH_GAME_ENGINE_API EntityFactory_c: public GenericFactory1_c<ObjectCreator1_c<EntityPtr_t, String_c, EntityFactory_c>, String_c >
+	class MapLoader_c;
+
+	class PH_GAME_ENGINE_API TileWorldEntity_c: public Entity_c
 	{
 		public:
-			static EntityFactory_c &GetInstance();			
+			static EntityPtr_t Create(const String_c &name);
+
+			void Load(const MapLoader_c &loader);
+
+		private:
+			TileWorldEntity_c(const String_c &name);
 	};
 }
-
-#define PH_ENTITY_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1_c<Phobos::EntityPtr_t, String_c, Phobos::EntityFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
-
-#define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  		\
-	PH_ENTITY_CREATOR(NAME, TYPE);					\
-	Phobos::EntityPtr_t TYPE::Create(const Phobos::String_c &name)	\
-	{												\
-		return new TYPE(name);						\
-	}
 
 #endif

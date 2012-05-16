@@ -199,6 +199,63 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance)
 	BOOST_REQUIRE_THROW(infoPlayerStart->AddString("new", "invalid keyword"), InvalidParameterException_c);
 }
 
+/**
+	The same as dictionary_inheritance, but the inheritance chain uses a baseHive
+
+*/
+BOOST_AUTO_TEST_CASE(dictionary_inheritance_other_hive)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "EntityDef InfoPlayerStart" << endl;
+	stream << "{" << endl;
+	stream <<	"className=Entity;" << endl;
+	stream <<	"health=100;" << endl;
+	stream <<	"weight=2.0;" << endl;
+	stream <<	"description=\"bla bla\";" << endl;
+	stream << "}" << endl;
+	stream << endl << endl;
+	stream << "DynamicEntity SuperPlayer" << endl;
+	stream << "{" << endl;
+	stream <<	"inherit=InfoPlayerStart;" << endl;
+	stream <<	"baseHive=EntityDef;" << endl;
+	stream <<	"health=200;" << endl;	
+	stream <<	"boost=2;" << endl;	
+	stream << "}";
+	stream << "DynamicEntity InvalidPlayer" << endl;
+	stream << "{" << endl;
+	stream <<	"inherit=InfoPlayerStart;" << endl;
+	stream <<	"health=200;" << endl;	
+	stream << "}";
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	manager->Load(stream);
+
+	//test both forms of retrieving data
+	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
+	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("DynamicEntity")->GetDictionary("SuperPlayer");
+
+	//now check overriding
+	BOOST_REQUIRE(infoPlayerStart->GetString("health").compare("100") == 0);
+	BOOST_REQUIRE(superPlayer->GetString("health").compare("200") == 0);
+
+	//check parent relationship
+	BOOST_REQUIRE(infoPlayerStart->GetString("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(superPlayer->GetString("weight").compare("2.0") == 0);
+
+	//non existing value
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE(superPlayer->GetString("boost").compare("2") == 0);
+
+	//bad inheritance
+	DictionaryPtr_t invalidPlayer = manager->GetDictionary("DynamicEntity", "InvalidPlayer");
+
+	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("bla"), ObjectNotFoundException_c);	
+}
+
 BOOST_AUTO_TEST_CASE(dictionary_parse_matrix)
 {
 	KernelInstance_s instance;

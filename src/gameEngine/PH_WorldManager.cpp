@@ -26,10 +26,11 @@ subject to the following restrictions:
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Path.h>
 
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
-#include "PH_WorldEntity.h"
+#include "PH_MapLoaderFactory.h"
 
 namespace Phobos
 {
@@ -63,10 +64,14 @@ namespace Phobos
 	{
 		this->UnloadMap();
 
-		clMapLoader.LoadOgitor(mapName);
+		Path_c path(mapName);
+		String_c extension;
+		path.GetExtension(extension);
 
-		WorldEntityPtr_t world = boost::static_pointer_cast<WorldEntity_c>(WorldEntity_c::Create("WorldSpawn"));
-		world->Load(clMapLoader);
+		spMapLoader = MapLoaderFactory_c::GetInstance().Create(extension.c_str());
+		spMapLoader->Load(mapName);
+
+		EntityPtr_t world = spMapLoader->CreateAndLoadWorld();		
 		this->AddPrivateChild(world);
 
 		this->LoadEntities();
@@ -83,7 +88,7 @@ namespace Phobos
 
 	void WorldManager_c::LoadEntities()
 	{
-		const DictionaryHive_c &hive = clMapLoader.GetDynamicEntitiesHive();
+		const DictionaryHive_c &hive = spMapLoader->GetDynamicEntitiesHive();
 		EntityFactory_c &factory = EntityFactory_c::GetInstance();
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
@@ -129,7 +134,7 @@ namespace Phobos
 
 	void WorldManager_c::OnBoot()
 	{
-		clMapLoader.OnBoot();
+		MapLoader_c::OnBoot();
 	}
 
 	void WorldManager_c::OnFinalize()

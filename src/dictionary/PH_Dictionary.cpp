@@ -24,7 +24,7 @@ subject to the following restrictions:
 #include <stdio.h>
 
 #define INHERIT_KEY "inherit"
-#define BASE_HIVE_KEY "base_hive"
+#define BASE_HIVE_KEY "baseHive"
 
 #define NEW_KEYWORD "new"
 

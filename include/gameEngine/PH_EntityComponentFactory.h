@@ -27,7 +27,7 @@ namespace Phobos
 
 	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
 	//typedef GenericFactory1_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &>, Entity_c & > EntityComponentFactory_c;
-	class PH_GAME_ENGINE_API EntityComponentFactory_c: public GenericFactory1_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &, EntityComponentFactory_c>, Entity_c & >
+	class PH_GAME_ENGINE_API EntityComponentFactory_c: public GenericFactory2_c<ObjectCreator2_c<EntityComponentPtr_t, String_c, Entity_c &, EntityComponentFactory_c>, String_c, Entity_c & >
 	{
 		public:
 			static EntityComponentFactory_c &GetInstance();			
@@ -35,7 +35,7 @@ namespace Phobos
 }
 
 #define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
-	static ObjectCreator1_c<EntityComponentPtr_t, Entity_c &, Phobos::EntityComponentFactory_c> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
+	static ObjectCreator2_c<EntityComponentPtr_t, String_c, Entity_c &, Phobos::EntityComponentFactory_c> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
 
 #define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)							\
 	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);									\

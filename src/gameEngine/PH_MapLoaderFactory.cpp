@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-September 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+April 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,29 +14,29 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_WORLD_ENTITY_H
-#define PH_WORLD_ENTITY_H
+#include "PH_MapLoaderFactory.h"
 
-#include "PH_Entity.h"
-#include "PH_GameEngineAPI.h"
-
-#define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
+#include <PH_DictionaryManager.h>
+#include <PH_Dictionary.h>
 
 namespace Phobos
 {
-	PH_DECLARE_NODE_PTR(WorldEntity);
-
-	class Dictionary_c;
-	class MapLoader_c;	
-
-	class PH_GAME_ENGINE_API WorldEntity_c: public Entity_c
+	MapLoaderFactory_c &MapLoaderFactory_c::GetInstance()
 	{
-		public:			
-			virtual void Load(const MapLoader_c &loader) = 0;
-		
-			WorldEntity_c(const String_c &name);
-			~WorldEntity_c();			
-	};
-}
+		static MapLoaderFactory_c clInstance_gl;
 
-#endif
+		return clInstance_gl;
+	}	
+
+	MapLoaderFactory_c::MapLoaderFactory_c()
+	{
+		//empty
+	}
+
+	MapLoaderPtr_t MapLoaderFactory_c::Create(const String_c &type)
+	{
+		DictionaryPtr_t dictionary = DictionaryManager_c::GetInstance()->GetDictionary("MapLoader", type);
+
+		return clFactory.Create(dictionary->GetString("loader"), *dictionary);
+	}
+}

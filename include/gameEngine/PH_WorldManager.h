@@ -96,7 +96,7 @@ namespace Phobos
 		private:
 			EntityManager_c clEntityManager;
 
-			MapLoader_c		clMapLoader;
+			MapLoaderPtr_t	spMapLoader;
 
 			ContextCmd_c	cmdLoadMap;	
 			ContextCmd_c	cmdUnloadMap;	

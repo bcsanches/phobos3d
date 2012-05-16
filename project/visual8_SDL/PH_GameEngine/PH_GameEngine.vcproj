@@ -201,11 +201,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_OgitorWorldEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_OgitorWorldEntity.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_PointEntity.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_PointEntity.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_TileWorldEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_TileWorldEntity.h"
 				>
 			</File>
 			<File
@@ -385,6 +401,42 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="mapLoader"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_MapLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_MapLoader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_MapLoaderFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_MapLoaderFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_OgitorMapLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_OgitorMapLoader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_TileMapLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_TileMapLoader.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\src\gameEngine\PH_BaseClient.cpp"
 			>
@@ -419,14 +471,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_IPlayerCommandProducer.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\gameEngine\PH_MapLoader.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_MapLoader.h"
 			>
 		</File>
 		<File

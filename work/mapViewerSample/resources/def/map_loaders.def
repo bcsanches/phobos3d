@@ -1,0 +1,11 @@
+MapLoader ogscene
+{
+  loader = "OgitorMapLoader";
+  worldSpawnEntity = "OgitorWorldEntity";
+}
+
+MapLoader tile
+{
+  loader = "TileMapLoader";
+  worldSpawnEntity = "TileWorldEntity";
+}

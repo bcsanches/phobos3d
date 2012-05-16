@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-April 2012
+April 2010
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,46 +14,30 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_MAP_LOADER_H
-#define PH_MAP_LOADER_H
+#ifndef PH_OGITOR_MAP_LOADER_H
+#define PH_OGITOR_MAP_LOADER_H
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <PH_String.h>
 #include <PH_DictionaryHive.h>
 
-#include "PH_Entity.h"
+#include "PH_MapLoader.h"
 
 namespace Phobos
-{		
-	class MapLoader_c: boost::noncopyable
+{
+	class OgitorMapLoader_c: public MapLoader_c
 	{
 		public:
-			virtual void Load(const String_c &fileName) = 0;
+			static MapLoaderPtr_t Create(const Dictionary_c &settings);
 
-			static void OnBoot();
-				
-			const DictionaryHive_c &GetStaticEntitiesHive() const;
-			const DictionaryHive_c &GetDynamicEntitiesHive() const ;
-			const DictionaryHive_c &GetCurrentLevelHive() const;
+			void Load(const String_c &fileName);	
 
-			EntityPtr_t CreateAndLoadWorld();
+			OgitorMapLoader_c(const Dictionary_c &settings);
 
-		protected:
-			static void ClearAllHives();
-
-			MapLoader_c(const Dictionary_c &settings);
-
-		protected:			
-			static DictionaryHivePtr_t ipStaticEntitiesHive_g;
-			static DictionaryHivePtr_t ipDynamicEntitiesHive_g;
-			static DictionaryHivePtr_t ipCurrentLevelHive_g;
-
-			String_c strWorldSpawnEntityType;
+		private:			
 	};	
-
-	typedef boost::shared_ptr<MapLoader_c> MapLoaderPtr_t;
 }
 
 #endif
+

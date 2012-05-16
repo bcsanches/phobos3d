@@ -29,184 +29,62 @@ subject to the following restrictions:
 #include <PH_Kernel.h>
 #include <PH_Path.h>
 
+#include "PH_EntityFactory.h"
+#include "PH_WorldEntity.h"
+
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"
 
 namespace Phobos
-{
+{	
+	DictionaryHivePtr_t MapLoader_c::ipStaticEntitiesHive_g;
+	DictionaryHivePtr_t MapLoader_c::ipDynamicEntitiesHive_g;
+	DictionaryHivePtr_t MapLoader_c::ipCurrentLevelHive_g;
+
 	void MapLoader_c::OnBoot()
 	{
 		DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
 
-		ipCurrentLevelHive = manager->CreateCustomHive("LevelInfo");
-		ipStaticEntitiesHive = manager->CreateCustomHive("StaticEntities");
-		ipDynamicEntitiesHive = manager->CreateCustomHive("DynamicEntities");		
+		ipCurrentLevelHive_g = manager->CreateCustomHive("LevelInfo");
+		ipStaticEntitiesHive_g = manager->CreateCustomHive("StaticEntities");
+		ipDynamicEntitiesHive_g = manager->CreateCustomHive("DynamicEntities");		
 	}
 
-	static const char *GetChildNodeValue(const rapidxml::xml_node<> &element, const char *nodeName)
+	const DictionaryHive_c &MapLoader_c::GetStaticEntitiesHive() const
+	{
+		return *ipStaticEntitiesHive_g;
+	}
+
+	const DictionaryHive_c &MapLoader_c::GetDynamicEntitiesHive() const
+	{
+		return *ipDynamicEntitiesHive_g;
+	}
+
+	const DictionaryHive_c &MapLoader_c::GetCurrentLevelHive() const
+	{
+		return *ipCurrentLevelHive_g;
+	}
+
+	void MapLoader_c::ClearAllHives()
+	{
+		ipCurrentLevelHive_g->RemoveAllChildren();
+		ipStaticEntitiesHive_g->RemoveAllChildren();
+		ipDynamicEntitiesHive_g->RemoveAllChildren();
+	}
+
+	MapLoader_c::MapLoader_c(const Dictionary_c &settings):
+		strWorldSpawnEntityType(settings.GetString("worldSpawnEntity"))
+	{
+		//empty
+	}
+
+	EntityPtr_t MapLoader_c::CreateAndLoadWorld()
 	{		
-		if(rapidxml::xml_node<> *child = element.first_node(nodeName))
-		{
-			if(rapidxml::xml_attribute<> *valueAtr =child->first_attribute("value"))
-			{
-				return valueAtr->value();
-			}
-		}
+		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(strWorldSpawnEntityType, "WorldSpawn");
 
-		return NULL;
-	}
+		WorldEntityPtr_t world = boost::static_pointer_cast<WorldEntity_c>(ptr);
+		world->Load(*this);
 
-	static bool IsEditorOnly(const rapidxml::xml_node<> &element)
-	{
-		if(rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME))
-		{
-			for(const rapidxml::xml_node<> *elem = custom->first_node(PROPERTY_NODE_NAME); elem; elem = elem->next_sibling(PROPERTY_NODE_NAME))
-			{
-				const rapidxml::xml_attribute<> *name = elem->first_attribute("id");
-				if(strcmp(name->value(), "editorOnly") == 0)
-				{
-					const rapidxml::xml_attribute<> *value = elem->first_attribute("value");
-					if(strcmp(value->value(), "true")==0)
-						return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	static bool ContainsCustomProperties(const rapidxml::xml_node<> &element)
-	{
-		if(rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME))
-			return custom->first_node(PROPERTY_NODE_NAME) != NULL;
-		else
-			return false;
-	}
-
-	static bool IsDynamicEntity(const rapidxml::xml_node<> &element)
-	{
-		if(ContainsCustomProperties(element))
-			return true;
-
-		const rapidxml::xml_attribute<> *attribute = element.first_attribute("typename");
-		return (strcmp(attribute->value(), "Marker Object") == 0) || (strcmp(attribute->value(), "Camera Object") == 0);
-	}
-
-	static void LoadProperties(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
-	{
-		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
-
-		for(const rapidxml::xml_node<> *elem = element.first_node(PROPERTY_NODE_NAME); elem; elem = elem->next_sibling(PROPERTY_NODE_NAME))
-		{
-			const rapidxml::xml_attribute<> *name = elem->first_attribute("id");
-			const rapidxml::xml_attribute<> *value = elem->first_attribute("value");
-
-			if(name == NULL)
-			{
-				stream << "[MapLoader_c::LoadDictionary] id attribute not found on CUSTOMPROPERTY node\n";
-				continue;
-			}
-
-			if(value == NULL)
-			{
-				stream << "[MapLoader_c::LoadDictionary] value attribute not found on CUSTOMPROPERTY node\n";
-				continue;
-			}
-
-			dict->AddString(name->value(), value->value());
-		}
-	}
-
-	static void LoadDictionary(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
-	{
-		for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
-		{
-			dict->AddString(atr->name(), atr->value());
-		}		
-
-		const rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME);
-
-		LoadProperties(dict, element);
-
-		if(custom)
-			LoadProperties(dict, *custom);
-	}
-
-	void MapLoader_c::LoadOgitor(const String_c &fileName)
-	{		
-		rapidxml::xml_document<> doc;
-
-		std::ifstream input(fileName.c_str(), std::ios_base::in);
-
-		if(input.fail())			
-			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "MapLoader_c::LoadOgitor", "'" + fileName + "' not found");
-
-		std::vector<char> fileData( (std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
-		fileData.push_back('\0');
-		
-		doc.parse<0>(&fileData[0] );	
-
-		ipCurrentLevelHive->RemoveAllChildren();
-		ipStaticEntitiesHive->RemoveAllChildren();
-		ipDynamicEntitiesHive->RemoveAllChildren();		
-
-		rapidxml::xml_node<> *root = doc.first_node();
-		if(root == NULL)
-			PH_RAISE(PARSER_EXCEPTION, "MapLoader_c::LoadOgitor", "'" + fileName + "' appears to be empty");		
-
-		for(rapidxml::xml_node<> *elem = root->first_node("OBJECT");elem; elem = elem->next_sibling())
-		{			
-			try
-			{
-				rapidxml::xml_attribute<> *nameAttribute = elem->first_attribute("name");
-				if(nameAttribute == NULL)
-				{
-					Kernel_c::GetInstance().LogMessage("[MapLoader_c::LoadOgitor] Object without name, ignored");
-					continue;
-				}
-
-				bool dynamicEntity = IsDynamicEntity(*elem);
-				if(dynamicEntity && IsEditorOnly(*elem))
-					continue;
-				
-				DictionaryPtr_t dict = Dictionary_c::Create(nameAttribute->value());
-
-				LoadDictionary(dict, *elem);
-
-				(dynamicEntity ? ipDynamicEntitiesHive : ipStaticEntitiesHive)->AddDictionary(dict);				
-			}
-			catch(Exception_c &e)
-			{
-				Kernel_c::GetInstance().LogMessage(e.what());
-			}			
-		}
-
-		DictionaryPtr_t dict = Dictionary_c::Create("Project");
-
-		//load project data
-		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
-		{
-			if(const char *caelumDir = GetChildNodeValue(*project, "CAELUMDIR"))
-				dict->AddString("CaelumDir", caelumDir);			
-
-			if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
-				dict->AddString("TerrainDir", terrainDir);
-		}
-		ipCurrentLevelHive->AddDictionary(dict);
-
-		//fill out basic level data
-		dict = Dictionary_c::Create("LevelFile");
-
-		dict->AddString("PathName", fileName);
-
-		Path_c path(fileName);
-		Path_c filePath, onlyFileName;
-		path.ExtractPathAndFilename(&filePath, &onlyFileName);
-
-		dict->AddString("Path", filePath.GetStr());
-		dict->AddString("FileName", onlyFileName.GetStr());
-
-		ipCurrentLevelHive->AddDictionary(dict);
-		
+		return ptr;
 	}
 }
