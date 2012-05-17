@@ -32,7 +32,7 @@ namespace Phobos
 	struct InputEvent_s
 	{
 		InputEventType_e	eType;
-		InputDevicePtr_t	ipDevice;
+		InputDevice_c		*pclDevice;
 
 		union
 		{

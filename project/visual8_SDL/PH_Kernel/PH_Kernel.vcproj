@@ -407,18 +407,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\kernel\PH_RefCounter.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_RefCounter.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\kernel\PH_RefCounterFwd.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\include\kernel\PH_Resource.h"
 			>
 		</File>

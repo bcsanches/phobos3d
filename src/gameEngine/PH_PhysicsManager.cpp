@@ -163,7 +163,7 @@ namespace Phobos
 				it->second = ptr;
 			}
 
-			return ptr;			
+			return ptr;
 		}
 
 		bool PhysicsManager_c::CompareBoxShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs)

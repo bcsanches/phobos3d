@@ -48,14 +48,14 @@ namespace Phobos
 	{
 		PH_ASSERT(event.eType == EVENT_TYPE_KEYBOARD);
 
-                InputEvent_s inputEvent;
+		InputEvent_s inputEvent;		
 
 		switch(event.stKeyboard.eType)
 		{
 			case KEYBOARD_KEY_DOWN:
 			case KEYBOARD_KEY_UP:
 				inputEvent.eType = INPUT_EVENT_BUTTON;
-				inputEvent.ipDevice = this;
+				inputEvent.pclDevice = this;
 				if(event.stKeyboard.eType == KEYBOARD_KEY_DOWN)
 				{
 					inputEvent.stButton.eState = BUTTON_STATE_DOWN;
@@ -71,9 +71,12 @@ namespace Phobos
 
 			case KEYBOARD_CHAR:
 				inputEvent.eType = INPUT_EVENT_CHAR;
-				inputEvent.ipDevice = this;
+				inputEvent.pclDevice = this;
 				inputEvent.stChar.u16Char = event.stKeyboard.u16Code;
 				break;
+
+			default:
+				return;
 		}
 
 		this->DispatchEvent(inputEvent);

@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "PH_Node.h"
 
 #include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 
 #include "PH_Exception.h"
 #include "PH_Path.h"
@@ -44,13 +45,13 @@ namespace Phobos
 
 	NodePtr_t Node_c::Create(const String_c &name)
 	{
-		return NodePtr_t(new Node_c(name));
+		return NodePtr_t(boost::make_shared<Node_c>(name));
 	}
 			
 	NodePtr_t Node_c::Create(const Char_t *name)
 	{
-		return NodePtr_t(new Node_c(name));
-	}
+		return NodePtr_t(boost::make_shared<Node_c>(name));
+	}	
 
 	Node_c::Node_c(const String_c &name, ChildrenMode_e param):
 		Object_c(name),
@@ -109,7 +110,7 @@ namespace Phobos
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveSelf]", stream.str());
 		}
 
-		pclParent->RemoveChild(NodePtr_t(this));
+		pclParent->RemoveChild(this->MakePointerFromThis());
 	}
 
 	void Node_c::RemoveAllChildren()
@@ -196,7 +197,7 @@ namespace Phobos
 					child = Node_c::Create(currentFolder);
 					currentNode->AddChild(child);
 				}
-				currentNode = child.get();
+				currentNode = child;
 
 				if(!it.GetNext(&currentFolder))
 					break;
@@ -236,7 +237,7 @@ namespace Phobos
 			if(!it.GetNext(&folder))
 				return child;				
 
-			currentNode = child.get();
+			currentNode = child;
 		}
 	}
 
@@ -284,7 +285,7 @@ namespace Phobos
 				return true;
 			}
 
-			currentNode = child.get();
+			currentNode = child;
 		}		
 	}
 
@@ -315,7 +316,7 @@ namespace Phobos
 
 	NodePtr_t Node_c::GetParent() const
 	{
-		return NodePtr_t(pclParent);
+		return pclParent ? pclParent->MakePointerFromThis() : NodePtr_t();
 	}
 
 	void Node_c::GetThisPath(Path_c &out)

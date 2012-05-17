@@ -17,16 +17,20 @@ subject to the following restrictions:
 #ifndef PH_OBJECT_H
 #define PH_OBJECT_H
 
-#include "PH_RefCounter.h"
+//#include "PH_RefCounter.h"
 #include "PH_String.h"
+
+#include <boost/enable_shared_from_this.hpp>
 
 namespace Phobos
 {
-	class Object_c: public RefCounter_c
+	class Object_c: public boost::enable_shared_from_this<Object_c> //public RefCounter_c
 	{
 		public:
 			explicit Object_c(const String_c &name);
 			explicit Object_c(const Char_t *name);
+
+			virtual ~Object_c();
 
 			inline const String_c &GetName() const;
 

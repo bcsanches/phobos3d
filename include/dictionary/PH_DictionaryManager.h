@@ -38,6 +38,8 @@ namespace Phobos
 		PH_DECLARE_SINGLETON_METHODS(DictionaryManager);	
 
 		public:
+			~DictionaryManager_c();
+
 			void Load(const String_c &fileName);
 			void Load(std::istream &stream);
 
@@ -54,8 +56,7 @@ namespace Phobos
 			void RegisterCommands(IContext_c &context);
 
 		private:
-			DictionaryManager_c();
-			~DictionaryManager_c();
+			DictionaryManager_c();			
 
 			void CmdLoadAllDeclarations(const StringVector_t &args, Context_c &);
 

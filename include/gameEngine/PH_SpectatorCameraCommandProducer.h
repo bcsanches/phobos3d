@@ -30,8 +30,8 @@ namespace Phobos
 {
 	class Context_c;
 	class SpectatorCameraCmd_c;
-
-	typedef boost::intrusive_ptr<SpectatorCameraCmd_c> SpectatorCameraCmdPtr_t;
+	
+	typedef boost::shared_ptr<SpectatorCameraCmd_c> SpectatorCameraCmdPtr_t;
 
 	class PH_GAME_ENGINE_API SpectatorCameraCmd_c: public IPlayerCmd_c
 	{

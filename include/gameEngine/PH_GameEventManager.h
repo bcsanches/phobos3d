@@ -34,6 +34,8 @@ namespace Phobos
 		PH_DECLARE_SINGLETON_METHODS(GameEventManager);
 
 		public:			
+			~GameEventManager_c();
+
 			void Schedule(EntityIO_c &receiver, GameEvent_c::EventProc_t proc, Float_t delay);
 
 			void CancelEvents(const EntityIO_c &receiver);
@@ -42,8 +44,7 @@ namespace Phobos
 			virtual void OnFixedUpdate();
 
 		private:
-			GameEventManager_c();
-			~GameEventManager_c();
+			GameEventManager_c();			
 
 		private:
 			typedef std::multimap<Float_t, GameEvent_c> GameEventMap_t;

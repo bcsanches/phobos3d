@@ -40,6 +40,8 @@ namespace Phobos
 		public:
 			static EntityPtr_t Create(const String_c &name);
 
+			~OgitorWorldEntity_c();
+
 			void Load(const MapLoader_c &loader);
 
 		protected:
@@ -70,8 +72,7 @@ namespace Phobos
 				}
 			};
 
-			OgitorWorldEntity_c(const String_c &name);
-			~OgitorWorldEntity_c();
+			OgitorWorldEntity_c(const String_c &name);			
 
 			bool LoadGlobalObject(const String_c &type, const Dictionary_c &dict);
 			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict);

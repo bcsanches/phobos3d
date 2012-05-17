@@ -18,10 +18,6 @@ subject to the following restrictions:
 #ifndef PH_IPLAYER_COMMAND_PRODUCER_H
 #define PH_IPLAYER_COMMAND_PRODUCER_H
 
-#include <boost/intrusive_ptr.hpp>
-
-#include <PH_RefCounter.h>
-
 /*
 	Mouse can be clipped or not to the screen.
 
@@ -37,12 +33,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class IPlayerCmd_c: public RefCounter_c
+	class IPlayerCmd_c
 	{
 		public:		
 	};
 
-	typedef boost::intrusive_ptr<IPlayerCmd_c> IPlayerCmdPtr_t;
+	typedef boost::shared_ptr<IPlayerCmd_c> IPlayerCmdPtr_t;
 
 	class IPlayerCommandProducer_c
 	{

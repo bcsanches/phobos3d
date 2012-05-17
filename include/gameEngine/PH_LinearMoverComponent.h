@@ -28,11 +28,12 @@ namespace Phobos
 		public:
 			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);	
 
+			~LinearMoverComponent_c();		
+
 			virtual void FixedUpdate();
 
 		protected:
-			LinearMoverComponent_c(const String_c &name, Entity_c &owner);
-			~LinearMoverComponent_c();				
+			LinearMoverComponent_c(const String_c &name, Entity_c &owner);					
 
 			virtual void OnLoad(const Dictionary_c &dictionary);
 

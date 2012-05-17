@@ -33,7 +33,7 @@ namespace Phobos
 	class IContext_c;
 	class Core_c;
 
-	typedef boost::intrusive_ptr<Core_c> CorePtr_t;
+	PH_DECLARE_NODE_PTR(Core);	
 
 	struct CoreSimInfo_s
 	{
@@ -49,6 +49,8 @@ namespace Phobos
 			static CorePtr_t CreateInstance();
 			static void ReleaseInstance();
 			static CorePtr_t GetInstance();
+
+			~Core_c();
 			
 			void Shutdown(void);
 
@@ -73,8 +75,7 @@ namespace Phobos
 			void FixedUpdate(Float_t seconds);
 
 		private:
-			Core_c(const String_c &name);
-			~Core_c();
+			Core_c(const String_c &name);			
 
 			inline Float_t GetUpdateTime(void);
 			inline Float_t GetMinFrameTime(void);			

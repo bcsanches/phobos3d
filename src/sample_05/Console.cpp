@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 ConsolePtr_t Console_c::CreateInstance(void)
 {		
-	Phobos::Console_c::UpdateInstance(new Console_c());		
+	Phobos::Console_c::UpdateInstance(ConsolePtr_t(new Console_c()));
 
 	return boost::static_pointer_cast<Console_c>(Phobos::Console_c::GetInstance());
 }

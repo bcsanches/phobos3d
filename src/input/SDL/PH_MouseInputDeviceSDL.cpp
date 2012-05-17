@@ -69,7 +69,7 @@ namespace Phobos
 			inputEvent.stThumb.fpAxis[0] = static_cast<Float_t>(x);
 			inputEvent.stThumb.fpAxis[1] = static_cast<Float_t>(y);
 
-			inputEvent.ipDevice = InputDevicePtr_t(this);
+			inputEvent.pclDevice = this;
 
 			this->DispatchEvent(inputEvent);
 		}		
@@ -119,7 +119,7 @@ namespace Phobos
 							return;
 					}
 
-					inputEvent.ipDevice = InputDevicePtr_t(this);
+					inputEvent.pclDevice = this;
 
 					this->DispatchEvent(inputEvent);
 				}

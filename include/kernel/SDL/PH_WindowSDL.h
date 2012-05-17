@@ -28,7 +28,9 @@ namespace Phobos
 {
 	class PH_KERNEL_API WindowSDL_c: public Window_c
 	{
-		public:
+		public:			
+			~WindowSDL_c();
+
 			void Open(	const String_c &name,
 						const Rect_s<size_t> &rect);
 
@@ -43,20 +45,10 @@ namespace Phobos
 
 			virtual void SetEventManager(EventManagerPtr_t manager);
 
-		private:
+		private:			
 			WindowSDL_c(const String_c &name);
-			~WindowSDL_c();
-
-		private:
-			//static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-		private:
-			//void CreateWindowClass();
-			//LRESULT MainWndMethod(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-		private:
-			//static bool fWindowClassRegistered;
-
+		
+		private:			
 			friend WindowPtr_t Window_c::Create(const String_c &name);
 
 		private:

@@ -26,10 +26,8 @@ subject to the following restrictions:
 #include "PH_InputManager.h"
 
 namespace Phobos
-{
-	class InputMapper_c;
-
-	typedef boost::intrusive_ptr<InputMapper_c> InputMapperPtr_t;
+{	
+	PH_DECLARE_NODE_PTR(InputMapper);	
 
 	class PH_INPUT_API InputMapper_c: public Node_c, private InputManagerListener_c
 	{		
@@ -92,6 +90,8 @@ namespace Phobos
 			// =====================================================
 			static InputMapperPtr_t Create(const String_c &name, Context_c &context);
 
+			~InputMapper_c(void);
+
 			void Bind(const String_c &devicePathName, const String_c &actionName, const String_c &cmd);
 			void Unbind(const String_c &devicePathName, const String_c &actionName);						
 
@@ -105,8 +105,7 @@ namespace Phobos
 			// =====================================================
 			// PRIVATE METHODS
 			// =====================================================
-			InputMapper_c(const String_c &name, Context_c &context);
-			~InputMapper_c(void);
+			InputMapper_c(const String_c &name, Context_c &context);			
 
 			void OnDeviceAttached(InputDevicePtr_t &device);
 			void OnDeviceDetached(InputDevicePtr_t &device);

@@ -19,9 +19,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Plugin_c;
-
-	typedef ::boost::intrusive_ptr<Plugin_c> PluginPtr_t;	
+	PH_DECLARE_NODE_PTR(Plugin);
 
 	class IPluginInstance_c
 	{
@@ -37,11 +35,12 @@ namespace Phobos
 		public:
 			static PluginPtr_t Create(const String_c &name);
 
+			~Plugin_c();
+
 			void Init();
 
 		private:
-			Plugin_c(const String_c &name);
-			~Plugin_c();
+			Plugin_c(const String_c &name);			
 
 		private:
 			DynamicLibrary_c	clLibrary;

@@ -56,6 +56,8 @@ namespace Phobos
 
 				typedef boost::shared_ptr<btCollisionShape> CollisionShapeSharedPtr_t;
 
+				~PhysicsManager_c();
+
 				CollisionShapeSharedPtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
 				CollisionShapeSharedPtr_t CreateMeshShape(const Ogre::Mesh &mesh);
 
@@ -114,8 +116,7 @@ namespace Phobos
 
 			private:
 
-				PhysicsManager_c();
-				~PhysicsManager_c();	
+				PhysicsManager_c();				
 				
 				inline CollisionShapeComparator_s CreateBoxComparator(Float_t x, Float_t y, Float_t z) const;
 

@@ -30,12 +30,13 @@ class Console_c:
 		// =====================================================
 		static ConsolePtr_t CreateInstance(void);
 
+		~Console_c(void);
+
 	protected:
 		// =====================================================
 		// PROTECTED METHODS
 		// =====================================================
-		Console_c(void);
-		~Console_c(void);
+		Console_c(void);		
 
 		void OnUpdate();
 		void OnRenderReady();

@@ -17,13 +17,11 @@ subject to the following restrictions:
 #ifndef PH_CORE_MODULE_FWD_H
 #define PH_CORE_MODULE_FWD_H
 
-#include <boost/intrusive_ptr.hpp>
+#include <PH_NodeFwd.h>
 
 namespace Phobos
 {
-	class CoreModule_c;
-
-	typedef boost::intrusive_ptr<CoreModule_c> CoreModulePtr_t;
+	PH_DECLARE_NODE_PTR(CoreModule);	
 }
 
 #endif

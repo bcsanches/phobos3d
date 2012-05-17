@@ -15,6 +15,8 @@ subject to the following restrictions:
 */
 #include <boost/test/unit_test.hpp>
 
+#include <boost/make_shared.hpp>
+
 #include <PH_Exception.h>
 #include <PH_Node.h>
 #include <PH_Path.h>
@@ -50,29 +52,28 @@ class TestPrivateNode_c: public Node_c
 		  }
 };
 
-typedef intrusive_ptr<TestPrivateNode_c> TestPrivateNodePtr_t;
-
-typedef intrusive_ptr<TestNode_c> TestNodePtr_t;
+PH_DECLARE_NODE_PTR(TestPrivateNode);
+PH_DECLARE_NODE_PTR(TestNode);
 
 BOOST_AUTO_TEST_CASE(node_basic)
 {
-	//Test the test :)
+	//Test the test :)	
 	{
-		TestNodePtr_t ptr(new TestNode_c("root"));
+		TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
 
-		BOOST_REQUIRE(iAliveNodes_gl == 1);
+		BOOST_REQUIRE(iAliveNodes_gl == 1);		
 	}
 
 	BOOST_REQUIRE(iAliveNodes_gl == 0);
 
 	//Now test basic child add / removal
 	{
-		TestNodePtr_t ptr(new TestNode_c("root"));
+		TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
 		BOOST_REQUIRE(ptr->GetNumChildren() == 0);
 		BOOST_REQUIRE(!(ptr->HasChildren()));
 
 		{
-			TestNodePtr_t child(new TestNode_c("child0"));
+			TestNodePtr_t child(boost::make_shared<TestNode_c>("child0"));
 			BOOST_REQUIRE(iAliveNodes_gl == 2);		
 
 			ptr->AddChild(child);
@@ -87,7 +88,7 @@ BOOST_AUTO_TEST_CASE(node_basic)
 			child->GetThisPath(path);
 			BOOST_REQUIRE(path.GetStr().compare("/root/child0")==0);
 
-			child = new TestNode_c("child1");
+			child = TestNodePtr_t(boost::make_shared<TestNode_c>("child1"));
 			BOOST_REQUIRE(iAliveNodes_gl == 3);
 			ptr->AddChild(child);
 
@@ -97,7 +98,7 @@ BOOST_AUTO_TEST_CASE(node_basic)
 			child.reset();
 		}
 
-		NodePtr_t child(new TestNode_c("child2"));
+		NodePtr_t child(boost::make_shared<TestNode_c>("child2"));
 		ptr->AddChild(child);
 		child->RemoveSelf();
 		child.reset();
@@ -114,10 +115,10 @@ BOOST_AUTO_TEST_CASE(node_exceptions)
 {
 	//now check AddChild Exceptions
 	{
-		TestNodePtr_t ptr(new TestNode_c("root"));
+		TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
 
-		TestNodePtr_t child(new TestNode_c("child0"));
-		TestNodePtr_t child1(new TestNode_c("child1"));
+		TestNodePtr_t child(boost::make_shared< TestNode_c>("child0"));
+		TestNodePtr_t child1(boost::make_shared< TestNode_c>("child1"));
 
 		ptr->AddChild(child);
 		ptr->AddChild(child1);
@@ -125,7 +126,7 @@ BOOST_AUTO_TEST_CASE(node_exceptions)
 		BOOST_REQUIRE_THROW( child->AddChild(child1), InvalidParameterException_c);
 
 		//check remove child if a "virgin" node
-		child1.reset(new TestNode_c("child0"));
+		child1.swap(boost::make_shared<TestNode_c>("child0"));
 		BOOST_REQUIRE_THROW(ptr->RemoveChild(child1), InvalidParameterException_c);
 
 		BOOST_REQUIRE_THROW(ptr->AddChild(child1), ObjectAlreadyExistsException_c);
@@ -141,20 +142,20 @@ BOOST_AUTO_TEST_CASE(node_exceptions)
 
 BOOST_AUTO_TEST_CASE(node_private)
 {
-	TestPrivateNodePtr_t ptr(new TestPrivateNode_c("root_private_test", PRIVATE_CHILDREN));
+	TestPrivateNodePtr_t ptr(boost::make_shared<TestPrivateNode_c>("root_private_test", PRIVATE_CHILDREN));
 	
-	TestPrivateNodePtr_t child1(new TestPrivateNode_c("child_private_test", PUBLIC_CHILDREN));
+	TestPrivateNodePtr_t child1(boost::make_shared<TestPrivateNode_c>("child_private_test", PUBLIC_CHILDREN));
 
 	BOOST_REQUIRE_THROW(ptr->AddChild(child1), InvalidOperationException_c);
 }
 
 BOOST_AUTO_TEST_CASE(node_lookup)
 {
-	TestNodePtr_t ptr(new TestNode_c("root"));
+	TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
 
-	TestNodePtr_t child(new TestNode_c("child0"));
-	TestNodePtr_t child1(new TestNode_c("child1"));
-	TestNodePtr_t child2(new TestNode_c("child2"));
+	TestNodePtr_t child(boost::make_shared< TestNode_c>("child0"));
+	TestNodePtr_t child1(boost::make_shared< TestNode_c>("child1"));
+	TestNodePtr_t child2(boost::make_shared< TestNode_c>("child2"));
 
 	ptr->AddChild(child);
 	ptr->AddChild(child1);
@@ -203,15 +204,15 @@ BOOST_AUTO_TEST_CASE(node_lookup)
 
 BOOST_AUTO_TEST_CASE(node_addNode)
 {
-	TestNodePtr_t ptr(new TestNode_c("root"));
+	TestNodePtr_t ptr(boost::make_shared< TestNode_c>("root"));
 	
-	TestNodePtr_t child(new TestNode_c("child0"));
+	TestNodePtr_t child(boost::make_shared< TestNode_c>("child0"));
 
 	ptr->AddNode(child, Path_c("children/"));
 	BOOST_REQUIRE(ptr->LookupNode(Path_c("/children/child0"))->GetName().compare("child0") == 0);
 	BOOST_REQUIRE(ptr->LookupNode(Path_c("/children"))->GetName().compare("children") == 0);
 
-	TestNodePtr_t child1(new TestNode_c("child1"));
+	TestNodePtr_t child1(boost::make_shared< TestNode_c>("child1"));
 	ptr->AddNode(child1, Path_c("/"));
 	BOOST_REQUIRE(ptr->LookupNode(Path_c("/child1"))->GetName().compare("child1") == 0);
 }

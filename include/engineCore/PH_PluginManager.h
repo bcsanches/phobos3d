@@ -27,9 +27,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PluginManager_c;
-
-	typedef boost::intrusive_ptr<PluginManager_c> PluginManagerPtr_t;
+	PH_DECLARE_NODE_PTR(PluginManager);
 
 	class PH_ENGINE_CORE_API PluginManager_c: public CoreModule_c
 	{
@@ -37,6 +35,8 @@ namespace Phobos
 			static PluginManagerPtr_t &CreateInstance(void);
 			static PluginManagerPtr_t &GetInstance(void);
 			static void ReleaseInstance(void);
+
+			~PluginManager_c();
 
 			void LoadPlugin(const String_c &name);
 			void UnloadPlugin(const String_c &name);
@@ -49,8 +49,7 @@ namespace Phobos
 			void OnUpdate();
 
 		private:
-			PluginManager_c();
-			~PluginManager_c();
+			PluginManager_c();			
 
 			void CmdLoadPlugin(const StringVector_t &args, Context_c &);
 			void CmdUnloadPlugin(const StringVector_t &args, Context_c &);

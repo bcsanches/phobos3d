@@ -35,14 +35,15 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Context_c;
-	class Render_c;
+	class Context_c;	
 
-	typedef boost::intrusive_ptr<Render_c> RenderPtr_t;
+	PH_DECLARE_NODE_PTR(Render);	
 
 	class PH_OGRE_ENGINE_CORE_API Render_c: public CoreModule_c
 	{		
 		public:
+			~Render_c();
+
 			enum EntityMeshFlags_e
 			{
 				FORCE_EDGE_LIST_GENERATION = 0x01
@@ -103,8 +104,7 @@ namespace Phobos
 			// =====================================================
 			// PROTECTED METHODS
 			// =====================================================
-			Render_c();
-			~Render_c();
+			Render_c();			
 
 			void OnBoot();
 			void OnInit();

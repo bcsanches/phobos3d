@@ -25,9 +25,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Window_c;
-
-	typedef boost::intrusive_ptr<Window_c> WindowPtr_t;
+	PH_DECLARE_NODE_PTR(Window);	
 
 	class PH_KERNEL_API Window_c: public Node_c, boost::noncopyable
 	{

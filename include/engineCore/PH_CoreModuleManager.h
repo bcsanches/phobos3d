@@ -51,6 +51,8 @@ namespace Phobos
 		public:
 			static CoreModuleManagerPtr_t Create(const String_c &name);
 
+			~CoreModuleManager_c();
+
 			void AddModule(CoreModulePtr_t module, UInt32_t priority = NORMAL_PRIORITY);
 			void AddModuleToDestroyList(CoreModule_c &module);
 			void RemoveModule(CoreModule_c &module);
@@ -62,8 +64,7 @@ namespace Phobos
 			void LogCoreModules();
 
 		protected:
-			CoreModuleManager_c(const String_c &name, ChildrenMode_e=PRIVATE_CHILDREN);
-			~CoreModuleManager_c();
+			CoreModuleManager_c(const String_c &name, ChildrenMode_e=PRIVATE_CHILDREN);			
 
 			virtual void OnUpdate();
 			virtual void OnFixedUpdate();

@@ -39,12 +39,12 @@ namespace Phobos
 			// =====================================================		
 			static OgreConsolePtr_t CreateInstance(void);
 
+			~OgreConsole_c(void);
 		protected:
 			// =====================================================
 			// PROTECTED METHODS
 			// =====================================================
-			OgreConsole_c(void);
-			~OgreConsole_c(void);
+			OgreConsole_c(void);			
 			
 			void OnUpdate();
 			void OnRenderReady();

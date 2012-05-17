@@ -41,7 +41,7 @@ namespace Phobos
 	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);									\
 	EntityComponentPtr_t TYPE::Create(const String_c &name, Entity_c &owner)	\
 	{																			\
-		return new TYPE(name, owner);											\
+		return EntityComponentPtr_t(new TYPE(name, owner)); 					\
 	}
 
 #endif

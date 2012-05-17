@@ -30,7 +30,7 @@ namespace Phobos
 {	
 	CoreModuleManagerPtr_t CoreModuleManager_c::Create(const String_c &name)
 	{
-		return new CoreModuleManager_c(name);
+		return CoreModuleManagerPtr_t(new CoreModuleManager_c(name));
 	}
 
 	CoreModuleManager_c::CoreModuleManager_c(const Phobos::String_c &name, ChildrenMode_e mode):

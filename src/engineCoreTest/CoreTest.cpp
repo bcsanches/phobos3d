@@ -34,9 +34,7 @@ enum Sequence_e
 static Sequence_e eSequenceMarkerFixedUpdate_gl = NONE;
 static Sequence_e eSequenceMarkerUpdate_gl = NONE;
 
-class TestModule_c;
-
-typedef boost::intrusive_ptr<TestModule_c> TestModulePtr_t;
+PH_DECLARE_NODE_PTR(TestModule);
 
 class TestModule_c: public CoreModule_c
 {
@@ -44,6 +42,11 @@ class TestModule_c: public CoreModule_c
 		static TestModulePtr_t CreateInstance()
 		{
 			return TestModulePtr_t(new TestModule_c());
+		}
+
+		~TestModule_c()
+		{
+			--iCount;
 		}
 
 		virtual void OnUpdate()
@@ -85,11 +88,6 @@ class TestModule_c: public CoreModule_c
 			++iCount;
 		}
 
-		~TestModule_c()
-		{
-			--iCount;
-		}
-
 	public:
 		static int iCount;
 
@@ -102,9 +100,7 @@ class TestModule_c: public CoreModule_c
 
 int TestModule_c::iCount = 0;
 
-class TestModule2_c;
-
-typedef boost::intrusive_ptr<TestModule2_c> TestModule2Ptr_t;
+PH_DECLARE_NODE_PTR( TestModule2);
 
 class TestModule2_c: public CoreModule_c
 {
@@ -112,6 +108,10 @@ class TestModule2_c: public CoreModule_c
 		static TestModule2Ptr_t CreateInstance()
 		{
 			return TestModule2Ptr_t(new TestModule2_c());
+		}
+		
+		~TestModule2_c()
+		{
 		}
 
 		virtual void OnUpdate()
@@ -139,10 +139,6 @@ class TestModule2_c: public CoreModule_c
 			CoreModule_c("test2")
 		{
 		}
-
-		~TestModule2_c()
-		{
-		}
 };
 
 static TestModulePtr_t CreateAndRegisterTestModule()
@@ -162,7 +158,7 @@ class TestConsole_c: public Console_c
 	public:
 		static ConsolePtr_t CreateInstance(void)
 		{
-			Console_c::UpdateInstance(new TestConsole_c());		
+			Console_c::UpdateInstance(ConsolePtr_t(new TestConsole_c()));		
 
 			return Console_c::GetInstance();
 		}

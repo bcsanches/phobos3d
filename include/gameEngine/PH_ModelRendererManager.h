@@ -28,10 +28,12 @@ namespace Phobos
 	class PH_GAME_ENGINE_API ModelRendererManager_c: public GenericComponentManager_c<ModelRendererComponent_c>
 	{
 		PH_DECLARE_SINGLETON_METHODS(ModelRendererManager);
+
+		public:
+			~ModelRendererManager_c();
 		
 		protected:
-			ModelRendererManager_c();
-			~ModelRendererManager_c();
+			ModelRendererManager_c();			
 
 			virtual void OnUpdate();
 	};

@@ -57,6 +57,8 @@ namespace Phobos
 			typedef std::list<EntityIO_c*> EntityIOList_t;
 
 		public:
+			~WorldManager_c();		
+
 			void LoadMap(const String_c &mapName);
 			void UnloadMap();
 
@@ -81,8 +83,7 @@ namespace Phobos
 			virtual void OnUpdate();
 
 		private:
-			WorldManager_c();
-			~WorldManager_c();				
+			WorldManager_c();					
 
 			void LoadEntities();
 

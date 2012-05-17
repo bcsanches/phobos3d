@@ -40,7 +40,7 @@ namespace Phobos
 	PH_ENTITY_CREATOR(NAME, TYPE);					\
 	Phobos::EntityPtr_t TYPE::Create(const Phobos::String_c &name)	\
 	{												\
-		return new TYPE(name);						\
+		return EntityPtr_t(new TYPE(name));			\
 	}
 
 #endif

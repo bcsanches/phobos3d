@@ -17,13 +17,11 @@ subject to the following restrictions:
 #ifndef PH_EVENT_MANAGER_FWD_H
 #define PH_EVENT_MANAGER_FWD_H
 
-#include <boost/intrusive_ptr.hpp>
+#include "PH_NodeFwd.h"
 
 namespace Phobos
-{
-	class EventManager_c;
-
-	typedef boost::intrusive_ptr<EventManager_c> EventManagerPtr_t;
+{	
+	PH_DECLARE_NODE_PTR(EventManager);	
 }
 
 #endif

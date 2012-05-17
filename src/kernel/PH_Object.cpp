@@ -29,4 +29,9 @@ namespace Phobos
 	{
 		//empty
 	}
+
+	Object_c::~Object_c()
+	{
+		//empty
+	}
 }

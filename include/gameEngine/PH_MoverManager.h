@@ -29,9 +29,11 @@ namespace Phobos
 	{
 		PH_DECLARE_SINGLETON_METHODS(MoverManager);		
 
-		protected:
-			MoverManager_c();
+		public:
 			~MoverManager_c();
+
+		protected:
+			MoverManager_c();			
 
 			virtual void OnFixedUpdate();
 	};

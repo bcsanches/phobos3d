@@ -25,17 +25,16 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class EventManagerModule_c;
-
-	typedef boost::intrusive_ptr<EventManagerModule_c> EventManagerModulePtr_t;
+	PH_DECLARE_NODE_PTR(EventManagerModule);	
 
 	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c, private EventListener_c
 	{
 		public:
-
 			static EventManagerModulePtr_t CreateInstance();
 			static void ReleaseInstance();
 			static EventManagerModulePtr_t GetInstance();
+
+			~EventManagerModule_c();
 
 		private:
 
@@ -43,8 +42,7 @@ namespace Phobos
 
 			virtual void Event(struct Event_s &event);
 
-			EventManagerModule_c();
-			~EventManagerModule_c();
+			EventManagerModule_c();			
 
 		private:
 

@@ -146,6 +146,8 @@ namespace Phobos
 		public:
 			static DictionaryPtr_t Create(const String_c &name);
 
+			~Dictionary_c();
+
 			void Load(Parser_c &parser);
 
 			const String_c &GetString(const String_c &key) const;
@@ -167,8 +169,7 @@ namespace Phobos
 			const Dictionary_c *GetInherited() const;
 
 		private:
-			Dictionary_c(const String_c &name);
-			~Dictionary_c();
+			Dictionary_c(const String_c &name);			
 
 			static const String_c *TryGetString(const Dictionary_c *current, const String_c &key);
 

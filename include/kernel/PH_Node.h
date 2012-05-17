@@ -32,10 +32,6 @@ subject to the following restrictions:
 #include "PH_NodeProperty.h"
 #include "PH_Object.h"
 
-#define PH_DECLARE_NODE_PTR(X)						\
-	class X##_c;									\
-	typedef boost::intrusive_ptr<X##_c> X##Ptr_t;
-
 namespace Phobos
 {
 	/**
@@ -69,6 +65,10 @@ namespace Phobos
 		public:			
 			static NodePtr_t Create(const String_c &name);
 			static NodePtr_t Create(const Char_t *name);
+	
+			~Node_c();
+			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
+			explicit Node_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);
 
 			void AddChild(NodePtr_t node);
 			void RemoveChild(NodePtr_t node);
@@ -115,11 +115,7 @@ namespace Phobos
 				return static_cast<T &>(this->GetProperty(name));
 			}
 
-		protected:
-			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit Node_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);		
-			~Node_c();
-
+		protected:			
 			void AddPrivateChild(NodePtr_t node);
 
 			inline NodeMap_t::iterator begin();
@@ -127,7 +123,8 @@ namespace Phobos
 
 			inline NodePtr_t MakePointerFromThis() const
 			{
-				return NodePtr_t(const_cast<Node_c*>(this));
+				//return NodePtr_t(const_cast<Node_c*>(this));
+				return boost::static_pointer_cast<Node_c>(const_cast<Node_c *>(this)->shared_from_this());
 			}
 
 		private:

@@ -85,7 +85,7 @@ namespace Phobos
 
 	EntityPtr_t OgitorWorldEntity_c::Create(const String_c &name)
 	{
-		return new OgitorWorldEntity_c(name);
+		return EntityPtr_t(new OgitorWorldEntity_c(name));
 	}
 
 	OgitorWorldEntity_c::OgitorWorldEntity_c(const String_c &name):

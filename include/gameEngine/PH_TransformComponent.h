@@ -28,9 +28,10 @@ namespace Phobos
 		public:
 			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
-		protected:
-			TransformComponent_c(const String_c &name, Entity_c &owner);
 			~TransformComponent_c();
+
+		protected:
+			TransformComponent_c(const String_c &name, Entity_c &owner);			
 
 			virtual void OnLoad(const Dictionary_c &dictionary);
 

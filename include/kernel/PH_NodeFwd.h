@@ -18,13 +18,15 @@ subject to the following restrictions:
 #ifndef PH_NODE_FWD_H
 #define PH_NODE_FWD_H
 
-#include <boost/intrusive_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
+#define PH_DECLARE_NODE_PTR(X)						\
+	class X##_c;									\
+	typedef boost::shared_ptr<X##_c> X##Ptr_t;
 
 namespace Phobos
-{
-	class Node_c;
-
-	typedef boost::intrusive_ptr<Node_c> NodePtr_t;
+{	
+	PH_DECLARE_NODE_PTR(Node);	
 }
 
 #endif

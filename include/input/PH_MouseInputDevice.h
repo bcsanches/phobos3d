@@ -21,10 +21,8 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class MouseInputDevice_c;
-
-	typedef boost::intrusive_ptr<MouseInputDevice_c> MouseInputDevicePtr_t;
-
+	PH_DECLARE_NODE_PTR(MouseInputDevice);
+	
 	class MouseInputDevice_c: public InputDevice_c
 	{		
 		public:

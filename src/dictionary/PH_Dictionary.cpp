@@ -45,7 +45,7 @@ namespace Phobos
 
 	DictionaryPtr_t Dictionary_c::Create(const String_c &name)
 	{
-		return new Dictionary_c(name);
+		return DictionaryPtr_t(new Dictionary_c(name));
 	}
 
 	Dictionary_c::Dictionary_c(const String_c &name):

@@ -35,12 +35,13 @@ namespace Phobos
 			public:
 				static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
+				~RigidBodyComponent_c();
+
 				void SaveTransform();
 				void UpdateTransform(Float_t delta);
 
 			protected:
-				RigidBodyComponent_c(const String_c &name, Entity_c &owner);
-				~RigidBodyComponent_c();
+				RigidBodyComponent_c(const String_c &name, Entity_c &owner);				
 
 				void OnLoad(const Dictionary_c &dictionary);
 				void OnLoadFinished();

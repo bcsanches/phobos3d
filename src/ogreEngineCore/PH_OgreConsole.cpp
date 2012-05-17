@@ -42,7 +42,7 @@ namespace Phobos
 {	
 	OgreConsolePtr_t OgreConsole_c::CreateInstance(void)
 	{		
-		Console_c::UpdateInstance(new OgreConsole_c());		
+		Console_c::UpdateInstance(OgreConsolePtr_t(new OgreConsole_c()));		
 
 		return boost::static_pointer_cast<OgreConsole_c>(Console_c::GetInstance());
 	}

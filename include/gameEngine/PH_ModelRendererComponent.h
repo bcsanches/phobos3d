@@ -32,6 +32,8 @@ namespace Phobos
 		public:
 			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
+			~ModelRendererComponent_c();
+
 			void Update();
 
 			void AttachObjectToBone(
@@ -52,8 +54,7 @@ namespace Phobos
 			Ogre::Bone &GetBone(const String_c &boneName);
 
 		protected:
-			ModelRendererComponent_c(const String_c &name, Entity_c &owner);
-			~ModelRendererComponent_c();				
+			ModelRendererComponent_c(const String_c &name, Entity_c &owner);			
 
 			virtual void OnLoad(const Dictionary_c &dictionary);
 			virtual void OnLoadFinished();

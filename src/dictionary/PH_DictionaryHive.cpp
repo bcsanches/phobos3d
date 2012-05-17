@@ -25,7 +25,7 @@ namespace Phobos
 {
 	DictionaryHivePtr_t DictionaryHive_c::Create(const String_c &name)
 	{
-		return new DictionaryHive_c(name);
+		return DictionaryHivePtr_t(new DictionaryHive_c(name));
 	}
 
 	DictionaryHive_c::DictionaryHive_c(const String_c &name):

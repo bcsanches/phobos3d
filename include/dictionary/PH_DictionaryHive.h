@@ -33,6 +33,8 @@ namespace Phobos
 		public:
 			static DictionaryHivePtr_t Create(const String_c &name);
 
+			~DictionaryHive_c();
+
 			void Load(Parser_c &parser);
 
 			DictionaryPtr_t GetDictionary(const String_c &name);
@@ -42,8 +44,7 @@ namespace Phobos
 
 	
 		private:
-			DictionaryHive_c(const String_c &name);
-			~DictionaryHive_c();
+			DictionaryHive_c(const String_c &name);			
 	};
 }
 
