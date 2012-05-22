@@ -33,7 +33,14 @@ namespace Phobos
 	{
 		Entity_c::OnLoad(dictionary);
 
-		clTransform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
-		clTransform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+		try
+		{
+			clTransform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
+			clTransform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+		}
+		catch(...)
+		{
+			//FIXME
+		}
 	}
 }

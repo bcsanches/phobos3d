@@ -1,11 +1,11 @@
 MapLoader ogscene
 {
   loader = "OgitorMapLoader";
-  worldSpawnEntity = "OgitorWorldEntity";
+  worldSpawnEntityDef = "OgitorWorldSpawn";
 }
 
 MapLoader tile
 {
   loader = "TileMapLoader";
-  worldSpawnEntity = "TileWorldEntity";
+  worldSpawnEntityDef = "TileWorldSpawn";
 }

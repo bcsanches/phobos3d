@@ -30,10 +30,10 @@ subject to the following restrictions:
 #include <PH_Path.h>
 
 #include "PH_EntityFactory.h"
+#include "PH_EntityKeys.h"
 #include "PH_WorldEntity.h"
 
-#define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
-#define PROPERTY_NODE_NAME "PROPERTY"
+#define WORLD_SPAWN_ENTITY "worldspawn"
 
 namespace Phobos
 {	
@@ -73,18 +73,32 @@ namespace Phobos
 	}
 
 	MapLoader_c::MapLoader_c(const Dictionary_c &settings):
-		strWorldSpawnEntityType(settings.GetString("worldSpawnEntity"))
+		strWorldSpawnEntityType(settings.GetString("worldSpawnEntityDef"))
 	{
 		//empty
 	}
 
-	EntityPtr_t MapLoader_c::CreateAndLoadWorld()
-	{		
-		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(strWorldSpawnEntityType, "WorldSpawn");
+	EntityPtr_t MapLoader_c::CreateAndLoadWorldSpawn()
+	{	
+		DictionaryPtr_t entityDef = ipCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY);
+		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(entityDef->GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef->GetName());
 
-		WorldEntityPtr_t world = boost::static_pointer_cast<WorldEntity_c>(ptr);
-		world->Load(*this);
+		ptr->Load(*entityDef);		
+
+		WorldEntityPtr_t worldEntity = boost::static_pointer_cast<WorldEntity_c>(ptr);
+
+		worldEntity->LoadMap(*this);
 
 		return ptr;
+	}
+
+	DictionaryPtr_t MapLoader_c::CreateWorldSpawnEntityDictionary()
+	{
+		DictionaryPtr_t dict = Dictionary_c::Create(WORLD_SPAWN_ENTITY);
+
+		dict->SetBaseHive("EntityDef");
+		dict->SetInherited(strWorldSpawnEntityType);
+
+		return dict;
 	}
 }

@@ -177,6 +177,14 @@
 			Name="entities"
 			>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_BaseOgreWorldEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_BaseOgreWorldEntity.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_Entity.cpp"
 				>
 			</File>

@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-June 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+May 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,31 +14,29 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_TransformComponent.h"
+#include "PH_BaseOgreWorldEntity.h"
 
-#include "PH_Entity.h"
-#include "PH_EntityComponentFactory.h"
-#include "PH_EntityKeys.h"
-#include "PH_GameDictionaryUtils.h"
+#include <PH_Render.h>
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR("Transform", TransformComponent_c);	
-
-	TransformComponent_c::TransformComponent_c(const String_c &name, Entity_c &owner):
-		EntityComponent_c(name, owner),
-		propTransform("transform")
+	BaseOgreWorldEntity_c::TempStaticObject_s::~TempStaticObject_s()
 	{
-		owner.AddProperty(propTransform);
+		RenderPtr_t render = Render_c::GetInstance();
+
+		if(pclSceneNode)
+			render->DestroySceneNode(pclSceneNode);
+
+		if(pclLight)
+			render->DestroyLight(pclLight);
+
+		if(pclEntity)
+			render->DestroyEntity(pclEntity);
 	}
 
-	TransformComponent_c::~TransformComponent_c()
+	BaseOgreWorldEntity_c::BaseOgreWorldEntity_c(const String_c &name):
+		WorldEntity_c(name)
 	{
-	}
-
-	void TransformComponent_c::OnLoad(const Dictionary_c &dictionary)
-	{			
-		propTransform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
-		propTransform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));		
+		//empty
 	}
 }

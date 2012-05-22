@@ -71,7 +71,7 @@ namespace Phobos
 		spMapLoader = MapLoaderFactory_c::GetInstance().Create(extension.c_str());
 		spMapLoader->Load(mapName);
 
-		EntityPtr_t world = spMapLoader->CreateAndLoadWorld();		
+		EntityPtr_t world = spMapLoader->CreateAndLoadWorldSpawn();		
 		this->AddPrivateChild(world);
 
 		this->LoadEntities();
@@ -86,23 +86,29 @@ namespace Phobos
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
 	}
 
+	EntityPtr_t WorldManager_c::LoadEntity(const Dictionary_c &entityDef)
+	{
+		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName());
+			
+		ptr->Load(entityDef);
+		
+		this->AddPrivateChild(ptr);
+
+		Handle_s h = clEntityManager.AddObject(ptr.get());
+		ptr->SetHandle(h);
+
+		return ptr;
+	}
+
 	void WorldManager_c::LoadEntities()
 	{
-		const DictionaryHive_c &hive = spMapLoader->GetDynamicEntitiesHive();
-		EntityFactory_c &factory = EntityFactory_c::GetInstance();
+		const DictionaryHive_c &hive = spMapLoader->GetDynamicEntitiesHive();		
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
 			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
 
-			EntityPtr_t ptr = factory.Create(dict->GetString(PH_ENTITY_KEY_CLASS_NAME), dict->GetName());
-
-			Handle_s h = clEntityManager.AddObject(ptr.get());
-			ptr->SetHandle(h);
-
-			ptr->Load(*dict);
-
-			this->AddPrivateChild(ptr);
+			this->LoadEntity(*dict);						
 		}
 	}
 

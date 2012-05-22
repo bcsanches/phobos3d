@@ -19,13 +19,11 @@ subject to the following restrictions:
 #ifndef PH_TILE_WORLD_ENTITY_H
 #define PH_TILE_WORLD_ENTITY_H
 
-#include <OgrePrerequisites.h>
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
 
-#include "PH_WorldEntity.h"
+#include "PH_BaseOgreWorldEntity.h"
 #include "PH_GameEngineAPI.h"
-#include "PH_PhysicsManager.h"
 
 namespace Phobos
 {
@@ -35,42 +33,20 @@ namespace Phobos
 	class MapLoader_c;
 	struct TempStaticObject_s;
 
-	class PH_GAME_ENGINE_API OgitorWorldEntity_c: public WorldEntity_c
+	class PH_GAME_ENGINE_API OgitorWorldEntity_c: public BaseOgreWorldEntity_c
 	{
 		public:
 			static EntityPtr_t Create(const String_c &name);
 
 			~OgitorWorldEntity_c();
 
-			void Load(const MapLoader_c &loader);
+			void LoadMap(const MapLoader_c &loader);
 
-		protected:
-			virtual void OnLoad(const Dictionary_c &dictionary);
+		protected:			
 			virtual void OnLoadFinished();
 
 		private:
-			friend struct TempStaticObject_s;
-
-			struct StaticObject_s
-			{
-				String_c strParent;
-
-				Ogre::SceneNode *pclSceneNode;
-				Ogre::Entity *pclEntity;
-				Ogre::Light *pclLight;
-
-				Physics::PhysicsManager_c::CollisionShapeSharedPtr_t spCollisionShape;
-				btRigidBody *pclRigidBody;
-
-				inline StaticObject_s():
-					pclSceneNode(NULL),
-					pclEntity(NULL),
-					pclLight(NULL),
-					pclRigidBody(NULL)
-				{
-					//empty
-				}
-			};
+			friend struct TempStaticObject_s;			
 
 			OgitorWorldEntity_c(const String_c &name);			
 

@@ -38,12 +38,14 @@ namespace Phobos
 			const DictionaryHive_c &GetDynamicEntitiesHive() const ;
 			const DictionaryHive_c &GetCurrentLevelHive() const;
 
-			EntityPtr_t CreateAndLoadWorld();
+			EntityPtr_t CreateAndLoadWorldSpawn();
 
 		protected:
 			static void ClearAllHives();
 
 			MapLoader_c(const Dictionary_c &settings);
+
+			DictionaryPtr_t CreateWorldSpawnEntityDictionary();
 
 		protected:			
 			static DictionaryHivePtr_t ipStaticEntitiesHive_g;

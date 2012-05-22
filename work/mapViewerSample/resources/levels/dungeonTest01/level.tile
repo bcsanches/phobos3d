@@ -1,4 +1,4 @@
-DynamicEntities world
+LevelInfo worldspawn
 {             
   map = new CharMatrix(
     "########",
@@ -8,8 +8,16 @@ DynamicEntities world
     "#.#.#.##",
     "#.######",
     "#......#",
+    "#......#",
+    "#......#",
+    "#......#",
     "########"
   );
+  
+  tileSet = BaseTilesDef;
+  
+  inherit= TileWorldSpawn;
+  baseHive = EntityDef;
 }
 
 DynamicEntities infoPlayerStart

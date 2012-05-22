@@ -1,3 +1,13 @@
+EntityDef OgitorWorldSpawn
+{
+  className="OgitorWorldEntity";
+}
+
+EntityDef TileWorldSpawn
+{
+  className="TileWorldEntity";
+}
+
 EntityDef InfoPlayerStart
 {
   className=PointEntity;  

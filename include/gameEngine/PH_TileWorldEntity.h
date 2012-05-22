@@ -18,7 +18,9 @@ subject to the following restrictions:
 #ifndef PH_TILE_WORLD_ENTITY_H
 #define PH_TILE_WORLD_ENTITY_H
 
-#include "PH_Entity.h"
+#include "PH_BaseOgreWorldEntity.h"
+
+#include <vector>
 
 namespace Phobos
 {
@@ -26,15 +28,21 @@ namespace Phobos
 
 	class MapLoader_c;
 
-	class PH_GAME_ENGINE_API TileWorldEntity_c: public Entity_c
+	class PH_GAME_ENGINE_API TileWorldEntity_c: public BaseOgreWorldEntity_c
 	{
 		public:
 			static EntityPtr_t Create(const String_c &name);
 
-			void Load(const MapLoader_c &loader);
+			TileWorldEntity_c(const String_c &name);
+			~TileWorldEntity_c();
+
+			void LoadMap(const MapLoader_c &loader);
+
+		private:			
+			StaticObject_s CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, Float_t tileSize);
 
 		private:
-			TileWorldEntity_c(const String_c &name);
+			std::vector<StaticObject_s> vecObjects;
 	};
 }
 

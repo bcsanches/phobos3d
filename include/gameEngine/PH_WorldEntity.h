@@ -32,7 +32,7 @@ namespace Phobos
 	class PH_GAME_ENGINE_API WorldEntity_c: public Entity_c
 	{
 		public:			
-			virtual void Load(const MapLoader_c &loader) = 0;
+			virtual void LoadMap(const MapLoader_c &loader) = 0;
 		
 			WorldEntity_c(const String_c &name);
 			~WorldEntity_c();			

@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance)
 	BOOST_REQUIRE_THROW(manager->GetDictionary("Bla", "Bla"), ObjectNotFoundException_c);
 	BOOST_REQUIRE_THROW(manager->GetDictionary("EntityDef", "Bla"), ObjectNotFoundException_c);
 
-	BOOST_REQUIRE_THROW(infoPlayerStart->AddString("new", "invalid keyword"), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->SetString("new", "invalid keyword"), InvalidParameterException_c);
 }
 
 /**
@@ -405,19 +405,65 @@ BOOST_AUTO_TEST_CASE(dictionary_add_matrix_errors)
 	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
 
 	//Cannot use inherit as matrix
-	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("inherit", "AB", 1, 1), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("new", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("inherit", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("new", "AB", 1, 1), InvalidParameterException_c);
 
 	//Matrix data does not match sizes
-	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException_c);
 
 	//Cannot have size == 0 data
-	BOOST_REQUIRE_THROW(infoPlayerStart->AddCharMatrix("inherit", "", 0, 0), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("inherit", "", 0, 0), InvalidParameterException_c);
 
 	//Not a matrix type
 	BOOST_REQUIRE_THROW(infoPlayerStart->GetMatrix("weight"), InvalidOperationException_c);
 
 	//non existing
 	BOOST_REQUIRE_THROW(infoPlayerStart->GetMatrix("bla"), ObjectNotFoundException_c);
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_inheritance_setters)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "EntityDef InfoPlayerStart" << endl;
+	stream << "{" << endl;
+	stream <<	"className=Entity;" << endl;
+	stream <<	"health=100;" << endl;
+	stream <<	"weight=2.0;" << endl;
+	stream <<	"description=\"bla bla\";" << endl;
+	stream << "}" << endl;
+	stream << endl << endl;
+	stream << "OtherDef InfoPlayerStart" << endl;
+	stream << "{" << endl;
+	stream <<	"inherit=InfoPlayerStart;" << endl;
+	stream <<	"health=200;" << endl;	
+	stream <<	"boost=2;" << endl;	
+	stream << "}";
+	stream << "OtherDef Player" << endl;
+	stream << "{" << endl;	
+	stream << "}";
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	manager->Load(stream);
+
+	//test both forms of retrieving data	
+	DictionaryPtr_t player = manager->GetDictionaryHive("OtherDef")->GetDictionary("Player");
+
+	//now check overriding
+	BOOST_REQUIRE_THROW(player->GetString("health"), ObjectNotFoundException_c);
+
+	//Now check SetInherited
+	player->SetInherited("InfoPlayerStart");
+	BOOST_REQUIRE(player->GetString("health").compare("200") == 0);
+
+	player->SetBaseHive("EntityDef");
+	BOOST_REQUIRE(player->GetString("health").compare("100") == 0);
+
+	//REstore original hive
+	player->SetBaseHive("OtherDef");
+	BOOST_REQUIRE(player->GetString("health").compare("200") == 0);	
 }

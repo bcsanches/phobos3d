@@ -86,6 +86,7 @@ namespace Phobos
 			WorldManager_c();					
 
 			void LoadEntities();
+			EntityPtr_t LoadEntity(const Dictionary_c &entityDef);
 
 			inline bool RemoveFromList(EntityIOList_t &list, EntityIO_c &io);
 			inline void CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)());

@@ -38,50 +38,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_ENTITY_CREATOR("OgitorWorldEntity", OgitorWorldEntity_c);
-
-	struct TempStaticObject_s
-	{
-		Ogre::Entity *pclEntity;
-		Ogre::SceneNode *pclSceneNode;
-		Ogre::Light *pclLight;		
-
-		bool fParent;
-		String_c strName;
-
-		TempStaticObject_s():
-			pclEntity(NULL),
-			pclSceneNode(NULL),
-			pclLight(NULL),						
-			fParent(false)
-		{
-		}
-
-		inline void Commit(OgitorWorldEntity_c::StaticObject_s &object)
-		{
-			object.pclEntity = pclEntity;
-			object.pclSceneNode = pclSceneNode;
-			object.pclLight = pclLight;						
-
-			pclEntity = NULL;
-			pclLight = NULL;
-			pclSceneNode = NULL;			
-		}
-
-		~TempStaticObject_s()
-		{
-			RenderPtr_t render = Render_c::GetInstance();
-
-			if(pclSceneNode)
-				render->DestroySceneNode(pclSceneNode);
-
-			if(pclLight)
-				render->DestroyLight(pclLight);
-
-			if(pclEntity)
-				render->DestroyEntity(pclEntity);
-		}
-	};
+	PH_ENTITY_CREATOR("OgitorWorldEntity", OgitorWorldEntity_c);	
 
 	EntityPtr_t OgitorWorldEntity_c::Create(const String_c &name)
 	{
@@ -89,13 +46,14 @@ namespace Phobos
 	}
 
 	OgitorWorldEntity_c::OgitorWorldEntity_c(const String_c &name):
-		WorldEntity_c(name),
+		BaseOgreWorldEntity_c(name),
 		pclTerrainGroup(NULL),
 		pclTerrainOptions(NULL),
 		pclTerrainLight(NULL),
 		pclTerrainGroupDictionary(NULL),
 		pclTerrainPageDictionary(NULL)
 	{
+		//empty
 	}
 
 	OgitorWorldEntity_c::~OgitorWorldEntity_c()
@@ -128,7 +86,7 @@ namespace Phobos
 		}
 	}
 
-	void OgitorWorldEntity_c::Load(const MapLoader_c &loader)
+	void OgitorWorldEntity_c::LoadMap(const MapLoader_c &loader)
 	{
 		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
 
@@ -281,7 +239,7 @@ namespace Phobos
 	{
 		DictionaryHivePtr_t levelInfo = DictionaryManager_c::GetInstance()-> GetDictionaryHive("LevelInfo");
 
-		String_c name = levelInfo->GetDictionary("LevelFile")->GetString("Path") + "/" + levelInfo->GetDictionary("Project")->GetString("TerrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		String_c name = levelInfo->GetDictionary("LevelFile")->GetString("path") + "/" + this->GetDictionary().GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
@@ -395,13 +353,7 @@ namespace Phobos
 		temp.pclLight->setPowerScale(dict.GetFloat("power"));
 		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));
 	}
-
-	void OgitorWorldEntity_c::OnLoad(const Dictionary_c &dictionary)
-	{
-		//should never be called
-		PH_RAISE(INVALID_OPERATION_EXCEPTION, "OgitorWorldEntity_c::OnLoad", "Not implemented");
-	}
-
+	
 	void OgitorWorldEntity_c::OnLoadFinished()
 	{
 		Physics::PhysicsManagerPtr_t manager = Physics::PhysicsManager_c::GetInstance();

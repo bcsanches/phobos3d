@@ -78,19 +78,35 @@ namespace Phobos
 		this->CheckInvalidKey(key, parszKeywords_g, "cannot be a key because it is a reserved keyword");		
 	}
 
-	void Dictionary_c::AddString(const String_c &key, const String_c &value)
+	void Dictionary_c::SetInherited(const String_c &base)
+	{
+		this->SetString(INHERIT_KEY, base);
+	}
+
+	void Dictionary_c::SetBaseHive(const String_c &baseHive)
+	{
+		this->SetString(BASE_HIVE_KEY, baseHive);
+	}
+
+	void Dictionary_c::SetString(const String_c &key, const String_c &value)
 	{	
 		CheckForKeyword(key);
 
 		mapValues[key] = Value_s(value);
 
 		if(key.compare(INHERIT_KEY) == 0)
+		{			
 			strInherit = value;
+			pclInherit = NULL;
+		}
 		if(key.compare(BASE_HIVE_KEY) == 0)
+		{			
 			strBaseHive = value;
+			pclInherit = NULL;
+		}
 	}
 
-	void Dictionary_c::AddCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns)
+	void Dictionary_c::SetCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns)
 	{	
 		CheckForKeyword(key);
 		this->CheckInvalidKey(key, parszStringOnlyKeys_g, "should be string data, not matrix");
@@ -145,7 +161,7 @@ namespace Phobos
 						PH_RaiseDictionaryParseException(parser, "matrix data", "closing parenthesis", "Dictionary_c::ParseSpecialValue");
 					}
 					
-					this->AddCharMatrix(idName, matrix, numRows, numColumns);
+					this->SetCharMatrix(idName, matrix, numRows, numColumns);
 					break;
 				}
 				else if(token == TOKEN_STRING)
@@ -233,7 +249,7 @@ namespace Phobos
 
 				case TOKEN_NUMBER:
 				case TOKEN_STRING:
-					this->AddString(idName, value);
+					this->SetString(idName, value);
 					break;
 
 				default:

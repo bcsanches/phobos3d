@@ -163,10 +163,13 @@ namespace Phobos
 			int GetInt(const String_c &key) const;
 			float GetFloat(const String_c &key) const;
 
-			void AddString(const String_c &key, const String_c &value);
-			void AddCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns);
+			void SetString(const String_c &key, const String_c &value);
+			void SetCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns);
 			
 			const Dictionary_c *GetInherited() const;
+
+			void SetInherited(const String_c &base);
+			void SetBaseHive(const String_c &baseHive);
 
 		private:
 			Dictionary_c(const String_c &name);			
