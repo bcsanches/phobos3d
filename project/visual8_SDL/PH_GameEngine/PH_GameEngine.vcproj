@@ -177,14 +177,6 @@
 			Name="entities"
 			>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_BaseOgreWorldEntity.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_BaseOgreWorldEntity.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\gameEngine\PH_Entity.cpp"
 				>
 			</File>
@@ -209,35 +201,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_OgitorWorldEntity.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_OgitorWorldEntity.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\gameEngine\PH_PointEntity.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_PointEntity.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\gameEngine\PH_TileWorldEntity.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_TileWorldEntity.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\gameEngine\PH_WorldEntity.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_WorldEntity.h"
 				>
 			</File>
 		</Filter>
@@ -442,6 +410,50 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_TileMapLoader.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="gameWorld"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_BaseOgreGameWorld.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_BaseOgreGameWorld.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GameWorld.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GameWorldFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_OgitorGameWorld.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_OgitorGameWorld.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_TileGameWorld.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_TileGameWorld.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_TileTransform.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_TileTransform.h"
 				>
 			</File>
 		</Filter>

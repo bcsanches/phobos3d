@@ -22,11 +22,11 @@ subject to the following restrictions:
 #include <PH_Render.h>
 #include <PH_TransformProperty.h>
 
+#include "PH_BaseOgreGameWorld.h"
 #include "PH_GameDictionaryUtils.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_ModelRendererManager.h"
-#include "PH_WorldEntity.h"
 
 namespace Phobos
 {
@@ -59,21 +59,24 @@ namespace Phobos
 
 		RenderPtr_t render = Render_c::GetInstance();
 
-		pclSceneNode = render->CreateSceneNode(this->GetName());
+		pclSceneNode = render->CreateSceneNode(this->GetEntityName());
 		pclMeshEntity = render->CreateEntity(meshName);
 
 		pclSceneNode->attachObject(pclMeshEntity);
-
-		pclSceneNode->setPosition(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
-		pclSceneNode->setScale(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_SCALE));
-		pclSceneNode->setOrientation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+		
+		pclSceneNode->setScale(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_SCALE));		
 
 		strParentNode = dictionary.GetString(PH_ENTITY_KEY_PARENT_NODE);
 	}
 
 	void ModelRendererComponent_c::OnLoadFinished()
 	{
-		EntityComponent_c::OnLoadFinished();
+		EntityComponent_c::OnLoadFinished();		
+
+		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
+
+		//Force node transform update
+		this->Update();
 
 		if(strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
 		{
@@ -82,9 +85,7 @@ namespace Phobos
 			pclSceneNode->getParent()->removeChild(pclSceneNode);
 
 			render->GetSceneNode(strParentNode)->addChild(pclSceneNode);
-		}
-
-		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
+		}		
 	}
 
 	void ModelRendererComponent_c::Update()

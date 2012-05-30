@@ -36,6 +36,8 @@ namespace Phobos
 
 			inline Handle_s GetEntityHandle() const;
 
+			inline const String_c &GetEntityName() const;
+
 		protected:
 			EntityComponent_c(const String_c &name, Entity_c &owner);
 
@@ -55,6 +57,11 @@ namespace Phobos
 	inline Handle_s EntityComponent_c::GetEntityHandle() const
 	{
 		return rclEntity.GetHandle();
+	}
+
+	inline const String_c &EntityComponent_c::GetEntityName() const
+	{
+		return rclEntity.GetName();
 	}
 }
 

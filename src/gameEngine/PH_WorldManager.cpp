@@ -50,12 +50,14 @@ namespace Phobos
 	WorldManager_c::~WorldManager_c()
 	{
 
-	}
+	}	
 
 	void WorldManager_c::UnloadMap()
 	{
 		this->RemoveAllChildren();
 		clEntityManager.Clear();
+
+		spGameWorld.reset();
 
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
 	}
@@ -74,6 +76,8 @@ namespace Phobos
 		EntityPtr_t world = spMapLoader->CreateAndLoadWorldSpawn();		
 		this->AddPrivateChild(world);
 
+		spGameWorld = spMapLoader->CreateAndLoadWorld();
+
 		this->LoadEntities();
 
 		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
@@ -89,13 +93,14 @@ namespace Phobos
 	EntityPtr_t WorldManager_c::LoadEntity(const Dictionary_c &entityDef)
 	{
 		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName());
+
+		//Update handle before loading entity, so components would have a valid handle
+		Handle_s h = clEntityManager.AddObject(ptr.get());
+		ptr->SetHandle(h);
 			
 		ptr->Load(entityDef);
 		
-		this->AddPrivateChild(ptr);
-
-		Handle_s h = clEntityManager.AddObject(ptr.get());
-		ptr->SetHandle(h);
+		this->AddPrivateChild(ptr);		
 
 		return ptr;
 	}
@@ -144,8 +149,10 @@ namespace Phobos
 	}
 
 	void WorldManager_c::OnFinalize()
-	{
-		this->RemoveAllChildren();
+	{		
+		this->UnloadMap();
+
+		spMapLoader.reset();
 	}
 
 	void WorldManager_c::CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)())

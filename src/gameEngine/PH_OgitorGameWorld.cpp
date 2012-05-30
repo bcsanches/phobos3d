@@ -13,7 +13,7 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 */
-#include "PH_OgitorWorldEntity.h"
+#include "PH_OgitorGameWorld.h"
 
 #include <boost/foreach.hpp>
 
@@ -38,15 +38,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_ENTITY_CREATOR("OgitorWorldEntity", OgitorWorldEntity_c);	
-
-	EntityPtr_t OgitorWorldEntity_c::Create(const String_c &name)
-	{
-		return EntityPtr_t(new OgitorWorldEntity_c(name));
-	}
-
-	OgitorWorldEntity_c::OgitorWorldEntity_c(const String_c &name):
-		BaseOgreWorldEntity_c(name),
+	OgitorGameWorld_c::OgitorGameWorld_c():		
 		pclTerrainGroup(NULL),
 		pclTerrainOptions(NULL),
 		pclTerrainLight(NULL),
@@ -56,7 +48,7 @@ namespace Phobos
 		//empty
 	}
 
-	OgitorWorldEntity_c::~OgitorWorldEntity_c()
+	OgitorGameWorld_c::~OgitorGameWorld_c()
 	{
 		RenderPtr_t render = Render_c::GetInstance();
 
@@ -86,7 +78,7 @@ namespace Phobos
 		}
 	}
 
-	void OgitorWorldEntity_c::LoadMap(const MapLoader_c &loader)
+	void OgitorGameWorld_c::Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary)
 	{
 		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
 
@@ -106,7 +98,7 @@ namespace Phobos
 				StaticObjectsMap_t::iterator objIt = mapStaticObjects.lower_bound(name);
 				if((objIt != mapStaticObjects.end()) && !(mapStaticObjects.key_comp()(name, objIt->first)))
 				{
-					Kernel_c::GetInstance().LogStream() << "[OgitorWorldEntity_c::Load] Static object " << name << " is duplicated\n";
+					Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::Load] Static object " << name << " is duplicated\n";
 					continue;
 				}
 
@@ -119,7 +111,7 @@ namespace Phobos
 			}
 			catch(Exception_c &ex)
 			{
-				Kernel_c::GetInstance().LogStream() << "[OgitorWorldEntity_c::Load] Exception loading static object: " << ex.what();
+				Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::Load] Exception loading static object: " << ex.what();
 			}
 		}
 
@@ -134,7 +126,7 @@ namespace Phobos
 			StaticObjectsMap_t::iterator it = mapStaticObjects.find(object.strParent);
 			if(it == mapStaticObjects.end())
 			{
-				Kernel_c::GetInstance().LogStream() << "[OgitorWorldEntity_c::Load] Static object " << pair.first << " without parent " << object.strParent << "\n";
+				Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::Load] Static object " << pair.first << " without parent " << object.strParent << "\n";
 				continue;
 			}
 
@@ -163,6 +155,8 @@ namespace Phobos
 
 			object.spCollisionShape = physicsManager->CreateMeshShape(*object.pclEntity->getMesh().get());
 			object.pclRigidBody = physicsManager->CreateRigidBody(transform, *object.spCollisionShape.get(), 0);
+
+			physicsManager->RegisterRigidBody(*object.pclRigidBody);
 		}		
 		
 
@@ -174,12 +168,12 @@ namespace Phobos
 
 		if(pclTerrainPageDictionary != NULL)
 		{
-			this->LoadTerrainPage(*pclTerrainPageDictionary);
+			this->LoadTerrainPage(*pclTerrainPageDictionary, worldEntityDictionary);
 			pclTerrainPageDictionary = NULL;
-		}
+		}		
 	}
 
-	bool OgitorWorldEntity_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
+	bool OgitorGameWorld_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
 	{
 		if((type.compare("Caelum Object") == 0) ||
 		   (type.compare("Viewport Object") == 0))
@@ -209,7 +203,7 @@ namespace Phobos
 		return false;
 	}
 
-	void OgitorWorldEntity_c::LoadTerrainGroup(const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadTerrainGroup(const Dictionary_c &dict)
 	{
 		pclTerrainOptions = new Ogre::TerrainGlobalOptions();
 
@@ -235,16 +229,16 @@ namespace Phobos
 		}
 	}
 
-	void OgitorWorldEntity_c::LoadTerrainPage(const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadTerrainPage(const Dictionary_c &terrainPageDictionary, const Dictionary_c &worldEntityDictionary)
 	{
 		DictionaryHivePtr_t levelInfo = DictionaryManager_c::GetInstance()-> GetDictionaryHive("LevelInfo");
 
-		String_c name = levelInfo->GetDictionary("LevelFile")->GetString("path") + "/" + this->GetDictionary().GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		String_c name = levelInfo->GetDictionary("LevelFile")->GetString("path") + "/" + worldEntityDictionary.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
 
-	bool OgitorWorldEntity_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict)
+	bool OgitorGameWorld_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict)
 	{
 		TempStaticObject_s temp;
 
@@ -265,7 +259,7 @@ namespace Phobos
 		}
 		else
 		{
-			Kernel_c::GetInstance().LogStream() << "[OgitorWorldEntity_c::LoadStaticObject] Error, unknown static object type: " << type << "\n";
+			Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::LoadStaticObject] Error, unknown static object type: " << type << "\n";
 			return false;
 		}
 
@@ -278,7 +272,7 @@ namespace Phobos
 		return true;
 	}
 
-	void OgitorWorldEntity_c::LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
 		temp.pclSceneNode = Render_c::GetInstance()->CreateSceneNode(temp.strName);
 
@@ -286,7 +280,7 @@ namespace Phobos
 		temp.pclSceneNode->setOrientation(DictionaryGetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
 	}
 
-	void OgitorWorldEntity_c::LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
 		this->LoadNodeObject(temp, dict);
 
@@ -295,7 +289,7 @@ namespace Phobos
 		temp.pclSceneNode->attachObject(temp.pclEntity);		
 	}
 
-	void OgitorWorldEntity_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
 		temp.pclLight = Render_c::GetInstance()->CreateLight();
 
@@ -336,7 +330,7 @@ namespace Phobos
 					std::stringstream stream;
 
 					stream << "Invalid light type " << dict.GetInt("lighttype") << " for object " << dict.GetString("name");
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "OgitorWorldEntity_c::LoadLightObject", stream.str());
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "OgitorGameWorld_c::LoadLightObject", stream.str());
 				}
 				break;
 		}
@@ -351,21 +345,6 @@ namespace Phobos
 			temp.pclLight->setDirection(DictionaryGetVector3(dict, "direction"));
 
 		temp.pclLight->setPowerScale(dict.GetFloat("power"));
-		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));
-	}
-	
-	void OgitorWorldEntity_c::OnLoadFinished()
-	{
-		Physics::PhysicsManagerPtr_t manager = Physics::PhysicsManager_c::GetInstance();
-
-		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
-		{
-			StaticObject_s &object = pair.second;
-
-			if(object.pclRigidBody == NULL)
-				continue;
-
-			manager->RegisterRigidBody(*object.pclRigidBody);
-		}
-	}
+		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));		
+	}		
 }

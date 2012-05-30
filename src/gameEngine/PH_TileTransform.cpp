@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-September 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+May 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,29 +14,17 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_WORLD_ENTITY_H
-#define PH_WORLD_ENTITY_H
-
-#include "PH_Entity.h"
-#include "PH_GameEngineAPI.h"
-
-#define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
+#include "PH_TileTransform.h"
 
 namespace Phobos
 {
-	PH_DECLARE_NODE_PTR(WorldEntity);
-
-	class Dictionary_c;
-	class MapLoader_c;	
-
-	class PH_GAME_ENGINE_API WorldEntity_c: public Entity_c
+	TileTransform_c::TileTransform_c(UInt_t row, UInt_t col, Direction_e dir):
+		iRow(row),
+		iCol(col),
+		eDirection(dir)
 	{
-		public:			
-			virtual void LoadMap(const MapLoader_c &loader) = 0;
-		
-			WorldEntity_c(const String_c &name);
-			~WorldEntity_c();			
-	};
+		//empty
+	}		
 }
 
-#endif
+

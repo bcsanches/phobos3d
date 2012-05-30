@@ -24,6 +24,7 @@ subject to the following restrictions:
 #include <PH_DictionaryHive.h>
 
 #include "PH_Entity.h"
+#include "PH_GameWorldFwd.h"
 
 namespace Phobos
 {		
@@ -40,12 +41,16 @@ namespace Phobos
 
 			EntityPtr_t CreateAndLoadWorldSpawn();
 
+			GameWorldPtr_t CreateAndLoadWorld();
+
 		protected:
 			static void ClearAllHives();
 
 			MapLoader_c(const Dictionary_c &settings);
 
 			DictionaryPtr_t CreateWorldSpawnEntityDictionary();
+
+			virtual GameWorldPtr_t CreateGameWorld() = 0;
 
 		protected:			
 			static DictionaryHivePtr_t ipStaticEntitiesHive_g;

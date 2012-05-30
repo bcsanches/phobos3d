@@ -1,11 +1,13 @@
 EntityDef OgitorWorldSpawn
 {
-  className="OgitorWorldEntity";
+  className=Entity;
 }
 
 EntityDef TileWorldSpawn
 {
-  className="TileWorldEntity";
+  className=Entity;
+  
+  ambientColor="1 1 1 1";
 }
 
 EntityDef InfoPlayerStart
@@ -16,7 +18,12 @@ EntityDef InfoPlayerStart
 EntityDef SkeletonTorch
 {
   className=Entity;  
-  components="ModelRenderer|Transform";               
+  components="ModelRenderer|Transform";
+  
+  meshfile="skeltorch.mesh";
+  scale = "0.3 0.3 0.3";
+  
+  parentnode=SceneManager;
 }
 
 EntityDef Platform

@@ -28,7 +28,10 @@ namespace Phobos
 
 			TileMapLoader_c(const Dictionary_c &settings);
 
-			void Load(const String_c &fileName);				
+			void Load(const String_c &fileName);
+
+		protected:
+			virtual GameWorldPtr_t CreateGameWorld();
 	};
 }
 	

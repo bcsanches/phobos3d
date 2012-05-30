@@ -35,7 +35,8 @@ namespace Phobos
 
 			OgitorMapLoader_c(const Dictionary_c &settings);
 
-		private:			
+		protected:			
+			virtual GameWorldPtr_t CreateGameWorld();
 	};	
 }
 

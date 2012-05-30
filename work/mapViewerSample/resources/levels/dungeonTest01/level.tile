@@ -1,33 +1,68 @@
 LevelInfo worldspawn
-{             
-  map = new CharMatrix(
-    "########",
-    "#......#",
-    "######.#",
-    "#......#",
-    "#.#.#.##",
-    "#.######",
-    "#......#",
-    "#......#",
-    "#......#",
-    "#......#",
-    "########"
-  );
-  
-  tileSet = BaseTilesDef;
-  
+{       
   inherit= TileWorldSpawn;
   baseHive = EntityDef;
+  
+  ambientColor = "0.2 0.2 0.2 1";
+            
+            
+  map = new CharMatrix(                      
+        "################",
+        "#..............#",
+        "######.........#",
+        "#..............#",
+        "#.#.#.#........#",
+        "#.#####........#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "################"
+  );
+  
+  tileSet = BaseTilesDef;   
 }
 
 DynamicEntities infoPlayerStart
 {
-  tileX = 1;
-  tileY = 1;  
+  tileRow = 1;
+  tileCol = 1;  
   
-  faces = "right"; //or east
+  faces = "east"; //or east
   
   baseHive="EntityDef";
   inherit="InfoPlayerStart";
 }
 
+DynamicEntities skeletonTorch0
+{
+  tileRow = 5;
+  tileCol = 8;
+  
+  faces = "right";
+  
+  baseHive="EntityDef";
+  inherit=SkeletonTorch;
+}
+
+DynamicEntities skeletonTorch1
+{
+  tileRow = 5;
+  tileCol = 9;
+  
+  faces = "right";
+  
+  baseHive="EntityDef";
+  inherit=SkeletonTorch;
+}
+
+DynamicEntities skeletonTorch2
+{
+  tileRow = 4;
+  tileCol = 3;
+  
+  faces = "right";
+  
+  baseHive="EntityDef";
+  inherit=SkeletonTorch;
+}

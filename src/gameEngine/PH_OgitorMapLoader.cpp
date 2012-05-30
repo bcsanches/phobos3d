@@ -30,6 +30,7 @@ subject to the following restrictions:
 #include <PH_Path.h>
 
 #include "PH_MapLoaderFactory.h"
+#include "PH_OgitorGameWorld.h"
 
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"
@@ -131,6 +132,11 @@ namespace Phobos
 		MapLoader_c(settings)
 	{
 		//empty
+	}
+
+	GameWorldPtr_t OgitorMapLoader_c::CreateGameWorld()
+	{
+		return boost::make_shared<OgitorGameWorld_c>();
 	}
 
 	void OgitorMapLoader_c::Load(const String_c &fileName)

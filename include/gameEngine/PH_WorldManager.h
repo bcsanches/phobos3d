@@ -35,7 +35,7 @@ namespace Phobos
 
 	typedef HandleManager_c<Entity_c> EntityManager_c;
 
-	class EntityIO_c;
+	class EntityIO_c;	
 
 	class WorldManagerListener_c
 	{
@@ -75,6 +75,8 @@ namespace Phobos
 			void RemoveFromFixedUpdateList(EntityIO_c &io);
 			void RemoveFromUpdateList(EntityIO_c &io);
 
+			inline const GameWorld_c *GetGameWorld() const;
+
 		protected:		
 			virtual void OnBoot();
 			virtual void OnFinalize();
@@ -100,6 +102,8 @@ namespace Phobos
 
 			MapLoaderPtr_t	spMapLoader;
 
+			GameWorldPtr_t	spGameWorld;
+
 			ContextCmd_c	cmdLoadMap;	
 			ContextCmd_c	cmdUnloadMap;	
 			ContextCmd_c	cmdDumpFactoryCreators;
@@ -113,6 +117,11 @@ namespace Phobos
 	inline UInt_t WorldManager_c::GetNumActiveEntities() const
 	{
 		return clEntityManager.GetNumActiveObjects();
+	}
+
+	inline const GameWorld_c *WorldManager_c::GetGameWorld() const
+	{
+		return spGameWorld.get();
 	}
 }
 

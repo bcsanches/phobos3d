@@ -19,6 +19,8 @@ subject to the following restrictions:
 #include "PH_GameDictionaryUtils.h"
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
+#include "PH_TileGameWorld.h"
+#include "PH_WorldManager.h"
 
 namespace Phobos
 {
@@ -32,15 +34,16 @@ namespace Phobos
 	void PointEntity_c::OnLoad(const Dictionary_c &dictionary)
 	{
 		Entity_c::OnLoad(dictionary);
-
-		try
+		
+		if(dictionary.TryGetString(PH_ENTITY_KEY_TILE_ROW))
+		{						
+			const TileGameWorld_c *tileWorld = static_cast<const TileGameWorld_c *>(WorldManager_c::GetInstance()->GetGameWorld());
+			tileWorld->LoadTileTransform(clTransform, dictionary);
+		}
+		else
 		{
 			clTransform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
 			clTransform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
-		}
-		catch(...)
-		{
-			//FIXME
-		}
+		}		
 	}
 }

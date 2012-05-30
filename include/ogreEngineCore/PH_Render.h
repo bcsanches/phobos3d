@@ -88,6 +88,8 @@ namespace Phobos
 			void SetAmbientColor(const Ogre::ColourValue &value);
 			Ogre::ColourValue GetAmbientColor() const;
 
+			void SetFog(Ogre::FogMode mode, Ogre::ColourValue color, Float_t density, Float_t min, Float_t max);
+
 			Ogre::Viewport *AddViewport(Ogre::Camera *camera, int ZOrder = 0);
 			void RemoveViewport(int ZOrder);
 

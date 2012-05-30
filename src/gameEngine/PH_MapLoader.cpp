@@ -31,7 +31,7 @@ subject to the following restrictions:
 
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
-#include "PH_WorldEntity.h"
+#include "PH_GameWorld.h"
 
 #define WORLD_SPAWN_ENTITY "worldspawn"
 
@@ -83,13 +83,18 @@ namespace Phobos
 		DictionaryPtr_t entityDef = ipCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY);
 		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(entityDef->GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef->GetName());
 
-		ptr->Load(*entityDef);		
-
-		WorldEntityPtr_t worldEntity = boost::static_pointer_cast<WorldEntity_c>(ptr);
-
-		worldEntity->LoadMap(*this);
+		ptr->Load(*entityDef);
 
 		return ptr;
+	}
+
+	GameWorldPtr_t MapLoader_c::CreateAndLoadWorld()
+	{
+		GameWorldPtr_t world = this->CreateGameWorld();
+
+		world->Load(*this, *(ipCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY)));
+
+		return world;
 	}
 
 	DictionaryPtr_t MapLoader_c::CreateWorldSpawnEntityDictionary()

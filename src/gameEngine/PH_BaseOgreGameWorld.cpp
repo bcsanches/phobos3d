@@ -14,13 +14,13 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_BaseOgreWorldEntity.h"
+#include "PH_BaseOgreGameWorld.h"
 
 #include <PH_Render.h>
 
 namespace Phobos
 {
-	BaseOgreWorldEntity_c::TempStaticObject_s::~TempStaticObject_s()
+	BaseOgreGameWorld_c::TempStaticObject_s::~TempStaticObject_s()
 	{
 		RenderPtr_t render = Render_c::GetInstance();
 
@@ -32,11 +32,5 @@ namespace Phobos
 
 		if(pclEntity)
 			render->DestroyEntity(pclEntity);
-	}
-
-	BaseOgreWorldEntity_c::BaseOgreWorldEntity_c(const String_c &name):
-		WorldEntity_c(name)
-	{
-		//empty
 	}
 }

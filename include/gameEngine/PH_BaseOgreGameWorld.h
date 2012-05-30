@@ -14,20 +14,20 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_BASE_OGRE_WORLD_ENTITY_H
-#define PH_BASE_OGRE_WORLD_ENTITY_H
+#ifndef PH_BASE_OGRE_GAME_WORLD_H
+#define PH_BASE_OGRE_GAME_WORLD_H
 
-#include "PH_WorldEntity.h"
+#include "PH_GameWorld.h"
 
 #include <OgrePrerequisites.h>
 
 #include "PH_PhysicsManager.h"
 
-namespace Phobos
-{
-	PH_DECLARE_NODE_PTR(BaseOgreWorldEntity);
+#define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
 
-	class PH_GAME_ENGINE_API BaseOgreWorldEntity_c: public WorldEntity_c
+namespace Phobos
+{	
+	class PH_GAME_ENGINE_API BaseOgreGameWorld_c: public GameWorld_c
 	{
 		protected:
 			struct StaticObject_s
@@ -81,8 +81,6 @@ namespace Phobos
 
 				~TempStaticObject_s();
 			};
-
-			BaseOgreWorldEntity_c(const String_c &name);
 	};
 }
 

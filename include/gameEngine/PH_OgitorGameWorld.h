@@ -16,40 +16,32 @@ subject to the following restrictions:
 
 
 
-#ifndef PH_TILE_WORLD_ENTITY_H
-#define PH_TILE_WORLD_ENTITY_H
+#ifndef PH_OGITOR_GAME_WORLD_H
+#define PH_OGITOR_GAME_WORLD_H
 
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
 
-#include "PH_BaseOgreWorldEntity.h"
+#include "PH_BaseOgreGameWorld.h"
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
-{
-	PH_DECLARE_NODE_PTR(OgitorWorldEntity);
-
+{	
 	class Dictionary_c;
 	class MapLoader_c;
 	struct TempStaticObject_s;
 
-	class PH_GAME_ENGINE_API OgitorWorldEntity_c: public BaseOgreWorldEntity_c
+	class PH_GAME_ENGINE_API OgitorGameWorld_c: public BaseOgreGameWorld_c
 	{
 		public:
-			static EntityPtr_t Create(const String_c &name);
+			virtual void Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary);
 
-			~OgitorWorldEntity_c();
-
-			void LoadMap(const MapLoader_c &loader);
-
-		protected:			
-			virtual void OnLoadFinished();
+			OgitorGameWorld_c();			
+			~OgitorGameWorld_c();		
 
 		private:
 			friend struct TempStaticObject_s;			
-
-			OgitorWorldEntity_c(const String_c &name);			
-
+			
 			bool LoadGlobalObject(const String_c &type, const Dictionary_c &dict);
 			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict);
 
@@ -58,7 +50,7 @@ namespace Phobos
 			void LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict);
 
 			void LoadTerrainGroup(const Dictionary_c &dict);
-			void LoadTerrainPage(const Dictionary_c &dict);
+			void LoadTerrainPage(const Dictionary_c &terrainPageDictionary, const Dictionary_c &worldEntityDictionary);
 
 			void Proc() {};
 
@@ -67,9 +59,7 @@ namespace Phobos
 			StaticObjectsMap_t mapStaticObjects;
 
 			Ogre::TerrainGroup			*pclTerrainGroup;
-			Ogre::TerrainGlobalOptions	*pclTerrainOptions;
-
-			//UInt16_t					u16TerrainSize;
+			Ogre::TerrainGlobalOptions	*pclTerrainOptions;			
 
 			const Ogre::Light			*pclTerrainLight;
 

@@ -492,6 +492,13 @@ namespace Phobos
 		return pclMainSceneManager->getAmbientLight();
 	}
 
+	void Render_c::SetFog(Ogre::FogMode mode, Ogre::ColourValue color, Float_t density, Float_t min, Float_t max)
+	{
+		PH_ASSERT_VALID(pclMainSceneManager);
+
+		pclMainSceneManager->setFog(mode, color, density, min, max);
+	}
+
 	Ogre::Viewport *Render_c::AddViewport(Ogre::Camera *camera, int ZOrder)
 	{
 		PH_ASSERT_VALID(pclOgreWindow);

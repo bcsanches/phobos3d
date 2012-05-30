@@ -25,6 +25,9 @@ subject to the following restrictions:
 #define PH_ENTITY_KEY_COMPONENTS "components"
 #define PH_ENTITY_KEY_PARENT_NODE "parentnode"
 
+#define PH_ENTITY_KEY_TILE_ROW "tileRow"
+#define PH_ENTITY_KEY_TILE_COL "tileCol"
+
 #define PH_ENTITY_PROP_TRANSFORM "transform"
 
 #endif
