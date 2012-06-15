@@ -34,13 +34,13 @@ namespace Phobos
 }
 
 #define PH_ENTITY_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1_c<Phobos::EntityPtr_t, String_c, Phobos::EntityFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+	static Phobos::ObjectCreator1_c<Phobos::EntityPtr_t, Phobos::String_c, Phobos::EntityFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
 
 #define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  		\
 	PH_ENTITY_CREATOR(NAME, TYPE);					\
 	Phobos::EntityPtr_t TYPE::Create(const Phobos::String_c &name)	\
 	{												\
-		return EntityPtr_t(new TYPE(name));			\
+		return Phobos::EntityPtr_t(new TYPE(name));	\
 	}
 
 #endif

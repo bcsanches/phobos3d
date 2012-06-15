@@ -228,3 +228,4 @@ glob:project/visual8_SDL/Sample_05/Sample_05.vcproj.mordor.bcsanches.user
 glob:project/visual8_SDL/PH_DictionaryTest/Release/
 glob:project/visual8_SDL/PH_KernelTest/Release/
 glob:project/visual8_SDL/PH_OgreEngineCore/Release/
+glob:work/mapViewerSample/screenshots/
