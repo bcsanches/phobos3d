@@ -17,8 +17,12 @@ subject to the following restrictions:
 #include "PH_Render.h"
 
 #include <OgreEntity.h>
+#include <OgreMaterialManager.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
+#include <OgreShadowCameraSetup.h>
+#include <OgreShadowCameraSetupPSSM.h>
+#include <OgreSubEntity.h>
 
 #include <PH_Console.h>
 #include <PH_Context.h>
@@ -34,6 +38,8 @@ subject to the following restrictions:
 #include "PH_Core.h"
 #include "PH_OgreUtils.h"
 
+#define SHADER_SYSTEM_MATERIAL_GROUP "RTShaderSystemMaterialsGroup"
+
 namespace Phobos
 {
 	RenderPtr_t Render_c::ipInstance_gl;
@@ -48,6 +54,67 @@ namespace Phobos
 	};
 
 	static OgreLogListener_c clOgreLogListener_gl;
+	
+	class ShaderGeneratorTechniqueResolverListener : public Ogre::MaterialManager::Listener
+	{
+		public:
+			ShaderGeneratorTechniqueResolverListener(Ogre::RTShader::ShaderGenerator &shaderGenerator):
+			  rclShaderGenerator(shaderGenerator)
+			{
+				//empty
+			}
+
+			/** This is the hook point where shader based technique will be created.
+			It will be called whenever the material manager won't find appropriate technique
+			that satisfy the target scheme name. If the scheme name is out target RT Shader System
+			scheme name we will try to create shader generated technique for it. 
+			*/
+			virtual Ogre::Technique* handleSchemeNotFound(unsigned short schemeIndex, 
+				const Ogre::String& schemeName, Ogre::Material* originalMaterial, unsigned short lodIndex, 
+				const Ogre::Renderable* rend)
+			{	
+				Ogre::Technique* generatedTech = NULL;
+
+				// Case this is the default shader generator scheme.
+				if (schemeName == Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME)
+				{
+					bool techniqueCreated;
+
+					// Create shader generated technique for this material.
+					techniqueCreated = rclShaderGenerator.createShaderBasedTechnique(
+						originalMaterial->getName(), 
+						Ogre::MaterialManager::DEFAULT_SCHEME_NAME, 
+						schemeName
+					);	
+
+					// Case technique registration succeeded.
+					if (techniqueCreated)
+					{
+						// Force creating the shaders for the generated technique.
+						rclShaderGenerator.validateMaterial(schemeName, originalMaterial->getName());
+						
+						// Grab the generated technique.
+						Ogre::Material::TechniqueIterator itTech = originalMaterial->getTechniqueIterator();
+
+						while (itTech.hasMoreElements())
+						{
+							Ogre::Technique* curTech = itTech.getNext();
+
+							if (curTech->getSchemeName() == schemeName)
+							{
+								generatedTech = curTech;
+								break;
+							}
+						}				
+					}
+				}
+
+				return generatedTech;
+			}
+
+		private:	
+			Ogre::RTShader::ShaderGenerator &rclShaderGenerator;
+	};
 
 	RenderPtr_t Render_c::CreateInstance()
 	{
@@ -77,6 +144,7 @@ namespace Phobos
 		varRVSync("dvRVSync", "1"),
 		varRFullScreen("dvRFullScreen", "0"),
 		varRRenderSystem("dvRRenderSystem", "Direct3D9"),
+		varRShaderSystemLibPath("dvRShaderSystemLibPath", "resources/RTShaderLib"),
 		varRCaelum("dvRCaelum", "1"),
 		cmdOgreLoadPlugin("ogreLoadPlugin"),
 		cmdOgreAddResourceLocation("ogreAddResourceLocation"),
@@ -86,6 +154,7 @@ namespace Phobos
 		cmdSetShadowFarDistance("setShadowFarDistance"),
 		pclOgreWindow(NULL),
 		pclMainSceneManager(NULL),
+		pclShaderGenerator(NULL),
 		eShadowMode(Ogre::SHADOWTYPE_NONE)
 	{
 		Kernel_c &kernel = Kernel_c::GetInstance();
@@ -206,17 +275,35 @@ namespace Phobos
 		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");
 		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);
 
-                pclOgreWindow->setVisible(true);
-
-		kernel.LogMessage("[Render_c::OnBoot] Initializing all resource groups");
-		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-
+		pclOgreWindow->setVisible(true);
+		
 		kernel.LogMessage("[Render_c::OnBoot] Creating SceneManager");
 		pclMainSceneManager = spRoot->createSceneManager(Ogre::ST_GENERIC);
+		
+		pclMainSceneManager->setShadowFarDistance(100);
+
+		kernel.LogMessage("[Render_c::OnBoot] Initializing ShaderSystem.");
+
+		Ogre::RTShader::ShaderGenerator::initialize();
+
+		pclShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
+		pclShaderGenerator->addSceneManager(pclMainSceneManager);		
+
+		/*
+		spShaderGeneratorTechiniqueResolverListener.reset(new ShaderGeneratorTechniqueResolverListener(*pclShaderGenerator));
+		Ogre::MaterialManager::getSingleton().addListener(spShaderGeneratorTechiniqueResolverListener.get());*/
+
+		Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
+
+		resourceGroupManager.createResourceGroup(SHADER_SYSTEM_MATERIAL_GROUP, false);
+		resourceGroupManager.addResourceLocation(varRShaderSystemLibPath.GetValue(), "FileSystem", SHADER_SYSTEM_MATERIAL_GROUP, true);
+		resourceGroupManager.initialiseResourceGroup(SHADER_SYSTEM_MATERIAL_GROUP);
+		resourceGroupManager.loadResourceGroup(SHADER_SYSTEM_MATERIAL_GROUP);
 
 		this->SetShadowMode(eShadowMode);
 
-		pclMainSceneManager->setShadowFarDistance(1000);
+		kernel.LogMessage("[Render_c::OnBoot] Initializing all resource groups");
+		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
 		kernel.LogMessage("[Render_c::OnBoot] Ready.");
 		Core_c::GetInstance()->OnEvent(CORE_EVENT_RENDER_READY);
@@ -303,18 +390,6 @@ namespace Phobos
 		pclMainSceneManager->clearScene();
 	}
 
-	/*
-	//If this method is activated, we need to rename the others, because it does not attach the node to a scene
-	Ogre::SceneNode *Render_c::GetOrCreateSceneNode(const String_c &name)
-	{
-		PH_ASSERT_VALID(pclMainSceneManager);
-
-		if(pclMainSceneManager->hasSceneNode(name))
-			return pclMainSceneManager->getSceneNode(name);
-		else
-			return pclMainSceneManager->createSceneNode(name);
-	}*/
-
 	Ogre::SceneNode *Render_c::GetSceneNode(const String_c &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
@@ -373,13 +448,42 @@ namespace Phobos
 			return NULL;
 
 		flags |= FORCE_EDGE_LIST_GENERATION;
-
+		
 		Ogre::MeshPtr mesh = ent->getMesh();
 		if((flags & FORCE_EDGE_LIST_GENERATION) && (!mesh->isEdgeListBuilt()))
 		{
 			mesh->buildEdgeList();
 		}
+		/*
+		using namespace Ogre;
+		for (unsigned int i=0; i < ent->getNumSubEntities(); ++i)
+		{
+			SubEntity *curSubEntity = ent->getSubEntity(i);
+			const String &curMaterialName = curSubEntity->getMaterialName();
+					
+			// Create the shader based technique of this material.
+			if(!pclShaderGenerator->createShaderBasedTechnique(curMaterialName,  MaterialManager::DEFAULT_SCHEME_NAME, RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME))
+			{
+				continue;
+			}
 
+			MaterialPtr curMaterial = MaterialManager::getSingleton().getByName(curMaterialName);
+
+			// Grab the first pass render state. 
+			// NOTE: For more complicated samples iterate over the passes and build each one of them as desired.
+			RTShader::RenderState* renderState = pclShaderGenerator->getRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME, curMaterialName, 1);
+
+			// Remove all sub render states.
+			renderState->reset();
+
+			RTShader::SubRenderState* perPixelLightModel = pclShaderGenerator->createSubRenderState(RTShader::PerPixelLighting::Type);
+				
+			renderState->addTemplateSubRenderState(perPixelLightModel);
+
+			// Invalidate this material in order to re-generate its shaders.
+			pclShaderGenerator->invalidateMaterial(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME, curMaterialName);
+		}
+*/
 		return (ent);
 	}
 
@@ -503,7 +607,10 @@ namespace Phobos
 	{
 		PH_ASSERT_VALID(pclOgreWindow);
 
-		return(pclOgreWindow->addViewport(camera, ZOrder));
+		Ogre::Viewport *viewport = pclOgreWindow->addViewport(camera, ZOrder);
+		viewport->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+
+		return(viewport);
 	}
 
 	void Render_c::RemoveViewport(int ZOrder)
@@ -561,7 +668,10 @@ namespace Phobos
 	{
 		{"none", Ogre::SHADOWTYPE_NONE},
 		{"stencil_additive", Ogre::SHADOWTYPE_STENCIL_ADDITIVE},
-		{"stencil_modulative", Ogre::SHADOWTYPE_STENCIL_MODULATIVE}
+		{"stencil_modulative", Ogre::SHADOWTYPE_STENCIL_MODULATIVE},
+		{"texture_modulative", Ogre::SHADOWTYPE_TEXTURE_MODULATIVE},
+		{"texture_additive", Ogre::SHADOWTYPE_TEXTURE_ADDITIVE},
+		{"texture_modulative_integrated", Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED}
 	};
 
 	void Render_c::CmdSetShadowMode(const StringVector_t &args, Context_c &)
@@ -570,7 +680,7 @@ namespace Phobos
 
 		if(args.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Missing parameter type, usage: setShadowMode [none|stencil_additive|stencil_modulative]");
+			Kernel_c::GetInstance().LogMessage("[Render_c::CmdSetShadowMode] Missing parameter type, usage: setShadowMode [none|texture_modulative_integrated]");
 
 			return;
 		}
@@ -587,12 +697,15 @@ namespace Phobos
 		if(tech == eShadowMode)
 			return;
 
-		eShadowMode = tech;
+		if(eShadowMode != tech)
+		{
+			eShadowMode = tech;
 
-		if(pclMainSceneManager == NULL)
-			return;
+			if(pclMainSceneManager == NULL)
+				return;
 
-		this->SetShadowMode(tech);
+			this->SetShadowMode(tech);
+		}
 	}
 
 	void Render_c::CmdSetShadowFarDistance(const StringVector_t &args, Context_c &)
@@ -610,6 +723,82 @@ namespace Phobos
 	void Render_c::SetShadowMode(Ogre::ShadowTechnique tech)
 	{
 		pclMainSceneManager->setShadowTechnique(tech);
+
+		Ogre::RTShader::RenderState *schemRenderState = pclShaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+
+		if(tech != Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED)
+		{
+			const Ogre::RTShader::SubRenderStateList& subRenderStateList = schemRenderState->getTemplateSubRenderStateList();
+			Ogre::RTShader::SubRenderStateListConstIterator it = subRenderStateList.begin();
+			Ogre::RTShader::SubRenderStateListConstIterator itEnd = subRenderStateList.end();
+
+			for (; it != itEnd; ++it)
+			{
+				Ogre::RTShader::SubRenderState* curSubRenderState = *it;
+
+				// This is the pssm3 sub render state -> remove it.
+				if (curSubRenderState->getType() == Ogre::RTShader::IntegratedPSSM3::Type)
+				{
+					schemRenderState->removeTemplateSubRenderState(*it);
+					break;
+				}
+			}
+		}
+
+		if((tech == Ogre::SHADOWTYPE_NONE) || (tech == Ogre::SHADOWTYPE_STENCIL_ADDITIVE) || (tech == Ogre::SHADOWTYPE_STENCIL_MODULATIVE))
+		{			
+			//empty
+		}
+		else if((tech == Ogre::SHADOWTYPE_TEXTURE_ADDITIVE) || (tech == Ogre::SHADOWTYPE_TEXTURE_MODULATIVE))
+		{
+			pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_DIRECTIONAL, 1);
+			pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_POINT, 3);
+			pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_SPOTLIGHT, 3);
+
+			pclMainSceneManager->setShadowTextureSettings(512, 3, Ogre::PF_FLOAT32_R);
+			pclMainSceneManager->setShadowTextureSelfShadow(true);
+			pclMainSceneManager->setShadowColour(Ogre::ColourValue(0.1, 0.5, 0.1));
+			pclMainSceneManager->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::DefaultShadowCameraSetup()));
+		}
+		else if(tech == Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED)
+		{
+			pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_DIRECTIONAL, 3);
+			pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_POINT, 3);
+			pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_SPOTLIGHT, 3);
+
+			pclMainSceneManager->setShadowTextureSettings(512, 3, Ogre::PF_FLOAT32_R);
+			pclMainSceneManager->setShadowTextureSelfShadow(true);
+
+			pclMainSceneManager->setShadowTextureCasterMaterial("PSSM/shadow_caster");
+
+			// Disable fog on the caster pass.
+			Ogre::MaterialPtr passCaterMaterial = Ogre::MaterialManager::getSingleton().getByName("PSSM/shadow_caster");
+			Ogre::Pass* pssmCasterPass = passCaterMaterial->getTechnique(0)->getPass(0);
+			pssmCasterPass->setFog(true);
+
+			// shadow camera setup
+			Ogre::PSSMShadowCameraSetup *pssmSetup = new Ogre::PSSMShadowCameraSetup();
+			pssmSetup->calculateSplitPoints(3, 0.1f, 100);
+			pssmSetup->setSplitPadding(0.01f);
+			pssmSetup->setOptimalAdjustFactor(0, 0.01f);
+			pssmSetup->setOptimalAdjustFactor(1, 0.01f);
+			pssmSetup->setOptimalAdjustFactor(2, 0.01f);
+
+			pclMainSceneManager->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(pssmSetup));
+	
+			Ogre::RTShader::SubRenderState* subRenderState = pclShaderGenerator->createSubRenderState(Ogre::RTShader::IntegratedPSSM3::Type);	
+			Ogre::RTShader::IntegratedPSSM3* pssm3SubRenderState = static_cast<Ogre::RTShader::IntegratedPSSM3*>(subRenderState);
+			const Ogre::PSSMShadowCameraSetup::SplitPointList& srcSplitPoints = pssmSetup->getSplitPoints();
+			Ogre::RTShader::IntegratedPSSM3::SplitPointList dstSplitPoints;
+
+			for (unsigned int i=0; i < srcSplitPoints.size(); ++i)
+			{
+				dstSplitPoints.push_back(srcSplitPoints[i]);
+			}
+
+			pssm3SubRenderState->setSplitPoints(dstSplitPoints);
+			schemRenderState->addTemplateSubRenderState(subRenderState);
+		}
 	}
 
 	/*

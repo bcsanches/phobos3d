@@ -82,6 +82,12 @@ namespace Phobos
 		pclCamera->setNearClipDistance(distance);
 	}
 
+	void GameCamera_c::SetFarClipDistance(const Float_t distance)
+	{
+		fpFarPlane = distance;
+		pclCamera->setFarClipDistance(distance);
+	}
+
 	void GameCamera_c::Enable()
 	{
 		//PH_ASSERT(pclCamera == NULL);

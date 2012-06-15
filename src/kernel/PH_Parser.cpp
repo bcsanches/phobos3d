@@ -20,10 +20,11 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	#define IS_NUMBER(X) (((X >= '0') && (X <= '9')) || (X == '.'))
+	#define IS_DIGIT(X) (((X >= '0') && (X <= '9')))
+	#define IS_NUMBER(X) (IS_DIGIT(X) || (X == '.'))	
 
 	#define IS_ID_START(X) (((X >= 'a') && (X <= 'z')) || ((X >= 'A') && (X <= 'Z')) || (X == '_'))
-	#define IS_ID(X) (IS_NUMBER(X) || IS_ID_START(X) || (X == '-'))
+	#define IS_ID(X) (IS_DIGIT(X) || IS_ID_START(X) || (X == '-'))
 	#define IS_NUMBER_START(X) ((X == '-') || IS_NUMBER(X))
 
 	Parser_c::Parser_c(void):
@@ -110,6 +111,11 @@ namespace Phobos
 					RETURN_TOKEN(TOKEN_EQUAL);
 					break;
 
+				case ':':
+					strToken += ch;
+					RETURN_TOKEN(TOKEN_COLON);
+					break;
+
 				case ';':
 					strToken += ch;
 					RETURN_TOKEN(TOKEN_SEMI_COLON);
@@ -143,20 +149,43 @@ namespace Phobos
 					//-------------------------
 					(*pclStream)>>ch;
 
-					if((!(pclStream->good())) || (ch != '/'))
+					if((!(pclStream->good())) || ((ch != '/') && (ch != '*')))
 					{
 						this->SetLookAhead(ch);
 						RETURN_TOKEN(TOKEN_ERROR);
 					}
 
-					//-----------------------
-					do
+					if(ch == '*')
 					{
-						(*pclStream)>>ch;
-						e = pclStream->good();
-						if(e != true)
-							RETURN_TOKEN(TOKEN_EOF);
-					} while(ch != '\n');
+						bool commentClosing = false;
+						for(;;)
+						{
+							(*pclStream)>>ch;
+							e = pclStream->good();
+							if(e != true)
+								RETURN_TOKEN(TOKEN_EOF);
+
+							if(ch == '*')
+							{
+								commentClosing = true;
+							}
+							else if(commentClosing && ch == '/')
+								break;
+							else
+								commentClosing = false;
+						}
+					}
+					else
+					{
+						//-----------------------
+						do
+						{
+							(*pclStream)>>ch;
+							e = pclStream->good();
+							if(e != true)
+								RETURN_TOKEN(TOKEN_EOF);
+						} while(ch != '\n');
+					}
 					break;
 
 				case '\"':

@@ -62,6 +62,11 @@ BOOST_AUTO_TEST_CASE(dictionary_basic)
 	stream <<	"height=1.0;" << endl;
 	stream <<	"radius=2.0;" << endl;
 	stream << "}";
+	stream << "RigidBody" << endl; //no name test
+	stream << "{" << endl;
+	stream <<	"height=1.0;" << endl;
+	stream <<	"radius=2.0;" << endl;
+	stream << "}";
 
 	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
 
@@ -466,4 +471,117 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance_setters)
 	//REstore original hive
 	player->SetBaseHive("OtherDef");
 	BOOST_REQUIRE(player->GetString("health").compare("200") == 0);	
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "EntityDef InfoPlayerStart" << endl;
+	stream << "{" << endl;
+	stream <<	"className=Entity;" << endl;
+	stream <<	"health=100;" << endl;
+	stream <<	"weight=2.0;" << endl;
+	stream <<	"description=\"bla bla\";" << endl;
+	stream << "}" << endl;
+	stream << endl << endl;
+	stream << "EntityDef SuperPlayerStart: InfoPlayerStart" << endl;
+	stream << "{" << endl;	
+	stream <<	"health=200;" << endl;	
+	stream <<	"boost=2;" << endl;	
+	stream << "}";
+	stream << "OtherDef Player: EntityDef.InfoPlayerStart" << endl;
+	stream << "{" << endl;	
+	stream << "}";
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	manager->Load(stream);
+
+	//test both forms of retrieving data	
+	DictionaryPtr_t player = manager->GetDictionaryHive("OtherDef")->GetDictionary("Player");
+
+	//now check overriding
+	BOOST_REQUIRE(player->GetString("health").compare("100") == 0);
+
+	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("EntityDef")->GetDictionary("SuperPlayerStart");
+	BOOST_REQUIRE(superPlayer->GetString("health").compare("200") == 0);	
+}
+
+
+BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_variations)
+{
+	KernelInstance_s instance;
+
+	stringstream stream;
+
+	stream << "EntityDef InfoPlayerStart" << endl;
+	stream << "{" << endl;	
+	stream << "}" << endl;
+	stream << endl << endl;
+	stream << "EntityDef SuperPlayerStart: InfoPlayerStart" << endl;
+	stream << "{" << endl;		
+	stream << "}";
+	//nameless
+	stream << "EntityDef : EntityDef.InfoPlayerStart" << endl;
+	stream << "{" << endl;	
+	stream << "}";
+	//nameless twice to catch a bug when DOT is not correct handled
+	stream << "EntityDef : EntityDef.InfoPlayerStart" << endl;
+	stream << "{" << endl;	
+	stream << "}";
+
+	//nameless
+	stream << "EntityDef : InfoPlayerStart" << endl;
+	stream << "{" << endl;	
+	stream << "}";
+
+	//nameless
+	stream << "EntityDef " << endl;
+	stream << "{" << endl;	
+	stream << "}";
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	//only parsing
+	manager->Load(stream);	
+}
+
+BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_errors)
+{
+	KernelInstance_s instance;
+
+	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+
+	{
+		stringstream stream;
+
+		stream << "EntityDef :2" << endl;
+		stream << "{" << endl;	
+		stream << "}" << endl;		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		stringstream stream;
+
+		stream << "EntityDef : abc." << endl;
+		stream << "{" << endl;	
+		stream << "}" << endl;		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
+
+	{
+		stringstream stream;
+
+		stream << "EntityDef : abc abc" << endl;
+		stream << "{" << endl;	
+		stream << "}" << endl;		
+
+		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+	}
 }

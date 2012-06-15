@@ -159,9 +159,11 @@ namespace Phobos
 			bool GetBool(const String_c &key) const;
 
 			void Get4Float(float values[4], const String_c &key) const;
+			bool TryGet4Float(float values[4], const String_c &key) const;
 			void Get3Float(float values[3], const String_c &key) const;
 			int GetInt(const String_c &key) const;
 			float GetFloat(const String_c &key) const;
+			bool TryGetFloat(float &outValue, const String_c &key) const;
 
 			void SetString(const String_c &key, const String_c &value);
 			void SetCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns);

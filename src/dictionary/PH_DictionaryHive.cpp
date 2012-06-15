@@ -29,7 +29,8 @@ namespace Phobos
 	}
 
 	DictionaryHive_c::DictionaryHive_c(const String_c &name):
-		Node_c(name, PRIVATE_CHILDREN)
+		Node_c(name, PRIVATE_CHILDREN),
+		uSequence(0)
 	{
 		//empty
 	}
@@ -47,10 +48,66 @@ namespace Phobos
 	{
 		String_c tokenValue;
 		ParserTokens_e token = parser.GetToken(&tokenValue);
-		if(token != TOKEN_ID)
-			PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
 
-		DictionaryPtr_t dict = Dictionary_c::Create(tokenValue);
+		String_c dictName;
+		String_c inherit;
+		String_c baseHive;
+
+		if(token == TOKEN_ID)
+		{
+			dictName.swap(tokenValue);
+
+			token = parser.GetToken(&tokenValue);
+		}
+
+		if(token == TOKEN_COLON)
+		{
+			token = parser.GetToken(&baseHive);
+			if(token != TOKEN_ID)
+			{
+				PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
+			}			
+
+			token = parser.GetToken(&tokenValue);
+			if(token == TOKEN_DOT)
+			{
+				token = parser.GetToken(&inherit);
+				if(token != TOKEN_ID)
+				{
+					PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
+				}				
+
+				//grab next token (must be a {, to be handled later if nameless)
+				token = parser.GetToken(&tokenValue);
+			}
+			else if(token != TOKEN_OPEN_BRACE)
+				PH_RaiseDictionaryParseException(parser, TOKEN_OPEN_BRACE, token, tokenValue, "DictionaryHive_c::Load");
+			else
+			{
+				inherit.swap(baseHive);
+			}
+		}
+
+		if(token == TOKEN_OPEN_BRACE)
+		{
+			//generate name
+			if(dictName.empty())
+			{
+				dictName = "#autoName_";
+				dictName += NumberToString(uSequence++);
+			}
+
+			parser.PushToken();
+		}		
+
+		DictionaryPtr_t dict = Dictionary_c::Create(dictName);
+
+		if(!baseHive.empty())
+			dict->SetBaseHive(baseHive);
+
+		if(!inherit.empty())
+			dict->SetInherited(inherit);
+
 		dict->Load(parser);
 
 		this->AddDictionary(dict);		

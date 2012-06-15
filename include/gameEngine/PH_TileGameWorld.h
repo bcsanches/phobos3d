@@ -49,6 +49,11 @@ namespace Phobos
 
 			void CreateMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform);
 
+			void CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict);
+			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName);
+
+			void CommitTempObject(TempStaticObject_s &obj);
+
 		private:
 			std::vector<StaticObject_s> vecObjects;
 

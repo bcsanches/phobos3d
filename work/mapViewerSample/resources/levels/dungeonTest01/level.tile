@@ -2,10 +2,10 @@ LevelInfo worldspawn
 {       
   inherit= TileWorldSpawn;
   baseHive = EntityDef;
+                            
   
-  ambientColor = "0.2 0.2 0.2 1";
-            
-            
+  
+  
   map = new CharMatrix(                      
         "################",
         "#..............#",
@@ -20,49 +20,123 @@ LevelInfo worldspawn
         "################"
   );
   
+  //ambientColor = "0.01 0.01 0.01 1";
+  //ambientColor = "0.1 0.1 0.1 1";
+  ambientColor = "0.025 0.025 0.025 1";
+  //ambientColor = "0.5 0.5 0.5 1";
+  //ambientColor = "0 0 0 1";
+  
   tileSet = BaseTilesDef;   
 }
 
-DynamicEntities infoPlayerStart
+DynamicEntities infoPlayerStart : EntityDef.InfoPlayerStart
 {
   tileRow = 1;
   tileCol = 1;  
   
-  faces = "east"; //or east
-  
-  baseHive="EntityDef";
-  inherit="InfoPlayerStart";
+  faces = "east"; //or east   
 }
 
-DynamicEntities skeletonTorch0
+StaticEntities  : StaticEntityDef.PointLight
+{    
+  //attenuation="100 0 3 0";
+  //attenuation = "1000 1.0 0.014 0.0007";
+  
+  radius=3;
+  
+  diffuse="1 1 1 1";
+    
+  tileRow = 4;
+  tileCol = 3;  
+}
+
+StaticEntities  : StaticEntityDef.PointLight
+{    
+  attenuation="100 0 3 0";  
+  //attenuation = "1000 1.0 0.014 0.0007";
+  radius=3;
+  
+  diffuse="1 0 0 1";
+    
+  tileRow = 5;
+  tileCol = 8;  
+}
+
+StaticEntities : StaticEntityDef.PointLight
+{    
+  attenuation="100 0 3 0";
+  //attenuation = "1000 1.0 0.014 0.0007";
+  radius=3;
+  
+  diffuse="0 1 0 1";
+    
+  tileRow = 5;
+  tileCol = 9;  
+}
+
+StaticEntities  : StaticEntityDef.PointLight
+{    
+  attenuation="100 0 3 0";
+  //attenuation = "1000 1.0 0.014 0.0007";
+  radius=3;
+  
+  diffuse="0 0 1 1";
+    
+  tileRow = 1;
+  tileCol = 4;  
+}
+
+StaticEntities  : StaticEntityDef.PointLight
 {
+  //attenuation="100 0 1 0";
+  //attenuation = "1000 1.0 0.014 0.0007";
+  radius=20;
+  
+  diffuse="1 0 1 1";
+    
+  tileRow = 1;
+  tileCol = 10;  
+}
+
+
+/*
+StaticEntities : StaticEntityDef.StaticModel
+{
+  meshfile="skeltorch.mesh";
+  
+  scale="0.3 0.3 0.3";
+  
+  tileRow = 4;
+  tileCol = 8;
+}
+
+StaticEntities : StaticEntityDef.StaticModel
+{
+  meshfile="barrel.mesh";
+  
+  scale="0.3 0.3 0.3";
+  
   tileRow = 5;
   tileCol = 8;
-  
-  faces = "right";
-  
-  baseHive="EntityDef";
-  inherit=SkeletonTorch;
 }
 
-DynamicEntities skeletonTorch1
-{
-  tileRow = 5;
-  tileCol = 9;
-  
-  faces = "right";
-  
-  baseHive="EntityDef";
-  inherit=SkeletonTorch;
-}
 
-DynamicEntities skeletonTorch2
+StaticEntities : StaticEntityDef.StaticModel
 {
+  meshfile="ogre.mesh";
+  
+  scale="0.3 0.3 0.3";
+  
   tileRow = 4;
-  tileCol = 3;
+  tileCol = 10;
+}             */
+
+StaticEntities : StaticEntityDef.StaticModel
+{
+  meshfile="rock.05.mesh";
   
-  faces = "right";
+  scale="0.05 0.05 0.05";
   
-  baseHive="EntityDef";
-  inherit=SkeletonTorch;
+  tileRow = 2;
+  tileCol = 10;
 }

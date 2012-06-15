@@ -131,7 +131,14 @@ namespace Phobos
 		{
 			this->SetFrameRate(updateTime);
 						
-			Float_t lastFrameTime = clTimer.Elapsed();
+			Float_t lastFrameTime = clTimer.Elapsed();		
+
+			//FIXME HACK, fIX THIS
+			if(lastFrameTime > 1)
+			{
+				clTimer.Reset();
+				continue;
+			}
 
 			if(varFixedTime.GetBoolean())
 				lastFrameTime = updateTime;
@@ -150,7 +157,7 @@ namespace Phobos
 				//this happens on debug mode while stopped on break points
 				if(executionTime > 20)
 					executionTime = updateTime;
-			#endif
+			#endif				
 
 			//update the game on fixed time steps
 			while(executionTime >= updateTime)
@@ -160,14 +167,14 @@ namespace Phobos
 				
 				executionTime -= updateTime;
 			}
-			Float_t delta = (Float_t) executionTime / (Float_t) updateTime;
+			Float_t delta = (Float_t) executionTime / (Float_t) updateTime;			
 			
 			//Now update other modules as fast as we can
 			this->Update(totalFrameTime, delta);
 
 			//update it after frame
 			updateTime = GetUpdateTime();
-			clTimer.SetMinInterval( GetMinFrameTime() );	
+			clTimer.SetMinInterval( GetMinFrameTime() );				
 
 		} while(!fStopMainLoop);
 	}

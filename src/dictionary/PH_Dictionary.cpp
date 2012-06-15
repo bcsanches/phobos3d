@@ -297,6 +297,17 @@ namespace Phobos
 		sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
 	}
 
+	bool Dictionary_c::TryGet4Float(float values[4], const String_c &key) const
+	{
+		const String_c *value = this->TryGetString(key);
+		if(!value)
+			return false;
+
+		sscanf(value->c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
+
+		return true;
+	}
+
 	void Dictionary_c::Get3Float(float values[3], const String_c &key) const
 	{
 		const String_c &value = this->GetString(key);
@@ -328,6 +339,17 @@ namespace Phobos
 	float Dictionary_c::GetFloat(const String_c &key) const
 	{
 		return StringToFloat(this->GetString(key));
+	}
+
+	bool Dictionary_c::TryGetFloat(float &outValue, const String_c &key) const
+	{
+		const String_c *strValue = this->TryGetString(key);
+		if(!strValue)
+			return false;
+
+		outValue = StringToFloat(*strValue);
+
+		return true;
 	}
 
 	const Dictionary_c::MatrixDataHandle_c Dictionary_c::GetMatrix(const String_c &key) const

@@ -20,6 +20,35 @@ subject to the following restrictions:
 
 namespace Phobos
 {
+	void BaseOgreGameWorld_c::StaticObject_s::Clear()
+	{
+		RenderPtr_t render = Render_c::GetInstance();
+
+		if(pclSceneNode)
+		{
+			render->DestroySceneNode(pclSceneNode);
+			pclSceneNode = NULL;
+		}
+
+		if(pclLight)
+		{
+			render->DestroyLight(pclLight);
+			pclLight = NULL;
+		}
+
+		if(pclEntity)
+		{
+			render->DestroyEntity(pclEntity);
+			pclEntity = NULL;
+		}
+
+		if(pclRigidBody)
+		{
+			Physics::PhysicsManager_c::GetInstance()->DestroyRigidBody(pclRigidBody);
+			pclRigidBody = NULL;
+		}
+	}
+
 	BaseOgreGameWorld_c::TempStaticObject_s::~TempStaticObject_s()
 	{
 		RenderPtr_t render = Render_c::GetInstance();

@@ -44,7 +44,9 @@ namespace Phobos
 
 	
 		private:
-			DictionaryHive_c(const String_c &name);			
+			DictionaryHive_c(const String_c &name);
+
+			UInt_t	uSequence;
 	};
 }
 

@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <OgreEntity.h>
 
 #include <PH_Enum.h>
+#include <PH_Kernel.h>
 #include <PH_Render.h>
 #include <PH_Transform.h>
 
@@ -41,14 +42,38 @@ namespace Phobos
 	}
 
 	TileGameWorld_c::~TileGameWorld_c()
-	{
-		RenderPtr_t render = Render_c::GetInstance();
-
+	{		
 		BOOST_FOREACH(StaticObject_s &obj, vecObjects)
 		{
-			render->DestroySceneNode(obj.pclSceneNode);
-			render->DestroyEntity(obj.pclEntity);
+			obj.Clear();
 		}
+	}
+
+	void TileGameWorld_c::CommitTempObject(TempStaticObject_s &obj)
+	{
+		StaticObject_s object;
+		obj.Commit(object);
+
+		vecObjects.push_back(object);
+	}
+
+	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict)
+	{
+		obj.pclSceneNode = Render_c::GetInstance()->CreateSceneNode();
+
+		Transform_c transform;
+		this->LoadTileTransform(transform, dict);
+
+		obj.pclSceneNode->setPosition(transform.GetOrigin());
+		obj.pclSceneNode->setOrientation(transform.GetRotation());
+	}
+
+	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName)
+	{
+		obj.pclEntity = Render_c::GetInstance()->CreateEntity(meshName);
+		obj.pclEntity->setCastShadows(true);
+
+		obj.pclSceneNode->attachObject(obj.pclEntity);
 	}
 
 	void TileGameWorld_c::CreateMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform)
@@ -58,9 +83,7 @@ namespace Phobos
 		RenderPtr_t render = Render_c::GetInstance();
 		obj.pclSceneNode = render->CreateSceneNode();
 
-		obj.pclEntity = render->CreateEntity(meshName);
-
-		obj.pclSceneNode->attachObject(obj.pclEntity);
+		this->CreateStaticObjectMesh(obj, meshName);
 
 		obj.pclSceneNode->setScale(tileScale, tileScale, tileScale);
 		obj.pclSceneNode->setPosition(this->CalculatePosition(row, col));
@@ -68,10 +91,7 @@ namespace Phobos
 		obj.pclSceneNode->translate(transform.GetOrigin());
 		obj.pclSceneNode->rotate(transform.GetRotation());
 
-		StaticObject_s object;
-		obj.Commit(object);
-
-		vecObjects.push_back(object);
+		this->CommitTempObject(obj);		
 	}
 
 	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale)
@@ -118,8 +138,9 @@ namespace Phobos
 		Dictionary_c::MatrixDataHandle_c handle = worldEntityDictionary.GetMatrix("map");
 
 		RenderPtr_t render = Render_c::GetInstance();
+				
+		//render->SetShadowMode(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-		//render->SetFog(Ogre::FOG_EXP, Ogre::ColourValue::Black, 0.8f, 1, 5);		
 		render->SetAmbientColor(DictionaryGetColour(worldEntityDictionary, "ambientColor"));
 
 		for(int i = 0, numRows = handle.GetNumRows(); i < numRows; ++i)
@@ -158,7 +179,80 @@ namespace Phobos
 						break;
 				}
 			}
-		}		
+		}
+
+		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
+
+		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
+		{
+			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
+
+			try
+			{				
+				const String_c &type = dict->GetString("type");
+
+				if(type.compare("Light") == 0)
+				{
+					const String_c &lightType = dict->GetString("lightType");
+					if(lightType.compare("Point") == 0)
+					{
+						TempStaticObject_s obj;
+
+						this->CreateStaticObjectNode(obj, *dict.get());										
+
+						obj.pclLight = render->CreateLight();
+						obj.pclLight->setType(Ogre::Light::LT_POINT);
+						obj.pclLight->setCastShadows(true);
+
+						float attenuation[4];
+						if(dict->TryGet4Float(attenuation, "attenuation"))
+						{
+							dict->Get4Float(attenuation, "attenuation");
+							obj.pclLight->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
+						}
+						
+						float radius;
+						if(dict->TryGetFloat(radius, "radius"))
+						{
+							//based on: http://imdoingitwrong.wordpress.com/2011/01/31/light-attenuation/
+							obj.pclLight->setAttenuation(radius, 1, 2 / radius, 1 / (radius * radius));
+						}
+
+						obj.pclLight->setDiffuseColour(DictionaryGetColour(*dict, "diffuse"));
+						obj.pclLight->setSpecularColour(DictionaryGetColour(*dict, "specular"));
+
+						obj.pclSceneNode->attachObject(obj.pclLight);
+
+						this->CommitTempObject(obj);
+					}
+					else
+					{
+						Kernel_c::GetInstance().LogStream() << "[TileGameWorld_c::Load] Unknown light object type: " << lightType;
+					}
+				}
+				else if(type.compare("Model") == 0)
+				{
+					TempStaticObject_s obj;
+						
+					this->CreateStaticObjectNode(obj, *dict.get());
+					
+					obj.pclSceneNode->setScale(DictionaryGetVector3(*dict, "scale"));
+
+					const String_c &meshName = dict->GetString("meshfile");
+					this->CreateStaticObjectMesh(obj, meshName);
+
+					this->CommitTempObject(obj);
+				}
+				else
+				{
+					Kernel_c::GetInstance().LogStream() << "[TileGameWorld_c::Load] Unknown static object type: " << type;
+				}
+			}
+			catch(Exception_c &ex)
+			{
+				Kernel_c::GetInstance().LogStream() << "[TileGameWorld_c::Load] Exception loading static object: " << ex.what();
+			}
+		}
 	}
 
 	struct DirectionType_s
@@ -179,6 +273,21 @@ namespace Phobos
 		{"left", TileTransform_c::DIR_WEST}
 	};
 
+	struct HeightType_s
+	{
+		const char						*pstrzName;
+		TileTransform_c::Height_e		eValue;
+	};
+
+	static HeightType_s stHeightTypes_gl[] =
+	{
+		{"floor", TileTransform_c::HGT_FLOOR},
+		{"middle", TileTransform_c::HGT_MIDDLE},
+		{"ceiling", TileTransform_c::HGT_CEILING},
+		{"aboveFloor", TileTransform_c::HGT_ABOVE_FLOOR},
+		{"belowCeiling", TileTransform_c::HGT_BELOW_CEILING},
+	};
+
 	Ogre::Vector3 TileGameWorld_c::CalculatePosition(int row, int col) const
 	{
 		return Ogre::Vector3((fpTileSize * col) + fpTileSize / 2, 0, (fpTileSize * row) + fpTileSize / 2);
@@ -187,6 +296,7 @@ namespace Phobos
 	void TileGameWorld_c::LoadTileTransform(Transform_c &out, const Dictionary_c &entity) const
 	{
 		static Enum_c<TileTransform_c::Direction_e, DirectionType_s> clDirectionType_gl(stDirectionTypes_gl);
+		static Enum_c<TileTransform_c::Height_e, HeightType_s> clHeightType_gl(stHeightTypes_gl);
 
 		const int row = entity.GetInt(PH_ENTITY_KEY_TILE_ROW);		
 		const int col = entity.GetInt(PH_ENTITY_KEY_TILE_COL);
@@ -201,8 +311,45 @@ namespace Phobos
 
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "TileGameWorld_c::LoadTileTransform", stream.str());
 		}
+		
 
 		out.SetOrigin(this->CalculatePosition(row, col));
 		out.SetRotation(Ogre::Quaternion(Ogre::Degree(90.0f * dir), Ogre::Vector3::UNIT_Y));		
+
+		const String_c *heightStr = entity.TryGetString("tileHeight");
+		if(heightStr != NULL)
+		{
+			TileTransform_c::Height_e height;
+
+			if(!clHeightType_gl.TryGetValue(height, *heightStr))
+			{
+				std::stringstream stream;
+				stream << "Invalid value for tileHeight parameters: " << (*heightStr);
+
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "TileGameWorld_c::LoadTileTransform", stream.str());
+			}
+
+			switch(height)
+			{
+				case TileTransform_c::HGT_FLOOR:
+					break;
+
+				case TileTransform_c::HGT_MIDDLE:
+					out.Translate(Ogre::Vector3(0, fpTileSize / 2, 0));
+					break;
+
+				case TileTransform_c::HGT_CEILING:
+					out.Translate(Ogre::Vector3(0, fpTileSize, 0));
+					break;
+
+				case TileTransform_c::HGT_ABOVE_FLOOR:
+					out.Translate(Ogre::Vector3(0, fpTileSize * 0.1f, 0));
+					break;
+
+				case TileTransform_c::HGT_BELOW_CEILING:
+					out.Translate(Ogre::Vector3(0, fpTileSize - (fpTileSize * 0.1f), 0));
+					break;
+			}
+		}
 	}
 }

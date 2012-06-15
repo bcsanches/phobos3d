@@ -61,12 +61,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib OgreRTShaderSystem_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="..\..\..\lib\$(TargetName).lib"
+				ImportLibrary="..\..\..\lib\$(TargetName)_d.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -93,7 +93,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\..\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -118,7 +118,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_OGREENGINECORE_EXPORTS"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\ogreEngineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_CORE_EXPORTS;PH_SDL;PH_WIN32;PH_IGNORE_ASSERT;PH_MSVC;PH_RELEASE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,11 +137,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OgreMain.lib OgreTerrain.lib OgreRTShaderSystem.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool

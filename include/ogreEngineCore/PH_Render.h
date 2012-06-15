@@ -22,6 +22,7 @@ subject to the following restrictions:
 #include <boost/scoped_ptr.hpp>
 
 #include <OgrePrerequisites.h>
+#include <OgreRTShaderSystem.h>
 #include <OgreSceneManager.h>
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
@@ -36,6 +37,7 @@ subject to the following restrictions:
 namespace Phobos
 {
 	class Context_c;	
+	class ShaderGeneratorTechniqueResolverListener;
 
 	PH_DECLARE_NODE_PTR(Render);	
 
@@ -145,6 +147,8 @@ namespace Phobos
 			ContextVar_c						varRFullScreen;
 			ContextVar_c						varRRenderSystem;
 
+			ContextVar_c						varRShaderSystemLibPath;
+
 			ContextVar_c						varRCaelum;
 
 			ContextCmd_c						cmdOgreLoadPlugin;
@@ -155,11 +159,13 @@ namespace Phobos
 			ContextCmd_c						cmdSetShadowMode;
 			ContextCmd_c						cmdSetShadowFarDistance;			
 
-			boost::scoped_ptr<Ogre::Root>		spRoot;			
-			Ogre::RenderWindow					*pclOgreWindow;
-			Ogre::SceneManager					*pclMainSceneManager;
+			boost::scoped_ptr<Ogre::Root>								spRoot;
+			boost::scoped_ptr<ShaderGeneratorTechniqueResolverListener>	spShaderGeneratorTechiniqueResolverListener;
+			Ogre::RenderWindow											*pclOgreWindow;
+			Ogre::SceneManager											*pclMainSceneManager;
+			Ogre::RTShader::ShaderGenerator								*pclShaderGenerator;
 
-			Ogre::ShadowTechnique				eShadowMode;
+			Ogre::ShadowTechnique										eShadowMode;			
 
 			typedef std::list<String_c>			StringList_t;
 			StringList_t						lstPluginsName;

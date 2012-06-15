@@ -116,7 +116,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\physics&quot;;&quot;$(ProjectDir)..\..\..\include\ogreEngineCore&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PH_WIN32;PH_IGNORE_ASSERT;PH_MSVC;PH_RELEASE;PH_SDL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

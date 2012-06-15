@@ -35,14 +35,25 @@ namespace Phobos
 				DIR_WEST = 3
 			};
 
+			enum Height_e
+			{
+				HGT_FLOOR,
+				HGT_MIDDLE,
+				HGT_CEILING,
+
+				HGT_BELOW_CEILING,
+				HGT_ABOVE_FLOOR
+			};
+
 		public:
-			TileTransform_c(UInt_t row, UInt_t col, Direction_e dir);
+			TileTransform_c(UInt_t row, UInt_t col, Direction_e dir, Height_e height);
 
 		private:
 			UInt_t iRow;
 			UInt_t iCol;
 
 			Direction_e eDirection;
+			Height_e eHeight;
 	};
 }
 

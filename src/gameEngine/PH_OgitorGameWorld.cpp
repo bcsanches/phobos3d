@@ -49,32 +49,16 @@ namespace Phobos
 	}
 
 	OgitorGameWorld_c::~OgitorGameWorld_c()
-	{
-		RenderPtr_t render = Render_c::GetInstance();
-
+	{		
 		if(pclTerrainGroup)
-			render->DestroyTerrainGroup(pclTerrainGroup);
+			Render_c::GetInstance()->DestroyTerrainGroup(pclTerrainGroup);
 
 		if(pclTerrainOptions)
-			delete pclTerrainOptions;
-
-		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
+			delete pclTerrainOptions;		
 
 		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
 		{
-			StaticObject_s &object = pair.second;
-
-			if(object.pclSceneNode)
-				render->DestroySceneNode(object.pclSceneNode);
-
-			if(object.pclLight)
-				render->DestroyLight(object.pclLight);
-
-			if(object.pclEntity)
-				render->DestroyEntity(object.pclEntity);
-
-			if(object.pclRigidBody)
-				physicsManager->DestroyRigidBody(object.pclRigidBody);				
+			pair.second.Clear();			
 		}
 	}
 

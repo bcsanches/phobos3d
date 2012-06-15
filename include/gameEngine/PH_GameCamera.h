@@ -43,6 +43,7 @@ namespace Phobos
 			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
 
 			void SetNearClipDistance(const Float_t distance);
+			void SetFarClipDistance(const Float_t distance);
 
 			void Enable();
 			void Disable();

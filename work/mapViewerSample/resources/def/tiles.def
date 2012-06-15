@@ -1,8 +1,8 @@
 TileSet BaseTilesDef
 {
-  wall =  "Plane_10x10.mesh";
-  ceiling = "Plane_10x10.mesh";
-  floor = "Plane_10x10.mesh";
+  wall =  "plane_1x1m.mesh";
+  ceiling = "plane_1x1m.mesh";
+  floor = "plane_1x1m.mesh";
   tileSize = 1;
-  tileScale = 0.1;
+  tileScale = 1;
 }

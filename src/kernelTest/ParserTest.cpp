@@ -34,6 +34,9 @@ BOOST_AUTO_TEST_CASE(parser_test)
 	str << "end" << endl;
 	str << "0.25" << endl;
 	str << ".." << endl;
+	str << "/*multi line comment to skuip" << endl;
+	str << "more comments line" << endl;
+	str << "comment end */" << endl;
 	str << "/bla" << endl << "id" << endl;
 
 	Parser_c parser;

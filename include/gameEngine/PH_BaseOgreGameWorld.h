@@ -41,6 +41,8 @@ namespace Phobos
 				Physics::PhysicsManager_c::CollisionShapeSharedPtr_t spCollisionShape;
 				btRigidBody *pclRigidBody;
 
+				void Clear();
+
 				inline StaticObject_s():
 					pclSceneNode(NULL),
 					pclEntity(NULL),

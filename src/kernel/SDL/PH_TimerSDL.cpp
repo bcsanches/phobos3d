@@ -17,8 +17,16 @@ namespace Phobos
 
 	Float_t Timer_c::Elapsed()
 	{
-		UInt_t ticks = SDL_GetTicks();
-		UInt_t elapsed = ticks - uLastTime;
+		UInt_t ticks = SDL_GetTicks();		
+		
+		//UInt_t elapsed = (ticks < uLastTime) ? ticks + (0xFFFFFFFF - uLastTime) : ticks - uLastTime;
+
+#if 0
+		if(ticks < uLastTime)
+			ticks = uLastTime+1;
+#endif
+
+		UInt_t elapsed = ticks - uLastTime;		
 
 		Float_t elapsedSeconds = elapsed / 1000.0f;
 		if((elapsedSeconds < fpMinInterval) || (elapsed == 0))

@@ -22,7 +22,9 @@ namespace Phobos
 {
 	SpectatorCamera_c::SpectatorCamera_c()
 	{
-		clCamera.SetNearClipDistance(0.1f);
+		clCamera.SetNearClipDistance(0.1f);		
+		clCamera.SetFarClipDistance(100);
+		//clCamera.SetFarClipDistance(5000);
 		clCamera.EnableViewport();
 	}
 
