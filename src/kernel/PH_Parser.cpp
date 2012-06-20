@@ -42,6 +42,7 @@ namespace Phobos
 	void Parser_c::SetStream(std::istream *stream)
 	{
 		pclStream = stream;
+		uCurrentLine = 0;
 
 		if(stream != NULL)
 			(*stream) >> std::noskipws;
@@ -101,6 +102,9 @@ namespace Phobos
 			switch(ch)
 			{
 				case '\n':
+					uCurrentLine++;
+					break;
+
 				case '\t':
 				case '\r':
 				case ' ':
@@ -172,7 +176,11 @@ namespace Phobos
 							else if(commentClosing && ch == '/')
 								break;
 							else
+							{
 								commentClosing = false;
+								if(ch == '\n')
+									++uCurrentLine;
+							}
 						}
 					}
 					else
@@ -185,6 +193,7 @@ namespace Phobos
 							if(e != true)
 								RETURN_TOKEN(TOKEN_EOF);
 						} while(ch != '\n');
+						uCurrentLine++;
 					}
 					break;
 

@@ -25,6 +25,7 @@ subject to the following restrictions:
 namespace Phobos
 {	
 	class Transform_c;
+	class TileTransform_c;
 
 	class PH_GAME_ENGINE_API TileGameWorld_c: public BaseOgreGameWorld_c
 	{
@@ -34,23 +35,28 @@ namespace Phobos
 
 			virtual void Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary);
 
+			TileTransform_c CreateTileTransform(const Dictionary_c &entity) const;
+			void LoadTileTransform(TileTransform_c &out, const Dictionary_c &entity) const;
 			void LoadTileTransform(Transform_c &out, const Dictionary_c &entity) const;
+			void TileTransform2Transform(Transform_c &out, const TileTransform_c &tileTransform) const;
 
 			Ogre::Vector3 CalculatePosition(int row, int col) const;
 		
 		private:			
-			void CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale);
-			void CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale);
+			void CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial);
+			void CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial);
 
-			void CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale);
-			void CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale);
-			void CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale);
-			void CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale);
+			void CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial);
+			void CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial);
+			void CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial);
+			void CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial);
 
-			void CreateMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform);
+			void SpawnMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform, const String_c *optionalMaterial);
+			void SpawnMesh(const TileTransform_c transform, const String_c &meshName, const Ogre::Vector3 &scale);
 
-			void CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict);
-			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName);
+			void CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform_c &tileTransform, const Ogre::Vector3 &scale);
+			void CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict, const Ogre::Vector3 &scale);
+			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const;
 
 			void CommitTempObject(TempStaticObject_s &obj);
 

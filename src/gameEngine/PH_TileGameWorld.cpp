@@ -35,6 +35,66 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
+	static inline bool CheckNorthTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	{
+		return (row > 0) && handle(row-1, col) == tile;
+	}
+
+	static inline bool CheckWestTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	{
+		return (col > 0) && handle(row, col-1) == tile;
+	}
+
+	static inline bool CheckSouthTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	{
+		return (row < handle.GetNumRows() - 1) && handle(row+1, col) == tile;
+	}		
+
+	static inline bool CheckEastTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	{
+		return (col < handle.GetNumColumns()-1) && handle(row, col+1) == tile;
+	}
+
+	static inline bool HasNorthWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckNorthTileEqual(handle, row, col, '#');
+	}
+
+	static inline bool HasWestWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckWestTileEqual(handle, row, col, '#');
+	}
+
+	static inline bool HasSouthWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckSouthTileEqual(handle, row, col, '#');
+	}	
+
+	static inline bool HasEastWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckEastTileEqual(handle, row, col, '#');
+	}
+
+	static inline bool IsNorthFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckNorthTileEqual(handle, row, col, '.');
+	}
+
+	static inline bool IsWestFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckWestTileEqual(handle, row, col, '.');
+	}
+
+	static inline bool IsSouthFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckSouthTileEqual(handle, row, col, '.');
+	}	
+
+	static inline bool IsEastFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	{
+		return CheckEastTileEqual(handle, row, col, '.');
+	}
+
 	TileGameWorld_c::TileGameWorld_c():
 		BaseOgreGameWorld_c()
 	{
@@ -57,33 +117,42 @@ namespace Phobos
 		vecObjects.push_back(object);
 	}
 
-	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict)
+	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform_c &tileTransform, const Ogre::Vector3 &scale)
 	{
 		obj.pclSceneNode = Render_c::GetInstance()->CreateSceneNode();
 
 		Transform_c transform;
-		this->LoadTileTransform(transform, dict);
+		this->TileTransform2Transform(transform, tileTransform);
 
 		obj.pclSceneNode->setPosition(transform.GetOrigin());
 		obj.pclSceneNode->setOrientation(transform.GetRotation());
+		obj.pclSceneNode->setScale(scale);
 	}
 
-	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName)
+	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict, const Ogre::Vector3 &scale)
+	{		
+		this->CreateStaticObjectNode(obj, this->CreateTileTransform(dict), scale);		
+	}
+
+	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const
 	{
 		obj.pclEntity = Render_c::GetInstance()->CreateEntity(meshName);
 		obj.pclEntity->setCastShadows(true);
 
+		if(optionalMaterial)
+			obj.pclEntity->setMaterialName(*optionalMaterial);
+
 		obj.pclSceneNode->attachObject(obj.pclEntity);
 	}
 
-	void TileGameWorld_c::CreateMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform)
+	void TileGameWorld_c::SpawnMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform, const String_c *optionalMaterial)
 	{
 		TempStaticObject_s obj;
 
 		RenderPtr_t render = Render_c::GetInstance();
 		obj.pclSceneNode = render->CreateSceneNode();
 
-		this->CreateStaticObjectMesh(obj, meshName);
+		this->CreateStaticObjectMesh(obj, meshName, optionalMaterial);
 
 		obj.pclSceneNode->setScale(tileScale, tileScale, tileScale);
 		obj.pclSceneNode->setPosition(this->CalculatePosition(row, col));
@@ -91,37 +160,76 @@ namespace Phobos
 		obj.pclSceneNode->translate(transform.GetOrigin());
 		obj.pclSceneNode->rotate(transform.GetRotation());
 
-		this->CommitTempObject(obj);		
+		this->CommitTempObject(obj);
 	}
 
-	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale)
+	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale)
+	{
+		TempStaticObject_s obj;							
+
+		this->CreateStaticObjectNode(obj, tileTransform, scale);
+		this->CreateStaticObjectMesh(obj, meshName, NULL);
+
+		this->CommitTempObject(obj);
+	}
+
+	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
 	{		
-		this->CreateMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)));
+		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)), optionalMaterial);
 	}
 
-	void TileGameWorld_c::CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale)
+	void TileGameWorld_c::CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
 	{
-		this->CreateMesh(row, col, meshName, tileScale, Transform_c());						
+		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(), optionalMaterial);						
 	}
 
-	void TileGameWorld_c::CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale)
+	void TileGameWorld_c::CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
 	{
-		this->CreateMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize/2, -fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)));
+		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize/2, -fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)), optionalMaterial);
 	}
 	
-	void TileGameWorld_c::CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale)
+	void TileGameWorld_c::CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
 	{
-		this->CreateMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize/2, fpTileSize/2), Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_X)));
+		this->SpawnMesh(
+			row, 
+			col, 
+			meshName, 
+			tileScale, 
+			Transform_c(
+				Ogre::Vector3(0, fpTileSize/2, fpTileSize/2), Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)
+			), 
+			optionalMaterial
+		);
 	}
 	
-	void TileGameWorld_c::CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale)
+	void TileGameWorld_c::CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
 	{
-		this->CreateMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(-fpTileSize/2, fpTileSize/2, 0), Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Z)));
+		this->SpawnMesh(
+			row, 
+			col, 
+			meshName, 
+			tileScale, 
+			Transform_c(
+				Ogre::Vector3(-fpTileSize/2, fpTileSize/2, 0), 
+				Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Z) * Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Y)
+			), 
+			optionalMaterial
+		);
 	}
 
-	void TileGameWorld_c::CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale)
+	void TileGameWorld_c::CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
 	{
-		this->CreateMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(fpTileSize/2, fpTileSize/2, 0), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Z)));
+		this->SpawnMesh(
+			row, 
+			col, 
+			meshName, 
+			tileScale, 
+			Transform_c(
+				Ogre::Vector3(fpTileSize/2, fpTileSize/2, 0), 
+				Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Z) * Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Y)
+			),
+			optionalMaterial
+		);
 	}
 
 	void TileGameWorld_c::Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary)
@@ -129,17 +237,21 @@ namespace Phobos
 		DictionaryPtr_t tileSetDef = DictionaryManager_c::GetInstance()->GetDictionaryHive("TileSet")->GetDictionary(worldEntityDictionary.GetString("tileSet"));
 
 		const String_c &wallMeshName = tileSetDef->GetString("wall");
+		const String_c *wallMaterial = tileSetDef->TryGetString("wallMaterial");
+
 		const String_c &floorMeshName = tileSetDef->GetString("floor");
+		const String_c *floorMaterial = tileSetDef->TryGetString("floorMaterial");
+
 		const String_c &ceilingMeshName = tileSetDef->GetString("ceiling");		
+		const String_c *ceilingMaterial = tileSetDef->TryGetString("ceilingMaterial");
+
 		const Float_t tileScale = tileSetDef->GetFloat("tileScale");
 
 		fpTileSize = tileSetDef->GetFloat("tileSize");
 
 		Dictionary_c::MatrixDataHandle_c handle = worldEntityDictionary.GetMatrix("map");
 
-		RenderPtr_t render = Render_c::GetInstance();
-				
-		//render->SetShadowMode(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+		RenderPtr_t render = Render_c::GetInstance();					
 
 		render->SetAmbientColor(DictionaryGetColour(worldEntityDictionary, "ambientColor"));
 
@@ -153,30 +265,112 @@ namespace Phobos
 						break;
 
 					case '.':
-						this->CreateFloorMesh(i, j, floorMeshName, tileScale);
-						this->CreateCeilingMesh(i, j, floorMeshName, tileScale);
+						this->CreateFloorMesh(i, j, floorMeshName, tileScale, floorMaterial);
+						this->CreateCeilingMesh(i, j, floorMeshName, tileScale, ceilingMaterial);
 
-						if((i > 0) && (handle(i-1, j) == '#'))
+						if(HasNorthWall(handle, i, j))
 						{
-							this->CreateNorthWallMesh(i, j, wallMeshName, tileScale);
+							this->CreateNorthWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
 						}
 
-						if((i < handle.GetNumRows()-1) && (handle(i+1, j) == '#'))
+						if(HasSouthWall(handle, i, j))						
 						{
-							this->CreateSouthWallMesh(i, j, wallMeshName, tileScale);
+							this->CreateSouthWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
 						}
 
-						if((j > 0) && (handle(i, j-1) == '#'))
+						if(HasWestWall(handle, i, j))
 						{
-							this->CreateWestWallMesh(i, j, wallMeshName, tileScale);
+							this->CreateWestWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
 						}
 
-						if((j < handle.GetNumColumns()-1) && (handle(i, j+1) == '#'))
+						if(HasEastWall(handle, i, j))						
 						{
-							this->CreateEastWallMesh(i, j, wallMeshName, tileScale);
+							this->CreateEastWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
 						}
 
 						break;
+				}
+			}
+		}
+
+		const String_c *columnMeshName = tileSetDef->TryGetString("columnMesh");
+		if(columnMeshName)
+		{
+			Ogre::Vector3 scale = DictionaryTryGetVector3(*tileSetDef, "columMeshScale", Ogre::Vector3(1, 1, 1));
+
+			for(int i = 0, numRows = handle.GetNumRows(); i < numRows; ++i)
+			{
+				for(int j = 0, numCols = handle.GetNumColumns(); j < numCols; ++j)
+				{
+					if(handle(i, j) != '.')
+					{
+						continue;
+					}
+
+					//North wall
+					if(HasNorthWall(handle, i, j))
+					{
+						//Try the ##
+						//        #X
+
+						if((j > 0) && (handle(i-1, j-1) == '#'))
+						{
+							TileTransform_c::Direction_e dir = IsWestFloor(handle, i, j) ? TileTransform_c::DIR_SOUTH : TileTransform_c::DIR_SOUTH_EAST;
+							
+							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_NORTH_WEST);
+
+							this->SpawnMesh(tileTransform, *columnMeshName, scale);													
+						}
+					}
+
+					//
+					//east wall
+					if(HasEastWall(handle, i, j))
+					{
+						//Try the ##
+						//        X#
+						if((i > 0) && handle(i-1,j+1) == '#')
+						{
+							TileTransform_c::Direction_e dir = IsNorthFloor(handle, i, j) ? TileTransform_c::DIR_WEST : TileTransform_c::DIR_SOUTH_WEST;
+							
+							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_NORTH_EAST);
+
+							this->SpawnMesh(tileTransform, *columnMeshName, scale);
+						}
+					}
+
+					//
+					//south wall
+					if(HasSouthWall(handle, i, j))
+					{
+						//Try the X#
+						//        ##
+						if((j < handle.GetNumColumns()-1) && (handle(i+1, j+1) == '#'))							
+						{
+							TileTransform_c::Direction_e dir = IsEastFloor(handle, i, j) ? TileTransform_c::DIR_NORTH : TileTransform_c::DIR_NORTH_WEST;
+							
+							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_SOUTH_EAST);
+
+							this->SpawnMesh(tileTransform, *columnMeshName, scale);
+						}
+					}
+					
+
+					//
+					//west wall
+					if(HasWestWall(handle, i, j))
+					{
+						//Try the #X
+						//        ##
+						if((i < handle.GetNumRows()-1) && handle(i+1,j-1) == '#')
+						{
+							TileTransform_c::Direction_e dir = IsSouthFloor(handle, i, j) ? TileTransform_c::DIR_EAST : TileTransform_c::DIR_NORTH_EAST;
+							
+							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_SOUTH_WEST);
+
+							this->SpawnMesh(tileTransform, *columnMeshName, scale);
+						}
+					}
 				}
 			}
 		}
@@ -198,7 +392,7 @@ namespace Phobos
 					{
 						TempStaticObject_s obj;
 
-						this->CreateStaticObjectNode(obj, *dict.get());										
+						this->CreateStaticObjectNode(obj, *dict.get(), Ogre::Vector3(1, 1, 1));										
 
 						obj.pclLight = render->CreateLight();
 						obj.pclLight->setType(Ogre::Light::LT_POINT);
@@ -232,16 +426,7 @@ namespace Phobos
 				}
 				else if(type.compare("Model") == 0)
 				{
-					TempStaticObject_s obj;
-						
-					this->CreateStaticObjectNode(obj, *dict.get());
-					
-					obj.pclSceneNode->setScale(DictionaryGetVector3(*dict, "scale"));
-
-					const String_c &meshName = dict->GetString("meshfile");
-					this->CreateStaticObjectMesh(obj, meshName);
-
-					this->CommitTempObject(obj);
+					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), DictionaryGetVector3(*dict, "scale"));					
 				}
 				else
 				{
@@ -264,10 +449,14 @@ namespace Phobos
 	static DirectionType_s stDirectionTypes_gl[] =
 	{
 		{"north", TileTransform_c::DIR_NORTH},
+		{"northWest", TileTransform_c::DIR_NORTH_WEST},
+		{"northEast", TileTransform_c::DIR_NORTH_EAST},
 		{"up", TileTransform_c::DIR_NORTH},		
 		{"east", TileTransform_c::DIR_EAST},
 		{"right", TileTransform_c::DIR_EAST},
 		{"south", TileTransform_c::DIR_SOUTH},
+		{"southWest", TileTransform_c::DIR_SOUTH_WEST},
+		{"southEast", TileTransform_c::DIR_SOUTH_EAST},
 		{"down", TileTransform_c::DIR_SOUTH},
 		{"west", TileTransform_c::DIR_WEST},
 		{"left", TileTransform_c::DIR_WEST}
@@ -292,8 +481,84 @@ namespace Phobos
 	{
 		return Ogre::Vector3((fpTileSize * col) + fpTileSize / 2, 0, (fpTileSize * row) + fpTileSize / 2);
 	}
+
+	void TileGameWorld_c::TileTransform2Transform(Transform_c &out, const TileTransform_c &tileTransform) const
+	{				
+		out.SetOrigin(this->CalculatePosition(tileTransform.GetRow(), tileTransform.GetCol()));
+		out.SetRotation(Ogre::Quaternion(Ogre::Degree(static_cast<Ogre::Real>(tileTransform.GetDirection())), Ogre::Vector3::UNIT_Y));
+
+		Ogre::Vector3 translation(0, 0, 0);
+
+		switch(tileTransform.GetHeight())
+		{
+			case TileTransform_c::HGT_FLOOR:
+				break;
+
+			case TileTransform_c::HGT_MIDDLE:
+				translation.y = fpTileSize / 2;
+				break;
+
+			case TileTransform_c::HGT_CEILING:
+				translation.y = fpTileSize;
+				break;
+
+			case TileTransform_c::HGT_ABOVE_FLOOR:
+				translation.y = fpTileSize * 0.1f;				
+				break;
+
+			case TileTransform_c::HGT_BELOW_CEILING:
+				translation.y = fpTileSize - (fpTileSize * 0.1f);				
+				break;
+		}		
+
+		switch(tileTransform.GetPosition())
+		{
+			case TileTransform_c::POS_NORTH_WEST:
+				translation.x = -fpTileSize / 2.0f;
+				translation.z = -fpTileSize / 2.0f;
+				break;
+
+			case TileTransform_c::POS_NORTH_CENTERED:				
+				translation.z = -fpTileSize / 2.0f;
+				break;
+
+			case TileTransform_c::POS_NORTH_EAST:
+				translation.x = fpTileSize / 2.0f;
+				translation.z = -fpTileSize / 2.0f;
+				break;
+
+			case TileTransform_c::POS_EAST_CENTERED:
+				translation.x = fpTileSize / 2.0f;				
+				break;
+
+			case TileTransform_c::POS_SOUTH_EAST:
+				translation.x = fpTileSize / 2.0f;				
+				translation.z = fpTileSize / 2.0f;
+				break;
+
+			case TileTransform_c::POS_SOUTH_CENTERED:							
+				translation.z = fpTileSize / 2.0f;
+				break;
+
+			case TileTransform_c::POS_SOUTH_WEST:
+				translation.x = -fpTileSize / 2.0f;				
+				translation.z = fpTileSize / 2.0f;
+				break;
+
+			case TileTransform_c::POS_WEST_CENTERED:
+				translation.x = -fpTileSize / 2.0f;								
+				break;
+		}
+
+		out.Translate(translation);
+	}
 	
 	void TileGameWorld_c::LoadTileTransform(Transform_c &out, const Dictionary_c &entity) const
+	{
+		this->TileTransform2Transform(out, this->CreateTileTransform(entity));
+	}
+
+	TileTransform_c  TileGameWorld_c::CreateTileTransform(const Dictionary_c &entity) const
 	{
 		static Enum_c<TileTransform_c::Direction_e, DirectionType_s> clDirectionType_gl(stDirectionTypes_gl);
 		static Enum_c<TileTransform_c::Height_e, HeightType_s> clHeightType_gl(stHeightTypes_gl);
@@ -311,45 +576,21 @@ namespace Phobos
 
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "TileGameWorld_c::LoadTileTransform", stream.str());
 		}
-		
 
-		out.SetOrigin(this->CalculatePosition(row, col));
-		out.SetRotation(Ogre::Quaternion(Ogre::Degree(90.0f * dir), Ogre::Vector3::UNIT_Y));		
-
+		TileTransform_c::Height_e height = TileTransform_c::HGT_FLOOR;
+				
 		const String_c *heightStr = entity.TryGetString("tileHeight");
 		if(heightStr != NULL)
-		{
-			TileTransform_c::Height_e height;
-
+		{			
 			if(!clHeightType_gl.TryGetValue(height, *heightStr))
 			{
 				std::stringstream stream;
 				stream << "Invalid value for tileHeight parameters: " << (*heightStr);
 
 				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "TileGameWorld_c::LoadTileTransform", stream.str());
-			}
-
-			switch(height)
-			{
-				case TileTransform_c::HGT_FLOOR:
-					break;
-
-				case TileTransform_c::HGT_MIDDLE:
-					out.Translate(Ogre::Vector3(0, fpTileSize / 2, 0));
-					break;
-
-				case TileTransform_c::HGT_CEILING:
-					out.Translate(Ogre::Vector3(0, fpTileSize, 0));
-					break;
-
-				case TileTransform_c::HGT_ABOVE_FLOOR:
-					out.Translate(Ogre::Vector3(0, fpTileSize * 0.1f, 0));
-					break;
-
-				case TileTransform_c::HGT_BELOW_CEILING:
-					out.Translate(Ogre::Vector3(0, fpTileSize - (fpTileSize * 0.1f), 0));
-					break;
-			}
+			}						
 		}
+
+		return TileTransform_c(row, col, dir, height, TileTransform_c::POS_CENTER);		
 	}
 }

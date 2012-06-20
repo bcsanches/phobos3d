@@ -56,6 +56,8 @@ namespace Phobos
 
 			inline void PushToken(void);
 
+			inline unsigned int GetCurrentLine() const;
+
 		private:
 			void SetLookAhead(Char_t ch);
 
@@ -69,11 +71,18 @@ namespace Phobos
 			Char_t		chLookAhead;
 			bool		fLookAhead;
 			bool		fTokenAhead;
+
+			unsigned int	uCurrentLine;
 	};
 
 	inline void Parser_c::PushToken(void)
 	{
 		fTokenAhead = true;
+	}
+
+	inline unsigned int Parser_c::GetCurrentLine() const
+	{
+		return uCurrentLine;
 	}
 }
 

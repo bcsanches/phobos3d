@@ -28,11 +28,20 @@ namespace Phobos
 		public:
 			enum Direction_e
 			{
-				//Keep those on sequece, so angle can be easily determined
-				DIR_NORTH = 2,
-				DIR_EAST = 1,
+				//Those values are the angle in degree
+				DIR_NORTH = 180,
+
+				DIR_NORTH_EAST = 135,
+				DIR_NORTH_WEST = 225,
+
+				DIR_EAST = 90,
+
 				DIR_SOUTH = 0,
-				DIR_WEST = 3
+
+				DIR_SOUTH_WEST = 315,
+				DIR_SOUTH_EAST = 45,
+
+				DIR_WEST = 270
 			};
 
 			enum Height_e
@@ -45,15 +54,54 @@ namespace Phobos
 				HGT_ABOVE_FLOOR
 			};
 
+			enum Position_e
+			{
+				POS_CENTER,
+				POS_NORTH_WEST,
+				POS_NORTH_CENTERED,
+				POS_NORTH_EAST,
+				POS_EAST_CENTERED,
+				POS_SOUTH_EAST,
+				POS_SOUTH_CENTERED,
+				POS_SOUTH_WEST,
+				POS_WEST_CENTERED
+			};
+
 		public:
-			TileTransform_c(UInt_t row, UInt_t col, Direction_e dir, Height_e height);
+			TileTransform_c(UInt_t row, UInt_t col, Direction_e dir, Height_e height, Position_e position);
+
+			inline int GetRow() const
+			{
+				return iRow;
+			}
+
+			inline int GetCol() const
+			{
+				return iCol;
+			}
+
+			Direction_e GetDirection() const
+			{
+				return eDirection;
+			}
+
+			Height_e GetHeight() const
+			{
+				return eHeight;
+			}
+
+			Position_e GetPosition() const
+			{
+				return ePosition;
+			}
 
 		private:
 			UInt_t iRow;
 			UInt_t iCol;
 
 			Direction_e eDirection;
-			Height_e eHeight;
+			Height_e	eHeight;
+			Position_e	ePosition;
 	};
 }
 

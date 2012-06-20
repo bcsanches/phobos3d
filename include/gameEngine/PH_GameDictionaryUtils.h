@@ -35,6 +35,22 @@ namespace Phobos
 		return tmp;
 	}
 
+	inline Ogre::Vector3 DictionaryTryGetVector3(const Dictionary_c &dict, const String_c &key, const Ogre::Vector3 &defaultValue)
+	{		
+		const String_c *value = dict.TryGetString(key);
+		if(value)
+		{
+			Ogre::Vector3 tmp;
+			sscanf(value->c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
+
+			return tmp;
+		}
+		else
+		{
+			return defaultValue;
+		}
+	}
+
 	inline Ogre::Quaternion DictionaryGetQuaternion(const Dictionary_c &dict, const String_c &key)
 	{
 		const String_c &value = dict.GetString(key);

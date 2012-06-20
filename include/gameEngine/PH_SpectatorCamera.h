@@ -47,6 +47,9 @@ namespace Phobos
 			inline void SetMoveSpeed(Float_t value);
 			inline void SetTurnSpeed(Float_t value);
 
+			inline void SetCameraNearClipDistance(Float_t near);
+			inline void SetCameraFarClipDistance(Float_t far);
+
 			void SetTransform(const Transform_c &transform);		
 
 		private:
@@ -76,6 +79,16 @@ namespace Phobos
 	inline void SpectatorCamera_c::SetTurnSpeed(Float_t value)
 	{
 		clCameraCommandProducer.SetTurnSpeed(value);
+	}
+
+	inline void SpectatorCamera_c::SetCameraNearClipDistance(Float_t near)
+	{
+		clCamera.SetNearClipDistance(near);
+	}
+
+	inline void SpectatorCamera_c::SetCameraFarClipDistance(Float_t far)
+	{
+		clCamera.SetFarClipDistance(far);
 	}
 }
 

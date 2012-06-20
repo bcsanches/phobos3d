@@ -78,6 +78,8 @@ namespace Phobos
 		{
 			if(var->GetBoolean())
 				this->EnableMouse();
+			else
+				this->DisableMouse();
 
 			var->AddListener(*this);
 		}

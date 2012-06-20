@@ -25,7 +25,7 @@ namespace Phobos
 	{
 		std::stringstream stream;
 
-		stream << "Expected " << Parser_c::GetTokenTypeName(expected) << " but got " << Parser_c::GetTokenTypeName(got) << " value: " << token << std::endl;
+		stream << "Expected " << Parser_c::GetTokenTypeName(expected) << " but got " << Parser_c::GetTokenTypeName(got) << " value: " << token << " line " << parser.GetCurrentLine() <<  std::endl;
 		//stream << "On line " << parser.Get
 
 		PH_RAISE(PARSER_EXCEPTION, module, stream.str());

@@ -18,11 +18,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	TileTransform_c::TileTransform_c(UInt_t row, UInt_t col, Direction_e dir, Height_e height):
+	TileTransform_c::TileTransform_c(UInt_t row, UInt_t col, Direction_e dir, Height_e height, Position_e position):
 		iRow(row),
 		iCol(col),
 		eDirection(dir),
-		eHeight(height)
+		eHeight(height),
+		ePosition(position)
 	{
 		//empty
 	}		

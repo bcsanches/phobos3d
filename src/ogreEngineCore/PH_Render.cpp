@@ -145,7 +145,7 @@ namespace Phobos
 		varRFullScreen("dvRFullScreen", "0"),
 		varRRenderSystem("dvRRenderSystem", "Direct3D9"),
 		varRShaderSystemLibPath("dvRShaderSystemLibPath", "resources/RTShaderLib"),
-		varRCaelum("dvRCaelum", "1"),
+		varRCaelum("dvRCaelum", "1"),		
 		cmdOgreLoadPlugin("ogreLoadPlugin"),
 		cmdOgreAddResourceLocation("ogreAddResourceLocation"),
 		cmdOgreInitialiseResourceGroup("ogreInitialiseResourceGroup"),
@@ -757,7 +757,7 @@ namespace Phobos
 
 			pclMainSceneManager->setShadowTextureSettings(512, 3, Ogre::PF_FLOAT32_R);
 			pclMainSceneManager->setShadowTextureSelfShadow(true);
-			pclMainSceneManager->setShadowColour(Ogre::ColourValue(0.1, 0.5, 0.1));
+			pclMainSceneManager->setShadowColour(Ogre::ColourValue(0.1f, 0.5f, 0.1f));
 			pclMainSceneManager->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::DefaultShadowCameraSetup()));
 		}
 		else if(tech == Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED)
