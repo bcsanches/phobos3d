@@ -31,6 +31,7 @@ subject to the following restrictions:
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_GameDictionaryUtils.h"
+#include "PH_MapLoader.h"
 #include "PH_TileTransform.h"
 
 namespace Phobos

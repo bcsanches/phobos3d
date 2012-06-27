@@ -18,6 +18,8 @@ subject to the following restrictions:
 
 #include <PH_Render.h>
 
+#include "PH_PhysicsManager.h"
+
 namespace Phobos
 {
 	void BaseOgreGameWorld_c::StaticObject_s::Clear()

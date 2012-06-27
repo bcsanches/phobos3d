@@ -113,7 +113,7 @@ namespace Phobos
 			}			
 
 			PH_ASSERT(pclRigidBody == NULL);
-			pclRigidBody = physicsManager->CreateRigidBody(Transform_c(position, quaternion), *spCollisionShape.get(), dictionary.GetFloat("mass"));			
+			pclRigidBody = physicsManager->CreateRigidBody(Transform_c(position, quaternion), *spCollisionShape, dictionary.GetFloat("mass"));			
 		}
 
 		void RigidBodyComponent_c::OnLoadFinished()

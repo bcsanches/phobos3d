@@ -350,11 +350,35 @@
 			Name="physics"
 			>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_BaseCollisionShape.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_BaseCollisionShape.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_BaseCollisionShapeFwd.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_CollisionMesh.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionMeshFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_CollisionShapes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionShapes.h"
 				>
 			</File>
 			<File

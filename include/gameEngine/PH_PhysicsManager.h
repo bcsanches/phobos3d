@@ -28,6 +28,7 @@ subject to the following restrictions:
 
 #include <PH_Singleton.h>
 
+#include "PH_BaseCollisionShape.h"
 #include "PH_CollisionMesh.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_GenericComponentManager.h"
@@ -52,16 +53,14 @@ namespace Phobos
 					CST_BOX,					
 					CST_SPHERE,
 					CST_MESH
-				};
-
-				typedef boost::shared_ptr<btCollisionShape> CollisionShapeSharedPtr_t;
+				};				
 
 				~PhysicsManager_c();
 
-				CollisionShapeSharedPtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
-				CollisionShapeSharedPtr_t CreateMeshShape(const Ogre::Mesh &mesh);
+				BaseCollisionShapePtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
+				BaseCollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
-				btRigidBody *CreateRigidBody(const Transform_c &transform, btCollisionShape &shape, Float_t mass);
+				btRigidBody *CreateRigidBody(const Transform_c &transform, BaseCollisionShape_c &shape, Float_t mass);
 				void DestroyRigidBody(btRigidBody *body);
 
 				void RegisterRigidBody(btRigidBody &body);
@@ -73,59 +72,17 @@ namespace Phobos
 				virtual void OnFixedUpdate();
 				virtual void OnUpdate();
 
-			private:
-				typedef boost::weak_ptr<btCollisionShape> CollisionShapeWeakPtr_t;				
-
-				struct CollisionShapeComparator_s;
-				typedef bool (*CompareShapeProc_t)(const CollisionShapeComparator_s &, const CollisionShapeComparator_s &);
-
-				struct BoxShapeInfo_s
-				{
-					Float_t v3Dimension[3];
-				};
-
-				struct SphereShapeInfo_s
-				{
-					Float_t fpRadius;
-				};
-
-				struct CollisionShapeComparator_s
-				{
-					inline CollisionShapeComparator_s(BoxShapeInfo_s &info, CompareShapeProc_t proc);
-					inline CollisionShapeComparator_s(const Ogre::Mesh &mesh, CompareShapeProc_t proc);
-
-					bool operator<(const CollisionShapeComparator_s &lhs) const; 
-
-					CollisionShapeTypes_e eType;
-
-					union 
-					{
-						BoxShapeInfo_s stBox;
-						SphereShapeInfo_s stSphere;
-					} uShapeInfo;
-
-					//Valid only when eType == CST_MESH
-					//We do not insert it on the union because it is an smart pointer (no POD)
-					boost::shared_ptr<CollisionMesh_c> spCollisionMesh;
-					String_c strMeshName;
-
-					CompareShapeProc_t pfnLessThanProc;
-				};
-
-				typedef std::map<CollisionShapeComparator_s, CollisionShapeWeakPtr_t> CollisionShapesMap_t;
+			private:								
+				typedef boost::intrusive::set<BaseCollisionShape_c, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
+				typedef boost::intrusive::set<CollisionMesh_c, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
 
 			private:
 
-				PhysicsManager_c();				
-				
-				inline CollisionShapeComparator_s CreateBoxComparator(Float_t x, Float_t y, Float_t z) const;
+				PhysicsManager_c();											
 
-				inline CollisionShapeComparator_s CreateMeshComparator(const Ogre::Mesh &mesh) const;
+				bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const BaseCollisionShape_c::Key_s &key);
 
-				static bool CompareBoxShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs);
-				static bool CompareMeshShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs);
-
-				CollisionShapeSharedPtr_t RetrieveCollisionShape(CollisionShapesMap_t::iterator &retIt, const CollisionShapeComparator_s &comp);
+				CollisionMeshPtr_t RetrieveCollisionMesh(const Ogre::Mesh &mesh);				
 
 			private:
 				boost::scoped_ptr<btDiscreteDynamicsWorld> spWorld;
@@ -135,12 +92,11 @@ namespace Phobos
 				btDbvtBroadphase						clBroadphase;
 				btSequentialImpulseConstraintSolver		clConstraintSolver;				
 
-				//
-				//Usar um std::map
-				//Cada componente da fisica deve armazenar um weak_ptr para o elemento do mapa
-				//Quando o componente for destruído, checar o weak_ptr, se der null, remover elemento do mapa
-				//Ou entao fazer um flush quando for feito o reset do engine de fisica				
-				CollisionShapesMap_t mapCollisionShapes;
+				
+				CollisionShapesSet_t setCollisionShapesCache;
+
+				//Because scaled meshes references the original mesh we keep a cache of all meshes that were been loaded
+				CollisionMeshesSet_t setCollisionMeshesCache;
 
 		};
 	}

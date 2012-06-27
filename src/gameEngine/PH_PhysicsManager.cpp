@@ -16,6 +16,8 @@ subject to the following restrictions:
 
 #include <PH_Core.h>
 
+#include "PH_BaseCollisionShape.h"
+#include "PH_CollisionShapes.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtil.h"
 #include "PH_RigidBodyComponent.h"
@@ -26,34 +28,6 @@ namespace Phobos
 	{
 		PH_DEFINE_DEFAULT_SINGLETON(PhysicsManager);
 
-		inline PhysicsManager_c::CollisionShapeComparator_s::CollisionShapeComparator_s(BoxShapeInfo_s &info, CompareShapeProc_t proc):
-			eType(CST_BOX),
-			pfnLessThanProc(proc)
-		{
-			uShapeInfo.stBox = info;
-		}
-
-		inline PhysicsManager_c::CollisionShapeComparator_s::CollisionShapeComparator_s(const Ogre::Mesh &mesh, CompareShapeProc_t proc):
-			eType(CST_MESH),
-			pfnLessThanProc(proc),
-			strMeshName(mesh.getName()),
-			spCollisionMesh(new CollisionMesh_c(mesh))
-		{
-
-		}
-
-		bool PhysicsManager_c::CollisionShapeComparator_s::operator<(const CollisionShapeComparator_s &rhs) const
-		{
-			if(eType == rhs.eType)
-			{				
-				return pfnLessThanProc(*this, rhs);
-			}
-			else
-			{
-				return eType < rhs.eType;
-			}
-		}
-
 		PhysicsManager_c::PhysicsManager_c():
 			GenericComponentManager_c("PhysicsManager", PRIVATE_CHILDREN)
 		{
@@ -61,7 +35,7 @@ namespace Phobos
 
 		PhysicsManager_c::~PhysicsManager_c()
 		{
-
+			//empty
 		}
 
 		void PhysicsManager_c::OnBoot()
@@ -93,18 +67,20 @@ namespace Phobos
 			GenericComponentManager_c::CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
 		}
 
-		btRigidBody *PhysicsManager_c::CreateRigidBody(const Transform_c &transform, btCollisionShape &shape, Float_t mass)
+		btRigidBody *PhysicsManager_c::CreateRigidBody(const Transform_c &transform, BaseCollisionShape_c &shape, Float_t mass)
 		{
 			bool dynamic = mass != 0;
 
 			btVector3 localInertia(0, 0, 0);
 
+			btCollisionShape &btShape = shape.GetCollisionShape();
+
 			if(dynamic)
-				shape.calculateLocalInertia(mass, localInertia);
+				btShape.calculateLocalInertia(mass, localInertia);
 
 			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform));
 
-			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &shape, localInertia);
+			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 
 			return new btRigidBody(info);
 		}
@@ -128,83 +104,83 @@ namespace Phobos
 			spWorld->removeRigidBody(&body);
 		}
 
-		PhysicsManager_c::CollisionShapeSharedPtr_t PhysicsManager_c::RetrieveCollisionShape(CollisionShapesMap_t::iterator &retIt, const CollisionShapeComparator_s &comparator)
-		{
-			retIt = mapCollisionShapes.lower_bound(comparator);
+		
+		bool PhysicsManager_c::RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const BaseCollisionShape_c::Key_s &key)
+		{			
+			retIt = setCollisionShapesCache.lower_bound(key, BaseCollisionShape_c::KeyComparator_s());
 
-			//found the element?
-			if((retIt == mapCollisionShapes.end()) || (mapCollisionShapes.key_comp()(comparator, retIt->first)))
+			//not found the element?
+			if((retIt != setCollisionShapesCache.end()) && (!BaseCollisionShape_c::KeyComparator_s()(key, *retIt)))
 			{
-				//Inser the new shape in the map
-				retIt = mapCollisionShapes.insert(retIt, std::make_pair(comparator, CollisionShapeSharedPtr_t()));
+				return true;
+			}			
+			else
+			{
+				return false;
+			}						
+		}		
+
+		BaseCollisionShapePtr_t PhysicsManager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
+		{
+			const BaseCollisionShape_c::BoxShapeInfo_s box = {x, y, z};
+			BaseCollisionShape_c::Key_s key(box);
+			
+			
+			CollisionShapesSet_t::iterator it;
+			if(!this->RetrieveCollisionShape(it, key))
+			{			
+				//create it and store on the map
+				BaseCollisionShapePtr_t ptr = boost::make_shared<BoxCollisionShape_c>(Ogre::Vector3(x, y, z));
+
+				setCollisionShapesCache.insert(it, *ptr);
+
+				return ptr;
+			}
+			else
+			{
+				return it->shared_from_this();
+			}			
+		}
+
+		CollisionMeshPtr_t PhysicsManager_c::RetrieveCollisionMesh(const Ogre::Mesh &mesh)
+		{			
+			CollisionMeshesSet_t::iterator it = setCollisionMeshesCache.lower_bound(mesh.getName(), CollisionMesh_c::Comparator_s());
+
+			if((it != setCollisionMeshesCache.end()) && (!CollisionMesh_c::Comparator_s()(mesh.getName(), *it)))
+			{						
+				return it->shared_from_this();
+			}
+			else
+			{
+				//not found, create a new one
+				CollisionMeshPtr_t ptr = boost::make_shared<CollisionMesh_c>(mesh);
+
+				setCollisionMeshesCache.insert(it, *ptr);
+
+				return ptr;
+			}			
+		}
+		
+		
+		BaseCollisionShapePtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		{
+			BaseCollisionShape_c::Key_s key(mesh, scale);
+
+			CollisionShapesSet_t::iterator it;			
+
+			//Element does not exists?
+			if(!this->RetrieveCollisionShape(it, key))
+			{
+				CollisionMeshPtr_t collisionMesh = this->RetrieveCollisionMesh(mesh);
+
+				BaseCollisionShapePtr_t ptr = boost::make_shared<ScaledMeshCollissionShape_c>(collisionMesh, scale);
+
+				setCollisionShapesCache.insert(it, *ptr);				
+
+				return ptr;
 			}			
 
-			return retIt->second.lock();
-		}
-
-		inline PhysicsManager_c::CollisionShapeComparator_s PhysicsManager_c::CreateBoxComparator(Float_t x, Float_t y, Float_t z) const
-		{
-			BoxShapeInfo_s box = {x, y, z};
-			return CollisionShapeComparator_s(box, PhysicsManager_c::CompareBoxShape);
+			return it->shared_from_this();	
 		}				
-
-		PhysicsManager_c::CollisionShapeSharedPtr_t PhysicsManager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
-		{
-			CollisionShapeComparator_s comparator = this->CreateBoxComparator(x, y, z);
-
-			CollisionShapesMap_t::iterator it;
-			CollisionShapeSharedPtr_t ptr = this->RetrieveCollisionShape(it, comparator);			
-
-			//Element does not exists?
-			if(ptr.get() == NULL)
-			{
-				//create it and store on the map
-				ptr.reset(new btBoxShape(btVector3(x * 0.5f, y * 0.5f, z * 0.5f)));
-				it->second = ptr;
-			}
-
-			return ptr;
-		}
-
-		bool PhysicsManager_c::CompareBoxShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs)
-		{
-			for(int i = 0;i < 3; ++i)
-			{
-				if(lhs.uShapeInfo.stBox.v3Dimension[i] == rhs.uShapeInfo.stBox.v3Dimension[i])
-					continue;
-
-				return lhs.uShapeInfo.stBox.v3Dimension[i] < rhs.uShapeInfo.stBox.v3Dimension[i];
-			}
-
-			return false;
-		}
-
-		PhysicsManager_c::CollisionShapeComparator_s PhysicsManager_c::CreateMeshComparator(const Ogre::Mesh &mesh) const
-		{
-			return CollisionShapeComparator_s(mesh, PhysicsManager_c::CompareMeshShape);
-		}
-
-		PhysicsManager_c::CollisionShapeSharedPtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh)
-		{
-			CollisionShapeComparator_s comparator = this->CreateMeshComparator(mesh);
-
-			CollisionShapesMap_t::iterator it;
-			CollisionShapeSharedPtr_t ptr = this->RetrieveCollisionShape(it, comparator);			
-
-			//Element does not exists?
-			if(ptr.get() == NULL)
-			{
-				//create it and store on the map
-				ptr.reset(new btBvhTriangleMeshShape(&it->first.spCollisionMesh->GetMeshInterface(), true));
-				it->second = ptr;
-			}
-
-			return ptr;	
-		}
-
-		bool PhysicsManager_c::CompareMeshShape(const CollisionShapeComparator_s &lhs, const CollisionShapeComparator_s &rhs)
-		{
-			return lhs.strMeshName < rhs.strMeshName;
-		}
 	}
 }

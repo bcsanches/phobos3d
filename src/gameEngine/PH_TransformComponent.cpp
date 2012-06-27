@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include "PH_EntityKeys.h"
 #include "PH_GameDictionaryUtils.h"
 #include "PH_TileGameWorld.h"
+#include "PH_WorldManager.h"
 
 namespace Phobos
 {

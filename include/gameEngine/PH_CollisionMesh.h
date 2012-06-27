@@ -14,19 +14,32 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_COLLISION_MESH_H
+#define PH_COLLISION_MESH_H
+
 #include <vector>
+
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/intrusive/set.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h>
 
 #include <OgrePrerequisites.h>
 
 #include <PH_Types.h>
+#include <PH_String.h>
+
+#include "PH_CollisionMeshFwd.h"
+
+class btBvhTriangleMeshShape;
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		class CollisionMesh_c
+		class CollisionMeshData_c: boost::noncopyable
 		{
 			public:
 				struct Vertex_s
@@ -35,7 +48,7 @@ namespace Phobos
 				};
 
 			public:			
-				CollisionMesh_c(const Ogre::Mesh &mesh);
+				CollisionMeshData_c(const Ogre::Mesh &mesh);
 
 				void AddMesh(const Ogre::Mesh &mesh);
 
@@ -58,34 +71,93 @@ namespace Phobos
 				btTriangleIndexVertexArray	clIndexVertexArray;
 		};		
 
-		inline UInt_t CollisionMesh_c::GetNumVertices(void) const
+		inline UInt_t CollisionMeshData_c::GetNumVertices(void) const
 		{
 			return vecVertices.size();
 		}
 
-		inline UInt_t CollisionMesh_c::GetNumIndices(void) const
+		inline UInt_t CollisionMeshData_c::GetNumIndices(void) const
 		{
 			return vecIndices.size();
 		}
 
-		inline UInt_t CollisionMesh_c::GetNumTriangles(void) const
+		inline UInt_t CollisionMeshData_c::GetNumTriangles(void) const
 		{
 			return vecIndices.size() / 3;
 		}
 
-		inline const CollisionMesh_c::Vertex_s *CollisionMesh_c::GetVertices(void) const
+		inline const CollisionMeshData_c::Vertex_s *CollisionMeshData_c::GetVertices(void) const
 		{
 			return vecVertices.empty() ? NULL : &vecVertices[0];
 		}
 
-		inline const UInt32_t *CollisionMesh_c::GetIndices(void) const
+		inline const UInt32_t *CollisionMeshData_c::GetIndices(void) const
 		{
 			return vecIndices.empty() ? NULL : &vecIndices[0];
 		}
 
-		inline btStridingMeshInterface &CollisionMesh_c::GetMeshInterface(void)
+		inline btStridingMeshInterface &CollisionMeshData_c::GetMeshInterface(void)
 		{
 			return(clIndexVertexArray);
 		}
+
+		//
+		//
+		//
+		//
+		//		
+		class CollisionMesh_c: 
+			public boost::enable_shared_from_this<CollisionMesh_c>,			
+			public boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> >
+		{
+			public:
+				CollisionMesh_c(const Ogre::Mesh &mesh);
+
+				inline const String_c &GetName() const;
+
+				inline btBvhTriangleMeshShape &GetTriangleMeshShape() const;
+
+				struct Comparator_s
+				{
+					bool operator()(const String_c &name, const CollisionMesh_c &collisionMesh) const;
+					bool operator()(const CollisionMesh_c &collisionMesh, const String_c &name) const;
+				};
+
+				inline bool operator<(const CollisionMesh_c &) const;
+
+			private:				
+				String_c			strName;
+
+				boost::scoped_ptr<CollisionMeshData_c> spMeshData;
+				boost::scoped_ptr<btBvhTriangleMeshShape> spMeshShape;
+		};
+
+		inline const String_c &CollisionMesh_c::GetName() const
+		{
+			return strName;
+		}
+
+		inline btBvhTriangleMeshShape &CollisionMesh_c::GetTriangleMeshShape() const
+		{
+			return *spMeshShape;
+		}
+
+		inline bool CollisionMesh_c::operator<(const CollisionMesh_c &rhs) const
+		{
+			return strName < rhs.strName;
+		}
+
+		inline bool CollisionMesh_c::Comparator_s::operator()(const String_c &name, const CollisionMesh_c &collisionMesh) const
+		{
+			return name < collisionMesh.GetName();
+		}
+
+		inline bool CollisionMesh_c::Comparator_s::operator()(const CollisionMesh_c &collisionMesh, const String_c &name) const
+		{
+			return collisionMesh.GetName() < name;
+		}
 	}
 }
+
+
+#endif

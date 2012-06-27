@@ -19,18 +19,20 @@ subject to the following restrictions:
 #include <OgreMesh.h>
 #include <OgreSubMesh.h>
 
+#include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
+
 #include <PH_Error.h>
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		CollisionMesh_c::CollisionMesh_c(const Ogre::Mesh &mesh)
+		CollisionMeshData_c::CollisionMeshData_c(const Ogre::Mesh &mesh)
 		{
 			this->AddMesh(mesh);
 		}
 
-		void CollisionMesh_c::AddMesh(const Ogre::Mesh &mesh)
+		void CollisionMeshData_c::AddMesh(const Ogre::Mesh &mesh)
 		{	
 			using namespace Ogre;
 
@@ -60,13 +62,13 @@ namespace Phobos
 			indexedMesh.m_triangleIndexBase = (const unsigned char *) this->GetIndices();
 			indexedMesh.m_triangleIndexStride = sizeof(UInt32_t) * 3;
 			indexedMesh.m_numVertices = this->GetNumVertices();
-			indexedMesh.m_vertexStride = sizeof(CollisionMesh_c::Vertex_s);
+			indexedMesh.m_vertexStride = sizeof(CollisionMeshData_c::Vertex_s);
 			indexedMesh.m_vertexBase = (const unsigned char *) this->GetVertices();
 
 			clIndexVertexArray.addIndexedMesh(indexedMesh);
 		}
 
-		void CollisionMesh_c::AddVertexData(const Ogre::VertexData &vertexData)
+		void CollisionMeshData_c::AddVertexData(const Ogre::VertexData &vertexData)
 		{
 			const size_t prevNumVertices = vecVertices.size();
 			vecVertices.resize(prevNumVertices + vertexData.vertexCount);
@@ -97,7 +99,7 @@ namespace Phobos
 			vbuf->unlock();
 		}
 
-		void CollisionMesh_c::AddIndexData(const Ogre::IndexData &index, UInt_t offset)
+		void CollisionMeshData_c::AddIndexData(const Ogre::IndexData &index, UInt_t offset)
 		{
 			using namespace Ogre;
 
@@ -131,6 +133,13 @@ namespace Phobos
 				}
 				ibuf->unlock();
 			}
+		}
+
+		CollisionMesh_c::CollisionMesh_c(const Ogre::Mesh &mesh):
+			spMeshData(new CollisionMeshData_c(mesh)),
+			strName(mesh.getName())			
+		{			
+			spMeshShape.reset(new btBvhTriangleMeshShape(&spMeshData->GetMeshInterface(), true, true));
 		}
 	}
 }

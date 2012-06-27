@@ -47,7 +47,7 @@ namespace Phobos
 				void OnLoadFinished();
 
 			private:
-				PhysicsManager_c::CollisionShapeSharedPtr_t spCollisionShape;
+				BaseCollisionShapePtr_t spCollisionShape;
 				btRigidBody *pclRigidBody;
 
 				TransformProperty_c *pprpTransform;
