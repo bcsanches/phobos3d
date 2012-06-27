@@ -24,7 +24,7 @@ subject to the following restrictions:
 #include "PH_EntityKeys.h"
 #include "PH_GameDictionaryUtils.h"
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtil.h"
+#include "PH_RigidBody.h"
 
 namespace Phobos
 {
@@ -48,37 +48,25 @@ namespace Phobos
 		};
 
 		RigidBodyComponent_c::RigidBodyComponent_c(const String_c &name, Entity_c &owner):
-			EntityComponent_c(name, owner),
-			pclRigidBody(NULL),
+			EntityComponent_c(name, owner),			
 			pprpTransform(NULL)
 		{
 			//empty
 		}
 
 		RigidBodyComponent_c::~RigidBodyComponent_c()
-		{
-			if(pclRigidBody != NULL)
-				PhysicsManager_c::GetInstance()->DestroyRigidBody(pclRigidBody);
-
+		{			
 			PhysicsManager_c::GetInstance()->Unregister(*this);
 		}
 
 		void RigidBodyComponent_c::SaveTransform()
-		{
-			btTransform bodyTransform;
-			pclRigidBody->getMotionState()->getWorldTransform(bodyTransform);
-
-			clPreviousTransform = MakeTransform(bodyTransform);
+		{			
+			clPreviousTransform = spRigidBody->GetTransform();
 		}
 
 		void RigidBodyComponent_c::UpdateTransform(Float_t delta)
-		{
-			const btMotionState *state = pclRigidBody->getMotionState();
-
-			btTransform bodyTransform;
-			state->getWorldTransform(bodyTransform);
-
-			pprpTransform->SetTransform(Transform_c::Interpolate(clPreviousTransform, MakeTransform(bodyTransform), delta));
+		{			
+			pprpTransform->SetTransform(Transform_c::Interpolate(clPreviousTransform, spRigidBody->GetTransform(), delta));
 		}
 
 		void RigidBodyComponent_c::OnLoad(const Dictionary_c &dictionary)
@@ -98,29 +86,31 @@ namespace Phobos
 
 			PhysicsManagerPtr_t physicsManager = PhysicsManager_c::GetInstance();
 
+			PH_ASSERT(!spRigidBody);			
+
+			Transform_c transform(position, quaternion);
+			Float_t mass = dictionary.GetFloat("mass");
+
 			switch(type)
 			{
 				case PhysicsManager_c::CST_BOX:
 					{
-						Ogre::Vector3 boxDimensions = DictionaryGetVector3(dictionary, "boxDimensions");
-						spCollisionShape = physicsManager->CreateBoxShape(boxDimensions.x, boxDimensions.y, boxDimensions.z);
+						Ogre::Vector3 boxDimensions = boxDimensions = DictionaryGetVector3(dictionary, "boxDimensions");						
+						spRigidBody = physicsManager->CreateBoxRigidBody(transform, mass, boxDimensions.x, boxDimensions.y, boxDimensions.z );			
 					}
 					break;
 
 				default:
 					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "RigidBodyComponent_c::OnLoad", "Shape not supported");
 					break;
-			}			
-
-			PH_ASSERT(pclRigidBody == NULL);
-			pclRigidBody = physicsManager->CreateRigidBody(Transform_c(position, quaternion), *spCollisionShape, dictionary.GetFloat("mass"));			
+			}									
 		}
 
 		void RigidBodyComponent_c::OnLoadFinished()
 		{
 			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
 			manager->Register(*this);
-			manager->RegisterRigidBody(*pclRigidBody);
+			spRigidBody->Register();			
 
 			pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
 

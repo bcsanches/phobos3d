@@ -25,13 +25,13 @@ namespace Phobos
 		}
 
 		BoxCollisionShape_c::BoxCollisionShape_c(const Ogre::Vector3 &dimensions):
-			BaseCollisionShape_c(CST_BOX),
+			CollisionShape_c(CST_BOX),
 			clBoxShape(btVector3(dimensions.x * 0.5f, dimensions.y * 0.5f, dimensions.z * 0.5f))
 		{
 			//empty
 		}
 
-		int BoxCollisionShape_c::Compare(const BaseCollisionShape_c &other) const
+		int BoxCollisionShape_c::Compare(const CollisionShape_c &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());
 
@@ -60,14 +60,14 @@ namespace Phobos
 
 		
 		ScaledMeshCollissionShape_c::ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale):
-			BaseCollisionShape_c(CST_MESH),
+			CollisionShape_c(CST_MESH),
 			spOriginalMesh(collisionMesh),
 			clScaleTriangleMeshShape(&collisionMesh->GetTriangleMeshShape(), btVector3(localScale.x, localScale.y, localScale.z))
 		{
 			//empty
 		}
 
-		int ScaledMeshCollissionShape_c::Compare(const BaseCollisionShape_c &other) const
+		int ScaledMeshCollissionShape_c::Compare(const CollisionShape_c &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());			
 

@@ -1,7 +1,7 @@
 #ifndef PH_COLLISION_SHAPES_H
 #define PH_COLLISION_SHAPES_H
 
-#include "PH_BaseCollisionShape.h"
+#include "PH_CollisionShape.h"
 
 #include <BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.h>
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
@@ -13,7 +13,7 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class BoxCollisionShape_c: public BaseCollisionShape_c
+		class BoxCollisionShape_c: public CollisionShape_c
 		{
 			public:
 				BoxCollisionShape_c(const Ogre::Vector3 &dimensions);
@@ -21,7 +21,7 @@ namespace Phobos
 				virtual btCollisionShape &GetCollisionShape();
 
 			protected:
-				virtual int Compare(const BaseCollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape_c &other) const;
 				virtual int Compare(const Key_s &other) const;				
 
 			private:
@@ -29,7 +29,7 @@ namespace Phobos
 		};
 		
 
-		class ScaledMeshCollissionShape_c: public BaseCollisionShape_c
+		class ScaledMeshCollissionShape_c: public CollisionShape_c
 		{
 			public:
 				ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale);
@@ -37,7 +37,7 @@ namespace Phobos
 				virtual btCollisionShape &GetCollisionShape();			
 
 			private:
-				virtual int Compare(const BaseCollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape_c &other) const;
 				virtual int Compare(const Key_s &other) const;
 
 			private:	

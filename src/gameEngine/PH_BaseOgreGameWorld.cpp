@@ -44,11 +44,7 @@ namespace Phobos
 			pclEntity = NULL;
 		}
 
-		if(pclRigidBody)
-		{
-			Physics::PhysicsManager_c::GetInstance()->DestroyRigidBody(pclRigidBody);
-			pclRigidBody = NULL;
-		}
+		spRigidBody.reset();		
 	}
 
 	BaseOgreGameWorld_c::TempStaticObject_s::~TempStaticObject_s()

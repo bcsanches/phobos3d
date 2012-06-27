@@ -14,19 +14,45 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_BASE_COLLISION_SHAPE_FWD_H
-#define PH_BASE_COLLISION_SHAPE_FWD_H
+#include "PH_RigidBody.h"
 
-#include <boost/shared_ptr.hpp>
+#include "PH_PhysicsManager.h"
+#include "PH_PhysicsUtil.h"
 
 namespace Phobos
-{
+{	
 	namespace Physics
 	{
-		class BaseCollisionShape_c;
-		typedef boost::shared_ptr<BaseCollisionShape_c> BaseCollisionShapePtr_t;
+		RigidBody_c::RigidBody_c(const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape):
+			spRigidBody(new btRigidBody(info)),
+			spCollisionShape(shape),
+			spMotionState(motionState)
+		{
+			//empty
+		}
+
+		RigidBody_c::~RigidBody_c()
+		{
+			if(spRigidBody->isInWorld())
+				this->Unregister();
+		}
+
+		void RigidBody_c::Register()
+		{
+			PhysicsManager_c::GetInstance()->RegisterRigidBody(*spRigidBody);
+		}
+		
+		void RigidBody_c::Unregister()
+		{
+			PhysicsManager_c::GetInstance()->UnregisterRigidBody(*spRigidBody);
+		}
+
+		Transform_c RigidBody_c::GetTransform() const
+		{
+			btTransform bodyTransform;
+			spMotionState->getWorldTransform(bodyTransform);
+
+			return MakeTransform(bodyTransform);
+		}
 	}
 }
-
-
-#endif

@@ -23,7 +23,7 @@ subject to the following restrictions:
 
 #include <PH_String.h>
 
-#include "PH_BaseCollisionShapeFwd.h"
+#include "PH_RigidBodyFwd.h"
 
 #define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
 
@@ -41,17 +41,15 @@ namespace Phobos
 				Ogre::SceneNode *pclSceneNode;
 				Ogre::Entity *pclEntity;
 				Ogre::Light *pclLight;
-
-				Physics::BaseCollisionShapePtr_t spCollisionShape;
-				btRigidBody *pclRigidBody;
+				
+				Physics::RigidBodyPtr_t spRigidBody;
 
 				void Clear();
 
 				inline StaticObject_s():
 					pclSceneNode(NULL),
 					pclEntity(NULL),
-					pclLight(NULL),
-					pclRigidBody(NULL)
+					pclLight(NULL)
 				{
 					//empty
 				}

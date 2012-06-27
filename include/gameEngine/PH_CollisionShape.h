@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_BASE_COLLISION_SHAPE_H
-#define PH_BASE_COLLISION_SHAPE_H
+#ifndef PH_COLLISION_SHAPE_H
+#define PH_COLLISION_SHAPE_H
 
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/intrusive/set.hpp>
@@ -26,7 +26,7 @@ subject to the following restrictions:
 
 #include <PH_Types.h>
 
-#include "PH_BaseCollisionShapeFwd.h"
+#include "PH_CollisionShapeFwd.h"
 
 class btCollisionShape;
 
@@ -34,9 +34,9 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class BaseCollisionShape_c: 
+		class CollisionShape_c: 
 			public boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> >, 
-			public boost::enable_shared_from_this<BaseCollisionShape_c>,
+			public boost::enable_shared_from_this<CollisionShape_c>,
 			public boost::noncopyable
 		{			
 			public:
@@ -78,32 +78,32 @@ namespace Phobos
 
 				struct KeyComparator_s
 				{
-					inline bool operator()(const Key_s &lhs, const BaseCollisionShape_c &rhs) const;
-					inline bool operator()(const BaseCollisionShape_c &lhs, const Key_s &rhs) const;
+					inline bool operator()(const Key_s &lhs, const CollisionShape_c &rhs) const;
+					inline bool operator()(const CollisionShape_c &lhs, const Key_s &rhs) const;
 				};				
 
-				bool operator<(const BaseCollisionShape_c &rhs) const;
+				bool operator<(const CollisionShape_c &rhs) const;
 
 				inline CollisionShapeTypes_e GetType() const;
 				
 				virtual btCollisionShape &GetCollisionShape() = 0;
 
 			protected:
-				BaseCollisionShape_c(CollisionShapeTypes_e type);
+				CollisionShape_c(CollisionShapeTypes_e type);
 
-				virtual int Compare(const BaseCollisionShape_c &other) const = 0;
+				virtual int Compare(const CollisionShape_c &other) const = 0;
 				virtual int Compare(const Key_s &other) const = 0;
 
 			private:
 				CollisionShapeTypes_e eType;
 		};	
 
-		inline BaseCollisionShape_c::CollisionShapeTypes_e BaseCollisionShape_c::GetType() const
+		inline CollisionShape_c::CollisionShapeTypes_e CollisionShape_c::GetType() const
 		{
 			return eType;
 		}
 
-		inline bool BaseCollisionShape_c::KeyComparator_s::operator()(const Key_s &lhs, const BaseCollisionShape_c &rhs) const
+		inline bool CollisionShape_c::KeyComparator_s::operator()(const Key_s &lhs, const CollisionShape_c &rhs) const
 		{
 			if(lhs.eType == rhs.eType)
 			{
@@ -116,7 +116,7 @@ namespace Phobos
 
 		}
 		
-		inline bool BaseCollisionShape_c::KeyComparator_s::operator()(const BaseCollisionShape_c &lhs, const Key_s &rhs) const
+		inline bool CollisionShape_c::KeyComparator_s::operator()(const CollisionShape_c &lhs, const Key_s &rhs) const
 		{
 			if(lhs.eType == rhs.eType)
 			{

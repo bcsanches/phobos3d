@@ -138,7 +138,7 @@ namespace Phobos
 	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const
 	{
 		obj.pclEntity = Render_c::GetInstance()->CreateEntity(meshName);
-		obj.pclEntity->setCastShadows(true);
+		obj.pclEntity->setCastShadows(true);		
 
 		if(optionalMaterial)
 			obj.pclEntity->setMaterialName(*optionalMaterial);
@@ -164,12 +164,12 @@ namespace Phobos
 		this->CommitTempObject(obj);
 	}
 
-	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale)
+	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial)
 	{
 		TempStaticObject_s obj;							
 
 		this->CreateStaticObjectNode(obj, tileTransform, scale);
-		this->CreateStaticObjectMesh(obj, meshName, NULL);
+		this->CreateStaticObjectMesh(obj, meshName, optionalMaterial);
 
 		this->CommitTempObject(obj);
 	}
@@ -320,7 +320,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_NORTH_WEST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale);													
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);													
 						}
 					}
 
@@ -336,7 +336,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_NORTH_EAST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale);
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);
 						}
 					}
 
@@ -352,7 +352,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_SOUTH_EAST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale);
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);
 						}
 					}
 					
@@ -369,7 +369,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_SOUTH_WEST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale);
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);
 						}
 					}
 				}
@@ -427,7 +427,7 @@ namespace Phobos
 				}
 				else if(type.compare("Model") == 0)
 				{
-					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), DictionaryGetVector3(*dict, "scale"));					
+					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), DictionaryGetVector3(*dict, "scale"), dict->TryGetString("meshMaterial"));					
 				}
 				else
 				{

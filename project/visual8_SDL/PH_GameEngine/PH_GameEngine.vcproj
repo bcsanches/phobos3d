@@ -350,18 +350,6 @@
 			Name="physics"
 			>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_BaseCollisionShape.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_BaseCollisionShape.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_BaseCollisionShapeFwd.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>
 			</File>
@@ -371,6 +359,18 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_CollisionMeshFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_CollisionShape.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionShape.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionShapeFwd.h"
 				>
 			</File>
 			<File
@@ -394,11 +394,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_RigidBody.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_RigidBody.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_RigidBodyComponent.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_RigidBodyComponent.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_RigidBodyFwd.h"
 				>
 			</File>
 		</Filter>

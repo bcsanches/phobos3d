@@ -28,10 +28,11 @@ subject to the following restrictions:
 
 #include <PH_Singleton.h>
 
-#include "PH_BaseCollisionShape.h"
+#include "PH_CollisionShape.h"
 #include "PH_CollisionMesh.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_GenericComponentManager.h"
+#include "PH_RigidBodyFwd.h"
 
 namespace Phobos
 {
@@ -55,16 +56,10 @@ namespace Phobos
 					CST_MESH
 				};				
 
-				~PhysicsManager_c();
+				~PhysicsManager_c();				
 
-				BaseCollisionShapePtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
-				BaseCollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
-
-				btRigidBody *CreateRigidBody(const Transform_c &transform, BaseCollisionShape_c &shape, Float_t mass);
-				void DestroyRigidBody(btRigidBody *body);
-
-				void RegisterRigidBody(btRigidBody &body);
-				void UnregisterRigidBody(btRigidBody &body);
+				RigidBodyPtr_t CreateBoxRigidBody(const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz);
+				RigidBodyPtr_t CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);							
 
 			protected:
 				virtual void OnBoot();
@@ -73,16 +68,27 @@ namespace Phobos
 				virtual void OnUpdate();
 
 			private:								
-				typedef boost::intrusive::set<BaseCollisionShape_c, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
+				typedef boost::intrusive::set<CollisionShape_c, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
 				typedef boost::intrusive::set<CollisionMesh_c, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
 
 			private:
 
 				PhysicsManager_c();											
 
-				bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const BaseCollisionShape_c::Key_s &key);
+				bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key);
 
-				CollisionMeshPtr_t RetrieveCollisionMesh(const Ogre::Mesh &mesh);				
+				CollisionMeshPtr_t RetrieveCollisionMesh(const Ogre::Mesh &mesh);		
+
+				CollisionShapePtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
+				CollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+
+				RigidBodyPtr_t CreateRigidBody(const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass);
+
+				//
+				//
+				//RigidBody class interface
+				void RegisterRigidBody(btRigidBody &body);
+				void UnregisterRigidBody(btRigidBody &body);				
 
 			private:
 				boost::scoped_ptr<btDiscreteDynamicsWorld> spWorld;
@@ -97,6 +103,8 @@ namespace Phobos
 
 				//Because scaled meshes references the original mesh we keep a cache of all meshes that were been loaded
 				CollisionMeshesSet_t setCollisionMeshesCache;
+
+				friend class RigidBody_c;
 
 		};
 	}

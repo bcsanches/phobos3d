@@ -16,10 +16,10 @@ subject to the following restrictions:
 
 #include <PH_Core.h>
 
-#include "PH_BaseCollisionShape.h"
 #include "PH_CollisionShapes.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtil.h"
+#include "PH_RigidBody.h"
 #include "PH_RigidBodyComponent.h"
 
 namespace Phobos
@@ -67,13 +67,27 @@ namespace Phobos
 			GenericComponentManager_c::CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
 		}
 
-		btRigidBody *PhysicsManager_c::CreateRigidBody(const Transform_c &transform, BaseCollisionShape_c &shape, Float_t mass)
+		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		{
+			CollisionShapePtr_t collisionShape = this->CreateMeshShape(mesh, scale);
+
+			return this->CreateRigidBody(transform, collisionShape, mass);
+		}
+
+		RigidBodyPtr_t PhysicsManager_c::CreateBoxRigidBody(const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz)
+		{
+			CollisionShapePtr_t collisionShape = this->CreateBoxShape(dimx, dimy, dimz);
+
+			return this->CreateRigidBody(transform, collisionShape, mass);
+		}
+
+		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass)
 		{
 			bool dynamic = mass != 0;
 
 			btVector3 localInertia(0, 0, 0);
 
-			btCollisionShape &btShape = shape.GetCollisionShape();
+			btCollisionShape &btShape = shape->GetCollisionShape();
 
 			if(dynamic)
 				btShape.calculateLocalInertia(mass, localInertia);
@@ -82,17 +96,9 @@ namespace Phobos
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 
-			return new btRigidBody(info);
-		}
-
-		void PhysicsManager_c::DestroyRigidBody(btRigidBody *body)
-		{
-			if(body->isInWorld())
-				spWorld->removeRigidBody(body);
-
-			delete body->getMotionState();
-			delete body;
-		}
+			return boost::make_shared<RigidBody_c>(info, motionState, shape);
+			//return RigidBodyPtr_t(new RigidBody_c(info, motionState, shape));
+		}				
 
 		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body)
 		{
@@ -105,12 +111,12 @@ namespace Phobos
 		}
 
 		
-		bool PhysicsManager_c::RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const BaseCollisionShape_c::Key_s &key)
+		bool PhysicsManager_c::RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key)
 		{			
-			retIt = setCollisionShapesCache.lower_bound(key, BaseCollisionShape_c::KeyComparator_s());
+			retIt = setCollisionShapesCache.lower_bound(key, CollisionShape_c::KeyComparator_s());
 
 			//not found the element?
-			if((retIt != setCollisionShapesCache.end()) && (!BaseCollisionShape_c::KeyComparator_s()(key, *retIt)))
+			if((retIt != setCollisionShapesCache.end()) && (!CollisionShape_c::KeyComparator_s()(key, *retIt)))
 			{
 				return true;
 			}			
@@ -120,17 +126,17 @@ namespace Phobos
 			}						
 		}		
 
-		BaseCollisionShapePtr_t PhysicsManager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
+		CollisionShapePtr_t PhysicsManager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
 		{
-			const BaseCollisionShape_c::BoxShapeInfo_s box = {x, y, z};
-			BaseCollisionShape_c::Key_s key(box);
+			const CollisionShape_c::BoxShapeInfo_s box = {x, y, z};
+			CollisionShape_c::Key_s key(box);
 			
 			
 			CollisionShapesSet_t::iterator it;
 			if(!this->RetrieveCollisionShape(it, key))
 			{			
 				//create it and store on the map
-				BaseCollisionShapePtr_t ptr = boost::make_shared<BoxCollisionShape_c>(Ogre::Vector3(x, y, z));
+				CollisionShapePtr_t ptr = boost::make_shared<BoxCollisionShape_c>(Ogre::Vector3(x, y, z));
 
 				setCollisionShapesCache.insert(it, *ptr);
 
@@ -162,9 +168,9 @@ namespace Phobos
 		}
 		
 		
-		BaseCollisionShapePtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		CollisionShapePtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
-			BaseCollisionShape_c::Key_s key(mesh, scale);
+			CollisionShape_c::Key_s key(mesh, scale);
 
 			CollisionShapesSet_t::iterator it;			
 
@@ -173,7 +179,7 @@ namespace Phobos
 			{
 				CollisionMeshPtr_t collisionMesh = this->RetrieveCollisionMesh(mesh);
 
-				BaseCollisionShapePtr_t ptr = boost::make_shared<ScaledMeshCollissionShape_c>(collisionMesh, scale);
+				CollisionShapePtr_t ptr = boost::make_shared<ScaledMeshCollissionShape_c>(collisionMesh, scale);
 
 				setCollisionShapesCache.insert(it, *ptr);				
 

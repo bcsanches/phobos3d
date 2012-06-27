@@ -14,7 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_BaseCollisionShape.h"
+#include "PH_CollisionShape.h"
 
 #include <iostream>
 
@@ -22,14 +22,14 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		BaseCollisionShape_c::Key_s::Key_s(const BoxShapeInfo_s &info):
+		CollisionShape_c::Key_s::Key_s(const BoxShapeInfo_s &info):
 			eType(CST_BOX),			
 			pclMesh(NULL)
 		{
 			uShapeInfo.stBox = info;
 		}
 				
-		BaseCollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale):
+		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale):
 			eType(CST_MESH),			
 			pclMesh(&mesh),
 			v3MeshScale(scale)
@@ -38,13 +38,13 @@ namespace Phobos
 		}
 
 
-		BaseCollisionShape_c::BaseCollisionShape_c(CollisionShapeTypes_e type):
+		CollisionShape_c::CollisionShape_c(CollisionShapeTypes_e type):
 			eType(type)
 		{
 			//empty
 		}
 
-		bool BaseCollisionShape_c::operator<(const BaseCollisionShape_c &rhs) const
+		bool CollisionShape_c::operator<(const CollisionShape_c &rhs) const
 		{
 			return eType == rhs.eType ? (this->Compare(rhs) < 0) : eType < rhs.eType;
 		}		

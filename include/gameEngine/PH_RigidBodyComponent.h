@@ -46,9 +46,8 @@ namespace Phobos
 				void OnLoad(const Dictionary_c &dictionary);
 				void OnLoadFinished();
 
-			private:
-				BaseCollisionShapePtr_t spCollisionShape;
-				btRigidBody *pclRigidBody;
+			private:				
+				RigidBodyPtr_t		spRigidBody;
 
 				TransformProperty_c *pprpTransform;
 				Transform_c			clPreviousTransform;

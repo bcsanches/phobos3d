@@ -34,6 +34,7 @@ subject to the following restrictions:
 #include "PH_EntityKeys.h"
 #include "PH_MapLoader.h"
 #include "PH_PhysicsManager.h"
+#include "PH_RigidBody.h"
 
 #include "PH_GameEventManager.h"
 
@@ -137,11 +138,9 @@ namespace Phobos
 				object.pclSceneNode->_getDerivedPosition(), 
 				object.pclSceneNode->_getDerivedOrientation()
 			);
-
-			object.spCollisionShape = physicsManager->CreateMeshShape(*object.pclEntity->getMesh().get(), object.pclSceneNode->_getDerivedScale());
-			object.pclRigidBody = physicsManager->CreateRigidBody(transform, *object.spCollisionShape.get(), 0);
-
-			physicsManager->RegisterRigidBody(*object.pclRigidBody);
+			
+			object.spRigidBody = physicsManager->CreateMeshRigidBody(transform, 0, *object.pclEntity->getMesh().get(), object.pclSceneNode->_getDerivedScale());
+			object.spRigidBody->Register();			
 		}		
 		
 
