@@ -58,7 +58,9 @@ namespace Phobos
 			void CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict, const Ogre::Vector3 &scale);
 			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const;
 
-			void CommitTempObject(TempStaticObject_s &obj);
+			void CreateStaticObjectRigidBody(StaticObject_s &obj, const Ogre::Vector3 &scale);
+
+			StaticObject_s &CommitTempObject(TempStaticObject_s &obj);
 
 		private:
 			std::vector<StaticObject_s> vecObjects;

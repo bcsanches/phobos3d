@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-October 2011
+July 2012
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,25 +14,29 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_PointEntity.h"
+class btPairCachingGhostObject;
+class btKinematicCharacterController;
 
-#include "PH_GameDictionaryUtils.h"
-#include "PH_EntityFactory.h"
-#include "PH_EntityUtils.h"
+#include <boost/scoped_ptr.hpp>
+
+#include <PH_Types.h>
+
+#include "PH_CollisionShapeFwd.h"
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);
-
-	PointEntity_c::PointEntity_c(const String_c &name):
-		Entity_c(name)
+	namespace Physics
 	{
-	}
+		class CharacterBody_c
+		{
+			public:
+				CharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape);
 
-	void PointEntity_c::OnLoad(const Dictionary_c &dictionary)
-	{
-		Entity_c::OnLoad(dictionary);
-		
-		EntityLoadTransform(clTransform, dictionary);	
+			private:
+				boost::scoped_ptr<btPairCachingGhostObject> spGhostObject;
+				boost::scoped_ptr<btKinematicCharacterController> spCharacterController;
+
+				CollisionShapePtr_t	spCollisionShape;
+		};
 	}
 }

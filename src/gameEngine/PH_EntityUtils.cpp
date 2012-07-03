@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-October 2011
+July 2012
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,25 +14,29 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_PointEntity.h"
+#include "PH_TileGameWorld.h"
 
+#include <PH_Dictionary.h>
+#include <PH_Transform.h>
+
+#include "PH_EntityKeys.h"
 #include "PH_GameDictionaryUtils.h"
-#include "PH_EntityFactory.h"
-#include "PH_EntityUtils.h"
+#include "PH_TileGameWorld.h"
+#include "PH_WorldManager.h"
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);
-
-	PointEntity_c::PointEntity_c(const String_c &name):
-		Entity_c(name)
+	void EntityLoadTransform(Transform_c &transform, const Dictionary_c &dictionary)
 	{
-	}
-
-	void PointEntity_c::OnLoad(const Dictionary_c &dictionary)
-	{
-		Entity_c::OnLoad(dictionary);
-		
-		EntityLoadTransform(clTransform, dictionary);	
+		if(dictionary.TryGetString(PH_ENTITY_KEY_TILE_ROW))
+		{						
+			const TileGameWorld_c *tileWorld = static_cast<const TileGameWorld_c *>(WorldManager_c::GetInstance()->GetGameWorld());
+			tileWorld->LoadTileTransform(transform, dictionary);
+		}
+		else
+		{
+			transform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
+			transform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+		}
 	}
 }

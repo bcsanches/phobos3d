@@ -52,3 +52,20 @@ EntityDef Box1m
   
   mass = 5;
 }
+
+EntityDef BoxQuaterMeter
+{
+  className = Entity;
+  components = "ModelRenderer|Transform|RigidBody";
+  
+  colliderType = "box";
+  boxDimensions = "0.25 0.25 0.25";
+  
+  meshfile="Box_1m";
+  scale="0.25 0.25 0.25";
+  
+  mass = 5;
+  
+  //ogitor
+  parentnode = "SceneManager";
+}

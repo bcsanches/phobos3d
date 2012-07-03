@@ -81,6 +81,13 @@ namespace Phobos
 			return this->CreateRigidBody(transform, collisionShape, mass);
 		}
 
+		RigidBodyPtr_t PhysicsManager_c::CreateCapsuleRigidBody(const Transform_c &transform, Float_t mass, Float_t radius, Float_t height)
+		{
+			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
+
+			return this->CreateRigidBody(transform, collisionShape, mass);
+		}
+
 		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass)
 		{
 			bool dynamic = mass != 0;
@@ -137,6 +144,28 @@ namespace Phobos
 			{			
 				//create it and store on the map
 				CollisionShapePtr_t ptr = boost::make_shared<BoxCollisionShape_c>(Ogre::Vector3(x, y, z));
+
+				setCollisionShapesCache.insert(it, *ptr);
+
+				return ptr;
+			}
+			else
+			{
+				return it->shared_from_this();
+			}			
+		}
+
+		CollisionShapePtr_t PhysicsManager_c::CreateCapsuleShape(Float_t radius, Float_t height)
+		{
+			const CollisionShape_c::CapsuleShapeInfo_s capsule = {radius, height};
+			CollisionShape_c::Key_s key(capsule);
+			
+			
+			CollisionShapesSet_t::iterator it;
+			if(!this->RetrieveCollisionShape(it, key))
+			{			
+				//create it and store on the map
+				CollisionShapePtr_t ptr = boost::make_shared<CapsuleCollisionShape_c>(radius, height);
 
 				setCollisionShapesCache.insert(it, *ptr);
 

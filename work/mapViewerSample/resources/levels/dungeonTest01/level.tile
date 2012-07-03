@@ -37,6 +37,15 @@ DynamicEntities infoPlayerStart : EntityDef.InfoPlayerStart
   faces = "east"; //or east   
 }
 
+DynamicEntities box1 : EntityDef.BoxQuaterMeter
+{
+  tileRow = 1;
+  tileCol = 5;
+  
+  faces = "east";
+  tileHeight = "middle";  
+}
+
 StaticEntities  : StaticEntityDef.PointLight
 {    
   //attenuation="100 0 3 0";

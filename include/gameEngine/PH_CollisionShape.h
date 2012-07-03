@@ -44,6 +44,7 @@ namespace Phobos
 				{
 					CST_BOX,					
 					CST_SPHERE,
+					CST_CAPSULE,
 					CST_MESH
 				};
 
@@ -57,17 +58,25 @@ namespace Phobos
 					Float_t fpRadius;
 				};
 
+				struct CapsuleShapeInfo_s
+				{
+					Float_t fpRadius;
+					Float_t fpHeight;
+				};
+
 				struct Key_s
 				{
 					Key_s(const BoxShapeInfo_s &info);
+					Key_s(const CapsuleShapeInfo_s &info);
 					Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 					
 					CollisionShapeTypes_e eType;
 
 					union 
 					{
-						BoxShapeInfo_s stBox;
-						SphereShapeInfo_s stSphere;
+						BoxShapeInfo_s		stBox;
+						SphereShapeInfo_s	stSphere;
+						CapsuleShapeInfo_s	stCapsule;
 					} uShapeInfo;
 
 					//Valid only when eType == CST_MESH

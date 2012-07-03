@@ -28,6 +28,13 @@ namespace Phobos
 		{
 			uShapeInfo.stBox = info;
 		}
+
+		CollisionShape_c::Key_s::Key_s(const CapsuleShapeInfo_s &info):
+			eType(CST_CAPSULE),			
+			pclMesh(NULL)
+		{
+			uShapeInfo.stCapsule = info;
+		}
 				
 		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale):
 			eType(CST_MESH),			

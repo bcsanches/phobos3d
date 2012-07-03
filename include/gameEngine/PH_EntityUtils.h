@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-October 2011
+July 2012
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,25 +14,10 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "PH_PointEntity.h"
-
-#include "PH_GameDictionaryUtils.h"
-#include "PH_EntityFactory.h"
-#include "PH_EntityUtils.h"
-
 namespace Phobos
 {
-	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);
+	class Transform_c;
+	class Dictionary_c;
 
-	PointEntity_c::PointEntity_c(const String_c &name):
-		Entity_c(name)
-	{
-	}
-
-	void PointEntity_c::OnLoad(const Dictionary_c &dictionary)
-	{
-		Entity_c::OnLoad(dictionary);
-		
-		EntityLoadTransform(clTransform, dictionary);	
-	}
+	void EntityLoadTransform(Transform_c &transform, const Dictionary_c &dictionary);
 }

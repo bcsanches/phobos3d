@@ -32,6 +32,8 @@ subject to the following restrictions:
 #include "PH_EntityKeys.h"
 #include "PH_GameDictionaryUtils.h"
 #include "PH_MapLoader.h"
+#include "PH_PhysicsManager.h"
+#include "PH_RigidBody.h"
 #include "PH_TileTransform.h"
 
 namespace Phobos
@@ -110,12 +112,24 @@ namespace Phobos
 		}
 	}
 
-	void TileGameWorld_c::CommitTempObject(TempStaticObject_s &obj)
+	void TileGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Ogre::Vector3 &scale)
+	{
+		Transform_c transform(staticObj.pclSceneNode->_getDerivedPosition(), staticObj.pclSceneNode->_getDerivedOrientation());
+
+		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
+
+		staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(transform, 0, *staticObj.pclEntity->getMesh(), scale);		
+		staticObj.spRigidBody->Register();
+	}
+
+	BaseOgreGameWorld_c::StaticObject_s &TileGameWorld_c::CommitTempObject(TempStaticObject_s &obj)
 	{
 		StaticObject_s object;
 		obj.Commit(object);
 
-		vecObjects.push_back(object);
+		vecObjects.push_back(object);		
+
+		return vecObjects.back();
 	}
 
 	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform_c &tileTransform, const Ogre::Vector3 &scale)
@@ -159,11 +173,11 @@ namespace Phobos
 		obj.pclSceneNode->setPosition(this->CalculatePosition(row, col));
 
 		obj.pclSceneNode->translate(transform.GetOrigin());
-		obj.pclSceneNode->rotate(transform.GetRotation());
+		obj.pclSceneNode->rotate(transform.GetRotation());		
 
-		this->CommitTempObject(obj);
+		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), Ogre::Vector3(tileScale, tileScale, tileScale));
 	}
-
+	
 	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial)
 	{
 		TempStaticObject_s obj;							
@@ -171,7 +185,7 @@ namespace Phobos
 		this->CreateStaticObjectNode(obj, tileTransform, scale);
 		this->CreateStaticObjectMesh(obj, meshName, optionalMaterial);
 
-		this->CommitTempObject(obj);
+		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), scale);
 	}
 
 	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)

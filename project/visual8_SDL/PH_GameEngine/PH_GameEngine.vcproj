@@ -202,6 +202,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_EntityUtils.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_EntityUtils.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_PointEntity.cpp"
 				>
 			</File>
@@ -349,6 +357,14 @@
 		<Filter
 			Name="physics"
 			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_CharacterBody.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CharacterBody.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>

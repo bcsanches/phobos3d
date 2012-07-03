@@ -5,6 +5,7 @@
 
 #include <BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.h>
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
+#include <BulletCollision/CollisionShapes/btCapsuleShape.h>
 #include <OgrePrerequisites.h>
 
 #include "PH_CollisionMeshFwd.h"
@@ -26,6 +27,21 @@ namespace Phobos
 
 			private:
 				btBoxShape clBoxShape;
+		};
+
+		class CapsuleCollisionShape_c: public CollisionShape_c
+		{
+			public:
+				CapsuleCollisionShape_c(Float_t radius, Float_t height);
+
+				virtual btCollisionShape &GetCollisionShape();
+
+			protected:
+				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const Key_s &other) const;				
+
+			private:
+				btCapsuleShape clCapsuleShape;
 		};
 		
 

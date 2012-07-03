@@ -57,6 +57,68 @@ namespace Phobos
 		//
 		//
 		//
+		
+		CapsuleCollisionShape_c::CapsuleCollisionShape_c(Float_t radius, Float_t height):
+			CollisionShape_c(CST_CAPSULE),
+			clCapsuleShape(radius, height)
+		{
+			//empty
+		}
+
+
+		btCollisionShape &CapsuleCollisionShape_c::GetCollisionShape()		
+		{
+			return clCapsuleShape;
+		}
+			
+		int CapsuleCollisionShape_c::Compare(const CollisionShape_c &other) const
+		{
+			PH_ASSERT(other.GetType() == this->GetType());
+
+			const CapsuleCollisionShape_c &capsule = static_cast<const CapsuleCollisionShape_c&>(other);
+
+			Float_t left = clCapsuleShape.getRadius();
+			Float_t right = capsule.clCapsuleShape.getRadius();
+
+			if(left == right)
+			{
+				left = clCapsuleShape.getHalfHeight();
+				right = capsule.clCapsuleShape.getHalfHeight();
+			}
+
+			if(left < right)
+				return -1;
+			else if(left == right)
+				return 0;
+			else
+				return 1;
+
+		}
+
+		int CapsuleCollisionShape_c::Compare(const Key_s &other) const
+		{
+			Float_t left = clCapsuleShape.getRadius();
+			Float_t right = other.uShapeInfo.stCapsule.fpRadius;
+
+			if(left == right)
+			{
+				left = clCapsuleShape.getHalfHeight() * 2;
+				right = other.uShapeInfo.stCapsule.fpHeight;
+			}
+
+			if(left < right)
+				return -1;
+			else if(left == right)
+				return 0;
+			else
+				return 1;
+		}
+
+		//
+		//
+		//
+		//
+		//
 
 		
 		ScaledMeshCollissionShape_c::ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale):

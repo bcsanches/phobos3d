@@ -22,6 +22,7 @@ subject to the following restrictions:
 
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
+#include "PH_EntityUtils.h"
 #include "PH_GameDictionaryUtils.h"
 #include "PH_PhysicsManager.h"
 #include "PH_RigidBody.h"
@@ -70,9 +71,10 @@ namespace Phobos
 		}
 
 		void RigidBodyComponent_c::OnLoad(const Dictionary_c &dictionary)
-		{			
-			Ogre::Vector3 position = DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION);
-			Ogre::Quaternion quaternion = DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION);
+		{	
+			Transform_c transform;
+
+			EntityLoadTransform(transform, dictionary);			
 
 			Enum_c<PhysicsManager_c::CollisionShapeTypes_e,  ShapeTypeName_s> enumMap(stShapeTypeNameTable_gl);
 
@@ -87,8 +89,7 @@ namespace Phobos
 			PhysicsManagerPtr_t physicsManager = PhysicsManager_c::GetInstance();
 
 			PH_ASSERT(!spRigidBody);			
-
-			Transform_c transform(position, quaternion);
+			
 			Float_t mass = dictionary.GetFloat("mass");
 
 			switch(type)
