@@ -229,3 +229,7 @@ glob:project/visual8_SDL/PH_DictionaryTest/Release/
 glob:project/visual8_SDL/PH_KernelTest/Release/
 glob:project/visual8_SDL/PH_OgreEngineCore/Release/
 glob:work/mapViewerSample/screenshots/
+glob:project/visual8_SDL/PH_KernelTest/logTest.log
+glob:project/visual8_SDL/PH_KernelTest/phobos.log
+glob:project/visual8_SDL/Sample_05/Release/BuildLog.htm
+glob:project/visual8_SDL/UT_EngineCore/enginecoretest.log

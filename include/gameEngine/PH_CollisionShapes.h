@@ -17,7 +17,7 @@ namespace Phobos
 		class BoxCollisionShape_c: public CollisionShape_c
 		{
 			public:
-				BoxCollisionShape_c(const Ogre::Vector3 &dimensions);
+				BoxCollisionShape_c(const Ogre::Vector3 &dimensions, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
@@ -32,7 +32,7 @@ namespace Phobos
 		class CapsuleCollisionShape_c: public CollisionShape_c
 		{
 			public:
-				CapsuleCollisionShape_c(Float_t radius, Float_t height);
+				CapsuleCollisionShape_c(Float_t radius, Float_t height, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
@@ -48,7 +48,7 @@ namespace Phobos
 		class ScaledMeshCollissionShape_c: public CollisionShape_c
 		{
 			public:
-				ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale);
+				ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();			
 

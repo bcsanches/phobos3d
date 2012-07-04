@@ -14,11 +14,12 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <PH_Console.h>
 #include <PH_Core.h>
 
 #include "PH_CollisionShapes.h"
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtil.h"
+#include "PH_PhysicsUtils.h"
 #include "PH_RigidBody.h"
 #include "PH_RigidBodyComponent.h"
 
@@ -29,8 +30,11 @@ namespace Phobos
 		PH_DEFINE_DEFAULT_SINGLETON(PhysicsManager);
 
 		PhysicsManager_c::PhysicsManager_c():
-			GenericComponentManager_c("PhysicsManager", PRIVATE_CHILDREN)
+			GenericComponentManager_c("PhysicsManager", PRIVATE_CHILDREN),
+			fpScale(1),
+			varPhysicsScale("dvPhysicsScale", "1")
 		{
+			//empty
 		}
 
 		PhysicsManager_c::~PhysicsManager_c()
@@ -38,10 +42,19 @@ namespace Phobos
 			//empty
 		}
 
+		void PhysicsManager_c::OnPrepareToBoot()
+		{
+			ConsolePtr_t console = Console_c::GetInstance();
+
+			console->AddContextVar(varPhysicsScale);
+		}
+
 		void PhysicsManager_c::OnBoot()
 		{
 			spCollisionDispatcher.reset(new btCollisionDispatcher(&clCollisionConfig));
 			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
+
+			fpScale = StringToFloat(varPhysicsScale.GetValue());
 		}
 
 		void PhysicsManager_c::OnFixedUpdate()
@@ -65,6 +78,11 @@ namespace Phobos
 			
 			//No pause check, to allow client interpolation
 			GenericComponentManager_c::CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
+		}
+
+		void PhysicsManager_c::SetGravity(const Ogre::Vector3 &gravity)
+		{
+			spWorld->setGravity(MakeVector3(gravity, fpScale));
 		}
 
 		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
@@ -99,7 +117,7 @@ namespace Phobos
 			if(dynamic)
 				btShape.calculateLocalInertia(mass, localInertia);
 
-			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform));
+			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform, fpScale));
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 
@@ -136,14 +154,14 @@ namespace Phobos
 		CollisionShapePtr_t PhysicsManager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
 		{
 			const CollisionShape_c::BoxShapeInfo_s box = {x, y, z};
-			CollisionShape_c::Key_s key(box);
+			CollisionShape_c::Key_s key(box, this->GetScale());
 			
 			
 			CollisionShapesSet_t::iterator it;
 			if(!this->RetrieveCollisionShape(it, key))
 			{			
 				//create it and store on the map
-				CollisionShapePtr_t ptr = boost::make_shared<BoxCollisionShape_c>(Ogre::Vector3(x, y, z));
+				CollisionShapePtr_t ptr = boost::make_shared<BoxCollisionShape_c>(Ogre::Vector3(x, y, z), fpScale);
 
 				setCollisionShapesCache.insert(it, *ptr);
 
@@ -158,14 +176,14 @@ namespace Phobos
 		CollisionShapePtr_t PhysicsManager_c::CreateCapsuleShape(Float_t radius, Float_t height)
 		{
 			const CollisionShape_c::CapsuleShapeInfo_s capsule = {radius, height};
-			CollisionShape_c::Key_s key(capsule);
+			CollisionShape_c::Key_s key(capsule, this->GetScale());
 			
 			
 			CollisionShapesSet_t::iterator it;
 			if(!this->RetrieveCollisionShape(it, key))
 			{			
 				//create it and store on the map
-				CollisionShapePtr_t ptr = boost::make_shared<CapsuleCollisionShape_c>(radius, height);
+				CollisionShapePtr_t ptr = boost::make_shared<CapsuleCollisionShape_c>(radius, height, fpScale);
 
 				setCollisionShapesCache.insert(it, *ptr);
 
@@ -199,7 +217,7 @@ namespace Phobos
 		
 		CollisionShapePtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
-			CollisionShape_c::Key_s key(mesh, scale);
+			CollisionShape_c::Key_s key(mesh, scale, this->GetScale());
 
 			CollisionShapesSet_t::iterator it;			
 
@@ -208,7 +226,7 @@ namespace Phobos
 			{
 				CollisionMeshPtr_t collisionMesh = this->RetrieveCollisionMesh(mesh);
 
-				CollisionShapePtr_t ptr = boost::make_shared<ScaledMeshCollissionShape_c>(collisionMesh, scale);
+				CollisionShapePtr_t ptr = boost::make_shared<ScaledMeshCollissionShape_c>(collisionMesh, scale, fpScale);
 
 				setCollisionShapesCache.insert(it, *ptr);				
 

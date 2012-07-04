@@ -406,7 +406,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\gameEngine\PH_PhysicsUtil.h"
+				RelativePath="..\..\..\include\gameEngine\PH_PhysicsUtils.h"
 				>
 			</File>
 			<File

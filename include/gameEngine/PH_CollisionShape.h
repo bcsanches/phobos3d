@@ -66,9 +66,9 @@ namespace Phobos
 
 				struct Key_s
 				{
-					Key_s(const BoxShapeInfo_s &info);
-					Key_s(const CapsuleShapeInfo_s &info);
-					Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+					Key_s(const BoxShapeInfo_s &info, Float_t physicsScale);
+					Key_s(const CapsuleShapeInfo_s &info, Float_t physicsScale);
+					Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale);
 					
 					CollisionShapeTypes_e eType;
 

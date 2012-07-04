@@ -26,6 +26,7 @@ subject to the following restrictions:
 
 #include <OgreMesh.h>
 
+#include <PH_ContextVar.h>
 #include <PH_Singleton.h>
 
 #include "PH_CollisionShape.h"
@@ -62,7 +63,13 @@ namespace Phobos
 				RigidBodyPtr_t CreateCapsuleRigidBody(const Transform_c &transform, Float_t mass, Float_t radius, Float_t height);
 				RigidBodyPtr_t CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);							
 
+				void SetGravity(const Ogre::Vector3 &gravity);
+
+				inline Float_t GetScale() const;
+				inline Float_t GetPhysicsToGameScale() const;
+
 			protected:
+				virtual void OnPrepareToBoot();
 				virtual void OnBoot();
 
 				virtual void OnFixedUpdate();
@@ -98,7 +105,11 @@ namespace Phobos
 
 				btDefaultCollisionConfiguration			clCollisionConfig;
 				btDbvtBroadphase						clBroadphase;
-				btSequentialImpulseConstraintSolver		clConstraintSolver;				
+				btSequentialImpulseConstraintSolver		clConstraintSolver;		
+
+				Float_t									fpScale;
+
+				ContextVar_c							varPhysicsScale;
 
 				
 				CollisionShapesSet_t setCollisionShapesCache;
@@ -109,6 +120,16 @@ namespace Phobos
 				friend class RigidBody_c;
 
 		};
+
+		inline Float_t PhysicsManager_c::GetScale() const
+		{
+			return fpScale;
+		}
+
+		inline Float_t PhysicsManager_c::GetPhysicsToGameScale() const
+		{
+			return 1.0f / this->GetScale() ;
+		}
 	}
 }
 

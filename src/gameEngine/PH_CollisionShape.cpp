@@ -22,24 +22,28 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		CollisionShape_c::Key_s::Key_s(const BoxShapeInfo_s &info):
+		CollisionShape_c::Key_s::Key_s(const BoxShapeInfo_s &info, Float_t physicsScale):
 			eType(CST_BOX),			
 			pclMesh(NULL)
 		{
 			uShapeInfo.stBox = info;
+
+			for(int i = 0;i < 3; ++i)
+				uShapeInfo.stBox.v3Dimension[i] *= physicsScale;
 		}
 
-		CollisionShape_c::Key_s::Key_s(const CapsuleShapeInfo_s &info):
+		CollisionShape_c::Key_s::Key_s(const CapsuleShapeInfo_s &info, Float_t physicsScale):
 			eType(CST_CAPSULE),			
 			pclMesh(NULL)
 		{
-			uShapeInfo.stCapsule = info;
+			uShapeInfo.stCapsule.fpRadius = info.fpRadius * physicsScale;			
+			uShapeInfo.stCapsule.fpHeight = info.fpHeight * physicsScale;			
 		}
 				
-		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale):
+		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale):
 			eType(CST_MESH),			
 			pclMesh(&mesh),
-			v3MeshScale(scale)
+			v3MeshScale(scale * physicsScale)
 		{
 			//empty
 		}

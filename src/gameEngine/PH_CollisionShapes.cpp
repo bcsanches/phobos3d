@@ -6,6 +6,7 @@
 #include <PH_Error.h>
 
 #include "PH_CollisionMesh.h"
+#include "PH_PhysicsUtils.h"
 
 namespace Phobos
 {
@@ -24,9 +25,9 @@ namespace Phobos
 			return 0;
 		}
 
-		BoxCollisionShape_c::BoxCollisionShape_c(const Ogre::Vector3 &dimensions):
+		BoxCollisionShape_c::BoxCollisionShape_c(const Ogre::Vector3 &dimensions, Float_t physicsScale):
 			CollisionShape_c(CST_BOX),
-			clBoxShape(btVector3(dimensions.x * 0.5f, dimensions.y * 0.5f, dimensions.z * 0.5f))
+			clBoxShape(MakeVector3(dimensions, physicsScale) * 0.5f)
 		{
 			//empty
 		}
@@ -58,7 +59,7 @@ namespace Phobos
 		//
 		//
 		
-		CapsuleCollisionShape_c::CapsuleCollisionShape_c(Float_t radius, Float_t height):
+		CapsuleCollisionShape_c::CapsuleCollisionShape_c(Float_t radius, Float_t height, Float_t physicsScale):
 			CollisionShape_c(CST_CAPSULE),
 			clCapsuleShape(radius, height)
 		{
@@ -121,10 +122,10 @@ namespace Phobos
 		//
 
 		
-		ScaledMeshCollissionShape_c::ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale):
+		ScaledMeshCollissionShape_c::ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale, Float_t physicsScale):
 			CollisionShape_c(CST_MESH),
 			spOriginalMesh(collisionMesh),
-			clScaleTriangleMeshShape(&collisionMesh->GetTriangleMeshShape(), btVector3(localScale.x, localScale.y, localScale.z))
+			clScaleTriangleMeshShape(&collisionMesh->GetTriangleMeshShape(), MakeVector3(localScale, physicsScale))
 		{
 			//empty
 		}

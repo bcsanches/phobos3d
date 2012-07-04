@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include "PH_RigidBody.h"
 
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtil.h"
+#include "PH_PhysicsUtils.h"
 
 namespace Phobos
 {	
@@ -52,7 +52,7 @@ namespace Phobos
 			btTransform bodyTransform;
 			spMotionState->getWorldTransform(bodyTransform);
 
-			return MakeTransform(bodyTransform);
+			return MakeTransform(bodyTransform, PhysicsManager_c::GetInstance()->GetPhysicsToGameScale());
 		}
 	}
 }

@@ -25,14 +25,14 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		inline btVector3 MakeVector3(const Ogre::Vector3 &v)
+		inline btVector3 MakeVector3(const Ogre::Vector3 &v, const Float_t scale)
 		{
-			return btVector3(v.x, v.y, v.z);
+			return btVector3(v.x, v.y, v.z) * scale;
 		}
 
-		inline Ogre::Vector3 MakeVector3(const btVector3 &v)
+		inline Ogre::Vector3 MakeVector3(const btVector3 &v, Float_t physicsToGameScale)
 		{
-			return Ogre::Vector3(v.x(), v.y(), v.z());
+			return Ogre::Vector3(v.x(), v.y(), v.z()) * physicsToGameScale;
 		}
 
 		inline Ogre::Quaternion MakeQuaternion(const btQuaternion &q)
@@ -45,14 +45,14 @@ namespace Phobos
 			return btQuaternion(q.x, q.y, q.z, q.w);
 		}
 
-		inline btTransform MakeTransform(const Transform_c &transform)
+		inline btTransform MakeTransform(const Transform_c &transform, const Float_t scale)
 		{
-			return btTransform(MakeQuaternion(transform.GetRotation()), MakeVector3(transform.GetOrigin()));
+			return btTransform(MakeQuaternion(transform.GetRotation()), MakeVector3(transform.GetOrigin(), scale));
 		}				
 
-		inline Transform_c MakeTransform(const btTransform &transform)
+		inline Transform_c MakeTransform(const btTransform &transform , Float_t physicsToGameScale)
 		{
-			return Transform_c(MakeVector3(transform.getOrigin()), MakeQuaternion(transform.getRotation()));
+			return Transform_c(MakeVector3(transform.getOrigin(), physicsToGameScale), MakeQuaternion(transform.getRotation()));
 		}
 	}
 }
