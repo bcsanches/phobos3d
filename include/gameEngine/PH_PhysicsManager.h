@@ -97,7 +97,13 @@ namespace Phobos
 				//
 				//RigidBody class interface
 				void RegisterRigidBody(btRigidBody &body);
-				void UnregisterRigidBody(btRigidBody &body);				
+				void UnregisterRigidBody(btRigidBody &body);
+
+				void AddCollisionObject(btCollisionObject &collisionObject,short int collisionFilterGroup,short int collisionFilterMask);
+				void RemoveCollisionObject(btCollisionObject &collisionObject);
+
+				void AddAction(btActionInterface &action);
+				void RemoveAction(btActionInterface &action);
 
 			private:
 				boost::scoped_ptr<btDiscreteDynamicsWorld> spWorld;
@@ -118,6 +124,7 @@ namespace Phobos
 				CollisionMeshesSet_t setCollisionMeshesCache;
 
 				friend class RigidBody_c;
+				friend class CharacterBody_c;
 
 		};
 

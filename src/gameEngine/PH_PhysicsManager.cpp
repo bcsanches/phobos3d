@@ -135,6 +135,26 @@ namespace Phobos
 			spWorld->removeRigidBody(&body);
 		}
 
+		void PhysicsManager_c::AddCollisionObject(btCollisionObject &collisionObject,short int collisionFilterGroup,short int collisionFilterMask)
+		{
+			spWorld->addCollisionObject(&collisionObject, collisionFilterGroup, collisionFilterMask);
+		}
+
+		void PhysicsManager_c::RemoveCollisionObject(btCollisionObject &collisionObject)
+		{
+			spWorld->removeCollisionObject(&collisionObject);
+		}
+
+		void PhysicsManager_c::AddAction(btActionInterface &action)
+		{
+			spWorld->addAction(&action);
+		}
+
+		void PhysicsManager_c::RemoveAction(btActionInterface &action)
+		{
+			spWorld->removeAction(&action);
+		}
+
 		
 		bool PhysicsManager_c::RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key)
 		{			

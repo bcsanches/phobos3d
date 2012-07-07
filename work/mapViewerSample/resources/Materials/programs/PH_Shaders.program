@@ -1,0 +1,227 @@
+// CG Vertex shader definition
+vertex_program PH_Diffuse_VS cg            
+{    
+    source PH_Shaders.cg
+                    
+    entry_point PH_MainPlainDiffuse_vp    
+            
+    profiles vs_1_1                    
+ 
+    
+    default_params                    
+    {
+                
+        // Ogre will put the worldviewproj into our 'worldViewProj' parameter for us.
+        param_named_auto worldViewProj worldviewproj_matrix
+                
+        // Note that 'worldViewProj' is a parameter in the cg code.
+    }
+}
+ 
+// CG Pixel shader definition
+fragment_program PH_Diffuse_PS cg            
+{    
+    source PH_Shaders.cg
+                        
+    entry_point PH_MainPlainDiffuse_fp    
+            
+    profiles ps_1_1                    
+}
+ 
+material PH_PlainTexture
+{    
+    technique                    
+    {        
+        pass                    
+        {                        
+            vertex_program_ref PH_Diffuse_VS    
+            {
+            }
+                    
+            fragment_program_ref PH_Diffuse_PS    
+            {
+            }
+            
+            texture_unit DiffuseMap
+            {                                
+                texture Ten.png 2d        
+            }
+        }
+    }
+}
+
+//
+//
+//AMBIENT LIGHTING
+//
+//
+
+
+fragment_program PH_AmbientDiffuse_PS cg            
+{    
+    source PH_Shaders.cg
+                        
+    entry_point PH_MainAmbientDiffuse_fp    
+    
+    default_params
+    {
+        param_named_auto ambientLightColour derived_ambient_light_colour
+    }
+            
+    profiles ps_1_1                    
+}
+
+material PH_AmbientDiffuse
+{    
+    technique                    
+    {        
+        pass                    
+        {                   
+            ambient 1 1 1 1
+             
+            vertex_program_ref PH_Diffuse_VS    
+            {
+            }
+                    
+            fragment_program_ref PH_AmbientDiffuse_PS    
+            {
+            }
+            
+            texture_unit DiffuseMap
+            {                                
+                texture Ten.png 2d        
+            }
+        }
+    }
+}
+
+//
+//
+//DIRECTIONAL LIGHTING
+//
+//
+
+vertex_program PH_Plain_VS cg            
+{    
+    source PH_Shaders.cg
+                    
+    entry_point PH_MainPlain_vp    
+            
+    profiles vs_1_1                    
+ 
+    
+    default_params                    
+    {
+                
+        // Ogre will put the worldviewproj into our 'worldViewProj' parameter for us.
+        param_named_auto worldViewProj worldviewproj_matrix
+                
+        // Note that 'worldViewProj' is a parameter in the cg code.
+    }
+}
+ 
+// CG Pixel shader definition
+fragment_program PH_PlainAmbient_PS cg            
+{    
+    source PH_Shaders.cg
+                        
+    entry_point PH_MainAmbientPlain_fp    
+    
+    default_params
+    {
+        param_named_auto ambientLightColour derived_ambient_light_colour
+    }
+            
+    profiles ps_1_1                    
+}
+
+// CG Vertex shader definition
+vertex_program PH_DiffuseLighting_VS cg            
+{    
+    source PH_Shaders.cg
+                    
+    entry_point PH_MainDiffuseLighting_vp    
+            
+    profiles vs_1_1                    
+ 
+    
+    default_params                    
+    {
+                
+        // Ogre will put the worldviewproj into our 'worldViewProj' parameter for us. 
+        param_named_auto worldViewProj worldviewproj_matrix                            
+    }
+}
+
+fragment_program PH_DiffuseLighting_PS cg            
+{    
+    source PH_Shaders.cg
+                        
+    entry_point PH_MainDiffuseLighting_fp            
+         
+    profiles ps_2_x                    
+}
+
+material PH_DiffuseLighting
+{    
+    technique                    
+    {        
+        //base ambient pass
+        pass
+        {
+            vertex_program_ref PH_Plain_VS    
+            {
+            }  
+                                                                     
+            // base colours, not needed for rendering, but as information
+            // to lighting pass categorisation routine
+            ambient 1 1 1
+            diffuse 0 0 0 
+            specular 0 0 0 0
+			     
+            fragment_program_ref PH_PlainAmbient_PS    
+            {
+            }             						        
+        }
+                              
+        pass                    
+        {                        
+            vertex_program_ref PH_DiffuseLighting_VS    
+            {                
+            }
+                    
+            fragment_program_ref PH_DiffuseLighting_PS    
+            {                                        
+                param_named_auto lightPosition light_position_object_space 0
+                param_named_auto lightDiffuse light_diffuse_colour 0  
+                param_named_auto lightAtt light_attenuation 0           
+            }
+            
+            iteration once_per_light
+
+            scene_blend add                        
+        }
+                        
+        pass decal
+        {
+            // base colours, not needed for rendering, but as information
+            // to lighting pass categorisation routine
+            lighting off
+                    			
+            scene_blend dest_colour zero            
+            
+            vertex_program_ref PH_Diffuse_VS    
+            {
+            }
+                    
+            fragment_program_ref PH_Diffuse_PS    
+            {
+            }
+			
+            texture_unit DiffuseMap
+            {
+                texture Ten.png 2d 
+            }		
+        }
+    }
+}

@@ -1,0 +1,117 @@
+void PH_MainPlain_vp(    
+    float4 position        : POSITION,    // Vertex position in model space    
+ 
+    // Outputs
+    out float4 oPosition    : POSITION,    // Transformed vertex position    
+ 
+    // Model Level Inputs
+    uniform float4x4 worldViewProj)
+{
+    // Calculate output position
+    oPosition = mul(worldViewProj, position);     
+}
+
+void PH_MainPlainDiffuse_vp(    
+    float4 position        : POSITION,    // Vertex position in model space
+    float2 texCoord0    : TEXCOORD0,    // Texture UV set 0
+ 
+    // Outputs
+    out float4 oPosition    : POSITION,    // Transformed vertex position
+    out float2 uv0        : TEXCOORD0,    // UV0
+ 
+    // Model Level Inputs
+    uniform float4x4 worldViewProj)
+{
+    // Calculate output position
+    oPosition = mul(worldViewProj, position);
+ 
+    // Simply copy the input vertex UV to the output
+    uv0 = texCoord0;
+}
+ 
+void PH_MainPlainDiffuse_fp(
+    // Pixel Inputs
+    float2 uv0        : TEXCOORD0,    // UV interpolated for current pixel
+ 
+    // Outputs
+    out float4 color    : COLOR,    // Output color we want to write
+ 
+    // Model Level Inputs
+    uniform sampler2D texture)        // Texture we're going to use
+{
+    // Just sample texture using supplied UV
+    color = tex2D(texture, uv0);    
+}
+
+void PH_MainAmbientPlain_fp(    
+    uniform float4 ambientLightColour    : COLOR,                                    
+
+    // Outputs
+    out float4 color    : COLOR)
+{
+    // Just sample texture using supplied UV
+    color = ambientLightColour;    
+}
+ 
+void PH_MainAmbientDiffuse_fp(
+
+    float2 uv0        : TEXCOORD0,
+    
+    uniform float4 ambientLightColour    : COLOR,                         
+    uniform sampler2D texture,       
+    
+    // Outputs
+    out float4 color    : COLOR)
+{
+    // Just sample texture using supplied UV
+    color = tex2D(texture, uv0) * ambientLightColour;    
+}
+
+void PH_MainDiffuseLighting_vp(    
+    float4 position         : POSITION,    // Vertex position in model space
+    float3 normal           : NORMAL,        
+ 
+    // Outputs
+    out float4 oPosition    : POSITION,    // Transformed vertex position    
+    out float3 oNorm        : TEXCOORD0,    
+    out float4 oObjPos      : TEXCOORD1,
+ 
+    // Model Level Inputs
+    uniform float4x4 worldViewProj, 
+    uniform float4 lightPosition)
+{
+    // Calculate output position
+    oPosition = mul(worldViewProj, position);
+    oNorm = normal;       
+    
+    oObjPos = position;     
+}
+
+void PH_MainDiffuseLighting_fp(           
+    float3 normal       : TEXCOORD0,     
+    float4 position     : TEXCOORD1,
+    
+    uniform float4 lightPosition,  
+    uniform float4 lightDiffuse:COLOR,
+    uniform float4 lightAtt,    
+       
+    // Outputs
+    out float4 color    : COLOR)
+{
+    float3 N = normalize(normal);
+ 
+    float4 vLightView  = lightPosition - position;
+    float4 L = normalize(vLightView);
+    
+    float d = length(vLightView);    
+    
+    float dotR = dot(N, L);
+    if(dotR > 0 && d <= lightAtt.x)
+    {
+        float att = 1 / (lightAtt.y + lightAtt.z * d + lightAtt.w * d * d);
+                    
+        color = lightDiffuse * max(dotR, 0) * att;
+    }     
+    else                           
+        color = float4(0, 0, 0, 1);
+}

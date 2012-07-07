@@ -46,6 +46,33 @@ DynamicEntities box1 : EntityDef.BoxQuaterMeter
   tileHeight = "middle";  
 }
 
+DynamicEntities box2 : EntityDef.BoxQuaterMeter
+{
+  tileRow = 1;
+  tileCol = 4;
+  
+  faces = "east";
+  tileHeight = "middle";  
+}
+
+DynamicEntities box3 : EntityDef.BoxQuaterMeter
+{
+  tileRow = 1;
+  tileCol = 3;
+  
+  faces = "east";
+  tileHeight = "middle";  
+}
+
+DynamicEntities box4 : EntityDef.BoxQuaterMeter
+{
+  tileRow = 1;
+  tileCol = 6;
+  
+  faces = "east";
+  tileHeight = "middle";  
+}
+
 StaticEntities  : StaticEntityDef.PointLight
 {    
   //attenuation="100 0 3 0";

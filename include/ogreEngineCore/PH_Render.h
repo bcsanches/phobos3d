@@ -147,6 +147,7 @@ namespace Phobos
 			ContextVar_c						varRFullScreen;
 			ContextVar_c						varRRenderSystem;			
 
+			ContextVar_c						varRShaderSystem;
 			ContextVar_c						varRShaderSystemLibPath;
 
 			ContextVar_c						varRCaelum;

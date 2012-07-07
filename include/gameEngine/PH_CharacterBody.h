@@ -19,6 +19,8 @@ class btKinematicCharacterController;
 
 #include <boost/scoped_ptr.hpp>
 
+#include <OgrePrerequisites.h>
+
 #include <PH_Types.h>
 
 #include "PH_CollisionShapeFwd.h"
@@ -31,6 +33,12 @@ namespace Phobos
 		{
 			public:
 				CharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape);
+				~CharacterBody_c();
+
+				void SetWalkDirection(const Ogre::Vector3 &walkDirection);
+
+				void Register();
+				void Unregister();
 
 			private:
 				boost::scoped_ptr<btPairCachingGhostObject> spGhostObject;
