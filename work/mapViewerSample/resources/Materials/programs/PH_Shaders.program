@@ -148,8 +148,9 @@ vertex_program PH_DiffuseLighting_VS cg
     default_params                    
     {
                 
-        // Ogre will put the worldviewproj into our 'worldViewProj' parameter for us. 
-        param_named_auto worldViewProj worldviewproj_matrix                            
+        param_named_auto worldView worldview_matrix 
+        param_named_auto worldViewProj worldviewproj_matrix         
+        param_named_auto lightPosition light_position_view_space 0                   
     }
 }
 
@@ -192,10 +193,14 @@ material PH_DiffuseLighting
                     
             fragment_program_ref PH_DiffuseLighting_PS    
             {                                        
-                param_named_auto lightPosition light_position_object_space 0
+                //param_named_auto lightPosition light_position_object_space 0
                 param_named_auto lightDiffuse light_diffuse_colour 0  
                 param_named_auto lightAtt light_attenuation 0           
             }
+            
+            // set ambient off, not needed for rendering, but as information
+			// to lighting pass categorisation routine
+			ambient 0 0 0 
             
             iteration once_per_light
 

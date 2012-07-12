@@ -1,7 +1,6 @@
 import PH_DiffuseLighting from PH_Shaders.program
-
-     /*
-material Base_128
+    
+material ___Base_128
 {
 	technique
 	{
@@ -14,9 +13,8 @@ material Base_128
 		}
 
 	}
-}      */
-
-
+}
+                
 material Base_128: PH_DiffuseLighting
 {  
   set_texture_alias DiffuseMap base128.png

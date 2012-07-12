@@ -75,23 +75,27 @@ void PH_MainDiffuseLighting_vp(
     out float4 oPosition    : POSITION,    // Transformed vertex position    
     out float3 oNorm        : TEXCOORD0,    
     out float4 oObjPos      : TEXCOORD1,
+    out float4 oLightViewPos: TEXCOORD2,
  
-    // Model Level Inputs
+    // Model Level Inputs    
+    uniform float4x4 worldView,  
     uniform float4x4 worldViewProj, 
     uniform float4 lightPosition)
 {
     // Calculate output position
     oPosition = mul(worldViewProj, position);
-    oNorm = normal;       
+    oNorm = mul((float3x3)worldView, normal);   
     
-    oObjPos = position;     
+    oLightViewPos = lightPosition;    
+    
+    oObjPos = mul(worldView, position);     
 }
 
 void PH_MainDiffuseLighting_fp(           
     float3 normal       : TEXCOORD0,     
     float4 position     : TEXCOORD1,
-    
-    uniform float4 lightPosition,  
+    float4 lightViewPos : TEXCOORD2,
+        
     uniform float4 lightDiffuse:COLOR,
     uniform float4 lightAtt,    
        
@@ -100,7 +104,7 @@ void PH_MainDiffuseLighting_fp(
 {
     float3 N = normalize(normal);
  
-    float4 vLightView  = lightPosition - position;
+    float4 vLightView  = lightViewPos - position;
     float4 L = normalize(vLightView);
     
     float d = length(vLightView);    
