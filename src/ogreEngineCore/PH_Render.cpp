@@ -47,7 +47,7 @@ namespace Phobos
 	class OgreLogListener_c: public Ogre::LogListener
 	{
 		public:
-			virtual void messageLogged( const Ogre::String& message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String & )
+			virtual void messageLogged( const Ogre::String& message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool& skipThisMessage )
 			{
 				Kernel_c::GetInstance().LogMessage("Ogre: " + message);
 			}
