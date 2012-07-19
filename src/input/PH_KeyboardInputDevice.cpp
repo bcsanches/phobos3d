@@ -91,6 +91,9 @@ namespace Phobos
 		{"TILDE",			'`'},
 		{"QUOTE",			'\''},
 
+		{"LEFT_SHIFT",		KB_LEFT_SHIFT},
+		{"RIGHT_SHIFT",		KB_RIGHT_SHIFT},
+
 		//Sentinel
 		{NULL,				0}
 	};	

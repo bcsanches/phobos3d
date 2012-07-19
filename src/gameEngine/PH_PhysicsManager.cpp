@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include <PH_Console.h>
 #include <PH_Core.h>
 
+#include "PH_CharacterBody.h"
 #include "PH_CollisionShapes.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtils.h"
@@ -54,6 +55,8 @@ namespace Phobos
 			spCollisionDispatcher.reset(new btCollisionDispatcher(&clCollisionConfig));
 			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
 
+			clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&clGhostPairCallback); 
+
 			fpScale = StringToFloat(varPhysicsScale.GetValue());
 		}
 
@@ -83,6 +86,16 @@ namespace Phobos
 		void PhysicsManager_c::SetGravity(const Ogre::Vector3 &gravity)
 		{
 			spWorld->setGravity(MakeVector3(gravity, fpScale));
+		}
+
+		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height)
+		{
+			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
+
+			CharacterBodyPtr_t ptr =  boost::make_shared<CharacterBody_c>(stepHeight, collisionShape);
+			ptr->Teleport(startPosition);
+
+			return ptr;
 		}
 
 		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)

@@ -50,5 +50,15 @@ namespace Phobos
 		{
 			spCharacterController->setWalkDirection(MakeVector3(walkDirection, PhysicsManager_c::GetInstance()->GetScale()));
 		}
+
+		Ogre::Vector3 CharacterBody_c::GetPosition() const
+		{
+			return MakeVector3(spGhostObject->getWorldTransform().getOrigin(), PhysicsManager_c::GetInstance()->GetPhysicsToGameScale());
+		}
+
+		void CharacterBody_c::Teleport(const Ogre::Vector3 &position)
+		{
+			spCharacterController->warp(MakeVector3(position, PhysicsManager_c::GetInstance()->GetScale()));
+		}
 	}
 }

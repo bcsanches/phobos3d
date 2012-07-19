@@ -14,43 +14,13 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-class btPairCachingGhostObject;
-class btKinematicCharacterController;
-
-#include <boost/scoped_ptr.hpp>
-
-#include <OgrePrerequisites.h>
-
-#include <PH_Types.h>
-
-#include "PH_CharacterBodyFwd.h"
-#include "PH_CollisionShapeFwd.h"
-#include "PH_GameEngineAPI.h"
+#include <boost/shared_ptr.hpp>
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API CharacterBody_c
-		{
-			public:
-				CharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape);
-				~CharacterBody_c();
-
-				void SetWalkDirection(const Ogre::Vector3 &walkDirection);
-
-				Ogre::Vector3 GetPosition() const;
-
-				void Register();
-				void Unregister();
-
-				void Teleport(const Ogre::Vector3 &position);
-
-			private:
-				boost::scoped_ptr<btPairCachingGhostObject> spGhostObject;
-				boost::scoped_ptr<btKinematicCharacterController> spCharacterController;
-
-				CollisionShapePtr_t	spCollisionShape;
-		};
+		class CharacterBody_c;
+		typedef boost::shared_ptr<CharacterBody_c> CharacterBodyPtr_t;
 	}
 }

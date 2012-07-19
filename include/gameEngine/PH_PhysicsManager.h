@@ -23,12 +23,14 @@ subject to the following restrictions:
 #include <boost/weak_ptr.hpp>
 
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <OgreMesh.h>
 
 #include <PH_ContextVar.h>
 #include <PH_Singleton.h>
 
+#include "PH_CharacterBodyFwd.h"
 #include "PH_CollisionShape.h"
 #include "PH_CollisionMesh.h"
 #include "PH_GameEngineAPI.h"
@@ -61,7 +63,9 @@ namespace Phobos
 
 				RigidBodyPtr_t CreateBoxRigidBody(const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz);
 				RigidBodyPtr_t CreateCapsuleRigidBody(const Transform_c &transform, Float_t mass, Float_t radius, Float_t height);
-				RigidBodyPtr_t CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);							
+				RigidBodyPtr_t CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+
+				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height);
 
 				void SetGravity(const Ogre::Vector3 &gravity);
 
@@ -112,6 +116,8 @@ namespace Phobos
 				btDefaultCollisionConfiguration			clCollisionConfig;
 				btDbvtBroadphase						clBroadphase;
 				btSequentialImpulseConstraintSolver		clConstraintSolver;		
+
+				btGhostPairCallback						clGhostPairCallback;
 
 				Float_t									fpScale;
 

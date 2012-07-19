@@ -366,6 +366,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CharacterBodyFwd.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>
 			</File>

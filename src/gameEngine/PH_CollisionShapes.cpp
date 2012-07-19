@@ -61,7 +61,7 @@ namespace Phobos
 		
 		CapsuleCollisionShape_c::CapsuleCollisionShape_c(Float_t radius, Float_t height, Float_t physicsScale):
 			CollisionShape_c(CST_CAPSULE),
-			clCapsuleShape(radius, height)
+			clCapsuleShape(radius * physicsScale, height * physicsScale)
 		{
 			//empty
 		}
