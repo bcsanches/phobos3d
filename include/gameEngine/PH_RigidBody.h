@@ -25,17 +25,18 @@ subject to the following restrictions:
 #include <PH_Types.h>
 
 #include "PH_CollisionShapeFwd.h"
+#include "PH_RigidBodyFwd.h"
 
 namespace Phobos
 {
 	class Transform_c;
 
 	namespace Physics
-	{
+	{		
 		class RigidBody_c
 		{
 			public:
-				RigidBody_c(const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape);
+				RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape);
 				~RigidBody_c();
 
 				void Register();
@@ -43,14 +44,22 @@ namespace Phobos
 
 				Transform_c GetTransform() const;
 
+				inline const btRigidBody &GetRigidBody() const;
+
+				void SetKinematicTransform(const btTransform &transform);
+
 			private:
-				//Unless we force this class to be allocated on 16 bytes aligned memory, we cannot create RigidBody without using new :(
-				//btRigidBody								clRigidBody;
+				//Unless we force this class to be allocated on 16 bytes aligned memory, we cannot create RigidBody without using new :(				
 				boost::scoped_ptr<btRigidBody>			spRigidBody;
 				boost::scoped_ptr<btDefaultMotionState> spMotionState;
 				CollisionShapePtr_t						spCollisionShape;
 
 		};
+
+		inline const btRigidBody &RigidBody_c::GetRigidBody() const
+		{
+			return *spRigidBody;
+		}
 	}
 }
 

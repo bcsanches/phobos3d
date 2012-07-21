@@ -23,12 +23,16 @@ namespace Phobos
 {	
 	namespace Physics
 	{
-		RigidBody_c::RigidBody_c(const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape):
+		RigidBody_c::RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape):
 			spRigidBody(new btRigidBody(info)),
 			spCollisionShape(shape),
 			spMotionState(motionState)
 		{
-			//empty
+			if(type == RBT_KINEMATIC)
+			{
+				spRigidBody->setCollisionFlags( spRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
+				spRigidBody->setActivationState(DISABLE_DEACTIVATION);
+			}
 		}
 
 		RigidBody_c::~RigidBody_c()
@@ -39,7 +43,7 @@ namespace Phobos
 
 		void RigidBody_c::Register()
 		{
-			PhysicsManager_c::GetInstance()->RegisterRigidBody(*spRigidBody);
+			PhysicsManager_c::GetInstance()->RegisterRigidBody(*spRigidBody, 1, 1);
 		}
 		
 		void RigidBody_c::Unregister()
@@ -53,6 +57,11 @@ namespace Phobos
 			spMotionState->getWorldTransform(bodyTransform);
 
 			return MakeTransform(bodyTransform, PhysicsManager_c::GetInstance()->GetPhysicsToGameScale());
+		}
+
+		void RigidBody_c::SetKinematicTransform(const btTransform &transform)
+		{
+			spMotionState->setWorldTransform(transform);
 		}
 	}
 }

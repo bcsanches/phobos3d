@@ -97,7 +97,7 @@ namespace Phobos
 				case PhysicsManager_c::CST_BOX:
 					{
 						Ogre::Vector3 boxDimensions = boxDimensions = DictionaryGetVector3(dictionary, "boxDimensions");						
-						spRigidBody = physicsManager->CreateBoxRigidBody(transform, mass, boxDimensions.x, boxDimensions.y, boxDimensions.z );			
+						spRigidBody = physicsManager->CreateBoxRigidBody(RBT_DYNAMIC, transform, mass, boxDimensions.x, boxDimensions.y, boxDimensions.z );			
 					}
 					break;
 

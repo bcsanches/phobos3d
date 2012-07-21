@@ -26,6 +26,13 @@ namespace Phobos
 		class RigidBody_c;
 
 		typedef boost::shared_ptr<RigidBody_c> RigidBodyPtr_t;
+
+		enum RigidBodyTypes_e
+		{
+			RBT_STATIC,
+			RBT_DYNAMIC,
+			RBT_KINEMATIC
+		};
 	}
 }
 

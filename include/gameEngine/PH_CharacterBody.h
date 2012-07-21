@@ -21,20 +21,23 @@ class btKinematicCharacterController;
 
 #include <OgrePrerequisites.h>
 
+#include <BulletDynamics/Dynamics/btActionInterface.h>
+#include <LinearMath/btVector3.h>
+
 #include <PH_Types.h>
 
 #include "PH_CharacterBodyFwd.h"
-#include "PH_CollisionShapeFwd.h"
 #include "PH_GameEngineAPI.h"
+#include "PH_RigidBodyFwd.h"
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API CharacterBody_c
+		class PH_GAME_ENGINE_API CharacterBody_c: private btActionInterface
 		{
 			public:
-				CharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape);
+				CharacterBody_c(RigidBodyPtr_t rigidBody, Float_t stepHeight);
 				~CharacterBody_c();
 
 				void SetWalkDirection(const Ogre::Vector3 &walkDirection);
@@ -47,10 +50,26 @@ namespace Phobos
 				void Teleport(const Ogre::Vector3 &position);
 
 			private:
-				boost::scoped_ptr<btPairCachingGhostObject> spGhostObject;
-				boost::scoped_ptr<btKinematicCharacterController> spCharacterController;
+				//For bullet
+				virtual void updateAction( btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 
-				CollisionShapePtr_t	spCollisionShape;
+				virtual void debugDraw(btIDebugDraw* debugDrawer);
+
+				bool GroundTrace(const btVector3 &position);
+
+				void Move(const btTransform &fromTransform, const btVector3 &linearVel, btTransform &toTransform, Float_t timeStep);
+
+			private:
+				RigidBodyPtr_t spRigidBody;
+
+				Float_t fpStepHeight;
+
+				btVector3 v3WalkDirection;
+
+				btVector3 v3GroundNormal;
+
+				bool fGroundPlane;
+				bool fWalking;
 		};
 	}
 }

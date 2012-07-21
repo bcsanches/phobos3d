@@ -118,7 +118,7 @@ namespace Phobos
 
 		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
 
-		staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(transform, 0, *staticObj.pclEntity->getMesh(), scale);		
+		staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, *staticObj.pclEntity->getMesh(), scale);		
 		staticObj.spRigidBody->Register();
 	}
 

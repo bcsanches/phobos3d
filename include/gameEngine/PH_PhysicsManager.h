@@ -47,6 +47,18 @@ namespace Phobos
 
 		PH_DECLARE_SINGLETON_PTR(PhysicsManager);
 
+		struct SweepCollisionResult_s
+		{	
+			btVector3				v3HitPointWorld;
+			btVector3				v3HitNormalWorld;
+
+			Float_t					fpFraction;
+
+			bool					fHasHit;
+
+			//RigidBody_c				*pclContact;
+		};
+
 		class PH_GAME_ENGINE_API PhysicsManager_c: public GenericComponentManager_c<RigidBodyComponent_c>
 		{
 			PH_DECLARE_SINGLETON_METHODS(PhysicsManager);
@@ -61,9 +73,9 @@ namespace Phobos
 
 				~PhysicsManager_c();				
 
-				RigidBodyPtr_t CreateBoxRigidBody(const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz);
-				RigidBodyPtr_t CreateCapsuleRigidBody(const Transform_c &transform, Float_t mass, Float_t radius, Float_t height);
-				RigidBodyPtr_t CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz);
+				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t radius, Float_t height);
+				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
 				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height);
 
@@ -95,19 +107,30 @@ namespace Phobos
 				CollisionShapePtr_t CreateCapsuleShape(Float_t radius, Float_t height);
 				CollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
-				RigidBodyPtr_t CreateRigidBody(const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass);
+				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass);
+
+				const btVector3 GetPhysicsGravity() const;
 
 				//
 				//
 				//RigidBody class interface
-				void RegisterRigidBody(btRigidBody &body);
+				void RegisterRigidBody(btRigidBody &body, short group, short mask);
 				void UnregisterRigidBody(btRigidBody &body);
 
 				void AddCollisionObject(btCollisionObject &collisionObject,short int collisionFilterGroup,short int collisionFilterMask);
 				void RemoveCollisionObject(btCollisionObject &collisionObject);
 
+				//
+				//
+				//Character body interface
+
 				void AddAction(btActionInterface &action);
 				void RemoveAction(btActionInterface &action);
+
+				//
+				//
+				//Collision interface
+				void ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end);
 
 			private:
 				boost::scoped_ptr<btDiscreteDynamicsWorld> spWorld;

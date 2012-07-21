@@ -88,38 +88,42 @@ namespace Phobos
 			spWorld->setGravity(MakeVector3(gravity, fpScale));
 		}
 
+		const btVector3 PhysicsManager_c::GetPhysicsGravity() const
+		{
+			return spWorld->getGravity();
+		}
+
 		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height)
 		{
-			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
-
-			CharacterBodyPtr_t ptr =  boost::make_shared<CharacterBody_c>(stepHeight, collisionShape);
-			ptr->Teleport(startPosition);
+			RigidBodyPtr_t body = this->CreateCapsuleRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height);
+			
+			CharacterBodyPtr_t ptr =  boost::make_shared<CharacterBody_c>(body, stepHeight);			
 
 			return ptr;
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateMeshShape(mesh, scale);
 
-			return this->CreateRigidBody(transform, collisionShape, mass);
+			return this->CreateRigidBody(type, transform, collisionShape, mass);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateBoxRigidBody(const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz)
+		RigidBodyPtr_t PhysicsManager_c::CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateBoxShape(dimx, dimy, dimz);
 
-			return this->CreateRigidBody(transform, collisionShape, mass);
+			return this->CreateRigidBody(type, transform, collisionShape, mass);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateCapsuleRigidBody(const Transform_c &transform, Float_t mass, Float_t radius, Float_t height)
+		RigidBodyPtr_t PhysicsManager_c::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t radius, Float_t height)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
 
-			return this->CreateRigidBody(transform, collisionShape, mass);
+			return this->CreateRigidBody(type, transform, collisionShape, mass);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass)
+		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass)
 		{
 			bool dynamic = mass != 0;
 
@@ -128,19 +132,19 @@ namespace Phobos
 			btCollisionShape &btShape = shape->GetCollisionShape();
 
 			if(dynamic)
-				btShape.calculateLocalInertia(mass, localInertia);
+				btShape.calculateLocalInertia(mass, localInertia);			
 
 			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform, fpScale));
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 
-			return boost::make_shared<RigidBody_c>(info, motionState, shape);
+			return boost::make_shared<RigidBody_c>(type, info, motionState, shape);
 			//return RigidBodyPtr_t(new RigidBody_c(info, motionState, shape));
 		}				
 
-		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body)
+		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body, short group, short mask)
 		{
-			spWorld->addRigidBody(&body);
+			spWorld->addRigidBody(&body, group, mask);
 		}
 
 		void PhysicsManager_c::UnregisterRigidBody(btRigidBody &body)
@@ -267,6 +271,54 @@ namespace Phobos
 			}			
 
 			return it->shared_from_this();	
-		}				
+		}
+
+		//
+		//
+		// Collision Detection
+		//
+		//
+
+		class ClosestNotMeConvexResultCallback_c: public btCollisionWorld::ClosestConvexResultCallback
+		{
+			public:
+				ClosestNotMeConvexResultCallback_c (const btCollisionObject &me) : 
+				  btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)),
+				  rclMe(me)
+				{
+					//empty
+				}	
+
+				virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult,bool normalInWorldSpace)
+				{
+					if (convexResult.m_hitCollisionObject == &rclMe)
+						return 1.0f;
+
+					if(convexResult.m_hitCollisionObject->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE)
+						return 1.0f;			
+
+					return ClosestConvexResultCallback::addSingleResult (convexResult, normalInWorldSpace);
+				}		
+				
+			protected:
+				const btCollisionObject &rclMe;
+		};
+
+		void PhysicsManager_c::ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end)
+		{			
+			ClosestNotMeConvexResultCallback_c callback (body);
+
+			callback.m_collisionFilterGroup = body.getBroadphaseHandle()->m_collisionFilterGroup;
+			callback.m_collisionFilterMask = body.getBroadphaseHandle()->m_collisionFilterMask;
+								
+			spWorld->convexSweepTest (static_cast<const btConvexShape *>(body.getCollisionShape()), start, end, callback);
+
+			result.fpFraction = callback.m_closestHitFraction;
+			result.fHasHit = callback.hasHit();
+			result.v3HitPointWorld = callback.m_hitPointWorld;
+			result.v3HitNormalWorld = callback.m_hitNormalWorld;
+
+			//result.pclContact = static_cast<IM_BtRigidBody_c *>(callback.m_hitCollisionObject ? callback.m_hitCollisionObject->getUserPointer() : NULL);
+		}
 	}
 }

@@ -139,7 +139,7 @@ namespace Phobos
 				object.pclSceneNode->_getDerivedOrientation()
 			);
 			
-			object.spRigidBody = physicsManager->CreateMeshRigidBody(transform, 0, *object.pclEntity->getMesh().get(), object.pclSceneNode->_getDerivedScale());
+			object.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, *object.pclEntity->getMesh().get(), object.pclSceneNode->_getDerivedScale());
 			object.spRigidBody->Register();			
 		}		
 		
