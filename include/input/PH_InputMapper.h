@@ -75,7 +75,7 @@ namespace Phobos
 					void OnInputEventThumb(const InputEvent_s &event);
 					void AddEventButtonInfo(std::stringstream &stream, const InputEvent_s &event) const;
 
-					UInt_t GetActionId(const String_c &name);
+					UInt_t GetActionId(const String_c &name);					
 
 				private:
 					ActionBindMap_t					mapActions;
@@ -119,8 +119,12 @@ namespace Phobos
 
 			void InputManagerEvent(const InputManagerEvent_s &event);			
 
+			void ForceButtonState(const String_c &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure);
+
 			void CmdUnbind(const StringVector_t &args, Context_c &);
-			void CmdBind(const StringVector_t &args, Context_c &);			
+			void CmdBind(const StringVector_t &args, Context_c &);
+			void CmdPushButton(const StringVector_t &args, Context_c &);
+			void CmdReleaseButton(const StringVector_t &args, Context_c &);
 
 		private:
 			// =====================================================
@@ -135,6 +139,8 @@ namespace Phobos
 
 			ContextCmd_c			cmdBind;
 			ContextCmd_c			cmdUnbind;
+			ContextCmd_c			cmdPushButton;
+			ContextCmd_c			cmdReleaseButton;
 	};
 
 	inline void InputMapper_c::Disable()

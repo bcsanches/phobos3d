@@ -45,7 +45,9 @@ namespace Phobos
 		rclContext(context),
 		fDisable(false),
 		cmdBind("bind"),
-		cmdUnbind("unbind")
+		cmdUnbind("unbind"),
+		cmdPushButton("pushButton"),
+		cmdReleaseButton("releaseButton")
 	{
 		InputManagerPtr_t manager = InputManager_c::GetInstance();
 
@@ -53,9 +55,13 @@ namespace Phobos
 
 		cmdBind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdBind, this));
 		cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdUnbind, this));
+		cmdPushButton.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdPushButton, this));
+		cmdReleaseButton.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdReleaseButton, this));
 
 		rclContext.AddContextCmd(cmdBind);
 		rclContext.AddContextCmd(cmdUnbind);
+		rclContext.AddContextCmd(cmdPushButton);
+		rclContext.AddContextCmd(cmdReleaseButton);
 	}
 
 	InputMapper_c::~InputMapper_c(void)
@@ -271,6 +277,48 @@ namespace Phobos
 			{
 				Kernel_c::GetInstance().LogMessage(e.what());
 			}
+		}
+	}
+
+	void InputMapper_c::ForceButtonState(const String_c &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure)
+	{
+		std::stringstream	stream;
+
+		if(commandName[0] != cmdPrefix)
+			stream << cmdPrefix;
+
+		stream << commandName;
+		stream << ' ' <<
+		INPUT_EVENT_BUTTON << ' ' <<
+		0 << ' ' <<
+		pressure << ' ' <<
+		state << ' ' <<
+		"user";
+
+		rclContext.Execute(stream.str());
+	}
+
+	void InputMapper_c::CmdPushButton(const StringVector_t &args, Context_c &)
+	{
+		if(args.size() < 2)
+		{
+			Kernel_c::GetInstance().LogMessage("Usage: pushButton <buttonName>");			
+		}
+		else
+		{
+			this->ForceButtonState(args[1], '+', BUTTON_STATE_DOWN, 1);			
+		}
+	}
+
+	void InputMapper_c::CmdReleaseButton(const StringVector_t &args, Context_c &)
+	{
+		if(args.size() < 2)
+		{
+			Kernel_c::GetInstance().LogMessage("Usage: releaseButton <buttonName>");			
+		}
+		else
+		{
+			this->ForceButtonState(args[1], '-', BUTTON_STATE_UP, 0);
 		}
 	}
 

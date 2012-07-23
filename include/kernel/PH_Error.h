@@ -19,18 +19,28 @@ subject to the following restrictions:
 
 #ifdef PH_CHECK_ASSERT
 #	if (defined PH_MSVC)
-#		include <crtdbg.h>
-#		define PH_ASSERT(EXP) _ASSERTE(EXP)
-#		define PH_ASSERT_MSG(EXP, MSG) _ASSERT_EXPR(EXP, _CRT_WIDE(MSG))
-#		define PH_ASSERT_VALID(VALUE) _ASSERTE(VALUE != NULL)
-#		define PH_ASSERT_VALID_MSG(VALUE, MSG) _ASSERT_EXPR(VALUE != NULL, _CRT_WIDE(MSG))
+#		if(defined _DEBUG)
+#			include <crtdbg.h>
+#			define PH_ASSERT(EXP) _ASSERTE(EXP)
+#			define PH_ASSERT_MSG(EXP, MSG) _ASSERT_EXPR(EXP, _CRT_WIDE(MSG))
+#			define PH_ASSERT_VALID(VALUE) _ASSERTE(VALUE != NULL)
+#			define PH_ASSERT_VALID_MSG(VALUE, MSG) _ASSERT_EXPR(VALUE != NULL, _CRT_WIDE(MSG))
 
-#		define PH_VERIFY(EXP) PH_ASSERT(EXP)
-#		define PH_VERIFY_MSG(EXP, MSG) PH_ASSERT_MSG(EXP, MSG)
+#			define PH_VERIFY(EXP) PH_ASSERT(EXP)
+#			define PH_VERIFY_MSG(EXP, MSG) PH_ASSERT_MSG(EXP, MSG)
 
-#		define PH_ASSERT_ADDRESS_ALIGN_SIZE(VAR, SIZE) PH_ASSERT((SIZE != 0) && (((PH_Size_t) VAR) % SIZE) == 0)
-#		define PH_ASSERT_ADDRESS_ALIGN(VAR) PH_ASSERT_ADDRESS_ALIGN_SIZE(VAR, sizeof(*VAR))
-#		define PH_ASSERT_ALIGN(VAR) PH_ASSERT_ADDRESS_ALIGN_SIZE(&VAR, sizeof(VAR))
+#			define PH_ASSERT_ADDRESS_ALIGN_SIZE(VAR, SIZE) PH_ASSERT((SIZE != 0) && (((PH_Size_t) VAR) % SIZE) == 0)
+#			define PH_ASSERT_ADDRESS_ALIGN(VAR) PH_ASSERT_ADDRESS_ALIGN_SIZE(VAR, sizeof(*VAR))
+#			define PH_ASSERT_ALIGN(VAR) PH_ASSERT_ADDRESS_ALIGN_SIZE(&VAR, sizeof(VAR))
+#		else
+#			define PH_ASSERT(EXP)
+#			define PH_ASSERT_MSG(EXP, MSG)
+#			define PH_ASSERT_VALID(VALUE)
+#			define PH_ASSERT_VALID_MSG(VALUE, MSG)
+#			define PH_ASSERT_ADDRESS_ALIGN(VALUE)
+#			define PH_VERIFY(EXP) if(EXP){};
+#			define PH_VERIFY_MSG(EXP, MSG) EXP
+#		endif
 #   elif(defined PH_GCC)
 #		define PH_ASSERT(EXP)
 #		define PH_ASSERT_MSG(EXP, MSG)

@@ -77,6 +77,19 @@ namespace Phobos
 		cmdListVars("listVars"),
 		cmdSet("set"),
 		cmdIf("if"),
+	#ifdef PH_RELEASE_LIBS
+		varDebugWithDebugLib("dvDebugWithDebugLib", "false"),
+		varDebugWithReleaseLib("dvDebugWithReleaseLib", "false"),
+		varReleaseLib("dvReleaseLib", "true"),
+	#elif (defined PH_DEBUG_WITH_RELEASE_LIBS)
+		varDebugWithDebugLib("dvDebugWithDebugLib", "false"),
+		varDebugWithReleaseLib("dvDebugWithReleaseLib", "true"),
+		varReleaseLib("dvReleaseLib", "false"),
+	#elif (defined PH_DEBUG_WITH_DEBUG_LIBS)
+		varDebugWithDebugLib("dvDebugWithDebugLib", "true"),
+		varDebugWithReleaseLib("dvDebugWithReleaseLib", "false"),
+		varReleaseLib("dvReleaseLib", "false"),
+	#endif
 	#ifdef PH_DEBUG
 		varDebug("dvDebug", "true"),
 		varRelease("dvRelease", "false"),
@@ -138,6 +151,9 @@ namespace Phobos
 		this->AddContextCmd(cmdSet);
 		this->AddContextCmd(cmdIf);
 
+		this->AddContextVar(varDebugWithDebugLib);
+		this->AddContextVar(varDebugWithReleaseLib);
+		this->AddContextVar(varReleaseLib);
 		this->AddContextVar(varDebug);
 		this->AddContextVar(varRelease);
 		this->AddContextVar(varLinux);

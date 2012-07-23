@@ -64,7 +64,7 @@
 				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2008\lib\release&quot;"
+				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2008\lib\debug&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="..\..\..\lib\$(TargetName).lib"
@@ -145,6 +145,82 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\..\..\lib\$(TargetName).lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug_rel|Win32"
+			OutputDirectory="..\..\..\bin"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include\kernel\&quot;;&quot;$(ProjectDir)..\..\..\include\engineCore\&quot;;&quot;$(ProjectDir)..\..\..\include\input\&quot;;&quot;$(ProjectDir)..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)..\..\..\include\ogreEngineCore&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="OgreMain.lib OgreTerrain.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
+				OutputFile="$(OutDir)\$(ProjectName)_dr.dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2008\lib\release&quot;"
+				GenerateDebugInformation="true"
+				SubSystem="2"
 				ImportLibrary="..\..\..\lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
@@ -358,18 +434,6 @@
 			Name="physics"
 			>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_CharacterBody.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_CharacterBody.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_CharacterBodyFwd.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>
 			</File>
@@ -402,6 +466,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\gameEngine\PH_GhostCharacterBody.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GhostCharacterBody.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_ICharacterBody.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_ICharacterBodyFwd.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_PhysicsManager.cpp"
 				>
 			</File>
@@ -431,6 +511,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_RigidBodyFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_SweepCharacterBody.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_SweepCharacterBody.h"
 				>
 			</File>
 		</Filter>

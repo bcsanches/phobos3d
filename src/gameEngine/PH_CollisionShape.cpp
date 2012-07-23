@@ -16,6 +16,8 @@ subject to the following restrictions:
 
 #include "PH_CollisionShape.h"
 
+#include <PH_Exception.h>
+
 #include <iostream>
 
 namespace Phobos
@@ -36,8 +38,11 @@ namespace Phobos
 			eType(CST_CAPSULE),			
 			pclMesh(NULL)
 		{
+			if((info.fpRadius * 2) > info.fpHeight)
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape_c::Key_s", "Capsule height must be > than 2 * radius");
+
 			uShapeInfo.stCapsule.fpRadius = info.fpRadius * physicsScale;			
-			uShapeInfo.stCapsule.fpHeight = info.fpHeight * physicsScale;			
+			uShapeInfo.stCapsule.fpHeight = (info.fpHeight - (2 * info.fpRadius))* physicsScale;			
 		}
 				
 		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale):

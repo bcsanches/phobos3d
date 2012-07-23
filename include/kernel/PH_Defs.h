@@ -51,4 +51,19 @@ subject to the following restrictions:
 	#error "Phobos: please define PH_SDL or PH_NATIVE"
 	#endif
 
+	#if (defined PH_WIN32)
+
+		#if(defined NDEBUG)
+			#if(defined PH_DEBUG)
+				#define PH_DEBUG_WITH_RELEASE_LIBS
+			#else
+				#define PH_RELEASE_LIBS
+			#endif
+		#else
+			#define PH_DEBUG_WITH_DEBUG_LIBS			
+		#endif	
+	#else
+		#error "Could not determine runtime library"
+	#endif
+	
 #endif

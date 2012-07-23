@@ -17,12 +17,13 @@ subject to the following restrictions:
 #include <PH_Console.h>
 #include <PH_Core.h>
 
-#include "PH_CharacterBody.h"
 #include "PH_CollisionShapes.h"
+#include "PH_GhostCharacterBody.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtils.h"
 #include "PH_RigidBody.h"
 #include "PH_RigidBodyComponent.h"
+#include "PH_SweepCharacterBody.h"
 
 namespace Phobos
 {
@@ -33,7 +34,8 @@ namespace Phobos
 		PhysicsManager_c::PhysicsManager_c():
 			GenericComponentManager_c("PhysicsManager", PRIVATE_CHILDREN),
 			fpScale(1),
-			varPhysicsScale("dvPhysicsScale", "1")
+			varPhysicsScale("dvPhysicsScale", "1"),
+			clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))
 		{
 			//empty
 		}
@@ -55,6 +57,7 @@ namespace Phobos
 			spCollisionDispatcher.reset(new btCollisionDispatcher(&clCollisionConfig));
 			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
 
+			spWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
 			clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&clGhostPairCallback); 
 
 			fpScale = StringToFloat(varPhysicsScale.GetValue());
@@ -95,9 +98,13 @@ namespace Phobos
 
 		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height)
 		{
-			RigidBodyPtr_t body = this->CreateCapsuleRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height);
+			//RigidBodyPtr_t body = this->CreateCapsuleRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height);
+			//RigidBodyPtr_t body = this->CreateBoxRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height, radius);
 			
-			CharacterBodyPtr_t ptr =  boost::make_shared<CharacterBody_c>(body, stepHeight);			
+			//CharacterBodyPtr_t ptr =  boost::make_shared<SweepCharacterBody_c>(body, stepHeight);
+			CollisionShapePtr_t shape = this->CreateCapsuleShape(radius, height);
+			CharacterBodyPtr_t ptr = boost::make_shared<GhostCharacterBody_c>(stepHeight, shape);
+			ptr->Teleport(startPosition);
 
 			return ptr;
 		}
@@ -138,8 +145,7 @@ namespace Phobos
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 
-			return boost::make_shared<RigidBody_c>(type, info, motionState, shape);
-			//return RigidBodyPtr_t(new RigidBody_c(info, motionState, shape));
+			return boost::make_shared<RigidBody_c>(type, info, motionState, shape);			
 		}				
 
 		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body, short group, short mask)
@@ -311,7 +317,7 @@ namespace Phobos
 			callback.m_collisionFilterGroup = body.getBroadphaseHandle()->m_collisionFilterGroup;
 			callback.m_collisionFilterMask = body.getBroadphaseHandle()->m_collisionFilterMask;
 								
-			spWorld->convexSweepTest (static_cast<const btConvexShape *>(body.getCollisionShape()), start, end, callback);
+			spWorld->convexSweepTest (static_cast<const btConvexShape *>(body.getCollisionShape()), start, end, callback);			
 
 			result.fpFraction = callback.m_closestHitFraction;
 			result.fHasHit = callback.hasHit();

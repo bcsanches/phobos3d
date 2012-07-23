@@ -4,6 +4,7 @@
 #include <OgreVector3.h>
 
 #include <PH_Error.h>
+#include <PH_Exception.h>
 
 #include "PH_CollisionMesh.h"
 #include "PH_PhysicsUtils.h"
@@ -61,9 +62,10 @@ namespace Phobos
 		
 		CapsuleCollisionShape_c::CapsuleCollisionShape_c(Float_t radius, Float_t height, Float_t physicsScale):
 			CollisionShape_c(CST_CAPSULE),
-			clCapsuleShape(radius * physicsScale, height * physicsScale)
+			clCapsuleShape(radius * physicsScale, (height - (2 * radius))* physicsScale)
 		{
-			//empty
+			if((radius * 2) > height)
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape_c::Key_s", "Capsule height must be > than 2 * radius");
 		}
 
 

@@ -30,7 +30,7 @@ subject to the following restrictions:
 #include <PH_ContextVar.h>
 #include <PH_Singleton.h>
 
-#include "PH_CharacterBodyFwd.h"
+#include "PH_ICharacterBodyFwd.h"
 #include "PH_CollisionShape.h"
 #include "PH_CollisionMesh.h"
 #include "PH_GameEngineAPI.h"
@@ -137,7 +137,7 @@ namespace Phobos
 				boost::scoped_ptr<btCollisionDispatcher> spCollisionDispatcher;
 
 				btDefaultCollisionConfiguration			clCollisionConfig;
-				btDbvtBroadphase						clBroadphase;
+				btAxisSweep3							clBroadphase;
 				btSequentialImpulseConstraintSolver		clConstraintSolver;		
 
 				btGhostPairCallback						clGhostPairCallback;
@@ -153,7 +153,8 @@ namespace Phobos
 				CollisionMeshesSet_t setCollisionMeshesCache;
 
 				friend class RigidBody_c;
-				friend class CharacterBody_c;
+				friend class SweepCharacterBody_c;
+				friend class GhostCharacterBody_c;
 
 		};
 

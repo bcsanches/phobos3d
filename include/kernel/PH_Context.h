@@ -107,6 +107,9 @@ namespace Phobos
 			ContextCmd_c cmdSet;
 			ContextCmd_c cmdIf;
 
+			ContextVar_c	varDebugWithDebugLib;
+			ContextVar_c	varDebugWithReleaseLib;
+			ContextVar_c	varReleaseLib;
 			ContextVar_c	varDebug;
 			ContextVar_c	varRelease;
 			ContextVar_c    varLinux;
