@@ -15,7 +15,7 @@ subject to the following restrictions:
 */
 
 class btPairCachingGhostObject;
-class btKinematicCharacterController;
+//class btKinematicCharacterController;
 
 #include <boost/scoped_ptr.hpp>
 
@@ -31,6 +31,8 @@ namespace Phobos
 {
 	namespace Physics
 	{
+		class KinematicCharacterController_c;
+
 		class PH_GAME_ENGINE_API GhostCharacterBody_c: public ICharacterBody_c
 		{
 			public:
@@ -48,7 +50,8 @@ namespace Phobos
 
 			private:
 				boost::scoped_ptr<btPairCachingGhostObject> spGhostObject;
-				boost::scoped_ptr<btKinematicCharacterController> spCharacterController;
+				//boost::scoped_ptr<btKinematicCharacterController> spCharacterController;
+				boost::scoped_ptr<KinematicCharacterController_c> spCharacterController;
 
 				CollisionShapePtr_t	spCollisionShape;
 		};

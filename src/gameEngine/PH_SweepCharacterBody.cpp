@@ -10,11 +10,11 @@
 #include "PH_PhysicsUtils.h"
 #include "PH_RigidBody.h"
 
-#define GROUND_CHECK -0.005f
+#define GROUND_CHECK -0.1f
 #define MIN_WALK_NORMAL 0.7f
 #define	MAX_CLIP_PLANES	5
 #define MAX_LOOPS 4
-#define EPSILON 0.01f
+#define EPSILON 0.00001f
 
 #define OVERCLIP 1.001f;
 
@@ -90,7 +90,7 @@ namespace Phobos
 
 		bool SweepCharacterBody_c::GroundTrace(const btVector3 &position)
 		{
-			btTransform toTransform(btQuaternion::getIdentity(), position + btVector3(0, GROUND_CHECK, 0));
+			btTransform toTransform(btQuaternion::getIdentity(), position + btVector3(0, GROUND_CHECK, 0));			
 	
 			SweepCollisionResult_s collisionResult;
 
@@ -192,6 +192,8 @@ namespace Phobos
 			
 				if( !cb.fHasHit || (cb.fHasHit && cb.fpFraction == 0))
 				{				
+					if(cb.fHasHit)
+						toTransform = fromTransform;
 					break;		
 				}
 			

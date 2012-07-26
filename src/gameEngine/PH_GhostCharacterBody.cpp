@@ -2,10 +2,11 @@
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <BulletCollision/CollisionShapes/btConvexShape.h>
-#include <BulletDynamics/Character/btKinematicCharacterController.h>
+//#include <BulletDynamics/Character/btKinematicCharacterController.h>
 
 #include "PH_CollisionShape.h"
 
+#include "PH_KinematicCharacterController.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtils.h"
 
@@ -22,7 +23,8 @@ namespace Phobos
 			spGhostObject->setCollisionShape(&collisionShape->GetCollisionShape());
 			spGhostObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
 
-			spCharacterController.reset(new btKinematicCharacterController(&*spGhostObject, static_cast<btConvexShape *>(&collisionShape->GetCollisionShape()), stepHeight));
+			//spCharacterController.reset(new btKinematicCharacterController(&*spGhostObject, static_cast<btConvexShape *>(&collisionShape->GetCollisionShape()), stepHeight));
+			spCharacterController.reset(new KinematicCharacterController_c(&*spGhostObject, static_cast<btConvexShape *>(&collisionShape->GetCollisionShape()), stepHeight));
 		}
 
 		GhostCharacterBody_c::~GhostCharacterBody_c()

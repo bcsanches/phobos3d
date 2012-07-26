@@ -97,14 +97,16 @@ namespace Phobos
 		}
 
 		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height)
-		{
-			//RigidBodyPtr_t body = this->CreateCapsuleRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height);
-			//RigidBodyPtr_t body = this->CreateBoxRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height, radius);
+		{	
+#if 1
+			RigidBodyPtr_t body = this->CreateBoxRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height, radius);
+			CharacterBodyPtr_t ptr =  boost::make_shared<SweepCharacterBody_c>(body, stepHeight);
+#else
 			
-			//CharacterBodyPtr_t ptr =  boost::make_shared<SweepCharacterBody_c>(body, stepHeight);
-			CollisionShapePtr_t shape = this->CreateCapsuleShape(radius, height);
+			CollisionShapePtr_t shape = this->CreateCapsuleShape(radius, height);			
 			CharacterBodyPtr_t ptr = boost::make_shared<GhostCharacterBody_c>(stepHeight, shape);
 			ptr->Teleport(startPosition);
+#endif
 
 			return ptr;
 		}

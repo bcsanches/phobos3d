@@ -33,6 +33,10 @@ namespace Phobos
 				spRigidBody->setCollisionFlags( spRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
 				spRigidBody->setActivationState(DISABLE_DEACTIVATION);
 			}
+			else if(type == RBT_STATIC)
+			{
+				spRigidBody->setCollisionFlags( spRigidBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT );
+			}
 		}
 
 		RigidBody_c::~RigidBody_c()
