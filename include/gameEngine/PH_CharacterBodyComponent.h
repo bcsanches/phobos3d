@@ -14,38 +14,47 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ICHARACTER_BODY_H
-#define PH_ICHARACTER_BODY_H
+#ifndef PH_CHARACTER_BODY_COMPONENT_H
+#define PH_CHARACTER_BODY_COMPONENT_H
 
-#include <OgrePrerequisites.h>
+#include <PH_Vector3Property.h>
 
-#include <PH_Types.h>
-
-#include "PH_ICharacterBodyFwd.h"
+#include "PH_EntityComponent.h"
 #include "PH_GameEngineAPI.h"
-#include "PH_RigidBodyFwd.h"
+#include "PH_PhysicsManager.h"
+#include "PH_Transform.h"
+
+#define PH_CHARACTER_BODY_COMPONENT_NAME "CharacterBody"
 
 namespace Phobos
 {
+	class TransformProperty_c;
+
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API ICharacterBody_c
+		class PH_GAME_ENGINE_API CharacterBodyComponent_c: public EntityComponent_c
 		{
-			public:				
-				virtual ~ICharacterBody_c() {};
+			public:
+				static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
 
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection) = 0;
-				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
+				~CharacterBodyComponent_c();
 
-				virtual Ogre::Vector3 GetPosition() const = 0;
-
-				virtual void Register() = 0;
-				virtual void Unregister() = 0;
-
-				virtual void Teleport(const Ogre::Vector3 &position) = 0;
+				void PreparePhysicsFrame(Float_t delta);
+				void FinishPhysicsFrame();
 
 			protected:
-				ICharacterBody_c() { };
+				CharacterBodyComponent_c(const String_c &name, Entity_c &owner);				
+
+				void OnLoad(const Dictionary_c &dictionary);
+				void OnLoadFinished();
+
+			private:				
+				Vector3Property_c	prpVelocity;
+				Vector3Property_c	prpCharacterPosition;
+
+				CharacterBodyPtr_t	spCharacterBody;
+
+				TransformProperty_c *pprpTransform;				
 		};
 	}
 }

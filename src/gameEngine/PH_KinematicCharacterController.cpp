@@ -135,7 +135,7 @@ namespace Phobos
 			m_upAxis = upAxis;
 			m_addedMargin = 0.02f;
 			m_walkDirection.setValue(0,0,0);
-			m_useGhostObjectSweepTest = false;
+			m_useGhostObjectSweepTest = true;
 			m_ghostObject = ghostObject;
 			m_stepHeight = stepHeight;
 			m_turnAngle = btScalar(0.0);
@@ -348,8 +348,7 @@ namespace Phobos
 				fraction -= callback.m_closestHitFraction;
 
 				if (callback.hasHit())
-				{	
-					fraction = 1.0;
+				{						
 					// we moved only a fraction
 					btScalar hitDistance = (callback.m_hitPointWorld - m_currentPosition).length();
 
@@ -536,7 +535,7 @@ namespace Phobos
 		//	printf("walkDirection(%f,%f,%f)\n",walkDirection[0],walkDirection[1],walkDirection[2]);
 		//	printf("walkSpeed=%f\n",walkSpeed);
 
-			//stepUp (collisionWorld);
+			stepUp (collisionWorld);
 			if (m_useWalkDirection) {
 				stepForwardAndStrafe (collisionWorld, m_walkDirection);
 			} else {

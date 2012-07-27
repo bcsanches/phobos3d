@@ -14,40 +14,12 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ICHARACTER_BODY_H
-#define PH_ICHARACTER_BODY_H
-
-#include <OgrePrerequisites.h>
-
-#include <PH_Types.h>
-
-#include "PH_ICharacterBodyFwd.h"
-#include "PH_GameEngineAPI.h"
-#include "PH_RigidBodyFwd.h"
+#ifndef PH_VECTOR3_PROPERTY_FWD_H
+#define PH_VECTOR3_PROPERTY_FWD_H
 
 namespace Phobos
 {
-	namespace Physics
-	{
-		class PH_GAME_ENGINE_API ICharacterBody_c
-		{
-			public:				
-				virtual ~ICharacterBody_c() {};
-
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection) = 0;
-				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
-
-				virtual Ogre::Vector3 GetPosition() const = 0;
-
-				virtual void Register() = 0;
-				virtual void Unregister() = 0;
-
-				virtual void Teleport(const Ogre::Vector3 &position) = 0;
-
-			protected:
-				ICharacterBody_c() { };
-		};
-	}
+	class Vector3Property_c;
 }
 
 #endif

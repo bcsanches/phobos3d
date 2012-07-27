@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include <PH_Console.h>
 #include <PH_Core.h>
 
+#include "PH_CharacterBodyComponent.h"
 #include "PH_CollisionShapes.h"
 #include "PH_GhostCharacterBody.h"
 #include "PH_PhysicsManager.h"
@@ -32,7 +33,7 @@ namespace Phobos
 		PH_DEFINE_DEFAULT_SINGLETON(PhysicsManager);
 
 		PhysicsManager_c::PhysicsManager_c():
-			GenericComponentManager_c("PhysicsManager", PRIVATE_CHILDREN),
+			CoreModule_c("PhysicsManager", PRIVATE_CHILDREN),
 			fpScale(1),
 			varPhysicsScale("dvPhysicsScale", "1"),
 			clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))
@@ -72,8 +73,12 @@ namespace Phobos
 			if(timer.IsPaused())
 				return;
 
-			GenericComponentManager_c::CallForAll(&RigidBodyComponent_c::SaveTransform);
+			clRigidBodyComponents.CallForAll(&RigidBodyComponent_c::SaveTransform);
+			clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent_c::PreparePhysicsFrame, timer.fpFrameTime);
+
 			spWorld->stepSimulation(timer.fpFrameTime, 32);
+
+			clCharacterBodyComponents.CallForAll(&CharacterBodyComponent_c::FinishPhysicsFrame);
 		}
 
 		void PhysicsManager_c::OnUpdate()
@@ -83,7 +88,7 @@ namespace Phobos
 				return;
 			
 			//No pause check, to allow client interpolation
-			GenericComponentManager_c::CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
+			clRigidBodyComponents.CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
 		}
 
 		void PhysicsManager_c::SetGravity(const Ogre::Vector3 &gravity)
@@ -98,7 +103,7 @@ namespace Phobos
 
 		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height)
 		{	
-#if 1
+#if 0
 			RigidBodyPtr_t body = this->CreateBoxRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height, radius);
 			CharacterBodyPtr_t ptr =  boost::make_shared<SweepCharacterBody_c>(body, stepHeight);
 #else
@@ -327,6 +332,32 @@ namespace Phobos
 			result.v3HitNormalWorld = callback.m_hitNormalWorld;
 
 			//result.pclContact = static_cast<IM_BtRigidBody_c *>(callback.m_hitCollisionObject ? callback.m_hitCollisionObject->getUserPointer() : NULL);
+		}
+		
+		//
+		//
+		//
+		//
+		//COMPONENTS
+
+		void PhysicsManager_c::RegisterRigidBodyComponent(RigidBodyComponent_c &comp)
+		{
+			clRigidBodyComponents.Register(comp);
+		}
+		
+		void PhysicsManager_c::UnregisterRigidBodyComponent(RigidBodyComponent_c &comp)
+		{
+			clRigidBodyComponents.Unregister(comp);
+		}
+
+		void PhysicsManager_c::RegisterCharacterBodyComponent(CharacterBodyComponent_c &comp)
+		{
+			clCharacterBodyComponents.Register(comp);
+		}
+
+		void PhysicsManager_c::UnregisterCharacterBodyComponent(CharacterBodyComponent_c &comp)
+		{
+			clCharacterBodyComponents.Unregister(comp);
 		}
 	}
 }

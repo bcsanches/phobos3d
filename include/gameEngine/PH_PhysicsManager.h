@@ -30,11 +30,11 @@ subject to the following restrictions:
 #include <PH_ContextVar.h>
 #include <PH_Singleton.h>
 
-#include "PH_ICharacterBodyFwd.h"
 #include "PH_CollisionShape.h"
 #include "PH_CollisionMesh.h"
 #include "PH_GameEngineAPI.h"
-#include "PH_GenericComponentManager.h"
+#include "PH_GenericComponentManagerModule.h"
+#include "PH_ICharacterBodyFwd.h"
 #include "PH_RigidBodyFwd.h"
 
 namespace Phobos
@@ -42,9 +42,7 @@ namespace Phobos
 	class Transform_c;
 
 	namespace Physics
-	{		
-		class RigidBodyComponent_c;
-
+	{						
 		PH_DECLARE_SINGLETON_PTR(PhysicsManager);
 
 		struct SweepCollisionResult_s
@@ -59,7 +57,10 @@ namespace Phobos
 			//RigidBody_c				*pclContact;
 		};
 
-		class PH_GAME_ENGINE_API PhysicsManager_c: public GenericComponentManager_c<RigidBodyComponent_c>
+		class CharacterBodyComponent_c;
+		class RigidBodyComponent_c;
+
+		class PH_GAME_ENGINE_API PhysicsManager_c: public CoreModule_c
 		{
 			PH_DECLARE_SINGLETON_METHODS(PhysicsManager);
 
@@ -83,6 +84,15 @@ namespace Phobos
 
 				inline Float_t GetScale() const;
 				inline Float_t GetPhysicsToGameScale() const;
+
+				//
+				//
+				//Components
+				void RegisterRigidBodyComponent(RigidBodyComponent_c &comp);
+				void UnregisterRigidBodyComponent(RigidBodyComponent_c &comp);
+
+				void RegisterCharacterBodyComponent(CharacterBodyComponent_c &comp);
+				void UnregisterCharacterBodyComponent(CharacterBodyComponent_c &comp);
 
 			protected:
 				virtual void OnPrepareToBoot();
@@ -118,7 +128,7 @@ namespace Phobos
 				void UnregisterRigidBody(btRigidBody &body);
 
 				void AddCollisionObject(btCollisionObject &collisionObject,short int collisionFilterGroup,short int collisionFilterMask);
-				void RemoveCollisionObject(btCollisionObject &collisionObject);
+				void RemoveCollisionObject(btCollisionObject &collisionObject);				
 
 				//
 				//
@@ -151,6 +161,9 @@ namespace Phobos
 
 				//Because scaled meshes references the original mesh we keep a cache of all meshes that were been loaded
 				CollisionMeshesSet_t setCollisionMeshesCache;
+
+				GenericComponentManager_c<RigidBodyComponent_c>			clRigidBodyComponents;
+				GenericComponentManager_c<CharacterBodyComponent_c>	clCharacterBodyComponents;
 
 				friend class RigidBody_c;
 				friend class SweepCharacterBody_c;

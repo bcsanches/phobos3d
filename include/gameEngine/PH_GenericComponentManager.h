@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-July 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+July 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -17,7 +17,6 @@ subject to the following restrictions:
 #ifndef PH_GENERIC_COMPONENT_MANAGER_H
 #define PH_GENERIC_COMPONENT_MANAGER_H
 
-#include <PH_CoreModule.h>
 #include <PH_Exception.h>
 
 #include "PH_GameEngineAPI.h"
@@ -26,11 +25,19 @@ subject to the following restrictions:
 namespace Phobos
 {			
 	template <typename T>
-	class PH_GAME_ENGINE_API GenericComponentManager_c: public CoreModule_c
-	{
-		//PH_DECLARE_SINGLETON_METHODS(GenericComponentManager_c);
-
+	class PH_GAME_ENGINE_API GenericComponentManager_c
+	{		
 		public:
+			GenericComponentManager_c()				
+			{
+				memset(arpclComponents, 0, sizeof(arpclComponents));
+			}
+
+			~GenericComponentManager_c()
+			{
+				//empty
+			}
+
 			void Register(T &comp)
 			{
 				UInt_t index = comp.GetEntityHandle().u12Index;
@@ -48,14 +55,7 @@ namespace Phobos
 					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[ModelRendererManager_c::Unregister]", "Slot contains another component");
 
 				arpclComponents[index] = NULL;
-			}
-
-		protected:
-			GenericComponentManager_c(const String_c &name, ChildrenMode_e mode =PUBLIC_CHILDREN):
-				CoreModule_c(name, mode)
-			{
-				memset(arpclComponents, 0, sizeof(arpclComponents));
-			}
+			}			
 
 			void CallForAll(void (T::*proc)())
 			{
@@ -86,12 +86,7 @@ namespace Phobos
 					(arpclComponents[i]->*proc)(p1);
 					++count;
 				}
-			}
-
-			~GenericComponentManager_c()
-			{
-				//empty
-			}
+			}			
 
 		protected:
 			T *arpclComponents[EntityManager_c::MAX_ENTRIES];

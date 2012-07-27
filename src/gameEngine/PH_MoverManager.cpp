@@ -24,7 +24,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(MoverManager);	
 
 	MoverManager_c::MoverManager_c():
-		GenericComponentManager_c("MoverManager")
+		GenericComponentManagerModule_c("MoverManager")
 	{
 		//empty
 	}

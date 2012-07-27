@@ -318,6 +318,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GenericComponentManagerModule.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_ModelRendererComponent.cpp"
 				>
 			</File>
@@ -433,6 +437,14 @@
 		<Filter
 			Name="physics"
 			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_CharacterBodyComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CharacterBodyComponent.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>

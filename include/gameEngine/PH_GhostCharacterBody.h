@@ -40,6 +40,7 @@ namespace Phobos
 				virtual ~GhostCharacterBody_c();
 
 				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection);
+				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
 
 				virtual Ogre::Vector3 GetPosition() const;
 

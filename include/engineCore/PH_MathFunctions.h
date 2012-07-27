@@ -20,8 +20,6 @@ subject to the following restrictions:
 #include <float.h>
 #include <algorithm>
 
-#include <OgreQuaternion.h>
-#include <OgreMath.h>
 #include <PH_Types.h>
 
 #define PH_FLOAT_EPSILON FLT_EPSILON
@@ -43,13 +41,7 @@ namespace Phobos
 	inline T MathInterpolate(const T &a, const T & b, Float_t alpha)
 	{
 		return(MathLerp<T>(a, b, alpha));
-	}
-
-	template <>
-	inline Ogre::Quaternion MathInterpolate(const Ogre::Quaternion &a, const Ogre::Quaternion &b, Float_t alpha)
-	{
-		return(Ogre::Quaternion::Slerp(alpha, a, b, true));
-	}
+	}	
 
 	template <typename T>
 	inline T MathClamp(const T value, const T minV, const T maxV)
@@ -62,24 +54,7 @@ namespace Phobos
 	inline T MathPositive(const T v1)
 	{
 		return std::abs(v1, -v1);
-	}
-
-	inline Ogre::Degree ClipDegree(Ogre::Degree angle)
-	{
-		const Ogre::Real r360(360);
-		if(angle >= Ogre::Degree(r360))
-		{
-			int div = (int)(angle.valueDegrees() / 360.0f);
-			angle -= Ogre::Degree(r360) * Ogre::Real(div);
-		}
-		else if (angle < Ogre::Degree(0))
-		{
-			int div = (int)(-angle.valueDegrees() / 360.0f);
-			angle += Ogre::Degree(360 * Ogre::Real(div + 1));
-		}
-
-		return angle;
-	}
+	}	
 }
 
 #endif

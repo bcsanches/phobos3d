@@ -57,7 +57,7 @@ namespace Phobos
 
 		RigidBodyComponent_c::~RigidBodyComponent_c()
 		{			
-			PhysicsManager_c::GetInstance()->Unregister(*this);
+			PhysicsManager_c::GetInstance()->UnregisterRigidBodyComponent(*this);
 		}
 
 		void RigidBodyComponent_c::SaveTransform()
@@ -110,7 +110,7 @@ namespace Phobos
 		void RigidBodyComponent_c::OnLoadFinished()
 		{
 			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
-			manager->Register(*this);
+			manager->RegisterRigidBodyComponent(*this);
 			spRigidBody->Register();			
 
 			pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);

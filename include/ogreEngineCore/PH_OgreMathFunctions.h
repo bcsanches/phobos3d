@@ -14,39 +14,43 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ICHARACTER_BODY_H
-#define PH_ICHARACTER_BODY_H
+#ifndef PH_OGRE_MATH_FUNCTIONS_H
+#define PH_OGRE_MATH_FUNCTIONS_H
 
-#include <OgrePrerequisites.h>
+#include <float.h>
+#include <algorithm>
 
+#include <OgreQuaternion.h>
+#include <OgreMath.h>
+
+#include <PH_MathFunctions.h>
 #include <PH_Types.h>
 
-#include "PH_ICharacterBodyFwd.h"
-#include "PH_GameEngineAPI.h"
-#include "PH_RigidBodyFwd.h"
+#define PH_FLOAT_EPSILON FLT_EPSILON
 
 namespace Phobos
-{
-	namespace Physics
+{	
+	template <>
+	inline Ogre::Quaternion MathInterpolate(const Ogre::Quaternion &a, const Ogre::Quaternion &b, Float_t alpha)
 	{
-		class PH_GAME_ENGINE_API ICharacterBody_c
+		return(Ogre::Quaternion::Slerp(alpha, a, b, true));
+	}
+
+	inline Ogre::Degree ClipDegree(Ogre::Degree angle)
+	{
+		const Ogre::Real r360(360);
+		if(angle >= Ogre::Degree(r360))
 		{
-			public:				
-				virtual ~ICharacterBody_c() {};
+			int div = (int)(angle.valueDegrees() / 360.0f);
+			angle -= Ogre::Degree(r360) * Ogre::Real(div);
+		}
+		else if (angle < Ogre::Degree(0))
+		{
+			int div = (int)(-angle.valueDegrees() / 360.0f);
+			angle += Ogre::Degree(360 * Ogre::Real(div + 1));
+		}
 
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection) = 0;
-				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
-
-				virtual Ogre::Vector3 GetPosition() const = 0;
-
-				virtual void Register() = 0;
-				virtual void Unregister() = 0;
-
-				virtual void Teleport(const Ogre::Vector3 &position) = 0;
-
-			protected:
-				ICharacterBody_c() { };
-		};
+		return angle;
 	}
 }
 

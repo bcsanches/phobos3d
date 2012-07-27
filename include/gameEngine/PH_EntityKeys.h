@@ -30,4 +30,8 @@ subject to the following restrictions:
 
 #define PH_ENTITY_PROP_TRANSFORM "transform"
 
+#define PH_ENTITY_PROP_VELOCITY "velocity"
+
+#define PH_ENTITY_PROP_CHARACTER_POSITION "characterPosition"
+
 #endif

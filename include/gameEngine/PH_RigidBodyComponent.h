@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_GEOMETRY_COMPONENT_H
-#define PH_GEOMETRY_COMPONENT_H
+#ifndef PH_RIGID_BODY_COMPONENT_H
+#define PH_RIGID_BODY_COMPONENT_H
 
 #include "PH_EntityComponent.h"
 #include "PH_GameEngineAPI.h"

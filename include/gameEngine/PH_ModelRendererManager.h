@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_MODEL_RENDERER_MANAGER_H
 #define PH_MODEL_RENDERER_MANAGER_H
 
-#include "PH_GenericComponentManager.h"
+#include "PH_GenericComponentManagerModule.h"
 
 namespace Phobos
 {		
@@ -25,7 +25,7 @@ namespace Phobos
 
 	class ModelRendererComponent_c;
 
-	class PH_GAME_ENGINE_API ModelRendererManager_c: public GenericComponentManager_c<ModelRendererComponent_c>
+	class PH_GAME_ENGINE_API ModelRendererManager_c: public GenericComponentManagerModule_c<ModelRendererComponent_c>
 	{
 		PH_DECLARE_SINGLETON_METHODS(ModelRendererManager);
 

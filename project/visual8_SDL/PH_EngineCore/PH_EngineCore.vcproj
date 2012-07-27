@@ -260,10 +260,6 @@
 				RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\include\engineCore\PH_Transform.h"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath="..\..\..\src\engineCore\PH_BootModule.cpp"

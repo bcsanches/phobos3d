@@ -53,6 +53,11 @@ namespace Phobos
 			spCharacterController->setWalkDirection(MakeVector3(walkDirection, PhysicsManager_c::GetInstance()->GetScale()));
 		}
 
+		void GhostCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
+		{
+			spCharacterController->setVelocityForTimeInterval(MakeVector3(velocity, PhysicsManager_c::GetInstance()->GetScale()), timeInvertal);
+		}
+
 		Ogre::Vector3 GhostCharacterBody_c::GetPosition() const
 		{
 			return MakeVector3(spGhostObject->getWorldTransform().getOrigin(), PhysicsManager_c::GetInstance()->GetPhysicsToGameScale());

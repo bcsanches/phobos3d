@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-July 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+July 2011
+Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,40 +14,31 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ICHARACTER_BODY_H
-#define PH_ICHARACTER_BODY_H
+#ifndef PH_GENERIC_COMPONENT_MANAGER_MODULE_H
+#define PH_GENERIC_COMPONENT_MANAGER_MODULE_H
 
-#include <OgrePrerequisites.h>
+#include <PH_CoreModule.h>
 
-#include <PH_Types.h>
-
-#include "PH_ICharacterBodyFwd.h"
-#include "PH_GameEngineAPI.h"
-#include "PH_RigidBodyFwd.h"
+#include "PH_GenericComponentManager.h"
 
 namespace Phobos
-{
-	namespace Physics
-	{
-		class PH_GAME_ENGINE_API ICharacterBody_c
-		{
-			public:				
-				virtual ~ICharacterBody_c() {};
-
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection) = 0;
-				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
-
-				virtual Ogre::Vector3 GetPosition() const = 0;
-
-				virtual void Register() = 0;
-				virtual void Unregister() = 0;
-
-				virtual void Teleport(const Ogre::Vector3 &position) = 0;
-
-			protected:
-				ICharacterBody_c() { };
-		};
-	}
+{			
+	template <typename T>
+	class PH_GAME_ENGINE_API GenericComponentManagerModule_c: public CoreModule_c, public GenericComponentManager_c<T>
+	{				
+		protected:
+			GenericComponentManagerModule_c(const String_c &name, ChildrenMode_e mode =PUBLIC_CHILDREN):
+				CoreModule_c(name, mode)
+			{
+				//empty
+			}
+			
+			~GenericComponentManagerModule_c()
+			{
+				//empty
+			}		
+	};
 }
 
 #endif
+

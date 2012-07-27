@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_MOVER_MANAGER_H
 #define PH_MOVER_MANAGER_H
 
-#include "PH_GenericComponentManager.h"
+#include "PH_GenericComponentManagerModule.h"
 
 namespace Phobos
 {		
@@ -25,7 +25,7 @@ namespace Phobos
 
 	class MoverComponent_c;
 
-	class PH_GAME_ENGINE_API MoverManager_c: public GenericComponentManager_c<MoverComponent_c>
+	class PH_GAME_ENGINE_API MoverManager_c: public GenericComponentManagerModule_c<MoverComponent_c>
 	{
 		PH_DECLARE_SINGLETON_METHODS(MoverManager);		
 

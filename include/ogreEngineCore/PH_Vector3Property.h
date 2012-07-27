@@ -14,40 +14,38 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_ICHARACTER_BODY_H
-#define PH_ICHARACTER_BODY_H
+#ifndef PH_VECTOR3_PROPERTY_H
+#define PH_VECTOR3_PROPERTY_H
 
-#include <OgrePrerequisites.h>
+#include <PH_NodeProperty.h>
 
-#include <PH_Types.h>
-
-#include "PH_ICharacterBodyFwd.h"
-#include "PH_GameEngineAPI.h"
-#include "PH_RigidBodyFwd.h"
+#include <OgreVector3.h>
 
 namespace Phobos
 {
-	namespace Physics
+	class Vector3Property_c: public NodeProperty_c
 	{
-		class PH_GAME_ENGINE_API ICharacterBody_c
-		{
-			public:				
-				virtual ~ICharacterBody_c() {};
+		private:
+			Ogre::Vector3 v3Vector;
+			
+		public:
+			Vector3Property_c(const char *name):
+				NodeProperty_c(name),
+				v3Vector(0, 0, 0)
+			{
+				//empty
+			}			
 
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection) = 0;
-				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
+			inline void SetVector(const Ogre::Vector3 &vector)
+			{
+				v3Vector = vector;
+			}
 
-				virtual Ogre::Vector3 GetPosition() const = 0;
-
-				virtual void Register() = 0;
-				virtual void Unregister() = 0;
-
-				virtual void Teleport(const Ogre::Vector3 &position) = 0;
-
-			protected:
-				ICharacterBody_c() { };
-		};
-	}
+			inline const Ogre::Vector3 &GetVector(void) const
+			{
+				return v3Vector;
+			}			
+	};
 }
 
 #endif

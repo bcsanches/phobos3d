@@ -260,6 +260,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_OgreMathFunctions.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\ogreEngineCore\PH_OgreUtils.cpp"
 			>
 		</File>
@@ -273,6 +277,26 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\ogreEngineCore\PH_Render.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_Transform.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_TransformProperty.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_TransformPropertyFwd.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_Vector3Property.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ogreEngineCore\PH_Vector3PropertyFwd.h"
 			>
 		</File>
 	</Files>
