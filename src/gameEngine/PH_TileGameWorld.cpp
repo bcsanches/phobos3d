@@ -262,6 +262,9 @@ namespace Phobos
 
 		const Float_t tileScale = tileSetDef->GetFloat("tileScale");
 
+		bool supressCeiling = false;
+		worldEntityDictionary.TryGetBool(supressCeiling, "supressCeiling");
+
 		fpTileSize = tileSetDef->GetFloat("tileSize");
 
 		Dictionary_c::MatrixDataHandle_c handle = worldEntityDictionary.GetMatrix("map");
@@ -281,7 +284,9 @@ namespace Phobos
 
 					case '.':
 						this->CreateFloorMesh(i, j, floorMeshName, tileScale, floorMaterial);
-						this->CreateCeilingMesh(i, j, floorMeshName, tileScale, ceilingMaterial);
+
+						if(!supressCeiling)
+							this->CreateCeilingMesh(i, j, floorMeshName, tileScale, ceilingMaterial);
 
 						if(HasNorthWall(handle, i, j))
 						{
@@ -474,7 +479,8 @@ namespace Phobos
 		{"southEast", TileTransform_c::DIR_SOUTH_EAST},
 		{"down", TileTransform_c::DIR_SOUTH},
 		{"west", TileTransform_c::DIR_WEST},
-		{"left", TileTransform_c::DIR_WEST}
+		{"left", TileTransform_c::DIR_WEST},
+		{NULL, TileTransform_c::DIR_NORTH}
 	};
 
 	struct HeightType_s
@@ -490,6 +496,26 @@ namespace Phobos
 		{"ceiling", TileTransform_c::HGT_CEILING},
 		{"aboveFloor", TileTransform_c::HGT_ABOVE_FLOOR},
 		{"belowCeiling", TileTransform_c::HGT_BELOW_CEILING},
+		{NULL, TileTransform_c::HGT_FLOOR}
+	};
+
+	struct PositionType_s
+	{
+		const char *pstrzName;
+		TileTransform_c::Position_e	eValue;
+	};
+
+	static PositionType_s stPositionTypes_gl[] = 
+	{
+		{"center", TileTransform_c::POS_CENTER},
+		{"northWest", TileTransform_c::POS_NORTH_WEST},
+		{"northCentered", TileTransform_c::POS_NORTH_CENTERED},
+		{"northEast", TileTransform_c::POS_NORTH_EAST},
+		{"eastCentered", TileTransform_c::POS_EAST_CENTERED},
+		{"sourthCentered", TileTransform_c::POS_SOUTH_CENTERED},
+		{"sourthWest", TileTransform_c::POS_SOUTH_WEST},
+		{"westCentered", TileTransform_c::POS_WEST_CENTERED},
+		{NULL, TileTransform_c::POS_CENTER}
 	};
 
 	Ogre::Vector3 TileGameWorld_c::CalculatePosition(int row, int col) const
@@ -577,6 +603,7 @@ namespace Phobos
 	{
 		static Enum_c<TileTransform_c::Direction_e, DirectionType_s> clDirectionType_gl(stDirectionTypes_gl);
 		static Enum_c<TileTransform_c::Height_e, HeightType_s> clHeightType_gl(stHeightTypes_gl);
+		static Enum_c<TileTransform_c::Position_e, PositionType_s> clPositionType_gl(stPositionTypes_gl);
 
 		const int row = entity.GetInt(PH_ENTITY_KEY_TILE_ROW);		
 		const int col = entity.GetInt(PH_ENTITY_KEY_TILE_COL);
@@ -606,6 +633,20 @@ namespace Phobos
 			}						
 		}
 
-		return TileTransform_c(row, col, dir, height, TileTransform_c::POS_CENTER);		
+		TileTransform_c::Position_e position = TileTransform_c::POS_CENTER;
+				
+		const String_c *positionStr = entity.TryGetString("tilePosition");
+		if(positionStr != NULL)
+		{			
+			if(!clPositionType_gl.TryGetValue(position, *positionStr))
+			{
+				std::stringstream stream;
+				stream << "Invalid value for tilePosition parameters: " << (*positionStr);
+
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "TileGameWorld_c::LoadTileTransform", stream.str());
+			}						
+		}
+
+		return TileTransform_c(row, col, dir, height, position);		
 	}
 }
