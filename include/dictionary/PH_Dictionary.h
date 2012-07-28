@@ -157,6 +157,7 @@ namespace Phobos
 			const MatrixDataHandle_c GetMatrix(const String_c &key) const;
 
 			bool GetBool(const String_c &key) const;
+			bool TryGetBool(bool &outValue, const String_c &key) const;
 
 			void Get4Float(float values[4], const String_c &key) const;
 			bool TryGet4Float(float values[4], const String_c &key) const;

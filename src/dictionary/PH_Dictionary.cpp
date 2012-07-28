@@ -289,6 +289,17 @@ namespace Phobos
 
 		return value.compare("true") == 0 ? true : false;
 	}
+	
+	bool Dictionary_c::TryGetBool(bool &outValue, const String_c &key) const
+	{
+		const String_c *value = this->TryGetString(key);
+		if(!value)
+			return false;
+
+		outValue = value->compare("true") == 0;
+
+		return true;
+	}
 
 	void Dictionary_c::Get4Float(float values[4], const String_c &key) const
 	{
