@@ -116,7 +116,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)\..\..\..\include\gamePlugin&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\include\mapViewer&quot;;&quot;$(ProjectDir)\..\..\..\include\engineCore&quot;;&quot;$(ProjectDir)\..\..\..\include\kernel&quot;;&quot;$(ProjectDir)\..\..\..\include\gameEngine&quot;;&quot;$(ProjectDir)\..\..\..\include\input&quot;;&quot;$(ProjectDir)\..\..\..\include\dictionary&quot;;&quot;$(ProjectDir)\..\..\..\include\gamePlugin&quot;;&quot;$(ProjectDir)\..\..\..\include\ogreEngineCore&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_RELEASE;PH_SDL;PH_IGNORE_ASSERT;PH_MSVC;PH_WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

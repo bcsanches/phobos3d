@@ -64,7 +64,7 @@
 				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2008\lib\debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\lib\&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="..\..\..\lib\$(TargetName).lib"
@@ -140,7 +140,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="OgreMain.lib OgreTerrain.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2008\lib\release&quot;"
+				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\lib\&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -438,14 +438,6 @@
 			Name="physics"
 			>
 			<File
-				RelativePath="..\..\..\src\gameEngine\PH_CharacterBodyComponent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_CharacterBodyComponent.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\gameEngine\PH_CollisionMesh.cpp"
 				>
 			</File>
@@ -475,30 +467,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_CollisionShapes.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\gameEngine\PH_GhostCharacterBody.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_GhostCharacterBody.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_ICharacterBody.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_ICharacterBodyFwd.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\gameEngine\PH_KinematicCharacterController.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_KinematicCharacterController.h"
 				>
 			</File>
 			<File
@@ -533,14 +501,58 @@
 				RelativePath="..\..\..\include\gameEngine\PH_RigidBodyFwd.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\src\gameEngine\PH_SweepCharacterBody.cpp"
+			<Filter
+				Name="character"
 				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gameEngine\PH_SweepCharacterBody.h"
-				>
-			</File>
+				<File
+					RelativePath="..\..\..\src\gameEngine\PH_CharacterBodyComponent.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_CharacterBodyComponent.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\gameEngine\PH_DynamicCharacterBody.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_DynamicCharacterBody.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\gameEngine\PH_GhostCharacterBody.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_GhostCharacterBody.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_ICharacterBody.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_ICharacterBodyFwd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\gameEngine\PH_KinematicCharacterController.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_KinematicCharacterController.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\gameEngine\PH_SweepCharacterBody.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gameEngine\PH_SweepCharacterBody.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="mapLoader"
