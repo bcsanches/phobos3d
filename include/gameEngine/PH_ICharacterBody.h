@@ -33,8 +33,7 @@ namespace Phobos
 		{
 			public:				
 				virtual ~ICharacterBody_c() {};
-
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection) = 0;
+				
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
 
 				virtual Ogre::Vector3 GetPosition() const = 0;

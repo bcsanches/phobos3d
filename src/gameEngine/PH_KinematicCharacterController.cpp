@@ -133,7 +133,7 @@ namespace Phobos
 		KinematicCharacterController_c::KinematicCharacterController_c (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis)
 		{
 			m_upAxis = upAxis;
-			m_addedMargin = 0.02f;
+			m_addedMargin = 0.05f;
 			m_walkDirection.setValue(0,0,0);
 			m_useGhostObjectSweepTest = true;
 			m_ghostObject = ghostObject;
@@ -199,7 +199,9 @@ namespace Phobos
 								m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
 
 							}
-							m_currentPosition += pt.m_normalWorldOnB * directionSign * dist * btScalar(0.2);
+
+							//BCS Hacking the 0.05 value downs there reduces the bumping and character getting stuck
+							m_currentPosition += pt.m_normalWorldOnB * directionSign * dist * btScalar(0.01);
 							penetration = true;
 						} else {
 							//printf("touching %f\n", dist);

@@ -49,9 +49,9 @@ namespace Phobos
 			spRigidBody->Unregister();
 		}
 
-		void SweepCharacterBody_c::SetWalkDirection(const Ogre::Vector3 &walkDirection)
+		void SweepCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
-			v3WalkDirection = MakeVector3(walkDirection, PhysicsManager_c::GetInstance()->GetScale());
+			v3WalkDirection = MakeVector3(velocity, PhysicsManager_c::GetInstance()->GetScale());
 		}
 
 		Ogre::Vector3 SweepCharacterBody_c::GetPosition() const

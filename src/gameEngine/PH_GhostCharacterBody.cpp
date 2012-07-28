@@ -48,11 +48,6 @@ namespace Phobos
 			manager->RemoveAction(*spCharacterController);
 		}
 
-		void GhostCharacterBody_c::SetWalkDirection(const Ogre::Vector3 &walkDirection)
-		{
-			spCharacterController->setWalkDirection(MakeVector3(walkDirection, PhysicsManager_c::GetInstance()->GetScale()));
-		}
-
 		void GhostCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
 			spCharacterController->setVelocityForTimeInterval(MakeVector3(velocity, PhysicsManager_c::GetInstance()->GetScale()), timeInvertal);

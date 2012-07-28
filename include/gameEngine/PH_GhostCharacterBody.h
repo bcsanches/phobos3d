@@ -14,6 +14,9 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_GHOST_CHARACTER_BODY_H
+#define PH_GHOST_CHARACTER_BODY_H
+
 class btPairCachingGhostObject;
 //class btKinematicCharacterController;
 
@@ -38,8 +41,7 @@ namespace Phobos
 			public:
 				GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape);
 				virtual ~GhostCharacterBody_c();
-
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection);
+				
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
 
 				virtual Ogre::Vector3 GetPosition() const;
@@ -58,3 +60,6 @@ namespace Phobos
 		};
 	}
 }
+
+
+#endif

@@ -38,9 +38,9 @@ namespace Phobos
 		{
 			public:
 				SweepCharacterBody_c(RigidBodyPtr_t rigidBody, Float_t stepHeight);
-				~SweepCharacterBody_c();
+				~SweepCharacterBody_c();				
 
-				virtual void SetWalkDirection(const Ogre::Vector3 &walkDirection);
+				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
 
 				virtual Ogre::Vector3 GetPosition() const;
 
