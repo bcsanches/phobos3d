@@ -48,7 +48,7 @@ namespace Phobos
 		ipCurrentLevelHive_g = manager->CreateCustomHive("LevelInfo");
 		ipStaticEntitiesHive_g = manager->CreateCustomHive("StaticEntities");
 		ipDynamicEntitiesHive_g = manager->CreateCustomHive("DynamicEntities");		
-	}
+	}	
 
 	const DictionaryHive_c &MapLoader_c::GetStaticEntitiesHive() const
 	{

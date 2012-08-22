@@ -34,6 +34,9 @@ EntityDef Platform
   colliderType = "box";
   boxDimensions = "1 1 1";
   
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
   mass = 5;
 }
 
@@ -50,6 +53,9 @@ EntityDef Box1m
   colliderType = "box";
   boxDimensions = "1 1 1";
   
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
   mass = 5;
 }
 
@@ -61,8 +67,11 @@ EntityDef BoxQuaterMeter
   colliderType = "box";
   boxDimensions = "0.25 0.25 0.25";
   
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
   meshfile="Box_1m";
-  scale="0.25 0.25 0.25";
+  scale="0.25 0.25 0.25";    
   
   mass = 5;
   

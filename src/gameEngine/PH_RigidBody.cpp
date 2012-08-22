@@ -23,10 +23,11 @@ namespace Phobos
 {	
 	namespace Physics
 	{
-		RigidBody_c::RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape):
+		RigidBody_c::RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag_c &collisionTag):
 			spRigidBody(new btRigidBody(info)),
 			spCollisionShape(shape),
-			spMotionState(motionState)
+			spMotionState(motionState),
+			clCollisionTag(collisionTag)
 		{
 			if(type == RBT_KINEMATIC)
 			{
@@ -47,7 +48,7 @@ namespace Phobos
 
 		void RigidBody_c::Register()
 		{
-			PhysicsManager_c::GetInstance()->RegisterRigidBody(*spRigidBody, 1, 1);
+			PhysicsManager_c::GetInstance()->RegisterRigidBody(*spRigidBody, clCollisionTag);
 		}
 		
 		void RigidBody_c::Unregister()

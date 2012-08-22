@@ -30,8 +30,9 @@ subject to the following restrictions:
 #include <PH_ContextVar.h>
 #include <PH_Singleton.h>
 
-#include "PH_CollisionShape.h"
 #include "PH_CollisionMesh.h"
+#include "PH_CollisionShape.h"
+#include "PH_CollisionTagFwd.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_GenericComponentManagerModule.h"
 #include "PH_ICharacterBodyFwd.h"
@@ -55,7 +56,7 @@ namespace Phobos
 			bool					fHasHit;
 
 			//RigidBody_c				*pclContact;
-		};
+		};		
 
 		class CharacterBodyComponent_c;
 		class RigidBodyComponent_c;
@@ -74,11 +75,11 @@ namespace Phobos
 
 				~PhysicsManager_c();				
 
-				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz);
-				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t radius, Float_t height);
-				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
+				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t radius, Float_t height);
+				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
-				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height);
+				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height);
 
 				void SetGravity(const Ogre::Vector3 &gravity);
 
@@ -117,17 +118,17 @@ namespace Phobos
 				CollisionShapePtr_t CreateCapsuleShape(Float_t radius, Float_t height);
 				CollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
-				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass);
+				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass, const CollisionTag_c &collisionTag);
 
 				const btVector3 GetPhysicsGravity() const;
 
 				//
 				//
 				//RigidBody class interface
-				void RegisterRigidBody(btRigidBody &body, short group, short mask);
+				void RegisterRigidBody(btRigidBody &body, const CollisionTag_c &collisionTag);
 				void UnregisterRigidBody(btRigidBody &body);
 
-				void AddCollisionObject(btCollisionObject &collisionObject,short int collisionFilterGroup,short int collisionFilterMask);
+				void AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag_c &collisionTag);
 				void RemoveCollisionObject(btCollisionObject &collisionObject);				
 
 				//

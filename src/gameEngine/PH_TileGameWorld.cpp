@@ -31,6 +31,7 @@ subject to the following restrictions:
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_GameDictionaryUtils.h"
+#include "PH_GamePhysicsSettings.h"
 #include "PH_MapLoader.h"
 #include "PH_PhysicsManager.h"
 #include "PH_RigidBody.h"
@@ -112,13 +113,13 @@ namespace Phobos
 		}
 	}
 
-	void TileGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Ogre::Vector3 &scale)
+	void TileGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag)
 	{
 		Transform_c transform(staticObj.pclSceneNode->_getDerivedPosition(), staticObj.pclSceneNode->_getDerivedOrientation());
 
 		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
 
-		staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, *staticObj.pclEntity->getMesh(), scale);		
+		staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.pclEntity->getMesh(), scale);		
 		staticObj.spRigidBody->Register();
 	}
 
@@ -160,7 +161,7 @@ namespace Phobos
 		obj.pclSceneNode->attachObject(obj.pclEntity);
 	}
 
-	void TileGameWorld_c::SpawnMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform, const String_c *optionalMaterial)
+	void TileGameWorld_c::SpawnMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		TempStaticObject_s obj;
 
@@ -175,35 +176,35 @@ namespace Phobos
 		obj.pclSceneNode->translate(transform.GetOrigin());
 		obj.pclSceneNode->rotate(transform.GetRotation());		
 
-		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), Ogre::Vector3(tileScale, tileScale, tileScale));
+		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), Ogre::Vector3(tileScale, tileScale, tileScale), collisionTag);
 	}
 	
-	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial)
+	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		TempStaticObject_s obj;							
 
 		this->CreateStaticObjectNode(obj, tileTransform, scale);
 		this->CreateStaticObjectMesh(obj, meshName, optionalMaterial);
 
-		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), scale);
+		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), scale, collisionTag);
 	}
 
-	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
+	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{		
-		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)), optionalMaterial);
+		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
 	}
 
-	void TileGameWorld_c::CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
+	void TileGameWorld_c::CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
-		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(), optionalMaterial);						
+		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(), optionalMaterial, collisionTag);						
 	}
 
-	void TileGameWorld_c::CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
+	void TileGameWorld_c::CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
-		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize/2, -fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)), optionalMaterial);
+		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize/2, -fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
 	}
 	
-	void TileGameWorld_c::CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
+	void TileGameWorld_c::CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(
 			row, 
@@ -213,11 +214,12 @@ namespace Phobos
 			Transform_c(
 				Ogre::Vector3(0, fpTileSize/2, fpTileSize/2), Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)
 			), 
-			optionalMaterial
+			optionalMaterial,
+			collisionTag
 		);
 	}
 	
-	void TileGameWorld_c::CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
+	void TileGameWorld_c::CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(
 			row, 
@@ -228,11 +230,12 @@ namespace Phobos
 				Ogre::Vector3(-fpTileSize/2, fpTileSize/2, 0), 
 				Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Z) * Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Y)
 			), 
-			optionalMaterial
+			optionalMaterial,
+			collisionTag
 		);
 	}
 
-	void TileGameWorld_c::CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial)
+	void TileGameWorld_c::CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(
 			row, 
@@ -243,7 +246,8 @@ namespace Phobos
 				Ogre::Vector3(fpTileSize/2, fpTileSize/2, 0), 
 				Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Z) * Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Y)
 			),
-			optionalMaterial
+			optionalMaterial,
+			collisionTag
 		);
 	}
 
@@ -273,6 +277,8 @@ namespace Phobos
 
 		render->SetAmbientColor(DictionaryGetColour(worldEntityDictionary, "ambientColor"));
 
+		Physics::CollisionTag_c staticCollisionTag = GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
+
 		for(int i = 0, numRows = handle.GetNumRows(); i < numRows; ++i)
 		{
 			for(int j = 0, numCols = handle.GetNumColumns(); j < numCols; ++j)
@@ -283,29 +289,29 @@ namespace Phobos
 						break;
 
 					case '.':
-						this->CreateFloorMesh(i, j, floorMeshName, tileScale, floorMaterial);
+						this->CreateFloorMesh(i, j, floorMeshName, tileScale, floorMaterial, staticCollisionTag);
 
 						if(!supressCeiling)
-							this->CreateCeilingMesh(i, j, floorMeshName, tileScale, ceilingMaterial);
+							this->CreateCeilingMesh(i, j, floorMeshName, tileScale, ceilingMaterial, staticCollisionTag);
 
 						if(HasNorthWall(handle, i, j))
 						{
-							this->CreateNorthWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
+							this->CreateNorthWallMesh(i, j, wallMeshName, tileScale, wallMaterial, staticCollisionTag);
 						}
 
 						if(HasSouthWall(handle, i, j))						
 						{
-							this->CreateSouthWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
+							this->CreateSouthWallMesh(i, j, wallMeshName, tileScale, wallMaterial, staticCollisionTag);
 						}
 
 						if(HasWestWall(handle, i, j))
 						{
-							this->CreateWestWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
+							this->CreateWestWallMesh(i, j, wallMeshName, tileScale, wallMaterial, staticCollisionTag);
 						}
 
 						if(HasEastWall(handle, i, j))						
 						{
-							this->CreateEastWallMesh(i, j, wallMeshName, tileScale, wallMaterial);
+							this->CreateEastWallMesh(i, j, wallMeshName, tileScale, wallMaterial, staticCollisionTag);
 						}
 
 						break;
@@ -339,7 +345,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_NORTH_WEST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);													
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL, staticCollisionTag);													
 						}
 					}
 
@@ -355,7 +361,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_NORTH_EAST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL, staticCollisionTag);
 						}
 					}
 
@@ -371,7 +377,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_SOUTH_EAST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL, staticCollisionTag);
 						}
 					}
 					
@@ -388,7 +394,7 @@ namespace Phobos
 							
 							TileTransform_c tileTransform(i, j, dir, TileTransform_c::HGT_MIDDLE, TileTransform_c::POS_SOUTH_WEST);
 
-							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL);
+							this->SpawnMesh(tileTransform, *columnMeshName, scale, NULL, staticCollisionTag);
 						}
 					}
 				}
@@ -446,7 +452,7 @@ namespace Phobos
 				}
 				else if(type.compare("Model") == 0)
 				{
-					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), DictionaryGetVector3(*dict, "scale"), dict->TryGetString("meshMaterial"));					
+					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), DictionaryGetVector3(*dict, "scale"), dict->TryGetString("meshMaterial"), staticCollisionTag);					
 				}
 				else
 				{

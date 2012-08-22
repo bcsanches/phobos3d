@@ -19,6 +19,7 @@ subject to the following restrictions:
 
 #include "PH_CharacterBodyComponent.h"
 #include "PH_CollisionShapes.h"
+#include "PH_CollisionTag.h"
 #include "PH_GhostCharacterBody.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtils.h"
@@ -101,7 +102,7 @@ namespace Phobos
 			return spWorld->getGravity();
 		}
 
-		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, Float_t stepHeight, Float_t radius, Float_t height)
+		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height)
 		{	
 #if 0
 			RigidBodyPtr_t body = this->CreateBoxRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height, radius);
@@ -109,35 +110,35 @@ namespace Phobos
 #else
 			
 			CollisionShapePtr_t shape = this->CreateCapsuleShape(radius, height);			
-			CharacterBodyPtr_t ptr = boost::make_shared<GhostCharacterBody_c>(stepHeight, shape);
+			CharacterBodyPtr_t ptr = boost::make_shared<GhostCharacterBody_c>(stepHeight, shape, collisionTag);
 			ptr->Teleport(startPosition);
 #endif
 
 			return ptr;
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateMeshShape(mesh, scale);
 
-			return this->CreateRigidBody(type, transform, collisionShape, mass);
+			return this->CreateRigidBody(type, transform, collisionShape, mass, collisionTag);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t dimx, Float_t dimy, Float_t dimz)
+		RigidBodyPtr_t PhysicsManager_c::CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateBoxShape(dimx, dimy, dimz);
 
-			return this->CreateRigidBody(type, transform, collisionShape, mass);
+			return this->CreateRigidBody(type, transform, collisionShape, mass, collisionTag);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, Float_t radius, Float_t height)
+		RigidBodyPtr_t PhysicsManager_c::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t radius, Float_t height)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
 
-			return this->CreateRigidBody(type, transform, collisionShape, mass);
+			return this->CreateRigidBody(type, transform, collisionShape, mass, collisionTag);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass)
+		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass, const CollisionTag_c &collisionTag)
 		{
 			bool dynamic = mass != 0;
 
@@ -152,12 +153,12 @@ namespace Phobos
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 
-			return boost::make_shared<RigidBody_c>(type, info, motionState, shape);			
+			return boost::make_shared<RigidBody_c>(type, info, motionState, shape, collisionTag);			
 		}				
 
-		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body, short group, short mask)
+		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body, const CollisionTag_c &collisionTag)
 		{
-			spWorld->addRigidBody(&body, group, mask);
+			spWorld->addRigidBody(&body, collisionTag.GetGroup(), collisionTag.GetFilter());
 		}
 
 		void PhysicsManager_c::UnregisterRigidBody(btRigidBody &body)
@@ -165,9 +166,9 @@ namespace Phobos
 			spWorld->removeRigidBody(&body);
 		}
 
-		void PhysicsManager_c::AddCollisionObject(btCollisionObject &collisionObject,short int collisionFilterGroup,short int collisionFilterMask)
+		void PhysicsManager_c::AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag_c &collisionTag)
 		{
-			spWorld->addCollisionObject(&collisionObject, collisionFilterGroup, collisionFilterMask);
+			spWorld->addCollisionObject(&collisionObject, collisionTag.GetGroup(), collisionTag.GetFilter());
 		}
 
 		void PhysicsManager_c::RemoveCollisionObject(btCollisionObject &collisionObject)

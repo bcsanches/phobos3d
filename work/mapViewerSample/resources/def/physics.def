@@ -1,0 +1,15 @@
+PhysicsDef CollisionGroups
+{
+    Static =            0x0001;
+    Dynamic =           0x0002;
+    
+    Character =         0x0004;
+    
+    PlayerCharacter =   0x0008;    
+}
+
+PhysicsDef StaticWorldCollision
+{
+    collisionGroup = Static;
+    collisionFilter =  "Dynamic | Character | PlayerCharacter";
+}

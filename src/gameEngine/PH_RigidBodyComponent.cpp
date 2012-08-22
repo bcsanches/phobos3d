@@ -20,10 +20,12 @@ subject to the following restrictions:
 #include <PH_Transform.h>
 #include <PH_TransformProperty.h>
 
+#include "PH_CollisionTag.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_EntityUtils.h"
 #include "PH_GameDictionaryUtils.h"
+#include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
 #include "PH_RigidBody.h"
 
@@ -88,6 +90,8 @@ namespace Phobos
 
 			PhysicsManagerPtr_t physicsManager = PhysicsManager_c::GetInstance();
 
+			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
+
 			PH_ASSERT(!spRigidBody);			
 			
 			Float_t mass = dictionary.GetFloat("mass");
@@ -97,7 +101,7 @@ namespace Phobos
 				case PhysicsManager_c::CST_BOX:
 					{
 						Ogre::Vector3 boxDimensions = boxDimensions = DictionaryGetVector3(dictionary, "boxDimensions");						
-						spRigidBody = physicsManager->CreateBoxRigidBody(RBT_DYNAMIC, transform, mass, boxDimensions.x, boxDimensions.y, boxDimensions.z );			
+						spRigidBody = physicsManager->CreateBoxRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, boxDimensions.x, boxDimensions.y, boxDimensions.z );			
 					}
 					break;
 

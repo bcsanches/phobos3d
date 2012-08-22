@@ -33,6 +33,7 @@ BOOST_AUTO_TEST_CASE(parser_test)
 	str << "bla" << endl << "bli" << endl;
 	str << "end" << endl;
 	str << "0.25" << endl;
+	str << "0x01" << endl;
 	str << ".." << endl;
 	str << "/*multi line comment to skuip" << endl;
 	str << "more comments line" << endl;
@@ -83,6 +84,10 @@ BOOST_AUTO_TEST_CASE(parser_test)
 	//
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
 	BOOST_REQUIRE(token.compare("0.25") == 0);
+
+	//hex digit
+	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_NUMBER);
+	BOOST_REQUIRE(token.compare("1") == 0);
 
 	//.. line
 	BOOST_REQUIRE(parser.GetToken(&token) == TOKEN_DOT);

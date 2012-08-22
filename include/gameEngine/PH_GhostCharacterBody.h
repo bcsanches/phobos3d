@@ -28,6 +28,7 @@ class btPairCachingGhostObject;
 
 #include "PH_ICharacterBody.h"
 #include "PH_CollisionShapeFwd.h"
+#include "PH_CollisionTag.h"
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
@@ -39,7 +40,7 @@ namespace Phobos
 		class PH_GAME_ENGINE_API GhostCharacterBody_c: public ICharacterBody_c
 		{
 			public:
-				GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape);
+				GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape, const CollisionTag_c &collisionTag);
 				virtual ~GhostCharacterBody_c();
 				
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
@@ -57,6 +58,8 @@ namespace Phobos
 				boost::scoped_ptr<KinematicCharacterController_c> spCharacterController;
 
 				CollisionShapePtr_t	spCollisionShape;
+
+				CollisionTag_c clCollisionTag;
 		};
 	}
 }

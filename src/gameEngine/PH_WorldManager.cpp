@@ -30,6 +30,7 @@ subject to the following restrictions:
 
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
+#include "PH_GamePhysicsSettings.h"
 #include "PH_MapLoaderFactory.h"
 
 namespace Phobos
@@ -146,6 +147,7 @@ namespace Phobos
 	void WorldManager_c::OnBoot()
 	{
 		MapLoader_c::OnBoot();
+		GamePhysicsSettings_c::OnBoot();
 	}
 
 	void WorldManager_c::OnFinalize()

@@ -23,7 +23,15 @@ subject to the following restrictions:
 namespace Phobos
 {	
 	class Dictionary_c;
-	class MapLoader_c;		
+	class MapLoader_c;			
+
+	enum PhysicsCollisionGroups
+	{
+		PCG_STATIC	= 0x0001,
+		PCG_DYNAMIC = 0x0002,
+		PCG_CHARACTER = 0x0004,
+		PCG_PlayerCharacter = 0x0008
+	};
 
 	class PH_GAME_ENGINE_API GameWorld_c
 	{

@@ -470,6 +470,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionTag.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_CollisionTagFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_PhysicsKeys.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\gameEngine\PH_PhysicsManager.cpp"
 				>
 			</File>
@@ -599,6 +611,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_BaseOgreGameWorld.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_GamePhysicsSettings.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\PH_GamePhysicsSettings.h"
 				>
 			</File>
 			<File

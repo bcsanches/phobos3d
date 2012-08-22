@@ -22,6 +22,7 @@ namespace Phobos
 {
 	#define IS_DIGIT(X) (((X >= '0') && (X <= '9')))
 	#define IS_NUMBER(X) (IS_DIGIT(X) || (X == '.'))	
+	#define IS_HEX_EXTRA_DIGITS(X) (((X >= 'a') && (X <= 'f')) || ((X >= 'A') && (X <= 'F')))
 
 	#define IS_ID_START(X) (((X >= 'a') && (X <= 'z')) || ((X >= 'A') && (X <= 'Z')) || (X == '_'))
 	#define IS_ID(X) (IS_DIGIT(X) || IS_ID_START(X) || (X == '-'))
@@ -215,19 +216,44 @@ namespace Phobos
 				default:
 					if(IS_NUMBER_START(ch))
 					{
-						bool gotDot = false;
-						do
-						{
-							if(ch == '.')
-							{
-								if(gotDot)
-									RETURN_TOKEN(TOKEN_ERROR);
-								gotDot = true;
-							}
+						bool gotDot = false;						
+						bool hexMode = false;
 
+						strToken += ch;
+
+						//Check for hex start sequence
+						(*pclStream)>>ch;
+						if(pclStream->good() != true)
+						{
+							//this is an expected EOF
+							RETURN_TOKEN(TOKEN_NUMBER);
+						}
+
+						if((ch == 'x') || (ch == 'X'))
+						{
+							hexMode = true;
 							strToken += ch;
 
 							(*pclStream)>>ch;
+							if(pclStream->good() != true)
+							{
+								//this is an expected EOF
+								RETURN_TOKEN(TOKEN_NUMBER);
+							}
+						}						
+
+						while(IS_NUMBER(ch) || (hexMode && IS_HEX_EXTRA_DIGITS(ch)))
+						{
+							if(ch == '.')
+							{
+								if(gotDot || hexMode)
+									RETURN_TOKEN(TOKEN_ERROR);
+								gotDot = true;
+							}
+							
+							strToken += ch;							
+
+							(*pclStream)>>ch;							
 
 							if(pclStream->good() != true)
 							{
@@ -235,7 +261,18 @@ namespace Phobos
 								RETURN_TOKEN(TOKEN_NUMBER);
 							}
 
-						} while(IS_NUMBER(ch));
+						} 
+
+						if(hexMode)
+						{
+							std::stringstream stream;
+							stream << std::hex << strToken;
+
+							unsigned int x;
+							stream >> x;
+
+							strToken = NumberToString(x);
+						}
 
 						this->SetLookAhead(ch);
 						RETURN_TOKEN(TOKEN_NUMBER);

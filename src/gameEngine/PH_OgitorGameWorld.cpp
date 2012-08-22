@@ -29,9 +29,11 @@ subject to the following restrictions:
 #include <PH_Render.h>
 #include <PH_Transform.h>
 
+#include "PH_CollisionTag.h"
 #include "PH_GameDictionaryUtils.h"
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
+#include "PH_GamePhysicsSettings.h"
 #include "PH_MapLoader.h"
 #include "PH_PhysicsManager.h"
 #include "PH_RigidBody.h"
@@ -124,6 +126,8 @@ namespace Phobos
 		//configure physics
 		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
 
+		Physics::CollisionTag_c staticCollisionTag = GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
+
 		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
 		{
 			StaticObject_s &object = pair.second;
@@ -139,7 +143,7 @@ namespace Phobos
 				object.pclSceneNode->_getDerivedOrientation()
 			);
 			
-			object.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, *object.pclEntity->getMesh().get(), object.pclSceneNode->_getDerivedScale());
+			object.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, staticCollisionTag, *object.pclEntity->getMesh().get(), object.pclSceneNode->_getDerivedScale());
 			object.spRigidBody->Register();			
 		}		
 		

@@ -19,10 +19,12 @@ subject to the following restrictions:
 #include <PH_Transform.h>
 #include <PH_TransformProperty.h>
 
+#include "PH_CollisionTag.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_EntityUtils.h"
 #include "PH_GameDictionaryUtils.h"
+#include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
 #include "PH_ICharacterBody.h"
 
@@ -75,10 +77,10 @@ namespace Phobos
 			Ogre::Vector3 startPos = transform.GetOrigin();
 			startPos.y += offset;
 
-			prpCharacterPosition.SetVector(startPos);
-			spCharacterBody = physicsManager->CreateCharacterBody(startPos, stepHeight, radius, height);
+			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
 
-			PH_ASSERT(!spRigidBody);													
+			prpCharacterPosition.SetVector(startPos);
+			spCharacterBody = physicsManager->CreateCharacterBody(startPos, collisionTag, stepHeight, radius, height);											
 		}
 
 		void CharacterBodyComponent_c::OnLoadFinished()

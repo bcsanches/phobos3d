@@ -32,6 +32,7 @@ namespace Phobos
 		strModuleName(moduleName),
 		strFile(fileName)
 	{
+		Kernel_c::GetInstance().LogMessage("[" + strTypeName + "] " + strDescription);
 	}
 
 	Exception_c::Exception_c(const Exception_c &rhs):

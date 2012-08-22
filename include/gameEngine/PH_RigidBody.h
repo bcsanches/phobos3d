@@ -25,6 +25,7 @@ subject to the following restrictions:
 #include <PH_Types.h>
 
 #include "PH_CollisionShapeFwd.h"
+#include "PH_CollisionTag.h"
 #include "PH_RigidBodyFwd.h"
 
 namespace Phobos
@@ -36,7 +37,7 @@ namespace Phobos
 		class RigidBody_c
 		{
 			public:
-				RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape);
+				RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag_c &collisionTag);
 				~RigidBody_c();
 
 				void Register();
@@ -53,6 +54,8 @@ namespace Phobos
 				boost::scoped_ptr<btRigidBody>			spRigidBody;
 				boost::scoped_ptr<btDefaultMotionState> spMotionState;
 				CollisionShapePtr_t						spCollisionShape;
+
+				CollisionTag_c							clCollisionTag;
 
 		};
 

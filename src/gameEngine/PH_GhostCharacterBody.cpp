@@ -14,9 +14,10 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		GhostCharacterBody_c::GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape):
+		GhostCharacterBody_c::GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape, const CollisionTag_c &collisionTag):
 			spCollisionShape(collisionShape),
-			spGhostObject(new btPairCachingGhostObject())
+			spGhostObject(new btPairCachingGhostObject()),
+			clCollisionTag(collisionTag)
 		{
 			stepHeight *= PhysicsManager_c::GetInstance()->GetScale();
 
@@ -36,7 +37,8 @@ namespace Phobos
 		{
 			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
 
-			manager->AddCollisionObject(*spGhostObject, btBroadphaseProxy::CharacterFilter|1, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
+			//manager->AddCollisionObject(*spGhostObject, btBroadphaseProxy::CharacterFilter|1, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
+			manager->AddCollisionObject(*spGhostObject, clCollisionTag);
 			manager->AddAction(*spCharacterController);
 		}
 		

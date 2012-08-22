@@ -33,7 +33,7 @@ namespace Phobos
 		public:
 			virtual void Load(const String_c &fileName) = 0;
 
-			static void OnBoot();
+			static void OnBoot();			
 				
 			const DictionaryHive_c &GetStaticEntitiesHive() const;
 			const DictionaryHive_c &GetDynamicEntitiesHive() const ;
@@ -48,6 +48,10 @@ namespace Phobos
 
 			MapLoader_c(const Dictionary_c &settings);
 
+			/**
+				Creates a basic dictionary entry that can be used to 
+				instantiate a WorldSpawn entity
+			*/
 			DictionaryPtr_t CreateWorldSpawnEntityDictionary();
 
 			virtual GameWorldPtr_t CreateGameWorld() = 0;
