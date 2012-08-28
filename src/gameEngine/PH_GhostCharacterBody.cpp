@@ -8,7 +8,7 @@
 
 #include "PH_KinematicCharacterController.h"
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtils.h"
+#include "PH_PhysicsConv.h"
 
 namespace Phobos
 {
@@ -19,7 +19,7 @@ namespace Phobos
 			spGhostObject(new btPairCachingGhostObject()),
 			clCollisionTag(collisionTag)
 		{
-			stepHeight *= PhysicsManager_c::GetInstance()->GetScale();
+			stepHeight *= Manager_c::GetInstance()->GetScale();
 
 			spGhostObject->setCollisionShape(&collisionShape->GetCollisionShape());
 			spGhostObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
@@ -35,7 +35,7 @@ namespace Phobos
 
 		void GhostCharacterBody_c::Register()
 		{
-			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t manager = Manager_c::GetInstance();
 
 			//manager->AddCollisionObject(*spGhostObject, btBroadphaseProxy::CharacterFilter|1, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
 			manager->AddCollisionObject(*spGhostObject, clCollisionTag);
@@ -44,7 +44,7 @@ namespace Phobos
 		
 		void GhostCharacterBody_c::Unregister()
 		{
-			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t manager = Manager_c::GetInstance();
 
 			manager->RemoveCollisionObject(*spGhostObject);
 			manager->RemoveAction(*spCharacterController);
@@ -52,17 +52,17 @@ namespace Phobos
 
 		void GhostCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
-			spCharacterController->setVelocityForTimeInterval(MakeVector3(velocity, PhysicsManager_c::GetInstance()->GetScale()), timeInvertal);
+			spCharacterController->setVelocityForTimeInterval(MakeVector3(velocity, Manager_c::GetInstance()->GetScale()), timeInvertal);
 		}
 
 		Ogre::Vector3 GhostCharacterBody_c::GetPosition() const
 		{
-			return MakeVector3(spGhostObject->getWorldTransform().getOrigin(), PhysicsManager_c::GetInstance()->GetPhysicsToGameScale());
+			return MakeVector3(spGhostObject->getWorldTransform().getOrigin(), Manager_c::GetInstance()->GetPhysicsToGameScale());
 		}
 
 		void GhostCharacterBody_c::Teleport(const Ogre::Vector3 &position)
 		{
-			spCharacterController->warp(MakeVector3(position, PhysicsManager_c::GetInstance()->GetScale()));
+			spCharacterController->warp(MakeVector3(position, Manager_c::GetInstance()->GetScale()));
 		}
 	}
 }

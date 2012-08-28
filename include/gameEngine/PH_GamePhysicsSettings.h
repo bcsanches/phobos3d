@@ -22,6 +22,8 @@ subject to the following restrictions:
 
 #include "PH_CollisionTag.h"
 
+#include "PH_RigidBodyFwd.h"
+
 namespace Phobos
 {	
 	class Dictionary_c;
@@ -32,9 +34,11 @@ namespace Phobos
 			static void OnBoot();
 
 			static UInt32_t DecodeCollisionMask(const String_c &config);
-			static Physics::CollisionTag_c GamePhysicsSettings_c::LoadCollisionTag(const Dictionary_c &dict);
+			static Physics::CollisionTag_c LoadCollisionTag(const Dictionary_c &dict);
 
-			static Physics::CollisionTag_c GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
+			static Physics::CollisionTag_c CreateStaticWorldCollisionTag();
+
+			static const Dictionary_c *TryGetStaticMeshCollisionShapeDef(const String_c &name);
 	};
 }
 

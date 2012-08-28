@@ -44,7 +44,7 @@ namespace Phobos
 
 	namespace Physics
 	{						
-		PH_DECLARE_SINGLETON_PTR(PhysicsManager);
+		PH_DECLARE_SINGLETON_PTR(Manager);
 
 		struct SweepCollisionResult_s
 		{	
@@ -56,28 +56,45 @@ namespace Phobos
 			bool					fHasHit;
 
 			//RigidBody_c				*pclContact;
-		};		
+		};				
 
 		class CharacterBodyComponent_c;
 		class RigidBodyComponent_c;
 
-		class PH_GAME_ENGINE_API PhysicsManager_c: public CoreModule_c
+		class PH_GAME_ENGINE_API Manager_c: public CoreModule_c
 		{
-			PH_DECLARE_SINGLETON_METHODS(PhysicsManager);
+			PH_DECLARE_SINGLETON_METHODS(Manager);
 
 			public:
-				enum CollisionShapeTypes_e
-				{
-					CST_BOX,					
-					CST_SPHERE,
-					CST_MESH
-				};				
+				~Manager_c();				
 
-				~PhysicsManager_c();				
+				/**
 
+					For quick and easy rigid body creation.
+
+				*/
 				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
 				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t radius, Float_t height);
 				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+
+				/**
+					Methods for manually creating a collision shape
+
+				*/
+				CollisionShapePtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
+				CollisionShapePtr_t CreateCapsuleShape(Float_t radius, Float_t height);
+				CollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+
+				CollisionShapePtr_t CreateCylinderShapeX(Float_t radius, Float_t height);
+				CollisionShapePtr_t CreateCylinderShapeY(Float_t radius, Float_t height);
+				CollisionShapePtr_t CreateCylinderShapeZ(Float_t radius, Float_t height);
+
+				/**
+
+					Create a rigid body from an existing collision shape.
+
+				*/
+				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, CollisionShapePtr_t shape);
 
 				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height);
 
@@ -102,23 +119,21 @@ namespace Phobos
 				virtual void OnFixedUpdate();
 				virtual void OnUpdate();
 
+			private:
+				template<typename T>
+				CollisionShapePtr_t CreateGenericCylinderShape(Float_t radius, Float_t height, CollisionShapeTypes_t type);
+
 			private:								
 				typedef boost::intrusive::set<CollisionShape_c, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
 				typedef boost::intrusive::set<CollisionMesh_c, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
 
 			private:
 
-				PhysicsManager_c();											
+				Manager_c();											
 
 				bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key);
 
-				CollisionMeshPtr_t RetrieveCollisionMesh(const Ogre::Mesh &mesh);		
-
-				CollisionShapePtr_t CreateBoxShape(Float_t x, Float_t y, Float_t z);
-				CollisionShapePtr_t CreateCapsuleShape(Float_t radius, Float_t height);
-				CollisionShapePtr_t CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
-
-				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass, const CollisionTag_c &collisionTag);
+				CollisionMeshPtr_t RetrieveCollisionMesh(const Ogre::Mesh &mesh);						
 
 				const btVector3 GetPhysicsGravity() const;
 
@@ -172,12 +187,12 @@ namespace Phobos
 
 		};
 
-		inline Float_t PhysicsManager_c::GetScale() const
+		inline Float_t Manager_c::GetScale() const
 		{
 			return fpScale;
 		}
 
-		inline Float_t PhysicsManager_c::GetPhysicsToGameScale() const
+		inline Float_t Manager_c::GetPhysicsToGameScale() const
 		{
 			return 1.0f / this->GetScale() ;
 		}

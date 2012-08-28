@@ -34,20 +34,28 @@ namespace Phobos
 {
 	namespace Physics
 	{
+		namespace CollisionShapeTypes
+		{
+			enum Enum
+			{
+				BOX,					
+				SPHERE,
+				CAPSULE,
+				CYLINDER_X,
+				CYLINDER_Y,
+				CYLINDER_Z,
+				MESH
+			};
+		}
+
+		typedef CollisionShapeTypes::Enum CollisionShapeTypes_t;
+
 		class CollisionShape_c: 
 			public boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> >, 
 			public boost::enable_shared_from_this<CollisionShape_c>,
 			public boost::noncopyable
 		{			
-			public:
-				enum CollisionShapeTypes_e
-				{
-					CST_BOX,					
-					CST_SPHERE,
-					CST_CAPSULE,
-					CST_MESH
-				};
-
+			public:				
 				struct BoxShapeInfo_s
 				{
 					Float_t v3Dimension[3];
@@ -58,7 +66,7 @@ namespace Phobos
 					Float_t fpRadius;
 				};
 
-				struct CapsuleShapeInfo_s
+				struct CylinderShapeInfo_s
 				{
 					Float_t fpRadius;
 					Float_t fpHeight;
@@ -67,16 +75,16 @@ namespace Phobos
 				struct Key_s
 				{
 					Key_s(const BoxShapeInfo_s &info, Float_t physicsScale);
-					Key_s(const CapsuleShapeInfo_s &info, Float_t physicsScale);
+					Key_s(CollisionShapeTypes_t type, const CylinderShapeInfo_s &info, Float_t physicsScale);
 					Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale);
 					
-					CollisionShapeTypes_e eType;
+					CollisionShapeTypes_t eType;
 
 					union 
 					{
 						BoxShapeInfo_s		stBox;
 						SphereShapeInfo_s	stSphere;
-						CapsuleShapeInfo_s	stCapsule;
+						CylinderShapeInfo_s	stCylinder;
 					} uShapeInfo;
 
 					//Valid only when eType == CST_MESH
@@ -93,21 +101,21 @@ namespace Phobos
 
 				bool operator<(const CollisionShape_c &rhs) const;
 
-				inline CollisionShapeTypes_e GetType() const;
+				inline CollisionShapeTypes_t GetType() const;
 				
 				virtual btCollisionShape &GetCollisionShape() = 0;
 
 			protected:
-				CollisionShape_c(CollisionShapeTypes_e type);
+				CollisionShape_c(CollisionShapeTypes_t type);
 
 				virtual int Compare(const CollisionShape_c &other) const = 0;
 				virtual int Compare(const Key_s &other) const = 0;
 
 			private:
-				CollisionShapeTypes_e eType;
+				CollisionShapeTypes_t eType;
 		};	
 
-		inline CollisionShape_c::CollisionShapeTypes_e CollisionShape_c::GetType() const
+		inline CollisionShapeTypes_t CollisionShape_c::GetType() const
 		{
 			return eType;
 		}

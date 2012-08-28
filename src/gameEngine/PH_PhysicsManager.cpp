@@ -22,7 +22,7 @@ subject to the following restrictions:
 #include "PH_CollisionTag.h"
 #include "PH_GhostCharacterBody.h"
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtils.h"
+#include "PH_PhysicsConv.h"
 #include "PH_RigidBody.h"
 #include "PH_RigidBodyComponent.h"
 #include "PH_SweepCharacterBody.h"
@@ -31,9 +31,9 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		PH_DEFINE_DEFAULT_SINGLETON(PhysicsManager);
+		PH_DEFINE_DEFAULT_SINGLETON(Manager);
 
-		PhysicsManager_c::PhysicsManager_c():
+		Manager_c::Manager_c():
 			CoreModule_c("PhysicsManager", PRIVATE_CHILDREN),
 			fpScale(1),
 			varPhysicsScale("dvPhysicsScale", "1"),
@@ -42,19 +42,19 @@ namespace Phobos
 			//empty
 		}
 
-		PhysicsManager_c::~PhysicsManager_c()
+		Manager_c::~Manager_c()
 		{
 			//empty
 		}
 
-		void PhysicsManager_c::OnPrepareToBoot()
+		void Manager_c::OnPrepareToBoot()
 		{
 			ConsolePtr_t console = Console_c::GetInstance();
 
 			console->AddContextVar(varPhysicsScale);
 		}
 
-		void PhysicsManager_c::OnBoot()
+		void Manager_c::OnBoot()
 		{
 			spCollisionDispatcher.reset(new btCollisionDispatcher(&clCollisionConfig));
 			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
@@ -65,7 +65,7 @@ namespace Phobos
 			fpScale = StringToFloat(varPhysicsScale.GetValue());
 		}
 
-		void PhysicsManager_c::OnFixedUpdate()
+		void Manager_c::OnFixedUpdate()
 		{
 			if(!spWorld)
 				return;
@@ -82,7 +82,7 @@ namespace Phobos
 			clCharacterBodyComponents.CallForAll(&CharacterBodyComponent_c::FinishPhysicsFrame);
 		}
 
-		void PhysicsManager_c::OnUpdate()
+		void Manager_c::OnUpdate()
 		{
 			//No world, no reason to update
 			if(!spWorld)
@@ -92,17 +92,17 @@ namespace Phobos
 			clRigidBodyComponents.CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
 		}
 
-		void PhysicsManager_c::SetGravity(const Ogre::Vector3 &gravity)
+		void Manager_c::SetGravity(const Ogre::Vector3 &gravity)
 		{
 			spWorld->setGravity(MakeVector3(gravity, fpScale));
 		}
 
-		const btVector3 PhysicsManager_c::GetPhysicsGravity() const
+		const btVector3 Manager_c::GetPhysicsGravity() const
 		{
 			return spWorld->getGravity();
 		}
 
-		CharacterBodyPtr_t PhysicsManager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height)
+		CharacterBodyPtr_t Manager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height)
 		{	
 #if 0
 			RigidBodyPtr_t body = this->CreateBoxRigidBody(RBT_KINEMATIC, Transform_c(startPosition), 0, radius, height, radius);
@@ -117,28 +117,28 @@ namespace Phobos
 			return ptr;
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		RigidBodyPtr_t Manager_c::CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateMeshShape(mesh, scale);
 
-			return this->CreateRigidBody(type, transform, collisionShape, mass, collisionTag);
+			return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
+		RigidBodyPtr_t Manager_c::CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateBoxShape(dimx, dimy, dimz);
 
-			return this->CreateRigidBody(type, transform, collisionShape, mass, collisionTag);
+			return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t radius, Float_t height)
+		RigidBodyPtr_t Manager_c::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t radius, Float_t height)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
 
-			return this->CreateRigidBody(type, transform, collisionShape, mass, collisionTag);
+			return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 		}
 
-		RigidBodyPtr_t PhysicsManager_c::CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, CollisionShapePtr_t shape, Float_t mass, const CollisionTag_c &collisionTag)
+		RigidBodyPtr_t Manager_c::CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, CollisionShapePtr_t shape)
 		{
 			bool dynamic = mass != 0;
 
@@ -156,38 +156,38 @@ namespace Phobos
 			return boost::make_shared<RigidBody_c>(type, info, motionState, shape, collisionTag);			
 		}				
 
-		void PhysicsManager_c::RegisterRigidBody(btRigidBody &body, const CollisionTag_c &collisionTag)
+		void Manager_c::RegisterRigidBody(btRigidBody &body, const CollisionTag_c &collisionTag)
 		{
 			spWorld->addRigidBody(&body, collisionTag.GetGroup(), collisionTag.GetFilter());
 		}
 
-		void PhysicsManager_c::UnregisterRigidBody(btRigidBody &body)
+		void Manager_c::UnregisterRigidBody(btRigidBody &body)
 		{
 			spWorld->removeRigidBody(&body);
 		}
 
-		void PhysicsManager_c::AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag_c &collisionTag)
+		void Manager_c::AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag_c &collisionTag)
 		{
 			spWorld->addCollisionObject(&collisionObject, collisionTag.GetGroup(), collisionTag.GetFilter());
 		}
 
-		void PhysicsManager_c::RemoveCollisionObject(btCollisionObject &collisionObject)
+		void Manager_c::RemoveCollisionObject(btCollisionObject &collisionObject)
 		{
 			spWorld->removeCollisionObject(&collisionObject);
 		}
 
-		void PhysicsManager_c::AddAction(btActionInterface &action)
+		void Manager_c::AddAction(btActionInterface &action)
 		{
 			spWorld->addAction(&action);
 		}
 
-		void PhysicsManager_c::RemoveAction(btActionInterface &action)
+		void Manager_c::RemoveAction(btActionInterface &action)
 		{
 			spWorld->removeAction(&action);
 		}
 
 		
-		bool PhysicsManager_c::RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key)
+		bool Manager_c::RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key)
 		{			
 			retIt = setCollisionShapesCache.lower_bound(key, CollisionShape_c::KeyComparator_s());
 
@@ -202,7 +202,7 @@ namespace Phobos
 			}						
 		}		
 
-		CollisionShapePtr_t PhysicsManager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
+		CollisionShapePtr_t Manager_c::CreateBoxShape(Float_t x, Float_t y, Float_t z)
 		{
 			const CollisionShape_c::BoxShapeInfo_s box = {x, y, z};
 			CollisionShape_c::Key_s key(box, this->GetScale());
@@ -224,10 +224,10 @@ namespace Phobos
 			}			
 		}
 
-		CollisionShapePtr_t PhysicsManager_c::CreateCapsuleShape(Float_t radius, Float_t height)
+		CollisionShapePtr_t Manager_c::CreateCapsuleShape(Float_t radius, Float_t height)
 		{
-			const CollisionShape_c::CapsuleShapeInfo_s capsule = {radius, height};
-			CollisionShape_c::Key_s key(capsule, this->GetScale());
+			const CollisionShape_c::CylinderShapeInfo_s capsule = {radius, height};
+			CollisionShape_c::Key_s key(CollisionShapeTypes::CAPSULE, capsule, this->GetScale());
 			
 			
 			CollisionShapesSet_t::iterator it;
@@ -246,7 +246,44 @@ namespace Phobos
 			}			
 		}
 
-		CollisionMeshPtr_t PhysicsManager_c::RetrieveCollisionMesh(const Ogre::Mesh &mesh)
+		template<typename T>
+		CollisionShapePtr_t Manager_c::CreateGenericCylinderShape(Float_t radius, Float_t height, CollisionShapeTypes_t type)
+		{
+			const CollisionShape_c::CylinderShapeInfo_s cylinder = {radius, height};
+			CollisionShape_c::Key_s key(type, cylinder, this->GetScale());			
+			
+			CollisionShapesSet_t::iterator it;
+			if(!this->RetrieveCollisionShape(it, key))
+			{			
+				//create it and store on the map
+				CollisionShapePtr_t ptr = boost::make_shared<T>(radius, height, fpScale);
+
+				setCollisionShapesCache.insert(it, *ptr);
+
+				return ptr;
+			}
+			else
+			{
+				return it->shared_from_this();
+			}			
+		}
+
+		CollisionShapePtr_t Manager_c::CreateCylinderShapeX(Float_t radius, Float_t height)
+		{
+			return CreateGenericCylinderShape<CylinderCollisionShapeX_c>(radius, height, CollisionShapeTypes::CYLINDER_X);
+		}
+
+		CollisionShapePtr_t Manager_c::CreateCylinderShapeY(Float_t radius, Float_t height)
+		{
+			return CreateGenericCylinderShape<CylinderCollisionShapeY_c>(radius, height, CollisionShapeTypes::CYLINDER_Y);
+		}
+		
+		CollisionShapePtr_t Manager_c::CreateCylinderShapeZ(Float_t radius, Float_t height)
+		{
+			return CreateGenericCylinderShape<CylinderCollisionShapeZ_c>(radius, height, CollisionShapeTypes::CYLINDER_Z);
+		}
+
+		CollisionMeshPtr_t Manager_c::RetrieveCollisionMesh(const Ogre::Mesh &mesh)
 		{			
 			CollisionMeshesSet_t::iterator it = setCollisionMeshesCache.lower_bound(mesh.getName(), CollisionMesh_c::Comparator_s());
 
@@ -266,7 +303,7 @@ namespace Phobos
 		}
 		
 		
-		CollisionShapePtr_t PhysicsManager_c::CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		CollisionShapePtr_t Manager_c::CreateMeshShape(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
 			CollisionShape_c::Key_s key(mesh, scale, this->GetScale());
 
@@ -318,7 +355,7 @@ namespace Phobos
 				const btCollisionObject &rclMe;
 		};
 
-		void PhysicsManager_c::ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end)
+		void Manager_c::ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end)
 		{			
 			ClosestNotMeConvexResultCallback_c callback (body);
 
@@ -341,22 +378,22 @@ namespace Phobos
 		//
 		//COMPONENTS
 
-		void PhysicsManager_c::RegisterRigidBodyComponent(RigidBodyComponent_c &comp)
+		void Manager_c::RegisterRigidBodyComponent(RigidBodyComponent_c &comp)
 		{
 			clRigidBodyComponents.Register(comp);
 		}
 		
-		void PhysicsManager_c::UnregisterRigidBodyComponent(RigidBodyComponent_c &comp)
+		void Manager_c::UnregisterRigidBodyComponent(RigidBodyComponent_c &comp)
 		{
 			clRigidBodyComponents.Unregister(comp);
 		}
 
-		void PhysicsManager_c::RegisterCharacterBodyComponent(CharacterBodyComponent_c &comp)
+		void Manager_c::RegisterCharacterBodyComponent(CharacterBodyComponent_c &comp)
 		{
 			clCharacterBodyComponents.Register(comp);
 		}
 
-		void PhysicsManager_c::UnregisterCharacterBodyComponent(CharacterBodyComponent_c &comp)
+		void Manager_c::UnregisterCharacterBodyComponent(CharacterBodyComponent_c &comp)
 		{
 			clCharacterBodyComponents.Unregister(comp);
 		}

@@ -27,28 +27,14 @@ subject to the following restrictions:
 #include "PH_GameDictionaryUtils.h"
 #include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
+#include "PH_PhysicsUtils.h"
 #include "PH_RigidBody.h"
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_RIGID_BODY_COMPONENT_NAME, RigidBodyComponent_c);
-
-		struct ShapeTypeName_s
-		{
-			const char *pstrzName;
-			PhysicsManager_c::CollisionShapeTypes_e eValue;
-		};
-
-		static const ShapeTypeName_s stShapeTypeNameTable_gl[] = 
-		{
-			{"box", PhysicsManager_c::CST_BOX},
-			{"sphere", PhysicsManager_c::CST_SPHERE},
-			{"mesh", PhysicsManager_c::CST_MESH},
-
-			{NULL, PhysicsManager_c::CST_BOX}
-		};
+		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_RIGID_BODY_COMPONENT_NAME, RigidBodyComponent_c);		
 
 		RigidBodyComponent_c::RigidBodyComponent_c(const String_c &name, Entity_c &owner):
 			EntityComponent_c(name, owner),			
@@ -59,7 +45,7 @@ namespace Phobos
 
 		RigidBodyComponent_c::~RigidBodyComponent_c()
 		{			
-			PhysicsManager_c::GetInstance()->UnregisterRigidBodyComponent(*this);
+			Manager_c::GetInstance()->UnregisterRigidBodyComponent(*this);
 		}
 
 		void RigidBodyComponent_c::SaveTransform()
@@ -76,19 +62,9 @@ namespace Phobos
 		{	
 			Transform_c transform;
 
-			EntityLoadTransform(transform, dictionary);			
+			EntityLoadTransform(transform, dictionary);						
 
-			Enum_c<PhysicsManager_c::CollisionShapeTypes_e,  ShapeTypeName_s> enumMap(stShapeTypeNameTable_gl);
-
-			PhysicsManager_c::CollisionShapeTypes_e type;
-			if(!enumMap.TryGetValue(type, dictionary.GetString("colliderType")))
-			{
-				std::stringstream stream;
-				stream << "Invalid colliderType " << dictionary.GetString("colliderType") << " for entity " << this->GetName();
-				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "RigidBodyComponent_c::OnLoad", stream.str());
-			}
-
-			PhysicsManagerPtr_t physicsManager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t physicsManager = Manager_c::GetInstance();
 
 			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
 
@@ -96,24 +72,12 @@ namespace Phobos
 			
 			Float_t mass = dictionary.GetFloat("mass");
 
-			switch(type)
-			{
-				case PhysicsManager_c::CST_BOX:
-					{
-						Ogre::Vector3 boxDimensions = boxDimensions = DictionaryGetVector3(dictionary, "boxDimensions");						
-						spRigidBody = physicsManager->CreateBoxRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, boxDimensions.x, boxDimensions.y, boxDimensions.z );			
-					}
-					break;
-
-				default:
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "RigidBodyComponent_c::OnLoad", "Shape not supported");
-					break;
-			}									
+			spRigidBody = physicsManager->CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(dictionary, Ogre::Vector3(1, 1, 1)));
 		}
 
 		void RigidBodyComponent_c::OnLoadFinished()
 		{
-			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t manager = Manager_c::GetInstance();
 			manager->RegisterRigidBodyComponent(*this);
 			spRigidBody->Register();			
 

@@ -1,7 +1,7 @@
 /*
 Phobos 3d
-October 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+August 2012
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -17,42 +17,23 @@ subject to the following restrictions:
 #ifndef PH_PHYSICS_UTIL_H
 #define PH_PHYSICS_UTIL_H
 
-#include <btBulletDynamicsCommon.h>
+#include <OgrePrerequisites.h>
 
-#include <PH_Transform.h>
+#include <PH_Types.h>
+
+#include "PH_CollisionTagFwd.h"
+#include "PH_CollisionShapeFwd.h"
 
 namespace Phobos
 {
+	class Transform_c;
+	class Dictionary_c;
+
 	namespace Physics
 	{
-		inline btVector3 MakeVector3(const Ogre::Vector3 &v, const Float_t scale)
-		{
-			return btVector3(v.x, v.y, v.z) * scale;
-		}
-
-		inline Ogre::Vector3 MakeVector3(const btVector3 &v, Float_t physicsToGameScale)
-		{
-			return Ogre::Vector3(v.x(), v.y(), v.z()) * physicsToGameScale;
-		}
-
-		inline Ogre::Quaternion MakeQuaternion(const btQuaternion &q)
-		{
-			return Ogre::Quaternion(q.w(), q.x(), q.y(), q.z());
-		}
-
-		inline btQuaternion MakeQuaternion(const Ogre::Quaternion &q)
-		{
-			return btQuaternion(q.x, q.y, q.z, q.w);
-		}
-
-		inline btTransform MakeTransform(const Transform_c &transform, const Float_t scale)
-		{
-			return btTransform(MakeQuaternion(transform.GetRotation()), MakeVector3(transform.GetOrigin(), scale));
-		}				
-
-		inline Transform_c MakeTransform(const btTransform &transform , Float_t physicsToGameScale)
-		{
-			return Transform_c(MakeVector3(transform.getOrigin(), physicsToGameScale), MakeQuaternion(transform.getRotation()));
+		namespace Utils
+		{			
+			CollisionShapePtr_t CreateCollisionShape(const Dictionary_c &collisionDef, const Ogre::Vector3 &scale);
 		}
 	}
 }

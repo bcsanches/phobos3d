@@ -117,10 +117,7 @@ namespace Phobos
 	{
 		Transform_c transform(staticObj.pclSceneNode->_getDerivedPosition(), staticObj.pclSceneNode->_getDerivedOrientation());
 
-		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::GetInstance();
-
-		staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.pclEntity->getMesh(), scale);		
-		staticObj.spRigidBody->Register();
+		BaseOgreGameWorld_c::CreateStaticObjectRigidBody(staticObj, transform, scale, collisionTag);		
 	}
 
 	BaseOgreGameWorld_c::StaticObject_s &TileGameWorld_c::CommitTempObject(TempStaticObject_s &obj)

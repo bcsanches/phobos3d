@@ -7,7 +7,7 @@
 #include "PH_CollisionShape.h"
 
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtils.h"
+#include "PH_PhysicsConv.h"
 #include "PH_RigidBody.h"
 
 #define GROUND_CHECK -0.1f
@@ -23,7 +23,7 @@ namespace Phobos
 	namespace Physics
 	{
 		SweepCharacterBody_c::SweepCharacterBody_c(RigidBodyPtr_t rigidBody, Float_t stepHeight):
-			fpStepHeight(stepHeight * PhysicsManager_c::GetInstance()->GetScale()),
+			fpStepHeight(stepHeight * Manager_c::GetInstance()->GetScale()),
 			spRigidBody(rigidBody),
 			v3WalkDirection(0, 0, 0),
 			fGroundPlane(false),
@@ -40,18 +40,18 @@ namespace Phobos
 		void SweepCharacterBody_c::Register()
 		{
 			spRigidBody->Register();
-			PhysicsManager_c::GetInstance()->AddAction(*this);
+			Manager_c::GetInstance()->AddAction(*this);
 		}
 		
 		void SweepCharacterBody_c::Unregister()
 		{
-			PhysicsManager_c::GetInstance()->RemoveAction(*this);
+			Manager_c::GetInstance()->RemoveAction(*this);
 			spRigidBody->Unregister();
 		}
 
 		void SweepCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
-			v3WalkDirection = MakeVector3(velocity, PhysicsManager_c::GetInstance()->GetScale());
+			v3WalkDirection = MakeVector3(velocity, Manager_c::GetInstance()->GetScale());
 		}
 
 		Ogre::Vector3 SweepCharacterBody_c::GetPosition() const
@@ -61,7 +61,7 @@ namespace Phobos
 
 		void SweepCharacterBody_c::Teleport(const Ogre::Vector3 &position)
 		{			
-			//spCharacterController->warp(MakeVector3(position, PhysicsManager_c::GetInstance()->GetScale()));
+			//spCharacterController->warp(MakeVector3(position, Manager_c::GetInstance()->GetScale()));
 		}
 
 		void SweepCharacterBody_c::updateAction( btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
@@ -75,7 +75,7 @@ namespace Phobos
 			btVector3 movement = v3WalkDirection;
 
 			if(!fGroundPlane)
-				movement += PhysicsManager_c::GetInstance()->GetPhysicsGravity() * deltaTimeStep;
+				movement += Manager_c::GetInstance()->GetPhysicsGravity() * deltaTimeStep;
 			
 			btTransform toTransform;
 			this->Move(fromTransform, movement, toTransform, 1.0f);
@@ -94,7 +94,7 @@ namespace Phobos
 	
 			SweepCollisionResult_s collisionResult;
 
-			PhysicsManager_c::GetInstance()->ConvexSweepTest(
+			Manager_c::GetInstance()->ConvexSweepTest(
 				collisionResult, 
 				spRigidBody->GetRigidBody(),
 				btTransform(btQuaternion::getIdentity(), position),
@@ -109,7 +109,7 @@ namespace Phobos
 				fWalking = v3GroundNormal.y() >= MIN_WALK_NORMAL;		
 
 				btTransform toTransform(btQuaternion::getIdentity(), position + btVector3(0, GROUND_CHECK*0.1f, 0));
-					PhysicsManager_c::GetInstance()->ConvexSweepTest(
+					Manager_c::GetInstance()->ConvexSweepTest(
 					collisionResult, 
 					spRigidBody->GetRigidBody(),
 					btTransform(btQuaternion::getIdentity(), position),
@@ -162,7 +162,7 @@ namespace Phobos
 
 			btVector3 velocity = linearVel;
 
-			PhysicsManagerPtr_t physicsManager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t physicsManager = Manager_c::GetInstance();
 				
 			if(fGroundPlane)
 			{

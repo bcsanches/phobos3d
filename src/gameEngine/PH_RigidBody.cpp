@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include "PH_RigidBody.h"
 
 #include "PH_PhysicsManager.h"
-#include "PH_PhysicsUtils.h"
+#include "PH_PhysicsConv.h"
 
 namespace Phobos
 {	
@@ -48,12 +48,12 @@ namespace Phobos
 
 		void RigidBody_c::Register()
 		{
-			PhysicsManager_c::GetInstance()->RegisterRigidBody(*spRigidBody, clCollisionTag);
+			Manager_c::GetInstance()->RegisterRigidBody(*spRigidBody, clCollisionTag);
 		}
 		
 		void RigidBody_c::Unregister()
 		{
-			PhysicsManager_c::GetInstance()->UnregisterRigidBody(*spRigidBody);
+			Manager_c::GetInstance()->UnregisterRigidBody(*spRigidBody);
 		}
 
 		Transform_c RigidBody_c::GetTransform() const
@@ -61,7 +61,7 @@ namespace Phobos
 			btTransform bodyTransform;
 			spMotionState->getWorldTransform(bodyTransform);
 
-			return MakeTransform(bodyTransform, PhysicsManager_c::GetInstance()->GetPhysicsToGameScale());
+			return MakeTransform(bodyTransform, Manager_c::GetInstance()->GetPhysicsToGameScale());
 		}
 
 		void RigidBody_c::SetKinematicTransform(const btTransform &transform)

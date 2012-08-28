@@ -80,8 +80,8 @@ namespace Phobos
 		clSingletons.AddProc(MoverManager_c::ReleaseInstance);
 		core->AddModule(moverManager);
 
-		Physics::PhysicsManagerPtr_t physicsManager = Physics::PhysicsManager_c::CreateInstance();
-		clSingletons.AddProc(Physics::PhysicsManager_c::ReleaseInstance);
+		Physics::ManagerPtr_t physicsManager = Physics::Manager_c::CreateInstance();
+		clSingletons.AddProc(Physics::Manager_c::ReleaseInstance);
 		core->AddModule(physicsManager, LOWEST_PRIORITY+2);
 
 		ModelRendererManagerPtr_t modelRendererManager = ModelRendererManager_c::CreateInstance();

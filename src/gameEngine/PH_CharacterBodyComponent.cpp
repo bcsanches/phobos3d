@@ -46,7 +46,7 @@ namespace Phobos
 
 		CharacterBodyComponent_c::~CharacterBodyComponent_c()
 		{			
-			PhysicsManager_c::GetInstance()->UnregisterCharacterBodyComponent(*this);
+			Manager_c::GetInstance()->UnregisterCharacterBodyComponent(*this);
 		}
 
 		void CharacterBodyComponent_c::FinishPhysicsFrame()
@@ -65,7 +65,7 @@ namespace Phobos
 
 			EntityLoadTransform(transform, dictionary);						
 
-			PhysicsManagerPtr_t physicsManager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t physicsManager = Manager_c::GetInstance();
 
 			Float_t height = dictionary.GetFloat("height");
 			Float_t radius = dictionary.GetFloat("radius");
@@ -85,7 +85,7 @@ namespace Phobos
 
 		void CharacterBodyComponent_c::OnLoadFinished()
 		{
-			PhysicsManagerPtr_t manager = PhysicsManager_c::GetInstance();
+			Physics::ManagerPtr_t manager = Manager_c::GetInstance();
 			manager->RegisterCharacterBodyComponent(*this);
 			spCharacterBody->Register();			
 

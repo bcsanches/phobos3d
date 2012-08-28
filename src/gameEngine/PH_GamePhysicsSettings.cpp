@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "PH_GamePhysicsSettings.h"
 
 #include <PH_Dictionary.h>
+#include <PH_DictionaryHive.h>
 #include <PH_DictionaryManager.h>
 
 #include "PH_PhysicsKeys.h"
@@ -25,11 +26,15 @@ namespace Phobos
 {
 	static DictionaryPtr_t spCollisionGroups_gl;
 	static DictionaryPtr_t spStaticWorldCollision_gl;
+	static DictionaryHivePtr_t spStaticMeshCollisionShapeDefHive_gl;
 
 	void GamePhysicsSettings_c::OnBoot()
 	{
-		spCollisionGroups_gl = DictionaryManager_c::GetInstance()->GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_COLLISION_GROUP);
-		spStaticWorldCollision_gl = DictionaryManager_c::GetInstance()->GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_STATIC_WORLD_COLLISION);
+		DictionaryManagerPtr_t dictManager = DictionaryManager_c::GetInstance();
+
+		spCollisionGroups_gl = dictManager->GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_COLLISION_GROUP);
+		spStaticWorldCollision_gl = dictManager->GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_STATIC_WORLD_COLLISION);
+		spStaticMeshCollisionShapeDefHive_gl = dictManager->TryGetDictionaryHive("StaticMeshCollisionShapeDef");					
 	}
 
 	UInt32_t GamePhysicsSettings_c::DecodeCollisionMask(const String_c &config)
@@ -59,5 +64,10 @@ namespace Phobos
 	Physics::CollisionTag_c GamePhysicsSettings_c::CreateStaticWorldCollisionTag()
 	{
 		return  GamePhysicsSettings_c::LoadCollisionTag(*spStaticWorldCollision_gl);
+	}
+
+	const Dictionary_c *GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(const String_c &name)
+	{
+		return spStaticMeshCollisionShapeDefHive_gl ? spStaticMeshCollisionShapeDefHive_gl->TryGetDictionary(name).get() : NULL;
 	}
 }

@@ -478,6 +478,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gameEngine\PH_PhysicsConv.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\gameEngine\PH_PhysicsKeys.h"
 				>
 			</File>
@@ -487,6 +491,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_PhysicsManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\gameEngine\PH_PhysicsUtils.cpp"
 				>
 			</File>
 			<File

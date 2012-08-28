@@ -25,7 +25,7 @@ namespace Phobos
 	namespace Physics
 	{
 		CollisionShape_c::Key_s::Key_s(const BoxShapeInfo_s &info, Float_t physicsScale):
-			eType(CST_BOX),			
+			eType(CollisionShapeTypes::BOX),			
 			pclMesh(NULL)
 		{
 			uShapeInfo.stBox = info;
@@ -34,19 +34,27 @@ namespace Phobos
 				uShapeInfo.stBox.v3Dimension[i] *= physicsScale;
 		}
 
-		CollisionShape_c::Key_s::Key_s(const CapsuleShapeInfo_s &info, Float_t physicsScale):
-			eType(CST_CAPSULE),			
+		CollisionShape_c::Key_s::Key_s(CollisionShapeTypes_t type, const CylinderShapeInfo_s &info, Float_t physicsScale):
+			eType(type),			
 			pclMesh(NULL)
 		{
-			if((info.fpRadius * 2) > info.fpHeight)
-				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape_c::Key_s", "Capsule height must be > than 2 * radius");
+			if(type == CollisionShapeTypes::CAPSULE)
+			{
+				if((info.fpRadius * 2) > info.fpHeight)
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape_c::Key_s", "Capsule height must be > than 2 * radius");
 
-			uShapeInfo.stCapsule.fpRadius = info.fpRadius * physicsScale;			
-			uShapeInfo.stCapsule.fpHeight = (info.fpHeight - (2 * info.fpRadius))* physicsScale;			
+				uShapeInfo.stCylinder.fpHeight = (info.fpHeight - (2 * info.fpRadius))* physicsScale;			
+			}
+			else
+			{
+				uShapeInfo.stCylinder.fpHeight = info.fpHeight * physicsScale;
+			}
+
+			uShapeInfo.stCylinder.fpRadius = info.fpRadius * physicsScale;						
 		}
 				
 		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale):
-			eType(CST_MESH),			
+			eType(CollisionShapeTypes::MESH),			
 			pclMesh(&mesh),
 			v3MeshScale(scale * physicsScale)
 		{
@@ -54,7 +62,7 @@ namespace Phobos
 		}
 
 
-		CollisionShape_c::CollisionShape_c(CollisionShapeTypes_e type):
+		CollisionShape_c::CollisionShape_c(CollisionShapeTypes_t type):
 			eType(type)
 		{
 			//empty

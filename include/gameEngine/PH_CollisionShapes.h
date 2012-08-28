@@ -6,6 +6,7 @@
 #include <BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.h>
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
 #include <BulletCollision/CollisionShapes/btCapsuleShape.h>
+#include <BulletCollision/CollisionShapes/btCylinderShape.h>
 #include <OgrePrerequisites.h>
 
 #include "PH_CollisionMeshFwd.h"
@@ -61,6 +62,53 @@ namespace Phobos
 				CollisionMeshPtr_t				spOriginalMesh;
 
 				btScaledBvhTriangleMeshShape	clScaleTriangleMeshShape;
+		};
+
+		class CylinderCollisionShapeX_c: public CollisionShape_c
+		{
+			public:
+				CylinderCollisionShapeX_c(Float_t radius, Float_t height, Float_t physicsScale);
+
+				virtual btCollisionShape &GetCollisionShape();
+
+			protected:
+				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const Key_s &other) const;
+
+			private:
+				btCylinderShapeX clCylinderShape;
+		};
+
+		class CylinderCollisionShapeY_c: public CollisionShape_c
+		{
+			public:
+				CylinderCollisionShapeY_c(Float_t radius, Float_t height, Float_t physicsScale);
+
+				virtual btCollisionShape &GetCollisionShape();
+
+			protected:
+				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const Key_s &other) const;				
+
+			private:
+				btCylinderShape clCylinderShape;
+
+		};
+
+		class CylinderCollisionShapeZ_c: public CollisionShape_c
+		{
+			public:
+				CylinderCollisionShapeZ_c(Float_t radius, Float_t height, Float_t physicsScale);
+
+				virtual btCollisionShape &GetCollisionShape();
+
+			protected:
+				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const Key_s &other) const;				
+
+			private:
+				btCylinderShapeZ clCylinderShape;
+
 		};
 	}
 }

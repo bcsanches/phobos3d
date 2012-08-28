@@ -16,9 +16,15 @@ subject to the following restrictions:
 
 #include "PH_BaseOgreGameWorld.h"
 
+#include <OgreEntity.h>
+
+#include <PH_Path.h>
 #include <PH_Render.h>
 
+#include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
+#include "PH_PhysicsUtils.h"
+#include "PH_RigidBody.h"
 
 namespace Phobos
 {
@@ -59,5 +65,28 @@ namespace Phobos
 
 		if(pclEntity)
 			render->DestroyEntity(pclEntity);
+	}
+
+	void BaseOgreGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform_c &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag) const
+	{		
+		const Ogre::MeshPtr mesh = staticObj.pclEntity->getMesh();
+		const String_c &meshName = mesh->getName();
+		
+		Path_c path(meshName);
+		path.StripExtension();
+
+		Physics::ManagerPtr_t physicsManager = Physics::Manager_c::GetInstance();
+
+		const Dictionary_c *collisionDef = GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(path.GetStr());
+		if(collisionDef != NULL)
+		{
+			staticObj.spRigidBody = physicsManager->CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));
+		}
+		else
+		{			
+			staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.pclEntity->getMesh(), scale);					
+		}
+
+		staticObj.spRigidBody->Register();
 	}
 }

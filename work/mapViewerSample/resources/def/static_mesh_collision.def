@@ -1,0 +1,6 @@
+StaticMeshCollisionShapeDef mymesh
+{
+  colliderType="box";
+  boxDimensions="1 1 1";  
+}
+
