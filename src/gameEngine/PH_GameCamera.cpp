@@ -29,7 +29,7 @@ namespace Phobos
 				
 		pclRootNode = render->CreateSceneNode();
 
-		this->CreateCamera();				
+		this->CreateCamera();
 	}
 
 	GameCamera_c::~GameCamera_c()
@@ -88,6 +88,11 @@ namespace Phobos
 		pclCamera->setFarClipDistance(distance);
 	}
 
+	void GameCamera_c::SetFov(Ogre::Degree angle)
+	{
+		pclCamera->setFOVy(Ogre::Radian(angle));
+	}
+
 	void GameCamera_c::Enable()
 	{
 		//PH_ASSERT(pclCamera == NULL);
@@ -132,5 +137,7 @@ namespace Phobos
 
 		pclCamera->setOrientation(Ogre::Quaternion(Ogre::Angle(180), Ogre::Vector3::UNIT_Y));	
 		pclCamera->setNearClipDistance(fpNearPlane);
+		
+		this->SetFov(Ogre::Degree(75));
 	}
 }

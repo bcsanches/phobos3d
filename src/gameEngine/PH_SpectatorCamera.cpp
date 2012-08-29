@@ -25,7 +25,7 @@ namespace Phobos
 		clCamera.SetNearClipDistance(0.1f);		
 		clCamera.SetFarClipDistance(100);
 		
-		clCamera.EnableViewport();
+		clCamera.EnableViewport();		
 	}
 
 	void SpectatorCamera_c::FixedUpdate()

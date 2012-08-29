@@ -50,6 +50,8 @@ namespace Phobos
 
 			void AddCameraListener(Ogre::Camera::Listener &listener);
 
+			void SetFov(Ogre::Degree angle);
+
 		private:
 			void CreateCamera();
 
