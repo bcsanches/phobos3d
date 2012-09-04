@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-July 2012
+October 2010
 Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,16 +14,12 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_OGRE_MATH_FUNCTIONS_H
-#define PH_OGRE_MATH_FUNCTIONS_H
+#ifndef PH_MATH_FUNCTIONS_H
+#define PH_MATH_FUNCTIONS_H
 
 #include <float.h>
 #include <algorithm>
 
-#include <OgreQuaternion.h>
-#include <OgreMath.h>
-
-#include <Math/PH_Functions.h>
 #include <PH_Types.h>
 
 #define PH_FLOAT_EPSILON FLT_EPSILON
@@ -32,28 +28,35 @@ namespace Phobos
 {	
 	namespace Math
 	{
-		template <>
-		inline Ogre::Quaternion Interpolate(const Ogre::Quaternion &a, const Ogre::Quaternion &b, Float_t alpha)
+		template <typename T>
+		inline T Lerp(const T &a, const T &b, Float_t alpha)
 		{
-			return(Ogre::Quaternion::Slerp(alpha, a, b, true));
+			//Calculates a + alpha(b - a)
+			T temp(b - a);
+
+			temp *= alpha;
+
+			return(a + temp);	
 		}
 
-		inline Ogre::Degree ClipDegree(Ogre::Degree angle)
+		template <typename T>
+		inline T Interpolate(const T &a, const T & b, Float_t alpha)
 		{
-			const Ogre::Real r360(360);
-			if(angle >= Ogre::Degree(r360))
-			{
-				int div = (int)(angle.valueDegrees() / 360.0f);
-				angle -= Ogre::Degree(r360) * Ogre::Real(div);
-			}
-			else if (angle < Ogre::Degree(0))
-			{
-				int div = (int)(-angle.valueDegrees() / 360.0f);
-				angle += Ogre::Degree(360 * Ogre::Real(div + 1));
-			}
+			return(Lerp<T>(a, b, alpha));
+		}	
 
-			return angle;
-		}
+		template <typename T>
+		inline T Clamp(const T value, const T minV, const T maxV)
+		{
+			//return(std::max(std::min(value, maxV), minV));
+			return (value < minV) ? minV : (value > maxV) ? maxV : value;
+		} 	
+
+		template <typename T>
+		inline T Positive(const T v1)
+		{
+			return std::abs(v1, -v1);
+		}	
 	}
 }
 

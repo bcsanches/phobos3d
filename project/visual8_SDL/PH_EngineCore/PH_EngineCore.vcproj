@@ -246,18 +246,34 @@
 	</References>
 	<Files>
 		<Filter
-			Name="math"
+			Name="Math"
 			>
 			<File
-				RelativePath="..\..\..\include\engineCore\PH_Accelerometer.h"
+				RelativePath="..\..\..\include\engineCore\Math\PH_Functions.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Gui"
+			>
+			<File
+				RelativePath="..\..\..\src\engineCore\Gui\PH_Context.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\engineCore\PH_Interpolator.h"
+				RelativePath="..\..\..\include\engineCore\Gui\PH_Context.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\engineCore\PH_MathFunctions.h"
+				RelativePath="..\..\..\include\engineCore\Gui\PH_ContextFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\engineCore\Gui\PH_Manager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\Gui\PH_Manager.h"
 				>
 			</File>
 		</Filter>

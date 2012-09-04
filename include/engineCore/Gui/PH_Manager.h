@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-July 2012
+September 2012
 Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -14,46 +14,32 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_OGRE_MATH_FUNCTIONS_H
-#define PH_OGRE_MATH_FUNCTIONS_H
+#ifndef PH_GUI_MANAGER_H
+#define PH_GUI_MANAGER_H
 
-#include <float.h>
-#include <algorithm>
+#include <PH_Singleton.h>
 
-#include <OgreQuaternion.h>
-#include <OgreMath.h>
+#include "PH_CoreModule.h"
+#include "PH_EngineCoreAPI.h"
 
-#include <Math/PH_Functions.h>
-#include <PH_Types.h>
-
-#define PH_FLOAT_EPSILON FLT_EPSILON
+#include "PH_ContextFwd.h"
 
 namespace Phobos
-{	
-	namespace Math
+{
+	namespace Gui
 	{
-		template <>
-		inline Ogre::Quaternion Interpolate(const Ogre::Quaternion &a, const Ogre::Quaternion &b, Float_t alpha)
-		{
-			return(Ogre::Quaternion::Slerp(alpha, a, b, true));
-		}
+		PH_DECLARE_NODE_PTR(Manager);
 
-		inline Ogre::Degree ClipDegree(Ogre::Degree angle)
+		class PH_ENGINE_CORE_API Manager_c: public CoreModule_c
 		{
-			const Ogre::Real r360(360);
-			if(angle >= Ogre::Degree(r360))
-			{
-				int div = (int)(angle.valueDegrees() / 360.0f);
-				angle -= Ogre::Degree(r360) * Ogre::Real(div);
-			}
-			else if (angle < Ogre::Degree(0))
-			{
-				int div = (int)(-angle.valueDegrees() / 360.0f);
-				angle += Ogre::Degree(360 * Ogre::Real(div + 1));
-			}
+			PH_DECLARE_SINGLETON_METHODS(Manager);
 
-			return angle;
-		}
+			public:
+				ContextPtr_t CreateContext(const String_c &name);
+
+			private:
+				Manager_c();
+		};
 	}
 }
 

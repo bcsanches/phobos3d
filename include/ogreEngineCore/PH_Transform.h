@@ -21,7 +21,7 @@ subject to the following restrictions:
 #include <OgreQuaternion.h>
 
 #include "PH_OgreMathFunctions.h"
-#include "PH_Interpolator.h"
+#include "Math/PH_Interpolator.h"
 
 namespace Phobos
 {
@@ -62,8 +62,8 @@ namespace Phobos
 	}
 
 	inline Transform_c::Transform_c(const Transform_c &from, const Transform_c &to, Float_t delta):
-		v3Origin(MathInterpolate(from.v3Origin, to.v3Origin, delta)),
-		qRotation(MathInterpolate(from.qRotation, to.qRotation, delta))
+		v3Origin(Math::Interpolate(from.v3Origin, to.v3Origin, delta)),
+		qRotation(Math::Interpolate(from.qRotation, to.qRotation, delta))
 	{
 		//empty
 	}
@@ -132,17 +132,20 @@ namespace Phobos
 		return Transform_c(a, b, delta);
 	}
 
-	template <>
-	inline Transform_c MathInterpolate(const Transform_c &a, const Transform_c &b, Float_t alpha)
+	namespace Math
 	{
-		return(Transform_c(
-			MathInterpolate(a.GetOrigin(), b.GetOrigin(), alpha), 
-			MathInterpolate(a.GetRotation(), b.GetRotation(), alpha)
-		));
+		template <>
+		inline Transform_c Interpolate(const Transform_c &a, const Transform_c &b, Float_t alpha)
+		{
+			return(Transform_c(
+				Interpolate(a.GetOrigin(), b.GetOrigin(), alpha), 
+				Interpolate(a.GetRotation(), b.GetRotation(), alpha)
+			));
+		}
 	}
 
 
-	typedef Interpolator_c<Transform_c> TransformInterpolator_c;
+	typedef Math::Interpolator_c<Transform_c> TransformInterpolator_c;
 }
 
 
