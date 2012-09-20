@@ -55,7 +55,7 @@ namespace Phobos
 	OgitorGameWorld_c::~OgitorGameWorld_c()
 	{		
 		if(pclTerrainGroup)
-			Render_c::GetInstance()->DestroyTerrainGroup(pclTerrainGroup);
+			Render_c::GetInstance().DestroyTerrainGroup(pclTerrainGroup);
 
 		if(pclTerrainOptions)
 			delete pclTerrainOptions;		
@@ -72,7 +72,7 @@ namespace Phobos
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
+			Dictionary_c *dict = static_cast<Dictionary_c *>(it->second);
 
 			try
 			{
@@ -124,7 +124,7 @@ namespace Phobos
 		}
 
 		//configure physics
-		Physics::ManagerPtr_t physicsManager = Physics::Manager_c::GetInstance();
+		Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
 
 		Physics::CollisionTag_c staticCollisionTag = GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
 
@@ -169,8 +169,8 @@ namespace Phobos
 		}
 		else if(type.compare("OctreeSceneManager") == 0)
 		{
-			RenderPtr_t render = Render_c::GetInstance();
-			render->SetAmbientColor(DictionaryGetColour(dict, "ambient"));
+			Render_c &render = Render_c::GetInstance();
+			render.SetAmbientColor(DictionaryGetColour(dict, "ambient"));
 
 			return true;
 		}
@@ -200,27 +200,27 @@ namespace Phobos
 		pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));
 		pclTerrainOptions->setLayerBlendMapSize(dict.GetInt("blendmap::texturesize"));
 
-		RenderPtr_t render = Render_c::GetInstance();
+		Render_c &render = Render_c::GetInstance();
 
 		//u16TerrainSize = dict.GetInt("pagemapsize");
 		//pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, u16TerrainSize, dict.GetFloat("pageworldsize"));
-		pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, dict.GetInt("pagemapsize"), dict.GetFloat("pageworldsize"));
+		pclTerrainGroup = render.CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, dict.GetInt("pagemapsize"), dict.GetFloat("pageworldsize"));
 		pclTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 		pclTerrainGroup->setFilenameConvention("Page", "ogt");
 
 		if(pclTerrainLight != NULL)
 		{
 			pclTerrainOptions->setLightMapDirection(pclTerrainLight->getDirection());
-			pclTerrainOptions->setCompositeMapAmbient(render->GetAmbientColor());
+			pclTerrainOptions->setCompositeMapAmbient(render.GetAmbientColor());
 			pclTerrainOptions->setCompositeMapDiffuse(pclTerrainLight->getDiffuseColour());
 		}
 	}
 
 	void OgitorGameWorld_c::LoadTerrainPage(const Dictionary_c &terrainPageDictionary, const Dictionary_c &worldEntityDictionary)
 	{
-		DictionaryHivePtr_t levelInfo = DictionaryManager_c::GetInstance()-> GetDictionaryHive("LevelInfo");
+		DictionaryHive_c &levelInfo = DictionaryManager_c::GetInstance().GetDictionaryHive("LevelInfo");
 
-		String_c name = levelInfo->GetDictionary("LevelFile")->GetString("path") + "/" + worldEntityDictionary.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		String_c name = levelInfo.GetDictionary("LevelFile").GetString("path") + "/" + worldEntityDictionary.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
@@ -261,7 +261,7 @@ namespace Phobos
 
 	void OgitorGameWorld_c::LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
-		temp.pclSceneNode = Render_c::GetInstance()->CreateSceneNode(temp.strName);
+		temp.pclSceneNode = Render_c::GetInstance().CreateSceneNode(temp.strName);
 
 		temp.pclSceneNode->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
 		temp.pclSceneNode->setOrientation(DictionaryGetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
@@ -271,14 +271,14 @@ namespace Phobos
 	{
 		this->LoadNodeObject(temp, dict);
 
-		temp.pclEntity = Render_c::GetInstance()->CreateEntity(dict.GetString("meshfile"));
+		temp.pclEntity = Render_c::GetInstance().CreateEntity(dict.GetString("meshfile"));
 		temp.pclEntity->setCastShadows(dict.GetBool("castshadows"));
 		temp.pclSceneNode->attachObject(temp.pclEntity);		
 	}
 
 	void OgitorGameWorld_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)
 	{
-		temp.pclLight = Render_c::GetInstance()->CreateLight();
+		temp.pclLight = Render_c::GetInstance().CreateLight();
 
 		if(temp.fParent)
 		{

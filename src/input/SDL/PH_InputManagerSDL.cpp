@@ -17,21 +17,21 @@ subject to the following restrictions:
 #include "SDL/PH_InputManagerSDL.h"
 
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 
 #include "PH_InputDefs.h"
-
-#include "SDL/PH_KeyboardInputDeviceSDL.h"
-#include "SDL/PH_MouseInputDeviceSDL.h"
 
 namespace Phobos
 {
 	InputManagerPtr_t InputManager_c::CreateInstanceImpl(const String_c &name)
 	{
-		return InputManagerPtr_t(new InputManagerSDL_c(name));
+		return InputManagerPtr_t(PH_NEW InputManagerSDL_c(name));
 	}
 
 	InputManagerSDL_c::InputManagerSDL_c(const String_c &name):
 		InputManager_c(name),
+		clKeyboardDevice(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_KEYBOARD)),
+		clMouseDevice(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_MOUSE)),
 		fPooled(false)
 	{
 		Kernel_c::GetInstance().LogMessage("[InputManagerSDL] Created.");
@@ -43,7 +43,7 @@ namespace Phobos
 			return;
 
 		fPooled = true;
-		this->AttachDevice(KeyboardInputDeviceSDL_c::Create(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_KEYBOARD)), 0);
-		this->AttachDevice(MouseInputDeviceSDL_c::Create(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_MOUSE)), 0);
+		this->AttachDevice(clKeyboardDevice, 0);
+		this->AttachDevice(clMouseDevice, 0);
 	}
 }

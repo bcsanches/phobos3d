@@ -61,19 +61,19 @@ void Render_c::OnBoot(void)
 	ipWindow->Open("Phobos Engine", r);
 
 	kernel.LogMessage("[Render_c::OnBoot] Ready.");
-	Core_c::GetInstance()->OnEvent(CORE_EVENT_RENDER_READY);
+	Core_c::GetInstance().OnEvent(CoreEvents::RENDER_READY);
 }
 
 void Render_c::OnPrepareToBoot()
 {
-	Phobos::ConsolePtr_t console = Phobos::Console_c::GetInstance();
+	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
 	
-	console->AddContextCmd(cmdScreenshot);
+	console.AddContextCmd(cmdScreenshot);
 	
-	console->AddContextVar(varRScreenX);
-	console->AddContextVar(varRScreenY);
-	console->AddContextVar(varRFullScreen);
-	console->AddContextVar(varRVSync);
+	console.AddContextVar(varRScreenX);
+	console.AddContextVar(varRScreenY);
+	console.AddContextVar(varRFullScreen);
+	console.AddContextVar(varRVSync);
 }
 
 void Render_c::CmdScreenshot(const Phobos::StringVector_t &container, Phobos::Context_c &)

@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include <boost/make_shared.hpp>
 
 #include "PH_Exception.h"
+#include "PH_Memory.h"
 #include "PH_Path.h"
 
 namespace Phobos
@@ -53,28 +54,31 @@ namespace Phobos
 		return NodePtr_t(boost::make_shared<Node_c>(name));
 	}	
 
-	Node_c::Node_c(const String_c &name, ChildrenMode_e param):
+	Node_c::Node_c(const String_c &name, UInt32_t flags):
 		Object_c(name),
 		pclParent(NULL),
-		fPrivateChildren(param == PRIVATE_CHILDREN ? true : false)
+		fPrivateChildren(flags & NodeFlags::PRIVATE_CHILDREN ? true : false),
+		fManagedNode(flags & NodeFlags::MANAGED ? true : false)
 	{
 	}
 
-	Node_c::Node_c(const Char_t *name, ChildrenMode_e param):
+	Node_c::Node_c(const Char_t *name, UInt32_t flags):
 		Object_c(name),
 		pclParent(NULL),
-		fPrivateChildren(param == PRIVATE_CHILDREN ? true : false)
+		fPrivateChildren(flags & NodeFlags::PRIVATE_CHILDREN ? true : false),
+		fManagedNode(flags & NodeFlags::MANAGED ? true : false)
 	{
 	}
 
 	Node_c::~Node_c()
 	{
-		//We clear all nodes parents, so in case they are not destroyed no dangling pointers are left
-		BOOST_FOREACH(NodeMapPair_t pair, mapNodes)
-			pair.second->pclParent = NULL;
+		if(pclParent != NULL)
+			pclParent->RemoveChild(*this);
+
+		this->RemoveAllChildren();
 	}
 
-	void Node_c::AddChild(NodePtr_t node)
+	void Node_c::AddChild(Node_c &node)
 	{
 		if (this->fPrivateChildren)
 			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Node_c::AddChild", "Node " + this->GetName() + " has private childs");
@@ -82,23 +86,23 @@ namespace Phobos
 		AddPrivateChild(node);
 	}
 
-	void Node_c::AddPrivateChild(NodePtr_t node)
+	void Node_c::AddPrivateChild(Node_c &node)
 	{
-		if(node->pclParent)
+		if(node.pclParent)
 		{
 			std::stringstream stream;
-			stream << "Node " << node->GetName() << " is already a child of " << node->pclParent->GetName() << ", unregister if first before adding it to " << this->GetName();
+			stream << "Node " << node.GetName() << " is already a child of " << node.pclParent->GetName() << ", unregister if first before adding it to " << this->GetName();
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::AddChild]", stream.str());
 		} 
-		else if(mapNodes.find(node->GetName()) != mapNodes.end())
+		else if(mapNodes.find(node.GetName()) != mapNodes.end())
 		{
 			std::stringstream stream;
-			stream << "Node " << node->GetName() << " already exists on node " << this->GetName();
+			stream << "Node " << node.GetName() << " already exists on node " << this->GetName();
 			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[Node_c::AddChild]", stream.str());
 		}
 
-		mapNodes.insert(std::make_pair(node->GetName(), node));
-		node->pclParent = this;
+		mapNodes.insert(std::make_pair(node.GetName(), &node));
+		node.pclParent = this;
 	}
 
 	void Node_c::RemoveSelf()
@@ -110,54 +114,62 @@ namespace Phobos
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveSelf]", stream.str());
 		}
 
-		pclParent->RemoveChild(this->MakePointerFromThis());
+		pclParent->RemoveChild(*this);
 	}
 
 	void Node_c::RemoveAllChildren()
 	{
+		//We clear all nodes parents, so in case they are not destroyed no dangling pointers are left
+		BOOST_FOREACH(NodeMapPair_t pair, mapNodes)
+		{
+			pair.second->pclParent = NULL;
+			if(pair.second->fManagedNode)
+				delete pair.second;
+		}
+
 		mapNodes.clear();
 	}
 
-	void Node_c::RemoveChild(NodePtr_t node)
+	void Node_c::RemoveChild(Node_c &node)
 	{
 		//node is not registered?
-		if(node->pclParent == NULL)
+		if(node.pclParent == NULL)
 		{
 			std::stringstream stream;
-			stream << "Node " << node->GetName() << " is not registered, cant remove it from " << this->GetName();
+			stream << "Node " << node.GetName() << " is not registered, cant remove it from " << this->GetName();
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveChild]", stream.str());
 		}
 		//wrong parent?
-		else if(node->pclParent != this)
+		else if(node.pclParent != this)
 		{
 			std::stringstream stream;
-			stream << "Node " << node->GetName() << " is not registered on " << this->GetName() << " it is registered on " << node->pclParent->GetName();
+			stream << "Node " << node.GetName() << " is not registered on " << this->GetName() << " it is registered on " << node.pclParent->GetName();
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node_c::RemoveChild]", stream.str());
 		}
 				
-		mapNodes.erase(node->GetName());
-		node->pclParent = NULL;
+		mapNodes.erase(node.GetName());
+		node.pclParent = NULL;
 	}
 
-	NodePtr_t Node_c::TryGetChild(const String_c &name) const
+	Node_c *Node_c::TryGetChild(const String_c &name) const
 	{
 		if((name.size() == 1) && (name[0] == '.'))
-			return this->MakePointerFromThis();
+			return const_cast<Node_c *>(this);
 		else if((name.size() == 2) && (name.compare("..") == 0))
-			return pclParent->MakePointerFromThis();
+			return pclParent;
 
 		NodeMap_t::const_iterator it = mapNodes.find(name);
 		if(it == mapNodes.end())
 		{
-			return NodePtr_t();			
+			return NULL;			
 		}
 
 		return it->second;
 	}
 
-	NodePtr_t Node_c::GetChild(const String_c &name) const
+	Node_c &Node_c::GetChild(const String_c &name) const
 	{
-		NodePtr_t ptr = this->TryGetChild(name);
+		Node_c *ptr = this->TryGetChild(name);
 		if(!ptr)
 		{
 			std::stringstream stream;
@@ -165,10 +177,10 @@ namespace Phobos
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[Node_c::GetChild]", stream.str());
 		}
 		
-		return ptr;
+		return *ptr;
 	}
 
-	void Node_c::AddNode(NodePtr_t ptr, const Path_c &path)
+	void Node_c::AddNode(Node_c &ptr, const Path_c &path)
 	{
 		if(!path.IsRelative() && pclParent)
 		{
@@ -187,15 +199,15 @@ namespace Phobos
 				return;
 			}
 
-			NodePtr_t currentNode = this->MakePointerFromThis();
+			Node_c *currentNode = this;
 			for(;;)
 			{
-				NodePtr_t child = currentNode->TryGetChild(currentFolder);
+				Node_c *child = currentNode->TryGetChild(currentFolder);
 				if(!child)
 				{
-					//No path, lets create a default one
-					child = Node_c::Create(currentFolder);
-					currentNode->AddChild(child);
+					//No path, lets create a default one					
+					child = PH_NEW Node_c(currentFolder, NodeFlags::MANAGED);
+					currentNode->AddChild(*child);
 				}
 				currentNode = child;
 
@@ -207,11 +219,11 @@ namespace Phobos
 		}
 	}
 
-	NodePtr_t Node_c::LookupNode(const Path_c &path) const
+	Node_c &Node_c::LookupNode(const Path_c &path) const
 	{
 		//If path is only "/"
 		if(path.IsOnlyRoot())
-			return this->GetRoot()->MakePointerFromThis();
+			return const_cast<Node_c &>(*(this->GetRoot()));
 
 		if(!path.IsRelative() && pclParent)
 		{
@@ -230,25 +242,25 @@ namespace Phobos
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Node_c::LookupObject", stream.str());
 		}
 
-		NodePtr_t currentNode = this->MakePointerFromThis();
+		Node_c *currentNode = const_cast<Node_c *>(this);
 		for(;;)
 		{			
-			NodePtr_t child = currentNode->GetChild(folder);			
+			Node_c &child = currentNode->GetChild(folder);			
 			if(!it.GetNext(&folder))
-				return child;				
+				return child;			
 
-			currentNode = child;
+			currentNode = &child;
 		}
 	}
 
-	bool Node_c::TryLookupNode(NodePtr_t &result, const Path_c &path) const
+	bool Node_c::TryLookupNode(Node_c *&result, const Path_c &path) const
 	{
-		result.reset();
+		result = NULL;
 
 		//If path is only "/"
 		if(path.IsOnlyRoot())
 		{
-			result = this->GetRoot()->MakePointerFromThis();
+			result = const_cast<Node_c *>(this->GetRoot());
 
 			return true;
 		}
@@ -268,10 +280,10 @@ namespace Phobos
 			return false;
 		}
 
-		NodePtr_t currentNode = this->MakePointerFromThis();
+		Node_c *currentNode = const_cast<Node_c *>(this);
 		for(;;)
 		{			
-			NodePtr_t child = currentNode->TryGetChild(folder);
+			Node_c *child = currentNode->TryGetChild(folder);
 			if(!child)
 			{
 				result = child;
@@ -314,9 +326,9 @@ namespace Phobos
 		return !mapNodes.empty();
 	}
 
-	NodePtr_t Node_c::GetParent() const
+	Node_c *Node_c::GetParent() const
 	{
-		return pclParent ? pclParent->MakePointerFromThis() : NodePtr_t();
+		return pclParent;
 	}
 
 	void Node_c::GetThisPath(Path_c &out)

@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_SINGLETON_H
 #define PH_SINGLETON_H
 
+#include "PH_Memory.h"
+
 #define PH_DECLARE_SINGLETON_PTR(X)	PH_DECLARE_NODE_PTR(X)	
 
 #define PH_DECLARE_SINGLETON_METHODS(X)		\
@@ -24,25 +26,25 @@ subject to the following restrictions:
 		static X##Ptr_t ipInstance_gl;		\
 											\
 	public:									\
-		static X##Ptr_t CreateInstance();	\
+		static X##_c &CreateInstance();		\
 		static void ReleaseInstance();		\
-		static X##Ptr_t GetInstance();
+		static X##_c &GetInstance();
 
 #define PH_DECLARE_NAMED_SINGLETON_METHODS(X)					\
 	private:													\
 		static X##Ptr_t ipInstance_gl;							\
 																\
 	public:														\
-		static X##Ptr_t CreateInstance(const String_c &name);	\
+		static X##_c &CreateInstance(const String_c &name);		\
 		static void ReleaseInstance();							\
-		static X##Ptr_t GetInstance();
+		static X##_c &GetInstance();
 
 #define PH_DEFINE_SINGLETON_VAR(X) X##Ptr_t X##_c::ipInstance_gl;
 
 #define PH_SINGLETON_PROCS(X, EXTRA)		\
-	X##Ptr_t X##_c::GetInstance(void)		\
+	X##_c &X##_c::GetInstance(void)			\
 	{										\
-		return ipInstance_gl;				\
+		return *ipInstance_gl;				\
 	}										\
 											\
 	void X##_c::ReleaseInstance(void)		\
@@ -53,19 +55,19 @@ subject to the following restrictions:
 
 #define PH_DEFINE_DEFAULT_SINGLETON_EX(X, EXTRA_CREATE, EXTRA_RELEASE)\
 	PH_DEFINE_SINGLETON_VAR(X)				\
-	X##Ptr_t X##_c::CreateInstance(void)	\
+	X##_c &X##_c::CreateInstance(void)		\
 	{										\
 		PH_ASSERT(!ipInstance_gl);			\
 											\
-		ipInstance_gl.reset(new X##_c());	\
+		ipInstance_gl.reset(PH_NEW X##_c());	\
 											\
 		EXTRA_CREATE;						\
 											\
-		return ipInstance_gl;				\
+		return *ipInstance_gl;				\
 	}										\
 	PH_SINGLETON_PROCS(X,EXTRA_RELEASE);
 
-#define PH_DEFINE_NODE_SINGLETON(X, NODE_PATH) PH_DEFINE_DEFAULT_SINGLETON_EX(X, Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(NODE_PATH)), ipInstance_gl->RemoveSelf())	
+#define PH_DEFINE_NODE_SINGLETON(X, NODE_PATH) PH_DEFINE_DEFAULT_SINGLETON_EX(X, Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c(NODE_PATH)), ipInstance_gl->RemoveSelf())	
 
 #define PH_DEFINE_DEFAULT_SINGLETON(X) PH_DEFINE_DEFAULT_SINGLETON_EX(X, ;, ;)	
 

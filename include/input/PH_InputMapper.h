@@ -60,7 +60,7 @@ namespace Phobos
 			class DeviceMapper_c: private InputDeviceListener_c
 			{
 				public:
-					DeviceMapper_c(InputMapper_c &mapper, InputDevicePtr_t device);
+					DeviceMapper_c(InputMapper_c &mapper, InputDevice_c &device);
 					DeviceMapper_c(const DeviceMapper_c &rhs);
 
 					DeviceMapper_c &operator =(const DeviceMapper_c &rhs);
@@ -80,7 +80,7 @@ namespace Phobos
 				private:
 					ActionBindMap_t					mapActions;
 
-					InputDevicePtr_t				ipInputDevice;
+					InputDevice_c					&clInputDevice;
 					InputMapper_c					&rclInputMapper;				
 			};				
 
@@ -90,6 +90,7 @@ namespace Phobos
 			// =====================================================
 			static InputMapperPtr_t Create(const String_c &name, Context_c &context);
 
+			InputMapper_c(const String_c &name, Context_c &context);
 			~InputMapper_c(void);
 
 			void Bind(const String_c &devicePathName, const String_c &actionName, const String_c &cmd);
@@ -104,9 +105,7 @@ namespace Phobos
 		private:
 			// =====================================================
 			// PRIVATE METHODS
-			// =====================================================
-			InputMapper_c(const String_c &name, Context_c &context);			
-
+			// =====================================================			
 			void OnDeviceAttached(InputDevicePtr_t &device);
 			void OnDeviceDetached(InputDevicePtr_t &device);
 

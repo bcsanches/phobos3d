@@ -18,6 +18,7 @@ subject to the following restrictions:
 
 #include <PH_Error.h>
 #include <PH_EventManager.h>
+#include <PH_Memory.h>
 
 #include "PH_InputEvent.h"
 
@@ -25,13 +26,13 @@ namespace Phobos
 {
 	InputDevicePtr_t KeyboardInputDeviceSDL_c::Create(const String_c &name)
 	{
-		return InputDevicePtr_t(new KeyboardInputDeviceSDL_c(name));
+		return InputDevicePtr_t(PH_NEW KeyboardInputDeviceSDL_c(name));
 	}
 
 	KeyboardInputDeviceSDL_c::KeyboardInputDeviceSDL_c(const String_c &name):
 		KeyboardInputDevice_c(name)
 	{
-		EventManager_c::GetInstance()->AddListener(*this, EVENT_TYPE_KEYBOARD);
+		EventManager_c::GetInstance().AddListener(*this, EVENT_TYPE_KEYBOARD);
 	}
 
 	KeyboardInputDeviceSDL_c::~KeyboardInputDeviceSDL_c(void)

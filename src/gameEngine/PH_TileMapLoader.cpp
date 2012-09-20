@@ -24,7 +24,7 @@ namespace Phobos
 	{
 		MapLoader_c::ClearAllHives();
 
-		DictionaryManager_c::GetInstance()->Load(fileName);
+		DictionaryManager_c::GetInstance().Load(fileName);
 	}
 }
 

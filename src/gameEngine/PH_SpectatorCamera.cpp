@@ -63,7 +63,7 @@ namespace Phobos
 
 	void SpectatorCamera_c::Update()
 	{
-		clCamera.SetTransform(clTransformInterpolator.GetValue(Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta));
+		clCamera.SetTransform(clTransformInterpolator.GetValue(Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta));
 	}
 
 	void SpectatorCamera_c::SetTransform(const Transform_c &transform)

@@ -46,7 +46,7 @@ namespace Phobos
 
 		CharacterBodyComponent_c::~CharacterBodyComponent_c()
 		{			
-			Manager_c::GetInstance()->UnregisterCharacterBodyComponent(*this);
+			Manager_c::GetInstance().UnregisterCharacterBodyComponent(*this);
 		}
 
 		void CharacterBodyComponent_c::FinishPhysicsFrame()
@@ -65,7 +65,7 @@ namespace Phobos
 
 			EntityLoadTransform(transform, dictionary);						
 
-			Physics::ManagerPtr_t physicsManager = Manager_c::GetInstance();
+			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
 
 			Float_t height = dictionary.GetFloat("height");
 			Float_t radius = dictionary.GetFloat("radius");
@@ -80,13 +80,13 @@ namespace Phobos
 			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
 
 			prpCharacterPosition.SetVector(startPos);
-			spCharacterBody = physicsManager->CreateCharacterBody(startPos, collisionTag, stepHeight, radius, height);											
+			spCharacterBody = physicsManager.CreateCharacterBody(startPos, collisionTag, stepHeight, radius, height);											
 		}
 
 		void CharacterBodyComponent_c::OnLoadFinished()
 		{
-			Physics::ManagerPtr_t manager = Manager_c::GetInstance();
-			manager->RegisterCharacterBodyComponent(*this);
+			Physics::Manager_c &manager = Manager_c::GetInstance();
+			manager.RegisterCharacterBodyComponent(*this);
 			spCharacterBody->Register();			
 
 			pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);

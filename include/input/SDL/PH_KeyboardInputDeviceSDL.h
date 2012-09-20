@@ -28,13 +28,12 @@ namespace Phobos
 		public:
 			static InputDevicePtr_t Create(const String_c &name);
 
+			KeyboardInputDeviceSDL_c(const String_c &name);
 			~KeyboardInputDeviceSDL_c(void);
 
 			virtual void Update(void);
 
-		private:
-			KeyboardInputDeviceSDL_c(const String_c &name);			
-
+		private:			
 			virtual void Event(struct Event_s &event);
 	};
 }

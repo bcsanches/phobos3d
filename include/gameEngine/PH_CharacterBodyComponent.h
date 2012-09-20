@@ -35,7 +35,7 @@ namespace Phobos
 		class PH_GAME_ENGINE_API CharacterBodyComponent_c: public EntityComponent_c
 		{
 			public:
-				static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);
+				static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
 
 				~CharacterBodyComponent_c();
 

@@ -14,25 +14,10 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Gui/PH_Manager.h"
 
-#include <PH_Memory.h>
+#ifndef PH_DISABLE_COPY_H
+#define PH_DISABLE_COPY_H
 
-#include "Gui/PH_Context.h"
+#define PH_DISABLE_COPY(X) private: X(const X &); X operator=(const X&);
 
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::Manager);
-
-Phobos::Gui::Manager_c::Manager_c():
-	CoreModule_c("GuiManager")
-{
-	//empty
-}
-
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
-{
-	ContextPtr_t ptr = Context_c::Create(name);
-
-	this->AddPrivateChild(*ptr);
-
-	return ptr;
-}
+#endif

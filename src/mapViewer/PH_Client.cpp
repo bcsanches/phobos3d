@@ -74,15 +74,15 @@ namespace Phobos
 	{
 		BaseClient_c::OnPrepareToBoot();
 
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdToggleMouseCursorClip);		
+		console.AddContextCmd(cmdToggleMouseCursorClip);		
 
-		console->AddContextVar(varMouseSensitivity);
-		console->AddContextVar(varSpectatorMoveSpeed);
-		console->AddContextVar(varSpectatorTurnSpeed);
+		console.AddContextVar(varMouseSensitivity);
+		console.AddContextVar(varSpectatorMoveSpeed);
+		console.AddContextVar(varSpectatorTurnSpeed);
 
-		WorldManager_c::GetInstance()->AddListener(*this);
+		WorldManager_c::GetInstance().AddListener(*this);
 	}	
 
 	void Client_c::OnMapUnloaded()
@@ -96,8 +96,8 @@ namespace Phobos
 
 	void Client_c::OnMapLoaded()
 	{
-		WorldManagerPtr_t worldManager = WorldManager_c::GetInstance();
-		PointEntityPtr_t player = boost::static_pointer_cast<PointEntity_c>(worldManager->TryGetEntityByType("InfoPlayerStart"));
+		WorldManager_c &worldManager = WorldManager_c::GetInstance();
+		PointEntity_c *player = static_cast<PointEntity_c *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
 		if(!player)
 		{
 			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contais InfoPlayerStart entity");

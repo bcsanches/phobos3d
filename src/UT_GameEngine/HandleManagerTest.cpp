@@ -17,9 +17,13 @@ subject to the following restrictions:
 #include <boost/test/unit_test.hpp>
 
 #include <PH_HandleManager.h>
+#include <PH_Memory.h>
+#include <PH_Kernel.h>
 
 BOOST_AUTO_TEST_CASE(HandleManager_Full)
 {
+	Phobos::Kernel_c::CreateInstance("UT_GameEngine_HandleManager_Full.log");
+
 	using namespace Phobos;
 
 	HandleManager_c<int> handleManager;
@@ -42,6 +46,8 @@ BOOST_AUTO_TEST_CASE(HandleManager_Full)
 
 	BOOST_REQUIRE(h1.u12Index == h.u12Index);
 	BOOST_REQUIRE(h1.u20Counter != h.u20Counter);
+
+	Phobos::Kernel_c::ReleaseInstance();
 }
 
 
@@ -49,10 +55,12 @@ BOOST_AUTO_TEST_CASE(HandleManagerBasic)
 {
 	using namespace Phobos;
 
+	Phobos::Kernel_c::CreateInstance("UT_GameEngine_HandleManagerBasic.log");
+
 	HandleManager_c<int> handleManager;
 
-	Handle_s h1 = handleManager.AddObject(new int(1));
-	Handle_s h2 = handleManager.AddObject(new int(2));
+	Handle_s h1 = handleManager.AddObject(PH_NEW int(1));
+	Handle_s h2 = handleManager.AddObject(PH_NEW int(2));
 
 	//Check basic handle
 	BOOST_REQUIRE(h1.u12Index == 0);
@@ -84,7 +92,10 @@ BOOST_AUTO_TEST_CASE(HandleManagerBasic)
 
 	delete handleManager.TryGetObject(h1);
 	delete handleManager.TryGetObject(h2);
+
+	Phobos::Kernel_c::ReleaseInstance();
 }
+
 
 
 

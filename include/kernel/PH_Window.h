@@ -21,25 +21,24 @@ subject to the following restrictions:
 #include <boost/utility.hpp>
 
 #include "PH_Node.h"
-#include "PH_EventManager.h"
 
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(Window);	
 
-	class PH_KERNEL_API Window_c: public Node_c, boost::noncopyable
+	class EventManager_c;
+
+	class PH_KERNEL_API Window_c: public Node_c
 	{
 		public:
 			static WindowPtr_t Create(const String_c &name);
 
 			virtual void Open(const String_c &name, const Rect_s<size_t> &rect) = 0;
 			virtual void *GetHandler() const = 0;
-			virtual bool HasGLContext() = 0;
-
-			virtual void SetEventManager(EventManagerPtr_t manager) = 0;
+			virtual bool HasGLContext() = 0;			
 
 		protected:
-			Window_c(const String_c &name);
+			Window_c(const String_c &name);		
 	};
 
 };

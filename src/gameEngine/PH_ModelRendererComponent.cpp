@@ -40,27 +40,27 @@ namespace Phobos
 		pclMeshEntity(NULL),
 		pprpTransform(NULL)
 	{		
-		ModelRendererManager_c::GetInstance()->Register(*this);
+		ModelRendererManager_c::GetInstance().Register(*this);
 	}
 
 	ModelRendererComponent_c::~ModelRendererComponent_c()
 	{
-		RenderPtr_t render = Render_c::GetInstance();
+		Render_c &render = Render_c::GetInstance();
 
-		render->DestroyEntity(pclMeshEntity);
-		render->DestroySceneNode(pclSceneNode);
+		render.DestroyEntity(pclMeshEntity);
+		render.DestroySceneNode(pclSceneNode);
 
-		ModelRendererManager_c::GetInstance()->Unregister(*this);
+		ModelRendererManager_c::GetInstance().Unregister(*this);
 	}
 
 	void ModelRendererComponent_c::OnLoad(const Dictionary_c &dictionary)
 	{
 		const String_c &meshName = dictionary.GetString(PH_ENTITY_KEY_MESH_FILE);
 
-		RenderPtr_t render = Render_c::GetInstance();
+		Render_c &render = Render_c::GetInstance();
 
-		pclSceneNode = render->CreateSceneNode(this->GetEntityName());
-		pclMeshEntity = render->CreateEntity(meshName);
+		pclSceneNode = render.CreateSceneNode(this->GetEntityName());
+		pclMeshEntity = render.CreateEntity(meshName);
 
 		pclSceneNode->attachObject(pclMeshEntity);
 		
@@ -80,11 +80,11 @@ namespace Phobos
 
 		if(strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
 		{
-			RenderPtr_t render = Render_c::GetInstance();
+			Render_c &render = Render_c::GetInstance();
 
 			pclSceneNode->getParent()->removeChild(pclSceneNode);
 
-			render->GetSceneNode(strParentNode)->addChild(pclSceneNode);
+			render.GetSceneNode(strParentNode)->addChild(pclSceneNode);
 		}		
 	}
 

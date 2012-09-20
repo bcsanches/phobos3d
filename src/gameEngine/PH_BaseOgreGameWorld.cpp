@@ -30,23 +30,23 @@ namespace Phobos
 {
 	void BaseOgreGameWorld_c::StaticObject_s::Clear()
 	{
-		RenderPtr_t render = Render_c::GetInstance();
+		Render_c &render = Render_c::GetInstance();
 
 		if(pclSceneNode)
 		{
-			render->DestroySceneNode(pclSceneNode);
+			render.DestroySceneNode(pclSceneNode);
 			pclSceneNode = NULL;
 		}
 
 		if(pclLight)
 		{
-			render->DestroyLight(pclLight);
+			render.DestroyLight(pclLight);
 			pclLight = NULL;
 		}
 
 		if(pclEntity)
 		{
-			render->DestroyEntity(pclEntity);
+			render.DestroyEntity(pclEntity);
 			pclEntity = NULL;
 		}
 
@@ -55,16 +55,16 @@ namespace Phobos
 
 	BaseOgreGameWorld_c::TempStaticObject_s::~TempStaticObject_s()
 	{
-		RenderPtr_t render = Render_c::GetInstance();
+		Render_c &render = Render_c::GetInstance();
 
 		if(pclSceneNode)
-			render->DestroySceneNode(pclSceneNode);
+			render.DestroySceneNode(pclSceneNode);
 
 		if(pclLight)
-			render->DestroyLight(pclLight);
+			render.DestroyLight(pclLight);
 
 		if(pclEntity)
-			render->DestroyEntity(pclEntity);
+			render.DestroyEntity(pclEntity);
 	}
 
 	void BaseOgreGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform_c &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag) const
@@ -75,16 +75,16 @@ namespace Phobos
 		Path_c path(meshName);
 		path.StripExtension();
 
-		Physics::ManagerPtr_t physicsManager = Physics::Manager_c::GetInstance();
+		Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
 
 		const Dictionary_c *collisionDef = GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(path.GetStr());
 		if(collisionDef != NULL)
 		{
-			staticObj.spRigidBody = physicsManager->CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));
+			staticObj.spRigidBody = physicsManager.CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));
 		}
 		else
 		{			
-			staticObj.spRigidBody = physicsManager->CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.pclEntity->getMesh(), scale);					
+			staticObj.spRigidBody = physicsManager.CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.pclEntity->getMesh(), scale);					
 		}
 
 		staticObj.spRigidBody->Register();

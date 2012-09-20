@@ -31,7 +31,7 @@ namespace Phobos
 	class PH_GAME_ENGINE_API Entity_c: public EntityIO_c
 	{
 		public:
-			static EntityPtr_t Create(const String_c &name);
+			static Entity_c *Create(const String_c &name);
 
 			void Load(const Dictionary_c &dictionary);
 			void LoadFinished();

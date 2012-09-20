@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "PH_Kernel.h"
 
 #include "PH_Error.h"
+#include "PH_Memory.h"
 
 namespace Phobos
 {
@@ -26,7 +27,7 @@ namespace Phobos
 	{
 		PH_ASSERT_MSG(pclInstance_g == 0, "[Kernel_c::CreateInstance] Instance already created");
 
-		pclInstance_g = new Kernel_c(logName);
+		pclInstance_g = PH_NEW Kernel_c(logName);
 
 		return *pclInstance_g;
 	}

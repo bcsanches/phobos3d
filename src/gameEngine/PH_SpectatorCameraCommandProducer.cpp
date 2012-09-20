@@ -43,7 +43,7 @@ namespace Phobos
 
 	IPlayerCmdPtr_t SpectatorCameraCommandProducer_c::CreateCmd()
 	{
-		const Float_t ticks = Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime;
+		const Float_t ticks = Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime;
 
 		const Float_t fwd = clMoveButton.GetValue() * ticks * fpMoveSpeed;
 		const Float_t strafe = clStrafeButton.GetValue() * ticks * fpMoveSpeed;
@@ -54,7 +54,7 @@ namespace Phobos
 		const Float_t turnAngle(((clTurnButton.GetValue() * fpTurnSpeed) + (-thumb[0] * fpTurnSpeed * fpMouseSensitivity)) * ticks);
 		const Float_t lookAngle(((clLookButton.GetValue() * fpTurnSpeed) + (thumb[1] * fpTurnSpeed * fpMouseSensitivity)) * ticks);
 
-		return IPlayerCmdPtr_t(new SpectatorCameraCmd_c(
+		return IPlayerCmdPtr_t(PH_NEW SpectatorCameraCmd_c(
 			fwd,
 			strafe,
 			upDown,
@@ -65,15 +65,15 @@ namespace Phobos
 
 	void SpectatorCameraCommandProducer_c::Enable()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		clMoveButton.Enable(*console);
-		clStrafeButton.Enable(*console);
-		clMoveUpDown.Enable(*console);
-		clTurnButton.Enable(*console);
-		clLookButton.Enable(*console);
+		clMoveButton.Enable(console);
+		clStrafeButton.Enable(console);
+		clMoveUpDown.Enable(console);
+		clTurnButton.Enable(console);
+		clLookButton.Enable(console);
 		
-		ContextVar_c *var = console->TryGetContextVar(PH_PLAYER_CMD_MOUSE_CLIPPED_VAR);
+		ContextVar_c *var = console.TryGetContextVar(PH_PLAYER_CMD_MOUSE_CLIPPED_VAR);
 		if(var != NULL)
 		{
 			if(var->GetBoolean())
@@ -93,7 +93,7 @@ namespace Phobos
 		clTurnButton.Disable();
 		clLookButton.Disable();		
 
-		ContextVar_c *var = Console_c::GetInstance()->TryGetContextVar(PH_PLAYER_CMD_MOUSE_CLIPPED_VAR);
+		ContextVar_c *var = Console_c::GetInstance().TryGetContextVar(PH_PLAYER_CMD_MOUSE_CLIPPED_VAR);
 		if (var != NULL)
 			var->RemoveListener(*this);
 
@@ -115,7 +115,7 @@ namespace Phobos
 			return;
 
 		clMouseThumb.Disable();
-		Console_c::GetInstance()->AddContextCmd(cmdNullMouseThumb);
+		Console_c::GetInstance().AddContextCmd(cmdNullMouseThumb);
 
 		fMouseActive = false;
 	}
@@ -126,7 +126,7 @@ namespace Phobos
 			return;
 
 		cmdNullMouseThumb.Unlink();
-		clMouseThumb.Enable(*Console_c::GetInstance());
+		clMouseThumb.Enable(Console_c::GetInstance());
 
 		fMouseActive = true;
 	}

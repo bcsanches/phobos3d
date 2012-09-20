@@ -172,9 +172,9 @@ namespace Phobos
 			StringList_t						lstPluginsName;
 
 		public:		
-			static RenderPtr_t CreateInstance();
+			static Render_c &CreateInstance();
 			static void ReleaseInstance();
-			static RenderPtr_t GetInstance();			
+			static Render_c &GetInstance();			
 
 		private:
 			// =====================================================

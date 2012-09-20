@@ -132,7 +132,7 @@ namespace Phobos
 
 	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform_c &tileTransform, const Ogre::Vector3 &scale)
 	{
-		obj.pclSceneNode = Render_c::GetInstance()->CreateSceneNode();
+		obj.pclSceneNode = Render_c::GetInstance().CreateSceneNode();
 
 		Transform_c transform;
 		this->TileTransform2Transform(transform, tileTransform);
@@ -149,7 +149,7 @@ namespace Phobos
 
 	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const
 	{
-		obj.pclEntity = Render_c::GetInstance()->CreateEntity(meshName);
+		obj.pclEntity = Render_c::GetInstance().CreateEntity(meshName);
 		obj.pclEntity->setCastShadows(true);		
 
 		if(optionalMaterial)
@@ -162,8 +162,8 @@ namespace Phobos
 	{
 		TempStaticObject_s obj;
 
-		RenderPtr_t render = Render_c::GetInstance();
-		obj.pclSceneNode = render->CreateSceneNode();
+		Render_c &render = Render_c::GetInstance();
+		obj.pclSceneNode = render.CreateSceneNode();
 
 		this->CreateStaticObjectMesh(obj, meshName, optionalMaterial);
 
@@ -250,29 +250,29 @@ namespace Phobos
 
 	void TileGameWorld_c::Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary)
 	{				
-		DictionaryPtr_t tileSetDef = DictionaryManager_c::GetInstance()->GetDictionaryHive("TileSet")->GetDictionary(worldEntityDictionary.GetString("tileSet"));
+		Dictionary_c &tileSetDef = DictionaryManager_c::GetInstance().GetDictionaryHive("TileSet").GetDictionary(worldEntityDictionary.GetString("tileSet"));
 
-		const String_c &wallMeshName = tileSetDef->GetString("wall");
-		const String_c *wallMaterial = tileSetDef->TryGetString("wallMaterial");
+		const String_c &wallMeshName = tileSetDef.GetString("wall");
+		const String_c *wallMaterial = tileSetDef.TryGetString("wallMaterial");
 
-		const String_c &floorMeshName = tileSetDef->GetString("floor");
-		const String_c *floorMaterial = tileSetDef->TryGetString("floorMaterial");
+		const String_c &floorMeshName = tileSetDef.GetString("floor");
+		const String_c *floorMaterial = tileSetDef.TryGetString("floorMaterial");
 
-		const String_c &ceilingMeshName = tileSetDef->GetString("ceiling");		
-		const String_c *ceilingMaterial = tileSetDef->TryGetString("ceilingMaterial");
+		const String_c &ceilingMeshName = tileSetDef.GetString("ceiling");		
+		const String_c *ceilingMaterial = tileSetDef.TryGetString("ceilingMaterial");
 
-		const Float_t tileScale = tileSetDef->GetFloat("tileScale");
+		const Float_t tileScale = tileSetDef.GetFloat("tileScale");
 
 		bool supressCeiling = false;
 		worldEntityDictionary.TryGetBool(supressCeiling, "supressCeiling");
 
-		fpTileSize = tileSetDef->GetFloat("tileSize");
+		fpTileSize = tileSetDef.GetFloat("tileSize");
 
 		Dictionary_c::MatrixDataHandle_c handle = worldEntityDictionary.GetMatrix("map");
 
-		RenderPtr_t render = Render_c::GetInstance();					
+		Render_c &render = Render_c::GetInstance();					
 
-		render->SetAmbientColor(DictionaryGetColour(worldEntityDictionary, "ambientColor"));
+		render.SetAmbientColor(DictionaryGetColour(worldEntityDictionary, "ambientColor"));
 
 		Physics::CollisionTag_c staticCollisionTag = GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
 
@@ -316,10 +316,10 @@ namespace Phobos
 			}
 		}
 
-		const String_c *columnMeshName = tileSetDef->TryGetString("columnMesh");
+		const String_c *columnMeshName = tileSetDef.TryGetString("columnMesh");
 		if(columnMeshName)
 		{
-			Ogre::Vector3 scale = DictionaryTryGetVector3(*tileSetDef, "columMeshScale", Ogre::Vector3(1, 1, 1));
+			Ogre::Vector3 scale = DictionaryTryGetVector3(tileSetDef, "columMeshScale", Ogre::Vector3(1, 1, 1));
 
 			for(int i = 0, numRows = handle.GetNumRows(); i < numRows; ++i)
 			{
@@ -402,7 +402,7 @@ namespace Phobos
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
+			Dictionary_c *dict = static_cast<Dictionary_c *>(it->second);
 
 			try
 			{				
@@ -415,9 +415,9 @@ namespace Phobos
 					{
 						TempStaticObject_s obj;
 
-						this->CreateStaticObjectNode(obj, *dict.get(), Ogre::Vector3(1, 1, 1));										
+						this->CreateStaticObjectNode(obj, *dict, Ogre::Vector3(1, 1, 1));										
 
-						obj.pclLight = render->CreateLight();
+						obj.pclLight = render.CreateLight();
 						obj.pclLight->setType(Ogre::Light::LT_POINT);
 						obj.pclLight->setCastShadows(true);
 

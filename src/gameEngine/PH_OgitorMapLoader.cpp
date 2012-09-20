@@ -88,7 +88,7 @@ namespace Phobos
 		return (strcmp(attribute->value(), "Marker Object") == 0) || (strcmp(attribute->value(), "Camera Object") == 0);
 	}
 
-	static void LoadProperties(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
+	static void LoadProperties(Dictionary_c &dict, const rapidxml::xml_node<> &element)
 	{
 		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
 
@@ -109,15 +109,15 @@ namespace Phobos
 				continue;
 			}
 
-			dict->SetString(name->value(), value->value());
+			dict.SetString(name->value(), value->value());
 		}
 	}
 
-	static void LoadDictionary(DictionaryPtr_t dict, const rapidxml::xml_node<> &element)
+	static void LoadDictionary(Dictionary_c &dict, const rapidxml::xml_node<> &element)
 	{
 		for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
 		{
-			dict->SetString(atr->name(), atr->value());
+			dict.SetString(atr->name(), atr->value());
 		}		
 
 		const rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME);
@@ -174,11 +174,11 @@ namespace Phobos
 				if(dynamicEntity && IsEditorOnly(*elem))
 					continue;
 				
-				DictionaryPtr_t dict = Dictionary_c::Create(nameAttribute->value());
+				std::auto_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(nameAttribute->value()));				
 
-				LoadDictionary(dict, *elem);
+				LoadDictionary(*dict, *elem);
 
-				(dynamicEntity ? ipDynamicEntitiesHive_g : ipStaticEntitiesHive_g)->AddDictionary(dict);				
+				(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddDictionary(dict);				
 			}
 			catch(Exception_c &e)
 			{
@@ -186,7 +186,7 @@ namespace Phobos
 			}			
 		}
 
-		DictionaryPtr_t dict = this->CreateWorldSpawnEntityDictionary();
+		std::auto_ptr<Dictionary_c> dict = this->CreateWorldSpawnEntityDictionary();
 
 		//load project data
 		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
@@ -197,10 +197,10 @@ namespace Phobos
 			if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
 				dict->SetString("terrainDir", terrainDir);
 		}
-		ipCurrentLevelHive_g->AddDictionary(dict);
+		pclCurrentLevelHive_g->AddDictionary(dict);
 
 		//fill out basic level data
-		dict = Dictionary_c::Create("LevelFile");
+		dict.reset(PH_NEW Dictionary_c("LevelFile"));
 
 		dict->SetString("pathName", fileName);
 
@@ -211,7 +211,7 @@ namespace Phobos
 		dict->SetString("path", filePath.GetStr());
 		dict->SetString("fileName", onlyFileName.GetStr());
 
-		ipCurrentLevelHive_g->AddDictionary(dict);
+		pclCurrentLevelHive_g->AddDictionary(dict);
 		
 	}
 }

@@ -35,7 +35,7 @@ namespace Phobos
 	{
 		ipManager = CoreModuleManager_c::Create("GamePlugin");
 
-		Core_c::GetInstance()->AddModule(ipManager);	
+		Core_c::GetInstance().AddModule(*ipManager);	
 
 		BOOST_FOREACH(Register_s &info, vecModules)
 		{
@@ -47,7 +47,7 @@ namespace Phobos
 
 	void GamePlugin_c::Finalize()
 	{
-		Core_c::GetInstance()->RemoveModule(*ipManager);		
+		Core_c::GetInstance().RemoveModule(*ipManager);		
 
 		BOOST_FOREACH(Register_s &info, vecModules)
 		{

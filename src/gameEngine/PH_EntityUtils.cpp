@@ -30,7 +30,7 @@ namespace Phobos
 	{
 		if(dictionary.TryGetString(PH_ENTITY_KEY_TILE_ROW))
 		{						
-			const TileGameWorld_c *tileWorld = static_cast<const TileGameWorld_c *>(WorldManager_c::GetInstance()->GetGameWorld());
+			const TileGameWorld_c *tileWorld = static_cast<const TileGameWorld_c *>(WorldManager_c::GetInstance().GetGameWorld());
 			tileWorld->LoadTileTransform(transform, dictionary);
 		}
 		else

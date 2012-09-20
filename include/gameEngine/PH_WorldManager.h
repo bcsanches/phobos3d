@@ -62,8 +62,8 @@ namespace Phobos
 			void LoadMap(const String_c &mapName);
 			void UnloadMap();
 
-			EntityPtr_t TryGetEntityByType(const String_c &className) const;
-			EntityPtr_t GetEntityByName(const String_c &name) const;			
+			Entity_c *TryGetEntityByType(const String_c &className) const;
+			Entity_c &GetEntityByName(const String_c &name) const;			
 
 			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);	
 
@@ -88,7 +88,7 @@ namespace Phobos
 			WorldManager_c();					
 
 			void LoadEntities();
-			EntityPtr_t LoadEntity(const Dictionary_c &entityDef);
+			Entity_c &LoadEntity(const Dictionary_c &entityDef);
 
 			inline bool RemoveFromList(EntityIOList_t &list, EntityIO_c &io);
 			inline void CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)());

@@ -45,13 +45,13 @@ namespace Phobos
 
 			void LoadAll(const String_c &path);
 
-			DictionaryHivePtr_t CreateCustomHive(const String_c &name);			
+			DictionaryHive_c &CreateCustomHive(const String_c &name);			
 
-			DictionaryHivePtr_t GetDictionaryHive(const String_c &name);
-			DictionaryHivePtr_t TryGetDictionaryHive(const String_c &name);
-			DictionaryPtr_t GetDictionary(const String_c &hive, const String_c &dictionary);
-			DictionaryPtr_t TryGetDictionary(const String_c &hive, const String_c &dictionary);
-			DictionaryPtr_t GetDictionary(const Path_c &relativePath);
+			DictionaryHive_c &GetDictionaryHive(const String_c &name);
+			DictionaryHive_c *TryGetDictionaryHive(const String_c &name);
+			Dictionary_c &GetDictionary(const String_c &hive, const String_c &dictionary);
+			Dictionary_c *TryGetDictionary(const String_c &hive, const String_c &dictionary);
+			Dictionary_c &GetDictionary(const Path_c &relativePath);
 
 			void RegisterCommands(IContext_c &context);
 

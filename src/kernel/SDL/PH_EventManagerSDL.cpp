@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include "PH_Error.h"
 #include "PH_Exception.h"
 #include "PH_InputActions.h"
+#include "PH_Memory.h"
 
 namespace Phobos
 {
@@ -413,7 +414,7 @@ namespace Phobos
 	//
 	EventManagerPtr_t EventManager_c::CreateInstanceImpl(const String_c &name)
 	{
-		return EventManagerPtr_t(new EventManagerSDL_c(name));
+		return EventManagerPtr_t(PH_NEW EventManagerSDL_c(name));
 	}
 
 	//

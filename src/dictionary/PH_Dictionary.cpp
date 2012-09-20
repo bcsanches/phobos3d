@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "PH_Dictionary.h"
 
 #include <PH_Exception.h>
+#include <PH_Memory.h>
 #include <PH_Parser.h>
 
 #include "PH_DictionaryManager.h"
@@ -45,7 +46,7 @@ namespace Phobos
 
 	DictionaryPtr_t Dictionary_c::Create(const String_c &name)
 	{
-		return DictionaryPtr_t(new Dictionary_c(name));
+		return DictionaryPtr_t(PH_NEW Dictionary_c(name));
 	}
 
 	Dictionary_c::Dictionary_c(const String_c &name):
@@ -334,9 +335,9 @@ namespace Phobos
 		if(!strInherit.empty())
 		{
 			if(strBaseHive.empty())
-				pclInherit = boost::static_pointer_cast<Dictionary_c>(this->GetParent()->GetChild(strInherit)).get();
+				pclInherit = &static_cast<Dictionary_c &>(this->GetParent()->GetChild(strInherit));
 			else
-				pclInherit = DictionaryManager_c::GetInstance()->GetDictionary(strBaseHive, strInherit).get();
+				pclInherit = &DictionaryManager_c::GetInstance().GetDictionary(strBaseHive, strInherit);
 		}
 
 		return pclInherit;

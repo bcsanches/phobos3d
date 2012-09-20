@@ -59,7 +59,10 @@ namespace Phobos
 		The above exampel defines a matrix with 3 rows and 4 columns.
 	*/
 	class PH_DICTIONARY_API Dictionary_c: public Node_c
-	{			
+	{	
+		//Not really needed, because node already blocks copies, but makes it easier to find errors
+		PH_DISABLE_COPY(Dictionary_c);
+
 		private:
 			enum ValueType_e
 			{
@@ -145,6 +148,7 @@ namespace Phobos
 
 		public:
 			static DictionaryPtr_t Create(const String_c &name);
+			Dictionary_c(const String_c &name);
 
 			~Dictionary_c();
 
@@ -174,9 +178,7 @@ namespace Phobos
 			void SetInherited(const String_c &base);
 			void SetBaseHive(const String_c &baseHive);
 
-		private:
-			Dictionary_c(const String_c &name);			
-
+		private:			
 			static const String_c *TryGetString(const Dictionary_c *current, const String_c &key);
 
 			static const Value_s *TryGetValue(const Dictionary_c *current, const String_c &key);

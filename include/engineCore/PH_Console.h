@@ -69,7 +69,7 @@ namespace Phobos
 			typedef boost::circular_buffer<String_c> TextList_t;
 
 		public:
-			static ConsolePtr_t GetInstance(void);			
+			static Console_c &GetInstance(void);			
 			static void ReleaseInstance(void);
 
 			void Execute(const String_c &cmdLine);
@@ -88,7 +88,7 @@ namespace Phobos
 			inline bool IsActive(void) const;
 
 		protected:
-			Console_c(const String_c &name, ChildrenMode_e childrenMode=PUBLIC_CHILDREN);
+			Console_c(const String_c &name, UInt32_t flags = 0);
 			virtual ~Console_c();
 
 			virtual void OnFixedUpdate();

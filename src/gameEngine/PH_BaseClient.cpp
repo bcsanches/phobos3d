@@ -22,23 +22,23 @@ namespace Phobos
 
 	void BaseClient_c::OnPrepareToBoot()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextVar(varMouseClipped);		
+		console.AddContextVar(varMouseClipped);		
 	}
 
 	void BaseClient_c::RegisterToggleMouseCursorClipCmd()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdToggleMouseCursorClip);
+		console.AddContextCmd(cmdToggleMouseCursorClip);
 	}
 
 	void BaseClient_c::RegisterNullMouseThumbCmd()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdNullMouseThumb);
+		console.AddContextCmd(cmdNullMouseThumb);
 	}
 
 	void BaseClient_c::UnregisterNullMouseThumbCmd()
@@ -50,8 +50,8 @@ namespace Phobos
 	{
 		ConfigInfo_s info;
 
-		info.pWindowHandler = Render_c::GetInstance()->GetWindowHandler();
-		info.ipMouse = boost::static_pointer_cast<MouseInputDevice_c>(InputManager_c::GetInstance()->GetDevice(INPUT_DEVICE_MOUSE));
+		info.pWindowHandler = Render_c::GetInstance().GetWindowHandler();
+		info.pclMouse = static_cast<MouseInputDevice_c *>(&InputManager_c::GetInstance().GetDevice(INPUT_DEVICE_MOUSE));
 
 		return info;
 	}
@@ -60,7 +60,7 @@ namespace Phobos
 	{
 		ConfigInfo_s info = this->GetConfig();
 
-		info.ipMouse->ClipToWindow(info.pWindowHandler);		
+		info.pclMouse->ClipToWindow(info.pWindowHandler);		
 		
 		varMouseClipped.SetValue("true");
 
@@ -71,7 +71,7 @@ namespace Phobos
 	{
 		ConfigInfo_s info = this->GetConfig();
 
-		info.ipMouse->Unclip();
+		info.pclMouse->Unclip();
 		
 		varMouseClipped.SetValue("false");
 

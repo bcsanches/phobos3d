@@ -68,16 +68,16 @@ BOOST_AUTO_TEST_CASE(dictionary_basic)
 	stream <<	"radius=2.0;" << endl;
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 }
 
 BOOST_AUTO_TEST_CASE(dictionary_errors)
 {
 	KernelInstance_s instance;
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
 	{
 		//invalid syntax
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		
 		stream << "{" << endl;
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		stream << "EntityDef " << endl;
 		stream << "{" << endl;
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		//missing =
 		stream <<	"className Entity" << endl;
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		stream <<	"className=Entity" << endl;
 		stream <<	"health=100;" << endl;
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		stream <<	"radius=2.0;" << endl;
 		stream << "}";
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ObjectAlreadyExistsException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ObjectAlreadyExistsException_c);
 	}
 }
 
@@ -171,37 +171,37 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance)
 	stream <<	"health=200;" << endl;	
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 
 	//test both forms of retrieving data
-	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
-	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("EntityDef")->GetDictionary("SuperPlayer");
+	Dictionary_c &infoPlayerStart = manager.GetDictionary("EntityDef", "InfoPlayerStart");
+	Dictionary_c &superPlayer = manager.GetDictionaryHive("EntityDef").GetDictionary("SuperPlayer");	
 
 	//now check overriding
-	BOOST_REQUIRE(infoPlayerStart->GetString("health").compare("100") == 0);
-	BOOST_REQUIRE(superPlayer->GetString("health").compare("200") == 0);
+	BOOST_REQUIRE(infoPlayerStart.GetString("health").compare("100") == 0);
+	BOOST_REQUIRE(superPlayer.GetString("health").compare("200") == 0);
 
 	//check parent relationship
-	BOOST_REQUIRE(infoPlayerStart->GetString("weight").compare("2.0") == 0);
-	BOOST_REQUIRE(superPlayer->GetString("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(infoPlayerStart.GetString("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(superPlayer.GetString("weight").compare("2.0") == 0);
 
 	//non existing value
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("boost"), ObjectNotFoundException_c);
-	BOOST_REQUIRE(superPlayer->GetString("boost").compare("2") == 0);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE(superPlayer.GetString("boost").compare("2") == 0);
 
 	//bad inheritance
-	DictionaryPtr_t invalidPlayer = manager->GetDictionary("EntityDef", "InvalidPlayer");
+	Dictionary_c &invalidPlayer = manager.GetDictionary("EntityDef", "InvalidPlayer");
 
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("bla"), ObjectNotFoundException_c);
 
 	//Check getters exceptions
-	BOOST_REQUIRE_THROW(manager->GetDictionaryHive("Bla"), ObjectNotFoundException_c);
-	BOOST_REQUIRE_THROW(manager->GetDictionary("Bla", "Bla"), ObjectNotFoundException_c);
-	BOOST_REQUIRE_THROW(manager->GetDictionary("EntityDef", "Bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(manager.GetDictionaryHive("Bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(manager.GetDictionary("Bla", "Bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(manager.GetDictionary("EntityDef", "Bla"), ObjectNotFoundException_c);
 
-	BOOST_REQUIRE_THROW(infoPlayerStart->SetString("new", "invalid keyword"), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetString("new", "invalid keyword"), InvalidParameterException_c);
 }
 
 /**
@@ -235,30 +235,30 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance_other_hive)
 	stream <<	"health=200;" << endl;	
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 
 	//test both forms of retrieving data
-	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
-	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("DynamicEntity")->GetDictionary("SuperPlayer");
+	Dictionary_c &infoPlayerStart = manager.GetDictionary("EntityDef", "InfoPlayerStart");
+	Dictionary_c &superPlayer = manager.GetDictionaryHive("DynamicEntity").GetDictionary("SuperPlayer");
 
 	//now check overriding
-	BOOST_REQUIRE(infoPlayerStart->GetString("health").compare("100") == 0);
-	BOOST_REQUIRE(superPlayer->GetString("health").compare("200") == 0);
+	BOOST_REQUIRE(infoPlayerStart.GetString("health").compare("100") == 0);
+	BOOST_REQUIRE(superPlayer.GetString("health").compare("200") == 0);
 
 	//check parent relationship
-	BOOST_REQUIRE(infoPlayerStart->GetString("weight").compare("2.0") == 0);
-	BOOST_REQUIRE(superPlayer->GetString("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(infoPlayerStart.GetString("weight").compare("2.0") == 0);
+	BOOST_REQUIRE(superPlayer.GetString("weight").compare("2.0") == 0);
 
 	//non existing value
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("boost"), ObjectNotFoundException_c);
-	BOOST_REQUIRE(superPlayer->GetString("boost").compare("2") == 0);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE(superPlayer.GetString("boost").compare("2") == 0);
 
 	//bad inheritance
-	DictionaryPtr_t invalidPlayer = manager->GetDictionary("DynamicEntity", "InvalidPlayer");
+	Dictionary_c &invalidPlayer = manager.GetDictionary("DynamicEntity", "InvalidPlayer");
 
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetString("bla"), ObjectNotFoundException_c);	
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("bla"), ObjectNotFoundException_c);	
 }
 
 BOOST_AUTO_TEST_CASE(dictionary_parse_matrix)
@@ -282,13 +282,13 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix)
 	stream <<	");" << endl;
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 
-	DictionaryPtr_t world = manager->GetDictionary("StaticEntities", "World");
+	Dictionary_c &world = manager.GetDictionary("StaticEntities", "World");
 
-	Dictionary_c::MatrixDataHandle_c handle = world->GetMatrix("map");
+	Dictionary_c::MatrixDataHandle_c handle = world.GetMatrix("map");
 
 	BOOST_REQUIRE(handle(1, 1) == '.');
 	BOOST_REQUIRE(handle(4, 3) == '.');
@@ -301,7 +301,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 {
 	KernelInstance_s instance;
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
 	{
 		//Invalid special type
@@ -312,7 +312,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new Bla;" << endl;
 		stream << "}";
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 
@@ -325,7 +325,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new 123;" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}		
 
 	{
@@ -337,7 +337,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new CharMatrix;" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -349,7 +349,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new CharMatrix();" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -361,7 +361,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new CharMatrix(\"\");" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -373,7 +373,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new CharMatrix(\"123\",\"12\");" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -385,7 +385,7 @@ BOOST_AUTO_TEST_CASE(dictionary_parse_matrix_errors)
 		stream <<	"map = new CharMatrix(1223);" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 }
 
@@ -403,28 +403,28 @@ BOOST_AUTO_TEST_CASE(dictionary_add_matrix_errors)
 	stream <<	"description=\"bla bla\";" << endl;
 	stream << "}" << endl;
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 
-	DictionaryPtr_t infoPlayerStart = manager->GetDictionary("EntityDef", "InfoPlayerStart");
+	Dictionary_c &infoPlayerStart = manager.GetDictionary("EntityDef", "InfoPlayerStart");
 
 	//Cannot use inherit as matrix
-	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("inherit", "AB", 1, 1), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("new", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("inherit", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("new", "AB", 1, 1), InvalidParameterException_c);
 
 	//Matrix data does not match sizes
-	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException_c);
 
 	//Cannot have size == 0 data
-	BOOST_REQUIRE_THROW(infoPlayerStart->SetCharMatrix("inherit", "", 0, 0), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("inherit", "", 0, 0), InvalidParameterException_c);
 
 	//Not a matrix type
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetMatrix("weight"), InvalidOperationException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetMatrix("weight"), InvalidOperationException_c);
 
 	//non existing
-	BOOST_REQUIRE_THROW(infoPlayerStart->GetMatrix("bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetMatrix("bla"), ObjectNotFoundException_c);
 }
 
 BOOST_AUTO_TEST_CASE(dictionary_inheritance_setters)
@@ -451,26 +451,26 @@ BOOST_AUTO_TEST_CASE(dictionary_inheritance_setters)
 	stream << "{" << endl;	
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 
 	//test both forms of retrieving data	
-	DictionaryPtr_t player = manager->GetDictionaryHive("OtherDef")->GetDictionary("Player");
+	Dictionary_c &player = manager.GetDictionaryHive("OtherDef").GetDictionary("Player");
 
 	//now check overriding
-	BOOST_REQUIRE_THROW(player->GetString("health"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(player.GetString("health"), ObjectNotFoundException_c);
 
 	//Now check SetInherited
-	player->SetInherited("InfoPlayerStart");
-	BOOST_REQUIRE(player->GetString("health").compare("200") == 0);
+	player.SetInherited("InfoPlayerStart");
+	BOOST_REQUIRE(player.GetString("health").compare("200") == 0);
 
-	player->SetBaseHive("EntityDef");
-	BOOST_REQUIRE(player->GetString("health").compare("100") == 0);
+	player.SetBaseHive("EntityDef");
+	BOOST_REQUIRE(player.GetString("health").compare("100") == 0);
 
 	//REstore original hive
-	player->SetBaseHive("OtherDef");
-	BOOST_REQUIRE(player->GetString("health").compare("200") == 0);	
+	player.SetBaseHive("OtherDef");
+	BOOST_REQUIRE(player.GetString("health").compare("200") == 0);	
 }
 
 BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance)
@@ -496,18 +496,18 @@ BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance)
 	stream << "{" << endl;	
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-	manager->Load(stream);
+	manager.Load(stream);
 
 	//test both forms of retrieving data	
-	DictionaryPtr_t player = manager->GetDictionaryHive("OtherDef")->GetDictionary("Player");
+	Dictionary_c &player = manager.GetDictionaryHive("OtherDef").GetDictionary("Player");
 
 	//now check overriding
-	BOOST_REQUIRE(player->GetString("health").compare("100") == 0);
+	BOOST_REQUIRE(player.GetString("health").compare("100") == 0);
 
-	DictionaryPtr_t superPlayer = manager->GetDictionaryHive("EntityDef")->GetDictionary("SuperPlayerStart");
-	BOOST_REQUIRE(superPlayer->GetString("health").compare("200") == 0);	
+	Dictionary_c &superPlayer = manager.GetDictionaryHive("EntityDef").GetDictionary("SuperPlayerStart");
+	BOOST_REQUIRE(superPlayer.GetString("health").compare("200") == 0);	
 }
 
 
@@ -543,17 +543,17 @@ BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_variations)
 	stream << "{" << endl;	
 	stream << "}";
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
 	//only parsing
-	manager->Load(stream);	
+	manager.Load(stream);	
 }
 
 BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_errors)
 {
 	KernelInstance_s instance;
 
-	DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+	DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
 	{
 		stringstream stream;
@@ -562,7 +562,7 @@ BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_errors)
 		stream << "{" << endl;	
 		stream << "}" << endl;		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -572,7 +572,7 @@ BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_errors)
 		stream << "{" << endl;	
 		stream << "}" << endl;		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 
 	{
@@ -582,6 +582,6 @@ BOOST_AUTO_TEST_CASE(dictionary_auto_inheritance_parser_errors)
 		stream << "{" << endl;	
 		stream << "}" << endl;		
 
-		BOOST_REQUIRE_THROW(manager->Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(manager.Load(stream), ParserException_c);
 	}
 }

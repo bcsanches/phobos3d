@@ -23,7 +23,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(GameEventManager);	
 
 	GameEventManager_c::GameEventManager_c():
-		CoreModule_c("GameEventManager", PRIVATE_CHILDREN)
+		CoreModule_c("GameEventManager", NodeFlags::PRIVATE_CHILDREN)
 	{
 		//empty
 	}
@@ -34,7 +34,7 @@ namespace Phobos
 
 	void GameEventManager_c::OnFixedUpdate()
 	{
-		Float_t ticks = Core_c::GetInstance()->GetGameTimer().fpTotalTicks;
+		Float_t ticks = Core_c::GetInstance().GetGameTimer().fpTotalTicks;
 
 		while(!mapEvents.empty())
 		{
@@ -54,7 +54,7 @@ namespace Phobos
 	{	
 		PH_ASSERT_VALID(proc);
 
-		mapEvents.insert(std::make_pair(delay + Core_c::GetInstance()->GetGameTimer().fpTotalTicks, GameEvent_c(receiver, proc)));		
+		mapEvents.insert(std::make_pair(delay + Core_c::GetInstance().GetGameTimer().fpTotalTicks, GameEvent_c(receiver, proc)));		
 	}
 
 	void GameEventManager_c::CancelEvents(const EntityIO_c &receiver)

@@ -18,8 +18,11 @@ subject to the following restrictions:
 
 #include <PH_ContextVar.h>
 #include <PH_Exception.h>
+#include <PH_Kernel.h>
 
 using namespace Phobos;
+
+static const String_c LOG_FILE_NAME("phobos.log");
 
 static bool fLocalVarCallbackCalled = false;
 
@@ -35,6 +38,8 @@ static void LocalVarThrowCallback(const class ContextVar_c &var, const String_c 
 
 BOOST_AUTO_TEST_CASE(contextVar_basic)
 {
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
+
 	ContextVar_c a("test", "5");
 
 	BOOST_REQUIRE(a.GetInt() == 5);
@@ -56,4 +61,6 @@ BOOST_AUTO_TEST_CASE(contextVar_basic)
 	b.SetValue("true");
 
 	BOOST_REQUIRE(b.GetBoolean());
+
+	Kernel_c::ReleaseInstance();
 }

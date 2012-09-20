@@ -34,8 +34,8 @@ namespace Phobos
 	class PH_GAME_ENGINE_API EntityIO_c: public Node_c
 	{
 		protected:
-			explicit EntityIO_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit EntityIO_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);
+			explicit EntityIO_c(const String_c &name, UInt32_t flags = 0);
+			explicit EntityIO_c(const Char_t *name, UInt32_t flags = 0);
 			
 			~EntityIO_c();
 

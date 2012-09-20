@@ -22,6 +22,7 @@ subject to the following restrictions:
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
 
 #include <PH_Error.h>
+#include <PH_Memory.h>
 
 namespace Phobos
 {
@@ -136,7 +137,7 @@ namespace Phobos
 		}
 
 		CollisionMesh_c::CollisionMesh_c(const Ogre::Mesh &mesh):
-			spMeshData(new CollisionMeshData_c(mesh)),
+			spMeshData(PH_NEW CollisionMeshData_c(mesh)),
 			strName(mesh.getName())			
 		{			
 			spMeshShape.reset(new btBvhTriangleMeshShape(&spMeshData->GetMeshInterface(), true, true));

@@ -25,6 +25,7 @@ subject to the following restrictions:
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_Parser.h>
 #include <PH_Path.h>
 
@@ -37,7 +38,7 @@ namespace Phobos
 	PH_DEFINE_NODE_SINGLETON(DictionaryManager, "/");
 
 	DictionaryManager_c::DictionaryManager_c():
-		Node_c("DictionaryManager", PRIVATE_CHILDREN),
+		Node_c("DictionaryManager", NodeFlags::PRIVATE_CHILDREN),
 		cmdLoadAllDeclarations("loadAllDeclarations")
 	{		
 		cmdLoadAllDeclarations.SetProc(PH_CONTEXT_CMD_BIND(&DictionaryManager_c::CmdLoadAllDeclarations, this));
@@ -56,12 +57,14 @@ namespace Phobos
 		this->Load(file);
 	}
 
-	DictionaryHivePtr_t DictionaryManager_c::CreateCustomHive(const String_c &name)
+	DictionaryHive_c &DictionaryManager_c::CreateCustomHive(const String_c &name)
 	{
-		DictionaryHivePtr_t hive = DictionaryHive_c::Create(name);
-		this->AddPrivateChild(hive);
+		std::auto_ptr<DictionaryHive_c> hive(PH_NEW DictionaryHive_c(name));
+		this->AddPrivateChild(*hive);
 
-		return hive;
+		hive->SetManaged(true);
+
+		return *(hive.release());
 	}
 
 	void DictionaryManager_c::Load(std::istream &file)
@@ -80,15 +83,18 @@ namespace Phobos
 			if(token != TOKEN_ID)
 				PH_RaiseDictionaryParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryManager_c::Load");
 
-			DictionaryHivePtr_t hive = boost::static_pointer_cast<DictionaryHive_c>(this->TryGetChild(tokenValue));
+			DictionaryHive_c *hive = this->TryGetDictionaryHive(tokenValue);
 			if(!hive)
 			{
-				hive = DictionaryHive_c::Create(tokenValue);
+				std::auto_ptr<DictionaryHive_c> hivePtr(PH_NEW DictionaryHive_c(tokenValue));
 				
 				//load before adding, so if error occurs it is not added
-				hive->Load(parser);
+				hivePtr->Load(parser);
 
-				this->AddPrivateChild(hive);
+				this->AddPrivateChild(*hivePtr);
+
+				hivePtr->SetManaged(true);
+				hivePtr.release();
 			}			
 			else
 				hive->Load(parser);
@@ -126,36 +132,38 @@ namespace Phobos
 		}
 	}
 
-	DictionaryHivePtr_t DictionaryManager_c::GetDictionaryHive(const String_c &name)
+	DictionaryHive_c &DictionaryManager_c::GetDictionaryHive(const String_c &name)
 	{
-		return boost::static_pointer_cast<DictionaryHive_c>(this->GetChild(name));
+		return static_cast<DictionaryHive_c&>(this->GetChild(name));
 	}
 
-	DictionaryHivePtr_t DictionaryManager_c::TryGetDictionaryHive(const String_c &name)
+	DictionaryHive_c *DictionaryManager_c::TryGetDictionaryHive(const String_c &name)
 	{
-		return boost::static_pointer_cast<DictionaryHive_c>(this->TryGetChild(name));
+		return static_cast<DictionaryHive_c*>(this->TryGetChild(name));
 	}
 
-	DictionaryPtr_t DictionaryManager_c::GetDictionary(const String_c &hive, const String_c &dictionary)
+	Dictionary_c &DictionaryManager_c::GetDictionary(const String_c &hive, const String_c &dictionary)
 	{
-		return this->GetDictionaryHive(hive)->GetDictionary(dictionary);
+		return this->GetDictionaryHive(hive).GetDictionary(dictionary);
 	}
 
-	DictionaryPtr_t DictionaryManager_c::TryGetDictionary(const String_c &hive, const String_c &dictionary)
+	Dictionary_c *DictionaryManager_c::TryGetDictionary(const String_c &hive, const String_c &dictionary)
 	{
-		return this->TryGetDictionaryHive(hive)->TryGetDictionary(dictionary);
+		DictionaryHive_c *hivePtr = this->TryGetDictionaryHive(hive);
+		
+		return hivePtr ? hivePtr->TryGetDictionary(dictionary) : NULL;
 	}
 
-	DictionaryPtr_t DictionaryManager_c::GetDictionary(const Path_c &relativePath)
+	Dictionary_c &DictionaryManager_c::GetDictionary(const Path_c &relativePath)
 	{
 		Path_c tmp;
 		this->GetThisPath(tmp);
 
 		tmp.Add(relativePath);
 
-		NodePtr_t ptr = Kernel_c::GetInstance().LookupObject(tmp);
+		Node_c &node = Kernel_c::GetInstance().LookupObject(tmp);
 
-		return boost::static_pointer_cast<Dictionary_c>(ptr);
+		return static_cast<Dictionary_c &>(node);
 	}
 
 	void DictionaryManager_c::RegisterCommands(IContext_c &context)

@@ -17,9 +17,12 @@ subject to the following restrictions:
 #include <boost/test/unit_test.hpp>
 
 #include <PH_Exception.h>
+#include <PH_Kernel.h>
 #include <PH_Path.h>
 
 using namespace Phobos;
+
+static const String_c LOG_FILE_NAME("phobos.log");
 
 BOOST_AUTO_TEST_CASE(path_basic)
 {	
@@ -87,6 +90,8 @@ BOOST_AUTO_TEST_CASE(path_AddName)
 
 BOOST_AUTO_TEST_CASE(path_Add)
 {
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);	
+
 	Path_c a("/");
 
 	a.Add(Path_c("system"));	
@@ -111,6 +116,8 @@ BOOST_AUTO_TEST_CASE(path_Add)
 	a = "";
 	a.Add(Path_c("root"));
 	BOOST_REQUIRE(a.GetStr().compare("root") == 0);
+
+	Kernel_c::ReleaseInstance();
 }
 
 BOOST_AUTO_TEST_CASE(path_SetSubPath)

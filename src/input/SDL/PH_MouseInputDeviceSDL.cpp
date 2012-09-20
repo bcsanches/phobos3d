@@ -19,6 +19,7 @@ subject to the following restrictions:
 #include <PH_Error.h>
 #include <PH_EventManager.h>
 #include <PH_InputActions.h>
+#include <PH_Memory.h>
 
 #include "PH_InputEvent.h"
 
@@ -26,7 +27,7 @@ namespace Phobos
 {
 	InputDevicePtr_t MouseInputDeviceSDL_c::Create(const String_c &name)
 	{
-		return InputDevicePtr_t(new MouseInputDeviceSDL_c(name));
+		return InputDevicePtr_t(PH_NEW MouseInputDeviceSDL_c(name));
 	}
 
 	MouseInputDeviceSDL_c::MouseInputDeviceSDL_c(const String_c &name):
@@ -34,7 +35,7 @@ namespace Phobos
 		fClipToWindow(false),
 		fAppActive(true)
 	{
-		EventManager_c::GetInstance()->AddListener(*this, EVENT_TYPE_MOUSE);
+		EventManager_c::GetInstance().AddListener(*this, EVENT_TYPE_MOUSE);
 
 		clSystemListener.SetOwner(this);
 	}
@@ -212,7 +213,7 @@ namespace Phobos
 	MouseInputDeviceSDL_c::SytemEventListner_c::SytemEventListner_c():
 		pclOwner(NULL)
 	{
-		EventManager_c::GetInstance()->AddListener(*this, EVENT_TYPE_SYSTEM);
+		EventManager_c::GetInstance().AddListener(*this, EVENT_TYPE_SYSTEM);
 	}
 
 	void MouseInputDeviceSDL_c::SytemEventListner_c::SetOwner(MouseInputDeviceSDL_c *owner)

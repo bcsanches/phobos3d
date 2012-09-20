@@ -45,7 +45,7 @@ namespace Phobos
 
 		RigidBodyComponent_c::~RigidBodyComponent_c()
 		{			
-			Manager_c::GetInstance()->UnregisterRigidBodyComponent(*this);
+			Manager_c::GetInstance().UnregisterRigidBodyComponent(*this);
 		}
 
 		void RigidBodyComponent_c::SaveTransform()
@@ -64,7 +64,7 @@ namespace Phobos
 
 			EntityLoadTransform(transform, dictionary);						
 
-			Physics::ManagerPtr_t physicsManager = Manager_c::GetInstance();
+			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
 
 			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
 
@@ -72,13 +72,13 @@ namespace Phobos
 			
 			Float_t mass = dictionary.GetFloat("mass");
 
-			spRigidBody = physicsManager->CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(dictionary, Ogre::Vector3(1, 1, 1)));
+			spRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(dictionary, Ogre::Vector3(1, 1, 1)));
 		}
 
 		void RigidBodyComponent_c::OnLoadFinished()
 		{
-			Physics::ManagerPtr_t manager = Manager_c::GetInstance();
-			manager->RegisterRigidBodyComponent(*this);
+			Physics::Manager_c &manager = Manager_c::GetInstance();
+			manager.RegisterRigidBodyComponent(*this);
 			spRigidBody->Register();			
 
 			pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);

@@ -27,8 +27,8 @@ namespace Phobos
 	class PH_GAME_ENGINE_API GenericComponentManagerModule_c: public CoreModule_c, public GenericComponentManager_c<T>
 	{				
 		protected:
-			GenericComponentManagerModule_c(const String_c &name, ChildrenMode_e mode =PUBLIC_CHILDREN):
-				CoreModule_c(name, mode)
+			GenericComponentManagerModule_c(const String_c &name, UInt32_t flags =0):
+				CoreModule_c(name, flags)
 			{
 				//empty
 			}

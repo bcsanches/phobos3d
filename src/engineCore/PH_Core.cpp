@@ -16,6 +16,7 @@ subject to the following restrictions:
 
 #include "PH_Core.h"
 
+#include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 #include <sstream>
@@ -40,15 +41,15 @@ namespace Phobos
 	const String_c Core_c::DEFAULT_NAME = "Core";
 	CorePtr_t Core_c::ipInstance_gl;
 
-	CorePtr_t Core_c::CreateInstance()
+	Core_c &Core_c::CreateInstance()
 	{
 		PH_ASSERT_MSG(!ipInstance_gl, "[Core_c::CreateInstance]: Instance already exists");
 
-		ipInstance_gl = CorePtr_t(new Core_c(DEFAULT_NAME));
+		ipInstance_gl = boost::make_shared<Core_c>(DEFAULT_NAME);
 
-		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c("/"));
+		Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c("/"));
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void Core_c::ReleaseInstance()
@@ -59,15 +60,15 @@ namespace Phobos
 		ipInstance_gl.reset();
 	}
 
-	CorePtr_t Core_c::GetInstance()
+	Core_c &Core_c::GetInstance()
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[Core_c::GetInstance]: Instance does not exists, use CreateInstance");
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	Core_c::Core_c(const Phobos::String_c &name):
-		CoreModuleManager_c(name, PRIVATE_CHILDREN),
+		CoreModuleManager_c(name, NodeFlags::PRIVATE_CHILDREN),
 		cmdTime("time"),
 		cmdToggleTimerPause("toggleTimerPause"),
 		cmdListModules("listModules"),

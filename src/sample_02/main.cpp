@@ -16,9 +16,11 @@ subject to the following restrictions:
 
 #include <PH_EventManager.h>
 #include <PH_InputActions.h>
+#include <PH_InputDevice.h>
 #include <PH_InputEvent.h>
 #include <PH_InputManager.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_ProcVector.h>
 #include <PH_Window.h>
 
@@ -39,9 +41,7 @@ class Sample_c: EventListener_c, InputManagerListener_c, InputDeviceListener_c
 
 	private:
 		ProcVector_c	clSingletons;
-		WindowPtr_t		ipWindow;
-		EventManagerPtr_t ipEventManager;
-		InputManagerPtr_t ipInputManager;
+		WindowPtr_t		ipWindow;				
 
 		bool fQuit;
 };
@@ -57,15 +57,14 @@ Sample_c::Sample_c():
 	Rect_s<UInt_t> r(0, 0, 640, 480);
 	ipWindow->Open("Sample 02", r);
 
-	ipEventManager = EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&EventManager_c::ReleaseInstance);
-	ipWindow->SetEventManager(ipEventManager);
+	EventManager_c &eventManager = EventManager_c::CreateInstance("EventManager");
+	clSingletons.AddProc(&EventManager_c::ReleaseInstance);	
 
-	ipEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
+	eventManager.AddListener(*this, EVENT_TYPE_SYSTEM);
 
-	ipInputManager = InputManager_c::CreateInstance("InputManager");
+	InputManager_c &inputManager = InputManager_c::CreateInstance("InputManager");
 	clSingletons.AddProc(&InputManager_c::ReleaseInstance);
-	ipInputManager->AddListener(*this);
+	inputManager.AddListener(*this);
 }
 
 Sample_c::~Sample_c()
@@ -97,8 +96,8 @@ void Sample_c::InputManagerEvent(const InputManagerEvent_s &event)
 	switch(event.eType)
 	{
 		case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-			if(event.ipDevice->GetDeviceType() == INPUT_DEVICE_KEYBOARD)
-				event.ipDevice->AddListener(*this);
+			if(event.rclDevice.GetDeviceType() == INPUT_DEVICE_KEYBOARD)
+				event.rclDevice.AddListener(*this);
 			break;
 
         default:
@@ -123,16 +122,22 @@ void Sample_c::Run()
 {
 	while(!fQuit)
 	{
-		ipEventManager->Update();
-		ipInputManager->Update();
+		EventManager_c::GetInstance().Update();
+		InputManager_c::GetInstance().Update();		
 	}
 }
 
 int main(int, char **)
 {
-	Sample_c sample;
+	Phobos::EnableMemoryTracker();
 
-	sample.Run();
+	{
+		Sample_c sample;
+
+		sample.Run();
+	}
+
+	Phobos::DumpMemoryLeaks();
 
 	return 0;
 }

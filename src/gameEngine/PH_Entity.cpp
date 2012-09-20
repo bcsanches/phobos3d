@@ -26,7 +26,7 @@ namespace Phobos
 	PH_FULL_ENTITY_CREATOR("Entity", Entity_c);
 
 	Entity_c::Entity_c(const String_c &name):
-		EntityIO_c(name, PRIVATE_CHILDREN),
+		EntityIO_c(name, NodeFlags::PRIVATE_CHILDREN),
 		pclDictionary(NULL)
 	{
 	}
@@ -47,17 +47,23 @@ namespace Phobos
 			
 			while(StringSplitBy(componentName, *components, '|', pos, &pos))
 			{				
-				this->AddPrivateChild(factory.Create(componentName, componentName, *this));
+				std::auto_ptr<EntityComponent_c> comp(factory.Create(componentName, componentName, *this));
+
+				comp->SetManaged(true);
+
+				this->AddPrivateChild(*comp);
+
+				comp.release();
 			}
 		}
 
 		this->OnLoad(dict);
 
-		for(NodeMap_t::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			EntityComponentPtr_t component = boost::static_pointer_cast<EntityComponent_c>(it->second);
+			EntityComponent_c &component = static_cast<EntityComponent_c &>(*it->second);
 
-			component->Load(dict);
+			component.Load(dict);
 		}
 	}
 
@@ -67,14 +73,14 @@ namespace Phobos
 
 		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			EntityComponentPtr_t component = boost::static_pointer_cast<EntityComponent_c>(it->second);
+			EntityComponent_c &component = static_cast<EntityComponent_c &>(*it->second);
 
-			component->LoadFinished();
+			component.LoadFinished();
 		}
 	}
 
 	EntityComponent_c &Entity_c::GetComponent(const char *typeName)
 	{
-		return static_cast<EntityComponent_c &>(*this->GetChild(typeName));			
+		return static_cast<EntityComponent_c &>(this->GetChild(typeName));			
 	}
 }

@@ -28,6 +28,7 @@ Phobos 3d
 #include <PH_ContextUtils.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_Path.h>
 
 #include "PH_InputEvent.h"
@@ -37,7 +38,7 @@ namespace Phobos
 {
 	InputMapperPtr_t InputMapper_c::Create(const String_c &name, Context_c &context)
 	{
-		return InputMapperPtr_t(new InputMapper_c(name, context));
+		return InputMapperPtr_t(PH_NEW InputMapper_c(name, context));
 	}
 
 	InputMapper_c::InputMapper_c(const String_c &name, Context_c &context):
@@ -49,9 +50,9 @@ namespace Phobos
 		cmdPushButton("pushButton"),
 		cmdReleaseButton("releaseButton")
 	{
-		InputManagerPtr_t manager = InputManager_c::GetInstance();
+		InputManager_c &manager = InputManager_c::GetInstance();
 
-		manager->AddListener(*this);
+		manager.AddListener(*this);
 
 		cmdBind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdBind, this));
 		cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdUnbind, this));
@@ -74,20 +75,20 @@ namespace Phobos
 		rclContext.Execute(cmd);
 	}
 
-	InputMapper_c::DeviceMapper_c::DeviceMapper_c(InputMapper_c &mapper, InputDevicePtr_t device):
-		ipInputDevice(device),
+	InputMapper_c::DeviceMapper_c::DeviceMapper_c(InputMapper_c &mapper, InputDevice_c &device):
+		clInputDevice(device),
 		rclInputMapper(mapper)
 	{
-		ipInputDevice->AddListener(*this);
+		clInputDevice.AddListener(*this);
 	}
 
 	InputMapper_c::DeviceMapper_c::DeviceMapper_c(const DeviceMapper_c &rhs):
 		mapActions(rhs.mapActions),
-		ipInputDevice(rhs.ipInputDevice),
+		clInputDevice(rhs.clInputDevice),
 		rclInputMapper(rhs.rclInputMapper)
 	{
 		if(rhs.hkListener.is_linked())
-			ipInputDevice->AddListener(*this);
+			clInputDevice.AddListener(*this);
 	}
 
 	InputMapper_c::DeviceMapper_c &InputMapper_c::GetDeviceMapper(const String_c &deviceName)
@@ -135,7 +136,7 @@ namespace Phobos
 
 	void InputMapper_c::InputManagerEvent(const InputManagerEvent_s &event)
 	{
-		const String_c &deviceName = event.ipDevice->GetName();
+		const String_c &deviceName = event.rclDevice.GetName();
 		switch(event.eType)
 		{
 			case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
@@ -149,13 +150,13 @@ namespace Phobos
 					}
 					else
 					{
-						mapInputDevices.insert(it, std::make_pair(deviceName, DeviceMapper_c(*this, event.ipDevice)));
+						mapInputDevices.insert(it, std::make_pair(deviceName, DeviceMapper_c(*this, event.rclDevice)));
 					}
 				}
 				break;
 
 			case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
-				mapInputDevices.erase(event.ipDevice->GetName());
+				mapInputDevices.erase(event.rclDevice.GetName());
 				break;
 		}
 	}
@@ -167,7 +168,7 @@ namespace Phobos
 			event.stButton.uId << ' ' <<
 			event.stButton.fpPression << ' ' <<
 			event.stButton.eState << ' ' <<
-			ipInputDevice->GetName();
+			clInputDevice.GetName();
 	}
 
 	void InputMapper_c::DeviceMapper_c::OnInputEventButton(const InputEvent_s &event)
@@ -325,10 +326,10 @@ namespace Phobos
 	UInt_t InputMapper_c::DeviceMapper_c::GetActionId(const String_c &actionName)
 	{
 		UInt_t actionId;
-		if(!ipInputDevice->TryGetActionId(actionName, actionId))
+		if(!clInputDevice.TryGetActionId(actionName, actionId))
 		{
 			std::stringstream stream;
-			stream << "Device " << ipInputDevice->GetName() << " does not have action " << actionName << std::endl;
+			stream << "Device " << clInputDevice.GetName() << " does not have action " << actionName << std::endl;
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "InputMapper::DeviceMapper::GetActionId", stream.str());
 		}
 
@@ -367,7 +368,7 @@ namespace Phobos
 		if(it == mapActions.end())
 		{
 			std::stringstream stream;
-			stream << "Action " << action << " not bound to device " << ipInputDevice->GetName() << std::endl;
+			stream << "Action " << action << " not bound to device " << clInputDevice.GetName() << std::endl;
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "InputMapper::DeviceMapper::Unbind", stream.str());
 		}
 

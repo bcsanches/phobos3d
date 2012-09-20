@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include <PH_Context.h>
 #include <PH_ContextUtils.h>
 #include <PH_Exception.h>
+#include <PH_Kernel.h>
 
 using namespace Phobos;
 
@@ -74,8 +75,12 @@ static void CheckArgsCmd(const StringVector_t &args, Context_c &)
 	BOOST_REQUIRE(args[6].compare("my string test") == 0);
 }
 
+static const String_c LOG_FILE_NAME("phobos.log");
+
 BOOST_AUTO_TEST_CASE(context_basic)
 {
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
+
 	Context_c context;
 
 	ContextVar_c tempVar("temp", "empty");
@@ -111,11 +116,15 @@ BOOST_AUTO_TEST_CASE(context_basic)
 
 		context.Execute("set temp 0;if $temp thenTest elseTest");
 	}
+
+	Kernel_c::ReleaseInstance();
 }
 
 
 BOOST_AUTO_TEST_CASE(context_file)
 {
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
+
 	Context_c context;
 
 	BOOST_REQUIRE_THROW(context.ExecuteFromFile("fileThatShouldNotExits.txt"), FileNotFoundException_c);
@@ -137,4 +146,6 @@ BOOST_AUTO_TEST_CASE(context_file)
 	context.ExecuteFromFile("context_file.cfg");
 
 	BOOST_REQUIRE(tempVar.GetValue().compare("bla") == 0);
+
+	Kernel_c::ReleaseInstance();
 }

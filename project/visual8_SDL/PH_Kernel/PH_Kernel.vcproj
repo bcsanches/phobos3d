@@ -355,6 +355,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\kernel\PH_DisableCopy.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\kernel\PH_DynamicLibrary.cpp"
 			>
 		</File>
@@ -440,6 +444,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\kernel\PH_Log.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\kernel\PH_Memory.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\kernel\PH_Memory.h"
 			>
 		</File>
 		<File

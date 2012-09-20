@@ -32,8 +32,8 @@ namespace Phobos
 	class PH_ENGINE_CORE_API PluginManager_c: public CoreModule_c
 	{
 		public:
-			static PluginManagerPtr_t &CreateInstance(void);
-			static PluginManagerPtr_t &GetInstance(void);
+			static PluginManager_c &CreateInstance(void);
+			static PluginManager_c &GetInstance(void);
 			static void ReleaseInstance(void);
 
 			~PluginManager_c();

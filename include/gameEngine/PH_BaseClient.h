@@ -28,7 +28,7 @@ namespace Phobos
 		public:
 			struct ConfigInfo_s
 			{
-				MouseInputDevicePtr_t ipMouse;
+				MouseInputDevice_c *pclMouse;
 				void *pWindowHandler;
 			};			
 

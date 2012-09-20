@@ -23,11 +23,11 @@ namespace Phobos
 	MoverComponent_c::MoverComponent_c(const String_c &name, Entity_c &owner):
 		EntityComponent_c(name, owner)
 	{
-		MoverManager_c::GetInstance()->Register(*this);
+		MoverManager_c::GetInstance().Register(*this);
 	}
 	
 	MoverComponent_c::~MoverComponent_c()
 	{
-		MoverManager_c::GetInstance()->Unregister(*this);
+		MoverManager_c::GetInstance().Unregister(*this);
 	}
 }

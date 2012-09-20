@@ -22,7 +22,7 @@ subject to the following restrictions:
 namespace Phobos
 {
 	ResourceManager_c::ResourceManager_c(const char *name):
-		Node_c(name, PRIVATE_CHILDREN)
+		Node_c(name, NodeFlags::PRIVATE_CHILDREN)
 	{
 		//empty
 	}
@@ -41,6 +41,10 @@ namespace Phobos
 
 		NodePtr_t resourceNode;
 
+		PH_RAISE(INVALID_OPERATION_EXCEPTION, "[ResourceManager_c::LoadResource]", "Not implemented");
+
+		//FIXME
+		/*
 		if(!this->TryLookupNode(resourceNode, path))
 		{
 			std::stringstream stream;
@@ -74,5 +78,6 @@ namespace Phobos
 		}
 
 		return resource;
+		*/
 	}
 }

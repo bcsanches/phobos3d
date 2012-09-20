@@ -26,7 +26,7 @@ namespace Phobos
 	class LinearMoverComponent_c: public MoverComponent_c
 	{
 		public:
-			static EntityComponentPtr_t Create(const String_c &name, Entity_c &owner);	
+			static EntityComponent_c *Create(const String_c &name, Entity_c &owner);	
 
 			~LinearMoverComponent_c();		
 

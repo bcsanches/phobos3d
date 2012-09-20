@@ -35,8 +35,8 @@ namespace Phobos
 
 	MapLoaderPtr_t MapLoaderFactory_c::Create(const String_c &type)
 	{
-		DictionaryPtr_t dictionary = DictionaryManager_c::GetInstance()->GetDictionary("MapLoader", type);
+		Dictionary_c &dictionary = DictionaryManager_c::GetInstance().GetDictionary("MapLoader", type);
 
-		return clFactory.Create(dictionary->GetString("loader"), *dictionary);
+		return MapLoaderPtr_t(clFactory.Create(dictionary.GetString("loader"), dictionary));
 	}
 }

@@ -19,10 +19,13 @@ subject to the following restrictions:
 
 #include <PH_Exception.h>
 #include <PH_Node.h>
+#include <PH_Kernel.h>
 #include <PH_Path.h>
 
 using namespace boost;
 using namespace Phobos;
+
+static const String_c LOG_FILE_NAME("phobos.log");
 
 static int iAliveNodes_gl = 0;
 
@@ -46,8 +49,8 @@ class TestNode_c: public Node_c
 class TestPrivateNode_c: public Node_c
 {
 	public:
-		TestPrivateNode_c(const Char_t *name, ChildrenMode_e mode=PUBLIC_CHILDREN):
-		  Node_c(name, mode)
+		TestPrivateNode_c(const Char_t *name, UInt32_t flags = 0):
+		  Node_c(name, flags)
 		  {
 		  }
 };
@@ -65,47 +68,51 @@ BOOST_AUTO_TEST_CASE(node_basic)
 	}
 
 	BOOST_REQUIRE(iAliveNodes_gl == 0);
-
-	//Now test basic child add / removal
+	
 	{
-		TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
-		BOOST_REQUIRE(ptr->GetNumChildren() == 0);
-		BOOST_REQUIRE(!(ptr->HasChildren()));
+		TestNode_c root("root");
+		BOOST_REQUIRE(root.GetNumChildren() == 0);
+		BOOST_REQUIRE(!(root.HasChildren()));		
 
 		{
-			TestNodePtr_t child(boost::make_shared<TestNode_c>("child0"));
+			TestNode_c child0("child0");
 			BOOST_REQUIRE(iAliveNodes_gl == 2);		
 
-			ptr->AddChild(child);
-			BOOST_REQUIRE(ptr->GetNumChildren() == 1);
-			BOOST_REQUIRE(ptr->HasChildren());
+			root.AddChild(child0);
+			BOOST_REQUIRE(root.GetNumChildren() == 1);
+			BOOST_REQUIRE(root.HasChildren());
 			
-			NodePtr_t parent(child->GetParent());
+			Node_c *parent(child0.GetParent());
 			BOOST_REQUIRE(parent);
 			BOOST_REQUIRE(parent->GetName().compare("root") == 0);
 
 			Path_c path;
-			child->GetThisPath(path);
+			child0.GetThisPath(path);
 			BOOST_REQUIRE(path.GetStr().compare("/root/child0")==0);
 
-			child = TestNodePtr_t(boost::make_shared<TestNode_c>("child1"));
+			TestNode_c child1("child1");
 			BOOST_REQUIRE(iAliveNodes_gl == 3);
-			ptr->AddChild(child);
+			root.AddChild(child1);
 
-			NodePtr_t retrievedPtr(ptr->GetChild("child0"));
-
-			ptr->RemoveChild(child);
-			child.reset();
+			Node_c &retrieved(root.GetChild("child0"));						
 		}
 
-		NodePtr_t child(boost::make_shared<TestNode_c>("child2"));
-		ptr->AddChild(child);
-		child->RemoveSelf();
-		child.reset();
+		BOOST_REQUIRE(iAliveNodes_gl == 1);
+		BOOST_REQUIRE(root.GetNumChildren() == 0);
+		BOOST_REQUIRE(!(root.HasChildren()));
 
-		BOOST_REQUIRE(!(ptr->TryGetChild("child2")));
+		{
+			TestNode_c child("child2");
+			root.AddChild(child);
+			child.RemoveSelf();
 
-		BOOST_REQUIRE(iAliveNodes_gl == 2);
+			BOOST_REQUIRE(root.GetNumChildren() == 0);
+			BOOST_REQUIRE(!(root.HasChildren()));
+		}
+
+		BOOST_REQUIRE(!(root.TryGetChild("child2")));
+
+		BOOST_REQUIRE(iAliveNodes_gl == 1);
 	}
 
 	BOOST_REQUIRE(iAliveNodes_gl == 0);
@@ -113,106 +120,120 @@ BOOST_AUTO_TEST_CASE(node_basic)
 
 BOOST_AUTO_TEST_CASE(node_exceptions)
 {
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
+
 	//now check AddChild Exceptions
 	{
-		TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
+		TestNode_c root("root");
 
-		TestNodePtr_t child(boost::make_shared< TestNode_c>("child0"));
-		TestNodePtr_t child1(boost::make_shared< TestNode_c>("child1"));
+		TestNode_c child("child0");
+		TestNode_c child1("child1");
 
-		ptr->AddChild(child);
-		ptr->AddChild(child1);
+		root.AddChild(child);
+		root.AddChild(child1);
 
-		BOOST_REQUIRE_THROW( child->AddChild(child1), InvalidParameterException_c);
+		BOOST_REQUIRE_THROW( child.AddChild(child1), InvalidParameterException_c);
 
 		//check remove child if a "virgin" node
-		child1.swap(boost::make_shared<TestNode_c>("child0"));
-		BOOST_REQUIRE_THROW(ptr->RemoveChild(child1), InvalidParameterException_c);
+		TestNode_c virgin("child0");		
+		BOOST_REQUIRE_THROW(root.RemoveChild(virgin), InvalidParameterException_c);
 
-		BOOST_REQUIRE_THROW(ptr->AddChild(child1), ObjectAlreadyExistsException_c);
+		BOOST_REQUIRE_THROW(root.AddChild(virgin), ObjectAlreadyExistsException_c);
 
 		//Check registered node, but not child of
-		BOOST_REQUIRE_THROW(child1->RemoveChild(child), InvalidParameterException_c);
+		BOOST_REQUIRE_THROW(virgin.RemoveChild(child), InvalidParameterException_c);
 
-		BOOST_REQUIRE_THROW(child1->GetChild("bla"), ObjectNotFoundException_c);
+		BOOST_REQUIRE_THROW(virgin.GetChild("bla"), ObjectNotFoundException_c);
 	}
 
-	
+	Kernel_c::ReleaseInstance();
 }
 
 BOOST_AUTO_TEST_CASE(node_private)
 {
-	TestPrivateNodePtr_t ptr(boost::make_shared<TestPrivateNode_c>("root_private_test", PRIVATE_CHILDREN));
-	
-	TestPrivateNodePtr_t child1(boost::make_shared<TestPrivateNode_c>("child_private_test", PUBLIC_CHILDREN));
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
 
-	BOOST_REQUIRE_THROW(ptr->AddChild(child1), InvalidOperationException_c);
+	TestPrivateNode_c root("root_private_test", NodeFlags::PRIVATE_CHILDREN);
+	
+	TestPrivateNode_c child1("child_private_test");
+
+	BOOST_REQUIRE_THROW(root.AddChild(child1), InvalidOperationException_c);
+
+	Kernel_c::ReleaseInstance();
 }
 
 BOOST_AUTO_TEST_CASE(node_lookup)
 {
-	TestNodePtr_t ptr(boost::make_shared<TestNode_c>("root"));
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);	
 
-	TestNodePtr_t child(boost::make_shared< TestNode_c>("child0"));
-	TestNodePtr_t child1(boost::make_shared< TestNode_c>("child1"));
-	TestNodePtr_t child2(boost::make_shared< TestNode_c>("child2"));
+	TestNode_c root("root");
 
-	ptr->AddChild(child);
-	ptr->AddChild(child1);
+	TestNode_c child("child0");
+	TestNode_c child1("child1");
+	TestNode_c child2("child2");
 
-	child1->AddChild(child2);
+	root.AddChild(child);
+	root.AddChild(child1);
 
-	BOOST_REQUIRE_THROW(ptr->LookupNode(Path_c("")), InvalidParameterException_c);
+	child1.AddChild(child2);
 
-	BOOST_REQUIRE(child1->LookupNode(Path_c("/child0"))->GetName().compare("child0") == 0);
-	BOOST_REQUIRE(child1->LookupNode(Path_c("/"))->GetName().compare("root") == 0);
-	BOOST_REQUIRE(ptr->LookupNode(Path_c("/"))->GetName().compare("root") == 0);
+	BOOST_REQUIRE_THROW(root.LookupNode(Path_c("")), InvalidParameterException_c);
 
-	BOOST_REQUIRE(ptr->LookupNode(Path_c("child1/child2"))->GetName().compare("child2") == 0);
-	BOOST_REQUIRE(child1->LookupNode(Path_c("child2"))->GetName().compare("child2") == 0);
+	BOOST_REQUIRE(child1.LookupNode(Path_c("/child0")).GetName().compare("child0") == 0);
+	BOOST_REQUIRE(child1.LookupNode(Path_c("/")).GetName().compare("root") == 0);
+	BOOST_REQUIRE(root.LookupNode(Path_c("/")).GetName().compare("root") == 0);
 
-	BOOST_REQUIRE_THROW(ptr->LookupNode(Path_c("bla")), ObjectNotFoundException_c);
+	BOOST_REQUIRE(root.LookupNode(Path_c("child1/child2")).GetName().compare("child2") == 0);
+	BOOST_REQUIRE(child1.LookupNode(Path_c("child2")).GetName().compare("child2") == 0);
+
+	BOOST_REQUIRE_THROW(root.LookupNode(Path_c("bla")), ObjectNotFoundException_c);
 
 
 	//
 	//Now check the "try" version
 	//
 
-	NodePtr_t result;
+	Node_c *result = NULL;
 
-	BOOST_REQUIRE(!ptr->TryLookupNode(result, Path_c("")));
+	BOOST_REQUIRE(!root.TryLookupNode(result, Path_c("")));
 	BOOST_REQUIRE(!result);
 
-	BOOST_REQUIRE(child1->TryLookupNode(result, Path_c("/child0")));
+	BOOST_REQUIRE(child1.TryLookupNode(result, Path_c("/child0")));
 	BOOST_REQUIRE(result->GetName().compare("child0") == 0);
 
-	BOOST_REQUIRE(child1->TryLookupNode(result, Path_c("/")));
+	BOOST_REQUIRE(child1.TryLookupNode(result, Path_c("/")));
 	BOOST_REQUIRE(result->GetName().compare("root") == 0);
 
-	BOOST_REQUIRE(ptr->TryLookupNode(result, Path_c("/")));
+	BOOST_REQUIRE(root.TryLookupNode(result, Path_c("/")));
 	BOOST_REQUIRE(result->GetName().compare("root") == 0);
 
-	BOOST_REQUIRE(ptr->TryLookupNode(result, Path_c("child1/child2")));
+	BOOST_REQUIRE(root.TryLookupNode(result, Path_c("child1/child2")));
 	BOOST_REQUIRE(result->GetName().compare("child2") == 0);
 
-	BOOST_REQUIRE(child1->TryLookupNode(result, Path_c("child2")));
+	BOOST_REQUIRE(child1.TryLookupNode(result, Path_c("child2")));
 	BOOST_REQUIRE(result->GetName().compare("child2") == 0);
 
-	BOOST_REQUIRE(ptr->TryLookupNode(result, Path_c("bla")));
+	BOOST_REQUIRE(root.TryLookupNode(result, Path_c("bla")));
 	BOOST_REQUIRE(!result);
+
+	Kernel_c::ReleaseInstance();
 }
 
 BOOST_AUTO_TEST_CASE(node_addNode)
 {
-	TestNodePtr_t ptr(boost::make_shared< TestNode_c>("root"));
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);
+
+	TestNode_c root("root");
 	
-	TestNodePtr_t child(boost::make_shared< TestNode_c>("child0"));
+	TestNode_c child("child0");
 
-	ptr->AddNode(child, Path_c("children/"));
-	BOOST_REQUIRE(ptr->LookupNode(Path_c("/children/child0"))->GetName().compare("child0") == 0);
-	BOOST_REQUIRE(ptr->LookupNode(Path_c("/children"))->GetName().compare("children") == 0);
+	root.AddNode(child, Path_c("children/"));
+	BOOST_REQUIRE(root.LookupNode(Path_c("/children/child0")).GetName().compare("child0") == 0);
+	BOOST_REQUIRE(root.LookupNode(Path_c("/children")).GetName().compare("children") == 0);
 
-	TestNodePtr_t child1(boost::make_shared< TestNode_c>("child1"));
-	ptr->AddNode(child1, Path_c("/"));
-	BOOST_REQUIRE(ptr->LookupNode(Path_c("/child1"))->GetName().compare("child1") == 0);
+	TestNode_c child1("child1");
+	root.AddNode(child1, Path_c("/"));
+	BOOST_REQUIRE(root.LookupNode(Path_c("/child1")).GetName().compare("child1") == 0);
+
+	Kernel_c::ReleaseInstance();
 }

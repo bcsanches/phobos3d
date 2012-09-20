@@ -30,9 +30,9 @@ namespace Phobos
 	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c, private EventListener_c
 	{
 		public:
-			static EventManagerModulePtr_t CreateInstance();
+			static EventManagerModule_c &CreateInstance();
 			static void ReleaseInstance();
-			static EventManagerModulePtr_t GetInstance();
+			static EventManagerModule_c &GetInstance();
 
 			~EventManagerModule_c();
 
@@ -44,9 +44,7 @@ namespace Phobos
 
 			EventManagerModule_c();			
 
-		private:
-
-			EventManagerPtr_t ipEventManager;
+		private:			
 			static EventManagerModulePtr_t ipInstance_gl;
 
 	};

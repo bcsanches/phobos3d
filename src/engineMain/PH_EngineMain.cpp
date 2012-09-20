@@ -50,57 +50,57 @@ namespace Phobos
 	EngineMain_c::EngineMain_c()
 	{
 		Kernel_c::CreateInstance("phobos.log");
-		CorePtr_t core = Core_c::CreateInstance();
+		Core_c &core = Core_c::CreateInstance();
 		clSingletons.AddProc(Core_c::ReleaseInstance);
 
-		DictionaryManagerPtr_t dictionaryManager = DictionaryManager_c::CreateInstance();
+		DictionaryManager_c &dictionaryManager = DictionaryManager_c::CreateInstance();
 		clSingletons.AddProc(DictionaryManager_c::ReleaseInstance);
 
-		EventManagerModulePtr_t eventManager = EventManagerModule_c::CreateInstance();
+		EventManagerModule_c &eventManager = EventManagerModule_c::CreateInstance();
 		clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
-		core->AddModule(eventManager);
+		core.AddModule(eventManager);
 
-		ConsolePtr_t console = OgreConsole_c::CreateInstance();
+		Console_c &console = OgreConsole_c::CreateInstance();
 		clSingletons.AddProc(Console_c::ReleaseInstance);
-		core->AddModule(console);		
+		core.AddModule(console);		
 
-		WorldManagerPtr_t worldManager = WorldManager_c::CreateInstance();
+		WorldManager_c &worldManager = WorldManager_c::CreateInstance();
 		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
-		core->AddModule(worldManager);
+		core.AddModule(worldManager);
 
-		GameEventManagerPtr_t gameEventManager = GameEventManager_c::CreateInstance();
+		GameEventManager_c &gameEventManager = GameEventManager_c::CreateInstance();
 		clSingletons.AddProc(GameEventManager_c::ReleaseInstance);
-		core->AddModule(gameEventManager);
+		core.AddModule(gameEventManager);
 
-		PluginManagerPtr_t pluginManager = PluginManager_c::CreateInstance();
+		PluginManager_c &pluginManager = PluginManager_c::CreateInstance();
 		clSingletons.AddProc(PluginManager_c::ReleaseInstance);
-		core->AddModule(pluginManager, NORMAL_PRIORITY-1);		
+		core.AddModule(pluginManager, CoreModulePriorities::NORMAL-1);		
 
-		MoverManagerPtr_t moverManager = MoverManager_c::CreateInstance();
+		MoverManager_c &moverManager = MoverManager_c::CreateInstance();
 		clSingletons.AddProc(MoverManager_c::ReleaseInstance);
-		core->AddModule(moverManager);
+		core.AddModule(moverManager);
 
-		Physics::ManagerPtr_t physicsManager = Physics::Manager_c::CreateInstance();
+		Physics::Manager_c &physicsManager = Physics::Manager_c::CreateInstance();
 		clSingletons.AddProc(Physics::Manager_c::ReleaseInstance);
-		core->AddModule(physicsManager, LOWEST_PRIORITY+2);
+		core.AddModule(physicsManager, CoreModulePriorities::LOWEST+2);
 
-		ModelRendererManagerPtr_t modelRendererManager = ModelRendererManager_c::CreateInstance();
+		ModelRendererManager_c &modelRendererManager = ModelRendererManager_c::CreateInstance();
 		clSingletons.AddProc(ModelRendererManager_c::ReleaseInstance);
-		core->AddModule(modelRendererManager, LOWEST_PRIORITY+1);
+		core.AddModule(modelRendererManager, CoreModulePriorities::LOWEST+1);
 
-		RenderPtr_t render = Render_c::CreateInstance();
+		Render_c &render = Render_c::CreateInstance();
 		clSingletons.AddProc(Render_c::ReleaseInstance);
-		core->AddModule(render, LOWEST_PRIORITY);
+		core.AddModule(render, CoreModulePriorities::LOWEST);
 
-		core->RegisterCommands(*console);
-		dictionaryManager->RegisterCommands(*console);
+		core.RegisterCommands(console);
+		dictionaryManager.RegisterCommands(console);
 
-		core->LaunchBootModule("autoexec.cfg");
+		core.LaunchBootModule("autoexec.cfg");
 	}
 
 	EngineMain_c::~EngineMain_c()
 	{
-		Core_c::GetInstance()->Shutdown();
+		Core_c::GetInstance().Shutdown();
 
 		clSingletons.CallAll();
 
@@ -114,30 +114,40 @@ namespace Phobos
 	*/
 	void EngineMain_c::MainLoop(void)
 	{
-		Core_c::GetInstance()->MainLoop();
+		Core_c::GetInstance().MainLoop();
 	}
 }
 
 int main(int, char **)
 {
-	Phobos::EngineMain_c engine;
+	#ifdef PH_DEBUG
+		Phobos::EnableMemoryTracker();
+	#endif
 
-#ifndef PH_DEBUG
-	try
-#endif
 	{
-		engine.MainLoop();
-	}
-#ifndef PH_DEBUG
-	catch(std::exception &e)
-	{
-		std::stringstream stream;
-		stream << "main: Unhandled excetion: ";
-		stream << e.what();
-		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+		Phobos::EngineMain_c engine;
 
-		exit(EXIT_FAILURE);
+	#ifndef PH_DEBUG
+		try
+	#endif
+		{
+			engine.MainLoop();
+		}
+	#ifndef PH_DEBUG
+		catch(std::exception &e)
+		{
+			std::stringstream stream;
+			stream << "main: Unhandled excetion: ";
+			stream << e.what();
+			Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+
+			exit(EXIT_FAILURE);
+		}
+	#endif
 	}
+
+#ifdef PH_DEBUG
+	Phobos::DumpMemoryLeaks();
 #endif
 
 	return 0;

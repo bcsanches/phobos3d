@@ -28,8 +28,7 @@ BOOST_AUTO_TEST_CASE(eventManager_basic)
 	Kernel_c &kernel = Kernel_c::CreateInstance("eventManager_basic.log");
 	EventManager_c::CreateInstance(EventManager_c::GetDefaultName());
 
-	NodePtr_t node = kernel.LookupObject(Path_c("/System/EventManager"));
-	BOOST_REQUIRE(node);
+	Node_c &node = kernel.LookupObject(Path_c("/System/EventManager"));	
 
 	EventManager_c::ReleaseInstance();
 

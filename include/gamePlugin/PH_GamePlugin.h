@@ -27,7 +27,7 @@ namespace Phobos
 	class GamePlugin_c: public IPluginInstance_c
 	{
 		public:
-			typedef CoreModulePtr_t (*CreateInstanceProc_t)();
+			typedef CoreModule_c &(*CreateInstanceProc_t)();
 			typedef void (*ReleaseInstanceProc_t)();		
 
 			
@@ -64,9 +64,9 @@ namespace Phobos
 #define PH_GAME_PLUGIN_REGISTER_MODULE(X)\
 	static Phobos::GamePlugin_c::Register_s X##Register_gl(X##_c::CreateModule, X##_c::ReleaseInstance);
 
-#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::CoreModulePtr_t CreateModule();
+#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::CoreModule_c &CreateModule();
 #define PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(X)	\
-	Phobos::CoreModulePtr_t X##_c::CreateModule()			\
+	Phobos::CoreModule_c &X##_c::CreateModule()		\
 	{												\
 		return CreateInstance();					\
 	}

@@ -28,16 +28,15 @@ class Console_c:
 		// =====================================================
 		// PUBLIC METHODS
 		// =====================================================
-		static ConsolePtr_t CreateInstance(void);
+		static Console_c &CreateInstance(void);
 
+		Console_c(void);
 		~Console_c(void);
 
 	protected:
 		// =====================================================
 		// PROTECTED METHODS
-		// =====================================================
-		Console_c(void);		
-
+		// =====================================================			
 		void OnUpdate();
 		void OnRenderReady();
 

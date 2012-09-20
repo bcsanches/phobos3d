@@ -29,7 +29,9 @@ class Render_c: public Phobos::CoreModule_c
 {
 	PH_DECLARE_SINGLETON_METHODS(Render);
 
-	protected:
+	public:		
+
+	protected:		
 		Render_c();
 
 		void OnBoot();

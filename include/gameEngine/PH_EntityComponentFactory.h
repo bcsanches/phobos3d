@@ -18,6 +18,7 @@ subject to the following restrictions:
 #define PH_ENTITY_COMPONENT_FACTORY_H
 
 #include <PH_GenericFactory.h>
+#include <PH_Memory.h>
 
 #include "PH_EntityComponent.h"
 
@@ -27,7 +28,7 @@ namespace Phobos
 
 	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
 	//typedef GenericFactory1_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &>, Entity_c & > EntityComponentFactory_c;
-	class PH_GAME_ENGINE_API EntityComponentFactory_c: public GenericFactory2_c<ObjectCreator2_c<EntityComponentPtr_t, String_c, Entity_c &, EntityComponentFactory_c>, String_c, Entity_c & >
+	class PH_GAME_ENGINE_API EntityComponentFactory_c: public GenericFactory2_c<ObjectCreator2_c<EntityComponent_c, String_c, Entity_c &, EntityComponentFactory_c>, String_c, Entity_c & >
 	{
 		public:
 			static EntityComponentFactory_c &GetInstance();			
@@ -35,13 +36,13 @@ namespace Phobos
 }
 
 #define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
-	static ObjectCreator2_c<EntityComponentPtr_t, String_c, Entity_c &, Phobos::EntityComponentFactory_c> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
+	static ObjectCreator2_c<EntityComponent_c, String_c, Entity_c &, Phobos::EntityComponentFactory_c> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
 
-#define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)							\
-	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);									\
-	EntityComponentPtr_t TYPE::Create(const String_c &name, Entity_c &owner)	\
-	{																			\
-		return EntityComponentPtr_t(new TYPE(name, owner)); 					\
+#define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)						\
+	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);								\
+	EntityComponent_c *TYPE::Create(const String_c &name, Entity_c &owner)	\
+	{																		\
+		return PH_NEW TYPE(name, owner); 									\
 	}
 
 #endif

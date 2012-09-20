@@ -30,29 +30,28 @@ namespace Phobos
 
 	const String_c EventManager_c::DEFAULT_NAME("EventManager");
 
-	EventManagerPtr_t EventManager_c::CreateInstance(const String_c &name)
+	EventManager_c &EventManager_c::CreateInstance(const String_c &name)
 	{
 		PH_ASSERT_MSG(!ipInstance_gl, "[EventManager_c::CreateInstance]: Instance already exists");
 
 		ipInstance_gl = EventManager_c::CreateInstanceImpl(name);
 
-		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
+		Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
-	EventManagerPtr_t EventManager_c::GetInstance()
+	EventManager_c &EventManager_c::GetInstance()
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[EventManager_c::GetInstance]: Instance does not exists, use CreateInstance");
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void EventManager_c::ReleaseInstance()
 	{	
 		PH_ASSERT_MSG(ipInstance_gl, "[EventManager_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
-
-		ipInstance_gl->RemoveSelf();
+		
 		ipInstance_gl.reset();
 	}
 

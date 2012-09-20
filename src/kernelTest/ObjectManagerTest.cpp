@@ -17,52 +17,54 @@ subject to the following restrictions:
 
 #include <PH_Exception.h>
 #include <PH_ObjectManager.h>
+#include <PH_Kernel.h>
 #include <PH_Path.h>
 
 using namespace Phobos;
+
+static const String_c LOG_FILE_NAME("phobos.log");
 
 BOOST_AUTO_TEST_CASE(objectManager_basic)
 {
 	ObjectManager_c manager;	
 
-	NodePtr_t node(Node_c::Create("test"));
-	manager.AddObject(node, Path_c("sys/screen"));
+	Node_c test("test");
+	manager.AddObject(test, Path_c("sys/screen"));
 
-	NodePtr_t sys = manager.LookupObject(Path_c("sys"));
-	BOOST_REQUIRE(sys);
-	BOOST_REQUIRE(sys->GetName().compare("sys") == 0);	
+	Node_c &sys = manager.LookupObject(Path_c("sys"));	
+	BOOST_REQUIRE(sys.GetName().compare("sys") == 0);	
 
-	NodePtr_t screen = manager.LookupObject(Path_c("sys/screen"));
-	BOOST_REQUIRE(screen);
-	BOOST_REQUIRE(screen->GetName().compare("screen") == 0);
+	Node_c &screen = manager.LookupObject(Path_c("sys/screen"));	
+	BOOST_REQUIRE(screen.GetName().compare("screen") == 0);
 
-	NodePtr_t parent = screen->GetParent();
+	Node_c *parent = screen.GetParent();
 	BOOST_REQUIRE(parent);
 	BOOST_REQUIRE(parent->GetName().compare("sys")==0);
 	
-	BOOST_REQUIRE(manager.LookupObject(Path_c("sys/screen/test")));
+	BOOST_REQUIRE(manager.LookupObject(Path_c("sys/screen/test")).GetName().compare("test") == 0);
 
-	node = Node_c::Create("input");
-	manager.AddObject(node, Path_c("/sys/"));
+	Node_c input("input");
+	manager.AddObject(input, Path_c("/sys/"));
 
-	NodePtr_t input = manager.LookupObject(Path_c("sys/input"));
-	BOOST_REQUIRE(input);
-	BOOST_REQUIRE(input->GetName().compare("input") == 0);
+	Node_c &inputLookup = manager.LookupObject(Path_c("sys/input"));	
+	BOOST_REQUIRE(&inputLookup == &input);
+	BOOST_REQUIRE(inputLookup.GetName().compare("input") == 0);
 
-	node = Node_c::Create("test");
-	manager.AddObject(node, Path_c());
+	Node_c test2("test");
+	manager.AddObject(test2, Path_c());
 
-	NodePtr_t test = manager.LookupObject(Path_c("test"));
-	BOOST_REQUIRE(test);
-	BOOST_REQUIRE(test->GetName().compare("test") == 0);
+	Node_c &test3 = manager.LookupObject(Path_c("test"));	
+	BOOST_REQUIRE(test3.GetName().compare("test") == 0);
 }
 
 BOOST_AUTO_TEST_CASE(objectManager_exception)
 {
+	Kernel_c &kernel = Kernel_c::CreateInstance(LOG_FILE_NAME);	
+
 	ObjectManager_c manager;
 
 	BOOST_REQUIRE_THROW(manager.LookupObject(Path_c()), InvalidParameterException_c);
 	BOOST_REQUIRE_THROW(manager.LookupObject(Path_c("bla/bla/bla")), ObjectNotFoundException_c);
 
-
+	Kernel_c::ReleaseInstance();
 }

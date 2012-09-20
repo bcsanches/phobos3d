@@ -46,10 +46,11 @@ namespace Phobos
 	class PH_ENGINE_CORE_API Core_c: public CoreModuleManager_c
 	{
 		public:
-			static CorePtr_t CreateInstance();
+			static Core_c &CreateInstance();
 			static void ReleaseInstance();
-			static CorePtr_t GetInstance();
+			static Core_c &GetInstance();
 
+			Core_c(const String_c &name);
 			~Core_c();
 			
 			void Shutdown(void);
@@ -74,9 +75,7 @@ namespace Phobos
 			void Update(Float_t seconds, Float_t delta);
 			void FixedUpdate(Float_t seconds);
 
-		private:
-			Core_c(const String_c &name);			
-
+		private:					
 			inline Float_t GetUpdateTime(void);
 			inline Float_t GetMinFrameTime(void);			
 

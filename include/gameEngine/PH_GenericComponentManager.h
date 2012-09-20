@@ -60,7 +60,7 @@ namespace Phobos
 			void CallForAll(void (T::*proc)())
 			{
 				UInt_t count = 0;
-				UInt_t total = WorldManager_c::GetInstance()->GetNumActiveEntities();
+				UInt_t total = WorldManager_c::GetInstance().GetNumActiveEntities();
 
 				for(int i = 0;i < EntityManager_c::MAX_ENTRIES && count < total; ++i)
 				{
@@ -76,7 +76,7 @@ namespace Phobos
 			void CallForAll1(void (T::*proc)(P1), P1 p1)
 			{
 				UInt_t count = 0;
-				UInt_t total = WorldManager_c::GetInstance()->GetNumActiveEntities();
+				UInt_t total = WorldManager_c::GetInstance().GetNumActiveEntities();
 
 				for(int i = 0;i < EntityManager_c::MAX_ENTRIES && count < total; ++i)
 				{

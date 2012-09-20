@@ -24,17 +24,17 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	static DictionaryPtr_t spCollisionGroups_gl;
-	static DictionaryPtr_t spStaticWorldCollision_gl;
-	static DictionaryHivePtr_t spStaticMeshCollisionShapeDefHive_gl;
+	static Dictionary_c *pclCollisionGroups_gl;
+	static Dictionary_c *pclStaticWorldCollision_gl;
+	static DictionaryHive_c *pclStaticMeshCollisionShapeDefHive_gl;
 
 	void GamePhysicsSettings_c::OnBoot()
 	{
-		DictionaryManagerPtr_t dictManager = DictionaryManager_c::GetInstance();
+		DictionaryManager_c &dictManager = DictionaryManager_c::GetInstance();
 
-		spCollisionGroups_gl = dictManager->GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_COLLISION_GROUP);
-		spStaticWorldCollision_gl = dictManager->GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_STATIC_WORLD_COLLISION);
-		spStaticMeshCollisionShapeDefHive_gl = dictManager->TryGetDictionaryHive("StaticMeshCollisionShapeDef");					
+		pclCollisionGroups_gl = &dictManager.GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_COLLISION_GROUP);
+		pclStaticWorldCollision_gl = &dictManager.GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_STATIC_WORLD_COLLISION);
+		pclStaticMeshCollisionShapeDefHive_gl = dictManager.TryGetDictionaryHive("StaticMeshCollisionShapeDef");					
 	}
 
 	UInt32_t GamePhysicsSettings_c::DecodeCollisionMask(const String_c &config)
@@ -47,7 +47,7 @@ namespace Phobos
 		{
 			StringTrim(stringFlag, STRING_TRIM_BOTH);
 
-			flags |= spCollisionGroups_gl->GetInt(stringFlag);
+			flags |= pclCollisionGroups_gl->GetInt(stringFlag);
 		}
 
 		return flags;
@@ -63,11 +63,11 @@ namespace Phobos
 
 	Physics::CollisionTag_c GamePhysicsSettings_c::CreateStaticWorldCollisionTag()
 	{
-		return  GamePhysicsSettings_c::LoadCollisionTag(*spStaticWorldCollision_gl);
+		return GamePhysicsSettings_c::LoadCollisionTag(*pclStaticWorldCollision_gl);
 	}
 
 	const Dictionary_c *GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(const String_c &name)
 	{
-		return spStaticMeshCollisionShapeDefHive_gl ? spStaticMeshCollisionShapeDefHive_gl->TryGetDictionary(name).get() : NULL;
+		return pclStaticMeshCollisionShapeDefHive_gl ? pclStaticMeshCollisionShapeDefHive_gl->TryGetDictionary(name) : NULL;
 	}
 }

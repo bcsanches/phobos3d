@@ -40,11 +40,11 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	OgreConsolePtr_t OgreConsole_c::CreateInstance(void)
+	OgreConsole_c &OgreConsole_c::CreateInstance(void)
 	{		
-		Console_c::UpdateInstance(OgreConsolePtr_t(new OgreConsole_c()));		
+		Console_c::UpdateInstance(OgreConsolePtr_t(PH_NEW OgreConsole_c()));		
 
-		return boost::static_pointer_cast<OgreConsole_c>(Console_c::GetInstance());
+		return static_cast<OgreConsole_c &>(Console_c::GetInstance());
 	}
 	
 	OgreConsole_c::OgreConsole_c(void):
@@ -102,7 +102,7 @@ namespace Phobos
 		{
 			if(fpHeight < CONSOLE_HEIGHT)
 			{
-				fpHeight += Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
+				fpHeight += Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
 				fUIMoved = true;
 				if(fpHeight >= CONSOLE_HEIGHT)
 				{
@@ -112,7 +112,7 @@ namespace Phobos
 		}
 		else if(fpHeight > 0)
 		{
-			fpHeight -= Core_c::GetInstance()->GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
+			fpHeight -= Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
 			fUIMoved = true;
 
 			if(fpHeight <= 0)
@@ -186,9 +186,9 @@ namespace Phobos
 
 		try
 		{  
-			RenderPtr_t render = Render_c::GetInstance();
+			Render_c &render = Render_c::GetInstance();
 
-			pclSceneManager = render->CreateSceneManager(Ogre::ST_GENERIC);
+			pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
 			pclCamera = pclSceneManager->createCamera("PH_ConsoleCamera");
 
 			// Create background rectangle covering the whole screen
@@ -220,7 +220,7 @@ namespace Phobos
 			pclRenderInfoOverlay = overlayManager.getByName("Core/RenderInfoOverlay");
 			pclRenderInfoOverlay->show();
 
-			render->AddViewport(pclCamera, INT_MIN);
+			render.AddViewport(pclCamera, INT_MIN);
 		}
 		catch(Ogre::Exception &)
 		{
@@ -257,7 +257,7 @@ namespace Phobos
 			OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("Core/BestFps");
 			OverlayElement* guiWorst = OverlayManager::getSingleton().getOverlayElement("Core/WorstFps");
 
-			const RenderTarget::FrameStats& stats = Render_c::GetInstance()->GetFrameStats();
+			const RenderTarget::FrameStats& stats = Render_c::GetInstance().GetFrameStats();
 			guiAvg->setCaption(avgFps + StringConverter::toString(stats.avgFPS));
 			guiCurr->setCaption(currFps + StringConverter::toString(stats.lastFPS));
 			guiBest->setCaption(bestFps + StringConverter::toString(stats.bestFPS)

@@ -31,11 +31,10 @@ namespace Phobos
 		public:
 			static BootModulePtr_t Create(const String_c &cfgName, CoreModuleManager_c &manager);
 
+			BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager);
+
 			void OnUpdate();			
 			void OnFixedUpdate();
-
-		protected:
-			BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager);
 
 		private:
 			String_c strCfgName;

@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 January 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -28,6 +28,7 @@ subject to the following restrictions:
 #include <boost/range/iterator.hpp>
 #endif
 
+#include "PH_DisableCopy.h"
 #include "PH_NodeFwd.h"
 #include "PH_NodeProperty.h"
 #include "PH_Object.h"
@@ -45,17 +46,22 @@ namespace Phobos
 
 	class Path_c;
 
-	enum ChildrenMode_e
+	namespace NodeFlags
 	{
-	   PRIVATE_CHILDREN,
-	   PUBLIC_CHILDREN
-	};	
+		enum Enum
+		{
+			PRIVATE_CHILDREN = 0x01,
+			MANAGED = 0x02
+		};
+	}	
 
 	class PH_KERNEL_API Node_c: public Object_c
 	{
+		PH_DISABLE_COPY(Node_c);
+
 		public:
-			typedef std::map<String_c, NodePtr_t> NodeMap_t;
-			typedef std::pair<String_c, NodePtr_t> NodeMapPair_t;
+			typedef std::map<String_c, Node_c *> NodeMap_t;
+			typedef std::pair<String_c, Node_c *> NodeMapPair_t;
 
 			typedef NodeMap_t::iterator iterator;
 			typedef NodeMap_t::const_iterator const_iterator;
@@ -67,16 +73,16 @@ namespace Phobos
 			static NodePtr_t Create(const Char_t *name);
 	
 			~Node_c();
-			explicit Node_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit Node_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);
+			explicit Node_c(const String_c &name, UInt32_t flags = 0);
+			explicit Node_c(const Char_t *name, UInt32_t flags = 0);
 
-			void AddChild(NodePtr_t node);
-			void RemoveChild(NodePtr_t node);
+			void AddChild(Node_c &node);
+			void RemoveChild(Node_c &node);
 			void RemoveAllChildren();
-			NodePtr_t GetChild(const String_c &name) const;
-			NodePtr_t TryGetChild(const String_c &name) const;
+			Node_c &GetChild(const String_c &name) const;
+			Node_c *TryGetChild(const String_c &name) const;
 
-			NodePtr_t LookupNode(const Path_c &name) const;
+			Node_c &LookupNode(const Path_c &name) const;
 
 			/**
 				\returns: true if the process completed normally, false if an error ocurred. Note that a true
@@ -87,16 +93,16 @@ namespace Phobos
 				If the returned value is true, but \param result is still null, this means that the object was not found, but the 
 				request was processed without errors.
 			*/
-			bool TryLookupNode(NodePtr_t &result, const Path_c &name) const;
+			bool TryLookupNode(Node_c *&result, const Path_c &name) const;
 
-			void AddNode(NodePtr_t ptr, const Path_c &path);
+			void AddNode(Node_c &ptr, const Path_c &path);
 
 			void RemoveSelf();
 
 			size_t GetNumChildren() const;
 			bool HasChildren() const;
 
-			NodePtr_t GetParent() const;
+			Node_c *GetParent() const;
 
 			void GetThisPath(Path_c &out);
 
@@ -115,8 +121,10 @@ namespace Phobos
 				return static_cast<T &>(this->GetProperty(name));
 			}
 
+			inline void SetManaged(bool value);
+
 		protected:			
-			void AddPrivateChild(NodePtr_t node);
+			void AddPrivateChild(Node_c &node);
 
 			inline NodeMap_t::iterator begin();
 			inline NodeMap_t::iterator end();
@@ -142,6 +150,7 @@ namespace Phobos
 			Node_c *pclParent;
 
 			bool fPrivateChildren;
+			bool fManagedNode;
 	};
 
 	inline Node_c::NodeMap_t::const_iterator Node_c::begin() const
@@ -167,6 +176,11 @@ namespace Phobos
 	inline const Node_c::NodeMap_t &Node_c::GetNodes() const
 	{
 		return mapNodes;
+	}
+
+	inline void Node_c::SetManaged(bool value)
+	{
+		fManagedNode = value;
 	}
 
 #ifdef PH_NODE_FOREACH

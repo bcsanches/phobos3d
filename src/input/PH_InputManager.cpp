@@ -26,6 +26,8 @@ subject to the following restrictions:
 #include <PH_Kernel.h>
 #include <PH_Path.h>
 
+#include "PH_InputDevice.h"
+
 namespace Phobos
 {
 	static const String_c strKeyboardName_gl("kb");
@@ -34,22 +36,22 @@ namespace Phobos
 
 	PH_DEFINE_SINGLETON_VAR(InputManager);
 
-	InputManagerPtr_t InputManager_c::CreateInstance(const String_c &name)
+	InputManager_c &InputManager_c::CreateInstance(const String_c &name)
 	{
 		PH_ASSERT_MSG(!ipInstance_gl, "[InputManager_c::CreateInstance]: Instance already exists");
 
 		ipInstance_gl = InputManager_c::CreateInstanceImpl(name);
 
-		Kernel_c::GetInstance().AddObject(ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
+		Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
-	InputManagerPtr_t InputManager_c::GetInstance()
+	InputManager_c &InputManager_c::GetInstance()
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[InputManager_c::GetInstance]: Instance does not exists, use CreateInstance");
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void InputManager_c::ReleaseInstance()
@@ -61,7 +63,7 @@ namespace Phobos
 	}
 
 	InputManager_c::InputManager_c(const String_c &name):
-		Node_c(name, PRIVATE_CHILDREN)
+		Node_c(name, NodeFlags::PRIVATE_CHILDREN)
 	{
 	}
 
@@ -84,13 +86,13 @@ namespace Phobos
 	*/
 	void InputManager_c::UpdateDevices(void)
 	{
-		for(NodeMap_t::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			boost::static_pointer_cast<InputDevice_c>(it->second)->Update();
+			static_cast<InputDevice_c *>(it->second)->Update();
 		}
 	}
 
-	InputDevicePtr_t InputManager_c::GetDevice(const InputDeviceTypes_e deviceType, UInt_t id)
+	InputDevice_c &InputManager_c::GetDevice(const InputDeviceTypes_e deviceType, UInt_t id)
 	{
 		String_c name;
 
@@ -98,14 +100,14 @@ namespace Phobos
 
 		//Because children is private we can control the types that are added
 		//so we can safely do a static cast
-		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(name));
+		return static_cast<InputDevice_c &>(this->GetChild(name));
 	}
 
-	InputDevicePtr_t InputManager_c::GetDevice(const InputDeviceTypes_e deviceType)
+	InputDevice_c &InputManager_c::GetDevice(const InputDeviceTypes_e deviceType)
 	{
 		//Because children is private we can control the types that are added
 		//so we can safely do a static cast
-		return boost::static_pointer_cast<InputDevice_c>(this->GetChild(this->GetDeviceTypeName(deviceType)));
+		return static_cast<InputDevice_c &>(this->GetChild(this->GetDeviceTypeName(deviceType)));
 	}
 
 	/**
@@ -113,7 +115,7 @@ namespace Phobos
 
 
 	*/
-	void InputManager_c::AttachDevice(InputDevicePtr_t device, UInt_t id)
+	void InputManager_c::AttachDevice(InputDevice_c &device, UInt_t id)
 	{
 		//InputDeviceTypes_e	type = device->GetDeviceType();
 		//Kernel_c			&kernel = Kernel_c::GetInstance();
@@ -136,9 +138,9 @@ namespace Phobos
 
 	void InputManager_c::AddListenerToDevice(const String_c &deviceName, InputDeviceListener_c &listener)
 	{
-		InputDevicePtr_t ptr = boost::static_pointer_cast<InputDevice_c>(this->GetChild(deviceName));
+		InputDevice_c &device = static_cast<InputDevice_c &>(this->GetChild(deviceName));
 
-		ptr->AddListener(listener);
+		device.AddListener(listener);
 	}
 
 	const String_c &InputManager_c::GetDeviceTypeName(InputDeviceTypes_e type)

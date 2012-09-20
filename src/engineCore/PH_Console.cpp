@@ -38,9 +38,9 @@ namespace Phobos
 {
 	ConsolePtr_t Console_c::ipInstance_gl;
 	
-	ConsolePtr_t Console_c::GetInstance(void)
+	Console_c &Console_c::GetInstance(void)
 	{
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void Console_c::ReleaseInstance(void)
@@ -48,8 +48,8 @@ namespace Phobos
 		ipInstance_gl.reset();
 	}
 			
-	Console_c::Console_c(const String_c &name, ChildrenMode_e childrenMode):
-		CoreModule_c(name, childrenMode),
+	Console_c::Console_c(const String_c &name, UInt32_t flags):
+		CoreModule_c(name, flags),
 		cmdLs("ls"),
 		cmdCd("cd"),
 		cmdDumpTable("dumpTable"),
@@ -61,14 +61,14 @@ namespace Phobos
 		fIgnoredLastChar(false),		
 		fActive(true)
 	{
-		InputManager_c::CreateInstance("InputManager")->AddListener(*this);
+		InputManager_c::CreateInstance("InputManager").AddListener(*this);
 
 		Kernel_c::GetInstance().AddLogListener(*this);
 
 		ipInputMapper = InputMapper_c::Create("InputMapper", clContext);
 		ipInputMapper->Disable();
 
-		this->AddChild(ipInputMapper);
+		this->AddChild(*ipInputMapper);
 
 		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
 		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
@@ -228,7 +228,7 @@ namespace Phobos
 
 	void Console_c::OnFixedUpdate()
 	{
-		InputManager_c::GetInstance()->Update();
+		InputManager_c::GetInstance().Update();
 	}
 
 	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)
@@ -238,13 +238,13 @@ namespace Phobos
 		switch(event.eType)
 		{
 			case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-				stream << "[Console_c::InputManagerEvent] Device " << event.ipDevice->GetName() << " attached.";
-				if(event.ipDevice->GetDeviceType() == INPUT_DEVICE_KEYBOARD)
-					event.ipDevice->AddListener(*this);
+				stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " attached.";
+				if(event.rclDevice.GetDeviceType() == INPUT_DEVICE_KEYBOARD)
+					event.rclDevice.AddListener(*this);
 				break;
 
 			case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
-				stream << "[Console_c::InputManagerEvent] Device " << event.ipDevice->GetName() << " detached.";
+				stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " detached.";
 				break;
 		}
 
@@ -315,7 +315,7 @@ namespace Phobos
 	void Console_c::CmdLs(const StringVector_t &args, Context_c &)
 	{
 		Kernel_c	&kernel = Kernel_c::GetInstance();
-		NodePtr_t	currentNode;
+		Node_c		*currentNode;
 
 		if(args.size() > 1)
 		{
@@ -329,7 +329,7 @@ namespace Phobos
 
 			try
 			{
-				currentNode = kernel.LookupObject(path);
+				currentNode = &kernel.LookupObject(path);
 			}
 			catch(ObjectNotFoundException_c &)
 			{
@@ -342,7 +342,7 @@ namespace Phobos
 		{
 			try
 			{
-				currentNode = kernel.LookupObject(Path_c(strCurrentNodePathName));
+				currentNode = &kernel.LookupObject(Path_c(strCurrentNodePathName));
 			}
 			catch(ObjectNotFoundException_c &)
 			{
@@ -369,7 +369,7 @@ namespace Phobos
 		if(args.size() == 2)
 		{
 			Kernel_c	&kernel = Kernel_c::GetInstance();
-			NodePtr_t	currentNode;
+			Node_c		*currentNode;
 			Path_c		path(args[1]);
 
 			if(path.IsRelative())
@@ -380,7 +380,7 @@ namespace Phobos
 
 			try
 			{
-				currentNode = kernel.LookupObject(path);
+				currentNode = &kernel.LookupObject(path);
 				currentNode->GetThisPath(path);
 
 				//if we are at root, we set the path manually, otherwise the path will be empty
@@ -404,15 +404,15 @@ namespace Phobos
 
 		try
 		{
-			DictionaryPtr_t dict;
+			Dictionary_c *dict;
 			if(args.size() == 2)
 			{
-				dict = DictionaryManager_c::GetInstance()->GetDictionary(Path_c(args[1]));
+				dict = &DictionaryManager_c::GetInstance().GetDictionary(Path_c(args[1]));
 				stream << "Values on " << args[1] << '\n';
 			}
 			else if(args.size() == 3)
 			{
-				dict = DictionaryManager_c::GetInstance()->GetDictionary(args[1], args[2]);
+				dict = &DictionaryManager_c::GetInstance().GetDictionary(args[1], args[2]);
 				stream << "Values on " << args[2];
 			}
 			else

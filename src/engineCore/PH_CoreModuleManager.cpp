@@ -23,6 +23,7 @@ subject to the following restrictions:
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 
 #include "PH_BootModule.h"
 
@@ -30,11 +31,11 @@ namespace Phobos
 {	
 	CoreModuleManagerPtr_t CoreModuleManager_c::Create(const String_c &name)
 	{
-		return CoreModuleManagerPtr_t(new CoreModuleManager_c(name));
+		return CoreModuleManagerPtr_t(PH_NEW CoreModuleManager_c(name));
 	}
 
-	CoreModuleManager_c::CoreModuleManager_c(const Phobos::String_c &name, ChildrenMode_e mode):
-		CoreModule_c(name, mode),
+	CoreModuleManager_c::CoreModuleManager_c(const Phobos::String_c &name, UInt32_t flags):
+		CoreModule_c(name, flags),
 		fLaunchedBoot(false),
 		fPendingSort(false),
 		fPendingRemoveErase(false)
@@ -58,12 +59,12 @@ namespace Phobos
 
 	void CoreModuleManager_c::OnPrepareToBoot()
 	{
-		this->OnEvent(CORE_EVENT_PREPARE_TO_BOOT);
+		this->OnEvent(CoreEvents::PREPARE_TO_BOOT);
 	}
 
 	void CoreModuleManager_c::OnBoot()
 	{
-		this->OnEvent(CORE_EVENT_BOOT);
+		this->OnEvent(CoreEvents::BOOT);
 	}
 
 	void CoreModuleManager_c::OnUpdate()
@@ -86,12 +87,12 @@ namespace Phobos
 
 	void CoreModuleManager_c::OnRenderReady()
 	{
-		this->OnEvent(CORE_EVENT_RENDER_READY);
+		this->OnEvent(CoreEvents::RENDER_READY);
 	}
 
 	void CoreModuleManager_c::OnFinalize()
 	{				
-		this->OnEvent(CORE_EVENT_FINALIZE);
+		this->OnEvent(CoreEvents::FINALIZE);
 		this->DispatchEvents();
 		this->UpdateDestroyList();			
 	}
@@ -100,17 +101,17 @@ namespace Phobos
 	{
 		for(size_t i = 0, len = vecModules.size();i < len; ++i)		
 		{	
-			if(!vecModules[i].ipModule)
+			if(!vecModules[i].pclModule)
 				continue;
 
-			((*vecModules[i].ipModule).*proc)();
+			((*vecModules[i].pclModule).*proc)();
 		}
 	}
 
-	void CoreModuleManager_c::AddModule(CoreModulePtr_t module, UInt32_t priority)
+	void CoreModuleManager_c::AddModule(CoreModule_c &module, UInt32_t priority)
 	{
-		if(priority == BOOT_MODULE_PRIORITY && (dynamic_cast<BootModule_c *>(module.get()) == NULL))
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CoreModuleManager_c::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module->GetName());
+		if((priority == CoreModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule_c *>(&module) == NULL))
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CoreModuleManager_c::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module.GetName());
 
 		this->AddPrivateChild(module);		
 
@@ -129,7 +130,7 @@ namespace Phobos
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "CoreModuleManager_c::AddModuleToDestroyList", stream.str());
 		}
 		
-		setModulesToDestroy.insert(it->ipModule);
+		setModulesToDestroy.insert(it->pclModule);
 	}
 
 	void CoreModuleManager_c::RemoveModule(CoreModule_c &module)
@@ -142,9 +143,10 @@ namespace Phobos
 
 			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "CoreModuleManager_c::AddModuleToDestroyList", stream.str());
 		}
-
-		this->RemoveChild(it->ipModule);
-		it->ipModule.reset();
+		
+		
+		this->RemoveChild(module);		
+		it->pclModule = NULL;
 		fPendingRemoveErase = true;
 	}	
 
@@ -156,21 +158,21 @@ namespace Phobos
 			vecModules.erase(std::remove_if(vecModules.begin(), vecModules.end(), ModuleInfo_s::IsNull));
 		}
 
-		BOOST_FOREACH(CoreModulePtr_t ptr, setModulesToDestroy)
+		BOOST_FOREACH(CoreModule_c *ptr, setModulesToDestroy)
 		{			
-			ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), ptr);
+			ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), *ptr);
 
 			PH_ASSERT_MSG(it != vecModules.end(), "Module on removed list is not registered!!!");
 						
 			vecModules.erase(it);
-			this->RemoveChild(ptr);
+			this->RemoveChild(*ptr);
 			ptr->OnFinalize();
 		}
 
 		setModulesToDestroy.clear();
 	}
 
-	void CoreModuleManager_c::OnEvent(CoreEvents_e event)
+	void CoreModuleManager_c::OnEvent(CoreEvents::Enum event)
 	{
 		vecEvents.push_back(event);
 	}
@@ -184,23 +186,23 @@ namespace Phobos
 		EventsVector_t tmp;
 		tmp.swap(vecEvents);
 
-		BOOST_FOREACH(CoreEvents_e event, tmp)
+		BOOST_FOREACH(CoreEvents::Enum event, tmp)
 		{
 			switch(event)
 			{
-				case CORE_EVENT_PREPARE_TO_BOOT:
+			case CoreEvents::PREPARE_TO_BOOT:
 					this->CallCoreModuleProc(&CoreModule_c::OnPrepareToBoot);
 					break;
 
-				case CORE_EVENT_BOOT:
+				case CoreEvents::BOOT:
 					this->CallCoreModuleProc(&CoreModule_c::OnBoot);
 					break;
 
-				case CORE_EVENT_RENDER_READY:
+				case CoreEvents::RENDER_READY:
 					this->CallCoreModuleProc(&CoreModule_c::OnRenderReady);
 					break;
 
-				case CORE_EVENT_FINALIZE:
+				case CoreEvents::FINALIZE:
 					this->CallCoreModuleProc(&CoreModule_c::OnFinalize);
 					break;
 
@@ -216,7 +218,10 @@ namespace Phobos
 		if(fLaunchedBoot)
 			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core_c::LaunchBootModule", "Boot module already launched");
 
-		this->AddModule(BootModule_c::Create(cfgName, *this), HIGHEST_PRIORITY);
+		std::auto_ptr<CoreModule_c> ptr(PH_NEW BootModule_c(cfgName, *this));
+		this->AddModule(*ptr, CoreModulePriorities::BOOT_MODULE);
+
+		ptr.release();
 	}	
 
 	void CoreModuleManager_c::LogCoreModules()
@@ -227,12 +232,12 @@ namespace Phobos
 		stream << "Core modules start: " << endl;		
 		BOOST_FOREACH(ModuleInfo_s &m, vecModules)
 		{			
-			if(!m.ipModule)
+			if(!m.pclModule)
 				continue;			
 
-			stream << '\t' << m.ipModule->GetName() << ' ' << m.u32Priority << endl;			
+			stream << '\t' << m.pclModule->GetName() << ' ' << m.u32Priority << endl;			
 
-			CoreModuleManagerPtr_t subModule = boost::dynamic_pointer_cast<CoreModuleManager_c>(m.ipModule);
+			CoreModuleManager_c *subModule = dynamic_cast<CoreModuleManager_c *>(m.pclModule);
 			if(subModule)
 			{
 				Kernel_c::GetInstance().LogMessage(stream.str());

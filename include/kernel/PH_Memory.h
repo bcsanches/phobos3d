@@ -14,25 +14,31 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Gui/PH_Manager.h"
+#ifndef PH_MEMORY_H
+#define PH_MEMORY_H
 
-#include <PH_Memory.h>
+#include <PH_Defs.h>
+#include <PH_KernelAPI.h>
 
-#include "Gui/PH_Context.h"
+#if (defined PH_WIN32)
+	#if (defined _DEBUG)
+		#define _CRTDBG_MAP_ALLOC
+		#include <stdlib.h>
+		#include <crtdbg.h>
 
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::Manager);
+		#ifndef PH_NEW      
+			#define PH_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )      				
+		#endif		
+	#else
+		#define PH_NEW new
+	#endif
+#endif
 
-Phobos::Gui::Manager_c::Manager_c():
-	CoreModule_c("GuiManager")
+namespace Phobos
 {
-	//empty
+	PH_KERNEL_API_PROC void DumpMemoryLeaks();
+	PH_KERNEL_API_PROC void EnableMemoryTracker();
+	PH_KERNEL_API_PROC bool BreakMemoryAllocation(long id);
 }
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
-{
-	ContextPtr_t ptr = Context_c::Create(name);
-
-	this->AddPrivateChild(*ptr);
-
-	return ptr;
-}
+#endif

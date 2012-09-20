@@ -101,12 +101,12 @@ namespace Phobos
 		void *pParam;
 	};
 
-	class PH_KERNEL_API EventManager_c: public Node_c, boost::noncopyable
+	class PH_KERNEL_API EventManager_c: public Node_c
 	{
 		public:	
-			static EventManagerPtr_t CreateInstance(const String_c &name);
+			static EventManager_c &CreateInstance(const String_c &name);
 			static void ReleaseInstance();
-			static EventManagerPtr_t GetInstance();	
+			static EventManager_c &GetInstance();	
 			static const String_c &GetDefaultName();
 
 		public:

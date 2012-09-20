@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 
 #include "PH_Console.h"
 #include "PH_Plugin.h"
@@ -28,18 +29,18 @@ namespace Phobos
 {
 	PluginManagerPtr_t PluginManager_c::ipInstance_gl;
 
-	PluginManagerPtr_t &PluginManager_c::CreateInstance(void)
+	PluginManager_c &PluginManager_c::CreateInstance(void)
 	{
 		PH_ASSERT(!ipInstance_gl);
 
-		ipInstance_gl.reset(new PluginManager_c());
+		ipInstance_gl.reset(PH_NEW PluginManager_c());
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
-	PluginManagerPtr_t &PluginManager_c::GetInstance(void)
+	PluginManager_c &PluginManager_c::GetInstance(void)
 	{
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void PluginManager_c::ReleaseInstance(void)
@@ -48,7 +49,7 @@ namespace Phobos
 	}
 
 	PluginManager_c::PluginManager_c():
-		CoreModule_c("PluginManager", PRIVATE_CHILDREN),
+		CoreModule_c("PluginManager", NodeFlags::PRIVATE_CHILDREN),
 		cmdLoadPlugin("loadPlugin"),
 		cmdUnloadPlugin("unloadPlugin"),
 		fSystemReady(false)
@@ -63,10 +64,10 @@ namespace Phobos
 
 	void PluginManager_c::OnPrepareToBoot()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdLoadPlugin);
-		console->AddContextCmd(cmdUnloadPlugin);
+		console.AddContextCmd(cmdLoadPlugin);
+		console.AddContextCmd(cmdUnloadPlugin);
 	}
 
 	void PluginManager_c::OnFinalize()
@@ -90,7 +91,7 @@ namespace Phobos
 			pluginName.swap(lstPluginsToActivate.front());
 			lstPluginsToActivate.pop_front();
 
-			PluginPtr_t plugin = boost::static_pointer_cast<Plugin_c>(this->TryGetChild(pluginName));
+			Plugin_c *plugin = static_cast<Plugin_c *>(this->TryGetChild(pluginName));
 			if(plugin)
 			{
 				plugin->Init();
@@ -100,7 +101,12 @@ namespace Phobos
 
 	void PluginManager_c::LoadPlugin(const String_c &name)
 	{
-		this->AddPrivateChild(Plugin_c::Create(name));
+		std::auto_ptr<Plugin_c> plugin(PH_NEW Plugin_c(name));
+		plugin->SetManaged(true);
+
+		this->AddPrivateChild(*plugin);
+
+		plugin.release();
 
 		lstPluginsToActivate.push_back(name);
 	}

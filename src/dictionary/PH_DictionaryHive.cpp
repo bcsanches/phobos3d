@@ -16,6 +16,7 @@ subject to the following restrictions:
 
 #include "PH_DictionaryHive.h"
 
+#include <PH_Memory.h>
 #include <PH_Parser.h>
 
 #include "PH_Dictionary.h"
@@ -25,11 +26,11 @@ namespace Phobos
 {
 	DictionaryHivePtr_t DictionaryHive_c::Create(const String_c &name)
 	{
-		return DictionaryHivePtr_t(new DictionaryHive_c(name));
+		return DictionaryHivePtr_t(PH_NEW DictionaryHive_c(name));
 	}
 
 	DictionaryHive_c::DictionaryHive_c(const String_c &name):
-		Node_c(name, PRIVATE_CHILDREN),
+		Node_c(name, NodeFlags::PRIVATE_CHILDREN),
 		uSequence(0)
 	{
 		//empty
@@ -39,9 +40,12 @@ namespace Phobos
 	{
 	}
 
-	void DictionaryHive_c::AddDictionary(DictionaryPtr_t dict)
+	void DictionaryHive_c::AddDictionary(std::auto_ptr<Dictionary_c> dict)
 	{
-		this->AddPrivateChild(dict);
+		dict->SetManaged(true);
+		this->AddPrivateChild(*dict);
+
+		dict.release();
 	}
 
 	void DictionaryHive_c::Load(Parser_c &parser)
@@ -100,7 +104,7 @@ namespace Phobos
 			parser.PushToken();
 		}		
 
-		DictionaryPtr_t dict = Dictionary_c::Create(dictName);
+		std::auto_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(dictName));		
 
 		if(!baseHive.empty())
 			dict->SetBaseHive(baseHive);
@@ -108,18 +112,18 @@ namespace Phobos
 		if(!inherit.empty())
 			dict->SetInherited(inherit);
 
-		dict->Load(parser);
+		dict->Load(parser);		
 
 		this->AddDictionary(dict);		
 	}
 
-	DictionaryPtr_t DictionaryHive_c::GetDictionary(const String_c &name)
+	Dictionary_c &DictionaryHive_c::GetDictionary(const String_c &name)
 	{
-		return boost::static_pointer_cast<Dictionary_c>(this->GetChild(name));
+		return static_cast<Dictionary_c &>(this->GetChild(name));
 	}
 
-	DictionaryPtr_t DictionaryHive_c::TryGetDictionary(const String_c &name)
+	Dictionary_c *DictionaryHive_c::TryGetDictionary(const String_c &name)
 	{
-		return boost::static_pointer_cast<Dictionary_c>(this->TryGetChild(name));
+		return static_cast<Dictionary_c *>(this->TryGetChild(name));
 	}
 }

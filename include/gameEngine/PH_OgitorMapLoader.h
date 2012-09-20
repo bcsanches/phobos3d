@@ -29,7 +29,7 @@ namespace Phobos
 	class OgitorMapLoader_c: public MapLoader_c
 	{
 		public:
-			static MapLoaderPtr_t Create(const Dictionary_c &settings);
+			static MapLoader_c *Create(const Dictionary_c &settings);
 
 			void Load(const String_c &fileName);	
 

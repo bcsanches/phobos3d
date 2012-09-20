@@ -19,6 +19,9 @@ subject to the following restrictions:
 
 #include "PH_InputManager.h"
 
+#include "SDL/PH_KeyboardInputDeviceSDL.h"
+#include "SDL/PH_MouseInputDeviceSDL.h"
+
 namespace Phobos
 {
 	class InputManagerSDL_c: public InputManager_c
@@ -32,6 +35,9 @@ namespace Phobos
 			friend class InputManager_c;
 
 		private:
+			KeyboardInputDeviceSDL_c	clKeyboardDevice;
+			MouseInputDeviceSDL_c		clMouseDevice;
+
 			bool fPooled;
 	};
 }

@@ -23,15 +23,15 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	EntityIO_c::EntityIO_c(const String_c &name, ChildrenMode_e mode):
-		Node_c(name, mode),
+	EntityIO_c::EntityIO_c(const String_c &name, UInt32_t flags):
+		Node_c(name, flags),
 		fFixedUpdateEnabled(false),
 		fUpdateEnabled(false)
 	{
 	}
 
-	EntityIO_c::EntityIO_c(const Char_t *name, ChildrenMode_e mode):
-		Node_c(name, mode),
+	EntityIO_c::EntityIO_c(const Char_t *name, UInt32_t flags):
+		Node_c(name, flags),
 		fFixedUpdateEnabled(false),
 		fUpdateEnabled(false)
 	{
@@ -39,17 +39,17 @@ namespace Phobos
 
 	EntityIO_c::~EntityIO_c()
 	{
-		GameEventManager_c::GetInstance()->CancelEvents(*this);		
+		GameEventManager_c::GetInstance().CancelEvents(*this);		
 
 		if(fFixedUpdateEnabled || fUpdateEnabled)
 		{
-			WorldManagerPtr_t world = WorldManager_c::GetInstance();
+			WorldManager_c &world = WorldManager_c::GetInstance();
 
 			if(fFixedUpdateEnabled)
-				world->RemoveFromFixedUpdateList(*this);
+				world.RemoveFromFixedUpdateList(*this);
 
 			if(fUpdateEnabled)
-				world->RemoveFromUpdateList(*this);
+				world.RemoveFromUpdateList(*this);
 		}
 	}
 
@@ -68,7 +68,7 @@ namespace Phobos
 		if(fFixedUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance()->AddToFixedUpdateList(*this);
+		WorldManager_c::GetInstance().AddToFixedUpdateList(*this);
 		fFixedUpdateEnabled = true;
 	}
 
@@ -77,7 +77,7 @@ namespace Phobos
 		if(fUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance()->AddToUpdateList(*this);
+		WorldManager_c::GetInstance().AddToUpdateList(*this);
 		fUpdateEnabled = true;
 	}
 
@@ -86,7 +86,7 @@ namespace Phobos
 		if(!fFixedUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance()->RemoveFromFixedUpdateList(*this);
+		WorldManager_c::GetInstance().RemoveFromFixedUpdateList(*this);
 		fFixedUpdateEnabled = false;
 	}
 
@@ -95,7 +95,7 @@ namespace Phobos
 		if(!fUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance()->RemoveFromUpdateList(*this);
+		WorldManager_c::GetInstance().RemoveFromUpdateList(*this);
 		fUpdateEnabled = false;
 	}
 

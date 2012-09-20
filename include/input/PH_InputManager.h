@@ -24,10 +24,13 @@ subject to the following restrictions:
 #include <PH_Types.h>
 
 #include "PH_InputDefs.h"
-#include "PH_InputDevice.h"
+#include "PH_InputDeviceListener.h"
 
 namespace Phobos
 {
+	class InputDevice_c;
+	class InputDeviceListener_c;
+
 	enum InputManagerEventType_e
 	{
 		INPUT_MANAGER_EVENT_DEVICE_ATTACHED,
@@ -37,11 +40,11 @@ namespace Phobos
 	struct InputManagerEvent_s
 	{
 		InputManagerEventType_e eType;
-		InputDevicePtr_t	ipDevice;
+		InputDevice_c			&rclDevice;
 
-		inline InputManagerEvent_s(InputManagerEventType_e type, InputDevicePtr_t device):
+		inline InputManagerEvent_s(InputManagerEventType_e type, InputDevice_c &device):
 			eType(type),
-			ipDevice(device)
+			rclDevice(device)
 
 		{
 		}
@@ -72,8 +75,8 @@ namespace Phobos
 
 			void AddListenerToDevice(const String_c &deviceName,  InputDeviceListener_c &listener);
 
-			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
-			InputDevicePtr_t GetDevice(const InputDeviceTypes_e deviceType);
+			InputDevice_c &GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
+			InputDevice_c &GetDevice(const InputDeviceTypes_e deviceType);
 
 			PH_DECLARE_LISTENER_PROCS(InputManagerListener_c);
 
@@ -86,8 +89,8 @@ namespace Phobos
 
 			virtual void PollDevices(void) = 0;
 
-			void AttachDevice(InputDevicePtr_t device, UInt_t id);
-			void DetachDevice(InputDevicePtr_t device);
+			void AttachDevice(InputDevice_c &device, UInt_t id);
+			void DetachDevice(InputDevice_c &device);
 
 		private:
 			// =====================================================

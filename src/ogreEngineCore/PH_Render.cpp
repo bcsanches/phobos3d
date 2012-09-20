@@ -32,6 +32,7 @@ subject to the following restrictions:
 #include <PH_EventManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_Path.h>
 #include <PH_String.h>
 
@@ -116,13 +117,13 @@ namespace Phobos
 			Ogre::RTShader::ShaderGenerator &rclShaderGenerator;
 	};
 
-	RenderPtr_t Render_c::CreateInstance()
+	Render_c &Render_c::CreateInstance()
 	{
 		PH_ASSERT(ipInstance_gl == NULL);
 
-		ipInstance_gl.reset(new Render_c());
+		ipInstance_gl.reset(PH_NEW Render_c());
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void Render_c::ReleaseInstance()
@@ -130,11 +131,11 @@ namespace Phobos
 		ipInstance_gl.reset();
 	}
 
-	RenderPtr_t Render_c::GetInstance()
+	Render_c &Render_c::GetInstance()
 	{
 		PH_ASSERT_VALID(ipInstance_gl);
 
-		return(ipInstance_gl);
+		return(*ipInstance_gl);
 	}
 
 	Render_c::Render_c(void):
@@ -225,9 +226,7 @@ namespace Phobos
 		for(StringList_t::iterator it = lstPluginsName.begin(), end = lstPluginsName.end(); it != end; ++it)
 			spRoot->loadPlugin(*it);
 
-		lstPluginsName.clear();
-
-		ipWindow->SetEventManager(EventManager_c::GetInstance());
+		lstPluginsName.clear();		
 
 		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());
 		Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
@@ -306,7 +305,7 @@ namespace Phobos
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
 		kernel.LogMessage("[Render_c::OnBoot] Ready.");
-		Core_c::GetInstance()->OnEvent(CORE_EVENT_RENDER_READY);
+		Core_c::GetInstance().OnEvent(CoreEvents::RENDER_READY);
 	}
 
 	void Render_c::OnUpdate(void)
@@ -351,25 +350,25 @@ namespace Phobos
 
 	void Render_c::OnPrepareToBoot()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdOgreAddResourceLocation);
-		console->AddContextCmd(cmdOgreInitialiseResourceGroup);
-		console->AddContextCmd(cmdOgreLoadPlugin);
-		console->AddContextCmd(cmdScreenshot);
+		console.AddContextCmd(cmdOgreAddResourceLocation);
+		console.AddContextCmd(cmdOgreInitialiseResourceGroup);
+		console.AddContextCmd(cmdOgreLoadPlugin);
+		console.AddContextCmd(cmdScreenshot);
 
-		console->AddContextCmd(cmdSetShadowMode);
-		console->AddContextCmd(cmdSetShadowFarDistance);
+		console.AddContextCmd(cmdSetShadowMode);
+		console.AddContextCmd(cmdSetShadowFarDistance);
 
-		console->AddContextVar(varRScreenX);
-		console->AddContextVar(varRScreenY);
-		console->AddContextVar(varRFullScreen);
-		console->AddContextVar(varRVSync);
-		console->AddContextVar(varRRenderSystem);
-		console->AddContextVar(varRCaelum);
+		console.AddContextVar(varRScreenX);
+		console.AddContextVar(varRScreenY);
+		console.AddContextVar(varRFullScreen);
+		console.AddContextVar(varRVSync);
+		console.AddContextVar(varRRenderSystem);
+		console.AddContextVar(varRCaelum);
 
-		console->AddContextVar(varRShaderSystem);
-		console->AddContextVar(varRShaderSystemLibPath);
+		console.AddContextVar(varRShaderSystem);
+		console.AddContextVar(varRShaderSystemLibPath);
 	}
 
 	//
@@ -759,10 +758,10 @@ namespace Phobos
 			else if((tech == Ogre::SHADOWTYPE_TEXTURE_ADDITIVE) || (tech == Ogre::SHADOWTYPE_TEXTURE_MODULATIVE))
 			{
 				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_DIRECTIONAL, 1);
-				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_POINT, 3);
+				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_POINT, 6);
 				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_SPOTLIGHT, 3);
 
-				pclMainSceneManager->setShadowTextureSettings(512, 3, Ogre::PF_FLOAT32_R);
+				pclMainSceneManager->setShadowTextureSettings(512, 18, Ogre::PF_FLOAT32_R);
 				pclMainSceneManager->setShadowTextureSelfShadow(true);
 				pclMainSceneManager->setShadowColour(Ogre::ColourValue(0.1f, 0.5f, 0.1f));
 				pclMainSceneManager->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::DefaultShadowCameraSetup()));
@@ -770,10 +769,10 @@ namespace Phobos
 			else if(tech == Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED)
 			{
 				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_DIRECTIONAL, 3);
-				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_POINT, 3);
+				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_POINT, 6);
 				pclMainSceneManager->setShadowTextureCountPerLightType(Ogre::Light::LT_SPOTLIGHT, 3);
 
-				pclMainSceneManager->setShadowTextureSettings(512, 3, Ogre::PF_FLOAT32_R);
+				pclMainSceneManager->setShadowTextureSettings(512, 18, Ogre::PF_FLOAT32_R);
 				pclMainSceneManager->setShadowTextureSelfShadow(true);
 
 				pclMainSceneManager->setShadowTextureCasterMaterial("PSSM/shadow_caster");

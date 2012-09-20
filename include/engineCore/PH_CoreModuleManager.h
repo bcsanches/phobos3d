@@ -27,24 +27,30 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(CoreModuleManager);
 
-	enum CoreModulePriorities_e
+	namespace CoreModulePriorities
 	{
-		LOWEST_PRIORITY			= 0,
-		LOW_PRIORITY			= 0xFF,
-		MEDIUM_PRIORITY			= 0xFFF,
-		NORMAL_PRIORITY			= 0xFFFF,
-		HIGH_PRIORITY			= 0xFFFFF,
-		HIGHEST_PRIORITY		= 0xFFFFFFF,
-		BOOT_MODULE_PRIORITY	= 0xFFFFFFFF
-	};
+		enum Enum
+		{		
+			LOWEST		= 0,
+			LOW			= 0xFF,
+			MEDIUM		= 0xFFF,
+			NORMAL		= 0xFFFF,
+			HIGH		= 0xFFFFF,
+			HIGHEST		= 0xFFFFFFF,
+			BOOT_MODULE	= 0xFFFFFFFF
+		};
+	}
 
-	enum CoreEvents_e
+	namespace CoreEvents
 	{
-		CORE_EVENT_PREPARE_TO_BOOT,
-		CORE_EVENT_BOOT,
-		CORE_EVENT_RENDER_READY,
-		CORE_EVENT_FINALIZE
-	};
+		enum Enum
+		{
+			PREPARE_TO_BOOT,
+			BOOT,
+			RENDER_READY,
+			FINALIZE
+		};
+	}
 
 	class PH_ENGINE_CORE_API CoreModuleManager_c: public CoreModule_c
 	{
@@ -53,18 +59,18 @@ namespace Phobos
 
 			~CoreModuleManager_c();
 
-			void AddModule(CoreModulePtr_t module, UInt32_t priority = NORMAL_PRIORITY);
+			void AddModule(CoreModule_c &module, UInt32_t priority = CoreModulePriorities::NORMAL);
 			void AddModuleToDestroyList(CoreModule_c &module);
 			void RemoveModule(CoreModule_c &module);
 
-			void OnEvent(CoreEvents_e event);
+			void OnEvent(CoreEvents::Enum event);
 
 			void LaunchBootModule(const String_c &cfgName);
 
 			void LogCoreModules();
 
 		protected:
-			CoreModuleManager_c(const String_c &name, ChildrenMode_e=PRIVATE_CHILDREN);			
+			CoreModuleManager_c(const String_c &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);			
 
 			virtual void OnUpdate();
 			virtual void OnFixedUpdate();
@@ -84,22 +90,22 @@ namespace Phobos
 			struct ModuleInfo_s
 			{
 				UInt32_t u32Priority;
-				CoreModulePtr_t ipModule;
+				CoreModule_c *pclModule;
 
 				static inline bool IsNull(const ModuleInfo_s &info)
 				{
-					return !info.ipModule;
+					return !info.pclModule;
 				}
 
-				inline ModuleInfo_s(CoreModulePtr_t module, UInt32_t priority):
+				inline ModuleInfo_s(CoreModule_c &module, UInt32_t priority):
 					u32Priority(priority),
-					ipModule(module)
+					pclModule(&module)
 				{
 				}
 
 				inline ModuleInfo_s(const ModuleInfo_s &rhs):
 					u32Priority(rhs.u32Priority),
-					ipModule(rhs.ipModule)
+					pclModule(rhs.pclModule)
 				{
 				}
 
@@ -110,23 +116,23 @@ namespace Phobos
 
 				inline bool operator==(const CoreModule_c &module) const
 				{
-					return ipModule.get() == &module;
+					return pclModule == &module;
 				}
 
-				inline bool operator==(const CoreModulePtr_t module) const
+				inline bool operator==(const ModuleInfo_s &info) const
 				{
-					return ipModule == module;
+					return pclModule == info.pclModule;
 				}
 			};
 
 			typedef std::vector<ModuleInfo_s>	ModulesVector_t;
 			ModulesVector_t						vecModules;
 
-			typedef std::set<CoreModulePtr_t>	ModulesSet_t;
+			typedef std::set<CoreModule_c *>	ModulesSet_t;
 			ModulesSet_t						setModulesToDestroy;
 
-			typedef std::vector<CoreEvents_e>	EventsVector_t;
-			EventsVector_t						vecEvents;
+			typedef std::vector<CoreEvents::Enum>	EventsVector_t;
+			EventsVector_t							vecEvents;
 
 			bool								fLaunchedBoot;
 			bool								fPendingSort;

@@ -35,12 +35,10 @@ namespace Phobos
 		public:
 			static PluginPtr_t Create(const String_c &name);
 
+			Plugin_c(const String_c &name);
 			~Plugin_c();
 
 			void Init();
-
-		private:
-			Plugin_c(const String_c &name);			
 
 		private:
 			DynamicLibrary_c	clLibrary;

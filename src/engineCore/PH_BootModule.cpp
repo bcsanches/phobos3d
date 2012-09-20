@@ -18,6 +18,7 @@ subject to the following restrictions:
 
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 
 #include "PH_Console.h"
 #include "PH_CoreModuleManager.h"
@@ -26,7 +27,7 @@ namespace Phobos
 {
 	BootModulePtr_t BootModule_c::Create(const String_c &cfgName, CoreModuleManager_c &manager)
 	{
-		return BootModulePtr_t(new BootModule_c(cfgName, manager));
+		return BootModulePtr_t(PH_NEW BootModule_c(cfgName, manager));
 	}
 
 	BootModule_c::BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager):
@@ -49,7 +50,7 @@ namespace Phobos
 			//First time, tell the system that we are ready to go
 			if(!fPrepareFired)
 			{
-				rclManager.OnEvent(CORE_EVENT_PREPARE_TO_BOOT);
+				rclManager.OnEvent(CoreEvents::PREPARE_TO_BOOT);
 				fPrepareFired = true;
 
 				//restart count
@@ -60,7 +61,7 @@ namespace Phobos
 			{
 				try
 				{
-					Console_c::GetInstance()->ExecuteFromFile(strCfgName);
+					Console_c::GetInstance().ExecuteFromFile(strCfgName);
 				}
 				catch(FileNotFoundException_c &e)
 				{
@@ -68,11 +69,14 @@ namespace Phobos
 				}
 
 				//Time to boot and game over for us
-				rclManager.OnEvent(CORE_EVENT_BOOT);
+				rclManager.OnEvent(CoreEvents::BOOT);
 
 				fBootFired = true;
 
 				rclManager.RemoveModule(*this);
+
+				//suicide
+				delete this;
 			}
 		}
 	}

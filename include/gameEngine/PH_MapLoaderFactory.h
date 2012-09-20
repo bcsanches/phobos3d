@@ -33,7 +33,7 @@ namespace Phobos
 
 			MapLoaderPtr_t Create(const String_c &type);
 
-			void Register(Phobos::ObjectCreator1_c<Phobos::MapLoaderPtr_t, Dictionary_c, Phobos::MapLoaderFactory_c> &creator)
+			void Register(Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Dictionary_c, Phobos::MapLoaderFactory_c> &creator)
 			{
 				clFactory.Register(creator);
 			}
@@ -49,7 +49,7 @@ namespace Phobos
 			DictionaryHivePtr_t	ipDynamicEntitiesHive;
 			DictionaryHivePtr_t ipCurrentLevelHive;
 
-			GenericFactory1_c<ObjectCreator1_c<MapLoaderPtr_t, Dictionary_c, MapLoaderFactory_c>, Dictionary_c > clFactory;			
+			GenericFactory1_c<ObjectCreator1_c<MapLoader_c, Dictionary_c, MapLoaderFactory_c>, Dictionary_c > clFactory;			
 	};
 
 	inline const DictionaryHive_c &MapLoaderFactory_c::GetStaticEntitiesHive() const
@@ -64,13 +64,13 @@ namespace Phobos
 }
 
 #define PH_MAP_LOADER_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1_c<Phobos::MapLoaderPtr_t, Dictionary_c, Phobos::MapLoaderFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+	static Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Dictionary_c, Phobos::MapLoaderFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
 
-#define PH_FULL_MAP_LOADER_CREATOR(NAME, TYPE)  								\
-	PH_MAP_LOADER_CREATOR(NAME, TYPE);											\
-	Phobos::MapLoaderPtr_t TYPE::Create(const Dictionary_c &settings)			\
-	{																			\
-		return boost::make_shared<TYPE>(settings);								\
+#define PH_FULL_MAP_LOADER_CREATOR(NAME, TYPE)  							\
+	PH_MAP_LOADER_CREATOR(NAME, TYPE);										\
+	Phobos::MapLoader_c *TYPE::Create(const Dictionary_c &settings)			\
+	{																		\
+		return PH_NEW TYPE(settings);										\
 	}
 
 #endif

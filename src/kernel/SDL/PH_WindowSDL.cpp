@@ -18,6 +18,7 @@ subject to the following restrictions:
 
 #include "PH_Error.h"
 #include "PH_Exception.h"
+#include "PH_Memory.h"
 
 #include <string>
 
@@ -27,7 +28,7 @@ namespace Phobos
 
 	WindowPtr_t Window_c::Create(const String_c &name)
 	{
-		return WindowPtr_t(new WindowSDL_c(name));
+		return WindowPtr_t(PH_NEW WindowSDL_c(name));
 	}
 
 	WindowSDL_c::WindowSDL_c(const String_c &name):
@@ -107,10 +108,5 @@ namespace Phobos
         #else
             return true;
         #endif
-	}
-
-	void WindowSDL_c::SetEventManager(EventManagerPtr_t manager)
-	{
-		ipEventManager = boost::static_pointer_cast<EventManagerSDL_c>(manager);
-	}
+	}	
 }

@@ -43,8 +43,6 @@ namespace Phobos
 
 			virtual bool HasGLContext();
 
-			virtual void SetEventManager(EventManagerPtr_t manager);
-
 		private:			
 			WindowSDL_c(const String_c &name);
 		

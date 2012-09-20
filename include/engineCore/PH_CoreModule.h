@@ -35,8 +35,8 @@ namespace Phobos
 			virtual void OnRenderReady() {}
 
 		protected:
-			explicit CoreModule_c(const String_c &name, ChildrenMode_e=PUBLIC_CHILDREN);
-			explicit CoreModule_c(const Char_t *name, ChildrenMode_e=PUBLIC_CHILDREN);			
+			explicit CoreModule_c(const String_c &name, UInt32_t flags = 0);
+			explicit CoreModule_c(const Char_t *name, UInt32_t flags = 0);			
 	};
 
 	typedef void (CoreModule_c::*CoreModuleProc_t)();

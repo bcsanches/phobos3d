@@ -43,6 +43,7 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <PH_Core.h>
 #include <PH_EventManagerModule.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_ProcVector.h>
 #include <PH_Timer.h>
 
@@ -63,31 +64,31 @@ EngineMain_c::EngineMain_c()
 	using namespace Phobos;
 
 	Kernel_c::CreateInstance("sample05.log");
-	CorePtr_t core = Core_c::CreateInstance();
+	Core_c &core = Core_c::CreateInstance();
 	clSingletons.AddProc(Core_c::ReleaseInstance);	
 
-	EventManagerModulePtr_t eventManager = EventManagerModule_c::CreateInstance();
+	EventManagerModule_c &eventManager = EventManagerModule_c::CreateInstance();
 	clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
-	core->AddModule(eventManager);
+	core.AddModule(eventManager);
 
-	Phobos::ConsolePtr_t console = ::Console_c::CreateInstance();
+	Phobos::Console_c &console = ::Console_c::CreateInstance();
 	clSingletons.AddProc(Phobos::Console_c::ReleaseInstance);
-	core->AddModule(console);					
+	core.AddModule(console);					
 
-	RenderPtr_t render = Render_c::CreateInstance();
+	Render_c &render = Render_c::CreateInstance();
 	clSingletons.AddProc(Render_c::ReleaseInstance);
-	core->AddModule(render, LOWEST_PRIORITY);
+	core.AddModule(render, CoreModulePriorities::LOWEST);
 
-	core->RegisterCommands(*console);	
+	core.RegisterCommands(console);	
 
-	core->LaunchBootModule("autoexec.cfg");
+	core.LaunchBootModule("autoexec.cfg");
 }
 
 EngineMain_c::~EngineMain_c()
 {
 	using namespace Phobos;
 
-	Core_c::GetInstance()->Shutdown();
+	Core_c::GetInstance().Shutdown();
 
 	clSingletons.CallAll();
 
@@ -101,30 +102,34 @@ EngineMain_c::~EngineMain_c()
 */
 void EngineMain_c::MainLoop(void)
 {
-	Phobos::Core_c::GetInstance()->MainLoop();
+	Phobos::Core_c::GetInstance().MainLoop();
 }
 
 int main(int, char **)
 {
-	EngineMain_c engine;
+	//Phobos::EnableMemoryTracker();	
+	{
+		EngineMain_c engine;
 
 #ifndef PH_DEBUG
-	try
+		try
 #endif
-	{
-		engine.MainLoop();
-	}
+		{
+			engine.MainLoop();
+		}
 #ifndef PH_DEBUG
-	catch(std::exception &e)
-	{
-		std::stringstream stream;
-		stream << "main: Unhandled excetion: ";
-		stream << e.what();
-		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+		catch(std::exception &e)
+		{
+			std::stringstream stream;
+			stream << "main: Unhandled excetion: ";
+			stream << e.what();
+			Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
 
-		exit(EXIT_FAILURE);
-	}
+			exit(EXIT_FAILURE);
+		}
 #endif
+	}
+	//Phobos::DumpMemoryLeaks();
 
 	return 0;
 }

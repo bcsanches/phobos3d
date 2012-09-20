@@ -58,14 +58,14 @@ Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShap
 
 	CollisionShapePtr_t shape;
 
-	Physics::ManagerPtr_t physicsManager = Physics::Manager_c::GetInstance();
+	Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
 
 	switch(type)
 	{
 		case Physics::CollisionShapeTypes::BOX:
 			{
 				Ogre::Vector3 boxDimensions = DictionaryGetVector3(collisionDef, "boxDimensions") * scale;
-				shape = physicsManager->CreateBoxShape(boxDimensions.x, boxDimensions.y, boxDimensions.z );
+				shape = physicsManager.CreateBoxShape(boxDimensions.x, boxDimensions.y, boxDimensions.z );
 			}
 			break;
 
@@ -80,19 +80,19 @@ Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShap
 				switch(type)
 				{
 					case Physics::CollisionShapeTypes::CYLINDER_X:
-						shape = physicsManager->CreateCylinderShapeX(radius, height);
+						shape = physicsManager.CreateCylinderShapeX(radius, height);
 						break;
 
 					case Physics::CollisionShapeTypes::CYLINDER_Y:
-						shape = physicsManager->CreateCylinderShapeY(radius, height);
+						shape = physicsManager.CreateCylinderShapeY(radius, height);
 						break;
 
 					case Physics::CollisionShapeTypes::CYLINDER_Z:
-						shape = physicsManager->CreateCylinderShapeZ(radius, height);
+						shape = physicsManager.CreateCylinderShapeZ(radius, height);
 						break;
 
 					case Physics::CollisionShapeTypes::CAPSULE:
-						shape = physicsManager->CreateCapsuleShape(radius, height);
+						shape = physicsManager.CreateCapsuleShape(radius, height);
 						break;
 				}
 			}

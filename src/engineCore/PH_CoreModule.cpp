@@ -18,14 +18,14 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	CoreModule_c::CoreModule_c(const String_c &name, ChildrenMode_e mode):
-		Node_c(name, mode)
+	CoreModule_c::CoreModule_c(const String_c &name, UInt32_t flags):
+		Node_c(name, flags)
 	{
 		//empty
 	}
 
-	CoreModule_c::CoreModule_c(const Char_t *name, ChildrenMode_e mode):
-		Node_c(name, mode)
+	CoreModule_c::CoreModule_c(const Char_t *name, UInt32_t flags):
+		Node_c(name, flags)
 	{
 		//empty
 	}

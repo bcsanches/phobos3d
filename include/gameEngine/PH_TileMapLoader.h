@@ -24,7 +24,7 @@ namespace Phobos
 	class TileMapLoader_c: public MapLoader_c
 	{
 		public:
-			static MapLoaderPtr_t Create(const Dictionary_c &settings);
+			static MapLoader_c *Create(const Dictionary_c &settings);
 
 			TileMapLoader_c(const Dictionary_c &settings);
 

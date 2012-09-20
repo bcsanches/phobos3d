@@ -31,13 +31,13 @@ namespace Phobos
 		public:
 			ObjectManager_c();
 
-			void AddObject(NodePtr_t ptr, const Path_c &path);
-			NodePtr_t LookupObject(const Path_c &path) const;
+			void AddObject(Node_c &node, const Path_c &path);
+			Node_c &LookupObject(const Path_c &path) const;
 
-			void RemoveObject(NodePtr_t ptr);
+			void RemoveObject(Node_c &node);
 
 		private:
-			NodePtr_t ipRoot;
+			Node_c clRoot;
 	};
 }
 

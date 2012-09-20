@@ -23,6 +23,7 @@ subject to the following restrictions:
 #include <PH_InputManager.h>
 #include <PH_InputMapper.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_ProcVector.h>
 #include <PH_Window.h>
 
@@ -40,9 +41,7 @@ class Sample_c: EventListener_c
 
 	private:
 		ProcVector_c		clSingletons;
-		WindowPtr_t			ipWindow;
-		EventManagerPtr_t	ipEventManager;
-		InputManagerPtr_t	ipInputManager;
+		WindowPtr_t			ipWindow;				
 		InputMapperPtr_t	ipInputMapper;
 
 		Context_c			clMainContext;
@@ -61,13 +60,12 @@ Sample_c::Sample_c():
 	Rect_s<UInt_t> r(0, 0, 640, 480);
 	ipWindow->Open("Sample 04", r);
 
-	ipEventManager = EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&EventManager_c::ReleaseInstance);
-	ipWindow->SetEventManager(ipEventManager);
+	EventManager_c &eventManager = EventManager_c::CreateInstance("EventManager");
+	clSingletons.AddProc(&EventManager_c::ReleaseInstance);	
 
-	ipEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
+	eventManager.AddListener(*this, EVENT_TYPE_SYSTEM);
 
-	ipInputManager = InputManager_c::CreateInstance("InputManager");
+	InputManager_c &inputManager = InputManager_c::CreateInstance("InputManager");
 	clSingletons.AddProc(&InputManager_c::ReleaseInstance);
 
 	clMainContext.AddContextVar(varQuit);
@@ -75,7 +73,7 @@ Sample_c::Sample_c():
 	ipInputMapper = InputMapper_c::Create("InputMapper", clMainContext);
 
 	//Force an update to allow device attachment
-	ipInputManager->Update();
+	inputManager.Update();
 
 	ipInputMapper->Bind("kb", "ESCAPE", "set dvQuit true");
 }
@@ -108,16 +106,22 @@ void Sample_c::Run()
 {
 	while(!varQuit.GetBoolean())
 	{
-		ipEventManager->Update();
-		ipInputManager->Update();
+		EventManager_c::GetInstance().Update();
+		InputManager_c::GetInstance().Update();
 	}
 }
 
 int main(int, char **)
 {
-	Sample_c sample;
+	Phobos::EnableMemoryTracker();
 
-	sample.Run();
+	{
+		Sample_c sample;
+
+		sample.Run();
+	}
+
+	Phobos::DumpMemoryLeaks();
 
 	return 0;
 }

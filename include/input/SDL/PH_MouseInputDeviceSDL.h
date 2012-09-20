@@ -27,12 +27,10 @@ namespace Phobos
 {
 	class MouseInputDeviceSDL_c: public MouseInputDevice_c, private EventListener_c
 	{
-		protected:
-			MouseInputDeviceSDL_c(const String_c &name);			
-
 		public:
 			static InputDevicePtr_t Create(const String_c &name);
 
+			MouseInputDeviceSDL_c(const String_c &name);
 			~MouseInputDeviceSDL_c(void);
 
 			virtual void Update(void);

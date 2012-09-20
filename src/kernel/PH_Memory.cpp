@@ -14,25 +14,48 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Gui/PH_Manager.h"
+#include "PH_Memory.h"
 
-#include <PH_Memory.h>
+#include <PH_Exception.h>
 
-#include "Gui/PH_Context.h"
-
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::Manager);
-
-Phobos::Gui::Manager_c::Manager_c():
-	CoreModule_c("GuiManager")
+void Phobos::DumpMemoryLeaks()
 {
-	//empty
+	#if (defined PH_WIN32)
+		#if (defined _DEBUG)
+			_CrtDumpMemoryLeaks();
+		#endif
+	#endif
 }
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
+void Phobos::EnableMemoryTracker()
 {
-	ContextPtr_t ptr = Context_c::Create(name);
+	#if (defined PH_WIN32)
+		#if (defined _DEBUG)
+			_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+			_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+			_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
+		#endif
+	#endif
+}
 
-	this->AddPrivateChild(*ptr);
+bool Phobos::BreakMemoryAllocation(long id)
+{
+	#if (defined PH_WIN32)
+		#if (defined _DEBUG)
+			int *p = (int*) malloc(sizeof(int));
+			long blockNumber;
+			_CrtIsMemoryBlock(p, sizeof(int), &blockNumber, NULL, NULL);
 
-	return ptr;
+			free(p);
+
+			if(blockNumber >= id)
+			{
+				return false;
+			}
+
+			_CrtSetBreakAlloc(id);
+		#endif
+	#endif
+
+	return true;
 }

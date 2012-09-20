@@ -33,19 +33,18 @@ namespace Phobos
 		public:
 			static DictionaryHivePtr_t Create(const String_c &name);
 
+			DictionaryHive_c(const String_c &name);
 			~DictionaryHive_c();
 
 			void Load(Parser_c &parser);
 
-			DictionaryPtr_t GetDictionary(const String_c &name);
-			DictionaryPtr_t TryGetDictionary(const String_c &name);
+			Dictionary_c &GetDictionary(const String_c &name);
+			Dictionary_c *TryGetDictionary(const String_c &name);
 
-			void AddDictionary(DictionaryPtr_t dict);
+			void AddDictionary(std::auto_ptr<Dictionary_c> dict);
 
 	
-		private:
-			DictionaryHive_c(const String_c &name);
-
+		private:			
 			UInt_t	uSequence;
 	};
 }

@@ -61,7 +61,7 @@ subject to the following restrictions:
 			#endif
 		#else
 			#define PH_DEBUG_WITH_DEBUG_LIBS			
-		#endif	
+		#endif			
 	#else
 		#error "Could not determine runtime library"
 	#endif

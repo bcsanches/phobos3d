@@ -18,6 +18,7 @@ subject to the following restrictions:
 
 #include <PH_Kernel.h>
 #include <PH_EventManager.h>
+#include <PH_Memory.h>
 
 #include "PH_Console.h"
 #include "PH_Core.h"
@@ -28,10 +29,10 @@ namespace Phobos
 	EventManagerModulePtr_t EventManagerModule_c::ipInstance_gl;
 
 	EventManagerModule_c::EventManagerModule_c():
-		CoreModule_c("EventManagerModule"),
-		ipEventManager(EventManager_c::CreateInstance("EventManager"))
+		CoreModule_c("EventManagerModule")
 	{
-		ipEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
+		EventManager_c &manager = EventManager_c::CreateInstance("EventManager");
+		manager.AddListener(*this, EVENT_TYPE_SYSTEM);		
 	}
 
 	EventManagerModule_c::~EventManagerModule_c()
@@ -39,13 +40,13 @@ namespace Phobos
 		EventManager_c::ReleaseInstance();
 	}
 
-	EventManagerModulePtr_t EventManagerModule_c::CreateInstance()
+	EventManagerModule_c &EventManagerModule_c::CreateInstance()
 	{
 		PH_ASSERT_MSG(!ipInstance_gl, "[EventManagerModule_c::CreateInstance]: Instance already exists");
 
-		ipInstance_gl = EventManagerModulePtr_t(new EventManagerModule_c());
+		ipInstance_gl = EventManagerModulePtr_t(PH_NEW EventManagerModule_c());
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void EventManagerModule_c::ReleaseInstance()
@@ -55,16 +56,16 @@ namespace Phobos
 		ipInstance_gl.reset();
 	}
 
-	EventManagerModulePtr_t EventManagerModule_c::GetInstance()
+	EventManagerModule_c &EventManagerModule_c::GetInstance()
 	{
 		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule_c::GetInstance]: Instance does not exists, use CreateInstance");
 
-		return ipInstance_gl;
+		return *ipInstance_gl;
 	}
 
 	void EventManagerModule_c::OnFixedUpdate()
 	{
-		ipEventManager->Update();
+		EventManager_c::GetInstance().Update();
 	}
 
 	void EventManagerModule_c::Event(struct Event_s &event)
@@ -72,7 +73,7 @@ namespace Phobos
 		switch(event.stSystem.eType)
 		{
 			case SYSTEM_QUIT:
-				Console_c::GetInstance()->Execute("quit");
+				Console_c::GetInstance().Execute("quit");
 				break;
 
             default:

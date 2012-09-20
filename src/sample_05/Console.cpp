@@ -17,11 +17,13 @@ subject to the following restrictions:
 
 #include "Console.h"
 
-ConsolePtr_t Console_c::CreateInstance(void)
-{		
-	Phobos::Console_c::UpdateInstance(ConsolePtr_t(new Console_c()));
+#include <boost/make_shared.hpp>
 
-	return boost::static_pointer_cast<Console_c>(Phobos::Console_c::GetInstance());
+Console_c &Console_c::CreateInstance(void)
+{		
+	Phobos::Console_c::UpdateInstance(boost::make_shared<Console_c>());
+
+	return static_cast<Console_c&>(Phobos::Console_c::GetInstance());
 }
 
 Console_c::Console_c(void):

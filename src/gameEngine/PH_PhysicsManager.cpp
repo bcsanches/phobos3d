@@ -34,7 +34,7 @@ namespace Phobos
 		PH_DEFINE_DEFAULT_SINGLETON(Manager);
 
 		Manager_c::Manager_c():
-			CoreModule_c("PhysicsManager", PRIVATE_CHILDREN),
+			CoreModule_c("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
 			fpScale(1),
 			varPhysicsScale("dvPhysicsScale", "1"),
 			clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))
@@ -49,15 +49,15 @@ namespace Phobos
 
 		void Manager_c::OnPrepareToBoot()
 		{
-			ConsolePtr_t console = Console_c::GetInstance();
+			Console_c &console = Console_c::GetInstance();
 
-			console->AddContextVar(varPhysicsScale);
+			console.AddContextVar(varPhysicsScale);
 		}
 
 		void Manager_c::OnBoot()
 		{
-			spCollisionDispatcher.reset(new btCollisionDispatcher(&clCollisionConfig));
-			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
+			spCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&clCollisionConfig));
+			spWorld.reset(PH_NEW btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
 
 			spWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
 			clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&clGhostPairCallback); 
@@ -70,7 +70,7 @@ namespace Phobos
 			if(!spWorld)
 				return;
 
-			const CoreTimer_s &timer = Core_c::GetInstance()->GetGameTimer();
+			const CoreTimer_s &timer = Core_c::GetInstance().GetGameTimer();
 			if(timer.IsPaused())
 				return;
 
@@ -89,7 +89,7 @@ namespace Phobos
 				return;
 			
 			//No pause check, to allow client interpolation
-			clRigidBodyComponents.CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance()->GetGameTimer().fpDelta);
+			clRigidBodyComponents.CallForAll1(&RigidBodyComponent_c::UpdateTransform, Core_c::GetInstance().GetGameTimer().fpDelta);
 		}
 
 		void Manager_c::SetGravity(const Ogre::Vector3 &gravity)
@@ -149,7 +149,7 @@ namespace Phobos
 			if(dynamic)
 				btShape.calculateLocalInertia(mass, localInertia);			
 
-			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform, fpScale));
+			btDefaultMotionState *motionState = PH_NEW btDefaultMotionState(MakeTransform(transform, fpScale));
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 

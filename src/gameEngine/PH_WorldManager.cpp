@@ -38,7 +38,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);
 
 	WorldManager_c::WorldManager_c():
-		CoreModule_c("WorldManager", PRIVATE_CHILDREN),
+		CoreModule_c("WorldManager", NodeFlags::PRIVATE_CHILDREN),
 		cmdLoadMap("loadMap"),
 		cmdUnloadMap("unloadMap"),
 		cmdDumpFactoryCreators("dumpFactoryCreators")
@@ -50,7 +50,7 @@ namespace Phobos
 
 	WorldManager_c::~WorldManager_c()
 	{
-
+		//empty
 	}	
 
 	void WorldManager_c::UnloadMap()
@@ -74,8 +74,10 @@ namespace Phobos
 		spMapLoader = MapLoaderFactory_c::GetInstance().Create(extension.c_str());
 		spMapLoader->Load(mapName);
 
-		EntityPtr_t world = spMapLoader->CreateAndLoadWorldSpawn();		
-		this->AddPrivateChild(world);
+		std::auto_ptr<Entity_c> world(spMapLoader->CreateAndLoadWorldSpawn());
+		world->SetManaged(true);
+		this->AddPrivateChild(*world);
+		world.release();
 
 		spGameWorld = spMapLoader->CreateAndLoadWorld();
 
@@ -83,7 +85,7 @@ namespace Phobos
 
 		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			EntityPtr_t entity = boost::static_pointer_cast<Entity_c>(it->second);
+			Entity_c *entity = static_cast<Entity_c *>(it->second);
 
 			entity->LoadFinished();
 		}
@@ -91,9 +93,9 @@ namespace Phobos
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
 	}
 
-	EntityPtr_t WorldManager_c::LoadEntity(const Dictionary_c &entityDef)
+	Entity_c &WorldManager_c::LoadEntity(const Dictionary_c &entityDef)
 	{
-		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName());
+		std::auto_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 
 		//Update handle before loading entity, so components would have a valid handle
 		Handle_s h = clEntityManager.AddObject(ptr.get());
@@ -101,9 +103,10 @@ namespace Phobos
 			
 		ptr->Load(entityDef);
 		
-		this->AddPrivateChild(ptr);		
+		ptr->SetManaged(true);
+		this->AddPrivateChild(*ptr);
 
-		return ptr;
+		return *ptr.release();
 	}
 
 	void WorldManager_c::LoadEntities()
@@ -112,36 +115,36 @@ namespace Phobos
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			DictionaryPtr_t dict = boost::static_pointer_cast<Dictionary_c>(it->second);
+			Dictionary_c *dict = static_cast<Dictionary_c *>(it->second);
 
 			this->LoadEntity(*dict);						
 		}
 	}
 
-	EntityPtr_t WorldManager_c::TryGetEntityByType(const String_c &className) const
+	Entity_c *WorldManager_c::TryGetEntityByType(const String_c &className) const
 	{
 		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			EntityPtr_t entity = boost::static_pointer_cast<Entity_c>(it->second);
+			Entity_c *entity = static_cast<Entity_c *>(it->second);
 			if(entity->GetEntityClassName().compare(className) == 0)
 				return entity;
 		}
 
-		return EntityPtr_t();
+		return NULL;
 	}
 
-	EntityPtr_t WorldManager_c::GetEntityByName(const String_c &name) const
+	Entity_c &WorldManager_c::GetEntityByName(const String_c &name) const
 	{
-		return boost::static_pointer_cast<Entity_c>(this->GetChild(name));
+		return static_cast<Entity_c &>(this->GetChild(name));
 	}
 
 	void WorldManager_c::OnPrepareToBoot()
 	{
-		ConsolePtr_t console = Console_c::GetInstance();
+		Console_c &console = Console_c::GetInstance();
 
-		console->AddContextCmd(cmdLoadMap);
-		console->AddContextCmd(cmdUnloadMap);
-		console->AddContextCmd(cmdDumpFactoryCreators);
+		console.AddContextCmd(cmdLoadMap);
+		console.AddContextCmd(cmdUnloadMap);
+		console.AddContextCmd(cmdDumpFactoryCreators);
 	}
 
 	void WorldManager_c::OnBoot()

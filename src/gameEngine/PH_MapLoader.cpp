@@ -20,8 +20,6 @@ subject to the following restrictions:
 #include <iostream>
 #include <vector>
 
-#include <rapidxml.hpp>
-
 #include <PH_Dictionary.h>
 #include <PH_DictionaryHive.h>
 #include <PH_DictionaryManager.h>
@@ -37,39 +35,39 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	DictionaryHivePtr_t MapLoader_c::ipStaticEntitiesHive_g;
-	DictionaryHivePtr_t MapLoader_c::ipDynamicEntitiesHive_g;
-	DictionaryHivePtr_t MapLoader_c::ipCurrentLevelHive_g;
+	DictionaryHive_c *MapLoader_c::pclStaticEntitiesHive_g = NULL;
+	DictionaryHive_c *MapLoader_c::pclDynamicEntitiesHive_g = NULL;
+	DictionaryHive_c *MapLoader_c::pclCurrentLevelHive_g = NULL;
 
 	void MapLoader_c::OnBoot()
 	{
-		DictionaryManagerPtr_t manager = DictionaryManager_c::GetInstance();
+		DictionaryManager_c &manager = DictionaryManager_c::GetInstance();
 
-		ipCurrentLevelHive_g = manager->CreateCustomHive("LevelInfo");
-		ipStaticEntitiesHive_g = manager->CreateCustomHive("StaticEntities");
-		ipDynamicEntitiesHive_g = manager->CreateCustomHive("DynamicEntities");		
+		pclCurrentLevelHive_g = &manager.CreateCustomHive("LevelInfo");
+		pclStaticEntitiesHive_g = &manager.CreateCustomHive("StaticEntities");
+		pclDynamicEntitiesHive_g = &manager.CreateCustomHive("DynamicEntities");		
 	}	
 
 	const DictionaryHive_c &MapLoader_c::GetStaticEntitiesHive() const
 	{
-		return *ipStaticEntitiesHive_g;
+		return *pclStaticEntitiesHive_g;
 	}
 
 	const DictionaryHive_c &MapLoader_c::GetDynamicEntitiesHive() const
 	{
-		return *ipDynamicEntitiesHive_g;
+		return *pclDynamicEntitiesHive_g;
 	}
 
 	const DictionaryHive_c &MapLoader_c::GetCurrentLevelHive() const
 	{
-		return *ipCurrentLevelHive_g;
+		return *pclCurrentLevelHive_g;
 	}
 
 	void MapLoader_c::ClearAllHives()
 	{
-		ipCurrentLevelHive_g->RemoveAllChildren();
-		ipStaticEntitiesHive_g->RemoveAllChildren();
-		ipDynamicEntitiesHive_g->RemoveAllChildren();
+		pclCurrentLevelHive_g->RemoveAllChildren();
+		pclStaticEntitiesHive_g->RemoveAllChildren();
+		pclDynamicEntitiesHive_g->RemoveAllChildren();
 	}
 
 	MapLoader_c::MapLoader_c(const Dictionary_c &settings):
@@ -78,12 +76,12 @@ namespace Phobos
 		//empty
 	}
 
-	EntityPtr_t MapLoader_c::CreateAndLoadWorldSpawn()
+	std::auto_ptr<Entity_c> MapLoader_c::CreateAndLoadWorldSpawn()
 	{	
-		DictionaryPtr_t entityDef = ipCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY);
-		EntityPtr_t ptr = EntityFactory_c::GetInstance().Create(entityDef->GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef->GetName());
+		Dictionary_c &entityDef = pclCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY);
 
-		ptr->Load(*entityDef);
+		std::auto_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
+		ptr->Load(entityDef);
 
 		return ptr;
 	}
@@ -92,14 +90,14 @@ namespace Phobos
 	{
 		GameWorldPtr_t world = this->CreateGameWorld();
 
-		world->Load(*this, *(ipCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY)));
+		world->Load(*this, pclCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY));
 
 		return world;
 	}
 
-	DictionaryPtr_t MapLoader_c::CreateWorldSpawnEntityDictionary()
+	std::auto_ptr<Dictionary_c> MapLoader_c::CreateWorldSpawnEntityDictionary()
 	{
-		DictionaryPtr_t dict = Dictionary_c::Create(WORLD_SPAWN_ENTITY);
+		std::auto_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(WORLD_SPAWN_ENTITY));
 
 		dict->SetBaseHive("EntityDef");
 		dict->SetInherited(strWorldSpawnEntityType);

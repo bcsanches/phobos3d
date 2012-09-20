@@ -22,25 +22,25 @@ subject to the following restrictions:
 namespace Phobos
 {
 	ObjectManager_c::ObjectManager_c():
-		ipRoot(Node_c::Create("/"))
+		clRoot("/")
 	{
 	}
 
-	void ObjectManager_c::AddObject(NodePtr_t ptr, const Path_c &strPath)
+	void ObjectManager_c::AddObject(Node_c &node, const Path_c &strPath)
 	{
 		if(strPath.IsOnlyRoot())
-			ipRoot->AddChild(ptr);
+			clRoot.AddChild(node);
 		else
-			ipRoot->AddNode(ptr, strPath);
+			clRoot.AddNode(node, strPath);
 	}
 
-	NodePtr_t ObjectManager_c::LookupObject(const Path_c &path) const
+	Node_c &ObjectManager_c::LookupObject(const Path_c &path) const
 	{
-		return ipRoot->LookupNode(path);
+		return clRoot.LookupNode(path);
 	}
 
-	void ObjectManager_c::RemoveObject(NodePtr_t ptr)
+	void ObjectManager_c::RemoveObject(Node_c &node)
 	{
-		ptr->RemoveSelf();
+		node.RemoveSelf();
 	}
 }

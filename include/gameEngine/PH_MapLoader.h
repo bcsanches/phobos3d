@@ -39,7 +39,7 @@ namespace Phobos
 			const DictionaryHive_c &GetDynamicEntitiesHive() const ;
 			const DictionaryHive_c &GetCurrentLevelHive() const;
 
-			EntityPtr_t CreateAndLoadWorldSpawn();
+			std::auto_ptr<Entity_c> CreateAndLoadWorldSpawn();
 
 			GameWorldPtr_t CreateAndLoadWorld();
 
@@ -52,14 +52,14 @@ namespace Phobos
 				Creates a basic dictionary entry that can be used to 
 				instantiate a WorldSpawn entity
 			*/
-			DictionaryPtr_t CreateWorldSpawnEntityDictionary();
+			std::auto_ptr<Dictionary_c> CreateWorldSpawnEntityDictionary();
 
 			virtual GameWorldPtr_t CreateGameWorld() = 0;
 
 		protected:			
-			static DictionaryHivePtr_t ipStaticEntitiesHive_g;
-			static DictionaryHivePtr_t ipDynamicEntitiesHive_g;
-			static DictionaryHivePtr_t ipCurrentLevelHive_g;
+			static DictionaryHive_c *pclStaticEntitiesHive_g;
+			static DictionaryHive_c *pclDynamicEntitiesHive_g;
+			static DictionaryHive_c *pclCurrentLevelHive_g;
 
 			String_c strWorldSpawnEntityType;
 	};	

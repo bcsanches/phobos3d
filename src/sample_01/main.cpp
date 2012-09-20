@@ -16,6 +16,7 @@ subject to the following restrictions:
 
 
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 #include <PH_ProcVector.h>
 #include <PH_Window.h>
 #include <PH_EventManager.h>
@@ -35,7 +36,7 @@ class Sample_c: EventListener_c
 	private:
 		ProcVector_c	clSingletons;
 		WindowPtr_t		ipWindow;
-		EventManagerPtr_t ipEventManager;
+		EventManager_c	*pclEventManager;
 
 		bool fQuit;
 };
@@ -51,11 +52,10 @@ Sample_c::Sample_c():
 	Rect_s<UInt_t> r(0, 0, 640, 480);
 	ipWindow->Open("Sample 01", r);
 
-	ipEventManager = EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&EventManager_c::ReleaseInstance);
-	ipWindow->SetEventManager(ipEventManager);
+	pclEventManager = &EventManager_c::CreateInstance("EventManager");
+	clSingletons.AddProc(&EventManager_c::ReleaseInstance);	
 
-	ipEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
+	pclEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
 }
 
 Sample_c::~Sample_c()
@@ -86,15 +86,21 @@ void Sample_c::Run()
 {
 	while(!fQuit)
 	{
-		ipEventManager->Update();
+		pclEventManager->Update();
 	}
 }
 
 int main(int, char **)
 {
-	Sample_c sample;
+	Phobos::EnableMemoryTracker();
 
-	sample.Run();
+	{
+		Sample_c sample;
+
+		sample.Run();			
+	}
+	
+	Phobos::DumpMemoryLeaks();
 
 	return 0;
 }
