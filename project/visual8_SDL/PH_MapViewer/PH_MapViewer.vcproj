@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="RocketCore_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -209,6 +210,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="RocketCore.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_dr.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"

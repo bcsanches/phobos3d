@@ -14,33 +14,59 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_GUI_MANAGER_H
-#define PH_GUI_MANAGER_H
+#ifndef PH_GUI_LEVEL_SELECTOR_H
+#define PH_GUI_LEVEL_SELECTOR_H
 
+#include <list>
+
+#include <boost/scoped_ptr.hpp>
+
+#include <PH_ContextCmd.h>
+#include <PH_CoreModule.h>
 #include <PH_Singleton.h>
 
-#include "PH_CoreModule.h"
-#include "PH_EngineCoreAPI.h"
+#include <Gui/PH_ContextFwd.h>
 
-#include "PH_ContextFwd.h"
+#include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
 	namespace Gui
 	{
-		PH_DECLARE_NODE_PTR(Manager);
+		PH_DECLARE_SINGLETON_PTR(LevelSelector);
 
-		class PH_ENGINE_CORE_API Manager_c: public CoreModule_c
+		class LevelFileDataSource_c;
+
+		class PH_GAME_ENGINE_API LevelSelector_c: public CoreModule_c
 		{
-			PH_DECLARE_SINGLETON_METHODS(Manager);
+			PH_DECLARE_SINGLETON_METHODS(LevelSelector);
 
 			public:
-				ContextPtr_t CreateContext(const String_c &name);
+				~LevelSelector_c();
+
+				void Open();
+				void Close();
+
+			protected:
+				LevelSelector_c();				
+
+				virtual void OnPrepareToBoot();
+				virtual void OnFinalize();
 
 			private:
-				Manager_c();
+				void CmdAddLevelPath(const Phobos::StringVector_t &args, Phobos::Context_c &);
+
+			private:
+				std::list<Phobos::String_c> lstLevelPaths;
+
+				Gui::ContextPtr_t	spGuiContext;
+
+				ContextCmd_c		cmdAddLevelPath;
+
+				boost::scoped_ptr<LevelFileDataSource_c> spDataSource;
 		};
 	}
 }
+
 
 #endif

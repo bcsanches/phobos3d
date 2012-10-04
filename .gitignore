@@ -132,6 +132,8 @@
 /project/visual8_SDL/PH_Input/Release/mt.dep
 /project/visual8_SDL/PH_Input/Release/vc90.idb
 /project/visual8_SDL/PH_Input/Release/vc90.pdb
+/project/visual8_SDL/PH_Kernel/Debug_rel/
+/project/visual8_SDL/PH_Kernel/Debug/
 /project/visual8_SDL/PH_Kernel/Debug/BuildLog.htm
 /project/visual8_SDL/PH_Kernel/Debug/PH_Context.obj
 /project/visual8_SDL/PH_Kernel/Debug/PH_ContextCmd.obj
@@ -301,7 +303,8 @@
 /project/visual8_SDL/PH_MapViewer/Release/mt.dep
 /project/visual8_SDL/PH_MapViewer/Release/vc90.idb
 /project/visual8_SDL/PH_MapViewer/Release/vc90.pdb
-/project/visual8_SDL/PH_OgreEngineCore/Debug/BuildLog.htm
+/project/visual8_SDL/PH_OgreEngineCore/Debug/
+/project/visual8_SDL/PH_OgreEngineCore/Debug_rel/
 /project/visual8_SDL/PH_OgreEngineCore/Debug/PH_OgreConsole.obj
 /project/visual8_SDL/PH_OgreEngineCore/Debug/PH_OgreEngineCore_d.dll.embed.manifest
 /project/visual8_SDL/PH_OgreEngineCore/Debug/PH_OgreEngineCore_d.dll.embed.manifest.res
@@ -823,7 +826,18 @@
 /project/visual8_SDL/UT_GameEngine/UT_GameEngine.vcproj.mordor.bcsanches.user
 /project/visual8_SDL/UT_GameEngine/Debug/
 
-/project\visual8_SDL\PH_KernelTest/context_file.cfg
-/project\visual8_SDL\PH_KernelTest/eventManager_basic.log
-/project\visual8_SDL\PH_KernelTest/logTest.log
-/project\visual8_SDL\PH_KernelTest/phobos.log
+/project/visual8_SDL/PH_KernelTest/context_file.cfg
+/project/visual8_SDL/PH_KernelTest/eventManager_basic.log
+/project/visual8_SDL/PH_KernelTest/logTest.log
+/project/visual8_SDL/PH_KernelTest/phobos.log
+/project/visual8_SDL/PH_DictionaryTest/dictionarytest.log
+/project/visual8_SDL/PH_KernelTest/context_file.cfg
+/project/visual8_SDL/Sample_05/sample05.log
+/project/visual8_SDL/Sample_01/Sample_01.log
+/project/visual8_SDL/Sample_02/Sample_02.log
+/project/visual8_SDL/Sample_03/Sample_03.log
+/project/visual8_SDL/Sample_04/Sample_04.log
+/project/visual8_SDL/PH_DictionaryTest/dictionarytest.log
+/project\visual8_SDL\UT_EngineCore/enginecoretest.log
+/project\visual8_SDL\UT_GameEngine/UT_GameEngine_HandleManagerBasic.log
+/project\visual8_SDL\UT_GameEngine/UT_GameEngine_HandleManager_Full.log

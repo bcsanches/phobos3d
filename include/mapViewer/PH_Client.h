@@ -42,6 +42,7 @@ namespace Phobos
 			void OnFixedUpdate();
 			void OnUpdate();			
 			void OnPrepareToBoot();
+			void OnBoot();
 
 		private:
 			Client_c();

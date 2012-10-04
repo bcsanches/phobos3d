@@ -15,17 +15,38 @@ subject to the following restrictions:
 */
 
 
-#include "Gui/PH_Context.h"
+#ifndef PH_GUI_CONTEXT_H
+#define PH_GUI_CONTEXT_H
 
-#include <boost/make_shared.hpp>
+#include <Rocket/Core.h>
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_c &name)
+#include <PH_Node.h>
+
+#include "PH_OgreEngineCoreAPI.h"
+
+#include "Gui/PH_ContextFwd.h"
+
+namespace Phobos
 {
-	return boost::make_shared<Context_c>(name);
+	namespace Gui
+	{			
+		class PH_OGRE_ENGINE_CORE_API Context_c: public Node_c
+		{			
+			public:
+				static ContextPtr_t Create(const String_c &name);
+
+				Context_c(const String_c &name);
+
+				void Update();
+				void Render();
+
+				Rocket::Core::ElementDocument *LoadMouseCursor(const Char_t *path);
+				Rocket::Core::ElementDocument *LoadDocument(const Char_t *path);
+
+			protected:
+				Rocket::Core::Context *pclContext;
+		};
+	}
 }
 
-Phobos::Gui::Context_c::Context_c(const String_c &name):
-	Node_c(name)
-{
-	//empty
-}
+#endif

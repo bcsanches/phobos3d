@@ -193,6 +193,16 @@ namespace Phobos
 		}
 	}
 
+	size_t Render_c::GetScreenWidth()
+	{
+		return ipWindow->GetWidth();
+	}
+	
+	size_t Render_c::GetScreenHeight()
+	{
+		return ipWindow->GetHeight();
+	}
+
 	void *Render_c::GetWindowHandler()
 	{
 		PH_ASSERT(ipWindow);
@@ -392,6 +402,16 @@ namespace Phobos
 		pclMainSceneManager->clearScene();
 	}
 
+	void Render_c::AddRenderQueueListener(Ogre::RenderQueueListener &listener)
+	{
+		pclMainSceneManager->addRenderQueueListener(&listener);
+	}
+
+	void Render_c::RemoveRenderQueueListener(Ogre::RenderQueueListener &listener)
+	{
+		pclMainSceneManager->removeRenderQueueListener(&listener);
+	}
+
 	Ogre::SceneNode *Render_c::GetSceneNode(const String_c &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
@@ -456,36 +476,7 @@ namespace Phobos
 		{
 			mesh->buildEdgeList();
 		}
-		/*
-		using namespace Ogre;
-		for (unsigned int i=0; i < ent->getNumSubEntities(); ++i)
-		{
-			SubEntity *curSubEntity = ent->getSubEntity(i);
-			const String &curMaterialName = curSubEntity->getMaterialName();
-					
-			// Create the shader based technique of this material.
-			if(!pclShaderGenerator->createShaderBasedTechnique(curMaterialName,  MaterialManager::DEFAULT_SCHEME_NAME, RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME))
-			{
-				continue;
-			}
 
-			MaterialPtr curMaterial = MaterialManager::getSingleton().getByName(curMaterialName);
-
-			// Grab the first pass render state. 
-			// NOTE: For more complicated samples iterate over the passes and build each one of them as desired.
-			RTShader::RenderState* renderState = pclShaderGenerator->getRenderState(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME, curMaterialName, 1);
-
-			// Remove all sub render states.
-			renderState->reset();
-
-			RTShader::SubRenderState* perPixelLightModel = pclShaderGenerator->createSubRenderState(RTShader::PerPixelLighting::Type);
-				
-			renderState->addTemplateSubRenderState(perPixelLightModel);
-
-			// Invalidate this material in order to re-generate its shaders.
-			pclShaderGenerator->invalidateMaterial(RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME, curMaterialName);
-		}
-*/
 		return (ent);
 	}
 

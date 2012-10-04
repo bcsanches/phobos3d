@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib OgreRTShaderSystem_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib OgreRTShaderSystem_d.lib RocketCore_d.lib RocketControls_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -213,7 +213,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OgreTerrain.lib OgreRTShaderSystem.lib"
+				AdditionalDependencies="OgreMain.lib OgreTerrain.lib OgreRTShaderSystem.lib RocketControls.lib RocketCore.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_dr.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -247,6 +247,38 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="Gui"
+			>
+			<File
+				RelativePath="..\..\..\src\ogreEngineCore\Gui\PH_Context.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ogreEngineCore\Gui\PH_Context.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ogreEngineCore\Gui\PH_ContextFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\ogreEngineCore\Gui\PH_Manager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ogreEngineCore\Gui\PH_Manager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\ogreEngineCore\Gui\PH_OgreRenderInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ogreEngineCore\Gui\PH_OgreRenderInterface.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\src\ogreEngineCore\PH_OgreConsole.cpp"
 			>

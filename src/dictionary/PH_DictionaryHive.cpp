@@ -38,6 +38,7 @@ namespace Phobos
 
 	DictionaryHive_c::~DictionaryHive_c()
 	{
+		//empty
 	}
 
 	void DictionaryHive_c::AddDictionary(std::auto_ptr<Dictionary_c> dict)

@@ -68,6 +68,27 @@ namespace Phobos
 		//empty
 	}	
 
+	void OgreConsole_c::OnFinalize()
+	{
+		Ogre::OverlayManager& overlayManager = Ogre::OverlayManager::getSingleton();
+
+		overlayManager.destroyOverlayElement(pclRect);
+		overlayManager.destroyOverlayElement(pclTextBox);	
+
+		overlayManager.destroy(pclOverlay);		
+		overlayManager.destroy(pclRenderInfoOverlay);		
+
+		if(pclSceneManager)
+		{
+			if(pclCamera)
+				pclSceneManager->destroyCamera(pclCamera);
+
+			Render_c &render = Render_c::GetInstance();
+
+			render.DestroySceneManager(pclSceneManager);
+		}				
+	}
+
 	void OgreConsole_c::OnEditBoxChanged()
 	{
 		fEditBoxChanged = true;
@@ -179,7 +200,7 @@ namespace Phobos
 	}
 
 	void OgreConsole_c::OnRenderReady(void)
-        {
+    {
 		using namespace Ogre;
 
 		fpHeight = 0;
@@ -220,7 +241,7 @@ namespace Phobos
 			pclRenderInfoOverlay = overlayManager.getByName("Core/RenderInfoOverlay");
 			pclRenderInfoOverlay->show();
 
-			render.AddViewport(pclCamera, INT_MIN);
+			render.AddViewport(pclCamera, DefaultViewportZOrder::CONSOLE);
 		}
 		catch(Ogre::Exception &)
 		{

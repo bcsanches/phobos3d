@@ -253,30 +253,6 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="Gui"
-			>
-			<File
-				RelativePath="..\..\..\src\engineCore\Gui\PH_Context.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\engineCore\Gui\PH_Context.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\engineCore\Gui\PH_ContextFwd.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\engineCore\Gui\PH_Manager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\engineCore\Gui\PH_Manager.h"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath="..\..\..\src\engineCore\PH_BootModule.cpp"
 			>

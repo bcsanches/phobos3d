@@ -41,6 +41,16 @@ namespace Phobos
 
 	PH_DECLARE_NODE_PTR(Render);	
 
+	namespace DefaultViewportZOrder
+	{
+		enum Enum
+		{
+			CONSOLE = -4096,
+			GAME = 0,
+			GUI = 4096
+		};
+	}
+
 	class PH_OGRE_ENGINE_CORE_API Render_c: public CoreModule_c
 	{		
 		public:
@@ -60,6 +70,9 @@ namespace Phobos
 			void DestroySceneManager(Ogre::SceneManager *manager);
 
 			void ClearScene();
+
+			void AddRenderQueueListener(Ogre::RenderQueueListener &listener);
+			void RemoveRenderQueueListener(Ogre::RenderQueueListener &listener);
 			
 			//Ogre::SceneNode *GetOrCreateSceneNode(const String_c &name);
 			Ogre::SceneNode *CreateSceneNode(const String_c &name);
@@ -102,7 +115,10 @@ namespace Phobos
 
 			void SetShadowMode(Ogre::ShadowTechnique tech);
 
-			void *GetWindowHandler();			
+			void *GetWindowHandler();		
+
+			size_t GetScreenWidth();
+			size_t GetScreenHeight();
 
 		protected:
 			// =====================================================

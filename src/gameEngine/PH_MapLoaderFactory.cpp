@@ -39,4 +39,18 @@ namespace Phobos
 
 		return MapLoaderPtr_t(clFactory.Create(dictionary.GetString("loader"), dictionary));
 	}
+
+	std::list<String_c> MapLoaderFactory_c::CreateMapFileExtensionsList() const
+	{
+		const DictionaryHive_c &hive = DictionaryManager_c::GetInstance().GetDictionaryHive("MapLoader");
+
+		std::list<String_c> extensions;		
+
+		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
+		{
+			extensions.push_back(it->second->GetName());
+		}
+
+		return extensions;
+	}
 }

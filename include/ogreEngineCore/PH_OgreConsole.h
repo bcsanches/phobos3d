@@ -48,6 +48,7 @@ namespace Phobos
 			
 			void OnUpdate();
 			void OnRenderReady();
+			virtual void OnFinalize();
 
 			virtual void OnToggleConsole();
 			virtual void OnEditBoxChanged();

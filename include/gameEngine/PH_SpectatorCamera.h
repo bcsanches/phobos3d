@@ -81,14 +81,14 @@ namespace Phobos
 		clCameraCommandProducer.SetTurnSpeed(value);
 	}
 
-	inline void SpectatorCamera_c::SetCameraNearClipDistance(Float_t near)
+	inline void SpectatorCamera_c::SetCameraNearClipDistance(Float_t nearDist)
 	{
-		clCamera.SetNearClipDistance(near);
+		clCamera.SetNearClipDistance(nearDist);
 	}
 
-	inline void SpectatorCamera_c::SetCameraFarClipDistance(Float_t far)
+	inline void SpectatorCamera_c::SetCameraFarClipDistance(Float_t farDist)
 	{
-		clCamera.SetFarClipDistance(far);
+		clCamera.SetFarClipDistance(farDist);
 	}
 }
 

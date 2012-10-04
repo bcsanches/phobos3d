@@ -22,7 +22,7 @@ void Phobos::DumpMemoryLeaks()
 {
 	#if (defined PH_WIN32)
 		#if (defined _DEBUG)
-			_CrtDumpMemoryLeaks();
+			_CrtDumpMemoryLeaks();			
 		#endif
 	#endif
 }
@@ -30,10 +30,10 @@ void Phobos::DumpMemoryLeaks()
 void Phobos::EnableMemoryTracker()
 {
 	#if (defined PH_WIN32)
-		#if (defined _DEBUG)
-			_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+		#if (defined _DEBUG)			
+			_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 			_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
-			_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
+			_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);			
 		#endif
 	#endif
 }

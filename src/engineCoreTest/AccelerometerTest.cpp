@@ -16,13 +16,11 @@ subject to the following restrictions:
 
 #include <boost/test/unit_test.hpp>
 
-#include <PH_Accelerometer.h>
+#include <Math/PH_Accelerometer.h>
 
 BOOST_AUTO_TEST_CASE(Accelerometer_basic)
 {
-	using namespace Phobos;
-
-	Accelerometer_c accel(5);	
+	Phobos::Math::Accelerometer_c accel(5);	
 
 	BOOST_CHECK(accel.GetValue() == 0);
 

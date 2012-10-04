@@ -14,25 +14,43 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Gui/PH_Manager.h"
-
-#include <PH_Memory.h>
 
 #include "Gui/PH_Context.h"
 
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::Manager);
+#include <boost/make_shared.hpp>
 
-Phobos::Gui::Manager_c::Manager_c():
-	CoreModule_c("GuiManager")
+#include <PH_Render.h>
+
+Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_c &name)
 {
-	//empty
+	return boost::make_shared<Context_c>(name);
 }
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
+Phobos::Gui::Context_c::Context_c(const String_c &name):
+	Node_c(name),
+	pclContext(NULL)
 {
-	ContextPtr_t ptr = Context_c::Create(name);
+	Phobos::Render_c &render = Render_c::GetInstance();	
 
-	this->AddPrivateChild(*ptr);
+	pclContext = Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(render.GetScreenWidth(), render.GetScreenHeight()));
+}
 
-	return ptr;
+void Phobos::Gui::Context_c::Update()
+{
+	pclContext->Update();	
+}
+
+void Phobos::Gui::Context_c::Render()
+{
+	pclContext->Render();
+}
+
+Rocket::Core::ElementDocument *Phobos::Gui::Context_c::LoadMouseCursor(const Char_t *path)
+{
+	return pclContext->LoadMouseCursor(path);
+}
+
+Rocket::Core::ElementDocument *Phobos::Gui::Context_c::LoadDocument(const Char_t *path)
+{
+	return pclContext->LoadDocument(path);
 }

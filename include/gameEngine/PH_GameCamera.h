@@ -23,6 +23,7 @@ subject to the following restrictions:
 #include <OgrePrerequisites.h>
 #include <OgreCamera.h>
 
+#include <PH_Render.h>
 #include <PH_Transform.h>
 
 #include "PH_GameEngineAPI.h"
@@ -35,7 +36,7 @@ namespace Phobos
 			GameCamera_c();
 			~GameCamera_c();
 
-			void EnableViewport(int ZOrder = 0);
+			void EnableViewport(int ZOrder = DefaultViewportZOrder::GAME);
 
 			void SetTransform(const Transform_c &t);
 			void SetCameraTransform(const Transform_c &t);

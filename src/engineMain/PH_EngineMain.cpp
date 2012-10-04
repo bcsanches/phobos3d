@@ -16,6 +16,9 @@ subject to the following restrictions:
 
 #include <sstream>
 
+
+#include <Gui/PH_Manager.h>
+
 #include <PH_OgreConsole.h>
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
@@ -32,6 +35,8 @@ subject to the following restrictions:
 #include <PH_Render.h>
 #include <PH_Timer.h>
 #include <PH_WorldManager.h>
+
+#include <Gui/PH_LevelSelector.h>
 
 namespace Phobos
 {
@@ -68,6 +73,10 @@ namespace Phobos
 		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
 		core.AddModule(worldManager);
 
+		Gui::LevelSelector_c &levelSelector = Gui::LevelSelector_c::CreateInstance();
+		clSingletons.AddProc(Gui::LevelSelector_c::ReleaseInstance);
+		core.AddModule(levelSelector);
+
 		GameEventManager_c &gameEventManager = GameEventManager_c::CreateInstance();
 		clSingletons.AddProc(GameEventManager_c::ReleaseInstance);
 		core.AddModule(gameEventManager);
@@ -82,11 +91,15 @@ namespace Phobos
 
 		Physics::Manager_c &physicsManager = Physics::Manager_c::CreateInstance();
 		clSingletons.AddProc(Physics::Manager_c::ReleaseInstance);
-		core.AddModule(physicsManager, CoreModulePriorities::LOWEST+2);
+		core.AddModule(physicsManager, CoreModulePriorities::LOWEST+3);
 
 		ModelRendererManager_c &modelRendererManager = ModelRendererManager_c::CreateInstance();
 		clSingletons.AddProc(ModelRendererManager_c::ReleaseInstance);
-		core.AddModule(modelRendererManager, CoreModulePriorities::LOWEST+1);
+		core.AddModule(modelRendererManager, CoreModulePriorities::LOWEST+2);
+
+		Gui::Manager_c &guiManager = Gui::Manager_c::CreateInstance();
+		clSingletons.AddProc(Gui::Manager_c::ReleaseInstance);
+		core.AddModule(guiManager, CoreModulePriorities::LOWEST+1);
 
 		Render_c &render = Render_c::CreateInstance();
 		clSingletons.AddProc(Render_c::ReleaseInstance);
@@ -122,6 +135,8 @@ int main(int, char **)
 {
 	#ifdef PH_DEBUG
 		Phobos::EnableMemoryTracker();
+
+		//Phobos::BreakMemoryAllocation(405);
 	#endif
 
 	{
@@ -147,7 +162,7 @@ int main(int, char **)
 	}
 
 #ifdef PH_DEBUG
-	Phobos::DumpMemoryLeaks();
+	//Phobos::DumpMemoryLeaks();
 #endif
 
 	return 0;

@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
+				AdditionalDependencies="OgreMain_d.lib OgreTerrain_d.lib BulletDynamics_debug.lib BulletCollision_debug.lib LinearMath_debug.lib RocketCore_d.lib RocketControls_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\lib\&quot;"
@@ -659,6 +659,18 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gameEngine\PH_TileTransform.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="gui"
+			>
+			<File
+				RelativePath="..\..\..\src\gameEngine\Gui\PH_LevelSelector.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gameEngine\Gui\PH_LevelSelector.h"
 				>
 			</File>
 		</Filter>

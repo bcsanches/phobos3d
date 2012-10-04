@@ -41,6 +41,8 @@ namespace Phobos
 			inline const DictionaryHive_c &GetStaticEntitiesHive() const;
 			inline const DictionaryHive_c &GetDynamicEntitiesHive() const;		
 
+			std::list<String_c> CreateMapFileExtensionsList() const;
+
 		private:
 			MapLoaderFactory_c();
 
