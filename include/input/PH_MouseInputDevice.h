@@ -28,12 +28,15 @@ namespace Phobos
 		public:
 			virtual bool TryGetActionName(UInt_t action, String_c &out) const;
 			virtual bool TryGetActionId(const String_c &name, UInt_t &out) const;
-
-			virtual void AcquireCapture(void *window) = 0;
-			virtual void ReleaseCapture(void)=0;
 			
-			virtual void ClipToWindow(void *window) = 0;
+			virtual void ClipToWindow() = 0;
 			virtual void Unclip(void) = 0;
+
+			virtual void ShowCursor() = 0;
+			virtual void HideCursor() = 0;
+
+			virtual short GetX() = 0;
+			virtual short GetY() = 0;
 
 		protected:
 			MouseInputDevice_c(const String_c &name);		

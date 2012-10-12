@@ -24,11 +24,8 @@ subject to the following restrictions:
 #include <PH_Exception.h>
 #include <PH_InputActions.h>
 #include <PH_InputEvent.h>
-#include <PH_InputManager.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
-
-#define CONSOLE_KEY '`'
 
 #define CONSOLE_HISTORY_COUNT 32
 
@@ -52,38 +49,26 @@ namespace Phobos
 		CoreModule_c(name, flags),
 		cmdLs("ls"),
 		cmdCd("cd"),
-		cmdDumpTable("dumpTable"),
-		cmdToggleConsole("toggleConsole"),
+		cmdDumpTable("dumpTable"),		
 		lstText(CONSOLE_LINE_COUNT),
 		lstHistory(CONSOLE_HISTORY_COUNT),
 		strCurrentNodePathName("/"),
-		fIgnoreFirstChar(false),
-		fIgnoredLastChar(false),		
 		fActive(true)
 	{
-		InputManager_c::CreateInstance("InputManager").AddListener(*this);
-
-		Kernel_c::GetInstance().AddLogListener(*this);
-
-		ipInputMapper = InputMapper_c::Create("InputMapper", clContext);
-		ipInputMapper->Disable();
-
-		this->AddChild(*ipInputMapper);
+		Kernel_c::GetInstance().AddLogListener(*this);				
 
 		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
 		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
-		cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdDumpTable, this));
-		cmdToggleConsole.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdToggleConsole, this));
+		cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdDumpTable, this));		
 
 		clContext.AddContextCmd(cmdLs);
 		clContext.AddContextCmd(cmdCd);
 		clContext.AddContextCmd(cmdDumpTable);
-		clContext.AddContextCmd(cmdToggleConsole);
 	}
 
 	Console_c::~Console_c()
 	{
-		InputManager_c::ReleaseInstance();
+		//empty
 	}
 
 	void Console_c::UpdateInstance(ConsolePtr_t console)
@@ -98,7 +83,7 @@ namespace Phobos
 
 	void Console_c::Execute(const String_c &cmdLine)
 	{
-		clContext.Execute(cmdLine);
+		this->QueueCommand(cmdLine);
 	}
 
 	void Console_c::ExecuteFromFile(const String_c &fileName)
@@ -107,22 +92,7 @@ namespace Phobos
 	}
 
 	void Console_c::OnChar(Char_t ch)
-	{
-		if(fIgnoreFirstChar)
-		{
-			fIgnoreFirstChar = false;
-			fIgnoredLastChar = true;
-			return;
-		}
-
-		if((fIgnoredLastChar) && (ch == CONSOLE_KEY))
-		{
-			fIgnoredLastChar = false;
-			return;
-		}
-
-		fIgnoredLastChar = false;
-
+	{		
 		switch(ch)
 		{
 			case KB_BACKSPACE:
@@ -131,6 +101,10 @@ namespace Phobos
 
 			case KB_ENTER:
 				this->OnEnter();
+				break;
+
+			case KB_ESCAPE:
+				//ignore
 				break;
 
 			default:
@@ -146,12 +120,26 @@ namespace Phobos
 		const String_c &cmdLine = clEditBox.GetStr();
 
 		Kernel_c::GetInstance().LogStream() << "> " << cmdLine;
-
-		clContext.Execute(cmdLine);
+		
+		this->QueueCommand(cmdLine);		
 
 		this->AddToHistory(cmdLine);
 
 		clEditBox.Clear();
+	}
+
+	void Console_c::QueueCommand(const String_c &cmd)
+	{
+		clCommandBuffer << cmd << std::endl;
+	}
+
+	void Console_c::FlushCommandBuffer()
+	{
+		String_c buffer = clCommandBuffer.str();
+		clCommandBuffer.str(String_c());
+		clCommandBuffer.clear();
+
+		clContext.Execute(buffer);				
 	}
 
 	void Console_c::AddToHistory(const String_c &str)
@@ -226,51 +214,33 @@ namespace Phobos
 		this->OnTextListChanged();		
 	}
 
-	void Console_c::OnFixedUpdate()
-	{
-		InputManager_c::GetInstance().Update();
-	}
-
-	void Console_c::InputManagerEvent(const InputManagerEvent_s &event)
-	{
-		std::stringstream stream;
-
-		switch(event.eType)
-		{
-			case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-				stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " attached.";
-				if(event.rclDevice.GetDeviceType() == INPUT_DEVICE_KEYBOARD)
-					event.rclDevice.AddListener(*this);
-				break;
-
-			case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
-				stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " detached.";
-				break;
-		}
-
-		Kernel_c::GetInstance().LogMessage(stream.str());
-	}
-
-	void Console_c::InputEvent(const InputEvent_s &event)
+	bool Console_c::HandleInputEvent(const InputEvent_s &event)
 	{
 		switch(event.eType)
 		{
 			case INPUT_EVENT_CHAR:
 				if(this->IsActive())
+				{
 					this->OnChar(static_cast<Char_t>(event.stChar.u16Char));
+					return true;
+				}
 				break;
 
 			case INPUT_EVENT_BUTTON:
 				if(event.stButton.eState == BUTTON_STATE_DOWN)
 				{
-					if(event.stButton.uId == CONSOLE_KEY || event.stButton.uId == '\'')
-						this->ToggleConsole();
-					else if(this->IsActive())
+					if(this->IsActive())
 					{
 						if(event.stButton.uId == KB_UP_ARROW)
+						{
 							this->OnPreviousCommand();
+							return true;
+						}
 						else if(event.stButton.uId == KB_DOWN_ARROW)
+						{
 							this->OnNextCommand();
+							return true;
+						}
 					}
 				}
 				break;
@@ -278,6 +248,8 @@ namespace Phobos
             default:
                 break;
 		}
+
+		return false;
 	}
 
 	void Console_c::Message(const String_c &msg)
@@ -289,20 +261,15 @@ namespace Phobos
 	{
 		const Char_t *msg;
 
-		//if just turning on, ignore first input
+		//if just turning on
 		fActive = !fActive;
 		if(fActive)
-		{
-			fIgnoreFirstChar = true;
-			msg = "enabled";
-
-			ipInputMapper->Disable();			
+		{			
+			msg = "enabled";					
 		}
 		else
 		{
 			msg = "disabled";
-
-			ipInputMapper->Enable();
 		}
 
 		std::string tmp("Console ");
@@ -433,11 +400,6 @@ namespace Phobos
 		{
 			stream << e.what();
 		}
-	}
-
-	void Console_c::CmdToggleConsole(const StringVector_t &args, Context_c &)
-	{
-		this->ToggleConsole();
 	}
 
 	//

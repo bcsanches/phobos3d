@@ -82,6 +82,7 @@ namespace Phobos
 			inline const InputDeviceTypes_e GetDeviceType(void) const;
 
 			inline void AddListener(InputDeviceListener_c &listener);
+			inline void RemoveListener(InputDeviceListener_c &listener);
 
 		protected:
 			inline InputDevice_c(const String_c &name, InputDeviceTypes_e);
@@ -138,6 +139,11 @@ namespace Phobos
 	inline void InputDevice_c::AddListener(InputDeviceListener_c &listener)
 	{
 		lstListeners.push_back(listener);
+	}
+
+	inline void InputDevice_c::RemoveListener(InputDeviceListener_c &listener)
+	{
+		listener.hkListener.unlink();
 	}
 }
 

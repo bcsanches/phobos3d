@@ -22,26 +22,33 @@ subject to the following restrictions:
 
 #include <PH_Node.h>
 
-#include "PH_OgreEngineCoreAPI.h"
+#include "PH_EngineCoreAPI.h"
 
 #include "Gui/PH_ContextFwd.h"
 
 namespace Phobos
 {
+	struct InputEvent_s;
+
 	namespace Gui
 	{			
-		class PH_OGRE_ENGINE_CORE_API Context_c: public Node_c
+		class PH_ENGINE_CORE_API Context_c: public Node_c
 		{			
 			public:
-				static ContextPtr_t Create(const String_c &name);
+				static ContextPtr_t Create(const String_c &name, size_t screenWidth, size_t screenHeight);
 
-				Context_c(const String_c &name);
+				Context_c(const String_c &name, size_t screenWidth, size_t screenHeight);
+				~Context_c();
 
 				void Update();
 				void Render();
 
+				void InputEvent(const InputEvent_s &event);
+
+				void ResetMousePosition(short x, short y);
+
 				Rocket::Core::ElementDocument *LoadMouseCursor(const Char_t *path);
-				Rocket::Core::ElementDocument *LoadDocument(const Char_t *path);
+				Rocket::Core::ElementDocument *LoadDocument(const Char_t *path);				
 
 			protected:
 				Rocket::Core::Context *pclContext;

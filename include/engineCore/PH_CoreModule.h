@@ -33,6 +33,7 @@ namespace Phobos
 			virtual void OnBoot() {}
 			virtual void OnFinalize() {}
 			virtual void OnRenderReady() {}
+			virtual void OnStart() {}
 
 		protected:
 			explicit CoreModule_c(const String_c &name, UInt32_t flags = 0);

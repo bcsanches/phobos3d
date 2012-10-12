@@ -838,6 +838,8 @@
 /project/visual8_SDL/Sample_03/Sample_03.log
 /project/visual8_SDL/Sample_04/Sample_04.log
 /project/visual8_SDL/PH_DictionaryTest/dictionarytest.log
-/project\visual8_SDL\UT_EngineCore/enginecoretest.log
-/project\visual8_SDL\UT_GameEngine/UT_GameEngine_HandleManagerBasic.log
-/project\visual8_SDL\UT_GameEngine/UT_GameEngine_HandleManager_Full.log
+/project/visual8_SDL/UT_EngineCore/enginecoretest.log
+/project/visual8_SDL/UT_GameEngine/UT_GameEngine_HandleManagerBasic.log
+/project/visual8_SDL/UT_GameEngine/UT_GameEngine_HandleManager_Full.log
+/project/visual8_SDL/PH_Kernel/Release/
+/project/visual8_SDL/PH_OgreEngineCore/Release/

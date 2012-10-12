@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include <sstream>
 
 
-#include <Gui/PH_Manager.h>
+#include <Gui/PH_OgreManager.h>
 
 #include <PH_OgreConsole.h>
 #include <PH_ContextVar.h>
@@ -33,6 +33,7 @@ subject to the following restrictions:
 #include <PH_PluginManager.h>
 #include <PH_ProcVector.h>
 #include <PH_Render.h>
+#include <PH_Session.h>
 #include <PH_Timer.h>
 #include <PH_WorldManager.h>
 
@@ -69,6 +70,10 @@ namespace Phobos
 		clSingletons.AddProc(Console_c::ReleaseInstance);
 		core.AddModule(console);		
 
+		Session_c &session = Session_c::CreateInstance();
+		clSingletons.AddProc(Session_c::ReleaseInstance);
+		core.AddModule(session);
+
 		WorldManager_c &worldManager = WorldManager_c::CreateInstance();
 		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
 		core.AddModule(worldManager);
@@ -97,7 +102,7 @@ namespace Phobos
 		clSingletons.AddProc(ModelRendererManager_c::ReleaseInstance);
 		core.AddModule(modelRendererManager, CoreModulePriorities::LOWEST+2);
 
-		Gui::Manager_c &guiManager = Gui::Manager_c::CreateInstance();
+		Gui::OgreManager_c &guiManager = Gui::OgreManager_c::CreateInstance();
 		clSingletons.AddProc(Gui::Manager_c::ReleaseInstance);
 		core.AddModule(guiManager, CoreModulePriorities::LOWEST+1);
 

@@ -34,6 +34,8 @@ namespace Phobos
 			virtual const ContextVar_c &GetContextVar(const String_c &name) const = 0;
 			virtual const ContextVar_c *TryGetContextVar(const String_c &name) const = 0;
 
+			virtual void Execute(const String_c &cmd) = 0;
+
 		protected:
 			virtual ~IContext_c() {}
 

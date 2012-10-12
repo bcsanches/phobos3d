@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="RocketCore_d.lib RocketControls_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -136,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OgreTerrain.lib"
+				AdditionalDependencies="RocketCore.lib RocketControls.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -212,6 +213,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="RocketCore.lib RocketControls.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_dr.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -250,6 +252,30 @@
 			>
 			<File
 				RelativePath="..\..\..\include\engineCore\Math\PH_Functions.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Gui"
+			>
+			<File
+				RelativePath="..\..\..\src\engineCore\Gui\PH_Context.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\Gui\PH_Context.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\Gui\PH_Form.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\engineCore\Gui\PH_Manager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\engineCore\Gui\PH_Manager.h"
 				>
 			</File>
 		</Filter>
@@ -314,6 +340,22 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\engineCore\PH_IClient.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_IEscHandler.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_IInputHandler.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_IPlayerCommandProducer.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\engineCore\PH_Plugin.cpp"
 			>
 		</File>
@@ -327,6 +369,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\engineCore\PH_PluginManager.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\engineCore\PH_Session.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\engineCore\PH_Session.h"
 			>
 		</File>
 		<File

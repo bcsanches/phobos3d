@@ -154,17 +154,7 @@ namespace Phobos
 		}
 	}
 
-	void MouseInputDeviceSDL_c::AcquireCapture(void *window)
-	{
-	    //empty
-	}
-
-	void MouseInputDeviceSDL_c::ReleaseCapture(void)
-	{
-	    //empty
-	}
-
-	void MouseInputDeviceSDL_c::ClipToWindow(void *window)
+	void MouseInputDeviceSDL_c::ClipToWindow()
 	{
 		fClipToWindow = true;
 	    SDL_WM_GrabInput(SDL_GRAB_ON);
@@ -208,6 +198,32 @@ namespace Phobos
 	void MouseInputDeviceSDL_c::Disable()
 	{
 		SDL_ShowCursor(SDL_ENABLE);
+	}
+
+	void MouseInputDeviceSDL_c::ShowCursor()
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+
+	void MouseInputDeviceSDL_c::HideCursor()
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+
+	short MouseInputDeviceSDL_c::GetX()
+	{
+		int x;
+		SDL_GetMouseState(&x, NULL);
+
+		return x;
+	}
+
+	short MouseInputDeviceSDL_c::GetY()
+	{
+		int y;
+		SDL_GetMouseState(NULL, &y);
+
+		return y;
 	}
 
 	MouseInputDeviceSDL_c::SytemEventListner_c::SytemEventListner_c():

@@ -86,7 +86,7 @@ namespace Phobos
 
 	#define PH_MOUSE_THUMB_CMD_NAME "mouseThumb"
 
-	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer_c, ContextVarListener_c
+	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer_c
 	{
 		public:
 			SpectatorCameraCommandProducer_c(Context_c *context = NULL);
@@ -96,17 +96,11 @@ namespace Phobos
 			virtual void Enable();
 			virtual void Disable();
 
-			virtual void EnableMouse();
-			virtual void DisableMouse();
+			virtual bool IsMouseClipped() const;	
 
 			void SetMoveSpeed(Float_t v);
 			void SetTurnSpeed(Float_t v);
-			void SetMouseSensitivity(Float_t v);
-
-		private:
-			void OnVariableValueChanged(const class ContextVar_c &var);
-
-			void CmdNullMouseThumb(const StringVector_t &args, Context_c &);			
+			void SetMouseSensitivity(Float_t v);		
 
 		private:
 			AxisButton_c	clMoveButton;
@@ -114,8 +108,7 @@ namespace Phobos
 			AxisButton_c	clStrafeButton;
 			AxisButton_c	clTurnButton;
 			AxisButton_c	clLookButton;		
-			Thumb_c			clMouseThumb;
-			ContextCmd_c	cmdNullMouseThumb;
+			Thumb_c			clMouseThumb;			
 
 			Float_t			fpMoveSpeed;
 			Float_t			fpTurnSpeed;

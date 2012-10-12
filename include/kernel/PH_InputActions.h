@@ -102,10 +102,10 @@ namespace Phobos
 
 	enum MouseInput_e
 	{
-		MOUSE_THUMB = 1,
-		MOUSE_LBUTTON,
+		MOUSE_LBUTTON = 1,
 		MOUSE_RBUTTON,
-		MOUSE_MBUTTON
+		MOUSE_MBUTTON,
+		MOUSE_THUMB
 	};
 
 }

@@ -14,58 +14,47 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_GUI_MANAGER_H
-#define PH_GUI_MANAGER_H
+#ifndef PH_GUI_OGRE_MANAGER_H
+#define PH_GUI_OGRE_MANAGER_H
 
 #include <list>
 
 #include <OgreRenderQueueListener.h>
 
-#include <PH_ContextCmd.h>
-#include <PH_Singleton.h>
+#include <Gui/PH_Manager.h>
 
-#include "PH_CoreModule.h"
 #include "PH_OgreEngineCoreAPI.h"
-
-#include "PH_ContextFwd.h"
 
 namespace Phobos
 {
 	namespace Gui
 	{
-		PH_DECLARE_NODE_PTR(Manager);
+		PH_DECLARE_NODE_PTR(OgreManager);
 
-		class PH_OGRE_ENGINE_CORE_API Manager_c: public CoreModule_c, Ogre::RenderQueueListener
-		{
-			PH_DECLARE_SINGLETON_METHODS(Manager);
+		class PH_OGRE_ENGINE_CORE_API OgreManager_c: public Gui::Manager_c, Ogre::RenderQueueListener
+		{			
+			public:				
+				static OgreManager_c &CreateInstance(void);
 
-			public:
-				ContextPtr_t CreateContext(const String_c &name);
+				virtual ~OgreManager_c();
 
-				~Manager_c();
-
-			protected:
-				virtual void OnPrepareToBoot();
-				virtual void OnRenderReady();
-				virtual void OnUpdate();
+			protected:				
+				virtual void OnRenderReady();	
 				virtual void OnFinalize();
+
+				virtual size_t GetScreenWidth();
+				virtual size_t GetScreenHeight();
 
 			private:
 				virtual void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation);				
 
 			private:
-				Manager_c();
+				OgreManager_c();
 
 				void ConfigureRenderSystem();
 				void BuildProjectionMatrix(Ogre::Matrix4& projection_matrix);
-
-				void CmdRocketLoadFonfFace(const StringVector_t &container, Phobos::Context_c &);
-
-			private:
-				std::list<String_c> lstFontFacesToLoad;
-
-				ContextCmd_c		cmdRocketLoadFontFace;
-
+				
+			private:				
 				/**
 					Here we need to have our own Scene and own camera to allow GUI rendering when no scenario is loaded
 

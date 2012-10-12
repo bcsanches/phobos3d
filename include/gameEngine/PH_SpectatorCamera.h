@@ -31,7 +31,7 @@ namespace Phobos
 		public:
 			SpectatorCamera_c();
 
-			void FixedUpdate();
+			void FixedUpdate(IPlayerCmdPtr_t cmd);
 			void Update();
 
 			void EnableProducer();
@@ -41,11 +41,7 @@ namespace Phobos
 			void DisableMouse();
 
 			void Enable();
-			void Disable();
-
-			inline void SetMouseSensitivity(Float_t value);
-			inline void SetMoveSpeed(Float_t value);
-			inline void SetTurnSpeed(Float_t value);
+			void Disable();			
 
 			inline void SetCameraNearClipDistance(Float_t near);
 			inline void SetCameraFarClipDistance(Float_t far);
@@ -53,8 +49,7 @@ namespace Phobos
 			void SetTransform(const Transform_c &transform);		
 
 		private:
-			GameCamera_c						clCamera;
-			SpectatorCameraCommandProducer_c	clCameraCommandProducer;
+			GameCamera_c				clCamera;			
 
 			Transform_c					clCurrentTransform;
 
@@ -65,22 +60,7 @@ namespace Phobos
 			Ogre::Degree				dTurn;
 			Ogre::Degree				dLook;	
 	};
-
-	inline void SpectatorCamera_c::SetMouseSensitivity(Float_t value)
-	{
-		clCameraCommandProducer.SetMouseSensitivity(value);
-	}
-
-	inline void SpectatorCamera_c::SetMoveSpeed(Float_t value)
-	{
-		clCameraCommandProducer.SetMoveSpeed(value);
-	}
-
-	inline void SpectatorCamera_c::SetTurnSpeed(Float_t value)
-	{
-		clCameraCommandProducer.SetTurnSpeed(value);
-	}
-
+	
 	inline void SpectatorCamera_c::SetCameraNearClipDistance(Float_t nearDist)
 	{
 		clCamera.SetNearClipDistance(nearDist);

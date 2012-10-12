@@ -19,22 +19,22 @@ subject to the following restrictions:
 #include <boost/circular_buffer.hpp>
 
 #include <PH_Context.h>
-#include <PH_InputManager.h>
-#include <PH_InputMapper.h>
 #include <PH_Log.h>
+
+#include "PH_IInputHandler.h"
 
 namespace Phobos
 {
 	class Console_c;
+	struct InputEvent_s;
 
 	PH_DECLARE_NODE_PTR(Console);	
 
 	class PH_ENGINE_CORE_API Console_c: 
 		public CoreModule_c, 
 		public IContext_c,
-		private LogListener_c, 
-		private InputManagerListener_c, 
-		private InputDeviceListener_c
+		private LogListener_c,
+		public IInputHandler_c
 	{
 		private:
 			class EditBox_c
@@ -77,7 +77,7 @@ namespace Phobos
 
 			inline void AddContextVar(ContextVar_c &var);
 			inline void AddContextCmd(ContextCmd_c &cmd);
-			inline void RemoveContextCmd(ContextCmd_c &cmd);
+			inline void RemoveContextCmd(ContextCmd_c &cmd);			
 
 			inline const ContextVar_c &GetContextVar(const String_c &name) const;
 			inline const ContextVar_c *TryGetContextVar(const String_c &name) const;
@@ -87,11 +87,15 @@ namespace Phobos
 
 			inline bool IsActive(void) const;
 
+			void ToggleConsole(void);
+
+			void FlushCommandBuffer();
+			
+			bool HandleInputEvent(const InputEvent_s &event);
+
 		protected:
 			Console_c(const String_c &name, UInt32_t flags = 0);
 			virtual ~Console_c();
-
-			virtual void OnFixedUpdate();
 
 			virtual void OnToggleConsole() = 0;
 			virtual void OnEditBoxChanged() = 0;
@@ -108,10 +112,7 @@ namespace Phobos
 		private:
 			void CmdCd(const StringVector_t &args, Context_c &);
 			void CmdLs(const StringVector_t &args, Context_c &);
-			void CmdDumpTable(const StringVector_t &args, Context_c &);
-			void CmdToggleConsole(const StringVector_t &args, Context_c &);
-
-			void ToggleConsole(void);
+			void CmdDumpTable(const StringVector_t &args, Context_c &);			
 
 			void OnChar(Char_t ch);
 			void OnEnter(void);		
@@ -125,32 +126,27 @@ namespace Phobos
 			bool GetNextCommand(String_c &out);
 
 			//Log message handler
-			void Message(const String_c &message);
+			void Message(const String_c &message);					
 
-			void InputManagerEvent(const InputManagerEvent_s &event);
-			void InputEvent(const InputEvent_s &event);
+			void QueueCommand(const String_c &cmd);
 
 		private:			
 			Context_c					clContext;
 
-			InputMapperPtr_t			ipInputMapper;
-
 			ContextCmd_c				cmdLs;
 			ContextCmd_c				cmdCd;
-			ContextCmd_c				cmdDumpTable;
-			ContextCmd_c				cmdToggleConsole;
+			ContextCmd_c				cmdDumpTable;			
 			
 			String_c					strCurrentNodePathName;			
 
 			EditBox_c					clEditBox;
+			std::stringstream			clCommandBuffer;
 			
 			TextList_t	lstText;
 			TextList_t	lstHistory;
 
 			TextList_t::iterator		itPrevCmd;
-
-			bool fIgnoreFirstChar;
-			bool fIgnoredLastChar;			
+			
 			bool fActive;
 
 		private:

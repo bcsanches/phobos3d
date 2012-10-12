@@ -24,6 +24,7 @@ subject to the following restrictions:
 #include <PH_Kernel.h>
 #include <PH_MouseInputDevice.h>
 #include <PH_PointEntity.h>
+#include <PH_Session.h>
 #include <PH_Window.h>
 #include <PH_WorldManager.h>
 
@@ -43,20 +44,32 @@ namespace Phobos
 	PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
 
 	Client_c::Client_c():
-		BaseClient_c("Client"),
-		cmdToggleMouseCursorClip("toggleMouseCursorClip"),		
+		BaseClient_c("Client"),		
 		varMouseSensitivity("dvMouseSensitivity", "0.1"),
 		varSpectatorMoveSpeed("dvSpectatorMoveSpeed", "2.0"),
 		varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),		
 		fMapLoaded(false)
 	{
-		cmdToggleMouseCursorClip.SetProc(PH_CONTEXT_CMD_BIND(&Client_c::CmdToggleMouseCursorClip, this));		
-
 		varSpectatorMoveSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorMoveSpeedChanged, this));
 		varSpectatorTurnSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorTurnSpeedChanged, this));
 		varMouseSensitivity.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarMouseSensitivityChanged, this));
 
-		clSpectatorCamera.Disable();
+		clSpectatorCamera.Disable();		
+	}
+
+	void Client_c::SetPlayerCmd(IPlayerCmdPtr_t cmd)
+	{
+		ipPlayerCmd = cmd;
+	}
+
+	EscAction::Enum Client_c::HandleEsc(Gui::Form_c *&outForm)
+	{
+		Gui::LevelSelector_c &levelSelector = Gui::LevelSelector_c::GetInstance();
+		levelSelector.Open();
+
+		outForm = &levelSelector;
+
+		return EscAction::SET_GUI;
 	}
 
 	void Client_c::OnFixedUpdate()
@@ -64,7 +77,7 @@ namespace Phobos
 		if(!fMapLoaded)
 			return;
 
-		clSpectatorCamera.FixedUpdate();
+		clSpectatorCamera.FixedUpdate(ipPlayerCmd);
 	}
 
 	void Client_c::OnUpdate()
@@ -79,9 +92,7 @@ namespace Phobos
 	{
 		BaseClient_c::OnPrepareToBoot();
 
-		Console_c &console = Console_c::GetInstance();
-
-		console.AddContextCmd(cmdToggleMouseCursorClip);		
+		Console_c &console = Console_c::GetInstance();		
 
 		console.AddContextVar(varMouseSensitivity);
 		console.AddContextVar(varSpectatorMoveSpeed);
@@ -92,9 +103,14 @@ namespace Phobos
 
 	void Client_c::OnBoot()
 	{
-		BaseClient_c::OnBoot();
+		BaseClient_c::OnBoot();		
 
-		Gui::LevelSelector_c::GetInstance().Open();
+		Gui::LevelSelector_c &levelSelector = Gui::LevelSelector_c::GetInstance();
+		levelSelector.Open();
+
+		Session_c &session = Session_c::GetInstance();
+		session.SetForm(&levelSelector);
+		session.CloseConsole();
 	}
 
 	void Client_c::OnMapUnloaded()
@@ -112,41 +128,36 @@ namespace Phobos
 		PointEntity_c *player = static_cast<PointEntity_c *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
 		if(!player)
 		{
-			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contais InfoPlayerStart entity");
+			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contains InfoPlayerStart entity");
 		}
 		else
 		{
 			clSpectatorCamera.SetTransform(player->GetTransform());
 		}
 
+		Gui::LevelSelector_c::GetInstance().Close();
+
 		fMapLoaded = true;
 		clSpectatorCamera.Enable();
+		Session_c::GetInstance().SetPlayerCommandProducer(&clSpectatorCameraCommandProducer);
 
-		if(!this->IsMouseClipped())
-			this->ClipMouseCursor();
+		//make sure no gui is present
+		Session_c::GetInstance().SetForm(NULL);
 	}	
-
-	void Client_c::CmdToggleMouseCursorClip(const StringVector_t &, Context_c &  )
-	{
-		if(this->IsMouseClipped())
-			this->UnclipMouseCursor();
-		else
-			this->ClipMouseCursor();
-	}
-
+	
 	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
 	{
-		clSpectatorCamera.SetMoveSpeed(StringToFloat(newValue));
+		clSpectatorCameraCommandProducer.SetMoveSpeed(StringToFloat(newValue));
 	}
 
 	void Client_c::VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
 	{
-		clSpectatorCamera.SetTurnSpeed(StringToFloat(newValue));
+		clSpectatorCameraCommandProducer.SetTurnSpeed(StringToFloat(newValue));
 	}
 
 	void Client_c::VarMouseSensitivityChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
 	{
-		clSpectatorCamera.SetMouseSensitivity(StringToFloat(newValue));
+		clSpectatorCameraCommandProducer.SetMouseSensitivity(StringToFloat(newValue));
 	}
 }
 

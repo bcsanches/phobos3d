@@ -35,11 +35,14 @@ namespace Phobos
 
 			virtual void Update(void);
 
-			virtual void AcquireCapture(void *window);
-			virtual void ReleaseCapture(void);
-
-			virtual void ClipToWindow(void *window);
+			virtual void ClipToWindow();
 			virtual void Unclip(void);
+
+			virtual void ShowCursor();
+			virtual void HideCursor();
+
+			virtual short GetX();
+			virtual short GetY();
 
 		private:
 			virtual void Event(struct Event_s &event);

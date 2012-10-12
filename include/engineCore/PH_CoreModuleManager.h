@@ -48,6 +48,7 @@ namespace Phobos
 			PREPARE_TO_BOOT,
 			BOOT,
 			RENDER_READY,
+			START,
 			FINALIZE
 		};
 	}

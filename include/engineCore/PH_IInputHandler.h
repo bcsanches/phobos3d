@@ -14,43 +14,20 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_IINPUT_HANDLER_H
+#define PH_IINPUT_HANDLER_H
 
-#include "Gui/PH_Context.h"
-
-#include <boost/make_shared.hpp>
-
-#include <PH_Render.h>
-
-Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_c &name)
+namespace Phobos
 {
-	return boost::make_shared<Context_c>(name);
+	struct InputEvent_s;
+
+	class IInputHandler_c
+	{
+		public:
+			virtual bool HandleInputEvent(const InputEvent_s &event) = 0;
+
+			virtual ~IInputHandler_c() {}
+	};
 }
 
-Phobos::Gui::Context_c::Context_c(const String_c &name):
-	Node_c(name),
-	pclContext(NULL)
-{
-	Phobos::Render_c &render = Render_c::GetInstance();	
-
-	pclContext = Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(render.GetScreenWidth(), render.GetScreenHeight()));
-}
-
-void Phobos::Gui::Context_c::Update()
-{
-	pclContext->Update();	
-}
-
-void Phobos::Gui::Context_c::Render()
-{
-	pclContext->Render();
-}
-
-Rocket::Core::ElementDocument *Phobos::Gui::Context_c::LoadMouseCursor(const Char_t *path)
-{
-	return pclContext->LoadMouseCursor(path);
-}
-
-Rocket::Core::ElementDocument *Phobos::Gui::Context_c::LoadDocument(const Char_t *path)
-{
-	return pclContext->LoadDocument(path);
-}
+#endif

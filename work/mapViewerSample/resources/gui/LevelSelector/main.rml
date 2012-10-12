@@ -22,9 +22,16 @@
 			}
 		</style>
 	</head>
-	<body template="window">
-	    <datagrid source="LevelFileDataSource.files">
+	<body template="window">       
+	    <datagrid id="datagrid" source="LevelFileDataSource.files">
         	<col fields="#fileName" width="100%">Level</col>        	
         </datagrid>
+        
+        <form id="loadForm">
+            <input id="btnLoadLevel" type="submit">Load</input>
+        </form>
+        <form id = "quitForm">
+            <input id="btnQuit" type="submit">Quit</input>
+        </form>
 	</body>
 </rml>

@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <PH_Core.h>
 #include <PH_Error.h>
 #include <PH_Kernel.h>
+#include <PH_Memory.h>
 
 #include <OgreOverlayContainer.h>
 #include <OgreOverlayElement.h>

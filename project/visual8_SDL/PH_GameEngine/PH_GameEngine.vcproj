@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OgreTerrain.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
+				AdditionalDependencies="OgreMain.lib OgreTerrain.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib RocketCore.lib RocketControls.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\lib\&quot;"
 				GenerateDebugInformation="true"
@@ -215,7 +215,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib OgreTerrain.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib"
+				AdditionalDependencies="OgreMain.lib OgreTerrain.lib BulletDynamics.lib BulletCollision.lib LinearMath.lib RocketCore.lib RocketControls.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_dr.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\lib\&quot;"
@@ -704,10 +704,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\gameEngine\PH_IGameController.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\gameEngine\PH_IPlayerCommandProducer.h"
 			>
 		</File>
 		<File

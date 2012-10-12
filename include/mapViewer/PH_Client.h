@@ -38,11 +38,15 @@ namespace Phobos
 		public:
 			PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL;
 
+			virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd);
+
+			virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm);
+
 		protected:
 			void OnFixedUpdate();
 			void OnUpdate();			
 			void OnPrepareToBoot();
-			void OnBoot();
+			void OnBoot();			
 
 		private:
 			Client_c();
@@ -58,14 +62,16 @@ namespace Phobos
 
 			struct ConfigInfo_s GetConfig();
 
-		private:					
-			ContextCmd_c		cmdToggleMouseCursorClip;				
+		private:								
 			ContextVar_c		varMouseSensitivity;
 
 			ContextVar_c		varSpectatorMoveSpeed;
 			ContextVar_c		varSpectatorTurnSpeed;
 
 			SpectatorCamera_c	clSpectatorCamera;
+			SpectatorCameraCommandProducer_c clSpectatorCameraCommandProducer;
+
+			IPlayerCmdPtr_t		ipPlayerCmd;
 			
 			bool fMapLoaded;
 	};

@@ -16,4 +16,7 @@ copy %OGRE_VC8_HOME%\build\bin\release\Plugin_ParticleFX.dll %1
 copy %OGRE_VC8_HOME%\build\bin\release\Plugin_CgProgramManager.dll %1
 copy %OGRE_VC8_HOME%\Dependencies\bin\Release\cg.dll %1
 
+copy %LIB_ROCKET_VC8_HOME%\bin\RocketCore.dll %1
+copy %LIB_ROCKET_VC8_HOME%\bin\RocketControls.dll %1 
+
 copy %SDL_HOME%\VisualC\SDL\Release\SDL.dll %1

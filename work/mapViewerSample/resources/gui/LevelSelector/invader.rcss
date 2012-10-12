@@ -300,6 +300,11 @@ datagrid datagridrow:nth-child(even)
 	background: #FFFFFFA0;
 }
 
+datagrid datagridrow.selected
+{
+   background: #efbf00;
+}
+
 select selectbox option:hover,
 dataselect selectbox option:hover
 {

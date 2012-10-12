@@ -26,6 +26,7 @@ subject to the following restrictions:
 #include <PH_Singleton.h>
 
 #include <Gui/PH_ContextFwd.h>
+#include <Gui/PH_Form.h>
 
 #include "PH_GameEngineAPI.h"
 
@@ -35,25 +36,34 @@ namespace Phobos
 	{
 		PH_DECLARE_SINGLETON_PTR(LevelSelector);
 
-		class LevelFileDataSource_c;
+		class DataGridController_c;
+		class LevelFileDataSource_c;		
 
-		class PH_GAME_ENGINE_API LevelSelector_c: public CoreModule_c
+		class PH_GAME_ENGINE_API LevelSelector_c: public CoreModule_c, public Gui::Form_c
 		{
 			PH_DECLARE_SINGLETON_METHODS(LevelSelector);
 
 			public:
 				~LevelSelector_c();
 
-				void Open();
-				void Close();
+				virtual void Open();
+				virtual void Close();
+
+				virtual EscAction::Enum HandleEsc(Phobos::Gui::Form_c *&outForm);				
 
 			protected:
 				LevelSelector_c();				
 
 				virtual void OnPrepareToBoot();
 				virtual void OnFinalize();
+				virtual void OnFixedUpdate();
 
 			private:
+				friend class LevelSelectorEventListener_c;
+
+				void OnLoadButtonClick();
+				void OnQuitButtonClick();
+
 				void CmdAddLevelPath(const Phobos::StringVector_t &args, Phobos::Context_c &);
 
 			private:
@@ -63,7 +73,10 @@ namespace Phobos
 
 				ContextCmd_c		cmdAddLevelPath;
 
+				bool				fCloseRequested;
+
 				boost::scoped_ptr<LevelFileDataSource_c> spDataSource;
+				boost::scoped_ptr<DataGridController_c> spDataGridController;
 		};
 	}
 }

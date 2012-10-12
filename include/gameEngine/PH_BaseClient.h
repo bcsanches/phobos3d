@@ -17,49 +17,18 @@ subject to the following restrictions:
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
+#include <PH_IClient.h>
 #include <PH_MouseInputDevice.h>
 
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API BaseClient_c: public CoreModule_c
-	{
-		public:
-			struct ConfigInfo_s
-			{
-				MouseInputDevice_c *pclMouse;
-				void *pWindowHandler;
-			};			
-
+	class PH_GAME_ENGINE_API BaseClient_c: public CoreModule_c, public IClient_c
+	{	
 		protected:
 			BaseClient_c(const char *name);
 
-			virtual void OnPrepareToBoot();
-
-			struct ConfigInfo_s GetConfig();
-
-			void ClipMouseCursor();
-			void UnclipMouseCursor();
-
-			void RegisterToggleMouseCursorClipCmd();
-
-			void RegisterNullMouseThumbCmd();
-			void UnregisterNullMouseThumbCmd();
-
-			bool IsMouseClipped();
-
-			virtual void OnMouseClip() {};
-			virtual void OnMouseUnclip() {};		
-
-		private:
-			void CmdToggleMouseCursorClip(const Phobos::StringVector_t &args, Phobos::Context_c &);
-			void CmdNullMouseThumb(const Phobos::StringVector_t &args, Phobos::Context_c &);
-
-		private:
-			ContextCmd_c cmdToggleMouseCursorClip;
-			ContextCmd_c cmdNullMouseThumb;
-
-			ContextVar_c varMouseClipped;
+			virtual void OnPrepareToBoot();					
 	};
 }

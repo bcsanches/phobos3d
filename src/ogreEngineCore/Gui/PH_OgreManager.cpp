@@ -14,9 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Gui/PH_Manager.h"
-
-#include <boost/foreach.hpp>
+#include "Gui/PH_OgreManager.h"
 
 #include <OgreRoot.h>
 
@@ -24,66 +22,33 @@ subject to the following restrictions:
 #include <Rocket/Core/SystemInterface.h>
 
 #include <PH_Console.h>
-#include <PH_ContextUtils.h>
-#include <PH_Core.h>
 #include <PH_Kernel.h>
-#include <PH_Memory.h>
 
 #include "Gui/PH_Context.h"
 #include "Gui/PH_OgreRenderInterface.h"
 
 #include "PH_Render.h"
 
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::Manager);
+Phobos::Gui::OgreManager_c &Phobos::Gui::OgreManager_c::CreateInstance(void)
+{		
+	Phobos::Gui::OgreManager_c::UpdateInstance(OgreManagerPtr_t(PH_NEW OgreManager_c()));		
 
-namespace 
-{
-	class SystemInterface_c: public Rocket::Core::SystemInterface
-	{
-		public:
-			virtual float GetElapsedTime();
-
-			/// Logs the specified message.
-			virtual bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message);
-	};
-
-	float SystemInterface_c::GetElapsedTime()
-	{
-		return Phobos::Core_c::GetInstance().GetUiTimer().fpTotalTicks;
-	}
-					
-	bool SystemInterface_c::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
-	{
-		std::stringstream stream;
-		stream << "Rocket: " << message.CString();
-		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
-
-		return false;
-	}
+	return static_cast<OgreManager_c &>(OgreManager_c::GetInstance());
 }
 
-Phobos::Gui::Manager_c::Manager_c():
-	CoreModule_c("GuiManager", NodeFlags::PRIVATE_CHILDREN),
-	cmdRocketLoadFontFace("rocketLoadFontFace"),
+Phobos::Gui::OgreManager_c::OgreManager_c():	
 	pclSceneManager(NULL),
 	pclCamera(NULL)
 {
-	cmdRocketLoadFontFace.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Gui::Manager_c::CmdRocketLoadFonfFace, this));
+	//empty
 }
 
-Phobos::Gui::Manager_c::~Manager_c()
+Phobos::Gui::OgreManager_c::~OgreManager_c()
 {
-	Rocket::Core::Shutdown();	
+	//empty
 }
 
-void Phobos::Gui::Manager_c::OnPrepareToBoot()
-{
-	Console_c &console = Console_c::GetInstance();
-
-	console.AddContextCmd(cmdRocketLoadFontFace);
-}
-
-void Phobos::Gui::Manager_c::OnRenderReady()
+void Phobos::Gui::OgreManager_c::OnRenderReady()
 {
 	Ogre::ResourceGroupManager::getSingleton().createResourceGroup("Rocket");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("./", "FileSystem", "Rocket");
@@ -95,19 +60,14 @@ void Phobos::Gui::Manager_c::OnRenderReady()
 	Rocket::Core::SetRenderInterface(renderer);
 	renderer->Release();
 
-	SystemInterface_c *systemInterface = PH_NEW SystemInterface_c();
+	Rocket::Core::SystemInterface *systemInterface = this->CreateSystemInterface();
 	Rocket::Core::SetSystemInterface(systemInterface);
 	systemInterface->Release();
 
 	Rocket::Core::Initialise();
 	Rocket::Controls::Initialise();
 
-	BOOST_FOREACH(String_c &path, lstFontFacesToLoad)
-	{
-		Rocket::Core::FontDatabase::LoadFontFace(path.c_str());	
-	}
-
-	lstFontFacesToLoad.clear();
+	this->LoadFonts();
 
 	pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
 	pclCamera = pclSceneManager->createCamera("Phobos::Gui::Manager::Camera");
@@ -119,7 +79,7 @@ void Phobos::Gui::Manager_c::OnRenderReady()
 	vp->setClearEveryFrame(false, Ogre::FBT_COLOUR);
 }
 
-void Phobos::Gui::Manager_c::OnFinalize()
+void Phobos::Gui::OgreManager_c::OnFinalize()
 {
 	if(pclSceneManager)
 	{
@@ -131,18 +91,13 @@ void Phobos::Gui::Manager_c::OnFinalize()
 		render.DestroySceneManager(pclSceneManager);
 		pclSceneManager = NULL;
 	}
+
+	Rocket::Core::Shutdown();
+
+	Gui::Manager_c::OnFinalize();
 }
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
-{
-	ContextPtr_t ptr = Context_c::Create(name);
-
-	this->AddPrivateChild(*ptr);
-
-	return ptr;
-}
-
-void Phobos::Gui::Manager_c::BuildProjectionMatrix(Ogre::Matrix4& projection_matrix)
+void Phobos::Gui::OgreManager_c::BuildProjectionMatrix(Ogre::Matrix4& projection_matrix)
 {
 	float z_near = -1;
 	float z_far = 1;
@@ -160,7 +115,7 @@ void Phobos::Gui::Manager_c::BuildProjectionMatrix(Ogre::Matrix4& projection_mat
 	projection_matrix[3][3]= 1.0000000f;
 }
 
-void Phobos::Gui::Manager_c::ConfigureRenderSystem()
+void Phobos::Gui::OgreManager_c::ConfigureRenderSystem()
 {
 	Ogre::RenderSystem* render_system = Ogre::Root::getSingleton().getRenderSystem();
 
@@ -212,17 +167,7 @@ void Phobos::Gui::Manager_c::ConfigureRenderSystem()
 	render_system->_setDepthBias(0, 0);
 }
 
-void Phobos::Gui::Manager_c::OnUpdate()
-{
-	for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
-	{
-		Context_c *context = static_cast<Context_c *>(it->second);
-
-		context->Update();
-	}
-}
-
-void Phobos::Gui::Manager_c::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool &skipThisInvocation)
+void Phobos::Gui::OgreManager_c::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool &skipThisInvocation)
 {
 	if (queueGroupId == Ogre::RENDER_QUEUE_OVERLAY && Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled())
 	{
@@ -237,14 +182,12 @@ void Phobos::Gui::Manager_c::renderQueueStarted(Ogre::uint8 queueGroupId, const 
 	}
 }
 
-void Phobos::Gui::Manager_c::CmdRocketLoadFonfFace(const StringVector_t &container, Phobos::Context_c &)
+size_t Phobos::Gui::OgreManager_c::GetScreenWidth()
 {
-	if(container.size() < 2)
-	{
-		Kernel_c::GetInstance().LogMessage("[Phobos::Gui::Manager_c::CmdRocketLoadFonfFace] ERROR: insuficient parameters, usage: rocketLoadFontFace <fontName>");
+	return Render_c::GetInstance().GetScreenWidth();
+}
 
-		return;
-	}
-
-	lstFontFacesToLoad.push_back(container[1]);		
+size_t Phobos::Gui::OgreManager_c::GetScreenHeight()
+{
+	return Render_c::GetInstance().GetScreenHeight();
 }

@@ -28,9 +28,9 @@ namespace Phobos
 		clCamera.EnableViewport();		
 	}
 
-	void SpectatorCamera_c::FixedUpdate()
+	void SpectatorCamera_c::FixedUpdate(IPlayerCmdPtr_t playerCmd)
 	{
-		SpectatorCameraCmdPtr_t cmd = boost::static_pointer_cast<SpectatorCameraCmd_c>(clCameraCommandProducer.CreateCmd());
+		SpectatorCameraCmdPtr_t cmd = boost::static_pointer_cast<SpectatorCameraCmd_c>(playerCmd);
 
 		using namespace Ogre;
 
@@ -73,36 +73,14 @@ namespace Phobos
 		dTurn = transform.GetRotation().getYaw().valueDegrees();
 		dLook = transform.GetRotation().getPitch().valueDegrees();
 	}
-
-	void SpectatorCamera_c::EnableProducer()
-	{
-		clCameraCommandProducer.Enable();
-	}
 	
-	void SpectatorCamera_c::DisableProducer()
-	{
-		clCameraCommandProducer.Disable();
-	}
-
-	void SpectatorCamera_c::EnableMouse()
-	{
-		clCameraCommandProducer.EnableMouse();
-	}
-
-	void SpectatorCamera_c::DisableMouse()
-	{
-		clCameraCommandProducer.DisableMouse();
-	}
-
 	void SpectatorCamera_c::Enable()
 	{
-		clCamera.Enable();
-		clCameraCommandProducer.Enable();
+		clCamera.Enable();		
 	}
 
 	void SpectatorCamera_c::Disable()
 	{
-		clCamera.Disable();
-		clCameraCommandProducer.Disable();
+		clCamera.Disable();		
 	}
 }

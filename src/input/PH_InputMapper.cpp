@@ -36,12 +36,12 @@ Phobos 3d
 
 namespace Phobos
 {
-	InputMapperPtr_t InputMapper_c::Create(const String_c &name, Context_c &context)
+	InputMapperPtr_t InputMapper_c::Create(const String_c &name, IContext_c &context)
 	{
 		return InputMapperPtr_t(PH_NEW InputMapper_c(name, context));
 	}
 
-	InputMapper_c::InputMapper_c(const String_c &name, Context_c &context):
+	InputMapper_c::InputMapper_c(const String_c &name, IContext_c &context):
 		Node_c(name),
 		rclContext(context),
 		fDisable(false),

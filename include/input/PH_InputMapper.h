@@ -88,9 +88,9 @@ namespace Phobos
 			// =====================================================
 			// PUBLIC METHODS
 			// =====================================================
-			static InputMapperPtr_t Create(const String_c &name, Context_c &context);
+			static InputMapperPtr_t Create(const String_c &name, IContext_c &context);
 
-			InputMapper_c(const String_c &name, Context_c &context);
+			InputMapper_c(const String_c &name, IContext_c &context);
 			~InputMapper_c(void);
 
 			void Bind(const String_c &devicePathName, const String_c &actionName, const String_c &cmd);
@@ -132,7 +132,7 @@ namespace Phobos
 			typedef std::map<String_c, DeviceMapper_c> InputDeviceMap_t;
 			InputDeviceMap_t		mapInputDevices;
 
-			Context_c				&rclContext;
+			IContext_c				&rclContext;
 
 			bool					fDisable;				
 

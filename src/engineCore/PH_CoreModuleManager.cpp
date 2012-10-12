@@ -88,6 +88,7 @@ namespace Phobos
 	void CoreModuleManager_c::OnRenderReady()
 	{
 		this->OnEvent(CoreEvents::RENDER_READY);
+		this->OnEvent(CoreEvents::START);
 	}
 
 	void CoreModuleManager_c::OnFinalize()
@@ -200,6 +201,10 @@ namespace Phobos
 
 				case CoreEvents::RENDER_READY:
 					this->CallCoreModuleProc(&CoreModule_c::OnRenderReady);
+					break;
+
+				case CoreEvents::START:
+					this->CallCoreModuleProc(&CoreModule_c::OnStart);
 					break;
 
 				case CoreEvents::FINALIZE:

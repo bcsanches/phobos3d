@@ -117,7 +117,7 @@ namespace Phobos
 				virtual void OnBoot();
 
 				virtual void OnFixedUpdate();
-				virtual void OnUpdate();
+				virtual void OnUpdate();				
 
 			private:
 				template<typename T>
