@@ -130,6 +130,7 @@ void Sample_c::Run()
 int main(int, char **)
 {
 	Phobos::EnableMemoryTracker();
+	Phobos::BreakMemoryAllocation(150);
 
 	{
 		Sample_c sample;

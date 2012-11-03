@@ -92,7 +92,8 @@ void Sample_c::Run()
 
 int main(int, char **)
 {
-	Phobos::EnableMemoryTracker();
+	//Phobos::EnableMemoryTracker();
+	//Phobos::BreakMemoryAllocation(150);
 
 	{
 		Sample_c sample;
@@ -100,7 +101,7 @@ int main(int, char **)
 		sample.Run();			
 	}
 	
-	Phobos::DumpMemoryLeaks();
+	//Phobos::DumpMemoryLeaks();
 
 	return 0;
 }

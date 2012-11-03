@@ -22,7 +22,6 @@ subject to the following restrictions:
 #include <boost/scoped_ptr.hpp>
 
 #include <OgrePrerequisites.h>
-#include <OgreRTShaderSystem.h>
 #include <OgreSceneManager.h>
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
@@ -33,6 +32,14 @@ subject to the following restrictions:
 #include <PH_Window.h>
 
 #include "PH_OgreEngineCoreAPI.h"
+
+namespace Ogre
+{
+	namespace RTShader
+	{
+		class ShaderGenerator;
+	}
+}
 
 namespace Phobos
 {

@@ -128,11 +128,11 @@ namespace Phobos
 			public:
 				virtual void ProcessEvent(Rocket::Core::Event& event)
 				{
-					if(event.GetCurrentElement()->GetId() == "loadform")
+					if(event.GetCurrentElement()->GetId() == "loadForm")
 					{
 						LevelSelector_c::GetInstance().OnLoadButtonClick();
 					}
-					else if(event.GetCurrentElement()->GetId() == "quitform")
+					else if(event.GetCurrentElement()->GetId() == "quitForm")
 					{
 						LevelSelector_c::GetInstance().OnQuitButtonClick();
 					}

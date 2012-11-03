@@ -57,7 +57,7 @@ namespace Phobos
 		void Manager_c::OnBoot()
 		{
 			spCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&clCollisionConfig));
-			spWorld.reset(PH_NEW btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
+			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
 
 			spWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
 			clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&clGhostPairCallback); 
@@ -149,7 +149,8 @@ namespace Phobos
 			if(dynamic)
 				btShape.calculateLocalInertia(mass, localInertia);			
 
-			btDefaultMotionState *motionState = PH_NEW btDefaultMotionState(MakeTransform(transform, fpScale));
+			//FIXME
+			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform, fpScale));
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
 

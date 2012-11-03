@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include <OgreMaterialManager.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
+#include <OgreRTShaderSystem.h>
 #include <OgreShadowCameraSetup.h>
 #include <OgreShadowCameraSetupPSSM.h>
 #include <OgreSubEntity.h>

@@ -38,6 +38,7 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include "Console.h"
 #include "Render.h"
 
+#include <PH_Session.h>
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
 #include <PH_Core.h>
@@ -73,7 +74,11 @@ EngineMain_c::EngineMain_c()
 
 	Phobos::Console_c &console = ::Console_c::CreateInstance();
 	clSingletons.AddProc(Phobos::Console_c::ReleaseInstance);
-	core.AddModule(console);					
+	core.AddModule(console);
+
+	Phobos::Session_c &session = Phobos::Session_c::CreateInstance();
+	clSingletons.AddProc(Phobos::Session_c::ReleaseInstance);
+	core.AddModule(session);
 
 	Render_c &render = Render_c::CreateInstance();
 	clSingletons.AddProc(Render_c::ReleaseInstance);

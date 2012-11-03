@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{50b62dd0-398c-4d27-b0db-9016b5f45885}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_ContextFwd.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_OgreManager.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_OgreRenderInterface.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_OgreConsole.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_OgreEngineCoreAPI.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_OgreMathFunctions.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_OgreUtils.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_Render.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_Transform.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_TransformProperty.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_TransformPropertyFwd.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_Vector3Property.h" />
+    <ClInclude Include="..\..\..\include\ogreEngineCore\PH_Vector3PropertyFwd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\ogreEngineCore\Gui\PH_OgreManager.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ogreEngineCore\Gui\PH_OgreRenderInterface.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ogreEngineCore\PH_OgreConsole.cpp" />
+    <ClCompile Include="..\..\..\src\ogreEngineCore\PH_OgreUtils.cpp" />
+    <ClCompile Include="..\..\..\src\ogreEngineCore\PH_Render.cpp" />
+  </ItemGroup>
+</Project>
