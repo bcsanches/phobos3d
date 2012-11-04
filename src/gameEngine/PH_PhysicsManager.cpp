@@ -148,8 +148,7 @@ namespace Phobos
 
 			if(dynamic)
 				btShape.calculateLocalInertia(mass, localInertia);			
-
-			//FIXME
+			
 			btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform, fpScale));
 
 			btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
