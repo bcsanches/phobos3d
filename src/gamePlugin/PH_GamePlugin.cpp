@@ -42,7 +42,7 @@ namespace Phobos
 			ipManager->AddModule(info.pfnCreate());
 		}
 
-		ipManager->LaunchBootModule("game.cfg");
+		ipManager->LaunchBootModule("game.cfg", 0, nullptr);
 	}
 
 	void GamePlugin_c::Finalize()

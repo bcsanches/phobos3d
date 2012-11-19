@@ -213,7 +213,11 @@ BOOST_AUTO_TEST_CASE(core_basic)
 
 	}
 
-	core.LaunchBootModule("autoexec.cfg");
+	ContextVar_c varExternal("dvExternal", "");
+	Console_c::GetInstance().AddContextVar(varExternal);
+
+	char * const argv[] = {"myexe.exe", "set dvExternal boo"};
+	core.LaunchBootModule("autoexec.cfg", 2, argv);
 
 	TestModule_c *testModule;
 	{
@@ -269,6 +273,9 @@ BOOST_AUTO_TEST_CASE(core_basic)
 		//Force boot dispatch
 		core.FixedUpdate(1);
 		BOOST_CHECK(testModule->iBootCount);
+
+		//Check if the external command line was used
+		BOOST_CHECK(varExternal.GetValue().compare("boo") == 0);
 
 		core.AddModuleToDestroyList(*testModule);
 		BOOST_REQUIRE(TestModule_c::iCount == 1);

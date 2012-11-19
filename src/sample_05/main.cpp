@@ -86,7 +86,7 @@ EngineMain_c::EngineMain_c()
 
 	core.RegisterCommands(console);	
 
-	core.LaunchBootModule("autoexec.cfg");
+	core.LaunchBootModule("autoexec.cfg", 0, nullptr);
 }
 
 EngineMain_c::~EngineMain_c()

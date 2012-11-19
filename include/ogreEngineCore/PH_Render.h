@@ -174,6 +174,7 @@ namespace Phobos
 			ContextVar_c						varRShaderSystemLibPath;
 
 			ContextVar_c						varRCaelum;
+			ContextVar_c						varParentWindow;
 
 			ContextCmd_c						cmdOgreLoadPlugin;
 			ContextCmd_c						cmdOgreAddResourceLocation;

@@ -66,7 +66,7 @@ namespace Phobos
 
 			void OnEvent(CoreEvents::Enum event);
 
-			void LaunchBootModule(const String_c &cfgName);
+			void LaunchBootModule(const String_c &cfgName, int argc, char *const argv[]);
 
 			void LogCoreModules();
 

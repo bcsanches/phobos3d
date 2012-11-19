@@ -33,7 +33,7 @@ namespace Phobos
 		public:
 			static WindowPtr_t Create(const String_c &name);
 
-			virtual void Open(const String_c &name, const Rect_s<size_t> &rect) = 0;
+			virtual void Open(const String_c &name, const Rect_s<size_t> &rect, void *parentWindow = NULL) = 0;
 			virtual void *GetHandler() const = 0;
 			virtual bool HasGLContext() = 0;	
 

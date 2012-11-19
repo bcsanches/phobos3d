@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\ogreEngineCore\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\include\dictionary\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_MSVC;PH_SDL;PH_CHECK_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_CORE_EXPORTS;PH_WIN32;PH_DEBUG;PH_MSVC;PH_SDL;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>

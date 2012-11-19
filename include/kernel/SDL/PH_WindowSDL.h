@@ -31,8 +31,7 @@ namespace Phobos
 		public:			
 			~WindowSDL_c();
 
-			void Open(	const String_c &name,
-						const Rect_s<size_t> &rect);
+			void Open(	const String_c &name, const Rect_s<size_t> &rect, void *parentWindow = NULL);
 
 			size_t GetWidth(void) const;
 			size_t GetHeight(void) const;

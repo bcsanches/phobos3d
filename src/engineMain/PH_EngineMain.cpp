@@ -44,7 +44,7 @@ namespace Phobos
 	class EngineMain_c
 	{
 		public:
-			EngineMain_c();
+			EngineMain_c(int argc, char *const argv[]);
 			~EngineMain_c();
 
 			void MainLoop(void);					
@@ -53,7 +53,7 @@ namespace Phobos
 			ProcVector_c	clSingletons;
 	};
 
-	EngineMain_c::EngineMain_c()
+	EngineMain_c::EngineMain_c(int argc, char * const argv[])
 	{
 		Kernel_c::CreateInstance("phobos.log");
 		Core_c &core = Core_c::CreateInstance();
@@ -113,7 +113,7 @@ namespace Phobos
 		core.RegisterCommands(console);
 		dictionaryManager.RegisterCommands(console);
 
-		core.LaunchBootModule("autoexec.cfg");
+		core.LaunchBootModule("autoexec.cfg", argc, argv);
 	}
 
 	EngineMain_c::~EngineMain_c()
@@ -136,7 +136,7 @@ namespace Phobos
 	}
 }
 
-int main(int, char **)
+extern "C" int SDL_main(int argc, char *argv[])
 {
 	#ifdef PH_DEBUG
 		Phobos::EnableMemoryTracker();
@@ -145,7 +145,7 @@ int main(int, char **)
 	#endif
 
 	{
-		Phobos::EngineMain_c engine;
+		Phobos::EngineMain_c engine(argc, argv);
 
 	#ifndef PH_DEBUG
 		try

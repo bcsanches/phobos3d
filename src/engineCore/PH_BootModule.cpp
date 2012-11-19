@@ -25,12 +25,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	BootModulePtr_t BootModule_c::Create(const String_c &cfgName, CoreModuleManager_c &manager)
-	{
-		return BootModulePtr_t(PH_NEW BootModule_c(cfgName, manager));
-	}
-
-	BootModule_c::BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager):
+	BootModule_c::BootModule_c(const String_c &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager):
 		CoreModule_c("BootModule"),
 		strCfgName(cfgName),
 		iFixedUpdateCount(0),
@@ -39,6 +34,13 @@ namespace Phobos
 		fBootFired(false),
 		rclManager(manager)
 	{
+		if(argc > 1)
+		{
+			vecArgs.reserve(argc-1);
+
+			for(int i = 1;i < argc; ++i)
+				vecArgs.push_back(argv[i]);
+		}
 	}
 
 	void BootModule_c::OnFixedUpdate()
@@ -61,7 +63,19 @@ namespace Phobos
 			{
 				try
 				{
-					Console_c::GetInstance().ExecuteFromFile(strCfgName);
+					Console_c &console = Console_c::GetInstance();					
+					console.ExecuteFromFile(strCfgName);
+
+					if(!vecArgs.empty())
+					{						
+						std::for_each(vecArgs.begin(), vecArgs.end(), [&console](const std::string &arg)
+							{
+								console.Execute(arg);
+							}
+						);
+
+						console.FlushCommandBuffer();
+					}
 				}
 				catch(FileNotFoundException_c &e)
 				{

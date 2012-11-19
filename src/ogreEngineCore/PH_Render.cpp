@@ -148,7 +148,8 @@ namespace Phobos
 		varRRenderSystem("dvRRenderSystem", "Direct3D9"),
 		varRShaderSystem("dvRShaderSystem", "true"),
 		varRShaderSystemLibPath("dvRShaderSystemLibPath", "resources/RTShaderLib"),
-		varRCaelum("dvRCaelum", "1"),		
+		varRCaelum("dvRCaelum", "1"),	
+		varParentWindow("dvParentWindow", "0x0"),
 		cmdOgreLoadPlugin("ogreLoadPlugin"),
 		cmdOgreAddResourceLocation("ogreAddResourceLocation"),
 		cmdOgreInitialiseResourceGroup("ogreInitialiseResourceGroup"),
@@ -227,8 +228,21 @@ namespace Phobos
 		bool fullScreen = varRFullScreen.GetBoolean();
 		bool vsync = varRVSync.GetBoolean();
 
+		unsigned int parentWindow = 0;
+		
+		if(!StringIsBlank(varParentWindow.GetValue()))
+		{
+			kernel.LogMessage("[Render_c::OnBoot] Setting parent window.");
+
+			sscanf(varParentWindow.GetValue().c_str(), "%X", &parentWindow);						
+		}
+		else
+		{
+			kernel.LogMessage("[Render_c::OnBoot] No parentWindow set.");
+		}
+
 		kernel.LogMessage("[Render_c::OnBoot] Opening render window");
-		ipWindow->Open("Phobos Engine", r);
+		ipWindow->Open("Phobos Engine", r, reinterpret_cast<void*>(parentWindow));
 
 		//We need to do a "lazy load" with Ogre plugins, to make sure the render plugins are only 
 		//loaded after screen is created.
@@ -377,6 +391,7 @@ namespace Phobos
 		console.AddContextVar(varRVSync);
 		console.AddContextVar(varRRenderSystem);
 		console.AddContextVar(varRCaelum);
+		console.AddContextVar(varParentWindow);
 
 		console.AddContextVar(varRShaderSystem);
 		console.AddContextVar(varRShaderSystemLibPath);

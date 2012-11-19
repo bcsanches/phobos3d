@@ -19,6 +19,9 @@ subject to the following restrictions:
 
 #include "PH_CoreModule.h"
 
+#include <vector>
+#include <string>
+
 namespace Phobos
 {
 	class BootModule_c;
@@ -28,16 +31,15 @@ namespace Phobos
 
 	class BootModule_c: public CoreModule_c
 	{
-		public:
-			static BootModulePtr_t Create(const String_c &cfgName, CoreModuleManager_c &manager);
-
-			BootModule_c(const String_c &cfgName, CoreModuleManager_c &manager);
+		public:			
+			BootModule_c(const String_c &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager);
 
 			void OnUpdate();			
 			void OnFixedUpdate();
 
 		private:
 			String_c strCfgName;
+			std::vector<std::string> vecArgs;
 
 			int		iFixedUpdateCount;
 			bool	fUpdateDone;
