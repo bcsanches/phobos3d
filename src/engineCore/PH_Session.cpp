@@ -226,6 +226,11 @@ void Phobos::Session_c::SetForm(Gui::Form_c *newForm)
 		this->DisableGameInput();
 	}
 
+	if(pclForm)
+	{
+		pclForm->Close();
+	}
+
 	pclForm = newForm;
 
 	if(!console.IsActive())

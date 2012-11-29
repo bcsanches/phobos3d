@@ -105,6 +105,14 @@ namespace Phobos
 		node.pclParent = this;
 	}
 
+	void Node_c::AddPrivateChild(std::unique_ptr<Node_c> &&ptr)
+	{
+		ptr->SetManaged(true);
+		this->AddPrivateChild(*ptr);
+		
+		ptr.release();
+	}
+
 	void Node_c::RemoveSelf()
 	{
 		if(pclParent == NULL)

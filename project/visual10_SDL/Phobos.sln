@@ -37,6 +37,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_KernelTest", "PH_KernelT
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_DictionaryTest", "PH_DictionaryTest\PH_DictionaryTest.vcxproj", "{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PH_Editor", "PH_Editor\PH_Editor.vcxproj", "{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E8C1152-D14C-4A78-B076-7F9C86568D15} = {0E8C1152-D14C-4A78-B076-7F9C86568D15}
+		{D4333B77-E967-4C0F-90A4-BB7F51F6311E} = {D4333B77-E967-4C0F-90A4-BB7F51F6311E}
+		{AA5050BA-66D0-497C-A832-246803410108} = {AA5050BA-66D0-497C-A832-246803410108}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_rel|Win32 = Debug_rel|Win32
@@ -152,6 +159,12 @@ Global
 		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Debug|Win32.Build.0 = Debug|Win32
 		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Release|Win32.ActiveCfg = Release|Win32
 		{EA5E47DB-5F79-4C4B-89FE-DDCB64178087}.Release|Win32.Build.0 = Release|Win32
+		{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}.Debug_rel|Win32.ActiveCfg = Debug|Win32
+		{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}.Debug_rel|Win32.Build.0 = Debug|Win32
+		{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}.Debug|Win32.Build.0 = Debug|Win32
+		{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}.Release|Win32.ActiveCfg = Release|Win32
+		{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -944,3 +944,5 @@
 /tools/SharpEditor/SharpEditor.csproj.user
 /tools/SharpEditor/bin/
 /tools/SharpEditor/obj/
+/project/visual10_SDL/PH_Editor/Debug/
+/project/visual10_SDL/PH_Editor/PH_Editor.vcxproj.user

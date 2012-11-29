@@ -101,12 +101,11 @@ namespace Phobos
 
 	void PluginManager_c::LoadPlugin(const String_c &name)
 	{
-		std::auto_ptr<Plugin_c> plugin(PH_NEW Plugin_c(name));
-		plugin->SetManaged(true);
+		{
+			std::unique_ptr<Plugin_c> plugin(PH_NEW Plugin_c(name));			
 
-		this->AddPrivateChild(*plugin);
-
-		plugin.release();
+			this->AddPrivateChild(std::move(plugin));
+		}
 
 		lstPluginsToActivate.push_back(name);
 	}

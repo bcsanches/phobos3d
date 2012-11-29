@@ -24,6 +24,9 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
+	const char *GamePlugin_c::szCfgName_g = NULL;
+	const char *GamePlugin_c::szModuleName_g = NULL;
+
 	GamePlugin_c &GamePlugin_c::GetInstance()
 	{
 		static GamePlugin_c plugin;
@@ -31,9 +34,15 @@ namespace Phobos
 		return plugin;
 	}
 
+	void GamePlugin_c::Configure(const char *moduleName, const char *cfgName)
+	{
+		szModuleName_g = moduleName;
+		szCfgName_g = cfgName;
+	}
+
 	void GamePlugin_c::Init()
 	{
-		ipManager = CoreModuleManager_c::Create("GamePlugin");
+		ipManager = CoreModuleManager_c::Create(szModuleName_g);
 
 		Core_c::GetInstance().AddModule(*ipManager);	
 
@@ -42,7 +51,7 @@ namespace Phobos
 			ipManager->AddModule(info.pfnCreate());
 		}
 
-		ipManager->LaunchBootModule("game.cfg", 0, nullptr);
+		ipManager->LaunchBootModule(szCfgName_g, 0, nullptr);
 	}
 
 	void GamePlugin_c::Finalize()

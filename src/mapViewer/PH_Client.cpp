@@ -33,7 +33,7 @@ subject to the following restrictions:
 
 #include "Gui/PH_LevelSelector.h"
 
-PH_GAME_PLUGIN_ENTRY_POINT;
+PH_GAME_PLUGIN_ENTRY_POINT("MapViewerPlugin", "game.cfg");
 
 namespace Phobos
 {

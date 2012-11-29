@@ -64,7 +64,7 @@ namespace Phobos
 					//not 100% trusted, but give us an extra check
 					if(!IsWindow(parent))
 					{
-						PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[WindowSDL_c::Open]", "Invalid parent window handle"));
+						PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[WindowSDL_c::Open]", "Invalid parent window handle");
 					}
 
 					RECT parentRec;					

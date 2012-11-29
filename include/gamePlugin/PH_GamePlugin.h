@@ -48,16 +48,23 @@ namespace Phobos
 
 			static GamePlugin_c &GetInstance();
 
+			static void Configure(const char *moduleName, const char *cfgName);
+		
 		private:			
 			CoreModuleManagerPtr_t ipManager;
 
 			std::vector<Register_s> vecModules;
+
+			static const char *szCfgName_g;
+			static const char *szModuleName_g;
 	};
 }
 
-#define PH_GAME_PLUGIN_ENTRY_POINT	\
+#define PH_GAME_PLUGIN_ENTRY_POINT(MODULE_NAME, CFG_NAME)	\
 	PH_GAME_PLUGIN_ENTRY_POINT_PROC Phobos::IPluginInstance_c *PH_PluginEntryPoint(void)\
 	{																					\
+		Phobos::GamePlugin_c::Configure(MODULE_NAME, CFG_NAME);							\
+																						\
 		return &Phobos::GamePlugin_c::GetInstance();									\
 	}
 
