@@ -158,14 +158,18 @@ void Phobos::Session_c::OnFixedUpdate()
 
 void Phobos::Session_c::SetPlayerCommandProducer(IPlayerCommandProducer_c *commandProducer)
 {	
+	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
+
 	if(pclPlayerCommandProducer)
 	{
-		pclPlayerCommandProducer->Disable();		
+		pclPlayerCommandProducer->Disable();
+
+		if(!console.IsActive() && !pclForm)
+			this->DisableGameInput();
 	}
 
 	pclPlayerCommandProducer = commandProducer;
-
-	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
+	
 	if(pclPlayerCommandProducer)
 	{
 		if(pclClient)
@@ -177,10 +181,7 @@ void Phobos::Session_c::SetPlayerCommandProducer(IPlayerCommandProducer_c *comma
 			
 		if(!console.IsActive() && (!pclForm))
 		{
-			pclPlayerCommandProducer->Enable();
-
-			if(pclPlayerCommandProducer->IsMouseClipped())
-				this->ClipMouseCursor();
+			this->EnableGameInput();			
 		}
 	}
 	else if(!console.IsActive())
@@ -245,7 +246,7 @@ void Phobos::Session_c::SetForm(Gui::Form_c *newForm)
 		{
 			Gui::Manager_c::GetInstance().DisableInput();
 			this->GetConfig().pclMouse->ShowCursor();
-
+			
 			this->EnableGameInput();
 		}
 	}
@@ -285,11 +286,11 @@ void Phobos::Session_c::DisableGameInput()
 }
 
 void Phobos::Session_c::EnableGameInput()
-{
-	ipInputMapper->Enable();
-
+{	
 	if(pclPlayerCommandProducer)
 	{
+		ipInputMapper->Enable();
+
 		pclPlayerCommandProducer->Enable();
 
 		if(pclPlayerCommandProducer->IsMouseClipped())

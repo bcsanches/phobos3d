@@ -72,7 +72,8 @@ namespace Phobos
 
 	void InputMapper_c::Execute(const std::string &cmd)
 	{
-		rclContext.Execute(cmd);
+		if(!fDisable)
+			rclContext.Execute(cmd);
 	}
 
 	InputMapper_c::DeviceMapper_c::DeviceMapper_c(InputMapper_c &mapper, InputDevice_c &device):

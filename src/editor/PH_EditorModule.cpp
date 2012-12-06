@@ -39,5 +39,6 @@ void Phobos::Editor::EditorModule_c::OnBoot()
 	Session_c &session = Session_c::GetInstance();
 
 	session.SetClient(this);
-	session.SetForm(NULL);
+	session.SetForm(nullptr);
+	session.SetPlayerCommandProducer(nullptr);
 }
