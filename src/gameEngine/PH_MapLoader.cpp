@@ -76,11 +76,11 @@ namespace Phobos
 		//empty
 	}
 
-	std::auto_ptr<Entity_c> MapLoader_c::CreateAndLoadWorldSpawn()
+	std::unique_ptr<Entity_c> MapLoader_c::CreateAndLoadWorldSpawn()
 	{	
 		Dictionary_c &entityDef = pclCurrentLevelHive_g->GetDictionary(WORLD_SPAWN_ENTITY);
 
-		std::auto_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
+		std::unique_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 		ptr->Load(entityDef);
 
 		return ptr;
@@ -95,9 +95,9 @@ namespace Phobos
 		return world;
 	}
 
-	std::auto_ptr<Dictionary_c> MapLoader_c::CreateWorldSpawnEntityDictionary()
+	std::unique_ptr<Dictionary_c> MapLoader_c::CreateWorldSpawnEntityDictionary()
 	{
-		std::auto_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(WORLD_SPAWN_ENTITY));
+		std::unique_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(WORLD_SPAWN_ENTITY));
 
 		dict->SetBaseHive("EntityDef");
 		dict->SetInherited(strWorldSpawnEntityType);

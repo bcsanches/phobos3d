@@ -19,8 +19,6 @@ subject to the following restrictions:
 
 #include <list>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <OgrePrerequisites.h>
 #include <OgreSceneManager.h>
 #include <OgreTerrainGroup.h>
@@ -184,8 +182,8 @@ namespace Phobos
 			ContextCmd_c						cmdSetShadowMode;
 			ContextCmd_c						cmdSetShadowFarDistance;			
 
-			boost::scoped_ptr<Ogre::Root>								spRoot;
-			boost::scoped_ptr<ShaderGeneratorTechniqueResolverListener>	spShaderGeneratorTechiniqueResolverListener;
+			std::unique_ptr<Ogre::Root>									upRoot;
+			std::unique_ptr<ShaderGeneratorTechniqueResolverListener>	upShaderGeneratorTechiniqueResolverListener;
 			Ogre::RenderWindow											*pclOgreWindow;
 			Ogre::SceneManager											*pclMainSceneManager;
 			Ogre::RTShader::ShaderGenerator								*pclShaderGenerator;

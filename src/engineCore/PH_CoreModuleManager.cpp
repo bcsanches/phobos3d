@@ -223,7 +223,7 @@ namespace Phobos
 		if(fLaunchedBoot)
 			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core_c::LaunchBootModule", "Boot module already launched");
 
-		std::auto_ptr<CoreModule_c> ptr(PH_NEW BootModule_c(cfgName, argc, argv, *this));
+		std::unique_ptr<CoreModule_c> ptr(PH_NEW BootModule_c(cfgName, argc, argv, *this));
 		this->AddModule(*ptr, CoreModulePriorities::BOOT_MODULE);
 
 		ptr.release();

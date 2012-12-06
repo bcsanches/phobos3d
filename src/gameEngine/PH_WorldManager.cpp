@@ -74,10 +74,10 @@ namespace Phobos
 		spMapLoader = MapLoaderFactory_c::GetInstance().Create(extension.c_str());
 		spMapLoader->Load(mapName);
 
-		std::auto_ptr<Entity_c> world(spMapLoader->CreateAndLoadWorldSpawn());
-		world->SetManaged(true);
-		this->AddPrivateChild(*world);
-		world.release();
+		{
+			auto world(spMapLoader->CreateAndLoadWorldSpawn());
+			this->AddPrivateChild(std::move(world));
+		}
 
 		spGameWorld = spMapLoader->CreateAndLoadWorld();
 
@@ -95,18 +95,19 @@ namespace Phobos
 
 	Entity_c &WorldManager_c::LoadEntity(const Dictionary_c &entityDef)
 	{
-		std::auto_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
+		std::unique_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 
 		//Update handle before loading entity, so components would have a valid handle
 		Handle_s h = clEntityManager.AddObject(ptr.get());
 		ptr->SetHandle(h);
 			
 		ptr->Load(entityDef);
-		
-		ptr->SetManaged(true);
-		this->AddPrivateChild(*ptr);
+				
+		Entity_c &entityRef = *ptr;
 
-		return *ptr.release();
+		this->AddPrivateChild(std::move(ptr));
+
+		return entityRef;
 	}
 
 	void WorldManager_c::LoadEntities()

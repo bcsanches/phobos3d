@@ -119,9 +119,7 @@ namespace Phobos
 			inline T &GetCustomProperty(const char *name)
 			{
 				return static_cast<T &>(this->GetProperty(name));
-			}
-
-			inline void SetManaged(bool value);
+			}			
 
 		protected:			
 			void AddPrivateChild(Node_c &node);
@@ -143,6 +141,8 @@ namespace Phobos
 
 			const Node_c *GetRoot() const;
 			Node_c *GetRoot();
+
+			inline void SetManaged(bool value);
 
 		private:			
 			NodePropertySet_t setProperties;

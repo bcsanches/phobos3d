@@ -17,8 +17,6 @@ subject to the following restrictions:
 class btPairCachingGhostObject;
 class btKinematicCharacterController;
 
-#include <boost/scoped_ptr.hpp>
-
 #include <OgrePrerequisites.h>
 
 #include <BulletDynamics/Dynamics/btActionInterface.h>

@@ -61,25 +61,26 @@ namespace Phobos
 			}
 			else if(!fBootFired)
 			{
+				Console_c &console = Console_c::GetInstance();
+
 				try
-				{
-					Console_c &console = Console_c::GetInstance();					
-					console.ExecuteFromFile(strCfgName);
-
-					if(!vecArgs.empty())
-					{						
-						std::for_each(vecArgs.begin(), vecArgs.end(), [&console](const std::string &arg)
-							{
-								console.Execute(arg);
-							}
-						);
-
-						console.FlushCommandBuffer();
-					}
+				{										
+					console.ExecuteFromFile(strCfgName);					
 				}
 				catch(FileNotFoundException_c &e)
 				{
 					Kernel_c::GetInstance().LogStream() << "[BootModule_c::OnFixedUpdate] Warning, boot failed: " << e.what();
+				}
+
+				if(!vecArgs.empty())
+				{						
+					std::for_each(vecArgs.begin(), vecArgs.end(), [&console](const std::string &arg)
+						{
+							console.Execute(arg);
+						}
+					);
+
+					console.FlushCommandBuffer();
 				}
 
 				//Time to boot and game over for us

@@ -24,49 +24,49 @@ namespace Phobos
 	namespace Physics
 	{
 		RigidBody_c::RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag_c &collisionTag):
-			spRigidBody(new btRigidBody(info)),
+			upRigidBody(new btRigidBody(info)),
 			spCollisionShape(shape),
-			spMotionState(motionState),
+			upMotionState(motionState),
 			clCollisionTag(collisionTag)
 		{
 			if(type == RBT_KINEMATIC)
 			{
-				spRigidBody->setCollisionFlags( spRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
-				spRigidBody->setActivationState(DISABLE_DEACTIVATION);
+				upRigidBody->setCollisionFlags( upRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
+				upRigidBody->setActivationState(DISABLE_DEACTIVATION);
 			}
 			else if(type == RBT_STATIC)
 			{
-				spRigidBody->setCollisionFlags( spRigidBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT );
+				upRigidBody->setCollisionFlags( upRigidBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT );
 			}
 		}
 
 		RigidBody_c::~RigidBody_c()
 		{
-			if(spRigidBody->isInWorld())
+			if(upRigidBody->isInWorld())
 				this->Unregister();
 		}
 
 		void RigidBody_c::Register()
 		{
-			Manager_c::GetInstance().RegisterRigidBody(*spRigidBody, clCollisionTag);
+			Manager_c::GetInstance().RegisterRigidBody(*upRigidBody, clCollisionTag);
 		}
 		
 		void RigidBody_c::Unregister()
 		{
-			Manager_c::GetInstance().UnregisterRigidBody(*spRigidBody);
+			Manager_c::GetInstance().UnregisterRigidBody(*upRigidBody);
 		}
 
 		Transform_c RigidBody_c::GetTransform() const
 		{
 			btTransform bodyTransform;
-			spMotionState->getWorldTransform(bodyTransform);
+			upMotionState->getWorldTransform(bodyTransform);
 
 			return MakeTransform(bodyTransform, Manager_c::GetInstance().GetPhysicsToGameScale());
 		}
 
 		void RigidBody_c::SetKinematicTransform(const btTransform &transform)
 		{
-			spMotionState->setWorldTransform(transform);
+			upMotionState->setWorldTransform(transform);
 		}
 	}
 }

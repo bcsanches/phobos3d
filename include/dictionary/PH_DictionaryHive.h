@@ -41,7 +41,7 @@ namespace Phobos
 			Dictionary_c &GetDictionary(const String_c &name);
 			Dictionary_c *TryGetDictionary(const String_c &name);
 
-			void AddDictionary(std::auto_ptr<Dictionary_c> dict);
+			void AddDictionary(std::unique_ptr<Dictionary_c> &&dict);
 
 	
 		private:			

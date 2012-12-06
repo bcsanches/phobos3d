@@ -92,7 +92,7 @@ class TestModule_c: public CoreModule_c
 		int iFinalizeCount;
 };
 
-typedef std::auto_ptr<TestModule_c> TestModulePtr_t;
+typedef std::unique_ptr<TestModule_c> TestModulePtr_t;
 
 int TestModule_c::iCount = 0;
 
@@ -137,11 +137,11 @@ class TestModule2_c: public CoreModule_c
 		}
 };
 
-static std::auto_ptr<TestModule_c> CreateAndRegisterTestModule()
+static std::unique_ptr<TestModule_c> CreateAndRegisterTestModule()
 {
 	Core_c &core = Core_c::GetInstance();
 
-	std::auto_ptr<TestModule_c> ptr(PH_NEW TestModule_c());	
+	std::unique_ptr<TestModule_c> ptr(PH_NEW TestModule_c());	
 	BOOST_REQUIRE(TestModule_c::iCount == 1);
 
 	core.AddModule(*ptr);

@@ -18,7 +18,6 @@ subject to the following restrictions:
 #define PH_MAP_LOADER_H
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <PH_String.h>
 #include <PH_DictionaryHive.h>
@@ -39,7 +38,7 @@ namespace Phobos
 			const DictionaryHive_c &GetDynamicEntitiesHive() const ;
 			const DictionaryHive_c &GetCurrentLevelHive() const;
 
-			std::auto_ptr<Entity_c> CreateAndLoadWorldSpawn();
+			std::unique_ptr<Entity_c> CreateAndLoadWorldSpawn();
 
 			GameWorldPtr_t CreateAndLoadWorld();
 
@@ -52,7 +51,7 @@ namespace Phobos
 				Creates a basic dictionary entry that can be used to 
 				instantiate a WorldSpawn entity
 			*/
-			std::auto_ptr<Dictionary_c> CreateWorldSpawnEntityDictionary();
+			std::unique_ptr<Dictionary_c> CreateWorldSpawnEntityDictionary();
 
 			virtual GameWorldPtr_t CreateGameWorld() = 0;
 
@@ -64,7 +63,7 @@ namespace Phobos
 			String_c strWorldSpawnEntityType;
 	};	
 
-	typedef boost::shared_ptr<MapLoader_c> MapLoaderPtr_t;
+	typedef std::shared_ptr<MapLoader_c> MapLoaderPtr_t;
 }
 
 #endif

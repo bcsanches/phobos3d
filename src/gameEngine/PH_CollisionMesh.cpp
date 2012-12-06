@@ -137,10 +137,10 @@ namespace Phobos
 		}
 
 		CollisionMesh_c::CollisionMesh_c(const Ogre::Mesh &mesh):
-			spMeshData(PH_NEW CollisionMeshData_c(mesh)),
+			upMeshData(PH_NEW CollisionMeshData_c(mesh)),
 			strName(mesh.getName())			
 		{			
-			spMeshShape.reset(new btBvhTriangleMeshShape(&spMeshData->GetMeshInterface(), true, true));
+			upMeshShape.reset(new btBvhTriangleMeshShape(&upMeshData->GetMeshInterface(), true, true));
 		}
 	}
 }

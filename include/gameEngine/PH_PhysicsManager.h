@@ -19,7 +19,6 @@ subject to the following restrictions:
 
 #include <map>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
 #include <btBulletDynamicsCommon.h>
@@ -159,8 +158,8 @@ namespace Phobos
 				void ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end);
 
 			private:
-				boost::scoped_ptr<btDiscreteDynamicsWorld> spWorld;
-				boost::scoped_ptr<btCollisionDispatcher> spCollisionDispatcher;
+				std::unique_ptr<btDiscreteDynamicsWorld> upWorld;
+				std::unique_ptr<btCollisionDispatcher> upCollisionDispatcher;
 
 				btDefaultCollisionConfiguration			clCollisionConfig;
 				btAxisSweep3							clBroadphase;

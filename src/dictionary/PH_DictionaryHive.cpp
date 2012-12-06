@@ -41,12 +41,9 @@ namespace Phobos
 		//empty
 	}
 
-	void DictionaryHive_c::AddDictionary(std::auto_ptr<Dictionary_c> dict)
-	{
-		dict->SetManaged(true);
-		this->AddPrivateChild(*dict);
-
-		dict.release();
+	void DictionaryHive_c::AddDictionary(std::unique_ptr<Dictionary_c> &&dict)
+	{				
+		this->AddPrivateChild(std::move(dict));
 	}
 
 	void DictionaryHive_c::Load(Parser_c &parser)
@@ -105,7 +102,7 @@ namespace Phobos
 			parser.PushToken();
 		}		
 
-		std::auto_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(dictName));		
+		std::unique_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(dictName));		
 
 		if(!baseHive.empty())
 			dict->SetBaseHive(baseHive);
@@ -115,7 +112,7 @@ namespace Phobos
 
 		dict->Load(parser);		
 
-		this->AddDictionary(dict);		
+		this->AddDictionary(std::move(dict));
 	}
 
 	Dictionary_c &DictionaryHive_c::GetDictionary(const String_c &name)

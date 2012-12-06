@@ -18,9 +18,6 @@ subject to the following restrictions:
 #define PH_GHOST_CHARACTER_BODY_H
 
 class btPairCachingGhostObject;
-//class btKinematicCharacterController;
-
-#include <boost/scoped_ptr.hpp>
 
 #include <OgrePrerequisites.h>
 
@@ -53,9 +50,8 @@ namespace Phobos
 				virtual void Teleport(const Ogre::Vector3 &position);
 
 			private:
-				boost::scoped_ptr<btPairCachingGhostObject> spGhostObject;
-				//boost::scoped_ptr<btKinematicCharacterController> spCharacterController;
-				boost::scoped_ptr<KinematicCharacterController_c> spCharacterController;
+				std::unique_ptr<btPairCachingGhostObject> upGhostObject;				
+				std::unique_ptr<KinematicCharacterController_c> upCharacterController;
 
 				CollisionShapePtr_t	spCollisionShape;
 

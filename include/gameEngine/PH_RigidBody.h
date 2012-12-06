@@ -17,8 +17,6 @@ subject to the following restrictions:
 #ifndef PH_RIGID_BODY_H
 #define PH_RIGID_BODY_H
 
-#include <boost/scoped_ptr.hpp>
-
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <LinearMath/btDefaultMotionState.h>
 
@@ -51,8 +49,8 @@ namespace Phobos
 
 			private:
 				//Unless we force this class to be allocated on 16 bytes aligned memory, we cannot create RigidBody without using new :(				
-				boost::scoped_ptr<btRigidBody>			spRigidBody;
-				boost::scoped_ptr<btDefaultMotionState> spMotionState;
+				std::unique_ptr<btRigidBody>			upRigidBody;
+				std::unique_ptr<btDefaultMotionState>	upMotionState;
 				CollisionShapePtr_t						spCollisionShape;
 
 				CollisionTag_c							clCollisionTag;
@@ -61,7 +59,7 @@ namespace Phobos
 
 		inline const btRigidBody &RigidBody_c::GetRigidBody() const
 		{
-			return *spRigidBody;
+			return *upRigidBody;
 		}
 	}
 }

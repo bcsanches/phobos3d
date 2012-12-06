@@ -19,8 +19,6 @@ subject to the following restrictions:
 
 #include <list>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <PH_ContextCmd.h>
 #include <PH_CoreModule.h>
 #include <PH_Singleton.h>
@@ -75,8 +73,8 @@ namespace Phobos
 
 				bool				fCloseRequested;
 
-				boost::scoped_ptr<LevelFileDataSource_c> spDataSource;
-				boost::scoped_ptr<DataGridController_c> spDataGridController;
+				std::unique_ptr<LevelFileDataSource_c> upDataSource;
+				std::unique_ptr<DataGridController_c> upDataGridController;
 		};
 	}
 }

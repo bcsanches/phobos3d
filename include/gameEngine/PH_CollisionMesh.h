@@ -22,7 +22,6 @@ subject to the following restrictions:
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/intrusive/set.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h>
 
@@ -128,8 +127,8 @@ namespace Phobos
 			private:				
 				String_c			strName;
 
-				boost::scoped_ptr<CollisionMeshData_c> spMeshData;
-				boost::scoped_ptr<btBvhTriangleMeshShape> spMeshShape;
+				std::unique_ptr<CollisionMeshData_c> upMeshData;
+				std::unique_ptr<btBvhTriangleMeshShape> upMeshShape;
 		};
 
 		inline const String_c &CollisionMesh_c::GetName() const
@@ -139,7 +138,7 @@ namespace Phobos
 
 		inline btBvhTriangleMeshShape &CollisionMesh_c::GetTriangleMeshShape() const
 		{
-			return *spMeshShape;
+			return *upMeshShape;
 		}
 
 		inline bool CollisionMesh_c::operator<(const CollisionMesh_c &rhs) const

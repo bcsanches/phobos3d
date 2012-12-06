@@ -59,12 +59,13 @@ namespace Phobos
 
 	DictionaryHive_c &DictionaryManager_c::CreateCustomHive(const String_c &name)
 	{
-		std::auto_ptr<DictionaryHive_c> hive(PH_NEW DictionaryHive_c(name));
-		this->AddPrivateChild(*hive);
+		std::unique_ptr<DictionaryHive_c> hivePtr(PH_NEW DictionaryHive_c(name));
 
-		hive->SetManaged(true);
+		auto hive = hivePtr.get();
 
-		return *(hive.release());
+		this->AddPrivateChild(std::move(hivePtr));
+
+		return *hive;
 	}
 
 	void DictionaryManager_c::Load(std::istream &file)
@@ -86,15 +87,12 @@ namespace Phobos
 			DictionaryHive_c *hive = this->TryGetDictionaryHive(tokenValue);
 			if(!hive)
 			{
-				std::auto_ptr<DictionaryHive_c> hivePtr(PH_NEW DictionaryHive_c(tokenValue));
+				std::unique_ptr<DictionaryHive_c> hivePtr(PH_NEW DictionaryHive_c(tokenValue));
 				
 				//load before adding, so if error occurs it is not added
 				hivePtr->Load(parser);
 
-				this->AddPrivateChild(*hivePtr);
-
-				hivePtr->SetManaged(true);
-				hivePtr.release();
+				this->AddPrivateChild(std::move(hivePtr));				
 			}			
 			else
 				hive->Load(parser);

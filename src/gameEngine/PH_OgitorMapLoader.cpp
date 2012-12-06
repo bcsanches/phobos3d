@@ -174,11 +174,11 @@ namespace Phobos
 				if(dynamicEntity && IsEditorOnly(*elem))
 					continue;
 				
-				std::auto_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(nameAttribute->value()));				
+				std::unique_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(nameAttribute->value()));				
 
 				LoadDictionary(*dict, *elem);
 
-				(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddDictionary(dict);				
+				(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddDictionary(std::move(dict));				
 			}
 			catch(Exception_c &e)
 			{
@@ -186,7 +186,7 @@ namespace Phobos
 			}			
 		}
 
-		std::auto_ptr<Dictionary_c> dict = this->CreateWorldSpawnEntityDictionary();
+		std::unique_ptr<Dictionary_c> dict = this->CreateWorldSpawnEntityDictionary();
 
 		//load project data
 		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
@@ -197,7 +197,7 @@ namespace Phobos
 			if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
 				dict->SetString("terrainDir", terrainDir);
 		}
-		pclCurrentLevelHive_g->AddDictionary(dict);
+		pclCurrentLevelHive_g->AddDictionary(std::move(dict));
 
 		//fill out basic level data
 		dict.reset(PH_NEW Dictionary_c("LevelFile"));
@@ -211,7 +211,7 @@ namespace Phobos
 		dict->SetString("path", filePath.GetStr());
 		dict->SetString("fileName", onlyFileName.GetStr());
 
-		pclCurrentLevelHive_g->AddDictionary(dict);
+		pclCurrentLevelHive_g->AddDictionary(std::move(dict));
 		
 	}
 }

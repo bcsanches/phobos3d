@@ -56,10 +56,10 @@ namespace Phobos
 
 		void Manager_c::OnBoot()
 		{
-			spCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&clCollisionConfig));
-			spWorld.reset(new btDiscreteDynamicsWorld(spCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
+			upCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&clCollisionConfig));
+			upWorld.reset(new btDiscreteDynamicsWorld(upCollisionDispatcher.get(), &clBroadphase, &clConstraintSolver, &clCollisionConfig));
 
-			spWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
+			upWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
 			clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&clGhostPairCallback); 
 
 			fpScale = StringToFloat(varPhysicsScale.GetValue());
@@ -67,7 +67,7 @@ namespace Phobos
 
 		void Manager_c::OnFixedUpdate()
 		{
-			if(!spWorld)
+			if(!upWorld)
 				return;
 
 			const CoreTimer_s &timer = Core_c::GetInstance().GetGameTimer();
@@ -77,7 +77,7 @@ namespace Phobos
 			clRigidBodyComponents.CallForAll(&RigidBodyComponent_c::SaveTransform);
 			clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent_c::PreparePhysicsFrame, timer.fpFrameTime);
 
-			spWorld->stepSimulation(timer.fpFrameTime, 32);
+			upWorld->stepSimulation(timer.fpFrameTime, 32);
 
 			clCharacterBodyComponents.CallForAll(&CharacterBodyComponent_c::FinishPhysicsFrame);
 		}
@@ -85,7 +85,7 @@ namespace Phobos
 		void Manager_c::OnUpdate()
 		{
 			//No world, no reason to update
-			if(!spWorld)
+			if(!upWorld)
 				return;
 			
 			//No pause check, to allow client interpolation
@@ -94,12 +94,12 @@ namespace Phobos
 
 		void Manager_c::SetGravity(const Ogre::Vector3 &gravity)
 		{
-			spWorld->setGravity(MakeVector3(gravity, fpScale));
+			upWorld->setGravity(MakeVector3(gravity, fpScale));
 		}
 
 		const btVector3 Manager_c::GetPhysicsGravity() const
 		{
-			return spWorld->getGravity();
+			return upWorld->getGravity();
 		}
 
 		CharacterBodyPtr_t Manager_c::CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height)
@@ -158,32 +158,32 @@ namespace Phobos
 
 		void Manager_c::RegisterRigidBody(btRigidBody &body, const CollisionTag_c &collisionTag)
 		{
-			spWorld->addRigidBody(&body, collisionTag.GetGroup(), collisionTag.GetFilter());
+			upWorld->addRigidBody(&body, collisionTag.GetGroup(), collisionTag.GetFilter());
 		}
 
 		void Manager_c::UnregisterRigidBody(btRigidBody &body)
 		{
-			spWorld->removeRigidBody(&body);
+			upWorld->removeRigidBody(&body);
 		}
 
 		void Manager_c::AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag_c &collisionTag)
 		{
-			spWorld->addCollisionObject(&collisionObject, collisionTag.GetGroup(), collisionTag.GetFilter());
+			upWorld->addCollisionObject(&collisionObject, collisionTag.GetGroup(), collisionTag.GetFilter());
 		}
 
 		void Manager_c::RemoveCollisionObject(btCollisionObject &collisionObject)
 		{
-			spWorld->removeCollisionObject(&collisionObject);
+			upWorld->removeCollisionObject(&collisionObject);
 		}
 
 		void Manager_c::AddAction(btActionInterface &action)
 		{
-			spWorld->addAction(&action);
+			upWorld->addAction(&action);
 		}
 
 		void Manager_c::RemoveAction(btActionInterface &action)
 		{
-			spWorld->removeAction(&action);
+			upWorld->removeAction(&action);
 		}
 
 		
@@ -362,7 +362,7 @@ namespace Phobos
 			callback.m_collisionFilterGroup = body.getBroadphaseHandle()->m_collisionFilterGroup;
 			callback.m_collisionFilterMask = body.getBroadphaseHandle()->m_collisionFilterMask;
 								
-			spWorld->convexSweepTest (static_cast<const btConvexShape *>(body.getCollisionShape()), start, end, callback);			
+			upWorld->convexSweepTest (static_cast<const btConvexShape *>(body.getCollisionShape()), start, end, callback);			
 
 			result.fpFraction = callback.m_closestHitFraction;
 			result.fHasHit = callback.hasHit();

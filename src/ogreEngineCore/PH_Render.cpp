@@ -176,7 +176,7 @@ namespace Phobos
 		//varRCaelum.SetCallback(VarCallback_t(this, &Render_c::VarRCaelumChanged));
 
 		kernel.LogMessage("[Render] Initializing Ogre");
-		spRoot.reset(new Ogre::Root("", ""));
+		upRoot.reset(new Ogre::Root("", ""));
 		Ogre::Log *log = Ogre::LogManager::getSingleton().getDefaultLog();
 		log->setDebugOutputEnabled(false);
 		log->addListener(&clOgreLogListener_gl);
@@ -249,11 +249,11 @@ namespace Phobos
 
 		//Loading plugin befire creating the screen, may cause problem in some platforms: ie linux opengl plugin
 		for(StringList_t::iterator it = lstPluginsName.begin(), end = lstPluginsName.end(); it != end; ++it)
-			spRoot->loadPlugin(*it);
+			upRoot->loadPlugin(*it);
 
 		lstPluginsName.clear();		
 
-		const Ogre::RenderSystemList &renderSystems = (spRoot->getAvailableRenderers());
+		const Ogre::RenderSystemList &renderSystems = (upRoot->getAvailableRenderers());
 		Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
 
 		kernel.LogMessage("[Render_c::OnBoot] Searching render system");
@@ -266,7 +266,7 @@ namespace Phobos
 
 			if(name.find(varRRenderSystem.GetValue()) >= 0)
 			{
-				spRoot->setRenderSystem(*r_it);
+				upRoot->setRenderSystem(*r_it);
 				foundRenderSystem = true;
 				break;
 			}
@@ -278,8 +278,8 @@ namespace Phobos
 		}
 
 		kernel.LogMessage("[Render_c::OnBoot] render system found, initializing Ogre");
-                spRoot->restoreConfig();
-                spRoot->initialise(false);
+                upRoot->restoreConfig();
+                upRoot->initialise(false);
 
 		Ogre::NameValuePairList opts;
 
@@ -298,12 +298,12 @@ namespace Phobos
             opts["currentGLContext"] = "true";
 
 		kernel.LogMessage("[Render_c::OnBoot] Creating ogre window");
-		pclOgreWindow = spRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);
+		pclOgreWindow = upRoot->createRenderWindow("PhobosMainWindow", r.tWidth, r.tHeight, fullScreen, &opts);
 
 		pclOgreWindow->setVisible(true);
 		
 		kernel.LogMessage("[Render_c::OnBoot] Creating SceneManager");
-		pclMainSceneManager = spRoot->createSceneManager(Ogre::ST_GENERIC);
+		pclMainSceneManager = upRoot->createSceneManager(Ogre::ST_GENERIC);
 		
 		pclMainSceneManager->setShadowFarDistance(100);
 
@@ -342,7 +342,7 @@ namespace Phobos
 		//http://www.ogre3d.org/forums/viewtopic.php?p=189032#189032
 		if(!Ogre::Pass::getDirtyHashList().empty() || !Ogre::Pass::getPassGraveyard().empty())
 		{
-			Ogre::SceneManagerEnumerator::SceneManagerIterator scenesIter = spRoot->getSceneManagerIterator();
+			Ogre::SceneManagerEnumerator::SceneManagerIterator scenesIter = upRoot->getSceneManagerIterator();
   
 			while(scenesIter.hasMoreElements())
 			{
@@ -370,7 +370,7 @@ namespace Phobos
 		//clAnimationManager.Update();
 		//clCaelum.Update(IM_GetGameTimer().fRenderFrameTime);
 
-            spRoot->renderOneFrame();
+        upRoot->renderOneFrame();
 	}
 
 	void Render_c::OnPrepareToBoot()
@@ -405,12 +405,12 @@ namespace Phobos
 
 	Ogre::SceneManager *Render_c::CreateSceneManager(Ogre::SceneTypeMask typeMask)
 	{
-		return spRoot->createSceneManager(typeMask);
+		return upRoot->createSceneManager(typeMask);
 	}
 
 	void Render_c::DestroySceneManager(Ogre::SceneManager *manager)
 	{
-		spRoot->destroySceneManager(manager);
+		upRoot->destroySceneManager(manager);
 	}
 
 	void Render_c::ClearScene()

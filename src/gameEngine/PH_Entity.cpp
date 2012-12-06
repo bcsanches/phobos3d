@@ -47,13 +47,9 @@ namespace Phobos
 			
 			while(StringSplitBy(componentName, *components, '|', pos, &pos))
 			{				
-				std::auto_ptr<EntityComponent_c> comp(factory.Create(componentName, componentName, *this));
-
-				comp->SetManaged(true);
-
-				this->AddPrivateChild(*comp);
-
-				comp.release();
+				std::unique_ptr<EntityComponent_c> comp(factory.Create(componentName, componentName, *this));
+				
+				this->AddPrivateChild(std::move(comp));
 			}
 		}
 

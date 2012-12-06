@@ -251,8 +251,8 @@ void Phobos::Gui::LevelSelector_c::Open()
 {
 	fCloseRequested = false;
 
-	spDataSource.reset( PH_NEW LevelFileDataSource_c(lstLevelPaths));
-	spDataGridController.reset(PH_NEW(DataGridController_c));
+	upDataSource.reset( PH_NEW LevelFileDataSource_c(lstLevelPaths));
+	upDataGridController.reset(PH_NEW(DataGridController_c));
 
 	spGuiContext = Gui::Manager_c::GetInstance().CreateContext("LevelSelector");
 
@@ -272,8 +272,8 @@ void Phobos::Gui::LevelSelector_c::Open()
 
 		int numRows = dataGrid->GetNumRows();
 
-		dataGrid->AddEventListener("rowadd", spDataGridController.get());
-		dataGrid->AddEventListener("keydown", spDataGridController.get());
+		dataGrid->AddEventListener("rowadd", upDataGridController.get());
+		dataGrid->AddEventListener("keydown", upDataGridController.get());
 
 		document->GetElementById("loadForm")->AddEventListener("submit", &clLevelSelectorEventListener_gl);
 		document->GetElementById("quitForm")->AddEventListener("submit", &clLevelSelectorEventListener_gl);
@@ -298,17 +298,17 @@ Phobos::EscAction::Enum Phobos::Gui::LevelSelector_c::HandleEsc(Phobos::Gui::For
 void Phobos::Gui::LevelSelector_c::OnFinalize()
 {
 	//make sure it is destroyed before gui is shutdown
-	spDataSource.reset();
+	upDataSource.reset();
 	spGuiContext.reset();
 }
 
 void Phobos::Gui::LevelSelector_c::OnLoadButtonClick()
 {
-	int row = spDataGridController->GetSelectedRowIndex();
+	int row = upDataGridController->GetSelectedRowIndex();
 	if(row < 0)
 		return;
 
-	const String_c &levelFile = spDataSource->GetFile(row);
+	const String_c &levelFile = upDataSource->GetFile(row);
 	WorldManager_c::GetInstance().LoadMap(levelFile);	
 }
 
