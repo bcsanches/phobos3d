@@ -19,10 +19,6 @@ subject to the following restrictions:
 #include "PH_Exception.h"
 #include "PH_Path.h"
 
-#if (!defined PH_LINUX) && (!defined PH_WIN32)
-#error "Phobos: Plataform not supported!"
-#endif
-
 #ifdef PH_LINUX
 #include <dlfcn.h>
 #define CloseLib dlclose
@@ -53,15 +49,14 @@ inline void *GetLibSymbol(void *handle, const char *name)
 namespace Phobos
 {
 	DynamicLibrary_c::DynamicLibrary_c():
-		pHandle(NULL)
+		upHandle(nullptr, &CloseLib)
 	{
 		//empty
 	}
 
 	DynamicLibrary_c::~DynamicLibrary_c()
 	{
-		if(pHandle != NULL)
-            CloseLib(pHandle);
+		//empty
 	}
 
 	void DynamicLibrary_c::Load(const String_c &name)
@@ -77,11 +72,9 @@ namespace Phobos
             tmp = path.GetStr();
         #endif
 
-		if(pHandle != NULL)
-			CloseLib(pHandle);
-
-		pHandle = OpenLib(tmp.c_str());
-		if(pHandle == NULL)
+		upHandle.reset(OpenLib(tmp.c_str()));
+		
+		if(upHandle == NULL)
 		{
 			this->RaiseException("DynamicLibrary_c::Load");
 		}
@@ -89,7 +82,7 @@ namespace Phobos
 
 	void *DynamicLibrary_c::TryGetSymbol(const String_c &name)
 	{
-		return GetLibSymbol(pHandle, name.c_str());
+		return GetLibSymbol(upHandle.get(), name.c_str());
 	}
 
 	void *DynamicLibrary_c::GetSymbol(const String_c &name)

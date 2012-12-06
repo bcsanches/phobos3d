@@ -17,14 +17,14 @@ subject to the following restrictions:
 #ifndef PH_DYNAMIC_LIBRARY_H
 #define PH_DYNAMIC_LIBRARY_H
 
-#include <boost/noncopyable.hpp>
+#include <memory>
 
 #include "PH_KernelAPI.h"
 #include "PH_String.h"
 
 namespace Phobos
 {
-	class PH_KERNEL_API DynamicLibrary_c: public boost::noncopyable
+	class PH_KERNEL_API DynamicLibrary_c
 	{
 		public:
 			DynamicLibrary_c();
@@ -40,7 +40,9 @@ namespace Phobos
 
 		private:
 			String_c	strName;
-			void		*pHandle;
+
+			typedef std::unique_ptr<void, void (*)(void *)> ModuleHandle_t;			
+			ModuleHandle_t upHandle;
 	};
 }
 
