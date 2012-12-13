@@ -946,3 +946,7 @@
 /tools/SharpEditor/obj/
 /project/visual10_SDL/PH_Editor/Debug/
 /project/visual10_SDL/PH_Editor/PH_Editor.vcxproj.user
+/contrib/lib/
+/contrib/websocketpp/windows/vcpp2010/Debug/
+/contrib/websocketpp/windows/vcpp2010/websocketpp.sdf
+/contrib/websocketpp/windows/vcpp2010/websocketpp.vcxproj.user

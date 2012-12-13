@@ -50,7 +50,7 @@ namespace Phobos
 
 			void SetPlayerCommandProducer(IPlayerCommandProducer_c *commandProducer);
 			void SetClient(IClient_c *client);
-			void SetForm(Gui::Form_c *form);
+			void SetGuiForm(Gui::Form_c *form);
 			void CloseConsole();
 
 		protected:

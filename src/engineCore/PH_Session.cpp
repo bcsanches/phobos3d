@@ -100,7 +100,7 @@ void Phobos::Session_c::InputEvent(const InputEvent_s &event)
 
 				if(action == EscAction::SET_GUI)
 				{
-					this->SetForm(newForm);
+					this->SetGuiForm(newForm);
 				}
 
 			}
@@ -217,7 +217,7 @@ void Phobos::Session_c::CloseConsole()
 	}
 }
 
-void Phobos::Session_c::SetForm(Gui::Form_c *newForm)
+void Phobos::Session_c::SetGuiForm(Gui::Form_c *newForm)
 {
 	Console_c &console = Console_c::GetInstance();
 

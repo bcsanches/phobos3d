@@ -2,8 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="..\..\..\include\editor\PH_EditorModule.h" />
+    <ClInclude Include="..\..\..\include\editor\PH_NetworkService.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_NetworkService.cpp" />
   </ItemGroup>
 </Project>

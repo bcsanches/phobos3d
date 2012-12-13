@@ -109,7 +109,7 @@ namespace Phobos
 		levelSelector.Open();
 
 		Session_c &session = Session_c::GetInstance();
-		session.SetForm(&levelSelector);
+		session.SetGuiForm(&levelSelector);
 		session.CloseConsole();
 	}
 
@@ -142,7 +142,7 @@ namespace Phobos
 		Session_c::GetInstance().SetPlayerCommandProducer(&clSpectatorCameraCommandProducer);
 
 		//make sure no gui is present
-		Session_c::GetInstance().SetForm(NULL);
+		Session_c::GetInstance().SetGuiForm(NULL);
 	}	
 	
 	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)

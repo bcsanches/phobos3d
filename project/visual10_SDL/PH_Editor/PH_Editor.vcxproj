@@ -12,11 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\editor\PH_EditorModule.h" />
+    <ClInclude Include="..\..\..\include\editor\PH_NetworkService.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_NetworkService.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2010\websocketpp.vcxproj">
+      <Project>{1c0fd04e-5aca-4031-b3d1-320a5360c9d0}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
     </ProjectReference>
@@ -68,8 +73,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\input\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -6,6 +6,8 @@
 #include <PH_IClient.h>
 #include <PH_Singleton.h>
 
+#include "PH_NetworkService.h"
+
 namespace Phobos
 {
 	namespace Editor
@@ -24,10 +26,13 @@ namespace Phobos
 				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd);
 
 			protected:
-				virtual void OnBoot();
+				virtual void OnBoot();				
 
 			private:
 				EditorModule_c();
+
+			private:
+				NetworkService_c clNetworkService;
 		};
 	}
 }
