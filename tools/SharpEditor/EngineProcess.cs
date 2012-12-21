@@ -21,7 +21,14 @@ namespace SharpEditor
         {
             mPanel = panel;
 
-            mProcess.StartInfo.Arguments = "\"set dvParentWindow 0x" + panel.Handle.ToString("X") + "\"";
+            mProcess.StartInfo.Arguments = "\"set dvParentWindow 0x" + panel.Handle.ToString("X") + "\"" + 
+
+#if DEBUG
+                " \"loadPlugin PH_Editor_d\"";
+#else
+                " \"loadPlugin PH_Editor\"";
+#endif
+
             mProcess.StartInfo.UseShellExecute = false;
             mProcess.StartInfo.FileName = exeFile;
             mProcess.StartInfo.WorkingDirectory = workingDirectory;

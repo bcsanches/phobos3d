@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_rel|Win32">
+      <Configuration>Debug_rel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BA4D7F77-9968-4C99-8A83-2C1B68720A93}</ProjectGuid>
+    <RootNamespace>PH_GameEngine</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">..\..\..\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">true</LinkIncremental>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_d</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">$(ProjectName)_dr</TargetName>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(BULLET_HOME)\src\;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">$(BULLET_HOME)\src\;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BULLET_HOME)\src\;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\include\dictionary;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;RocketCore_d.lib;RocketControls_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)_d.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(BULLET_HOME)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\include\dictionary;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_RELEASE;PH_IGNORE_ASSERT;PH_SDL;PH_MSVC;PH_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;RocketCore.lib;RocketControls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BULLET_HOME)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\include\dictionary;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_ENGINE_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;RocketCore.lib;RocketControls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)_dr.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(BULLET_HOME)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_Entity.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityFactory.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityUtils.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_PointEntity.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityComponentFactory.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_ModelRendererComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_ModelRendererManager.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TransformComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_SpectatorCamera.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_SpectatorCameraCommandProducer.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityEvent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityIO.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_LinearMoverComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MoverComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MoverManager.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GameEvent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GameEventManager.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CollisionMesh.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CollisionShape.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CollisionShapes.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_PhysicsManager.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_PhysicsUtils.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_RigidBody.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_RigidBodyComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CharacterBodyComponent.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_DynamicCharacterBody.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GhostCharacterBody.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_KinematicCharacterController.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_SweepCharacterBody.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MapLoaderFactory.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_OgitorMapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TileMapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_BaseOgreGameWorld.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GamePhysicsSettings.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_OgitorGameWorld.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TileGameWorld.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TileTransform.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\Gui\PH_LevelSelector.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_BaseClient.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GameCamera.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_WorldManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_Entity.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityFactory.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityKeys.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityUtils.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PointEntity.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityComponentFactory.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GenericComponentManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GenericComponentManagerModule.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ModelRendererComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ModelRendererManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TransformComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_SpectatorCamera.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_SpectatorCameraCommandProducer.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityEvent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityIO.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_LinearMoverComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MoverComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MoverManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameEvent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameEventManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionMesh.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionMeshFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionShape.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionShapeFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionShapes.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionTag.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionTagFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsConv.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsKeys.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsUtils.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_RigidBody.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_RigidBodyComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_RigidBodyFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CharacterBodyComponent.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_DynamicCharacterBody.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GhostCharacterBody.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ICharacterBody.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ICharacterBodyFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_KinematicCharacterController.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_SweepCharacterBody.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MapLoader.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MapLoaderFactory.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_OgitorMapLoader.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TileMapLoader.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_BaseOgreGameWorld.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GamePhysicsSettings.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameWorld.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameWorldFwd.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_OgitorGameWorld.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TileGameWorld.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TileTransform.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\Gui\PH_LevelSelector.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_BaseClient.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameCamera.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameEngineAPI.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_HandleManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_IGameController.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_WorldManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PH_Dictionary\PH_Dictionary.vcxproj">
+      <Project>{81ae5171-5abb-4cf2-ae62-28803837188b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
+      <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Input\PH_Input.vcxproj">
+      <Project>{736ee093-359c-4016-86e4-ebbb82951a3b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
+      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_OgreEngineCore\PH_OgreEngineCore.vcxproj">
+      <Project>{38679578-6b2c-4801-bd91-11bf34ec697b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

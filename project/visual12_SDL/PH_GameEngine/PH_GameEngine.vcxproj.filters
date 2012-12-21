@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="entities">
+      <UniqueIdentifier>{2d80e46e-dd70-4435-a2f2-8a046ad34987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components">
+      <UniqueIdentifier>{6dd86877-8ce2-4e55-a3d6-7300fff2e842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spectator">
+      <UniqueIdentifier>{c43abafe-179e-4752-9ead-4b41f4f4c962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{015c7c17-284a-4fbd-b39e-d3c2eccd8553}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mover">
+      <UniqueIdentifier>{9a9be5ac-739b-4196-969a-9ae91a667ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="event">
+      <UniqueIdentifier>{894b46f8-1c39-4c6d-a8a3-1f1d88ceeb77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physics">
+      <UniqueIdentifier>{309c8d9e-a5c3-4559-9bec-118d510615b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physics\character">
+      <UniqueIdentifier>{00508049-b951-4b59-bb06-f6075335a207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mapLoader">
+      <UniqueIdentifier>{a32f90ca-9fd9-423c-9faf-8eb467e9ce85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameWorld">
+      <UniqueIdentifier>{f68fa15c-1723-4d6c-929c-e5a24673e84a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{899352ce-db05-4fe3-a45f-5b768ebd24d7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_Entity.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityFactory.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityUtils.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_PointEntity.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityComponent.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityComponentFactory.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_ModelRendererComponent.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_ModelRendererManager.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TransformComponent.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_SpectatorCamera.cpp">
+      <Filter>spectator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_SpectatorCameraCommandProducer.cpp">
+      <Filter>spectator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityEvent.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_EntityIO.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_LinearMoverComponent.cpp">
+      <Filter>mover</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MoverComponent.cpp">
+      <Filter>mover</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MoverManager.cpp">
+      <Filter>mover</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GameEvent.cpp">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GameEventManager.cpp">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CollisionMesh.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CollisionShape.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CollisionShapes.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_PhysicsManager.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_PhysicsUtils.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_RigidBody.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_RigidBodyComponent.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_CharacterBodyComponent.cpp">
+      <Filter>physics\character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_DynamicCharacterBody.cpp">
+      <Filter>physics\character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GhostCharacterBody.cpp">
+      <Filter>physics\character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_KinematicCharacterController.cpp">
+      <Filter>physics\character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_SweepCharacterBody.cpp">
+      <Filter>physics\character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MapLoader.cpp">
+      <Filter>mapLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_MapLoaderFactory.cpp">
+      <Filter>mapLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_OgitorMapLoader.cpp">
+      <Filter>mapLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TileMapLoader.cpp">
+      <Filter>mapLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_BaseOgreGameWorld.cpp">
+      <Filter>gameWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GamePhysicsSettings.cpp">
+      <Filter>gameWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_OgitorGameWorld.cpp">
+      <Filter>gameWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TileGameWorld.cpp">
+      <Filter>gameWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_TileTransform.cpp">
+      <Filter>gameWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\Gui\PH_LevelSelector.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gameEngine\PH_BaseClient.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_GameCamera.cpp" />
+    <ClCompile Include="..\..\..\src\gameEngine\PH_WorldManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_Entity.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityFactory.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityFwd.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityKeys.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityUtils.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PointEntity.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityComponent.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityComponentFactory.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GenericComponentManager.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GenericComponentManagerModule.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ModelRendererComponent.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ModelRendererManager.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TransformComponent.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_SpectatorCamera.h">
+      <Filter>spectator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_SpectatorCameraCommandProducer.h">
+      <Filter>spectator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityEvent.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_EntityIO.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_LinearMoverComponent.h">
+      <Filter>mover</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MoverComponent.h">
+      <Filter>mover</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MoverManager.h">
+      <Filter>mover</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameEvent.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameEventManager.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionMesh.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionMeshFwd.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionShape.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionShapeFwd.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionShapes.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionTag.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CollisionTagFwd.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsConv.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsKeys.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsManager.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_PhysicsUtils.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_RigidBody.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_RigidBodyComponent.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_RigidBodyFwd.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_CharacterBodyComponent.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_DynamicCharacterBody.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GhostCharacterBody.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ICharacterBody.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_ICharacterBodyFwd.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_KinematicCharacterController.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_SweepCharacterBody.h">
+      <Filter>physics\character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MapLoader.h">
+      <Filter>mapLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_MapLoaderFactory.h">
+      <Filter>mapLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_OgitorMapLoader.h">
+      <Filter>mapLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TileMapLoader.h">
+      <Filter>mapLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_BaseOgreGameWorld.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GamePhysicsSettings.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameWorld.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameWorldFwd.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_OgitorGameWorld.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TileGameWorld.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_TileTransform.h">
+      <Filter>gameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\Gui\PH_LevelSelector.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gameEngine\PH_BaseClient.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameCamera.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameEngineAPI.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_HandleManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_IGameController.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_WorldManager.h" />
+  </ItemGroup>
+</Project>

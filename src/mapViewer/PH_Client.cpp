@@ -28,9 +28,6 @@ subject to the following restrictions:
 #include <PH_Window.h>
 #include <PH_WorldManager.h>
 
-#include <Gui/PH_Context.h>
-#include <Gui/PH_Manager.h>
-
 #include "Gui/PH_LevelSelector.h"
 
 PH_GAME_PLUGIN_ENTRY_POINT("MapViewerPlugin", "game.cfg");

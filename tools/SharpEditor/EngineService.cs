@@ -73,7 +73,7 @@ namespace SharpEditor
             }
         }
 
-        public static void Start(System.Windows.Forms.Panel enginePanel)
+        public async static void Start(System.Windows.Forms.Panel enginePanel)
         {
             if (mProcess != null)
             {
@@ -90,6 +90,9 @@ namespace SharpEditor
             mProcess.Start();
 
             StatusBarService.Status = "Engine started";
+
+            WebSocket4Net.WebSocket socket = new WebSocket4Net.WebSocket("ws://localhost:2325");             
+
         }
 
         public static void Stop()

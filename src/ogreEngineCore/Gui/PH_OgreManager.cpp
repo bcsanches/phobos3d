@@ -16,10 +16,10 @@ subject to the following restrictions:
 
 #include "Gui/PH_OgreManager.h"
 
-#include <OgreRoot.h>
-
 #include <Rocket/Controls.h>
 #include <Rocket/Core/SystemInterface.h>
+
+#include <OgreRoot.h>
 
 #include <PH_Console.h>
 #include <PH_Kernel.h>
