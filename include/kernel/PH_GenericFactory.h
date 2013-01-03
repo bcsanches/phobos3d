@@ -47,7 +47,8 @@ namespace Phobos
 			typedef boost::intrusive::set<T, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
 
 		public:
-			typedef typename T::ObjectType_t ObjectType_t;			
+			typedef typename T::ObjectType_t ObjectType_t;		
+			typedef typename T::ObjectReturnType_t ObjectReturnType_t;
 
 			void Register(T &creator)
 			{
@@ -90,7 +91,7 @@ namespace Phobos
 	class ObjectCreatorBase_c: public ObjectCreatorAutoUnlinkHook_t
 	{
 		public:
-			typedef T ObjectType_t;
+			typedef T ObjectType_t;			
 			typedef Y ObjectCreatorProc_t;
 
 		public:
@@ -127,7 +128,7 @@ namespace Phobos
 	class ObjectCreator0_c: public ObjectCreatorBase_c<T, T(*)()>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, T(*)()> BaseType_t;
+			typedef ObjectCreatorBase_c<T, T(*)()> BaseType_t;			
 
 		public:
 			ObjectCreator0_c(const String_c &name, T(*proc)()):
@@ -135,28 +136,28 @@ namespace Phobos
 			{				
 				FACTORY::GetInstance().Register(*this);
 			}
-				
+
 			T Create() const
 			{
 				return pfnCreateProc();
 			}
 	};
 
-	template <typename T, typename PARAM1, typename FACTORY>
-	class ObjectCreator1_c: public ObjectCreatorBase_c<T, T*(*)(const PARAM1 &)>
+	template <typename T, typename PARAM1, typename FACTORY, typename CREATE_RET = T*>
+	class ObjectCreator1_c: public ObjectCreatorBase_c<T, CREATE_RET (*)(const PARAM1 &)>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, T*(*)(const PARAM1&)> BaseType_t;
+			typedef ObjectCreatorBase_c<T, CREATE_RET (*)(const PARAM1&)> BaseType_t;
+			typedef CREATE_RET ObjectReturnType_t;			
 
 		public:
-			ObjectCreator1_c(const String_c &name, T*(*proc)(const PARAM1 &)):
+			ObjectCreator1_c(const String_c &name, CREATE_RET (*proc)(const PARAM1 &)):
 				BaseType_t(name, proc)
-			{
-				//GenericFactory_c<ObjectCreator_c<T> >::GetInstance().Register(*this);
+			{				
 				FACTORY::GetInstance().Register(*this);
 			}
 				
-			T *Create(const PARAM1 &name) const
+			ObjectReturnType_t Create(const PARAM1 &name) const
 			{
 				return pfnCreateProc(name);
 			}
@@ -198,7 +199,7 @@ namespace Phobos
 	class GenericFactory1_c: public GenericFactory_c<T>
 	{
 		public:
-			typename GenericFactory_c<T>::ObjectType_t *Create(const String_c &className, const PARAM1 &name) const
+			typename GenericFactory_c<T>::ObjectReturnType_t Create(const String_c &className, const PARAM1 &name) const
 			{
 				return this->GetObjectCreator(className).Create(name);
 			}

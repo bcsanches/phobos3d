@@ -1,5 +1,8 @@
-#ifndef PH_NETWORK_SERVICE_H
-#define PH_NETWORK_SERVICE_H
+#ifndef PH_EDITOR_NETWORK_SERVICE_H
+#define PH_EDITOR_NETWORK_SERVICE_H
+
+#include <string>
+#include <vector>
 
 #include <websocketpp.hpp>
 
@@ -16,6 +19,8 @@ namespace Phobos
 				~NetworkService_c();
 
 				void Start();
+
+				std::vector<std::string> GetPendingMessages();
 
 			private:				
 				websocketpp::server clServerEndPoint;

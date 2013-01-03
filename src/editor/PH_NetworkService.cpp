@@ -1,10 +1,12 @@
-#include "PH_NetworkService.h"
+#include "Editor/PH_NetworkService.h"
 
 #include <boost/make_shared.hpp>
 #include <websocketpp.hpp>
 
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
+
+#include "Editor/PH_MessageQueue.h"
 
 namespace
 {
@@ -21,27 +23,40 @@ namespace
     
 			void on_message(connection_ptr con, message_ptr msg);
 
+			Phobos::Editor::StringVector_t GetPendingMessages();
+
 		private:			
 			std::string encode_message(std::string sender,std::string msg,bool escape = true);			
     
-			void send_to_all(std::string data);    			
+			void send_to_all(std::string data);    		
+
+			Phobos::Editor::MessageQueue_c clMessageQueue;
 	};
 
 	void ServerHandler_c::validate(connection_ptr con)
 	{
+		//nothing to validade
 	}
 
     void ServerHandler_c::on_open(connection_ptr con)
 	{
+		clMessageQueue.Push("{\"command\":\"Log\",\"message\":\"[Phobos::Editor::ServerHandler_c::on_open] Connection opened\"}");
 	}
         
 	
 	void ServerHandler_c::on_close(connection_ptr con)
 	{
+		clMessageQueue.Push("{\"command\":\"Log\",\"message\":\"[Phobos::Edittor::ServerHandler_c::on_open] Connection closed\"}");		
 	}
     
 	void ServerHandler_c::on_message(connection_ptr con, message_ptr msg)
 	{
+		clMessageQueue.Push(msg->get_payload());
+	}
+
+	Phobos::Editor::StringVector_t ServerHandler_c::GetPendingMessages()
+	{
+		return clMessageQueue.GetPendingMessages();
 	}
 }
 
@@ -70,3 +85,7 @@ void Phobos::Editor::NetworkService_c::Start()
 	clThread.swap(boost::thread([&](){ clServerEndPoint.listen(2325); }));
 }
 
+Phobos::Editor::StringVector_t Phobos::Editor::NetworkService_c::GetPendingMessages()
+{	
+	return boost::static_pointer_cast<ServerHandler_c>(clServerEndPoint.get_handler())->GetPendingMessages();
+}

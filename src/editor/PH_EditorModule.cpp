@@ -1,7 +1,12 @@
-#include "PH_EditorModule.h"
+#include "Editor/PH_EditorModule.h"
 
 #include <PH_Exception.h>
+#include <PH_Kernel.h>
 #include <PH_Session.h>
+
+#include <json_spirit.h>
+
+#include "Editor/PH_RequestFactory.h"
 
 PH_GAME_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
 
@@ -44,3 +49,35 @@ void Phobos::Editor::EditorModule_c::OnBoot()
 
 	clNetworkService.Start();
 }
+
+void Phobos::Editor::EditorModule_c::OnFixedUpdate()
+{
+	StringVector_t messages(clNetworkService.GetPendingMessages());
+
+	Kernel_c &kernel = Kernel_c::GetInstance();
+	auto &requestFactory = RequestFactory_c::GetInstance();
+
+	for(const std::string &msg : messages)
+	{
+		json_spirit::mValue value;
+
+		if(!json_spirit::read(msg, value))
+		{
+			kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Error parsing JSON: " << msg;
+			continue;
+		}
+
+		auto &obj = value.get_obj();
+
+		auto it = obj.find("command");
+		if(it == obj.end())
+		{
+			kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Invalid JSON, no command: " << msg;
+			continue;
+		}
+
+		auto request = requestFactory.Create(it->second.get_str(), obj);
+		request->Execute();
+	}
+}
+

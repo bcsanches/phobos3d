@@ -11,14 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\editor\PH_EditorModule.h" />
-    <ClInclude Include="..\..\..\include\editor\PH_NetworkService.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_LogRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_MessageQueue.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_NetworkService.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_Request.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_RequestFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\contrib\json_spirit_v4.05\json_spirit\json_spirit.vcxproj">
+      <Project>{be262a86-cc26-4b25-a877-883ed2688cec}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2010\websocketpp.vcxproj">
       <Project>{1c0fd04e-5aca-4031-b3d1-320a5360c9d0}</Project>
     </ProjectReference>
@@ -31,6 +34,14 @@
     <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
       <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_LogRequest.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_MessageQueue.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_NetworkService.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_Request.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_RequestFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}</ProjectGuid>
@@ -65,6 +76,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\..\bin\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(ProjectDir)..\..\..\contrib\json_spirit_v4.05\json_spirit;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

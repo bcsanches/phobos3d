@@ -80,6 +80,7 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="EngineNetworkService.cs" />
     <Compile Include="EngineProcess.cs" />
     <Compile Include="EngineConfigForm.cs">
       <SubType>Form</SubType>

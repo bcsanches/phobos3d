@@ -25,6 +25,8 @@ namespace Phobos
 				virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm);
 				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd);
 
+				virtual void OnFixedUpdate();
+
 			protected:
 				virtual void OnBoot();				
 

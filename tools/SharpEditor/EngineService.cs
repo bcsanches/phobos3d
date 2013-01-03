@@ -15,6 +15,7 @@ namespace SharpEditor
             public string mFileName;
             public string mWorkingDirectory;
             public string mSystemPath;
+            public bool mExternalProcess;
         }
 
         public static bool ShowEngineConfigDialog()
@@ -51,6 +52,8 @@ namespace SharpEditor
                     continue;
                 }
 
+                info.mExternalProcess = Properties.Settings.Default.EngineExternalStart;
+
                 string workingDir = Properties.Settings.Default.EngineWorkingDirectory;
                 if (string.IsNullOrEmpty(workingDir))
                 {
@@ -73,7 +76,7 @@ namespace SharpEditor
             }
         }
 
-        public async static void Start(System.Windows.Forms.Panel enginePanel)
+        public static void Start(System.Windows.Forms.Panel enginePanel)
         {
             if (mProcess != null)
             {
@@ -85,19 +88,21 @@ namespace SharpEditor
             if (!PrepareProcessInfo(out info))
                 throw new Exception("User aborted");
 
-            StatusBarService.Status = "Starting engine";
-            mProcess = new EngineProcess(info.mFileName, info.mWorkingDirectory, info.mSystemPath, enginePanel);
-            mProcess.Start();
+            if (!info.mExternalProcess)
+            {
+                StatusBarService.Status = "Starting engine";
+                mProcess = new EngineProcess(info.mFileName, info.mWorkingDirectory, info.mSystemPath, enginePanel);
+                mProcess.Start();
+                StatusBarService.Status = "Engine started";
+            }
 
-            StatusBarService.Status = "Engine started";
-
-            WebSocket4Net.WebSocket socket = new WebSocket4Net.WebSocket("ws://localhost:2325");             
-
+            EngineNetworkService.Start();
         }
 
         public static void Stop()
         {
-            mProcess.Stop();
+            if(mProcess != null)
+                mProcess.Stop();
         }
     }
 }
