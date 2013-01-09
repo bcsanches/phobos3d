@@ -1,6 +1,8 @@
 #include "Editor/PH_NetworkService.h"
 
 #include <boost/make_shared.hpp>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 #include <websocketpp.hpp>
 
 #include <PH_Kernel.h>
@@ -40,13 +42,33 @@ namespace
 
     void ServerHandler_c::on_open(connection_ptr con)
 	{
-		clMessageQueue.Push("{\"command\":\"Log\",\"message\":\"[Phobos::Editor::ServerHandler_c::on_open] Connection opened\"}");
+		rapidjson::StringBuffer stream;
+		rapidjson::Writer<rapidjson::StringBuffer> writer(stream);
+
+		writer.StartObject();
+
+		writer.String("command").String("Log");
+		writer.String("message").String("[Phobos::Editor::ServerHandler_c::on_open] Connection opened");
+
+		writer.EndObject();		
+
+		clMessageQueue.Push(stream.GetString());
 	}
         
 	
 	void ServerHandler_c::on_close(connection_ptr con)
 	{
-		clMessageQueue.Push("{\"command\":\"Log\",\"message\":\"[Phobos::Edittor::ServerHandler_c::on_open] Connection closed\"}");		
+		rapidjson::StringBuffer stream;
+		rapidjson::Writer<rapidjson::StringBuffer> writer(stream);
+
+		writer.StartObject();
+
+		writer.String("command").String("Log");
+		writer.String("message").String("[Phobos::Edittor::ServerHandler_c::on_open] Connection closed");
+
+		writer.EndObject();		
+
+		clMessageQueue.Push(stream.GetString());
 	}
     
 	void ServerHandler_c::on_message(connection_ptr con, message_ptr msg)

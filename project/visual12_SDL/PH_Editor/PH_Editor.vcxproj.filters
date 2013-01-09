@@ -11,6 +11,9 @@
     <ClCompile Include="..\..\..\src\editor\PH_LogRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\PH_AssetListRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />
@@ -23,6 +26,9 @@
       <Filter>Requests</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\editor\Editor\PH_RequestFactory.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_AssetListRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
   </ItemGroup>

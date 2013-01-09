@@ -4,7 +4,7 @@
 #include <PH_Kernel.h>
 #include <PH_Session.h>
 
-#include <json_spirit.h>
+#include <rapidjson/document.h>
 
 #include "Editor/PH_RequestFactory.h"
 
@@ -50,34 +50,54 @@ void Phobos::Editor::EditorModule_c::OnBoot()
 	clNetworkService.Start();
 }
 
+void Phobos::Editor::EditorModule_c::ExecuteJsonCommand(const rapidjson::Value &obj)
+{		
+	const auto &command = obj["command"];
+	if(command.IsNull())
+	{		
+		Kernel_c::GetInstance().LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] JSON does not contains valid commands";
+		return;
+	}
+
+	auto &requestFactory = RequestFactory_c::GetInstance();
+	auto request = requestFactory.Create(command.GetString(), obj);
+	request->Execute();
+}
+
 void Phobos::Editor::EditorModule_c::OnFixedUpdate()
 {
 	StringVector_t messages(clNetworkService.GetPendingMessages());
 
-	Kernel_c &kernel = Kernel_c::GetInstance();
-	auto &requestFactory = RequestFactory_c::GetInstance();
+	Kernel_c &kernel = Kernel_c::GetInstance();	
+
+	rapidjson::Document document;
 
 	for(const std::string &msg : messages)
 	{
-		json_spirit::mValue value;
+		document.Parse<0>(msg.c_str());
 
-		if(!json_spirit::read(msg, value))
+		if(document.HasParseError())		
 		{
 			kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Error parsing JSON: " << msg;
 			continue;
 		}
 
-		auto &obj = value.get_obj();
-
-		auto it = obj.find("command");
-		if(it == obj.end())
+		const auto &commandList = document["commands"];
+		if(!commandList.IsNull())
 		{
-			kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Invalid JSON, no command: " << msg;
-			continue;
-		}
+			if(!commandList.IsArray())
+			{
+				kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Command list is no an array: " << msg;
+				continue;
+			}
 
-		auto request = requestFactory.Create(it->second.get_str(), obj);
-		request->Execute();
+			for (rapidjson::Value::ConstValueIterator itr = commandList.Begin(); itr != commandList.End(); ++itr)
+				this->ExecuteJsonCommand(*itr);
+		}
+		else
+		{			
+			this->ExecuteJsonCommand(document);
+		}		
 	}
 }
 

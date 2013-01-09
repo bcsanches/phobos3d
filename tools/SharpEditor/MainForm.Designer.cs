@@ -31,10 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabEntities = new System.Windows.Forms.TabPage();
-            this.tabWorld = new System.Windows.Forms.TabPage();
             this.mEnginePanel = new System.Windows.Forms.Panel();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,22 +43,28 @@
             this.mStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.worldPage1 = new SharpEditor.WorldPage();
+            this.assetBrowser1 = new SharpEditor.AssetBrowser();
+            this.propertyPage1 = new SharpEditor.PropertyPage();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
-            // 
-            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //             
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 49);
             this.splitContainer1.Name = "splitContainer1";
@@ -71,59 +75,27 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.propertyGrid1);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer1.Size = new System.Drawing.Size(1008, 659);
-            this.splitContainer1.SplitterDistance = 786;
+            this.splitContainer1.SplitterDistance = 650;
             this.splitContainer1.TabIndex = 0;
             // 
             // splitContainer2
-            // 
-            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //             
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.tabControl1);
+            this.splitContainer2.Panel1.Controls.Add(this.worldPage1);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.mEnginePanel);
-            this.splitContainer2.Size = new System.Drawing.Size(786, 659);
-            this.splitContainer2.SplitterDistance = 274;
+            this.splitContainer2.Size = new System.Drawing.Size(650, 659);
+            this.splitContainer2.SplitterDistance = 226;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabEntities);
-            this.tabControl1.Controls.Add(this.tabWorld);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(272, 657);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tabEntities
-            // 
-            this.tabEntities.Location = new System.Drawing.Point(4, 22);
-            this.tabEntities.Name = "tabEntities";
-            this.tabEntities.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEntities.Size = new System.Drawing.Size(264, 631);
-            this.tabEntities.TabIndex = 0;
-            this.tabEntities.Text = "Entities";
-            this.tabEntities.UseVisualStyleBackColor = true;
-            // 
-            // tabWorld
-            // 
-            this.tabWorld.Location = new System.Drawing.Point(4, 22);
-            this.tabWorld.Name = "tabWorld";
-            this.tabWorld.Padding = new System.Windows.Forms.Padding(3);
-            this.tabWorld.Size = new System.Drawing.Size(264, 631);
-            this.tabWorld.TabIndex = 1;
-            this.tabWorld.Text = "World";
-            this.tabWorld.UseVisualStyleBackColor = true;
             // 
             // mEnginePanel
             // 
@@ -131,8 +103,25 @@
             this.mEnginePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mEnginePanel.Location = new System.Drawing.Point(0, 0);
             this.mEnginePanel.Name = "mEnginePanel";
-            this.mEnginePanel.Size = new System.Drawing.Size(506, 657);
+            this.mEnginePanel.Size = new System.Drawing.Size(418, 657);
             this.mEnginePanel.TabIndex = 0;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.assetBrowser1);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.propertyPage1);
+            this.splitContainer3.Size = new System.Drawing.Size(352, 657);
+            this.splitContainer3.SplitterDistance = 180;
+            this.splitContainer3.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -218,13 +207,29 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
-            // propertyGrid1
+            // worldPage1
             // 
-            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(216, 657);
-            this.propertyGrid1.TabIndex = 0;
+            this.worldPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.worldPage1.Location = new System.Drawing.Point(0, 0);
+            this.worldPage1.Name = "worldPage1";
+            this.worldPage1.Size = new System.Drawing.Size(224, 657);
+            this.worldPage1.TabIndex = 0;
+            // 
+            // assetBrowser1
+            // 
+            this.assetBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.assetBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.assetBrowser1.Name = "assetBrowser1";
+            this.assetBrowser1.Size = new System.Drawing.Size(180, 657);
+            this.assetBrowser1.TabIndex = 0;
+            // 
+            // propertyPage1
+            // 
+            this.propertyPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyPage1.Location = new System.Drawing.Point(0, 0);
+            this.propertyPage1.Name = "propertyPage1";
+            this.propertyPage1.Size = new System.Drawing.Size(168, 657);
+            this.propertyPage1.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -240,11 +245,16 @@
             this.Text = "Sharp Editor";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -260,9 +270,6 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabEntities;
-        private System.Windows.Forms.TabPage tabWorld;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -274,7 +281,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.Panel mEnginePanel;
-        private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private AssetBrowser assetBrowser1;
+        private PropertyPage propertyPage1;
+        private WorldPage worldPage1;
     }
 }
 

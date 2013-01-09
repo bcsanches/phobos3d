@@ -25,9 +25,7 @@ subject to the following restrictions:
 namespace Phobos
 {
 	class Entity_c;
-
-	//typedef GenericFactory_c<EntityComponentPtr_t> EntityComponentFactory_c;
-	//typedef GenericFactory1_c<ObjectCreator1_c<EntityComponentPtr_t, Entity_c &>, Entity_c & > EntityComponentFactory_c;
+	
 	class PH_GAME_ENGINE_API EntityComponentFactory_c: public GenericFactory2_c<ObjectCreator2_c<EntityComponent_c, String_c, Entity_c &, EntityComponentFactory_c>, String_c, Entity_c & >
 	{
 		public:

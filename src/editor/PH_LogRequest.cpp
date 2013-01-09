@@ -12,10 +12,11 @@ namespace Phobos
 	}
 }
 
-Phobos::Editor::LogRequest_c::LogRequest_c(const json_spirit::mObject &obj):
-	Request_c(obj)
-{			
-	strMessage = obj.find("message")->second.get_str();
+Phobos::Editor::LogRequest_c::LogRequest_c(const rapidjson::Value &obj):
+	Request_c(obj),
+	strMessage(obj["message"].GetString())
+{				
+	//empty
 }
 
 void Phobos::Editor::LogRequest_c::OnExecute()

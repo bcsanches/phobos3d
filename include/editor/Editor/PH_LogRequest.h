@@ -12,7 +12,7 @@ namespace Phobos
 		class LogRequest_c: public Request_c
 		{
 			public:
-				LogRequest_c(const json_spirit::mObject &value);
+				LogRequest_c(const rapidjson::Value &value);
 
 			protected:
 				virtual void OnExecute();

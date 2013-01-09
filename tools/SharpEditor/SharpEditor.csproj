@@ -80,6 +80,12 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="AssetBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AssetBrowser.Designer.cs">
+      <DependentUpon>AssetBrowser.cs</DependentUpon>
+    </Compile>
     <Compile Include="EngineNetworkService.cs" />
     <Compile Include="EngineProcess.cs" />
     <Compile Include="EngineConfigForm.cs">
@@ -97,8 +103,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WorldPage.Designer.cs">
+      <DependentUpon>WorldPage.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AssetBrowser.resx">
+      <DependentUpon>AssetBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EngineConfigForm.resx">
       <DependentUpon>EngineConfigForm.cs</DependentUpon>
@@ -116,6 +131,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="PropertyPage.resx">
+      <DependentUpon>PropertyPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WorldPage.resx">
+      <DependentUpon>WorldPage.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -126,6 +147,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="PropertyPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyPage.Designer.cs">
+      <DependentUpon>PropertyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="StatusBarService.cs" />
   </ItemGroup>

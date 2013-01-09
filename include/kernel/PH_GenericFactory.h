@@ -166,11 +166,12 @@ namespace Phobos
 	template<typename T, typename PARAM1, typename PARAM2>
 	class GenericFactory2_c;
 
-	template <typename T, typename PARAM1, typename PARAM2, typename FACTORY>
+	template <typename T, typename PARAM1, typename PARAM2, typename FACTORY, typename CREATE_RET = T*>
 	class ObjectCreator2_c: public ObjectCreatorBase_c<T, T*(*)(const PARAM1 &, PARAM2 )>
 	{
 		public:
 			typedef ObjectCreatorBase_c<T, T*(*)(const PARAM1 &, PARAM2 )> BaseType_t;
+			typedef CREATE_RET ObjectReturnType_t;	
 
 			ObjectCreator2_c(const String_c &name,  T*(*proc)(const PARAM1 &, PARAM2 ) ):
 				BaseType_t(name, proc)
@@ -179,7 +180,7 @@ namespace Phobos
 				FACTORY::GetInstance().Register(*this);
 			}
 
-			T *Create(const PARAM1 &name, PARAM2 param) const
+			CREATE_RET Create(const PARAM1 &name, PARAM2 param) const
 			{
 				return pfnCreateProc(name, param);
 			}

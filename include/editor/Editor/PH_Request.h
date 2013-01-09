@@ -1,7 +1,7 @@
 #ifndef PH_EDITOR_REQUEST_H
 #define PH_EDITOR_REQUEST_H
 
-#include <json_spirit.h>
+#include <rapidjson/document.h>
 
 namespace Phobos
 {
@@ -10,7 +10,7 @@ namespace Phobos
 		class Request_c
 		{
 			public:
-				Request_c(const json_spirit::mObject &value);
+				Request_c(const rapidjson::Value &value);
 
 				void Execute();
 

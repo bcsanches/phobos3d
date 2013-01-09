@@ -1,6 +1,8 @@
 #ifndef PH_EDITOR_MODULE_H
 #define PH_EDITOR_MODULE_H
 
+#include <rapidjson/document.h>
+
 #include <PH_CoreModule.h>
 #include <PH_GamePlugin.h>
 #include <PH_IClient.h>
@@ -31,6 +33,8 @@ namespace Phobos
 				virtual void OnBoot();				
 
 			private:
+				void ExecuteJsonCommand(const rapidjson::Value &obj);
+
 				EditorModule_c();
 
 			private:
