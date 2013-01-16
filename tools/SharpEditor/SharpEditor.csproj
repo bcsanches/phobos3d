@@ -95,6 +95,19 @@
       <DependentUpon>EngineConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EngineService.cs" />
+    <Compile Include="LogControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogControl.Designer.cs">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogsControl.Designer.cs">
+      <DependentUpon>LogsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogService.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +130,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EngineConfigForm.resx">
       <DependentUpon>EngineConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogControl.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogsControl.resx">
+      <DependentUpon>LogsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

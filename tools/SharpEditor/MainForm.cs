@@ -20,6 +20,8 @@ namespace SharpEditor
 
         protected override void OnLoad(EventArgs e)
         {
+            LogService.Start(mLogsControl.mEditorLogControl);
+
             base.OnLoad(e);
 
             try
@@ -37,6 +39,7 @@ namespace SharpEditor
             base.OnClosed(e);
 
             EngineService.Stop();
+            LogService.Stop();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -51,6 +54,6 @@ namespace SharpEditor
         {
             EngineService.ShowEngineConfigDialog();
         }
-
     }
 }
+

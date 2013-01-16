@@ -8,23 +8,40 @@ namespace SharpEditor
 {
     class EngineNetworkService
     {
-        private static WebSocket4Net.WebSocket mSocket = new WebSocket4Net.WebSocket("ws://localhost:2325");
-        private static bool mConnected = false;
+        private WebSocket4Net.WebSocket mSocket = new WebSocket4Net.WebSocket("ws://localhost:2325");
+        private bool mConnected = false;
 
-        public static void Start()
+        public event EventHandler Connected;
+
+        public void Start()
         {
             mSocket.Opened += socket_Opened;
-            mSocket.Closed += socket_Closed;
-            mSocket.DataReceived += socket_DataReceived;
+            mSocket.Closed += socket_Closed;            
+            mSocket.MessageReceived += mSocket_MessageReceived;
             mSocket.Error += socket_Error;
 
             mSocket.Open();
+        }        
+
+        public void Stop()
+        {
+            if (mConnected)
+            {
+                mSocket.Close();
+                mConnected = false;
+            }
         }
 
-        static void socket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        public void Send(string cmd)
+        {
+            mSocket.Send(cmd);
+        }
+
+        void socket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
             //System.Windows.Forms.MessageBox.Show("socket_Error");
-            StatusBarService.Status = e.Exception.Message;
+            LogService.Log(e.Exception.Message);
+            
             mConnected = false;
 
             if (mSocket.State != WebSocket4Net.WebSocketState.Open)
@@ -34,26 +51,32 @@ namespace SharpEditor
             }
             else
             {
-                StatusBarService.Status = "Network service is lost";
+                LogService.Log("Network service is lost");
                 System.Windows.Forms.MessageBox.Show("Network service is lost");
             }
         }
 
-        static void socket_DataReceived(object sender, WebSocket4Net.DataReceivedEventArgs e)
+        void mSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("socket_DataReceived");            
+            LogService.Log("socket_DataReceived:" + e.Message);
         }
-
-        static void socket_Closed(object sender, EventArgs e)
+        
+        void socket_Closed(object sender, EventArgs e)
         {
             mConnected = false;
-            StatusBarService.Status = "Connection closed.";
+            LogService.Log("Connection closed.");
         }
 
-        static void socket_Opened(object sender, EventArgs e)
+        void socket_Opened(object sender, EventArgs e)
         {
-            StatusBarService.Status = "Connected to engine.";
+            LogService.Log("Connected to engine.");
             mConnected = true;
+
+            if (Connected != null)
+            {
+                var args = new EventArgs();
+                Connected(this, args);
+            }
         }
     }
 }

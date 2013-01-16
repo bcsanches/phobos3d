@@ -6,6 +6,8 @@
 
 #include <rapidjson/document.h>
 
+#include <JsonCreator/StringWriter.h>
+
 #include "Editor/PH_RequestFactory.h"
 
 PH_GAME_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
@@ -50,7 +52,7 @@ void Phobos::Editor::EditorModule_c::OnBoot()
 	clNetworkService.Start();
 }
 
-void Phobos::Editor::EditorModule_c::ExecuteJsonCommand(const rapidjson::Value &obj)
+void Phobos::Editor::EditorModule_c::ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response)
 {		
 	const auto &command = obj["command"];
 	if(command.IsNull())
@@ -61,16 +63,21 @@ void Phobos::Editor::EditorModule_c::ExecuteJsonCommand(const rapidjson::Value &
 
 	auto &requestFactory = RequestFactory_c::GetInstance();
 	auto request = requestFactory.Create(command.GetString(), obj);
-	request->Execute();
+	request->Execute(response);
 }
 
 void Phobos::Editor::EditorModule_c::OnFixedUpdate()
 {
 	StringVector_t messages(clNetworkService.GetPendingMessages());
 
+	if(messages.empty())
+		return;
+
 	Kernel_c &kernel = Kernel_c::GetInstance();	
 
 	rapidjson::Document document;
+
+	JsonCreator::StringWriter response;
 
 	for(const std::string &msg : messages)
 	{
@@ -92,12 +99,17 @@ void Phobos::Editor::EditorModule_c::OnFixedUpdate()
 			}
 
 			for (rapidjson::Value::ConstValueIterator itr = commandList.Begin(); itr != commandList.End(); ++itr)
-				this->ExecuteJsonCommand(*itr);
+				this->ExecuteJsonCommand(*itr, response);
 		}
 		else
 		{			
-			this->ExecuteJsonCommand(document);
+			this->ExecuteJsonCommand(document, response);
 		}		
+	}
+
+	if(response.GetSize() > 0)
+	{
+		clNetworkService.SendMessage(response.GetString());
 	}
 }
 

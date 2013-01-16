@@ -1,8 +1,8 @@
 #include "Editor/PH_NetworkService.h"
 
 #include <boost/make_shared.hpp>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include <JsonCreator/Object.h>
+#include <JsonCreator/StringWriter.h>
 #include <websocketpp.hpp>
 
 #include <PH_Kernel.h>
@@ -27,12 +27,16 @@ namespace
 
 			Phobos::Editor::StringVector_t GetPendingMessages();
 
+			void SendMessage(const std::string &msg);
+
 		private:			
 			std::string encode_message(std::string sender,std::string msg,bool escape = true);			
     
 			void send_to_all(std::string data);    		
 
 			Phobos::Editor::MessageQueue_c clMessageQueue;
+
+			connection_ptr spConnection;
 	};
 
 	void ServerHandler_c::validate(connection_ptr con)
@@ -42,33 +46,35 @@ namespace
 
     void ServerHandler_c::on_open(connection_ptr con)
 	{
-		rapidjson::StringBuffer stream;
-		rapidjson::Writer<rapidjson::StringBuffer> writer(stream);
+		spConnection = con;
 
-		writer.StartObject();
+		JsonCreator::StringWriter writer;
 
-		writer.String("command").String("Log");
-		writer.String("message").String("[Phobos::Editor::ServerHandler_c::on_open] Connection opened");
+		{
+			auto obj = JsonCreator::MakeObject(writer);
 
-		writer.EndObject();		
-
-		clMessageQueue.Push(stream.GetString());
+			obj.AddStringValue("command", "Log");
+			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler_c::on_open] Connection opened");
+		}
+		
+		clMessageQueue.Push(writer.GetString());
 	}
         
 	
 	void ServerHandler_c::on_close(connection_ptr con)
 	{
-		rapidjson::StringBuffer stream;
-		rapidjson::Writer<rapidjson::StringBuffer> writer(stream);
+		JsonCreator::StringWriter writer;
 
-		writer.StartObject();
+		{
+			auto obj = JsonCreator::MakeObject(writer);
 
-		writer.String("command").String("Log");
-		writer.String("message").String("[Phobos::Edittor::ServerHandler_c::on_open] Connection closed");
+			obj.AddStringValue("command", "Log");
+			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler_c::on_open] Connection closed");
+		}
 
-		writer.EndObject();		
+		clMessageQueue.Push(writer.GetString());
 
-		clMessageQueue.Push(stream.GetString());
+		spConnection.reset();
 	}
     
 	void ServerHandler_c::on_message(connection_ptr con, message_ptr msg)
@@ -79,6 +85,11 @@ namespace
 	Phobos::Editor::StringVector_t ServerHandler_c::GetPendingMessages()
 	{
 		return clMessageQueue.GetPendingMessages();
+	}
+
+	void ServerHandler_c::SendMessage(const std::string &msg)
+	{
+		spConnection->send(msg);
 	}
 }
 
@@ -110,4 +121,9 @@ void Phobos::Editor::NetworkService_c::Start()
 Phobos::Editor::StringVector_t Phobos::Editor::NetworkService_c::GetPendingMessages()
 {	
 	return boost::static_pointer_cast<ServerHandler_c>(clServerEndPoint.get_handler())->GetPendingMessages();
+}
+
+void Phobos::Editor::NetworkService_c::SendMessage(const std::string &msg)
+{
+	boost::static_pointer_cast<ServerHandler_c>(clServerEndPoint.get_handler())->SendMessage(msg);
 }

@@ -19,7 +19,7 @@ Phobos::Editor::LogRequest_c::LogRequest_c(const rapidjson::Value &obj):
 	//empty
 }
 
-void Phobos::Editor::LogRequest_c::OnExecute()
+void Phobos::Editor::LogRequest_c::OnExecute(JsonCreator::StringWriter &)
 {
 	Kernel_c::GetInstance().LogMessage(strMessage);
 }

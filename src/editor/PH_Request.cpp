@@ -5,7 +5,7 @@ Phobos::Editor::Request_c::Request_c(const rapidjson::Value &obj)
 
 }
 
-void Phobos::Editor::Request_c::Execute()
+void Phobos::Editor::Request_c::Execute(JsonCreator::StringWriter &response)
 {
-	this->OnExecute();
+	this->OnExecute(response);
 }

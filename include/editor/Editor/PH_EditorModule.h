@@ -3,6 +3,8 @@
 
 #include <rapidjson/document.h>
 
+#include <JsonCreator/StringWriterFwd.h>
+
 #include <PH_CoreModule.h>
 #include <PH_GamePlugin.h>
 #include <PH_IClient.h>
@@ -33,7 +35,7 @@ namespace Phobos
 				virtual void OnBoot();				
 
 			private:
-				void ExecuteJsonCommand(const rapidjson::Value &obj);
+				void ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response);
 
 				EditorModule_c();
 

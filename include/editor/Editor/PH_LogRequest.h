@@ -15,7 +15,7 @@ namespace Phobos
 				LogRequest_c(const rapidjson::Value &value);
 
 			protected:
-				virtual void OnExecute();
+				virtual void OnExecute(JsonCreator::StringWriter &response);
 
 			private:
 				String_c strMessage;

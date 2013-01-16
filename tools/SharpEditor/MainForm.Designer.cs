@@ -13,9 +13,10 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                if(components != null)
+                    components.Dispose();                
             }
             base.Dispose(disposing);
         }
@@ -28,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.SplitContainer mainSplit;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -46,6 +48,12 @@
             this.worldPage1 = new SharpEditor.WorldPage();
             this.assetBrowser1 = new SharpEditor.AssetBrowser();
             this.propertyPage1 = new SharpEditor.PropertyPage();
+            this.mLogsControl = new SharpEditor.LogsControl();
+            mainSplit = new System.Windows.Forms.SplitContainer();
+            ((System.ComponentModel.ISupportInitialize)(mainSplit)).BeginInit();
+            mainSplit.Panel1.SuspendLayout();
+            mainSplit.Panel2.SuspendLayout();
+            mainSplit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -63,10 +71,28 @@
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
+            // mainSplit
+            // 
+            mainSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            mainSplit.Location = new System.Drawing.Point(0, 49);
+            mainSplit.Name = "mainSplit";
+            mainSplit.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // mainSplit.Panel1
+            // 
+            mainSplit.Panel1.Controls.Add(this.splitContainer1);
+            // 
+            // mainSplit.Panel2
+            // 
+            mainSplit.Panel2.Controls.Add(this.mLogsControl);
+            mainSplit.Size = new System.Drawing.Size(1008, 659);
+            mainSplit.SplitterDistance = 531;
+            mainSplit.TabIndex = 4;
+            // 
             // splitContainer1
-            //             
+            // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 49);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -76,12 +102,12 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer1.Size = new System.Drawing.Size(1008, 659);
+            this.splitContainer1.Size = new System.Drawing.Size(1008, 531);
             this.splitContainer1.SplitterDistance = 650;
             this.splitContainer1.TabIndex = 0;
             // 
             // splitContainer2
-            //             
+            // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
@@ -93,7 +119,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.mEnginePanel);
-            this.splitContainer2.Size = new System.Drawing.Size(650, 659);
+            this.splitContainer2.Size = new System.Drawing.Size(650, 531);
             this.splitContainer2.SplitterDistance = 226;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -103,7 +129,7 @@
             this.mEnginePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mEnginePanel.Location = new System.Drawing.Point(0, 0);
             this.mEnginePanel.Name = "mEnginePanel";
-            this.mEnginePanel.Size = new System.Drawing.Size(418, 657);
+            this.mEnginePanel.Size = new System.Drawing.Size(420, 531);
             this.mEnginePanel.TabIndex = 0;
             // 
             // splitContainer3
@@ -119,8 +145,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.propertyPage1);
-            this.splitContainer3.Size = new System.Drawing.Size(352, 657);
-            this.splitContainer3.SplitterDistance = 180;
+            this.splitContainer3.Size = new System.Drawing.Size(354, 531);
+            this.splitContainer3.SplitterDistance = 181;
             this.splitContainer3.TabIndex = 0;
             // 
             // menuStrip1
@@ -212,7 +238,7 @@
             this.worldPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.worldPage1.Location = new System.Drawing.Point(0, 0);
             this.worldPage1.Name = "worldPage1";
-            this.worldPage1.Size = new System.Drawing.Size(224, 657);
+            this.worldPage1.Size = new System.Drawing.Size(226, 531);
             this.worldPage1.TabIndex = 0;
             // 
             // assetBrowser1
@@ -220,7 +246,7 @@
             this.assetBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.assetBrowser1.Location = new System.Drawing.Point(0, 0);
             this.assetBrowser1.Name = "assetBrowser1";
-            this.assetBrowser1.Size = new System.Drawing.Size(180, 657);
+            this.assetBrowser1.Size = new System.Drawing.Size(181, 531);
             this.assetBrowser1.TabIndex = 0;
             // 
             // propertyPage1
@@ -228,21 +254,33 @@
             this.propertyPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyPage1.Location = new System.Drawing.Point(0, 0);
             this.propertyPage1.Name = "propertyPage1";
-            this.propertyPage1.Size = new System.Drawing.Size(168, 657);
+            this.propertyPage1.Size = new System.Drawing.Size(169, 531);
             this.propertyPage1.TabIndex = 0;
+            // 
+            // mLogsControl
+            // 
+            this.mLogsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mLogsControl.Location = new System.Drawing.Point(0, 0);
+            this.mLogsControl.Name = "mLogsControl";
+            this.mLogsControl.Size = new System.Drawing.Size(1008, 124);
+            this.mLogsControl.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 730);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(mainSplit);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Sharp Editor";
+            mainSplit.Panel1.ResumeLayout(false);
+            mainSplit.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(mainSplit)).EndInit();
+            mainSplit.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -285,6 +323,7 @@
         private AssetBrowser assetBrowser1;
         private PropertyPage propertyPage1;
         private WorldPage worldPage1;
+        private LogsControl mLogsControl;
     }
 }
 

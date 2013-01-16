@@ -9,6 +9,7 @@ namespace SharpEditor
     public static class EngineService
     {
         private static EngineProcess mProcess;
+        private static EngineNetworkService mNetworkService;
 
         struct ProcessInfo
         {
@@ -90,19 +91,39 @@ namespace SharpEditor
 
             if (!info.mExternalProcess)
             {
-                StatusBarService.Status = "Starting engine";
+                LogService.Log("Starting engine");
                 mProcess = new EngineProcess(info.mFileName, info.mWorkingDirectory, info.mSystemPath, enginePanel);
                 mProcess.Start();
-                StatusBarService.Status = "Engine started";
+                LogService.Log("Engine started");
             }
 
-            EngineNetworkService.Start();
-        }
+            if (mNetworkService != null)
+            {
+                throw new InvalidOperationException("Network service running");
+            }
 
+            mNetworkService = new EngineNetworkService();
+
+            mNetworkService.Connected += mNetworkService_Connected;
+
+            mNetworkService.Start();
+        }
+             
         public static void Stop()
         {
+            if (mNetworkService != null)
+            {
+                mNetworkService.Stop();                
+                mNetworkService = null;
+            }
+
             if(mProcess != null)
                 mProcess.Stop();
         }
+
+        static void mNetworkService_Connected(object sender, EventArgs e)
+        {
+            mNetworkService.Send("{\"command\":\"AssetList\"}");
+        }   
     }
 }
