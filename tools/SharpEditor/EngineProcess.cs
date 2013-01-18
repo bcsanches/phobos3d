@@ -58,7 +58,7 @@ namespace SharpEditor
             mCaptureMainWindowTimer.Tick += new EventHandler(mCaptureMainWindowTimer_Tick);
             mCaptureMainWindowTimer.Start();
 
-            StatusBarService.Status = "Waiting for main window capture";
+            LogService.Log("Waiting for main window capture");
         }
 
         void mCaptureMainWindowTimer_Tick(object sender, EventArgs e)
@@ -74,7 +74,7 @@ namespace SharpEditor
             if (mProcess.MainWindowHandle.Equals(new IntPtr(0)))
                 return;
 
-            StatusBarService.Status = "Main window capture complete";
+            LogService.Log("Main window capture complete");
             this.StopCaptureMainWindowTimer();
 
             mPanel.SizeChanged += new EventHandler(mPanel_SizeChanged);
@@ -99,7 +99,7 @@ namespace SharpEditor
 
         void mProcess_Exited(object sender, EventArgs e)
         {
-            StatusBarService.Status = "Engine exited";
+            LogService.Log("Engine exited");
 
             mPanel.SizeChanged -= mPanel_SizeChanged;
         }

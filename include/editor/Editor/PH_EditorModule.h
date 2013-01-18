@@ -1,6 +1,10 @@
 #ifndef PH_EDITOR_MODULE_H
 #define PH_EDITOR_MODULE_H
 
+#include <rapidjson/document.h>
+
+#include <JsonCreator/StringWriterFwd.h>
+
 #include <PH_CoreModule.h>
 #include <PH_GamePlugin.h>
 #include <PH_IClient.h>
@@ -25,10 +29,14 @@ namespace Phobos
 				virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm);
 				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd);
 
+				virtual void OnFixedUpdate();
+
 			protected:
 				virtual void OnBoot();				
 
 			private:
+				void ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response);
+
 				EditorModule_c();
 
 			private:

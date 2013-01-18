@@ -289,7 +289,7 @@ public:
         
         msg->set_header(std::string(1,0x00));
         
-        msg->append_payload(std::string(1,0xFF));
+		msg->append_payload(std::string(1,static_cast<unsigned char>(0xFF)));
         
         msg->set_prepared(true);
     }
@@ -306,8 +306,8 @@ public:
         msg->set_header(std::string());
         
         std::string val;
-        val.append(1,0xFF);
-        val.append(1,0x00);
+        val.append(1,static_cast<unsigned char>(0xFF));
+        val.append(1,static_cast<unsigned char>(0x00));
         msg->set_payload(val);
         
         msg->set_prepared(true);

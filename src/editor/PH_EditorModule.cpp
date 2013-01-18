@@ -1,7 +1,14 @@
-#include "PH_EditorModule.h"
+#include "Editor/PH_EditorModule.h"
 
 #include <PH_Exception.h>
+#include <PH_Kernel.h>
 #include <PH_Session.h>
+
+#include <rapidjson/document.h>
+
+#include <JsonCreator/StringWriter.h>
+
+#include "Editor/PH_RequestFactory.h"
 
 PH_GAME_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
 
@@ -44,3 +51,65 @@ void Phobos::Editor::EditorModule_c::OnBoot()
 
 	clNetworkService.Start();
 }
+
+void Phobos::Editor::EditorModule_c::ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response)
+{		
+	const auto &command = obj["command"];
+	if(command.IsNull())
+	{		
+		Kernel_c::GetInstance().LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] JSON does not contains valid commands";
+		return;
+	}
+
+	auto &requestFactory = RequestFactory_c::GetInstance();
+	auto request = requestFactory.Create(command.GetString(), obj);
+	request->Execute(response);
+}
+
+void Phobos::Editor::EditorModule_c::OnFixedUpdate()
+{
+	StringVector_t messages(clNetworkService.GetPendingMessages());
+
+	if(messages.empty())
+		return;
+
+	Kernel_c &kernel = Kernel_c::GetInstance();	
+
+	rapidjson::Document document;
+
+	JsonCreator::StringWriter response;
+
+	for(const std::string &msg : messages)
+	{
+		document.Parse<0>(msg.c_str());
+
+		if(document.HasParseError())		
+		{
+			kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Error parsing JSON: " << msg;
+			continue;
+		}
+
+		const auto &commandList = document["commands"];
+		if(!commandList.IsNull())
+		{
+			if(!commandList.IsArray())
+			{
+				kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Command list is no an array: " << msg;
+				continue;
+			}
+
+			for (rapidjson::Value::ConstValueIterator itr = commandList.Begin(); itr != commandList.End(); ++itr)
+				this->ExecuteJsonCommand(*itr, response);
+		}
+		else
+		{			
+			this->ExecuteJsonCommand(document, response);
+		}		
+	}
+
+	if(response.GetSize() > 0)
+	{
+		clNetworkService.SendMessage(response.GetString());
+	}
+}
+

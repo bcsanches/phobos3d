@@ -9,12 +9,14 @@ namespace SharpEditor
     public static class EngineService
     {
         private static EngineProcess mProcess;
+        private static EngineNetworkService mNetworkService;
 
         struct ProcessInfo
         {
             public string mFileName;
             public string mWorkingDirectory;
             public string mSystemPath;
+            public bool mExternalProcess;
         }
 
         public static bool ShowEngineConfigDialog()
@@ -51,6 +53,8 @@ namespace SharpEditor
                     continue;
                 }
 
+                info.mExternalProcess = Properties.Settings.Default.EngineExternalStart;
+
                 string workingDir = Properties.Settings.Default.EngineWorkingDirectory;
                 if (string.IsNullOrEmpty(workingDir))
                 {
@@ -73,7 +77,7 @@ namespace SharpEditor
             }
         }
 
-        public async static void Start(System.Windows.Forms.Panel enginePanel)
+        public static void Start(System.Windows.Forms.Panel enginePanel)
         {
             if (mProcess != null)
             {
@@ -85,19 +89,41 @@ namespace SharpEditor
             if (!PrepareProcessInfo(out info))
                 throw new Exception("User aborted");
 
-            StatusBarService.Status = "Starting engine";
-            mProcess = new EngineProcess(info.mFileName, info.mWorkingDirectory, info.mSystemPath, enginePanel);
-            mProcess.Start();
+            if (!info.mExternalProcess)
+            {
+                LogService.Log("Starting engine");
+                mProcess = new EngineProcess(info.mFileName, info.mWorkingDirectory, info.mSystemPath, enginePanel);
+                mProcess.Start();
+                LogService.Log("Engine started");
+            }
 
-            StatusBarService.Status = "Engine started";
+            if (mNetworkService != null)
+            {
+                throw new InvalidOperationException("Network service running");
+            }
 
-            WebSocket4Net.WebSocket socket = new WebSocket4Net.WebSocket("ws://localhost:2325");             
+            mNetworkService = new EngineNetworkService();
 
+            mNetworkService.Connected += mNetworkService_Connected;
+
+            mNetworkService.Start();
         }
-
+             
         public static void Stop()
         {
-            mProcess.Stop();
+            if (mNetworkService != null)
+            {
+                mNetworkService.Stop();                
+                mNetworkService = null;
+            }
+
+            if(mProcess != null)
+                mProcess.Stop();
         }
+
+        static void mNetworkService_Connected(object sender, EventArgs e)
+        {
+            mNetworkService.Send("{\"command\":\"AssetList\"}");
+        }   
     }
 }

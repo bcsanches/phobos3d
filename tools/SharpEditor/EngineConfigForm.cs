@@ -19,6 +19,7 @@ namespace SharpEditor
             txtPhobosPath.Text = Properties.Settings.Default.EnginePath;
             txtWorkingDirectory.Text = Properties.Settings.Default.EngineWorkingDirectory;
             txtSystemPath.Text = Properties.Settings.Default.EnginePathVariable;
+            cbEnternalRun.Checked = Properties.Settings.Default.EngineExternalStart;
         }
 
         private void BrowseFolder(TextBox textBox)
@@ -50,6 +51,7 @@ namespace SharpEditor
             Properties.Settings.Default.EnginePath = txtPhobosPath.Text;
             Properties.Settings.Default.EngineWorkingDirectory = txtWorkingDirectory.Text;
             Properties.Settings.Default.EnginePathVariable = txtSystemPath.Text;
+            Properties.Settings.Default.EngineExternalStart = cbEnternalRun.Checked;
 
             Properties.Settings.Default.Save();
         }

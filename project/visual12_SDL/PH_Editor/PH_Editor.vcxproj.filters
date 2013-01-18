@@ -1,11 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\editor\PH_EditorModule.h" />
-    <ClInclude Include="..\..\..\include\editor\PH_NetworkService.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_NetworkService.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_MessageQueue.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_Request.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_RequestFactory.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\PH_LogRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\PH_AssetListRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_MessageQueue.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_NetworkService.h" />
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_Request.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_LogRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_RequestFactory.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\editor\Editor\PH_AssetListRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Requests">
+      <UniqueIdentifier>{37c37121-0fe4-41d0-971d-efaaf36d965a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
