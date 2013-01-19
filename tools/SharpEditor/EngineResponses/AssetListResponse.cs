@@ -13,7 +13,7 @@ namespace SharpEditor.EngineResponses
             var array = json.assets;
             foreach (dynamic obj in array)
             {
-                var asset = new Asset(json);                
+                var asset = new Assets.Asset(json);                
             }
         }
     }
