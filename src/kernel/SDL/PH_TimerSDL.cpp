@@ -1,6 +1,6 @@
 #include "PH_Timer.h"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 namespace Phobos
 {		

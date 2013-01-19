@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include "PH_EventManager.h"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 namespace Phobos
 {

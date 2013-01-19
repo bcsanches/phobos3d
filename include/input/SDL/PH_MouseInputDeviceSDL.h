@@ -21,7 +21,7 @@ subject to the following restrictions:
 
 #include <PH_EventListener.h>
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 namespace Phobos
 {

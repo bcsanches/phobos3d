@@ -21,8 +21,8 @@ subject to the following restrictions:
 #include "SDL/PH_EventManagerSDL.h"
 
 //#include <windows.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL.h>
+#include <SDL_syswm.h>
 
 namespace Phobos
 {
