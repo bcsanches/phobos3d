@@ -21,6 +21,7 @@ namespace SharpEditor
         protected override void OnLoad(EventArgs e)
         {
             LogService.Start(mLogsControl.mEditorLogControl);
+            EditorService.Start();
 
             base.OnLoad(e);
 
@@ -38,7 +39,8 @@ namespace SharpEditor
         {
             base.OnClosed(e);
 
-            EngineService.Stop();
+            EditorService.Stop();
+            EngineService.Stop();            
             LogService.Stop();
         }
 

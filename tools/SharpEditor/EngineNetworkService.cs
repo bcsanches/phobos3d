@@ -59,6 +59,7 @@ namespace SharpEditor
         void mSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
         {
             LogService.Log("socket_DataReceived:" + e.Message);
+            EditorService.ProcessMessage(e.Message);
         }
         
         void socket_Closed(object sender, EventArgs e)

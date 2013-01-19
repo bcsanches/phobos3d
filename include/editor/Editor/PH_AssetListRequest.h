@@ -13,7 +13,7 @@ namespace Phobos
 				AssetListRequest_c(const rapidjson::Value &value);
 
 			private:
-				virtual void OnExecute(JsonCreator::StringWriter &response);
+				virtual void OnExecute(JsonCreator::StringWriter &response) override;
 		};
 	}
 }

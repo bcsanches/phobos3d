@@ -26,13 +26,13 @@ namespace Phobos
 				PH_DECLARE_SINGLETON_METHODS(EditorModule);
 
 			public:				
-				virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm);
-				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd);
+				virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm) override;
+				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd) override;
 
-				virtual void OnFixedUpdate();
+				virtual void OnFixedUpdate() override;
 
 			protected:
-				virtual void OnBoot();				
+				virtual void OnBoot() override;				
 
 			private:
 				void ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response);
