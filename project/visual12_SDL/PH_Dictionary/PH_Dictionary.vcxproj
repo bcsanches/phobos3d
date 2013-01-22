@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\dictionary\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_DICTIONARY_EXPORTS;PH_WIN32;PH_CHECK_ASSERT;PH_MSVC;PH_DEBUG;_CRT_SECURE_NO_WARNINGS;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_DICTIONARY_EXPORTS;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>

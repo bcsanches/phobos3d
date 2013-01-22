@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_ERROR_H
 #define PH_ERROR_H
 
+#include "PH_Defs.h"
+
 #ifdef PH_CHECK_ASSERT
 #	if (defined PH_MSVC)
 #		if(defined _DEBUG)

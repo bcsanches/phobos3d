@@ -70,7 +70,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PH_WIN32;PH_DEBUG;PH_MSVC;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;PH_KERNEL_EXPORTS;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;PH_KERNEL_EXPORTS;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -138,9 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\kernel\SDL\PH_EventManagerSDL.cpp" />
-    <ClCompile Include="..\..\..\src\kernel\SDL\PH_TimerSDL.cpp" />
-    <ClCompile Include="..\..\..\src\kernel\SDL\PH_WindowSDL.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Node.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_ObjectManager.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Context.cpp" />
@@ -148,7 +145,6 @@
     <ClCompile Include="..\..\..\src\kernel\PH_ContextItem.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_ContextVar.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_DynamicLibrary.cpp" />
-    <ClCompile Include="..\..\..\src\kernel\PH_EventManager.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Exception.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Folders.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Kernel.cpp" />
@@ -160,11 +156,8 @@
     <ClCompile Include="..\..\..\src\kernel\PH_ProcVector.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_ResourceManager.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_String.cpp" />
-    <ClCompile Include="..\..\..\src\kernel\PH_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\kernel\SDL\PH_EventManagerSDL.h" />
-    <ClInclude Include="..\..\..\include\kernel\SDL\PH_WindowSDL.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Node.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_NodeFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_NodeProperty.h" />
@@ -181,10 +174,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_DynamicLibrary.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Enum.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Error.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventListener.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventListenerFwd.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventManager.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventManagerFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Exception.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Folders.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_GenericFactory.h" />
@@ -207,7 +196,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_String.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Timer.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Types.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\contrib\SDL-1.2.15\VisualC\SDL\SDL.vcxproj">

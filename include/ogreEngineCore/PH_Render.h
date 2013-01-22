@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 April 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -27,7 +27,8 @@ subject to the following restrictions:
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
-#include <PH_Window.h>
+
+#include <Phobos/System/Window.h>
 
 #include "PH_OgreEngineCoreAPI.h"
 
@@ -156,7 +157,7 @@ namespace Phobos
 			// =====================================================
 			// PRIVATE ATTRIBUTES
 			// =====================================================		
-			WindowPtr_t							ipWindow;
+			System::WindowPtr_t					ipWindow;
 		
 			Float_t								fpFrameTicks;
 			Float_t								fpCurrentFPS;

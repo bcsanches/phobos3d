@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 September 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -19,8 +19,8 @@ subject to the following restrictions:
 
 #include <boost/make_shared.hpp>
 
-#include <PH_InputDevice.h>
-#include <PH_InputEvent.h>
+#include <Phobos/System/InputDevice.h>
+#include <Phobos/System/InputEvent.h>
 
 Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_c &name, size_t screenWidth, size_t screenHeight)
 {
@@ -39,15 +39,15 @@ Phobos::Gui::Context_c::~Context_c()
 	pclContext->RemoveReference();
 }
 
-void Phobos::Gui::Context_c::InputEvent(const InputEvent_s &event)
+void Phobos::Gui::Context_c::InputEvent(const System::InputEvent_s &event)
 {
-	if(event.pclDevice->GetDeviceType() == INPUT_DEVICE_MOUSE)
+	if(event.pclDevice->GetDeviceType() == System::INPUT_DEVICE_MOUSE)
 	{
-		if(event.eType == INPUT_EVENT_THUMB)
+		if(event.eType == System::INPUT_EVENT_THUMB)
 		{
 			pclContext->ProcessMouseMove(static_cast<int>(event.stThumb.fpAxis[0]), static_cast<int>(event.stThumb.fpAxis[1]), 0);
 		}
-		else if(event.eType == INPUT_EVENT_BUTTON)
+		else if(event.eType == System::INPUT_EVENT_BUTTON)
 		{
 			if(event.stButton.fpPression > 0)
 				pclContext->ProcessMouseButtonDown(event.stButton.uId-1, 0);

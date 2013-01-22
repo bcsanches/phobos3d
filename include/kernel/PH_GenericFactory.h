@@ -16,10 +16,10 @@ subject to the following restrictions:
 #ifndef PH_GENERIC_FACTORY_H
 #define PH_GENERIC_FACTORY_H
 
-#include <boost/noncopyable.hpp>
 #include <boost/intrusive/set.hpp>
 
 #include <PH_Defs.h>
+#include <PH_DisableCopy.h>
 #include <PH_Exception.h>
 #include <PH_String.h>
 
@@ -27,8 +27,10 @@ namespace Phobos
 {
 
 	template <typename T>
-	class GenericFactory_c: boost::noncopyable
+	class GenericFactory_c
 	{
+		PH_DISABLE_COPY(GenericFactory_c);
+
 	    public:
             template<typename A>
             struct ObjectCreatorComp_s

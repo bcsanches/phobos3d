@@ -20,9 +20,9 @@ subject to the following restrictions:
 #include <fstream>
 
 #include <boost/intrusive/list.hpp>
-#include <boost/utility.hpp>
 
 #include "PH_Defs.h"
+#include "PH_DisableCopy.h"
 #include "PH_Listener.h"
 #include "PH_KernelAPI.h"
 #include "PH_String.h"
@@ -44,8 +44,10 @@ namespace Phobos
 			PH_DECLARE_LISTENER_HOOK
 	};
 
-	class PH_KERNEL_API Log_c: boost::noncopyable
+	class PH_KERNEL_API Log_c
 	{
+		PH_DISABLE_COPY(Log_c);
+
 		public:
 			class Stream_c
 			{

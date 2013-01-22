@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 October 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -16,12 +16,12 @@ subject to the following restrictions:
 
 #include "PH_Session.h"
 
-#include <PH_InputActions.h>
-#include <PH_InputDevice.h>
-#include <PH_InputEvent.h>
-#include <PH_InputManager.h>
+#include <Phobos/System/InputActions.h>
+#include <Phobos/System/InputDevice.h>
+#include <Phobos/System/InputEvent.h>
+#include <Phobos/System/InputManager.h>
+#include <Phobos/System/MouseInputDevice.h>
 #include <PH_Kernel.h>
-#include <PH_MouseInputDevice.h>
 
 #include "Gui/PH_Form.h"
 #include "Gui/PH_Manager.h"
@@ -41,9 +41,9 @@ Phobos::Session_c::Session_c():
 	pclClient(NULL),
 	pclForm(NULL)
 {
-	InputManager_c::CreateInstance("InputManager").AddListener(*this);
+	System::InputManager_c::CreateInstance("InputManager").AddListener(*this);
 
-	ipInputMapper = InputMapper_c::Create("InputMapper", Console_c::GetInstance());
+	ipInputMapper = System::InputMapper_c::Create("InputMapper", Console_c::GetInstance());
 	ipInputMapper->Disable();
 
 	this->AddChild(*ipInputMapper);
@@ -51,22 +51,22 @@ Phobos::Session_c::Session_c():
 
 Phobos::Session_c::~Session_c()
 {
-	InputManager_c::ReleaseInstance();
+	System::InputManager_c::ReleaseInstance();
 }
 
-void Phobos::Session_c::InputManagerEvent(const InputManagerEvent_s &event)
+void Phobos::Session_c::InputManagerEvent(const System::InputManagerEvent_s &event)
 {
 	std::stringstream stream;
 
 	switch(event.eType)
 	{
-		case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
+		case System::INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
 			stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " attached.";
-			if(event.rclDevice.GetDeviceType() == INPUT_DEVICE_KEYBOARD)
+			if(event.rclDevice.GetDeviceType() == System::INPUT_DEVICE_KEYBOARD)
 				event.rclDevice.AddListener(*this);
 			break;
 
-		case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
+		case System::INPUT_MANAGER_EVENT_DEVICE_DETACHED:
 			stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " detached.";
 			break;
 	}
@@ -74,13 +74,13 @@ void Phobos::Session_c::InputManagerEvent(const InputManagerEvent_s &event)
 	Kernel_c::GetInstance().LogMessage(stream.str());
 }
 
-void Phobos::Session_c::InputEvent(const InputEvent_s &event)
+void Phobos::Session_c::InputEvent(const System::InputEvent_s &event)
 {
 	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
 
-	if((event.eType == INPUT_EVENT_BUTTON) && (event.stButton.eState == Phobos::BUTTON_STATE_DOWN))
+	if((event.eType == System::INPUT_EVENT_BUTTON) && (event.stButton.eState == Phobos::System::BUTTON_STATE_DOWN))
 	{		
-		if(event.stButton.uId == Phobos::KB_ESCAPE)
+		if(event.stButton.uId == Phobos::System::KB_ESCAPE)
 		{
 			if(console.IsActive())
 			{
@@ -124,7 +124,7 @@ void Phobos::Session_c::InputEvent(const InputEvent_s &event)
 
 	if(console.IsActive())
 	{
-		if(event.eType == INPUT_EVENT_CHAR)
+		if(event.eType == System::INPUT_EVENT_CHAR)
 		{			
 			if(fIgnoreConsoleKey && (event.stButton.uId == CONSOLE_KEY || event.stButton.uId == '\''))
 			{
@@ -140,7 +140,7 @@ void Phobos::Session_c::InputEvent(const InputEvent_s &event)
 
 void Phobos::Session_c::OnFixedUpdate()
 {
-	InputManager_c::GetInstance().Update();
+	System::InputManager_c::GetInstance().Update();
 
 	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
 
@@ -256,7 +256,7 @@ Phobos::Session_c::ConfigInfo_s Phobos::Session_c::GetConfig()
 {
 	ConfigInfo_s info;
 	
-	info.pclMouse = static_cast<MouseInputDevice_c *>(&InputManager_c::GetInstance().GetDevice(INPUT_DEVICE_MOUSE));
+	info.pclMouse = static_cast<System::MouseInputDevice_c *>(&System::InputManager_c::GetInstance().GetDevice(System::INPUT_DEVICE_MOUSE));
 
 	return info;
 }

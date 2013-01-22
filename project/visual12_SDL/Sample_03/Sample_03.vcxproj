@@ -64,8 +64,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\include\kernel;$(ProjectDir)\..\..\..\include\input;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_CHECK_ASSERT;PH_MSVC;PH_DEBUG;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\include\kernel;$(ProjectDir)\..\..\..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -125,13 +125,12 @@
     <ClCompile Include="..\..\..\src\sample_03\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PH_Input\PH_Input.vcxproj">
-      <Project>{736ee093-359c-4016-86e4-ebbb82951a3b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
       <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_System\PH_System.vcxproj">
+      <Project>{49ad3e51-f626-4c97-b051-a9f40f6b3858}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

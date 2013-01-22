@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 March 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -19,10 +19,11 @@ subject to the following restrictions:
 #include <PH_Console.h>
 #include <PH_Core.h>
 #include <PH_CoreModule.h>
-#include <PH_EventManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
+
+#include <Phobos/System/EventManager.h>
 
 using namespace Phobos;
 
@@ -183,7 +184,7 @@ struct CoreInstance_s
 	CoreInstance_s()
 	{
 		Kernel_c::CreateInstance("enginecoretest.log");
-		EventManager_c::CreateInstance("EventManager");
+		System::EventManager_c::CreateInstance("EventManager");
 		Core_c::CreateInstance();		
 		TestConsole_c::CreateInstance();
 	}
@@ -193,7 +194,7 @@ struct CoreInstance_s
 		Console_c::ReleaseInstance();
 		Core_c::ReleaseInstance();
 
-		EventManager_c::ReleaseInstance();
+		System::EventManager_c::ReleaseInstance();
 		Kernel_c::ReleaseInstance();
 	}
 };

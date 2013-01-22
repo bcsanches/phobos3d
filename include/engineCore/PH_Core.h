@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 April 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,7 +22,8 @@ subject to the following restrictions:
 
 #include <PH_ContextCmd.h>
 #include <PH_ContextVar.h>
-#include <PH_Timer.h>
+
+#include <Phobos/System/Timer.h>
 
 #include "PH_CoreModuleManager.h"
 #include "PH_CoreTimer.h"
@@ -100,7 +101,7 @@ namespace Phobos
 			ContextVar_c	varEngineFPS;
 			ContextVar_c	varMinFrameTime;
 
-			Timer_c			clTimer;
+			System::Timer_c	clTimer;
 
 			bool			fLaunchedBoot;
 			bool			fStopMainLoop;									

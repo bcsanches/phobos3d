@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 September 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -19,8 +19,9 @@ subject to the following restrictions:
 
 #include <list>
 
+#include <Phobos/System/InputDeviceListener.h>
+
 #include <PH_ContextCmd.h>
-#include <PH_InputDeviceListener.h>
 #include <PH_Singleton.h>
 
 #include "PH_CoreModule.h"
@@ -38,7 +39,10 @@ namespace Rocket
 
 namespace Phobos
 {
-	class InputDevice_c;
+	namespace System
+	{
+		class InputDevice_c;
+	}
 
 	namespace Gui
 	{
@@ -71,7 +75,7 @@ namespace Phobos
 
 				void LoadFonts();
 
-				void InputEvent(const InputEvent_s &event);
+				void InputEvent(const System::InputEvent_s &event);
 
 			protected:
 				static void UpdateInstance(ManagerPtr_t manager);
@@ -80,16 +84,16 @@ namespace Phobos
 				void CmdRocketLoadFonfFace(const StringVector_t &container, Phobos::Context_c &);
 
 			private:
-				class LocalInputDeviceListener_c: public InputDeviceListener_c
+				class LocalInputDeviceListener_c: public System::InputDeviceListener_c
 				{
 					public:
 						LocalInputDeviceListener_c();
 
 						void SetOwner(Manager_c &manager);
 
-						void ListenTo(Phobos::InputDevice_c &device);
+						void ListenTo(System::InputDevice_c &device);
 
-						void InputEvent(const Phobos::InputEvent_s &event);
+						void InputEvent(const System::InputEvent_s &event);
 
 					private:
 						Manager_c *pclOwner;

@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 February 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,19 +14,23 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <PH_EventManager.h>
-#include <PH_InputActions.h>
-#include <PH_InputDevice.h>
-#include <PH_InputEvent.h>
-#include <PH_InputManager.h>
+
+
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
 #include <PH_ProcVector.h>
-#include <PH_Window.h>
+
+#include <Phobos/System/Window.h>
+#include <Phobos/System/EventManager.h>
+#include <Phobos/System/InputActions.h>
+#include <Phobos/System/InputDevice.h>
+#include <Phobos/System/InputEvent.h>
+#include <Phobos/System/InputManager.h>
+#include <Phobos/System/Window.h>
 
 using namespace Phobos;
 
-class Sample_c: EventListener_c, InputManagerListener_c, InputDeviceListener_c
+class Sample_c: System::EventListener_c, System::InputManagerListener_c, System::InputDeviceListener_c
 {
 	public:
 		Sample_c();
@@ -34,14 +38,14 @@ class Sample_c: EventListener_c, InputManagerListener_c, InputDeviceListener_c
 
 		void Run();
 
-		void Event(struct Event_s &event);
-		void InputManagerEvent(const InputManagerEvent_s &event);
+		void Event(System::Event_s &event);
+		void InputManagerEvent(const System::InputManagerEvent_s &event);
 
-		void InputEvent(const InputEvent_s &event);
+		void InputEvent(const System::InputEvent_s &event);
 
 	private:
 		ProcVector_c	clSingletons;
-		WindowPtr_t		ipWindow;				
+		System::WindowPtr_t		ipWindow;				
 
 		bool fQuit;
 };
@@ -52,18 +56,18 @@ Sample_c::Sample_c():
 	Kernel_c::CreateInstance("Sample_02.log");
 	clSingletons.AddProc(&Kernel_c::ReleaseInstance);
 
-	ipWindow = Window_c::Create("RenderWindow");
+	ipWindow = System::Window_c::Create("RenderWindow");
 
 	Rect_s<UInt_t> r(0, 0, 640, 480);
 	ipWindow->Open("Sample 02", r);
 
-	EventManager_c &eventManager = EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&EventManager_c::ReleaseInstance);	
+	auto &eventManager = System::EventManager_c::CreateInstance("EventManager");
+	clSingletons.AddProc(&System::EventManager_c::ReleaseInstance);	
 
-	eventManager.AddListener(*this, EVENT_TYPE_SYSTEM);
+	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	InputManager_c &inputManager = InputManager_c::CreateInstance("InputManager");
-	clSingletons.AddProc(&InputManager_c::ReleaseInstance);
+	auto &inputManager = System::InputManager_c::CreateInstance("InputManager");
+	clSingletons.AddProc(&System::InputManager_c::ReleaseInstance);
 	inputManager.AddListener(*this);
 }
 
@@ -74,12 +78,12 @@ Sample_c::~Sample_c()
 	clSingletons.CallAll();
 }
 
-void Sample_c::Event(struct Event_s &event)
+void Sample_c::Event(System::Event_s &event)
 {
 	switch(event.eType)
 	{
-		case EVENT_TYPE_SYSTEM:
-			if(event.stSystem.eType == SYSTEM_QUIT)
+		case System::EVENT_TYPE_SYSTEM:
+			if(event.stSystem.eType == System::SYSTEM_QUIT)
 			{
 				fQuit = true;
 				break;
@@ -91,12 +95,12 @@ void Sample_c::Event(struct Event_s &event)
 	}
 }
 
-void Sample_c::InputManagerEvent(const InputManagerEvent_s &event)
+void Sample_c::InputManagerEvent(const System::InputManagerEvent_s &event)
 {
 	switch(event.eType)
 	{
-		case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-			if(event.rclDevice.GetDeviceType() == INPUT_DEVICE_KEYBOARD)
+		case System::INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
+			if(event.rclDevice.GetDeviceType() == System::INPUT_DEVICE_KEYBOARD)
 				event.rclDevice.AddListener(*this);
 			break;
 
@@ -105,12 +109,12 @@ void Sample_c::InputManagerEvent(const InputManagerEvent_s &event)
 	}
 }
 
-void Sample_c::InputEvent(const InputEvent_s &event)
+void Sample_c::InputEvent(const System::InputEvent_s &event)
 {
 	switch(event.eType)
 	{
-		case INPUT_EVENT_BUTTON:
-			if((event.stButton.eState == BUTTON_STATE_DOWN) && (event.stButton.uId == KB_ESCAPE))
+		case System::INPUT_EVENT_BUTTON:
+			if((event.stButton.eState == System::BUTTON_STATE_DOWN) && (event.stButton.uId == System::KB_ESCAPE))
 				fQuit = true;
 
         default:
@@ -122,8 +126,8 @@ void Sample_c::Run()
 {
 	while(!fQuit)
 	{
-		EventManager_c::GetInstance().Update();
-		InputManager_c::GetInstance().Update();		
+		System::EventManager_c::GetInstance().Update();
+		System::InputManager_c::GetInstance().Update();		
 	}
 }
 

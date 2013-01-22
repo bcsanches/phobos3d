@@ -46,7 +46,8 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
 #include <PH_ProcVector.h>
-#include <PH_Timer.h>
+
+#include <Phobos/System/Timer.h>
 
 class EngineMain_c
 {

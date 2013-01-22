@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 September 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_DICTIONARY_H
 #define PH_DICTIONARY_H
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <PH_Node.h>
 
@@ -192,7 +192,7 @@ namespace Phobos
 			const Value_s *TryGetValue(const String_c &key) const;
 
 		private:
-			typedef boost::unordered_map<String_c, Value_s> ValueMap_t;
+			typedef std::unordered_map<String_c, Value_s> ValueMap_t;
 			typedef ValueMap_t::const_iterator ValueMapConstIterator_t;
 
 			ValueMap_t mapValues;

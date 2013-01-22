@@ -28,7 +28,10 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	struct InputEvent_s;
+	namespace System
+	{
+		struct InputEvent_s;
+	}
 
 	namespace Gui
 	{			
@@ -43,7 +46,7 @@ namespace Phobos
 				void Update();
 				void Render();
 
-				void InputEvent(const InputEvent_s &event);
+				void InputEvent(const System::InputEvent_s &event);
 
 				void ResetMousePosition(short x, short y);
 

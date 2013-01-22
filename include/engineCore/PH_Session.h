@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 October 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -17,9 +17,9 @@ subject to the following restrictions:
 #ifndef PH_SESSION_H
 #define PH_SESSION_H
 
-#include <PH_InputDeviceListener.h>
-#include <PH_InputManager.h>
-#include <PH_InputMapper.h>
+#include <Phobos/System/InputDeviceListener.h>
+#include <Phobos/System/InputManager.h>
+#include <Phobos/System/InputMapper.h>
 #include <PH_Singleton.h>
 
 #include "PH_EngineCoreAPI.h"
@@ -32,7 +32,11 @@ namespace Phobos
 
 	class IPlayerCommandProducer_c;
 	class IClient_c;
-	class MouseInputDevice_c;
+
+	namespace System
+	{
+		class MouseInputDevice_c;
+	}
 
 	namespace Gui
 	{
@@ -40,8 +44,8 @@ namespace Phobos
 	}
 
 	class PH_ENGINE_CORE_API Session_c: public CoreModule_c,
-		private InputManagerListener_c, 
-		private InputDeviceListener_c
+		private System::InputManagerListener_c, 
+		private System::InputDeviceListener_c
 	{
 		PH_DECLARE_SINGLETON_METHODS(Session);
 
@@ -59,8 +63,8 @@ namespace Phobos
 		private:
 			Session_c();			
 
-			void InputManagerEvent(const InputManagerEvent_s &event);
-			void InputEvent(const InputEvent_s &event);
+			void InputManagerEvent(const System::InputManagerEvent_s &event);
+			void InputEvent(const System::InputEvent_s &event);
 			
 			void ClipMouseCursor();
 			void UnclipMouseCursor();
@@ -71,13 +75,13 @@ namespace Phobos
 		private:
 			struct ConfigInfo_s
 			{
-				MouseInputDevice_c *pclMouse;				
+				System::MouseInputDevice_c *pclMouse;				
 			};		
 
 			struct ConfigInfo_s GetConfig();
 
 		private:			
-			InputMapperPtr_t			ipInputMapper;
+			System::InputMapperPtr_t	ipInputMapper;
 			bool						fIgnoreConsoleKey;
 
 			IPlayerCommandProducer_c	*pclPlayerCommandProducer;

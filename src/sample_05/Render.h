@@ -21,7 +21,7 @@ subject to the following restrictions:
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
 #include <PH_Singleton.h>
-#include <PH_Window.h>
+#include <Phobos/System/Window.h>
 
 PH_DECLARE_SINGLETON_PTR(Render);
 
@@ -44,7 +44,7 @@ class Render_c: public Phobos::CoreModule_c
 		// =====================================================
 		// PRIVATE ATTRIBUTES
 		// =====================================================		
-		Phobos::WindowPtr_t ipWindow;
+		Phobos::System::WindowPtr_t ipWindow;
 
 		Phobos::ContextVar_c varRScreenX;
 		Phobos::ContextVar_c varRScreenY;

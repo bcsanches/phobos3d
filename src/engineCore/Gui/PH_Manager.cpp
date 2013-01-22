@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 September 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -16,18 +16,17 @@ subject to the following restrictions:
 
 #include "Gui/PH_Manager.h"
 
-#include <boost/foreach.hpp>
-
 #include <Rocket/Core/SystemInterface.h>
 
 #include <PH_Console.h>
 #include <PH_ContextUtils.h>
 #include <PH_Core.h>
-#include <PH_InputManager.h>
-#include <PH_InputDevice.h>
-#include <PH_MouseInputDevice.h>
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
+
+#include <Phobos/System/InputManager.h>
+#include <Phobos/System/InputDevice.h>
+#include <Phobos/System/MouseInputDevice.h>
 
 #include "Gui/PH_Context.h"
 
@@ -70,12 +69,12 @@ void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::SetOwner(Phobos::Gui::M
 	pclOwner = &owner;
 }
 
-void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::ListenTo(Phobos::InputDevice_c &device)
+void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::ListenTo(Phobos::System::InputDevice_c &device)
 {
 	device.AddListener(*this);
 }
 
-void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::InputEvent(const Phobos::InputEvent_s &event)
+void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::InputEvent(const Phobos::System::InputEvent_s &event)
 {
 	pclOwner->InputEvent(event);
 }
@@ -127,7 +126,7 @@ Rocket::Core::SystemInterface *Phobos::Gui::Manager_c::CreateSystemInterface()
 
 void Phobos::Gui::Manager_c::LoadFonts()
 {
-	BOOST_FOREACH(String_c &path, lstFontFacesToLoad)
+	for(auto &path : lstFontFacesToLoad)	
 	{
 		Rocket::Core::FontDatabase::LoadFontFace(path.c_str());	
 	}
@@ -148,11 +147,11 @@ void Phobos::Gui::Manager_c::EnableInput()
 {
 	if(!fInputActive)
 	{
-		InputManager_c &inputManager = InputManager_c::GetInstance();
+		auto &inputManager = System::InputManager_c::GetInstance();
 
-		MouseInputDevice_c &mouse = static_cast<MouseInputDevice_c &>(inputManager.GetDevice(INPUT_DEVICE_MOUSE));
+		auto &mouse = static_cast<System::MouseInputDevice_c &>(inputManager.GetDevice(System::INPUT_DEVICE_MOUSE));
 
-		clKeyboardListener.ListenTo(inputManager.GetDevice(INPUT_DEVICE_KEYBOARD));	
+		clKeyboardListener.ListenTo(inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD));	
 		clMouseListener.ListenTo(mouse);	
 
 		fInputActive = true;
@@ -175,7 +174,7 @@ void Phobos::Gui::Manager_c::DisableInput()
 	fDisableInput = true;	
 }
 
-void Phobos::Gui::Manager_c::InputEvent(const InputEvent_s &event)
+void Phobos::Gui::Manager_c::InputEvent(const System::InputEvent_s &event)
 {	
 	for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 	{
@@ -189,10 +188,10 @@ void Phobos::Gui::Manager_c::OnFixedUpdate()
 {
 	if(fInputActive && fDisableInput)
 	{
-		InputManager_c &inputManager = InputManager_c::GetInstance();
+		auto &inputManager = System::InputManager_c::GetInstance();
 
-		inputManager.GetDevice(INPUT_DEVICE_KEYBOARD).RemoveListener(clKeyboardListener);
-		inputManager.GetDevice(INPUT_DEVICE_MOUSE).RemoveListener(clMouseListener);
+		inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD).RemoveListener(clKeyboardListener);
+		inputManager.GetDevice(System::INPUT_DEVICE_MOUSE).RemoveListener(clMouseListener);
 
 		fInputActive = fDisableInput = false;
 	}

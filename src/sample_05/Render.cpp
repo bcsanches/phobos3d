@@ -1,7 +1,7 @@
 /*
 Phobos3d
 March 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -46,7 +46,7 @@ void Render_c::OnBoot(void)
 	Kernel_c	&kernel(Kernel_c::GetInstance());
 	kernel.LogMessage("[Render_c::OnBoot] Starting");
 
-	ipWindow = Window_c::Create("RenderWindow");
+	ipWindow = System::Window_c::Create("RenderWindow");
 
 	Rect_s<UInt_t> r;
 

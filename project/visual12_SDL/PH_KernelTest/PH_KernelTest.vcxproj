@@ -66,7 +66,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\include\kernel;$(ProjectDir)\..\..\..\include\kernelTest;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_DEBUG;PH_MSVC;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -127,7 +127,6 @@
     <ClCompile Include="..\..\..\src\kernelTest\ContextItemTest.cpp" />
     <ClCompile Include="..\..\..\src\kernelTest\ContextTest.cpp" />
     <ClCompile Include="..\..\..\src\kernelTest\ContextVarTest.cpp" />
-    <ClCompile Include="..\..\..\src\kernelTest\EventManagerTest.cpp" />
     <ClCompile Include="..\..\..\src\kernelTest\KernelTest.cpp" />
     <ClCompile Include="..\..\..\src\kernelTest\LogTest.cpp" />
     <ClCompile Include="..\..\..\src\kernelTest\main.cpp" />

@@ -66,8 +66,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\include\mapViewer;$(ProjectDir)\..\..\..\include\engineCore;$(ProjectDir)\..\..\..\include\kernel;$(ProjectDir)\..\..\..\include\gameEngine;$(ProjectDir)\..\..\..\include\input;$(ProjectDir)\..\..\..\include\dictionary;$(ProjectDir)\..\..\..\include\gamePlugin;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\include\mapViewer;$(ProjectDir)\..\..\..\include\engineCore;$(ProjectDir)\..\..\..\include\kernel;$(ProjectDir)\..\..\..\include\gameEngine;$(ProjectDir)\..\..\..\include\;$(ProjectDir)\..\..\..\include\dictionary;$(ProjectDir)\..\..\..\include\gamePlugin;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_MAP_VIEWER_EXPORTS;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -145,10 +145,6 @@
     </ProjectReference>
     <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_Input\PH_Input.vcxproj">
-      <Project>{736ee093-359c-4016-86e4-ebbb82951a3b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">

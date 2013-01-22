@@ -26,7 +26,11 @@ subject to the following restrictions:
 namespace Phobos
 {
 	class Console_c;
-	struct InputEvent_s;
+
+	namespace
+	{
+		struct InputEvent_s;
+	}
 
 	PH_DECLARE_NODE_PTR(Console);	
 
@@ -91,7 +95,7 @@ namespace Phobos
 
 			void FlushCommandBuffer();
 			
-			bool HandleInputEvent(const InputEvent_s &event);
+			bool HandleInputEvent(const System::InputEvent_s &event);
 
 		protected:
 			Console_c(const String_c &name, UInt32_t flags = 0);

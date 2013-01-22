@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 January 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,20 +14,19 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_SYSTEM_EVENT_MANAGER_H
-#define PH_SYSTEM_EVENT_MANAGER_H
+#ifndef PH_EVENT_MANAGER_MODULE_H
+#define PH_EVENT_MANAGER_MODULE_H
 
 #include "PH_CoreModule.h"
 #include "PH_Core.h"
-#include <PH_EventManager.h>
-#include <PH_EventManagerFwd.h>
+#include <Phobos/System/EventManager.h>
 #include <PH_Error.h>
 
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(EventManagerModule);	
 
-	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c, private EventListener_c
+	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c, private Phobos::System::EventListener_c
 	{
 		public:
 			static EventManagerModule_c &CreateInstance();
@@ -40,7 +39,7 @@ namespace Phobos
 
 			void OnFixedUpdate();			
 
-			virtual void Event(struct Event_s &event);
+			virtual void Event(struct System::Event_s &event);
 
 			EventManagerModule_c();			
 

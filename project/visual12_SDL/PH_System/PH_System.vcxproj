@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{49AD3E51-F626-4C97-B051-A9F40F6B3858}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PH_System</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\include\kernel\;$(SolutionDir)\..\..\contrib\SDL-1.2.15\include\;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_SYSTEM_EXPORTS;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_SYSTEM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\System\AxisButton.cpp" />
+    <ClCompile Include="..\..\..\src\System\Button.cpp" />
+    <ClCompile Include="..\..\..\src\System\EventManager.cpp" />
+    <ClCompile Include="..\..\..\src\System\InputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\System\InputManager.cpp" />
+    <ClCompile Include="..\..\..\src\System\InputMapper.cpp" />
+    <ClCompile Include="..\..\..\src\System\KeyboardInputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\System\MouseInputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\EventManagerSDL.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\InputManagerSDL.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\KeyboardInputDeviceSDL.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\MouseInputDeviceSDL.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\TimerSDL.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\WindowSDL.cpp" />
+    <ClCompile Include="..\..\..\src\System\Thumb.cpp" />
+    <ClCompile Include="..\..\..\src\System\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\System\AxisButton.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Button.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventListener.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventListenerFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventManagerFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputActions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SystemAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDefs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDevice.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDeviceFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDeviceListener.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputEvent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputMapper.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\KeyboardInputDevice.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\MouseInputDevice.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\EventManagerSDL.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\InputManagerSDL.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\KeyboardInputDeviceSDL.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\MouseInputDeviceSDL.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\WindowSDL.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Thumb.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Timer.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\contrib\SDL-1.2.15\VisualC\SDL\SDL.vcxproj">
+      <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
+      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

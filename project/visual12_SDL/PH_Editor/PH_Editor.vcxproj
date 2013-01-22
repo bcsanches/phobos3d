@@ -86,8 +86,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_WIN32;PH_DEBUG;PH_CHECK_ASSERT;PH_MSVC;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 April 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -30,12 +30,13 @@ subject to the following restrictions:
 #include <PH_ContextUtils.h>
 #include <PH_Error.h>
 #include <PH_Enum.h>
-#include <PH_EventManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
 #include <PH_Path.h>
 #include <PH_String.h>
+
+#include <Phobos/System/EventManager.h>
 
 #include "PH_Core.h"
 #include "PH_OgreUtils.h"
@@ -217,7 +218,7 @@ namespace Phobos
 		Kernel_c	&kernel(Kernel_c::GetInstance());
 		kernel.LogMessage("[Render_c::OnBoot] Starting");
 
-		ipWindow = Window_c::Create("RenderWindow");
+		ipWindow = System::Window_c::Create("RenderWindow");
 
 		Rect_s<UInt_t> r;
 

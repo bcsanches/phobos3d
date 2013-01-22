@@ -16,7 +16,6 @@ subject to the following restrictions:
 
 #include "PH_Node.h"
 
-#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 
 #include "PH_Exception.h"
@@ -128,7 +127,7 @@ namespace Phobos
 	void Node_c::RemoveAllChildren()
 	{
 		//We clear all nodes parents, so in case they are not destroyed no dangling pointers are left
-		BOOST_FOREACH(NodeMapPair_t pair, mapNodes)
+		for(NodeMapPair_t pair : mapNodes)
 		{
 			pair.second->pclParent = NULL;
 			if(pair.second->fManagedNode)

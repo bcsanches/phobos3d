@@ -17,19 +17,20 @@ subject to the following restrictions:
 #include <PH_Context.h>
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
-#include <PH_EventManager.h>
-#include <PH_InputActions.h>
-#include <PH_InputEvent.h>
-#include <PH_InputManager.h>
-#include <PH_InputMapper.h>
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
 #include <PH_ProcVector.h>
-#include <PH_Window.h>
+
+#include <Phobos/System/EventManager.h>
+#include <Phobos/System/InputActions.h>
+#include <Phobos/System/InputEvent.h>
+#include <Phobos/System/InputManager.h>
+#include <Phobos/System/InputMapper.h>
+#include <Phobos/System/Window.h>
 
 using namespace Phobos;
 
-class Sample_c: EventListener_c
+class Sample_c: System::EventListener_c
 {
 	public:
 		Sample_c();
@@ -37,12 +38,12 @@ class Sample_c: EventListener_c
 
 		void Run();
 
-		void Event(struct Event_s &event);
+		void Event(System::Event_s &event);
 
 	private:
 		ProcVector_c		clSingletons;
-		WindowPtr_t			ipWindow;				
-		InputMapperPtr_t	ipInputMapper;
+		System::WindowPtr_t			ipWindow;				
+		System::InputMapperPtr_t	ipInputMapper;
 
 		Context_c			clMainContext;
 
@@ -55,22 +56,22 @@ Sample_c::Sample_c():
 	Kernel_c::CreateInstance("Sample_04.log");
 	clSingletons.AddProc(&Kernel_c::ReleaseInstance);
 
-	ipWindow = Window_c::Create("RenderWindow");
+	ipWindow = System::Window_c::Create("RenderWindow");
 
 	Rect_s<UInt_t> r(0, 0, 640, 480);
 	ipWindow->Open("Sample 04", r);
 
-	EventManager_c &eventManager = EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&EventManager_c::ReleaseInstance);	
+	auto &eventManager = System::EventManager_c::CreateInstance("EventManager");
+	clSingletons.AddProc(&System::EventManager_c::ReleaseInstance);	
 
-	eventManager.AddListener(*this, EVENT_TYPE_SYSTEM);
+	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	InputManager_c &inputManager = InputManager_c::CreateInstance("InputManager");
-	clSingletons.AddProc(&InputManager_c::ReleaseInstance);
+	auto &inputManager = System::InputManager_c::CreateInstance("InputManager");
+	clSingletons.AddProc(&System::InputManager_c::ReleaseInstance);
 
 	clMainContext.AddContextVar(varQuit);
 
-	ipInputMapper = InputMapper_c::Create("InputMapper", clMainContext);
+	ipInputMapper = System::InputMapper_c::Create("InputMapper", clMainContext);
 
 	//Force an update to allow device attachment
 	inputManager.Update();
@@ -85,12 +86,12 @@ Sample_c::~Sample_c()
 	clSingletons.CallAll();
 }
 
-void Sample_c::Event(struct Event_s &event)
+void Sample_c::Event(System::Event_s &event)
 {
 	switch(event.eType)
 	{
-		case EVENT_TYPE_SYSTEM:
-			if(event.stSystem.eType == SYSTEM_QUIT)
+		case System::EVENT_TYPE_SYSTEM:
+			if(event.stSystem.eType == System::SYSTEM_QUIT)
 			{
 				varQuit.SetValue("true");
 				break;
@@ -106,8 +107,8 @@ void Sample_c::Run()
 {
 	while(!varQuit.GetBoolean())
 	{
-		EventManager_c::GetInstance().Update();
-		InputManager_c::GetInstance().Update();
+		System::EventManager_c::GetInstance().Update();
+		System::InputManager_c::GetInstance().Update();
 	}
 }
 

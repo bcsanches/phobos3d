@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 January 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -16,6 +16,17 @@ subject to the following restrictions:
 
 #ifndef PH_DEFS_H
 #define PH_DEFS_H
+
+#ifdef _MSC_VER
+	#define PH_MSVC
+	#define PH_WIN32
+
+	#ifdef _DEBUG
+		#define PH_DEBUG
+	#elif defined NDEBUG
+		#define PH_RELEASE
+	#endif
+#endif
 
 #ifdef PH_MSVC
 	//Template exportation (stl errors on dll)

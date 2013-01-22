@@ -17,11 +17,12 @@ subject to the following restrictions:
 #ifndef PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 #define PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 
-#include <PH_AxisButton.h>
-#include <PH_Button.h>
 #include <PH_ContextVar.h>
-#include <PH_Thumb.h>
 #include <PH_Types.h>
+
+#include <Phobos/System/AxisButton.h>
+#include <Phobos/System/Button.h>
+#include <Phobos/System/Thumb.h>
 
 #include "PH_IPlayerCommandProducer.h"
 #include "PH_GameEngineAPI.h"
@@ -103,12 +104,12 @@ namespace Phobos
 			void SetMouseSensitivity(Float_t v);		
 
 		private:
-			AxisButton_c	clMoveButton;
-			AxisButton_c	clMoveUpDown;
-			AxisButton_c	clStrafeButton;
-			AxisButton_c	clTurnButton;
-			AxisButton_c	clLookButton;		
-			Thumb_c			clMouseThumb;			
+			System::AxisButton_c	clMoveButton;
+			System::AxisButton_c	clMoveUpDown;
+			System::AxisButton_c	clStrafeButton;
+			System::AxisButton_c	clTurnButton;
+			System::AxisButton_c	clLookButton;		
+			System::Thumb_c			clMouseThumb;			
 
 			Float_t			fpMoveSpeed;
 			Float_t			fpTurnSpeed;

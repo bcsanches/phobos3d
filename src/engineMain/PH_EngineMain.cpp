@@ -34,8 +34,9 @@ subject to the following restrictions:
 #include <PH_ProcVector.h>
 #include <PH_Render.h>
 #include <PH_Session.h>
-#include <PH_Timer.h>
 #include <PH_WorldManager.h>
+
+#include <Phobos/System/Timer.h>
 
 #include <Gui/PH_LevelSelector.h>
 

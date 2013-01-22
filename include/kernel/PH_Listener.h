@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_BASE_LISTENER_H
-#define PH_BASE_LISTENER_H
+#ifndef PH_SYSTEM_BASE_LISTENER_H
+#define PH_SYSTEM_BASE_LISTENER_H
 
 #include <boost/intrusive/list.hpp>
 

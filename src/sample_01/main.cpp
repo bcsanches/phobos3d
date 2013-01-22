@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-February 2011
+February 2013
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -18,12 +18,13 @@ subject to the following restrictions:
 #include <PH_Kernel.h>
 #include <PH_Memory.h>
 #include <PH_ProcVector.h>
-#include <PH_Window.h>
-#include <PH_EventManager.h>
+
+#include <Phobos/System/Window.h>
+#include <Phobos/System/EventManager.h>
 
 using namespace Phobos;
 
-class Sample_c: EventListener_c
+class Sample_c: Phobos::System::EventListener_c
 {
 	public:
 		Sample_c();
@@ -31,12 +32,12 @@ class Sample_c: EventListener_c
 
 		void Run();
 
-		void Event(struct Event_s &event);
+		void Event(System::Event_s &event);
 
 	private:
 		ProcVector_c	clSingletons;
-		WindowPtr_t		ipWindow;
-		EventManager_c	*pclEventManager;
+		Phobos::System::WindowPtr_t		ipWindow;
+		Phobos::System::EventManager_c	*pclEventManager;
 
 		bool fQuit;
 };
@@ -47,15 +48,15 @@ Sample_c::Sample_c():
 	Kernel_c::CreateInstance("Sample_01.log");
 	clSingletons.AddProc(&Kernel_c::ReleaseInstance);
 
-	ipWindow = Window_c::Create("RenderWindow");
+	ipWindow = Phobos::System::Window_c::Create("RenderWindow");
 
 	Rect_s<UInt_t> r(0, 0, 640, 480);
 	ipWindow->Open("Sample 01", r);
 
-	pclEventManager = &EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&EventManager_c::ReleaseInstance);	
+	pclEventManager = &Phobos::System::EventManager_c::CreateInstance("EventManager");
+	clSingletons.AddProc(&Phobos::System::EventManager_c::ReleaseInstance);	
 
-	pclEventManager->AddListener(*this, EVENT_TYPE_SYSTEM);
+	pclEventManager->AddListener(*this, Phobos::System::EVENT_TYPE_SYSTEM);
 }
 
 Sample_c::~Sample_c()
@@ -65,12 +66,12 @@ Sample_c::~Sample_c()
 	clSingletons.CallAll();
 }
 
-void Sample_c::Event(struct Event_s &event)
+void Sample_c::Event(System::Event_s &event)
 {
 	switch(event.eType)
 	{
-		case EVENT_TYPE_SYSTEM:
-			if(event.stSystem.eType == SYSTEM_QUIT)
+		case Phobos::System::EVENT_TYPE_SYSTEM:
+			if(event.stSystem.eType == Phobos::System::SYSTEM_QUIT)
 			{
 				fQuit = true;
 				break;

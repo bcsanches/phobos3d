@@ -19,8 +19,6 @@ subject to the following restrictions:
 
 #include <sstream>
 
-#include <boost/foreach.hpp>
-
 #include "PH_Error.h"
 #include "PH_Exception.h"
 #include "PH_Kernel.h"
@@ -537,7 +535,7 @@ namespace Phobos
 	{
 		std::stringstream stream;
 
-		BOOST_FOREACH(ContextCmd_c &cmd, setCommands)
+		for(auto &cmd: setCommands)
 		{
 			stream << "\t" << cmd.GetName() << std::endl;
 		}
@@ -549,7 +547,7 @@ namespace Phobos
 	{
 		std::stringstream stream;
 
-		BOOST_FOREACH(ContextVar_c &var, setVariables)
+		for(auto &var : setVariables)		
 		{
 			stream << "\t" << var.GetName() << " = " << var.GetValue() << std::endl;
 		}

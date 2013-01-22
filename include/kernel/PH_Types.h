@@ -16,6 +16,8 @@ subject to the following restrictions:
 #ifndef PH_TYPES_H
 #define PH_TYPES_H
 
+#include <PH_Defs.h>
+
 #include <cstring>
 
 namespace Phobos
@@ -42,10 +44,8 @@ namespace Phobos
 		typedef size_t				Size_t;			//platform dependent type, never store or transmit (sz)
 		typedef UInt32_t			ObjectType_t;
 
-#else
-
-    #ifdef PH_LINUX
-
+#elif defined PH_LINUX
+    
         typedef unsigned char		UInt8_t;			//u8
 		typedef char				SInt8_t;			//s8
 		typedef unsigned short		UInt16_t;		//u16
@@ -66,8 +66,8 @@ namespace Phobos
 		typedef size_t				Size_t;			//platform dependent type, never store or transmit (sz)
 		typedef UInt32_t			ObjectType_t;
 
-    #endif
-
+#else
+	#error "Unknown platform"
 #endif //WIN32
 
 }

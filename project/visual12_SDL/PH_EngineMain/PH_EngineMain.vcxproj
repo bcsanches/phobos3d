@@ -69,8 +69,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\input\;$(ProjectDir)..\..\..\include\dictionary;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\physics;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PH_WIN32;PH_MSVC;PH_CHECK_ASSERT;PH_DEBUG;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\include\dictionary;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\physics;$(ProjectDir)..\..\..\include\ogreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -154,10 +154,6 @@
     </ProjectReference>
     <ProjectReference Include="..\PH_GameEngine\PH_GameEngine.vcxproj">
       <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_Input\PH_Input.vcxproj">
-      <Project>{736ee093-359c-4016-86e4-ebbb82951a3b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">

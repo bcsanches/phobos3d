@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="SDL">
-      <UniqueIdentifier>{71a9104c-3670-4b53-813f-ce8ddc3baed6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="node">
       <UniqueIdentifier>{e8bf234a-c9db-4fb0-a9da-a05f34973f7e}</UniqueIdentifier>
     </Filter>
@@ -12,15 +9,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\kernel\SDL\PH_EventManagerSDL.cpp">
-      <Filter>SDL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\SDL\PH_TimerSDL.cpp">
-      <Filter>SDL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\SDL\PH_WindowSDL.cpp">
-      <Filter>SDL</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\kernel\PH_Node.cpp">
       <Filter>node</Filter>
     </ClCompile>
@@ -40,7 +28,6 @@
       <Filter>context</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\kernel\PH_DynamicLibrary.cpp" />
-    <ClCompile Include="..\..\..\src\kernel\PH_EventManager.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Exception.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Folders.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_Kernel.cpp" />
@@ -52,15 +39,8 @@
     <ClCompile Include="..\..\..\src\kernel\PH_ProcVector.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_ResourceManager.cpp" />
     <ClCompile Include="..\..\..\src\kernel\PH_String.cpp" />
-    <ClCompile Include="..\..\..\src\kernel\PH_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\kernel\SDL\PH_EventManagerSDL.h">
-      <Filter>SDL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\kernel\SDL\PH_WindowSDL.h">
-      <Filter>SDL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\kernel\PH_Node.h">
       <Filter>node</Filter>
     </ClInclude>
@@ -99,10 +79,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_DynamicLibrary.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Enum.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Error.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventListener.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventListenerFwd.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventManager.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_EventManagerFwd.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Exception.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Folders.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_GenericFactory.h" />
@@ -125,6 +101,5 @@
     <ClInclude Include="..\..\..\include\kernel\PH_String.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Timer.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Types.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_Window.h" />
   </ItemGroup>
 </Project>

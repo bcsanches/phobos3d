@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_GAME_PLUGIN_API_H
 #define PH_GAME_PLUGIN_API_H
 
+#include <PH_Defs.h>
+
 #ifdef PH_WIN32
 	#ifdef PH_GAME_PLUGIN_EXPORTS
 		#define PH_GAME_PLUGIN_API __declspec(dllexport)

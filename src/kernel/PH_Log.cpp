@@ -19,8 +19,6 @@ subject to the following restrictions:
 #include <ctime>
 #include <iostream>
 
-#include <boost/bind.hpp>
-
 namespace Phobos
 {
 	Log_c::Log_c(const String_c &name, UInt_t flags):
@@ -40,8 +38,9 @@ namespace Phobos
 	}
 
 	void Log_c::Message(const String_c &message)
-	{				
-		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&LogListener_c::Message, _1, message));		
+	{	
+		for(auto &listener : lstListeners)
+			listener.Message(message);		
 
 		if(fCopyToStdout)
 			std::cout << message << std::endl;

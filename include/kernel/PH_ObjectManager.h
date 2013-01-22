@@ -18,15 +18,14 @@ subject to the following restrictions:
 #ifndef PH_OBJECT_MANAGER_H
 #define PH_OBJECT_MANAGER_H
 
-#include <boost/utility.hpp>
-
+#include "PH_DisableCopy.h"
 #include "PH_KernelAPI.h"
 #include "PH_Node.h"
 #include "PH_PathFwd.h"
 
 namespace Phobos
 {
-	class PH_KERNEL_API ObjectManager_c: public boost::noncopyable
+	class PH_KERNEL_API ObjectManager_c
 	{
 		public:
 			ObjectManager_c();
@@ -38,6 +37,8 @@ namespace Phobos
 
 		private:
 			Node_c clRoot;
+
+			PH_DISABLE_COPY(ObjectManager_c);
 	};
 }
 

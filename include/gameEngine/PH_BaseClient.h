@@ -18,7 +18,6 @@ subject to the following restrictions:
 #include <PH_ContextVar.h>
 #include <PH_CoreModule.h>
 #include <PH_IClient.h>
-#include <PH_MouseInputDevice.h>
 
 #include "PH_GameEngineAPI.h"
 

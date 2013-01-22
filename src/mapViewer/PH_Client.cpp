@@ -22,10 +22,8 @@ subject to the following restrictions:
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
-#include <PH_MouseInputDevice.h>
 #include <PH_PointEntity.h>
 #include <PH_Session.h>
-#include <PH_Window.h>
 #include <PH_WorldManager.h>
 
 #include "Gui/PH_LevelSelector.h"

@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 January 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -17,7 +17,6 @@ subject to the following restrictions:
 #include "PH_EventManagerModule.h"
 
 #include <PH_Kernel.h>
-#include <PH_EventManager.h>
 #include <PH_Memory.h>
 
 #include "PH_Console.h"
@@ -31,13 +30,13 @@ namespace Phobos
 	EventManagerModule_c::EventManagerModule_c():
 		CoreModule_c("EventManagerModule")
 	{
-		EventManager_c &manager = EventManager_c::CreateInstance("EventManager");
-		manager.AddListener(*this, EVENT_TYPE_SYSTEM);		
+		auto &manager = System::EventManager_c::CreateInstance("EventManager");
+		manager.AddListener(*this, System::EVENT_TYPE_SYSTEM);		
 	}
 
 	EventManagerModule_c::~EventManagerModule_c()
 	{
-		EventManager_c::ReleaseInstance();
+		System::EventManager_c::ReleaseInstance();
 	}
 
 	EventManagerModule_c &EventManagerModule_c::CreateInstance()
@@ -65,14 +64,14 @@ namespace Phobos
 
 	void EventManagerModule_c::OnFixedUpdate()
 	{
-		EventManager_c::GetInstance().Update();
+		System::EventManager_c::GetInstance().Update();
 	}
 
-	void EventManagerModule_c::Event(struct Event_s &event)
+	void EventManagerModule_c::Event(System::Event_s &event)
 	{
 		switch(event.stSystem.eType)
 		{
-			case SYSTEM_QUIT:
+			case System::SYSTEM_QUIT:
 				Console_c::GetInstance().Execute("quit");
 				break;
 

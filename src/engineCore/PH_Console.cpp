@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 May 2012
-Copyright (c) 2005-2012 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,10 +22,11 @@ subject to the following restrictions:
 #include <PH_Dictionary.h>
 #include <PH_DictionaryManager.h>
 #include <PH_Exception.h>
-#include <PH_InputActions.h>
-#include <PH_InputEvent.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
+
+#include <Phobos/System/InputActions.h>
+#include <Phobos/System/InputEvent.h>
 
 #define CONSOLE_HISTORY_COUNT 32
 
@@ -95,15 +96,15 @@ namespace Phobos
 	{		
 		switch(ch)
 		{
-			case KB_BACKSPACE:
+			case System::KB_BACKSPACE:
 				clEditBox.Backspace();
 				break;
 
-			case KB_ENTER:
+			case System::KB_ENTER:
 				this->OnEnter();
 				break;
 
-			case KB_ESCAPE:
+			case System::KB_ESCAPE:
 				//ignore
 				break;
 
@@ -214,11 +215,11 @@ namespace Phobos
 		this->OnTextListChanged();		
 	}
 
-	bool Console_c::HandleInputEvent(const InputEvent_s &event)
+	bool Console_c::HandleInputEvent(const System::InputEvent_s &event)
 	{
 		switch(event.eType)
 		{
-			case INPUT_EVENT_CHAR:
+			case System::INPUT_EVENT_CHAR:
 				if(this->IsActive())
 				{
 					this->OnChar(static_cast<Char_t>(event.stChar.u16Char));
@@ -226,17 +227,17 @@ namespace Phobos
 				}
 				break;
 
-			case INPUT_EVENT_BUTTON:
-				if(event.stButton.eState == BUTTON_STATE_DOWN)
+			case System::INPUT_EVENT_BUTTON:
+				if(event.stButton.eState == System::BUTTON_STATE_DOWN)
 				{
 					if(this->IsActive())
 					{
-						if(event.stButton.uId == KB_UP_ARROW)
+						if(event.stButton.uId == System::KB_UP_ARROW)
 						{
 							this->OnPreviousCommand();
 							return true;
 						}
-						else if(event.stButton.uId == KB_DOWN_ARROW)
+						else if(event.stButton.uId == System::KB_DOWN_ARROW)
 						{
 							this->OnNextCommand();
 							return true;
