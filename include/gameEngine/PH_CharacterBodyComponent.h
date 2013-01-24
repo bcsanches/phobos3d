@@ -45,7 +45,7 @@ namespace Phobos
 			protected:
 				CharacterBodyComponent_c(const String_c &name, Entity_c &owner);				
 
-				void OnLoad(const Dictionary_c &dictionary);
+				void OnLoad(const Register::Table_c &table);
 				void OnLoadFinished();
 
 			private:				

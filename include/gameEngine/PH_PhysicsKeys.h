@@ -19,9 +19,9 @@ subject to the following restrictions:
 
 #define PH_PHYSICS_DEF "PhysicsDef"
 
-#define PH_DICTIONARY_COLLISION_GROUP "CollisionGroups"
+#define PH_TABLE_COLLISION_GROUP "CollisionGroups"
 
-#define PH_DICTIONARY_STATIC_WORLD_COLLISION "StaticWorldCollision"
+#define PH_TABLE_STATIC_WORLD_COLLISION "StaticWorldCollision"
 
 #define PH_PHYSICS_KEY_COLLSION_GROUP "collisionGroup"
 

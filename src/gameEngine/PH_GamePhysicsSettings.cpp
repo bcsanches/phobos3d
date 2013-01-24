@@ -16,25 +16,23 @@ subject to the following restrictions:
 
 #include "PH_GamePhysicsSettings.h"
 
-#include <PH_Dictionary.h>
-#include <PH_DictionaryHive.h>
-#include <PH_DictionaryManager.h>
+#include <Phobos/Register/Table.h>
+#include <Phobos/Register/Hive.h>
+#include <Phobos/Register/Manager.h>
 
 #include "PH_PhysicsKeys.h"
 
 namespace Phobos
 {
-	static Dictionary_c *pclCollisionGroups_gl;
-	static Dictionary_c *pclStaticWorldCollision_gl;
-	static DictionaryHive_c *pclStaticMeshCollisionShapeDefHive_gl;
+	static Register::Table_c *pclCollisionGroups_gl;
+	static Register::Table_c *pclStaticWorldCollision_gl;
+	static Register::Hive_c *pclStaticMeshCollisionShapeDefHive_gl;
 
 	void GamePhysicsSettings_c::OnBoot()
-	{
-		DictionaryManager_c &dictManager = DictionaryManager_c::GetInstance();
-
-		pclCollisionGroups_gl = &dictManager.GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_COLLISION_GROUP);
-		pclStaticWorldCollision_gl = &dictManager.GetDictionary(PH_PHYSICS_DEF, PH_DICTIONARY_STATIC_WORLD_COLLISION);
-		pclStaticMeshCollisionShapeDefHive_gl = dictManager.TryGetDictionaryHive("StaticMeshCollisionShapeDef");					
+	{		
+		pclCollisionGroups_gl = &Register::GetTable(PH_PHYSICS_DEF, PH_TABLE_COLLISION_GROUP);
+		pclStaticWorldCollision_gl = &Register::GetTable(PH_PHYSICS_DEF, PH_TABLE_STATIC_WORLD_COLLISION);
+		pclStaticMeshCollisionShapeDefHive_gl = Register::TryGetHive("StaticMeshCollisionShapeDef");					
 	}
 
 	UInt32_t GamePhysicsSettings_c::DecodeCollisionMask(const String_c &config)
@@ -53,7 +51,7 @@ namespace Phobos
 		return flags;
 	}
 
-	Physics::CollisionTag_c GamePhysicsSettings_c::LoadCollisionTag(const Dictionary_c &dict)
+	Physics::CollisionTag_c GamePhysicsSettings_c::LoadCollisionTag(const Register::Table_c &dict)
 	{
 		UInt32_t group = GamePhysicsSettings_c::DecodeCollisionMask(dict.GetString(PH_PHYSICS_KEY_COLLSION_GROUP));
 		UInt32_t filter = DecodeCollisionMask(dict.GetString(PH_PHYSICS_KEY_COLLSION_FILTER));
@@ -66,8 +64,8 @@ namespace Phobos
 		return GamePhysicsSettings_c::LoadCollisionTag(*pclStaticWorldCollision_gl);
 	}
 
-	const Dictionary_c *GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(const String_c &name)
+	const Register::Table_c *GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(const String_c &name)
 	{
-		return pclStaticMeshCollisionShapeDefHive_gl ? pclStaticMeshCollisionShapeDefHive_gl->TryGetDictionary(name) : NULL;
+		return pclStaticMeshCollisionShapeDefHive_gl ? pclStaticMeshCollisionShapeDefHive_gl->TryGetTable(name) : NULL;
 	}
 }

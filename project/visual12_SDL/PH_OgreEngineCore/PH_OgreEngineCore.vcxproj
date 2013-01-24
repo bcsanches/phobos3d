@@ -161,10 +161,6 @@
     <ClCompile Include="..\..\..\src\ogreEngineCore\PH_Render.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PH_Dictionary\PH_Dictionary.vcxproj">
-      <Project>{81ae5171-5abb-4cf2-ae62-28803837188b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

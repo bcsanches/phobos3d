@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 April 2010
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -21,12 +21,14 @@ subject to the following restrictions:
 
 #include <PH_Console.h>
 #include <PH_ContextUtils.h>
-#include <PH_Dictionary.h>
-#include <PH_DictionaryManager.h>
 #include <PH_Error.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
+
+#include <Phobos/Register/Hive.h>
+#include <Phobos/Register/Manager.h>
+#include <Phobos/Register/Table.h>
 
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
@@ -93,7 +95,7 @@ namespace Phobos
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
 	}
 
-	Entity_c &WorldManager_c::LoadEntity(const Dictionary_c &entityDef)
+	Entity_c &WorldManager_c::LoadEntity(const Register::Table_c &entityDef)
 	{
 		std::unique_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 
@@ -112,11 +114,11 @@ namespace Phobos
 
 	void WorldManager_c::LoadEntities()
 	{
-		const DictionaryHive_c &hive = spMapLoader->GetDynamicEntitiesHive();		
+		auto &hive = spMapLoader->GetDynamicEntitiesHive();		
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			Dictionary_c *dict = static_cast<Dictionary_c *>(it->second);
+			auto *dict = static_cast<Register::Table_c *>(it->second);
 
 			this->LoadEntity(*dict);						
 		}

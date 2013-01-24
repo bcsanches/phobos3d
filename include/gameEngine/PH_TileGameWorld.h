@@ -22,6 +22,8 @@ subject to the following restrictions:
 
 #include "PH_CollisionTagFwd.h"
 
+#include <Phobos/Register/TableFwd.h>
+
 #include <vector>
 
 namespace Phobos
@@ -35,11 +37,11 @@ namespace Phobos
 			TileGameWorld_c();
 			~TileGameWorld_c();
 
-			virtual void Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary);
+			virtual void Load(const MapLoader_c &loader, const Register::Table_c &worldEntityTable);
 
-			TileTransform_c CreateTileTransform(const Dictionary_c &entity) const;
-			void LoadTileTransform(TileTransform_c &out, const Dictionary_c &entity) const;
-			void LoadTileTransform(Transform_c &out, const Dictionary_c &entity) const;
+			TileTransform_c CreateTileTransform(const Register::Table_c &entity) const;
+			void LoadTileTransform(TileTransform_c &out, const Register::Table_c &entity) const;
+			void LoadTileTransform(Transform_c &out, const Register::Table_c &entity) const;
 			void TileTransform2Transform(Transform_c &out, const TileTransform_c &tileTransform) const;
 
 			Ogre::Vector3 CalculatePosition(int row, int col) const;
@@ -57,7 +59,7 @@ namespace Phobos
 			void SpawnMesh(const TileTransform_c transform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
 
 			void CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform_c &tileTransform, const Ogre::Vector3 &scale);
-			void CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict, const Ogre::Vector3 &scale);
+			void CreateStaticObjectNode(TempStaticObject_s &obj, const Register::Table_c &dict, const Ogre::Vector3 &scale);
 			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const;
 
 			void CreateStaticObjectRigidBody(StaticObject_s &obj, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag);

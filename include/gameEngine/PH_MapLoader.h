@@ -20,7 +20,9 @@ subject to the following restrictions:
 #include <boost/noncopyable.hpp>
 
 #include <PH_String.h>
-#include <PH_DictionaryHive.h>
+
+#include <Phobos/Register/HiveFwd.h>
+#include <Phobos/Register/TableFwd.h>
 
 #include "PH_Entity.h"
 #include "PH_GameWorldFwd.h"
@@ -34,9 +36,9 @@ namespace Phobos
 
 			static void OnBoot();			
 				
-			const DictionaryHive_c &GetStaticEntitiesHive() const;
-			const DictionaryHive_c &GetDynamicEntitiesHive() const ;
-			const DictionaryHive_c &GetCurrentLevelHive() const;
+			const Register::Hive_c &GetStaticEntitiesHive() const;
+			const Register::Hive_c &GetDynamicEntitiesHive() const ;
+			const Register::Hive_c &GetCurrentLevelHive() const;
 
 			std::unique_ptr<Entity_c> CreateAndLoadWorldSpawn();
 
@@ -45,20 +47,20 @@ namespace Phobos
 		protected:
 			static void ClearAllHives();
 
-			MapLoader_c(const Dictionary_c &settings);
+			MapLoader_c(const Register::Table_c &settings);
 
 			/**
-				Creates a basic dictionary entry that can be used to 
+				Creates a basic register entry that can be used to 
 				instantiate a WorldSpawn entity
 			*/
-			std::unique_ptr<Dictionary_c> CreateWorldSpawnEntityDictionary();
+			std::unique_ptr<Register::Table_c> CreateWorldSpawnEntityDef();
 
 			virtual GameWorldPtr_t CreateGameWorld() = 0;
 
 		protected:			
-			static DictionaryHive_c *pclStaticEntitiesHive_g;
-			static DictionaryHive_c *pclDynamicEntitiesHive_g;
-			static DictionaryHive_c *pclCurrentLevelHive_g;
+			static Register::Hive_c *pclStaticEntitiesHive_g;
+			static Register::Hive_c *pclDynamicEntitiesHive_g;
+			static Register::Hive_c *pclCurrentLevelHive_g;
 
 			String_c strWorldSpawnEntityType;
 	};	

@@ -17,12 +17,13 @@ subject to the following restrictions:
 #ifndef PH_GAME_WORLD_H
 #define PH_GAME_WORLD_H
 
+#include <Phobos/Register/TableFwd.h>
+
 #include "PH_GameEngineAPI.h"
 #include "PH_GameWorldFwd.h"
 
 namespace Phobos
-{	
-	class Dictionary_c;
+{		
 	class MapLoader_c;			
 
 	enum PhysicsCollisionGroups
@@ -36,7 +37,7 @@ namespace Phobos
 	class PH_GAME_ENGINE_API GameWorld_c
 	{
 		public:			
-			virtual void Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary) = 0;
+			virtual void Load(const MapLoader_c &loader, const Register::Table_c &worldEntityTable) = 0;
 		
 		protected:
 			GameWorld_c() {};

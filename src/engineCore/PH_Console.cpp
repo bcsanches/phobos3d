@@ -19,11 +19,12 @@ subject to the following restrictions:
 #include <boost/foreach.hpp>
 
 #include <PH_ContextUtils.h>
-#include <PH_Dictionary.h>
-#include <PH_DictionaryManager.h>
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
+
+#include <Phobos/Register/Table.h>
+#include <Phobos/Register/Manager.h>
 
 #include <Phobos/System/InputActions.h>
 #include <Phobos/System/InputEvent.h>
@@ -372,15 +373,15 @@ namespace Phobos
 
 		try
 		{
-			Dictionary_c *dict;
+			Register::Table_c *table;
 			if(args.size() == 2)
 			{
-				dict = &DictionaryManager_c::GetInstance().GetDictionary(Path_c(args[1]));
+				table = &Register::GetTable(Path_c(args[1]));
 				stream << "Values on " << args[1] << '\n';
 			}
 			else if(args.size() == 3)
 			{
-				dict = &DictionaryManager_c::GetInstance().GetDictionary(args[1], args[2]);
+				table = &Register::GetTable(args[1], args[2]);
 				stream << "Values on " << args[2];
 			}
 			else

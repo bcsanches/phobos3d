@@ -16,8 +16,9 @@ subject to the following restrictions:
 
 #include "PH_MapLoaderFactory.h"
 
-#include <PH_DictionaryManager.h>
-#include <PH_Dictionary.h>
+#include <Phobos/Register/Hive.h>
+#include <Phobos/Register/Manager.h>
+#include <Phobos/Register/Table.h>
 
 namespace Phobos
 {
@@ -35,14 +36,14 @@ namespace Phobos
 
 	MapLoaderPtr_t MapLoaderFactory_c::Create(const String_c &type)
 	{
-		Dictionary_c &dictionary = DictionaryManager_c::GetInstance().GetDictionary("MapLoader", type);
+		auto &table = Register::GetTable("MapLoader", type);
 
-		return MapLoaderPtr_t(clFactory.Create(dictionary.GetString("loader"), dictionary));
+		return MapLoaderPtr_t(clFactory.Create(table.GetString("loader"), table));
 	}
 
 	std::list<String_c> MapLoaderFactory_c::CreateMapFileExtensionsList() const
 	{
-		const DictionaryHive_c &hive = DictionaryManager_c::GetInstance().GetDictionaryHive("MapLoader");
+		const Register::Hive_c &hive = Register::GetHive("MapLoader");
 
 		std::list<String_c> extensions;		
 

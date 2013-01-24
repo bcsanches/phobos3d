@@ -18,10 +18,11 @@ subject to the following restrictions:
 
 #include <OgreEntity.h>
 
-#include <PH_Dictionary.h>
+#include <Phobos/Register/Table.h>
+
 #include <PH_TransformProperty.h>
 
-#include "PH_DictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 
@@ -44,7 +45,7 @@ namespace Phobos
 		//empty
 	}
 
-	void LinearMoverComponent_c::OnLoad(const Dictionary_c &dictionary)
+	void LinearMoverComponent_c::OnLoad(const Register::Table_c &table)
 	{
 		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
 	}

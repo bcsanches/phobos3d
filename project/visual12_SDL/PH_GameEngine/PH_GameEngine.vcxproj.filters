@@ -328,10 +328,10 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gameEngine\PH_BaseClient.h" />
     <ClInclude Include="..\..\..\include\gameEngine\PH_GameCamera.h" />
-    <ClInclude Include="..\..\..\include\gameEngine\PH_GameDictionaryUtils.h" />
     <ClInclude Include="..\..\..\include\gameEngine\PH_GameEngineAPI.h" />
     <ClInclude Include="..\..\..\include\gameEngine\PH_HandleManager.h" />
     <ClInclude Include="..\..\..\include\gameEngine\PH_IGameController.h" />
     <ClInclude Include="..\..\..\include\gameEngine\PH_WorldManager.h" />
+    <ClInclude Include="..\..\..\include\gameEngine\PH_GameRegisterUtils.h" />
   </ItemGroup>
 </Project>

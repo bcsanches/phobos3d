@@ -33,7 +33,7 @@ namespace Phobos
 		protected:
 			TransformComponent_c(const String_c &name, Entity_c &owner);			
 
-			virtual void OnLoad(const Dictionary_c &dictionary);
+			virtual void OnLoad(const Register::Table_c &table);
 
 		private:
 			TransformProperty_c propTransform;

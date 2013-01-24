@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 September 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -19,7 +19,7 @@ subject to the following restrictions:
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
 
-#include <PH_Dictionary.h>
+#include <Phobos/Register/Table.h>
 
 namespace Phobos
 {
@@ -27,17 +27,17 @@ namespace Phobos
 
 	Entity_c::Entity_c(const String_c &name):
 		EntityIO_c(name, NodeFlags::PRIVATE_CHILDREN),
-		pclDictionary(NULL)
+		pclTable(NULL)
 	{
 	}
 
-	void Entity_c::Load(const Dictionary_c &dict)
+	void Entity_c::Load(const Register::Table_c &table)
 	{
-		pclDictionary = &dict;
+		pclTable = &table;
 
-		strClassName = dict.GetInherited()->GetName();
+		strClassName = table.GetInherited()->GetName();
 
-		const String_c *components = dict.TryGetString(PH_ENTITY_KEY_COMPONENTS);
+		const String_c *components = table.TryGetString(PH_ENTITY_KEY_COMPONENTS);
 		if(components)
 		{
 			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
@@ -53,13 +53,13 @@ namespace Phobos
 			}
 		}
 
-		this->OnLoad(dict);
+		this->OnLoad(table);
 
 		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
 			EntityComponent_c &component = static_cast<EntityComponent_c &>(*it->second);
 
-			component.Load(dict);
+			component.Load(table);
 		}
 	}
 

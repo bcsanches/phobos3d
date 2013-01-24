@@ -16,27 +16,28 @@ subject to the following restrictions:
 
 #include "PH_TileGameWorld.h"
 
-#include <PH_Dictionary.h>
+#include <Phobos/Register/Table.h>
+
 #include <PH_Transform.h>
 
 #include "PH_EntityKeys.h"
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_TileGameWorld.h"
 #include "PH_WorldManager.h"
 
 namespace Phobos
 {
-	void EntityLoadTransform(Transform_c &transform, const Dictionary_c &dictionary)
+	void EntityLoadTransform(Transform_c &transform, const Register::Table_c &table)
 	{
-		if(dictionary.TryGetString(PH_ENTITY_KEY_TILE_ROW))
+		if(table.TryGetString(PH_ENTITY_KEY_TILE_ROW))
 		{						
 			const TileGameWorld_c *tileWorld = static_cast<const TileGameWorld_c *>(WorldManager_c::GetInstance().GetGameWorld());
-			tileWorld->LoadTileTransform(transform, dictionary);
+			tileWorld->LoadTileTransform(transform, table);
 		}
 		else
 		{
-			transform.SetOrigin(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_POSITION));
-			transform.SetRotation(DictionaryGetQuaternion(dictionary, PH_ENTITY_KEY_ORIENTATION));
+			transform.SetOrigin(Register::GetVector3(table, PH_ENTITY_KEY_POSITION));
+			transform.SetRotation(Register::GetQuaternion(table, PH_ENTITY_KEY_ORIENTATION));
 		}
 	}
 }

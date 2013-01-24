@@ -21,19 +21,20 @@ subject to the following restrictions:
 
 #include <PH_Types.h>
 
+#include <Phobos/Register/TableFwd.h>
+
 #include "PH_CollisionTagFwd.h"
 #include "PH_CollisionShapeFwd.h"
 
 namespace Phobos
 {
 	class Transform_c;
-	class Dictionary_c;
 
 	namespace Physics
 	{
 		namespace Utils
 		{			
-			CollisionShapePtr_t CreateCollisionShape(const Dictionary_c &collisionDef, const Ogre::Vector3 &scale);
+			CollisionShapePtr_t CreateCollisionShape(const Register::Table_c &collisionDef, const Ogre::Vector3 &scale);
 		}
 	}
 }

@@ -20,7 +20,8 @@ subject to the following restrictions:
 #include <boost/noncopyable.hpp>
 
 #include <PH_String.h>
-#include <PH_DictionaryHive.h>
+
+#include <Phobos/Register/Hive.h>
 
 #include "PH_MapLoader.h"
 
@@ -29,11 +30,11 @@ namespace Phobos
 	class OgitorMapLoader_c: public MapLoader_c
 	{
 		public:
-			static MapLoader_c *Create(const Dictionary_c &settings);
+			static MapLoader_c *Create(const Register::Table_c &settings);
 
 			void Load(const String_c &fileName);	
 
-			OgitorMapLoader_c(const Dictionary_c &settings);
+			OgitorMapLoader_c(const Register::Table_c &settings);
 
 		protected:			
 			virtual GameWorldPtr_t CreateGameWorld();
