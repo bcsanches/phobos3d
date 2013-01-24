@@ -178,7 +178,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_Folders.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_GenericFactory.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_IContext.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_InputActions.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Kernel.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_KernelAPI.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Listener.h" />
@@ -194,7 +193,6 @@
     <ClInclude Include="..\..\..\include\kernel\PH_ResourceManager.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Singleton.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_String.h" />
-    <ClInclude Include="..\..\..\include\kernel\PH_Timer.h" />
     <ClInclude Include="..\..\..\include\kernel\PH_Types.h" />
   </ItemGroup>
   <ItemGroup>

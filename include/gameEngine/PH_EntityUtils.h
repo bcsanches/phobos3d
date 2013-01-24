@@ -14,10 +14,11 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <Phobos/Register/TableFwd.h>
+
 namespace Phobos
 {
-	class Transform_c;
-	class Dictionary_c;
+	class Transform_c;	
 
-	void EntityLoadTransform(Transform_c &transform, const Dictionary_c &dictionary);
+	void EntityLoadTransform(Transform_c &transform, const Register::Table_c &table);
 }

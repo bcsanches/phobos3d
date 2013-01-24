@@ -35,7 +35,7 @@ namespace Phobos
 		protected:
 			LinearMoverComponent_c(const String_c &name, Entity_c &owner);					
 
-			virtual void OnLoad(const Dictionary_c &dictionary);
+			virtual void OnLoad(const Register::Table_c &table);
 
 		protected:
 			PH_DECLARE_ENTITY_OUTPUT_MANAGER;

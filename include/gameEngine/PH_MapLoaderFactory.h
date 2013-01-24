@@ -21,6 +21,8 @@ subject to the following restrictions:
 
 #include <PH_GenericFactory.h>
 
+#include <Phobos/Register/HiveFwd.h>
+
 #include "PH_GameEngineAPI.h"
 #include "PH_MapLoader.h"
 
@@ -33,13 +35,13 @@ namespace Phobos
 
 			MapLoaderPtr_t Create(const String_c &type);
 
-			void Register(Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Dictionary_c, Phobos::MapLoaderFactory_c> &creator)
+			void Register(Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Register::Table_c, Phobos::MapLoaderFactory_c> &creator)
 			{
 				clFactory.Register(creator);
 			}
 
-			inline const DictionaryHive_c &GetStaticEntitiesHive() const;
-			inline const DictionaryHive_c &GetDynamicEntitiesHive() const;		
+			inline const Register::Hive_c &GetStaticEntitiesHive() const;
+			inline const Register::Hive_c &GetDynamicEntitiesHive() const;		
 
 			std::list<String_c> CreateMapFileExtensionsList() const;
 
@@ -47,30 +49,30 @@ namespace Phobos
 			MapLoaderFactory_c();
 
 		private:
-			DictionaryHivePtr_t ipStaticEntitiesHive;
-			DictionaryHivePtr_t	ipDynamicEntitiesHive;
-			DictionaryHivePtr_t ipCurrentLevelHive;
+			Register::HivePtr_t ipStaticEntitiesHive;
+			Register::HivePtr_t	ipDynamicEntitiesHive;
+			Register::HivePtr_t ipCurrentLevelHive;
 
-			GenericFactory1_c<ObjectCreator1_c<MapLoader_c, Dictionary_c, MapLoaderFactory_c>, Dictionary_c > clFactory;			
+			GenericFactory1_c<ObjectCreator1_c<MapLoader_c, Register::Table_c, MapLoaderFactory_c>, Register::Table_c > clFactory;			
 	};
 
-	inline const DictionaryHive_c &MapLoaderFactory_c::GetStaticEntitiesHive() const
+	inline const Register::Hive_c &MapLoaderFactory_c::GetStaticEntitiesHive() const
 	{
 		return *ipStaticEntitiesHive;
 	}
 
-	inline const DictionaryHive_c &MapLoaderFactory_c::GetDynamicEntitiesHive() const
+	inline const Register::Hive_c &MapLoaderFactory_c::GetDynamicEntitiesHive() const
 	{
 		return *ipDynamicEntitiesHive;
 	}
 }
 
 #define PH_MAP_LOADER_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Dictionary_c, Phobos::MapLoaderFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+	static Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Register::Table_c, Phobos::MapLoaderFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
 
 #define PH_FULL_MAP_LOADER_CREATOR(NAME, TYPE)  							\
 	PH_MAP_LOADER_CREATOR(NAME, TYPE);										\
-	Phobos::MapLoader_c *TYPE::Create(const Dictionary_c &settings)			\
+	Phobos::MapLoader_c *TYPE::Create(const Register::Table_c &settings)			\
 	{																		\
 		return PH_NEW TYPE(settings);										\
 	}

@@ -169,13 +169,12 @@
     <ClCompile Include="..\..\..\src\engineCore\PH_Session.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PH_Dictionary\PH_Dictionary.vcxproj">
-      <Project>{81ae5171-5abb-4cf2-ae62-28803837188b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
       <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
+      <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PH_System\PH_System.vcxproj">
       <Project>{49ad3e51-f626-4c97-b051-a9f40f6b3858}</Project>

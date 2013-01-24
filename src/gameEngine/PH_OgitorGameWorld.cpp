@@ -21,16 +21,17 @@ subject to the following restrictions:
 #include <OgreLight.h>
 #include <OgreSceneNode.h>
 
-#include <PH_Dictionary.h>
-#include <PH_DictionaryHive.h>
-#include <PH_DictionaryManager.h>
+#include <Phobos/Register/Table.h>
+#include <Phobos/Register/Hive.h>
+#include <Phobos/Register/Manager.h>
+
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Render.h>
 #include <PH_Transform.h>
 
 #include "PH_CollisionTag.h"
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_GamePhysicsSettings.h"
@@ -46,8 +47,8 @@ namespace Phobos
 		pclTerrainGroup(NULL),
 		pclTerrainOptions(NULL),
 		pclTerrainLight(NULL),
-		pclTerrainGroupDictionary(NULL),
-		pclTerrainPageDictionary(NULL)
+		pclTerrainGroupTable(NULL),
+		pclTerrainPageTable(NULL)
 	{
 		//empty
 	}
@@ -66,13 +67,13 @@ namespace Phobos
 		}
 	}
 
-	void OgitorGameWorld_c::Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary)
+	void OgitorGameWorld_c::Load(const MapLoader_c &loader, const Register::Table_c &worldEntityDef)
 	{
-		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
+		const auto &hive = loader.GetStaticEntitiesHive();
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			Dictionary_c *dict = static_cast<Dictionary_c *>(it->second);
+			Register::Table_c *dict = static_cast<Register::Table_c *>(it->second);
 
 			try
 			{
@@ -147,20 +148,20 @@ namespace Phobos
 		}
 		
 
-		if(pclTerrainGroupDictionary != NULL)
+		if(pclTerrainGroupTable != NULL)
 		{
-			this->LoadTerrainGroup(*pclTerrainGroupDictionary);
-			pclTerrainGroupDictionary = NULL;
+			this->LoadTerrainGroup(*pclTerrainGroupTable);
+			pclTerrainGroupTable = NULL;
 		}
 
-		if(pclTerrainPageDictionary != NULL)
+		if(pclTerrainPageTable != NULL)
 		{
-			this->LoadTerrainPage(*pclTerrainPageDictionary, worldEntityDictionary);
-			pclTerrainPageDictionary = NULL;
+			this->LoadTerrainPage(*pclTerrainPageTable, worldEntityDef);
+			pclTerrainPageTable = NULL;
 		}		
 	}
 
-	bool OgitorGameWorld_c::LoadGlobalObject(const String_c &type, const Dictionary_c &dict)
+	bool OgitorGameWorld_c::LoadGlobalObject(const String_c &type, const Register::Table_c &dict)
 	{
 		if((type.compare("Caelum Object") == 0) ||
 		   (type.compare("Viewport Object") == 0))
@@ -170,19 +171,19 @@ namespace Phobos
 		else if(type.compare("OctreeSceneManager") == 0)
 		{
 			Render_c &render = Render_c::GetInstance();
-			render.SetAmbientColor(DictionaryGetColour(dict, "ambient"));
+			render.SetAmbientColor(Register::GetColour(dict, "ambient"));
 
 			return true;
 		}
 		else if(type.compare("Terrain Group Object") == 0)
 		{
-			pclTerrainGroupDictionary = &dict;
+			pclTerrainGroupTable = &dict;
 
 			return true;
 		}
 		else if(type.compare("Terrain Page Object") == 0)
 		{
-			pclTerrainPageDictionary = &dict;
+			pclTerrainPageTable = &dict;
 
 			return true;
 		}
@@ -190,7 +191,7 @@ namespace Phobos
 		return false;
 	}
 
-	void OgitorGameWorld_c::LoadTerrainGroup(const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadTerrainGroup(const Register::Table_c &dict)
 	{
 		pclTerrainOptions = new Ogre::TerrainGlobalOptions();
 
@@ -216,16 +217,16 @@ namespace Phobos
 		}
 	}
 
-	void OgitorGameWorld_c::LoadTerrainPage(const Dictionary_c &terrainPageDictionary, const Dictionary_c &worldEntityDictionary)
+	void OgitorGameWorld_c::LoadTerrainPage(const Register::Table_c &terrainPageTable, const Register::Table_c &worldEntityDef)
 	{
-		DictionaryHive_c &levelInfo = DictionaryManager_c::GetInstance().GetDictionaryHive("LevelInfo");
+		auto &levelInfo = Register::GetHive("LevelInfo");
 
-		String_c name = levelInfo.GetDictionary("LevelFile").GetString("path") + "/" + worldEntityDictionary.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		String_c name = levelInfo.GetTable("LevelFile").GetString("path") + "/" + worldEntityDef.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
 
-	bool OgitorGameWorld_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict)
+	bool OgitorGameWorld_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Register::Table_c &dict)
 	{
 		TempStaticObject_s temp;
 
@@ -259,15 +260,15 @@ namespace Phobos
 		return true;
 	}
 
-	void OgitorGameWorld_c::LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadNodeObject(TempStaticObject_s &temp, const Register::Table_c &dict)
 	{
 		temp.pclSceneNode = Render_c::GetInstance().CreateSceneNode(temp.strName);
 
-		temp.pclSceneNode->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
-		temp.pclSceneNode->setOrientation(DictionaryGetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
+		temp.pclSceneNode->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
+		temp.pclSceneNode->setOrientation(Register::GetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
 	}
 
-	void OgitorGameWorld_c::LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadEntityObject(TempStaticObject_s &temp, const Register::Table_c &dict)
 	{
 		this->LoadNodeObject(temp, dict);
 
@@ -276,7 +277,7 @@ namespace Phobos
 		temp.pclSceneNode->attachObject(temp.pclEntity);		
 	}
 
-	void OgitorGameWorld_c::LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict)
+	void OgitorGameWorld_c::LoadLightObject(TempStaticObject_s &temp, const Register::Table_c &dict)
 	{
 		temp.pclLight = Render_c::GetInstance().CreateLight();
 
@@ -293,7 +294,7 @@ namespace Phobos
 			case 0:
 				temp.pclLight->setType(Ogre::Light::LT_POINT);
 				if(!temp.fParent)
-					temp.pclLight->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
+					temp.pclLight->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
 				break;
 
 			case 1:
@@ -305,9 +306,9 @@ namespace Phobos
 					temp.pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
 
 					if(!temp.fParent)
-						temp.pclLight->setPosition(DictionaryGetVector3(dict, PH_ENTITY_KEY_POSITION));
+						temp.pclLight->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
 
-					Ogre::Vector3 lightRange = DictionaryGetVector3(dict, "lightrange");
+					Ogre::Vector3 lightRange = Register::GetVector3(dict, "lightrange");
 					temp.pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
 				}
 				break;
@@ -326,12 +327,12 @@ namespace Phobos
 		dict.Get4Float(attenuation, "attenuation");
 		temp.pclLight->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
 
-		temp.pclLight->setDiffuseColour(DictionaryGetColour(dict, "diffuse"));
+		temp.pclLight->setDiffuseColour(Register::GetColour(dict, "diffuse"));
 
 		if(!temp.fParent)
-			temp.pclLight->setDirection(DictionaryGetVector3(dict, "direction"));
+			temp.pclLight->setDirection(Register::GetVector3(dict, "direction"));
 
 		temp.pclLight->setPowerScale(dict.GetFloat("power"));
-		temp.pclLight->setSpecularColour(DictionaryGetColour(dict, "specular"));		
+		temp.pclLight->setSpecularColour(Register::GetColour(dict, "specular"));		
 	}		
 }

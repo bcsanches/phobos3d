@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 February 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -21,16 +21,16 @@ subject to the following restrictions:
 #include "PH_EntityIO.h"
 #include "PH_GameEngineAPI.h"
 
+#include <Phobos/Register/Table.h>
+
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(EntityComponent);
 
-	class Dictionary_c;	
-
 	class PH_GAME_ENGINE_API EntityComponent_c: public EntityIO_c
 	{
 		public:
-			void Load(const Dictionary_c &dictionary);
+			void Load(const Register::Table_c &table);
 
 			void LoadFinished();
 
@@ -41,7 +41,7 @@ namespace Phobos
 		protected:
 			EntityComponent_c(const String_c &name, Entity_c &owner);
 
-			virtual void OnLoad(const Dictionary_c &dictionary) {};
+			virtual void OnLoad(const Register::Table_c &table) {};
 			virtual void OnLoadFinished() {};
 
 			template <typename T>

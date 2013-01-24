@@ -16,10 +16,11 @@ subject to the following restrictions:
 
 #include "PH_PhysicsUtils.h"
 
-#include <PH_Dictionary.h>
+#include <Phobos/Register/Table.h>
+
 #include <PH_Enum.h>
 
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_PhysicsManager.h"
 
 namespace
@@ -44,7 +45,7 @@ namespace
 	};
 }
 			
-Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShape(const Phobos::Dictionary_c &collisionDef, const Ogre::Vector3 &scale)
+Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShape(const Phobos::Register::Table_c &collisionDef, const Ogre::Vector3 &scale)
 {
 	Enum_c<Phobos::Physics::CollisionShapeTypes_t,  ShapeTypeName_s> enumMap(stShapeTypeNameTable_gl);
 
@@ -64,7 +65,7 @@ Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShap
 	{
 		case Physics::CollisionShapeTypes::BOX:
 			{
-				Ogre::Vector3 boxDimensions = DictionaryGetVector3(collisionDef, "boxDimensions") * scale;
+				Ogre::Vector3 boxDimensions = Register::GetVector3(collisionDef, "boxDimensions") * scale;
 				shape = physicsManager.CreateBoxShape(boxDimensions.x, boxDimensions.y, boxDimensions.z );
 			}
 			break;

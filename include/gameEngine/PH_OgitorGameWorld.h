@@ -22,19 +22,20 @@ subject to the following restrictions:
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
 
+#include <Phobos/Register/TableFwd.h>
+
 #include "PH_BaseOgreGameWorld.h"
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {	
-	class Dictionary_c;
 	class MapLoader_c;
 	struct TempStaticObject_s;
 
 	class PH_GAME_ENGINE_API OgitorGameWorld_c: public BaseOgreGameWorld_c
 	{
 		public:
-			virtual void Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary);
+			virtual void Load(const MapLoader_c &loader, const Register::Table_c &worldEntityDef);
 
 			OgitorGameWorld_c();			
 			~OgitorGameWorld_c();		
@@ -42,15 +43,15 @@ namespace Phobos
 		private:
 			friend struct TempStaticObject_s;			
 			
-			bool LoadGlobalObject(const String_c &type, const Dictionary_c &dict);
-			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Dictionary_c &dict);
+			bool LoadGlobalObject(const String_c &type, const Register::Table_c &dict);
+			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Register::Table_c &dict);
 
-			void LoadEntityObject(TempStaticObject_s &temp, const Dictionary_c &dict);
-			void LoadNodeObject(TempStaticObject_s &temp, const Dictionary_c &dict);
-			void LoadLightObject(TempStaticObject_s &temp, const Dictionary_c &dict);
+			void LoadEntityObject(TempStaticObject_s &temp, const Register::Table_c &dict);
+			void LoadNodeObject(TempStaticObject_s &temp, const Register::Table_c &dict);
+			void LoadLightObject(TempStaticObject_s &temp, const Register::Table_c &dict);
 
-			void LoadTerrainGroup(const Dictionary_c &dict);
-			void LoadTerrainPage(const Dictionary_c &terrainPageDictionary, const Dictionary_c &worldEntityDictionary);
+			void LoadTerrainGroup(const Register::Table_c &dict);
+			void LoadTerrainPage(const Register::Table_c &terrainPageTable, const Register::Table_c &worldEntityDef);
 
 			void Proc() {};
 
@@ -63,8 +64,8 @@ namespace Phobos
 
 			const Ogre::Light			*pclTerrainLight;
 
-			const Dictionary_c	*pclTerrainGroupDictionary;
-			const Dictionary_c	*pclTerrainPageDictionary;
+			const Register::Table_c	*pclTerrainGroupTable;
+			const Register::Table_c	*pclTerrainPageTable;
 	};
 }
 

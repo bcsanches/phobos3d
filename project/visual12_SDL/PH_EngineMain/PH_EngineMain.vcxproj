@@ -144,10 +144,6 @@
     <ProjectReference Include="..\..\..\contrib\SDL-1.2.15\VisualC\SDL\SDL.vcxproj">
       <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PH_Dictionary\PH_Dictionary.vcxproj">
-      <Project>{81ae5171-5abb-4cf2-ae62-28803837188b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -163,6 +159,9 @@
     <ProjectReference Include="..\PH_OgreEngineCore\PH_OgreEngineCore.vcxproj">
       <Project>{38679578-6b2c-4801-bd91-11bf34ec697b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
+      <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

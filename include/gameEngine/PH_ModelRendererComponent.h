@@ -56,7 +56,7 @@ namespace Phobos
 		protected:
 			ModelRendererComponent_c(const String_c &name, Entity_c &owner);			
 
-			virtual void OnLoad(const Dictionary_c &dictionary);
+			virtual void OnLoad(const Register::Table_c &table);
 			virtual void OnLoadFinished();
 
 		private:

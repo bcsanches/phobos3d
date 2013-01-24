@@ -18,12 +18,13 @@ subject to the following restrictions:
 
 #include <OgreEntity.h>
 
-#include <PH_Dictionary.h>
+#include <Phobos/Register/Table.h>
+
 #include <PH_Render.h>
 #include <PH_TransformProperty.h>
 
 #include "PH_BaseOgreGameWorld.h"
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_ModelRendererManager.h"
@@ -53,9 +54,9 @@ namespace Phobos
 		ModelRendererManager_c::GetInstance().Unregister(*this);
 	}
 
-	void ModelRendererComponent_c::OnLoad(const Dictionary_c &dictionary)
+	void ModelRendererComponent_c::OnLoad(const Register::Table_c &table)
 	{
-		const String_c &meshName = dictionary.GetString(PH_ENTITY_KEY_MESH_FILE);
+		const String_c &meshName = table.GetString(PH_ENTITY_KEY_MESH_FILE);
 
 		Render_c &render = Render_c::GetInstance();
 
@@ -64,9 +65,9 @@ namespace Phobos
 
 		pclSceneNode->attachObject(pclMeshEntity);
 		
-		pclSceneNode->setScale(DictionaryGetVector3(dictionary, PH_ENTITY_KEY_SCALE));		
+		pclSceneNode->setScale(Register::GetVector3(table, PH_ENTITY_KEY_SCALE));		
 
-		strParentNode = dictionary.GetString(PH_ENTITY_KEY_PARENT_NODE);
+		strParentNode = table.GetString(PH_ENTITY_KEY_PARENT_NODE);
 	}
 
 	void ModelRendererComponent_c::OnLoadFinished()

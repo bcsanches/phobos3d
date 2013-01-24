@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include "PH_PointEntity.h"
 
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_EntityFactory.h"
 #include "PH_EntityUtils.h"
 
@@ -29,10 +29,10 @@ namespace Phobos
 	{
 	}
 
-	void PointEntity_c::OnLoad(const Dictionary_c &dictionary)
+	void PointEntity_c::OnLoad(const Register::Table_c &table)
 	{
-		Entity_c::OnLoad(dictionary);
+		Entity_c::OnLoad(table);
 		
-		EntityLoadTransform(clTransform, dictionary);	
+		EntityLoadTransform(clTransform, table);	
 	}
 }

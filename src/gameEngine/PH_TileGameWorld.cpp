@@ -25,12 +25,13 @@ subject to the following restrictions:
 #include <PH_Render.h>
 #include <PH_Transform.h>
 
-#include "PH_Dictionary.h"
-#include "PH_DictionaryHive.h"
-#include "PH_DictionaryManager.h"
+#include <Phobos/Register/Table.h>
+#include <Phobos/Register/Hive.h>
+#include <Phobos/Register/Manager.h>
+
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_GamePhysicsSettings.h"
 #include "PH_MapLoader.h"
 #include "PH_PhysicsManager.h"
@@ -39,62 +40,62 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	static inline bool CheckNorthTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	static inline bool CheckNorthTileEqual(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col, char tile)
 	{
 		return (row > 0) && handle(row-1, col) == tile;
 	}
 
-	static inline bool CheckWestTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	static inline bool CheckWestTileEqual(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col, char tile)
 	{
 		return (col > 0) && handle(row, col-1) == tile;
 	}
 
-	static inline bool CheckSouthTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	static inline bool CheckSouthTileEqual(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col, char tile)
 	{
 		return (row < handle.GetNumRows() - 1) && handle(row+1, col) == tile;
 	}		
 
-	static inline bool CheckEastTileEqual(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col, char tile)
+	static inline bool CheckEastTileEqual(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col, char tile)
 	{
 		return (col < handle.GetNumColumns()-1) && handle(row, col+1) == tile;
 	}
 
-	static inline bool HasNorthWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool HasNorthWall(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckNorthTileEqual(handle, row, col, '#');
 	}
 
-	static inline bool HasWestWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool HasWestWall(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckWestTileEqual(handle, row, col, '#');
 	}
 
-	static inline bool HasSouthWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool HasSouthWall(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckSouthTileEqual(handle, row, col, '#');
 	}	
 
-	static inline bool HasEastWall(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool HasEastWall(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckEastTileEqual(handle, row, col, '#');
 	}
 
-	static inline bool IsNorthFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool IsNorthFloor(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckNorthTileEqual(handle, row, col, '.');
 	}
 
-	static inline bool IsWestFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool IsWestFloor(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckWestTileEqual(handle, row, col, '.');
 	}
 
-	static inline bool IsSouthFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool IsSouthFloor(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckSouthTileEqual(handle, row, col, '.');
 	}	
 
-	static inline bool IsEastFloor(const Dictionary_c::MatrixDataHandle_c &handle, int row, int col)
+	static inline bool IsEastFloor(const Register::Table_c::MatrixDataHandle_c &handle, int row, int col)
 	{
 		return CheckEastTileEqual(handle, row, col, '.');
 	}
@@ -142,9 +143,9 @@ namespace Phobos
 		obj.pclSceneNode->setScale(scale);
 	}
 
-	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const Dictionary_c &dict, const Ogre::Vector3 &scale)
+	void TileGameWorld_c::CreateStaticObjectNode(TempStaticObject_s &obj, const Register::Table_c &table, const Ogre::Vector3 &scale)
 	{		
-		this->CreateStaticObjectNode(obj, this->CreateTileTransform(dict), scale);		
+		this->CreateStaticObjectNode(obj, this->CreateTileTransform(table), scale);		
 	}
 
 	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const
@@ -248,9 +249,9 @@ namespace Phobos
 		);
 	}
 
-	void TileGameWorld_c::Load(const MapLoader_c &loader, const Dictionary_c &worldEntityDictionary)
+	void TileGameWorld_c::Load(const MapLoader_c &loader, const Register::Table_c &worldEntityTable)
 	{				
-		Dictionary_c &tileSetDef = DictionaryManager_c::GetInstance().GetDictionaryHive("TileSet").GetDictionary(worldEntityDictionary.GetString("tileSet"));
+		auto &tileSetDef = Register::GetHive("TileSet").GetTable(worldEntityTable.GetString("tileSet"));
 
 		const String_c &wallMeshName = tileSetDef.GetString("wall");
 		const String_c *wallMaterial = tileSetDef.TryGetString("wallMaterial");
@@ -264,15 +265,15 @@ namespace Phobos
 		const Float_t tileScale = tileSetDef.GetFloat("tileScale");
 
 		bool supressCeiling = false;
-		worldEntityDictionary.TryGetBool(supressCeiling, "supressCeiling");
+		worldEntityTable.TryGetBool(supressCeiling, "supressCeiling");
 
 		fpTileSize = tileSetDef.GetFloat("tileSize");
 
-		Dictionary_c::MatrixDataHandle_c handle = worldEntityDictionary.GetMatrix("map");
+		Register::Table_c::MatrixDataHandle_c handle = worldEntityTable.GetMatrix("map");
 
 		Render_c &render = Render_c::GetInstance();					
 
-		render.SetAmbientColor(DictionaryGetColour(worldEntityDictionary, "ambientColor"));
+		render.SetAmbientColor(Register::GetColour(worldEntityTable, "ambientColor"));
 
 		Physics::CollisionTag_c staticCollisionTag = GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
 
@@ -319,7 +320,7 @@ namespace Phobos
 		const String_c *columnMeshName = tileSetDef.TryGetString("columnMesh");
 		if(columnMeshName)
 		{
-			Ogre::Vector3 scale = DictionaryTryGetVector3(tileSetDef, "columMeshScale", Ogre::Vector3(1, 1, 1));
+			Ogre::Vector3 scale = Register::TryGetVector3(tileSetDef, "columMeshScale", Ogre::Vector3(1, 1, 1));
 
 			for(int i = 0, numRows = handle.GetNumRows(); i < numRows; ++i)
 			{
@@ -398,11 +399,11 @@ namespace Phobos
 			}
 		}
 
-		const DictionaryHive_c &hive = loader.GetStaticEntitiesHive();
+		const auto &hive = loader.GetStaticEntitiesHive();
 
 		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			Dictionary_c *dict = static_cast<Dictionary_c *>(it->second);
+			auto *dict = static_cast<Register::Table_c *>(it->second);
 
 			try
 			{				
@@ -435,8 +436,8 @@ namespace Phobos
 							obj.pclLight->setAttenuation(radius, 1, 2 / radius, 1 / (radius * radius));
 						}
 
-						obj.pclLight->setDiffuseColour(DictionaryGetColour(*dict, "diffuse"));
-						obj.pclLight->setSpecularColour(DictionaryGetColour(*dict, "specular"));
+						obj.pclLight->setDiffuseColour(Register::GetColour(*dict, "diffuse"));
+						obj.pclLight->setSpecularColour(Register::GetColour(*dict, "specular"));
 
 						obj.pclSceneNode->attachObject(obj.pclLight);
 
@@ -449,7 +450,7 @@ namespace Phobos
 				}
 				else if(type.compare("Model") == 0)
 				{
-					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), DictionaryGetVector3(*dict, "scale"), dict->TryGetString("meshMaterial"), staticCollisionTag);					
+					this->SpawnMesh(this->CreateTileTransform(*dict), dict->GetString("meshfile"), Register::GetVector3(*dict, "scale"), dict->TryGetString("meshMaterial"), staticCollisionTag);					
 				}
 				else
 				{
@@ -597,12 +598,12 @@ namespace Phobos
 		out.Translate(translation);
 	}
 	
-	void TileGameWorld_c::LoadTileTransform(Transform_c &out, const Dictionary_c &entity) const
+	void TileGameWorld_c::LoadTileTransform(Transform_c &out, const Register::Table_c &entity) const
 	{
 		this->TileTransform2Transform(out, this->CreateTileTransform(entity));
 	}
 
-	TileTransform_c  TileGameWorld_c::CreateTileTransform(const Dictionary_c &entity) const
+	TileTransform_c  TileGameWorld_c::CreateTileTransform(const Register::Table_c &entity) const
 	{
 		static Enum_c<TileTransform_c::Direction_e, DirectionType_s> clDirectionType_gl(stDirectionTypes_gl);
 		static Enum_c<TileTransform_c::Height_e, HeightType_s> clHeightType_gl(stHeightTypes_gl);

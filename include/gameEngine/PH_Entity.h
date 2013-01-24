@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 September 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -17,13 +17,14 @@ subject to the following restrictions:
 #ifndef PH_ENTITY_H
 #define PH_ENTITY_H
 
+#include <Phobos/Register/TableFwd.h>
+
 #include "PH_EntityIO.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_HandleManager.h"
 
 namespace Phobos
-{
-	class Dictionary_c;
+{	
 	class EntityComponent_c;
 
 	PH_DECLARE_NODE_PTR(Entity);
@@ -33,7 +34,7 @@ namespace Phobos
 		public:
 			static Entity_c *Create(const String_c &name);
 
-			void Load(const Dictionary_c &dictionary);
+			void Load(const Register::Table_c &table);
 			void LoadFinished();
 
 			inline const String_c &GetEntityClassName() const;
@@ -44,17 +45,17 @@ namespace Phobos
 		protected:
 			Entity_c(const String_c &name);
 
-			virtual void OnLoad(const Dictionary_c &dictionary) {};
+			virtual void OnLoad(const Register::Table_c &table) {};
 
 			virtual void OnLoadFinished() {};
 
 			EntityComponent_c &GetComponent(const char *typeName);
 
-			inline const Dictionary_c &GetDictionary() const;
+			inline const Register::Table_c &GetTable() const;
 
 		private:			
 			String_c			strClassName;
-			const Dictionary_c	*pclDictionary;
+			const Register::Table_c	*pclTable;
 
 			Handle_s hHandle;
 	};
@@ -74,9 +75,9 @@ namespace Phobos
 		return hHandle;
 	}
 
-	inline const Dictionary_c &Entity_c::GetDictionary() const
+	inline const Register::Table_c &Entity_c::GetTable() const
 	{
-		return *pclDictionary;
+		return *pclTable;
 	}
 }
 

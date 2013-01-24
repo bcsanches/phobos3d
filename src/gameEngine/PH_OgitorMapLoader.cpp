@@ -22,9 +22,10 @@ subject to the following restrictions:
 
 #include <rapidxml.hpp>
 
-#include <PH_Dictionary.h>
-#include <PH_DictionaryHive.h>
-#include <PH_DictionaryManager.h>
+#include <Phobos/Register/Table.h>
+#include <Phobos/Register/Hive.h>
+#include <Phobos/Register/Manager.h>
+
 #include <PH_Exception.h>
 #include <PH_Kernel.h>
 #include <PH_Path.h>
@@ -88,7 +89,7 @@ namespace Phobos
 		return (strcmp(attribute->value(), "Marker Object") == 0) || (strcmp(attribute->value(), "Camera Object") == 0);
 	}
 
-	static void LoadProperties(Dictionary_c &dict, const rapidxml::xml_node<> &element)
+	static void LoadProperties(Register::Table_c &dict, const rapidxml::xml_node<> &element)
 	{
 		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
 
@@ -99,13 +100,13 @@ namespace Phobos
 
 			if(name == NULL)
 			{
-				stream << "[OgitorMapLoader_c::LoadDictionary] id attribute not found on CUSTOMPROPERTY node\n";
+				stream << "[OgitorMapLoader_c::LoadProperties] id attribute not found on CUSTOMPROPERTY node\n";
 				continue;
 			}
 
 			if(value == NULL)
 			{
-				stream << "[OgitorMapLoader_c::LoadDictionary] value attribute not found on CUSTOMPROPERTY node\n";
+				stream << "[OgitorMapLoader_c::LoadProperties] value attribute not found on CUSTOMPROPERTY node\n";
 				continue;
 			}
 
@@ -113,7 +114,7 @@ namespace Phobos
 		}
 	}
 
-	static void LoadDictionary(Dictionary_c &dict, const rapidxml::xml_node<> &element)
+	static void LoadTable(Register::Table_c &dict, const rapidxml::xml_node<> &element)
 	{
 		for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
 		{
@@ -128,7 +129,7 @@ namespace Phobos
 			LoadProperties(dict, *custom);
 	}
 
-	OgitorMapLoader_c::OgitorMapLoader_c(const Dictionary_c &settings):
+	OgitorMapLoader_c::OgitorMapLoader_c(const Register::Table_c &settings):
 		MapLoader_c(settings)
 	{
 		//empty
@@ -174,11 +175,11 @@ namespace Phobos
 				if(dynamicEntity && IsEditorOnly(*elem))
 					continue;
 				
-				std::unique_ptr<Dictionary_c> dict(PH_NEW Dictionary_c(nameAttribute->value()));				
+				std::unique_ptr<Register::Table_c> dict(PH_NEW Register::Table_c(nameAttribute->value()));				
 
-				LoadDictionary(*dict, *elem);
+				LoadTable(*dict, *elem);
 
-				(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddDictionary(std::move(dict));				
+				(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddTable(std::move(dict));				
 			}
 			catch(Exception_c &e)
 			{
@@ -186,7 +187,7 @@ namespace Phobos
 			}			
 		}
 
-		std::unique_ptr<Dictionary_c> dict = this->CreateWorldSpawnEntityDictionary();
+		std::unique_ptr<Register::Table_c> dict = this->CreateWorldSpawnEntityDef();
 
 		//load project data
 		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
@@ -197,10 +198,10 @@ namespace Phobos
 			if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
 				dict->SetString("terrainDir", terrainDir);
 		}
-		pclCurrentLevelHive_g->AddDictionary(std::move(dict));
+		pclCurrentLevelHive_g->AddTable(std::move(dict));
 
 		//fill out basic level data
-		dict.reset(PH_NEW Dictionary_c("LevelFile"));
+		dict.reset(PH_NEW Register::Table_c("LevelFile"));
 
 		dict->SetString("pathName", fileName);
 
@@ -211,7 +212,7 @@ namespace Phobos
 		dict->SetString("path", filePath.GetStr());
 		dict->SetString("fileName", onlyFileName.GetStr());
 
-		pclCurrentLevelHive_g->AddDictionary(std::move(dict));
+		pclCurrentLevelHive_g->AddTable(std::move(dict));
 		
 	}
 }

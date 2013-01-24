@@ -1,7 +1,7 @@
 /*
 Phobos 3d
 February 2011
-Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -25,9 +25,9 @@ namespace Phobos
 		//empty
 	}
 
-	void EntityComponent_c::Load(const Dictionary_c &dictionary)
+	void EntityComponent_c::Load(const Register::Table_c &table)
 	{
-		this->OnLoad(dictionary);
+		this->OnLoad(table);
 	}		
 
 	void EntityComponent_c::LoadFinished()

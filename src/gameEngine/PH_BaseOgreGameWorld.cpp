@@ -77,7 +77,7 @@ namespace Phobos
 
 		Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
 
-		const Dictionary_c *collisionDef = GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(path.GetStr());
+		auto collisionDef = GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(path.GetStr());
 		if(collisionDef != NULL)
 		{
 			staticObj.spRigidBody = physicsManager.CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));

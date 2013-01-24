@@ -35,10 +35,10 @@ namespace Phobos
 	{
 	}
 
-	void TransformComponent_c::OnLoad(const Dictionary_c &dictionary)
+	void TransformComponent_c::OnLoad(const Register::Table_c &table)
 	{			
 		Transform_c transform;
-		EntityLoadTransform(transform, dictionary);
+		EntityLoadTransform(transform, table);
 
 		propTransform.SetTransform(transform);				
 	}

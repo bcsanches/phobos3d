@@ -36,7 +36,7 @@ namespace Phobos
 		protected:
 			PointEntity_c(const String_c &name);
 
-			void OnLoad(const Dictionary_c &dictionary);
+			void OnLoad(const Register::Table_c &table);
 
 		private:
 			Transform_c	clTransform;

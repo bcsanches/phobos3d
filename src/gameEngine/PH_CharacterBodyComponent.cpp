@@ -23,7 +23,7 @@ subject to the following restrictions:
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_EntityUtils.h"
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
 #include "PH_ICharacterBody.h"
@@ -59,25 +59,25 @@ namespace Phobos
 			spCharacterBody->SetVelocityForTimeInterval(prpVelocity.GetVector(), delta);			
 		}
 
-		void CharacterBodyComponent_c::OnLoad(const Dictionary_c &dictionary)
+		void CharacterBodyComponent_c::OnLoad(const Register::Table_c &table)
 		{	
 			Transform_c transform;
 
-			EntityLoadTransform(transform, dictionary);						
+			EntityLoadTransform(transform, table);						
 
 			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
 
-			Float_t height = dictionary.GetFloat("height");
-			Float_t radius = dictionary.GetFloat("radius");
-			Float_t stepHeight = dictionary.GetFloat("stepHeight");
+			Float_t height = table.GetFloat("height");
+			Float_t radius = table.GetFloat("radius");
+			Float_t stepHeight = table.GetFloat("stepHeight");
 
 			Float_t offset = 0;
-			dictionary.TryGetFloat(offset, "characterStartHeight");
+			table.TryGetFloat(offset, "characterStartHeight");
 
 			Ogre::Vector3 startPos = transform.GetOrigin();
 			startPos.y += offset;
 
-			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
+			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(table);
 
 			prpCharacterPosition.SetVector(startPos);
 			spCharacterBody = physicsManager.CreateCharacterBody(startPos, collisionTag, stepHeight, radius, height);											

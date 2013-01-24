@@ -24,7 +24,7 @@ subject to the following restrictions:
 #include "PH_EntityComponentFactory.h"
 #include "PH_EntityKeys.h"
 #include "PH_EntityUtils.h"
-#include "PH_GameDictionaryUtils.h"
+#include "PH_GameRegisterUtils.h"
 #include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
 #include "PH_PhysicsUtils.h"
@@ -58,21 +58,21 @@ namespace Phobos
 			pprpTransform->SetTransform(Transform_c::Interpolate(clPreviousTransform, spRigidBody->GetTransform(), delta));
 		}
 
-		void RigidBodyComponent_c::OnLoad(const Dictionary_c &dictionary)
+		void RigidBodyComponent_c::OnLoad(const Register::Table_c &table)
 		{	
 			Transform_c transform;
 
-			EntityLoadTransform(transform, dictionary);						
+			EntityLoadTransform(transform, table);						
 
 			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
 
-			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(dictionary);
+			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(table);
 
 			PH_ASSERT(!spRigidBody);			
 			
-			Float_t mass = dictionary.GetFloat("mass");
+			Float_t mass = table.GetFloat("mass");
 
-			spRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(dictionary, Ogre::Vector3(1, 1, 1)));
+			spRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(table, Ogre::Vector3(1, 1, 1)));
 		}
 
 		void RigidBodyComponent_c::OnLoadFinished()

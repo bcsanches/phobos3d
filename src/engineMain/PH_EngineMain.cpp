@@ -23,7 +23,6 @@ subject to the following restrictions:
 #include <PH_ContextVar.h>
 #include <PH_ContextUtils.h>
 #include <PH_Core.h>
-#include <PH_DictionaryManager.h>
 #include <PH_EventManagerModule.h>
 #include <PH_GameEventManager.h>
 #include <PH_Kernel.h>
@@ -36,6 +35,7 @@ subject to the following restrictions:
 #include <PH_Session.h>
 #include <PH_WorldManager.h>
 
+#include <Phobos/Register/Manager.h>
 #include <Phobos/System/Timer.h>
 
 #include <Gui/PH_LevelSelector.h>
@@ -60,8 +60,8 @@ namespace Phobos
 		Core_c &core = Core_c::CreateInstance();
 		clSingletons.AddProc(Core_c::ReleaseInstance);
 
-		DictionaryManager_c &dictionaryManager = DictionaryManager_c::CreateInstance();
-		clSingletons.AddProc(DictionaryManager_c::ReleaseInstance);
+		Register::Init();
+		clSingletons.AddProc(Register::Finalize);		
 
 		EventManagerModule_c &eventManager = EventManagerModule_c::CreateInstance();
 		clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
@@ -112,7 +112,7 @@ namespace Phobos
 		core.AddModule(render, CoreModulePriorities::LOWEST);
 
 		core.RegisterCommands(console);
-		dictionaryManager.RegisterCommands(console);
+		Register::RegisterCommands(console);
 
 		core.LaunchBootModule("autoexec.cfg", argc, argv);
 	}
