@@ -169,10 +169,6 @@
     <ClCompile Include="..\..\..\src\engineCore\PH_Session.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
       <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
     </ProjectReference>

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shell">
+      <UniqueIdentifier>{91defefd-6465-4345-9923-db7d4cf9d980}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Base\DynamicLibrary.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Exception.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Folders.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Log.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Memory.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Node.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Object.cpp" />
+    <ClCompile Include="..\..\..\src\Base\ObjectManager.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Parser.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Path.cpp" />
+    <ClCompile Include="..\..\..\src\Base\ProcVector.cpp" />
+    <ClCompile Include="..\..\..\src\Base\ResourceManager.cpp" />
+    <ClCompile Include="..\..\..\src\Base\String.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Shell\Command.cpp">
+      <Filter>Shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Base\Shell\Context.cpp">
+      <Filter>Shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Base\Shell\Item.cpp">
+      <Filter>Shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Base\Shell\Variable.cpp">
+      <Filter>Shell</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Defs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\DisableCopy.h" />
+    <ClInclude Include="..\..\..\include\Phobos\DynamicLibrary.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Enum.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Error.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Exception.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Folders.h" />
+    <ClInclude Include="..\..\..\include\Phobos\GenericFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Listener.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Log.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Memory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\MemoryFunctions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Node.h" />
+    <ClInclude Include="..\..\..\include\Phobos\NodeFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\NodeProperty.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Object.h" />
+    <ClInclude Include="..\..\..\include\Phobos\ObjectManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Parser.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Path.h" />
+    <ClInclude Include="..\..\..\include\Phobos\PathFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\ProcVector.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Resource.h" />
+    <ClInclude Include="..\..\..\include\Phobos\ResourceManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Singleton.h" />
+    <ClInclude Include="..\..\..\include\Phobos\String.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Types.h" />
+    <ClInclude Include="..\..\..\include\Phobos\BaseAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Command.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\CommandFwd.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Context.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\ContextFwd.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Item.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Utils.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Variable.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Shell\IContext.h">
+      <Filter>Shell</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

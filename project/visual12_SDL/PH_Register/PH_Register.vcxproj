@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_REGISTER_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,11 +93,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Register\HiveFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Register\Manager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Register\Utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

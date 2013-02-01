@@ -125,10 +125,6 @@
     <ClCompile Include="..\..\..\src\sample_03\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_System\PH_System.vcxproj">
       <Project>{49ad3e51-f626-4c97-b051-a9f40f6b3858}</Project>
     </ProjectReference>

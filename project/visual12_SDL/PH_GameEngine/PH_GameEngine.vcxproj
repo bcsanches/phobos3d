@@ -254,10 +254,6 @@
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\PH_OgreEngineCore\PH_OgreEngineCore.vcxproj">
       <Project>{38679578-6b2c-4801-bd91-11bf34ec697b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
