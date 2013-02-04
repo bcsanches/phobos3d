@@ -17,37 +17,37 @@ subject to the following restrictions:
 #ifndef PH_REGISTER_HIVE_H
 #define PH_REGISTER_HIVE_H
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 #include "Phobos/Register/RegisterAPI.h"
 #include "Phobos/Register/TableFwd.h"
 
 namespace Phobos
 {
-	class Parser_c;
+	class Parser;
 
 	namespace Register
 	{
 		PH_DECLARE_NODE_PTR(Hive);
 
-		class PH_REGISTER_API Hive_c: public Node_c
+		class PH_REGISTER_API Hive: public Node
 		{
 			public:
 				static HivePtr_t Create(const String_t &name);
 
-				Hive_c(const String_t &name);
-				~Hive_c();
+				Hive(const String_t &name);
+				~Hive();
 
-				void Load(Parser_c &parser);
+				void Load(Parser &parser);
 
-				Table_c &GetTable(const String_t &name);
-				Table_c *TryGetTable(const String_t &name);
+				Table &GetTable(const String_t &name);
+				Table *TryGetTable(const String_t &name);
 
-				void AddTable(std::unique_ptr<Table_c> &&dict);
+				void AddTable(std::unique_ptr<Table> &&dict);
 
 	
 			private:			
-				UInt_t	uSequence;
+				UInt_t	m_uSequence;
 		};
 	}
 }

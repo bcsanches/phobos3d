@@ -16,9 +16,9 @@ subject to the following restrictions:
 
 #include "Phobos/Register/Table.h"
 
-#include <PH_Exception.h>
-#include <PH_Memory.h>
-#include <PH_Parser.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Memory.h>
+#include <Phobos/Parser.h>
 
 #include "Phobos/Register/Manager.h"
 #include "Phobos/Register/Utils.h"
@@ -45,24 +45,24 @@ namespace
 	};	
 }
 
-Phobos::Register::TablePtr_t Phobos::Register::Table_c::Create(const String_t &name)
+Phobos::Register::TablePtr_t Phobos::Register::Table::Create(const String_t &name)
 {
-	return TablePtr_t(PH_NEW Table_c(name));
+	return TablePtr_t(PH_NEW Table(name));
 }
 
-Phobos::Register::Table_c::Table_c(const String_t &name):
-	Node_c(name),
-	pclInherit(NULL)
-{
-	//empty
-}
-
-Phobos::Register::Table_c::~Table_c()
+Phobos::Register::Table::Table(const String_t &name):
+	Node(name),
+	m_pclInherit(NULL)
 {
 	//empty
 }
 
-void Phobos::Register::Table_c::CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const
+Phobos::Register::Table::~Table()
+{
+	//empty
+}
+
+void Phobos::Register::Table::CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const
 {
 	for(int i = 0;keys[i]; ++i)
 	{
@@ -70,79 +70,79 @@ void Phobos::Register::Table_c::CheckInvalidKey(const String_t &key, const char 
 		{
 			std::stringstream stream;
 			stream << "Value " << key << " " << message;
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Phobos::Register::Table_c::CheckInvalidKey", stream.str());
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Phobos::Register::Table::CheckInvalidKey", stream.str());
 		}
 	}
 }
 
-void Phobos::Register::Table_c::CheckForKeyword(const String_t &key) const
+void Phobos::Register::Table::CheckForKeyword(const String_t &key) const
 {
 	this->CheckInvalidKey(key, parszKeywords_g, "cannot be a key because it is a reserved keyword");		
 }
 
-void Phobos::Register::Table_c::SetInherited(const String_t &base)
+void Phobos::Register::Table::SetInherited(const String_t &base)
 {
 	this->SetString(INHERIT_KEY, base);
 }
 
-void Phobos::Register::Table_c::SetBaseHive(const String_t &baseHive)
+void Phobos::Register::Table::SetBaseHive(const String_t &baseHive)
 {
 	this->SetString(BASE_HIVE_KEY, baseHive);
 }
 
-void Phobos::Register::Table_c::SetString(const String_t &key, const String_t &value)
+void Phobos::Register::Table::SetString(const String_t &key, const String_t &value)
 {	
 	CheckForKeyword(key);
 
-	mapValues[key] = Value_s(value);
+	m_mapValues[key] = Value_s(value);
 
 	if(key.compare(INHERIT_KEY) == 0)
 	{			
-		strInherit = value;
-		pclInherit = NULL;
+		m_strInherit = value;
+		m_pclInherit = NULL;
 	}
 	if(key.compare(BASE_HIVE_KEY) == 0)
 	{			
-		strBaseHive = value;
-		pclInherit = NULL;
+		m_strBaseHive = value;
+		m_pclInherit = NULL;
 	}
 }
 
-void Phobos::Register::Table_c::SetCharMatrix(const String_t &key, const String_t &data, UInt16_t numRows, UInt16_t numColumns)
+void Phobos::Register::Table::SetCharMatrix(const String_t &key, const String_t &data, UInt16_t numRows, UInt16_t numColumns)
 {	
 	CheckForKeyword(key);
 	this->CheckInvalidKey(key, parszStringOnlyKeys_g, "should be string data, not matrix");
 
 	if(numRows * numColumns == 0)
 	{
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Phobos::Register::Table_c::ParseSpecialValue", "Matrix cannot be empty");
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Phobos::Register::Table::ParseSpecialValue", "Matrix cannot be empty");
 	}
 
 	if(numRows * numColumns != data.length())
 	{
 		std::stringstream stream;
 		stream << "Matrix data size (" << data.length() << ") does not match width (" << numColumns << ") and height (" << numRows << ") parameters";
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Phobos::Register::Table_c::ParseSpecialValue", stream.str());
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Phobos::Register::Table::ParseSpecialValue", stream.str());
 	}		
 
-	mapValues[key] = Value_s(data, numRows, numColumns);
+	m_mapValues[key] = Value_s(data, numRows, numColumns);
 }
 
-void Phobos::Register::Table_c::ParseSpecialValue(const String_t &idName, Parser_c &parser)
+void Phobos::Register::Table::ParseSpecialValue(const String_t &idName, Parser &parser)
 {
 	String_t type;
 
 	ParserTokens_e token;
 	if((token = parser.GetToken(&type)) != TOKEN_ID)
 	{
-		RaiseParseException(parser, TOKEN_ID, token, type, "Phobos::Register::Table_c::ParseSpecialValue");
+		RaiseParseException(parser, TOKEN_ID, token, type, "Phobos::Register::Table::ParseSpecialValue");
 	}
 
 	if(type.compare("CharMatrix") == 0)
 	{
 		if((token = parser.GetToken(NULL)) != TOKEN_OPEN_PAREN)
 		{
-			RaiseParseException(parser, TOKEN_OPEN_PAREN, token, type, "Phobos::Register::Table_c::ParseSpecialValue");
+			RaiseParseException(parser, TOKEN_OPEN_PAREN, token, type, "Phobos::Register::Table::ParseSpecialValue");
 		}
 
 		String_t matrix;
@@ -160,7 +160,7 @@ void Phobos::Register::Table_c::ParseSpecialValue(const String_t &idName, Parser
 				if(first)
 				{
 					//do not allow empty matrix
-					RaiseParseException(parser, "matrix data", "closing parenthesis", "Phobos::Register::Table_c::ParseSpecialValue");
+					RaiseParseException(parser, "matrix data", "closing parenthesis", "Phobos::Register::Table::ParseSpecialValue");
 				}
 					
 				this->SetCharMatrix(idName, matrix, numRows, numColumns);
@@ -173,13 +173,13 @@ void Phobos::Register::Table_c::ParseSpecialValue(const String_t &idName, Parser
 					numColumns = row.length();
 
 					if(numColumns == 0)
-						PH_RAISE(PARSER_EXCEPTION, "Phobos::Register::Table_c::ParseSpecialValue", "Matrix cannot be empty");
+						PH_RAISE(PARSER_EXCEPTION, "Phobos::Register::Table::ParseSpecialValue", "Matrix cannot be empty");
 
 					first = false;
 				}
 				else if(numColumns != row.length())
 				{
-					PH_RAISE(PARSER_EXCEPTION, "Phobos::Register::Table_c::ParseSpecialValue", "Matrix rows should always have the same length");
+					PH_RAISE(PARSER_EXCEPTION, "Phobos::Register::Table::ParseSpecialValue", "Matrix rows should always have the same length");
 				}
 
 				matrix.append(row);
@@ -187,17 +187,17 @@ void Phobos::Register::Table_c::ParseSpecialValue(const String_t &idName, Parser
 			}
 			else
 			{
-				RaiseParseException(parser, TOKEN_STRING, token, row, "Phobos::Register::Table_c::ParseSpecialValue");
+				RaiseParseException(parser, TOKEN_STRING, token, row, "Phobos::Register::Table::ParseSpecialValue");
 			}
 		}
 	}	
 	else
 	{
-		RaiseParseException(parser, " valid especial type, ie CharMatrix", type.c_str(), "Phobos::Register::Table_c::ParseSpecialValue");
+		RaiseParseException(parser, " valid especial type, ie CharMatrix", type.c_str(), "Phobos::Register::Table::ParseSpecialValue");
 	}
 }
 
-void Phobos::Register::Table_c::Load(Parser_c &parser)
+void Phobos::Register::Table::Load(Parser &parser)
 {
 	String_t idName;
 	String_t value;
@@ -205,7 +205,7 @@ void Phobos::Register::Table_c::Load(Parser_c &parser)
 	ParserTokens_e token = parser.GetToken(&value);
 
 	if(token != TOKEN_OPEN_BRACE)
-		RaiseParseException(parser, TOKEN_OPEN_BRACE, token, value, "Phobos::Register::Table_c::Load");
+		RaiseParseException(parser, TOKEN_OPEN_BRACE, token, value, "Phobos::Register::Table::Load");
 
 	for(;;)
 	{
@@ -220,7 +220,7 @@ void Phobos::Register::Table_c::Load(Parser_c &parser)
 		for(;;)
 		{
 			if(token != TOKEN_ID)
-				RaiseParseException(parser, TOKEN_ID, token, value, "Phobos::Register::Table_c::Load");
+				RaiseParseException(parser, TOKEN_ID, token, value, "Phobos::Register::Table::Load");
 
 			idName.append(value);
 			token = parser.GetToken(&value);
@@ -234,7 +234,7 @@ void Phobos::Register::Table_c::Load(Parser_c &parser)
 			if(token == TOKEN_EQUAL)
 				break;
 
-			RaiseParseException(parser, TOKEN_EQUAL, token, value, "Phobos::Register::Table_c::Load");
+			RaiseParseException(parser, TOKEN_EQUAL, token, value, "Phobos::Register::Table::Load");
 		}
 
 		token = parser.GetToken(&value);
@@ -255,22 +255,22 @@ void Phobos::Register::Table_c::Load(Parser_c &parser)
 				break;
 
 			default:
-				RaiseParseException(parser, TOKEN_STRING, token, idName, "Phobos::Register::Table_c::Load");
+				RaiseParseException(parser, TOKEN_STRING, token, idName, "Phobos::Register::Table::Load");
 				break;
 		}
 
 		token = parser.GetToken(&value);
 		if(token != TOKEN_SEMI_COLON)
-			RaiseParseException(parser, TOKEN_SEMI_COLON, token, value, "Phobos::Register::Table_c::Load");
+			RaiseParseException(parser, TOKEN_SEMI_COLON, token, value, "Phobos::Register::Table::Load");
 	}
 }
 
-const Phobos::String_t &Phobos::Register::Table_c::GetString(const String_t &key) const
+const Phobos::String_t &Phobos::Register::Table::GetString(const String_t &key) const
 {
-	return Phobos::Register::Table_c::GetValue(this, key).strValue;		
+	return Phobos::Register::Table::GetValue(this, key).m_strValue;		
 }
 
-bool Phobos::Register::Table_c::TryGetString(const String_t &key, String_t &value) const
+bool Phobos::Register::Table::TryGetString(const String_t &key, String_t &value) const
 {
 	const String_t *foundValue = TryGetString(this, key);
 	if(!foundValue)
@@ -280,19 +280,19 @@ bool Phobos::Register::Table_c::TryGetString(const String_t &key, String_t &valu
 	return true;
 }
 
-const Phobos::String_t *Phobos::Register::Table_c::TryGetString(const String_t &key) const
+const Phobos::String_t *Phobos::Register::Table::TryGetString(const String_t &key) const
 {
 	return TryGetString(this, key);
 }
 
-bool Phobos::Register::Table_c::GetBool(const String_t &key) const
+bool Phobos::Register::Table::GetBool(const String_t &key) const
 {
 	const String_t &value = this->GetString(key);
 
 	return value.compare("true") == 0 ? true : false;
 }
 	
-bool Phobos::Register::Table_c::TryGetBool(bool &outValue, const String_t &key) const
+bool Phobos::Register::Table::TryGetBool(bool &outValue, const String_t &key) const
 {
 	const String_t *value = this->TryGetString(key);
 	if(!value)
@@ -303,14 +303,14 @@ bool Phobos::Register::Table_c::TryGetBool(bool &outValue, const String_t &key) 
 	return true;
 }
 
-void Phobos::Register::Table_c::Get4Float(float values[4], const String_t &key) const
+void Phobos::Register::Table::Get4Float(float values[4], const String_t &key) const
 {
 	const String_t &value = this->GetString(key);
 
 	sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
 }
 
-bool Phobos::Register::Table_c::TryGet4Float(float values[4], const String_t &key) const
+bool Phobos::Register::Table::TryGet4Float(float values[4], const String_t &key) const
 {
 	const String_t *value = this->TryGetString(key);
 	if(!value)
@@ -321,70 +321,70 @@ bool Phobos::Register::Table_c::TryGet4Float(float values[4], const String_t &ke
 	return true;
 }
 
-void Phobos::Register::Table_c::Get3Float(float values[3], const String_t &key) const
+void Phobos::Register::Table::Get3Float(float values[3], const String_t &key) const
 {
 	const String_t &value = this->GetString(key);
 
 	sscanf(value.c_str(), "%f %f %f", &values[0], &values[1], &values[2]);
 }
 
-const Phobos::Register::Table_c *Phobos::Register::Table_c::GetInherited() const
+const Phobos::Register::Table *Phobos::Register::Table::GetInherited() const
 {
-	if(pclInherit)
-		return pclInherit;
+	if(m_pclInherit)
+		return m_pclInherit;
 
-	if(!strInherit.empty())
+	if(!m_strInherit.empty())
 	{
-		if(strBaseHive.empty())
-			pclInherit = &static_cast<Phobos::Register::Table_c &>(this->GetParent()->GetChild(strInherit));
+		if(m_strBaseHive.empty())
+			m_pclInherit = &static_cast<Phobos::Register::Table &>(this->GetParent()->GetChild(m_strInherit));
 		else
-			pclInherit = &Phobos::Register::GetTable(strBaseHive, strInherit);
+			m_pclInherit = &Phobos::Register::GetTable(m_strBaseHive, m_strInherit);
 	}
 
-	return pclInherit;
+	return m_pclInherit;
 }
 
-int Phobos::Register::Table_c::GetInt(const String_t &key) const
+int Phobos::Register::Table::GetInt(const String_t &key) const
 {
-	return StringToInt(this->GetString(key));
+	return std::stoi(this->GetString(key));
 }
 
-float Phobos::Register::Table_c::GetFloat(const String_t &key) const
+float Phobos::Register::Table::GetFloat(const String_t &key) const
 {
-	return StringToFloat(this->GetString(key));
+	return std::stof(this->GetString(key));
 }
 
-bool Phobos::Register::Table_c::TryGetFloat(float &outValue, const String_t &key) const
+bool Phobos::Register::Table::TryGetFloat(float &outValue, const String_t &key) const
 {
 	const String_t *strValue = this->TryGetString(key);
 	if(!strValue)
 		return false;
 
-	outValue = StringToFloat(*strValue);
+	outValue = std::stof(*strValue);
 
 	return true;
 }
 
-const Phobos::Register::Table_c::MatrixDataHandle_c Phobos::Register::Table_c::GetMatrix(const String_t &key) const
+const Phobos::Register::Table::MatrixDataHandle Phobos::Register::Table::GetMatrix(const String_t &key) const
 {
 	const Value_s &value = GetValue(this, key);
 
-	if(value.eType != CHAR_MATRIX)
+	if(value.m_eType != CHAR_MATRIX)
 	{
 		std::stringstream stream;
 		stream << "Value " << key << " is not a matrix " << this->GetName();
-		PH_RAISE(INVALID_OPERATION_EXCEPTION, "Phobos::Register::Table_c::GetMatrix", stream.str());
+		PH_RAISE(INVALID_OPERATION_EXCEPTION, "Phobos::Register::Table::GetMatrix", stream.str());
 	}
 
-	return MatrixDataHandle_c(value);
+	return MatrixDataHandle(value);
 }
 
-const Phobos::Register::Table_c::Value_s *Phobos::Register::Table_c::TryGetValue(const Table_c *current, const String_t &key)
+const Phobos::Register::Table::Value_s *Phobos::Register::Table::TryGetValue(const Table *current, const String_t &key)
 {
 	do
 	{
-		ValueMap_t::const_iterator it = current->mapValues.find(key);
-		if(it != current->mapValues.end())
+		ValueMap_t::const_iterator it = current->m_mapValues.find(key);
+		if(it != current->m_mapValues.end())
 		{
 			return &it->second;
 		}
@@ -395,22 +395,22 @@ const Phobos::Register::Table_c::Value_s *Phobos::Register::Table_c::TryGetValue
 	return NULL;
 }
 
-const Phobos::Register::Table_c::Value_s &Phobos::Register::Table_c::GetValue(const Table_c *current, const String_t &key)
+const Phobos::Register::Table::Value_s &Phobos::Register::Table::GetValue(const Table *current, const String_t &key)
 {
 	const Value_s *foundValue = TryGetValue(current, key);
 	if(!foundValue)
 	{
 		std::stringstream stream;
 		stream << "Value " << key << " does not exists in " << current->GetName();
-		PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Phobos::Register::Table_c::GetString", stream.str());
+		PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "Phobos::Register::Table::GetString", stream.str());
 	}
 
 	return *foundValue;
 }
 
-const Phobos::String_t *Phobos::Register::Table_c::TryGetString(const Table_c *current, const String_t &key)
+const Phobos::String_t *Phobos::Register::Table::TryGetString(const Table *current, const String_t &key)
 {
 	const Value_s *value = TryGetValue(current, key);
 
-	return value != NULL ? &value->strValue : NULL;
+	return value != NULL ? &value->m_strValue : NULL;
 }	

@@ -21,8 +21,7 @@ subject to the following restrictions:
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>
 
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
+#include <Phobos/Exception.h>
 
 using namespace Phobos;
 using namespace std;
@@ -30,16 +29,13 @@ using namespace std;
 struct KernelInstance_s
 {
 	KernelInstance_s()
-	{
-		Kernel_c::CreateInstance("ut_register.log");	
+	{		
 		Register::Init();
 	}
 
 	~KernelInstance_s()
 	{		
-		Register::Finalize();
-
-		Kernel_c::ReleaseInstance();
+		Register::Finalize();		
 	}
 };
 
@@ -82,7 +78,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		
 		stream << "{" << endl;
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -93,7 +89,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		stream << "EntityDef " << endl;
 		stream << "{" << endl;
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -105,7 +101,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		//missing =
 		stream <<	"className Entity" << endl;
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -118,7 +114,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		stream <<	"className=Entity" << endl;
 		stream <<	"health=100;" << endl;
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -138,7 +134,7 @@ BOOST_AUTO_TEST_CASE(dictionary_errors)
 		stream <<	"radius=2.0;" << endl;
 		stream << "}";
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ObjectAlreadyExistsException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ObjectAlreadyExistsException);
 	}
 }
 
@@ -183,20 +179,20 @@ BOOST_AUTO_TEST_CASE(register_inheritance)
 	BOOST_REQUIRE(superPlayer.GetString("weight").compare("2.0") == 0);
 
 	//non existing value
-	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("boost"), ObjectNotFoundException);
 	BOOST_REQUIRE(superPlayer.GetString("boost").compare("2") == 0);
 
 	//bad inheritance
 	auto &invalidPlayer = Register::GetTable("EntityDef", "InvalidPlayer");
 
-	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("bla"), ObjectNotFoundException);
 
 	//Check getters exceptions
-	BOOST_REQUIRE_THROW(Register::GetHive("Bla"), ObjectNotFoundException_c);
-	BOOST_REQUIRE_THROW(Register::GetTable("Bla", "Bla"), ObjectNotFoundException_c);
-	BOOST_REQUIRE_THROW(Register::GetTable("EntityDef", "Bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(Register::GetHive("Bla"), ObjectNotFoundException);
+	BOOST_REQUIRE_THROW(Register::GetTable("Bla", "Bla"), ObjectNotFoundException);
+	BOOST_REQUIRE_THROW(Register::GetTable("EntityDef", "Bla"), ObjectNotFoundException);
 
-	BOOST_REQUIRE_THROW(infoPlayerStart.SetString("new", "invalid keyword"), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetString("new", "invalid keyword"), InvalidParameterException);
 }
 
 /**
@@ -245,13 +241,13 @@ BOOST_AUTO_TEST_CASE(register_inheritance_other_hive)
 	BOOST_REQUIRE(superPlayer.GetString("weight").compare("2.0") == 0);
 
 	//non existing value
-	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("boost"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("boost"), ObjectNotFoundException);
 	BOOST_REQUIRE(superPlayer.GetString("boost").compare("2") == 0);
 
 	//bad inheritance
 	auto &invalidPlayer = Register::GetTable("DynamicEntity", "InvalidPlayer");
 
-	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("bla"), ObjectNotFoundException_c);	
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetString("bla"), ObjectNotFoundException);	
 }
 
 BOOST_AUTO_TEST_CASE(register_parse_matrix)
@@ -301,7 +297,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new Bla;" << endl;
 		stream << "}";
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 
@@ -314,7 +310,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new 123;" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}		
 
 	{
@@ -326,7 +322,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new CharMatrix;" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -338,7 +334,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new CharMatrix();" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -350,7 +346,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new CharMatrix(\"\");" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -362,7 +358,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new CharMatrix(\"123\",\"12\");" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -374,7 +370,7 @@ BOOST_AUTO_TEST_CASE(register_parse_matrix_errors)
 		stream <<	"map = new CharMatrix(1223);" << endl;
 		stream << "}";		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 }
 
@@ -397,21 +393,21 @@ BOOST_AUTO_TEST_CASE(register_add_matrix_errors)
 	auto &infoPlayerStart = Register::GetTable("EntityDef", "InfoPlayerStart");
 
 	//Cannot use inherit as matrix
-	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("inherit", "AB", 1, 1), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("new", "AB", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("inherit", "AB", 1, 1), InvalidParameterException);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("base_hive", "AB", 1, 1), InvalidParameterException);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("new", "AB", 1, 1), InvalidParameterException);
 
 	//Matrix data does not match sizes
-	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("matrix", "ABC", 1, 1), InvalidParameterException);
 
 	//Cannot have size == 0 data
-	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("inherit", "", 0, 0), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.SetCharMatrix("inherit", "", 0, 0), InvalidParameterException);
 
 	//Not a matrix type
-	BOOST_REQUIRE_THROW(infoPlayerStart.GetMatrix("weight"), InvalidOperationException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetMatrix("weight"), InvalidOperationException);
 
 	//non existing
-	BOOST_REQUIRE_THROW(infoPlayerStart.GetMatrix("bla"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(infoPlayerStart.GetMatrix("bla"), ObjectNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(register_inheritance_setters)
@@ -444,7 +440,7 @@ BOOST_AUTO_TEST_CASE(register_inheritance_setters)
 	auto &player = Register::GetHive("OtherDef").GetTable("Player");
 
 	//now check overriding
-	BOOST_REQUIRE_THROW(player.GetString("health"), ObjectNotFoundException_c);
+	BOOST_REQUIRE_THROW(player.GetString("health"), ObjectNotFoundException);
 
 	//Now check SetInherited
 	player.SetInherited("InfoPlayerStart");
@@ -541,7 +537,7 @@ BOOST_AUTO_TEST_CASE(register_auto_inheritance_parser_errors)
 		stream << "{" << endl;	
 		stream << "}" << endl;		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -551,7 +547,7 @@ BOOST_AUTO_TEST_CASE(register_auto_inheritance_parser_errors)
 		stream << "{" << endl;	
 		stream << "}" << endl;		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 
 	{
@@ -561,6 +557,6 @@ BOOST_AUTO_TEST_CASE(register_auto_inheritance_parser_errors)
 		stream << "{" << endl;	
 		stream << "}" << endl;		
 
-		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException_c);
+		BOOST_REQUIRE_THROW(Register::Load(stream), ParserException);
 	}
 }

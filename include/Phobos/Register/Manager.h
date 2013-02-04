@@ -16,9 +16,10 @@ subject to the following restrictions:
 #ifndef PH_REGISTER_REGISTER_MANAGER_H
 #define PH_REGISTER_REGISTER_MANAGER_H
 
-#include <PH_ContextCmd.h>
-#include <PH_Node.h>
-#include <PH_Singleton.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/IContext.h>
+
+#include <Phobos/Node.h>
 
 #include <istream>
 
@@ -27,9 +28,8 @@ subject to the following restrictions:
 #include "Phobos/Register/HiveFwd.h"
 
 namespace Phobos
-{
-	class IContext_c;
-	class Path_c;
+{	
+	class Path;
 
 	namespace Register
 	{		
@@ -41,15 +41,15 @@ namespace Phobos
 
 		PH_REGISTER_API void LoadAll(const String_t &path);
 
-		PH_REGISTER_API Hive_c &CreateCustomHive(const String_t &name);			
+		PH_REGISTER_API Hive &CreateCustomHive(const String_t &name);			
 
-		PH_REGISTER_API Hive_c &GetHive(const String_t &name);
-		PH_REGISTER_API Hive_c *TryGetHive(const String_t &name);
-		PH_REGISTER_API Table_c &GetTable(const String_t &hive, const String_t &table);
-		PH_REGISTER_API Table_c *TryGetTable(const String_t &hive, const String_t &table);
-		PH_REGISTER_API Table_c &GetTable(const Path_c &relativePath);
+		PH_REGISTER_API Hive &GetHive(const String_t &name);
+		PH_REGISTER_API Hive *TryGetHive(const String_t &name);
+		PH_REGISTER_API Table &GetTable(const String_t &hive, const String_t &table);
+		PH_REGISTER_API Table *TryGetTable(const String_t &hive, const String_t &table);
+		PH_REGISTER_API Table &GetTable(const Path &relativePath);
 
-		PH_REGISTER_API void RegisterCommands(IContext_c &context);
+		PH_REGISTER_API void RegisterCommands(Shell::IContext &context);
 	}
 }
 

@@ -19,14 +19,14 @@ subject to the following restrictions:
 
 #include <unordered_map>
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 #include "Phobos/Register/RegisterAPI.h"
 #include "Phobos/Register/TableFwd.h"
 
 namespace Phobos
 {
-	class Parser_c;
+	class Parser;
 
 	namespace Register
 	{
@@ -60,10 +60,10 @@ namespace Phobos
 
 			The above exampel defines a matrix with 3 rows and 4 columns.
 		*/
-		class PH_REGISTER_API Table_c: public Node_c
+		class PH_REGISTER_API Table: public Node
 		{	
 			//Not really needed, because node already blocks copies, but makes it easier to find errors
-			PH_DISABLE_COPY(Table_c);
+			PH_DISABLE_COPY(Table);
 
 			private:
 				enum ValueType_e
@@ -74,35 +74,35 @@ namespace Phobos
 
 				struct Value_s
 				{
-					ValueType_e eType;
+					ValueType_e m_eType;
 
-					String_t strValue;
+					String_t m_strValue;
 
-					UInt16_t u16NumRows;
-					UInt16_t u16NumColumns;
+					UInt16_t m_u16NumRows;
+					UInt16_t m_u16NumColumns;
 
 					inline Value_s():
-						eType(STRING),
-						u16NumColumns(0),
-						u16NumRows(0)
+						m_eType(STRING),
+						m_u16NumColumns(0),
+						m_u16NumRows(0)
 					{
 						//empty
 					}
 					
 					explicit inline Value_s(const String_t &value):
-						strValue(value),
-						eType(STRING),
-						u16NumColumns(0),
-						u16NumRows(0)
+						m_strValue(value),
+						m_eType(STRING),
+						m_u16NumColumns(0),
+						m_u16NumRows(0)
 					{
 						//empty
 					}
 
 					explicit inline Value_s(const String_t &value, UInt16_t numRows, UInt16_t numColumns):
-						strValue(value),
-						eType(CHAR_MATRIX),
-						u16NumColumns(numColumns),
-						u16NumRows(numRows)
+						m_strValue(value),
+						m_eType(CHAR_MATRIX),
+						m_u16NumColumns(numColumns),
+						m_u16NumRows(numRows)
 					{
 						//empty
 					}
@@ -114,53 +114,53 @@ namespace Phobos
 					The internal structure that holds the data is not exposed, a MatrixHandle is provided for a "safe" and more simple data access.
 
 				*/
-				class MatrixDataHandle_c
+				class MatrixDataHandle
 				{
 					private:
-						const Value_s &rstValue;
+						const Value_s &m_rstValue;
 
 					public:
-						inline MatrixDataHandle_c(const Value_s &value):
-							 rstValue(value)
+						inline MatrixDataHandle(const Value_s &value):
+							 m_rstValue(value)
 						 {
 							 //empty
 						 }
 				
-						inline MatrixDataHandle_c(const MatrixDataHandle_c &rhs):
-							rstValue(rhs.rstValue)
+						inline MatrixDataHandle(const MatrixDataHandle &rhs):
+							m_rstValue(rhs.m_rstValue)
 						{
 							//empty
 						}
 
 						inline Char_t operator()(UInt16_t row, UInt16_t col) const
 						{
-							return rstValue.strValue[row * rstValue.u16NumColumns + col];
+							return m_rstValue.m_strValue[row * m_rstValue.m_u16NumColumns + col];
 						}
 
 						inline UInt16_t GetNumColumns() const
 						{
-							return rstValue.u16NumColumns;
+							return m_rstValue.m_u16NumColumns;
 						}
 
 						inline UInt16_t GetNumRows() const
 						{
-							return rstValue.u16NumRows;
+							return m_rstValue.m_u16NumRows;
 						}
 				};	
 
 			public:
 				static TablePtr_t Create(const String_t &name);
-				Table_c(const String_t &name);
+				Table(const String_t &name);
 
-				~Table_c();
+				~Table();
 
-				void Load(Parser_c &parser);
+				void Load(Parser &parser);
 
 				const String_t &GetString(const String_t &key) const;
 				bool TryGetString(const String_t &key, String_t &out) const;
 				const String_t *TryGetString(const String_t &key) const;
 
-				const MatrixDataHandle_c GetMatrix(const String_t &key) const;
+				const MatrixDataHandle GetMatrix(const String_t &key) const;
 
 				bool GetBool(const String_t &key) const;
 				bool TryGetBool(bool &outValue, const String_t &key) const;
@@ -175,18 +175,18 @@ namespace Phobos
 				void SetString(const String_t &key, const String_t &value);
 				void SetCharMatrix(const String_t &key, const String_t &data, UInt16_t numRows, UInt16_t numColumns);
 			
-				const Table_c *GetInherited() const;
+				const Table *GetInherited() const;
 
 				void SetInherited(const String_t &base);
 				void SetBaseHive(const String_t &baseHive);
 
 			private:			
-				static const String_t *TryGetString(const Table_c *current, const String_t &key);
+				static const String_t *TryGetString(const Table *current, const String_t &key);
 
-				static const Value_s *TryGetValue(const Table_c *current, const String_t &key);
-				static const Value_s &GetValue(const Table_c *current, const String_t &key);
+				static const Value_s *TryGetValue(const Table *current, const String_t &key);
+				static const Value_s &GetValue(const Table *current, const String_t &key);
 
-				void ParseSpecialValue(const String_t &idName, Parser_c &parser);
+				void ParseSpecialValue(const String_t &idName, Parser &parser);
 
 				void CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const;
 				void CheckForKeyword(const String_t &key) const;		
@@ -197,11 +197,11 @@ namespace Phobos
 				typedef std::unordered_map<String_t, Value_s> ValueMap_t;
 				typedef ValueMap_t::const_iterator ValueMapConstIterator_t;
 
-				ValueMap_t mapValues;
+				ValueMap_t m_mapValues;
 
-				String_t strInherit;
-				String_t strBaseHive;
-				mutable const Table_c *pclInherit;
+				String_t m_strInherit;
+				String_t m_strBaseHive;
+				mutable const Table *m_pclInherit;
 		};	
 	}
 }

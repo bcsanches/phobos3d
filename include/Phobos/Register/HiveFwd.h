@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_REGISTER_HIVE_FWD_H
 #define PH_REGISTER_HIVE_FWD_H
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 namespace Phobos
 {
@@ -25,7 +25,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(Hive);
 
-		class Hive_c;
+		class Hive;
 	}
 }
 
