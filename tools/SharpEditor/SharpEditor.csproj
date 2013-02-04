@@ -88,8 +88,9 @@
     <Compile Include="AssetBrowser.Designer.cs">
       <DependentUpon>AssetBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Assets\AssetCategory.cs" />
-    <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\CategoryManager.cs" />
+    <Compile Include="Assets\Manager.cs" />
+    <Compile Include="Assets\Category.cs" />
     <Compile Include="EditorService.cs" />
     <Compile Include="EngineNetworkService.cs" />
     <Compile Include="EngineProcess.cs" />

@@ -117,6 +117,7 @@
             // cbCategories
             // 
             this.cbCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbCategories.DisplayMember = "Name";
             this.cbCategories.FormattingEnabled = true;
             this.cbCategories.Location = new System.Drawing.Point(53, 31);
             this.cbCategories.Name = "cbCategories";
@@ -128,11 +129,17 @@
             this.lvAssets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvAssets.FullRowSelect = true;
+            this.lvAssets.GridLines = true;
+            this.lvAssets.HideSelection = false;
             this.lvAssets.Location = new System.Drawing.Point(0, 68);
+            this.lvAssets.MultiSelect = false;
             this.lvAssets.Name = "lvAssets";
             this.lvAssets.Size = new System.Drawing.Size(137, 224);
+            this.lvAssets.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvAssets.TabIndex = 3;
             this.lvAssets.UseCompatibleStateImageBehavior = false;
+            this.lvAssets.View = System.Windows.Forms.View.List;
             // 
             // AssetBrowser
             // 
