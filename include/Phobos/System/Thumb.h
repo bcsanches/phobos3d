@@ -17,51 +17,50 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_THUMB_H
 #define PH_SYSTEM_THUMB_H
 
-#include <PH_Error.h>
-#include <PH_ContextCmd.h>
+#include <Phobos/Error.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/IContext.h>
 
 #include "Phobos/System/SystemAPI.h"
 
 namespace Phobos
-{
-	class IContext_c;
-
+{	
 	namespace System
 	{		
-		class PH_SYSTEM_API Thumb_c
+		class PH_SYSTEM_API Thumb
 		{
 			public:
-				Thumb_c(const String_c &cmd, IContext_c *context = NULL);
+				Thumb(const String_t &cmd, Shell::IContext *context = NULL);
 
 				inline Float_t GetX() const;
 				inline Float_t GetY() const;
 				inline const Float_t *GetPoint() const;
 
-				void Enable(IContext_c &context);
+				void Enable(Shell::IContext &context);
 				void Disable();
 
 			private:
-				void CmdProc(const StringVector_t &args, Context_c &);
+				void CmdProc(const Shell::StringVector_t &args, Shell::Context &);
 
 			private:
-				ContextCmd_c cmdUpdate;
+				Shell::Command m_cmdUpdate;
 
-				Float_t	fpPoint[2];		
+				Float_t	m_fpPoint[2];		
 		};
 
-		inline Float_t Thumb_c::GetX() const
+		inline Float_t Thumb::GetX() const
 		{
-			return fpPoint[0];
+			return m_fpPoint[0];
 		}
 
-		inline Float_t Thumb_c::GetY() const
+		inline Float_t Thumb::GetY() const
 		{
-			return fpPoint[1];
+			return m_fpPoint[1];
 		}
 
-		inline const Float_t *Thumb_c::GetPoint() const
+		inline const Float_t *Thumb::GetPoint() const
 		{
-			return fpPoint;
+			return m_fpPoint;
 		}
 	}
 }

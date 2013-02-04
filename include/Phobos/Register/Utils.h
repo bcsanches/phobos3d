@@ -24,7 +24,7 @@ namespace Phobos
 {	
 	namespace Register
 	{
-		void RaiseParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_c &token, const char *module);
+		void RaiseParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_t &token, const char *module);
 		void RaiseParseException(const Parser_c &parser, const char *expected, const char *got, const char *module);
 	}
 }

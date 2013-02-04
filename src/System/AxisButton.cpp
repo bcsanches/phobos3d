@@ -16,22 +16,22 @@ subject to the following restrictions:
 
 #include "Phobos/System/AxisButton.h"
 
-Phobos::System::AxisButton_c::AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context):
-	clButtonA(upA, downA, updateA, context),
-	clButtonB(upB, downB, updateB, context)
+Phobos::System::AxisButton::AxisButton(const String_t &upA, const String_t &downA, const String_t &updateA, const String_t &upB, const String_t &downB, const String_t &updateB, Shell::IContext *context):
+	m_clButtonA(upA, downA, updateA, context),
+	m_clButtonB(upB, downB, updateB, context)
 {
 	//empty
 }
 
-void Phobos::System::AxisButton_c::Enable(IContext_c &context)
+void Phobos::System::AxisButton::Enable(Shell::IContext &context)
 {
-	clButtonA.Enable(context);
-	clButtonB.Enable(context);
+	m_clButtonA.Enable(context);
+	m_clButtonB.Enable(context);
 }
 
-void Phobos::System::AxisButton_c::Disable()
+void Phobos::System::AxisButton::Disable()
 {
-	clButtonA.Disable();
-	clButtonB.Disable();
+	m_clButtonA.Disable();
+	m_clButtonB.Disable();
 }
 

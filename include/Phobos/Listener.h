@@ -21,10 +21,10 @@ subject to the following restrictions:
 
 #define PH_DECLARE_LISTENER_HOOK																							\
 	typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > ListenerHook_t;	\
-	ListenerHook_t hkListener;
+	ListenerHook_t m_hkListener;
 	
 #define PH_DECLARE_LISTENER_LIST_TYPE(X)\
-	typedef boost::intrusive::member_hook<X, X::ListenerHook_t, &X::hkListener> ListenerMemberHookOption_t;					\
+	typedef boost::intrusive::member_hook<X, X::ListenerHook_t, &X::m_hkListener> ListenerMemberHookOption_t;					\
 	typedef boost::intrusive::list<X, boost::intrusive::constant_time_size<false>, ListenerMemberHookOption_t > ListenersList_t;
 
 #define PH_DECLARE_LISTENER_LIST(X, NAME)	\
@@ -43,7 +43,7 @@ subject to the following restrictions:
 												\
 	void OWNER::RemoveListener(X &listener)		\
 	{											\
-		listener.hkListener.unlink();			\
+		listener.m_hkListener.unlink();			\
 	}
 
 

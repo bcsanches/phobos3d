@@ -26,28 +26,28 @@ subject to the following restrictions:
 		static X##Ptr_t ipInstance_gl;		\
 											\
 	public:									\
-		static X##_c &CreateInstance();		\
+		static X &CreateInstance();			\
 		static void ReleaseInstance();		\
-		static X##_c &GetInstance();
+		static X &GetInstance();
 
 #define PH_DECLARE_NAMED_SINGLETON_METHODS(X)					\
 	private:													\
 		static X##Ptr_t ipInstance_gl;							\
 																\
 	public:														\
-		static X##_c &CreateInstance(const String_t &name);		\
+		static X &CreateInstance(const String_t &name);			\
 		static void ReleaseInstance();							\
-		static X##_c &GetInstance();
+		static X &GetInstance();
 
-#define PH_DEFINE_SINGLETON_VAR(X) X##Ptr_t X##_c::ipInstance_gl;
+#define PH_DEFINE_SINGLETON_VAR(X) X##Ptr_t X::ipInstance_gl;
 
 #define PH_SINGLETON_PROCS(X, EXTRA)		\
-	X##_c &X##_c::GetInstance(void)			\
+	X &X::GetInstance(void)					\
 	{										\
 		return *ipInstance_gl;				\
 	}										\
 											\
-	void X##_c::ReleaseInstance(void)		\
+	void X::ReleaseInstance(void)			\
 	{										\
 		EXTRA;								\
 		ipInstance_gl.reset();				\
@@ -55,11 +55,11 @@ subject to the following restrictions:
 
 #define PH_DEFINE_DEFAULT_SINGLETON_EX(X, EXTRA_CREATE, EXTRA_RELEASE)\
 	PH_DEFINE_SINGLETON_VAR(X)				\
-	X##_c &X##_c::CreateInstance(void)		\
+	X &X::CreateInstance(void)				\
 	{										\
 		PH_ASSERT(!ipInstance_gl);			\
 											\
-		ipInstance_gl.reset(PH_NEW X##_c());	\
+		ipInstance_gl.reset(PH_NEW X());	\
 											\
 		EXTRA_CREATE;						\
 											\
@@ -67,7 +67,7 @@ subject to the following restrictions:
 	}										\
 	PH_SINGLETON_PROCS(X,EXTRA_RELEASE);
 
-#define PH_DEFINE_NODE_SINGLETON(X, NODE_PATH) PH_DEFINE_DEFAULT_SINGLETON_EX(X, Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path(NODE_PATH)), ipInstance_gl->RemoveSelf())	
+#define PH_DEFINE_NODE_SINGLETON(X, NODE_PATH) PH_DEFINE_DEFAULT_SINGLETON_EX(X, Phobos::ObjectManager::AddObject(*ipInstance_gl, Path(NODE_PATH)), ipInstance_gl->RemoveSelf())	
 
 #define PH_DEFINE_DEFAULT_SINGLETON(X) PH_DEFINE_DEFAULT_SINGLETON_EX(X, ;, ;)	
 

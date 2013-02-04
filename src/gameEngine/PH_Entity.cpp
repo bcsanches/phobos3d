@@ -25,7 +25,7 @@ namespace Phobos
 {
 	PH_FULL_ENTITY_CREATOR("Entity", Entity_c);
 
-	Entity_c::Entity_c(const String_c &name):
+	Entity_c::Entity_c(const String_t &name):
 		EntityIO_c(name, NodeFlags::PRIVATE_CHILDREN),
 		pclTable(NULL)
 	{
@@ -37,12 +37,12 @@ namespace Phobos
 
 		strClassName = table.GetInherited()->GetName();
 
-		const String_c *components = table.TryGetString(PH_ENTITY_KEY_COMPONENTS);
+		const String_t *components = table.TryGetString(PH_ENTITY_KEY_COMPONENTS);
 		if(components)
 		{
 			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
 
-			String_c componentName;
+			String_t componentName;
 			size_t pos = 0;
 			
 			while(StringSplitBy(componentName, *components, '|', pos, &pos))

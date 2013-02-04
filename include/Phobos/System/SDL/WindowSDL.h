@@ -28,12 +28,12 @@ namespace Phobos
 {
 	namespace System
 	{
-		class PH_SYSTEM_API WindowSDL_c: public Window_c
+		class PH_SYSTEM_API WindowSDL: public Window
 		{
 			public:			
-				~WindowSDL_c();
+				~WindowSDL();
 
-				void Open(	const String_c &name, const Rect_s<size_t> &rect, void *parentWindow = NULL);
+				void Open(	const String_t &name, const Rect_s<size_t> &rect, void *parentWindow = NULL);
 
 				size_t GetWidth(void) const;
 				size_t GetHeight(void) const;
@@ -45,13 +45,13 @@ namespace Phobos
 				virtual bool HasGLContext();
 
 			private:			
-				WindowSDL_c(const String_c &name);
+				WindowSDL(const String_t &name);
 		
 			private:			
-				friend WindowPtr_t Window_c::Create(const String_c &name);
+				friend WindowPtr_t Window::Create(const String_t &name);
 
 			private:
-				EventManagerSDLPtr_t ipEventManager;
+				EventManagerSDLPtr_t m_ipEventManager;
 
 				Rect_s<size_t> rect;
 		};

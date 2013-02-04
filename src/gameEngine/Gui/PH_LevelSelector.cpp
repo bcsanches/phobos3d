@@ -112,15 +112,15 @@ namespace Phobos
 		class LevelFileDataSource_c: public Rocket::Controls::DataSource
 		{
 			public:
-				LevelFileDataSource_c(const std::list<String_c> &directories);
+				LevelFileDataSource_c(const std::list<String_t> &directories);
 
 				virtual void GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns);
 				virtual int GetNumRows(const Rocket::Core::String& table);
 
-				const String_c &GetFile(int index);
+				const String_t &GetFile(int index);
 
 			private:
-				std::vector<String_c> vecFiles;
+				std::vector<String_t> vecFiles;
 		};
 
 		class LevelSelectorEventListener_c: public Rocket::Core::EventListener
@@ -143,23 +143,23 @@ namespace Phobos
 	}
 }
 
-Phobos::Gui::LevelFileDataSource_c::LevelFileDataSource_c(const std::list<String_c> &directories):
+Phobos::Gui::LevelFileDataSource_c::LevelFileDataSource_c(const std::list<String_t> &directories):
 	Rocket::Controls::DataSource("LevelFileDataSource")
 {		
-	std::set<String_c> setExtensions;
+	std::set<String_t> setExtensions;
 
 	{
-		std::list<String_c> mapFileExtensions = MapLoaderFactory_c::GetInstance().CreateMapFileExtensionsList();	
+		std::list<String_t> mapFileExtensions = MapLoaderFactory_c::GetInstance().CreateMapFileExtensionsList();	
 
-		BOOST_FOREACH(String_c &ext, mapFileExtensions)
+		BOOST_FOREACH(String_t &ext, mapFileExtensions)
 		{
 			setExtensions.insert("." + ext);
 		}
 	}
 
-	for(std::list<String_c>::const_iterator it = directories.begin(), end = directories.end(); it != end; ++it)
+	for(std::list<String_t>::const_iterator it = directories.begin(), end = directories.end(); it != end; ++it)
 	{
-		const String_c &dir = *it;
+		const String_t &dir = *it;
 
 		if(!boost::filesystem::exists(dir))
 		{
@@ -188,7 +188,7 @@ Phobos::Gui::LevelFileDataSource_c::LevelFileDataSource_c(const std::list<String
 				if(!boost::filesystem::is_regular_file(levelFilePath))
 					continue;
 
-				String_c ext = levelFilePath.extension().string();
+				String_t ext = levelFilePath.extension().string();
 				if(setExtensions.find(ext) != setExtensions.end())
 					vecFiles.push_back(levelFilePath.string());
 			}			
@@ -211,7 +211,7 @@ int Phobos::Gui::LevelFileDataSource_c::GetNumRows(const Rocket::Core::String& t
 		return 0;
 }
 
-const Phobos::String_c &Phobos::Gui::LevelFileDataSource_c::GetFile(int index)
+const Phobos::String_t &Phobos::Gui::LevelFileDataSource_c::GetFile(int index)
 {
 	return vecFiles[index];
 }
@@ -308,7 +308,7 @@ void Phobos::Gui::LevelSelector_c::OnLoadButtonClick()
 	if(row < 0)
 		return;
 
-	const String_c &levelFile = upDataSource->GetFile(row);
+	const String_t &levelFile = upDataSource->GetFile(row);
 	WorldManager_c::GetInstance().LoadMap(levelFile);	
 }
 

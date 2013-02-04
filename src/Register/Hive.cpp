@@ -23,12 +23,12 @@ subject to the following restrictions:
 #include "Phobos/Register/Table.h"
 #include "Phobos/Register/Utils.h"
 
-Phobos::Register::HivePtr_t Phobos::Register::Hive_c::Create(const String_c &name)
+Phobos::Register::HivePtr_t Phobos::Register::Hive_c::Create(const String_t &name)
 {
 	return HivePtr_t(PH_NEW Hive_c(name));
 }
 
-Phobos::Register::Hive_c::Hive_c(const String_c &name):
+Phobos::Register::Hive_c::Hive_c(const String_t &name):
 	Node_c(name, NodeFlags::PRIVATE_CHILDREN),
 	uSequence(0)
 {
@@ -47,12 +47,12 @@ void Phobos::Register::Hive_c::AddTable(std::unique_ptr<Table_c> &&dict)
 
 void Phobos::Register::Hive_c::Load(Parser_c &parser)
 {
-	String_c tokenValue;
+	String_t tokenValue;
 	ParserTokens_e token = parser.GetToken(&tokenValue);
 
-	String_c dictName;
-	String_c inherit;
-	String_c baseHive;
+	String_t dictName;
+	String_t inherit;
+	String_t baseHive;
 
 	if(token == TOKEN_ID)
 	{
@@ -114,12 +114,12 @@ void Phobos::Register::Hive_c::Load(Parser_c &parser)
 	this->AddTable(std::move(dict));
 }
 
-Phobos::Register::Table_c &Phobos::Register::Hive_c::GetTable(const String_c &name)
+Phobos::Register::Table_c &Phobos::Register::Hive_c::GetTable(const String_t &name)
 {
 	return static_cast<Table_c &>(this->GetChild(name));
 }
 
-Phobos::Register::Table_c *Phobos::Register::Hive_c::TryGetTable(const String_c &name)
+Phobos::Register::Table_c *Phobos::Register::Hive_c::TryGetTable(const String_t &name)
 {
 	return static_cast<Phobos::Register::Table_c *>(this->TryGetChild(name));
 }

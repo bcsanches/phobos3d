@@ -20,7 +20,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	MoverComponent_c::MoverComponent_c(const String_c &name, Entity_c &owner):
+	MoverComponent_c::MoverComponent_c(const String_t &name, Entity_c &owner):
 		EntityComponent_c(name, owner)
 	{
 		MoverManager_c::GetInstance().Register(*this);

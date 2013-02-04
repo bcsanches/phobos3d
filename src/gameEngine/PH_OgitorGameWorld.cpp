@@ -77,8 +77,8 @@ namespace Phobos
 
 			try
 			{
-				const String_c &name = dict->GetString("name");
-				const String_c &type = dict->GetString("typename");
+				const String_t &name = dict->GetString("name");
+				const String_t &type = dict->GetString("typename");
 
 				if(this->LoadGlobalObject(type, *dict))
 					continue;
@@ -161,7 +161,7 @@ namespace Phobos
 		}		
 	}
 
-	bool OgitorGameWorld_c::LoadGlobalObject(const String_c &type, const Register::Table_c &dict)
+	bool OgitorGameWorld_c::LoadGlobalObject(const String_t &type, const Register::Table_c &dict)
 	{
 		if((type.compare("Caelum Object") == 0) ||
 		   (type.compare("Viewport Object") == 0))
@@ -221,12 +221,12 @@ namespace Phobos
 	{
 		auto &levelInfo = Register::GetHive("LevelInfo");
 
-		String_c name = levelInfo.GetTable("LevelFile").GetString("path") + "/" + worldEntityDef.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
+		String_t name = levelInfo.GetTable("LevelFile").GetString("path") + "/" + worldEntityDef.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
 		pclTerrainGroup->defineTerrain(0, 0, name);
 		pclTerrainGroup->loadTerrain(0, 0, true);
 	}
 
-	bool OgitorGameWorld_c::LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Register::Table_c &dict)
+	bool OgitorGameWorld_c::LoadStaticObject(StaticObject_s &object, const String_t &name, const String_t &type, const Register::Table_c &dict)
 	{
 		TempStaticObject_s temp;
 

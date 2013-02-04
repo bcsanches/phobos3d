@@ -34,7 +34,7 @@ namespace Phobos
 	{
 		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_CHARACTER_BODY_COMPONENT_NAME, CharacterBodyComponent_c);
 		
-		CharacterBodyComponent_c::CharacterBodyComponent_c(const String_c &name, Entity_c &owner):
+		CharacterBodyComponent_c::CharacterBodyComponent_c(const String_t &name, Entity_c &owner):
 			EntityComponent_c(name, owner),			
 			pprpTransform(NULL),
 			prpVelocity("velocity"),

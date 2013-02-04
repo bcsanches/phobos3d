@@ -112,26 +112,26 @@ namespace Phobos
 			public:
 				CollisionMesh_c(const Ogre::Mesh &mesh);
 
-				inline const String_c &GetName() const;
+				inline const String_t &GetName() const;
 
 				inline btBvhTriangleMeshShape &GetTriangleMeshShape() const;
 
 				struct Comparator_s
 				{
-					bool operator()(const String_c &name, const CollisionMesh_c &collisionMesh) const;
-					bool operator()(const CollisionMesh_c &collisionMesh, const String_c &name) const;
+					bool operator()(const String_t &name, const CollisionMesh_c &collisionMesh) const;
+					bool operator()(const CollisionMesh_c &collisionMesh, const String_t &name) const;
 				};
 
 				inline bool operator<(const CollisionMesh_c &) const;
 
 			private:				
-				String_c			strName;
+				String_t			strName;
 
 				std::unique_ptr<CollisionMeshData_c> upMeshData;
 				std::unique_ptr<btBvhTriangleMeshShape> upMeshShape;
 		};
 
-		inline const String_c &CollisionMesh_c::GetName() const
+		inline const String_t &CollisionMesh_c::GetName() const
 		{
 			return strName;
 		}
@@ -146,12 +146,12 @@ namespace Phobos
 			return strName < rhs.strName;
 		}
 
-		inline bool CollisionMesh_c::Comparator_s::operator()(const String_c &name, const CollisionMesh_c &collisionMesh) const
+		inline bool CollisionMesh_c::Comparator_s::operator()(const String_t &name, const CollisionMesh_c &collisionMesh) const
 		{
 			return name < collisionMesh.GetName();
 		}
 
-		inline bool CollisionMesh_c::Comparator_s::operator()(const CollisionMesh_c &collisionMesh, const String_c &name) const
+		inline bool CollisionMesh_c::Comparator_s::operator()(const CollisionMesh_c &collisionMesh, const String_t &name) const
 		{
 			return collisionMesh.GetName() < name;
 		}

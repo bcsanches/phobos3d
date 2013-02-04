@@ -148,7 +148,7 @@ namespace Phobos
 		this->CreateStaticObjectNode(obj, this->CreateTileTransform(table), scale);		
 	}
 
-	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const
+	void TileGameWorld_c::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_t &meshName, const String_t *optionalMaterial) const
 	{
 		obj.pclEntity = Render_c::GetInstance().CreateEntity(meshName);
 		obj.pclEntity->setCastShadows(true);		
@@ -159,7 +159,7 @@ namespace Phobos
 		obj.pclSceneNode->attachObject(obj.pclEntity);
 	}
 
-	void TileGameWorld_c::SpawnMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::SpawnMesh(int row, int col, const String_t &meshName, Float_t tileScale, const Transform_c &transform, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		TempStaticObject_s obj;
 
@@ -177,7 +177,7 @@ namespace Phobos
 		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), Ogre::Vector3(tileScale, tileScale, tileScale), collisionTag);
 	}
 	
-	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::SpawnMesh(const TileTransform_c tileTransform, const String_t &meshName, const Ogre::Vector3 &scale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		TempStaticObject_s obj;							
 
@@ -187,22 +187,22 @@ namespace Phobos
 		this->CreateStaticObjectRigidBody(this->CommitTempObject(obj), scale, collisionTag);
 	}
 
-	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::CreateCeilingMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{		
 		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
 	}
 
-	void TileGameWorld_c::CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::CreateFloorMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(), optionalMaterial, collisionTag);						
 	}
 
-	void TileGameWorld_c::CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::CreateNorthWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(row, col, meshName, tileScale, Transform_c(Ogre::Vector3(0, fpTileSize/2, -fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
 	}
 	
-	void TileGameWorld_c::CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::CreateSouthWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(
 			row, 
@@ -217,7 +217,7 @@ namespace Phobos
 		);
 	}
 	
-	void TileGameWorld_c::CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::CreateWestWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(
 			row, 
@@ -233,7 +233,7 @@ namespace Phobos
 		);
 	}
 
-	void TileGameWorld_c::CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
+	void TileGameWorld_c::CreateEastWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag_c &collisionTag)
 	{
 		this->SpawnMesh(
 			row, 
@@ -253,14 +253,14 @@ namespace Phobos
 	{				
 		auto &tileSetDef = Register::GetHive("TileSet").GetTable(worldEntityTable.GetString("tileSet"));
 
-		const String_c &wallMeshName = tileSetDef.GetString("wall");
-		const String_c *wallMaterial = tileSetDef.TryGetString("wallMaterial");
+		const String_t &wallMeshName = tileSetDef.GetString("wall");
+		const String_t *wallMaterial = tileSetDef.TryGetString("wallMaterial");
 
-		const String_c &floorMeshName = tileSetDef.GetString("floor");
-		const String_c *floorMaterial = tileSetDef.TryGetString("floorMaterial");
+		const String_t &floorMeshName = tileSetDef.GetString("floor");
+		const String_t *floorMaterial = tileSetDef.TryGetString("floorMaterial");
 
-		const String_c &ceilingMeshName = tileSetDef.GetString("ceiling");		
-		const String_c *ceilingMaterial = tileSetDef.TryGetString("ceilingMaterial");
+		const String_t &ceilingMeshName = tileSetDef.GetString("ceiling");		
+		const String_t *ceilingMaterial = tileSetDef.TryGetString("ceilingMaterial");
 
 		const Float_t tileScale = tileSetDef.GetFloat("tileScale");
 
@@ -317,7 +317,7 @@ namespace Phobos
 			}
 		}
 
-		const String_c *columnMeshName = tileSetDef.TryGetString("columnMesh");
+		const String_t *columnMeshName = tileSetDef.TryGetString("columnMesh");
 		if(columnMeshName)
 		{
 			Ogre::Vector3 scale = Register::TryGetVector3(tileSetDef, "columMeshScale", Ogre::Vector3(1, 1, 1));
@@ -407,11 +407,11 @@ namespace Phobos
 
 			try
 			{				
-				const String_c &type = dict->GetString("type");
+				const String_t &type = dict->GetString("type");
 
 				if(type.compare("Light") == 0)
 				{
-					const String_c &lightType = dict->GetString("lightType");
+					const String_t &lightType = dict->GetString("lightType");
 					if(lightType.compare("Point") == 0)
 					{
 						TempStaticObject_s obj;
@@ -612,7 +612,7 @@ namespace Phobos
 		const int row = entity.GetInt(PH_ENTITY_KEY_TILE_ROW);		
 		const int col = entity.GetInt(PH_ENTITY_KEY_TILE_COL);
 
-		const String_c &direction = entity.GetString("faces");
+		const String_t &direction = entity.GetString("faces");
 
 		TileTransform_c::Direction_e dir;
 		if(!clDirectionType_gl.TryGetValue(dir, direction))
@@ -625,7 +625,7 @@ namespace Phobos
 
 		TileTransform_c::Height_e height = TileTransform_c::HGT_FLOOR;
 				
-		const String_c *heightStr = entity.TryGetString("tileHeight");
+		const String_t *heightStr = entity.TryGetString("tileHeight");
 		if(heightStr != NULL)
 		{			
 			if(!clHeightType_gl.TryGetValue(height, *heightStr))
@@ -639,7 +639,7 @@ namespace Phobos
 
 		TileTransform_c::Position_e position = TileTransform_c::POS_CENTER;
 				
-		const String_c *positionStr = entity.TryGetString("tilePosition");
+		const String_t *positionStr = entity.TryGetString("tilePosition");
 		if(positionStr != NULL)
 		{			
 			if(!clPositionType_gl.TryGetValue(position, *positionStr))

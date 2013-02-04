@@ -32,7 +32,7 @@ namespace Phobos
 		public:
 			static MapLoader_c *Create(const Register::Table_c &settings);
 
-			void Load(const String_c &fileName);	
+			void Load(const String_t &fileName);	
 
 			OgitorMapLoader_c(const Register::Table_c &settings);
 

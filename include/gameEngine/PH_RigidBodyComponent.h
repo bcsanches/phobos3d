@@ -33,7 +33,7 @@ namespace Phobos
 		class PH_GAME_ENGINE_API RigidBodyComponent_c: public EntityComponent_c
 		{
 			public:
-				static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
+				static EntityComponent_c *Create(const String_t &name, Entity_c &owner);
 
 				~RigidBodyComponent_c();
 
@@ -41,7 +41,7 @@ namespace Phobos
 				void UpdateTransform(Float_t delta);
 
 			protected:
-				RigidBodyComponent_c(const String_c &name, Entity_c &owner);				
+				RigidBodyComponent_c(const String_t &name, Entity_c &owner);				
 
 				void OnLoad(const Register::Table_c &table);
 				void OnLoadFinished();

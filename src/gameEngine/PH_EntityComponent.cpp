@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	EntityComponent_c::EntityComponent_c(const String_c &name, Entity_c &owner):
+	EntityComponent_c::EntityComponent_c(const String_t &name, Entity_c &owner):
 		EntityIO_c(name),
 		rclEntity(owner)
 	{

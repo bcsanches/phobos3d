@@ -32,13 +32,13 @@ namespace Phobos
 	class BootModule_c: public CoreModule_c
 	{
 		public:			
-			BootModule_c(const String_c &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager);
+			BootModule_c(const String_t &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager);
 
 			void OnUpdate();			
 			void OnFixedUpdate();
 
 		private:
-			String_c strCfgName;
+			String_t strCfgName;
 			std::vector<std::string> vecArgs;
 
 			int		iFixedUpdateCount;

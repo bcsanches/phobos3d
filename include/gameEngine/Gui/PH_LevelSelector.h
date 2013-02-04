@@ -65,7 +65,7 @@ namespace Phobos
 				void CmdAddLevelPath(const Phobos::StringVector_t &args, Phobos::Context_c &);
 
 			private:
-				std::list<Phobos::String_c> lstLevelPaths;
+				std::list<Phobos::String_t> lstLevelPaths;
 
 				Gui::ContextPtr_t	spGuiContext;
 

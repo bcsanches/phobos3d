@@ -45,12 +45,12 @@ namespace
 	};	
 }
 
-Phobos::Register::TablePtr_t Phobos::Register::Table_c::Create(const String_c &name)
+Phobos::Register::TablePtr_t Phobos::Register::Table_c::Create(const String_t &name)
 {
 	return TablePtr_t(PH_NEW Table_c(name));
 }
 
-Phobos::Register::Table_c::Table_c(const String_c &name):
+Phobos::Register::Table_c::Table_c(const String_t &name):
 	Node_c(name),
 	pclInherit(NULL)
 {
@@ -62,7 +62,7 @@ Phobos::Register::Table_c::~Table_c()
 	//empty
 }
 
-void Phobos::Register::Table_c::CheckInvalidKey(const String_c &key, const char *keys[], const char *message) const
+void Phobos::Register::Table_c::CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const
 {
 	for(int i = 0;keys[i]; ++i)
 	{
@@ -75,22 +75,22 @@ void Phobos::Register::Table_c::CheckInvalidKey(const String_c &key, const char 
 	}
 }
 
-void Phobos::Register::Table_c::CheckForKeyword(const String_c &key) const
+void Phobos::Register::Table_c::CheckForKeyword(const String_t &key) const
 {
 	this->CheckInvalidKey(key, parszKeywords_g, "cannot be a key because it is a reserved keyword");		
 }
 
-void Phobos::Register::Table_c::SetInherited(const String_c &base)
+void Phobos::Register::Table_c::SetInherited(const String_t &base)
 {
 	this->SetString(INHERIT_KEY, base);
 }
 
-void Phobos::Register::Table_c::SetBaseHive(const String_c &baseHive)
+void Phobos::Register::Table_c::SetBaseHive(const String_t &baseHive)
 {
 	this->SetString(BASE_HIVE_KEY, baseHive);
 }
 
-void Phobos::Register::Table_c::SetString(const String_c &key, const String_c &value)
+void Phobos::Register::Table_c::SetString(const String_t &key, const String_t &value)
 {	
 	CheckForKeyword(key);
 
@@ -108,7 +108,7 @@ void Phobos::Register::Table_c::SetString(const String_c &key, const String_c &v
 	}
 }
 
-void Phobos::Register::Table_c::SetCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns)
+void Phobos::Register::Table_c::SetCharMatrix(const String_t &key, const String_t &data, UInt16_t numRows, UInt16_t numColumns)
 {	
 	CheckForKeyword(key);
 	this->CheckInvalidKey(key, parszStringOnlyKeys_g, "should be string data, not matrix");
@@ -128,9 +128,9 @@ void Phobos::Register::Table_c::SetCharMatrix(const String_c &key, const String_
 	mapValues[key] = Value_s(data, numRows, numColumns);
 }
 
-void Phobos::Register::Table_c::ParseSpecialValue(const String_c &idName, Parser_c &parser)
+void Phobos::Register::Table_c::ParseSpecialValue(const String_t &idName, Parser_c &parser)
 {
-	String_c type;
+	String_t type;
 
 	ParserTokens_e token;
 	if((token = parser.GetToken(&type)) != TOKEN_ID)
@@ -145,8 +145,8 @@ void Phobos::Register::Table_c::ParseSpecialValue(const String_c &idName, Parser
 			RaiseParseException(parser, TOKEN_OPEN_PAREN, token, type, "Phobos::Register::Table_c::ParseSpecialValue");
 		}
 
-		String_c matrix;
-		String_c row;
+		String_t matrix;
+		String_t row;
 
 		UInt16_t numColumns = 0;
 		UInt16_t numRows = 0;
@@ -199,8 +199,8 @@ void Phobos::Register::Table_c::ParseSpecialValue(const String_c &idName, Parser
 
 void Phobos::Register::Table_c::Load(Parser_c &parser)
 {
-	String_c idName;
-	String_c value;
+	String_t idName;
+	String_t value;
 
 	ParserTokens_e token = parser.GetToken(&value);
 
@@ -265,14 +265,14 @@ void Phobos::Register::Table_c::Load(Parser_c &parser)
 	}
 }
 
-const Phobos::String_c &Phobos::Register::Table_c::GetString(const String_c &key) const
+const Phobos::String_t &Phobos::Register::Table_c::GetString(const String_t &key) const
 {
 	return Phobos::Register::Table_c::GetValue(this, key).strValue;		
 }
 
-bool Phobos::Register::Table_c::TryGetString(const String_c &key, String_c &value) const
+bool Phobos::Register::Table_c::TryGetString(const String_t &key, String_t &value) const
 {
-	const String_c *foundValue = TryGetString(this, key);
+	const String_t *foundValue = TryGetString(this, key);
 	if(!foundValue)
 		return false;
 
@@ -280,21 +280,21 @@ bool Phobos::Register::Table_c::TryGetString(const String_c &key, String_c &valu
 	return true;
 }
 
-const Phobos::String_c *Phobos::Register::Table_c::TryGetString(const String_c &key) const
+const Phobos::String_t *Phobos::Register::Table_c::TryGetString(const String_t &key) const
 {
 	return TryGetString(this, key);
 }
 
-bool Phobos::Register::Table_c::GetBool(const String_c &key) const
+bool Phobos::Register::Table_c::GetBool(const String_t &key) const
 {
-	const String_c &value = this->GetString(key);
+	const String_t &value = this->GetString(key);
 
 	return value.compare("true") == 0 ? true : false;
 }
 	
-bool Phobos::Register::Table_c::TryGetBool(bool &outValue, const String_c &key) const
+bool Phobos::Register::Table_c::TryGetBool(bool &outValue, const String_t &key) const
 {
-	const String_c *value = this->TryGetString(key);
+	const String_t *value = this->TryGetString(key);
 	if(!value)
 		return false;
 
@@ -303,16 +303,16 @@ bool Phobos::Register::Table_c::TryGetBool(bool &outValue, const String_c &key) 
 	return true;
 }
 
-void Phobos::Register::Table_c::Get4Float(float values[4], const String_c &key) const
+void Phobos::Register::Table_c::Get4Float(float values[4], const String_t &key) const
 {
-	const String_c &value = this->GetString(key);
+	const String_t &value = this->GetString(key);
 
 	sscanf(value.c_str(), "%f %f %f %f", &values[0], &values[1], &values[2], &values[3]);
 }
 
-bool Phobos::Register::Table_c::TryGet4Float(float values[4], const String_c &key) const
+bool Phobos::Register::Table_c::TryGet4Float(float values[4], const String_t &key) const
 {
-	const String_c *value = this->TryGetString(key);
+	const String_t *value = this->TryGetString(key);
 	if(!value)
 		return false;
 
@@ -321,9 +321,9 @@ bool Phobos::Register::Table_c::TryGet4Float(float values[4], const String_c &ke
 	return true;
 }
 
-void Phobos::Register::Table_c::Get3Float(float values[3], const String_c &key) const
+void Phobos::Register::Table_c::Get3Float(float values[3], const String_t &key) const
 {
-	const String_c &value = this->GetString(key);
+	const String_t &value = this->GetString(key);
 
 	sscanf(value.c_str(), "%f %f %f", &values[0], &values[1], &values[2]);
 }
@@ -344,19 +344,19 @@ const Phobos::Register::Table_c *Phobos::Register::Table_c::GetInherited() const
 	return pclInherit;
 }
 
-int Phobos::Register::Table_c::GetInt(const String_c &key) const
+int Phobos::Register::Table_c::GetInt(const String_t &key) const
 {
 	return StringToInt(this->GetString(key));
 }
 
-float Phobos::Register::Table_c::GetFloat(const String_c &key) const
+float Phobos::Register::Table_c::GetFloat(const String_t &key) const
 {
 	return StringToFloat(this->GetString(key));
 }
 
-bool Phobos::Register::Table_c::TryGetFloat(float &outValue, const String_c &key) const
+bool Phobos::Register::Table_c::TryGetFloat(float &outValue, const String_t &key) const
 {
-	const String_c *strValue = this->TryGetString(key);
+	const String_t *strValue = this->TryGetString(key);
 	if(!strValue)
 		return false;
 
@@ -365,7 +365,7 @@ bool Phobos::Register::Table_c::TryGetFloat(float &outValue, const String_c &key
 	return true;
 }
 
-const Phobos::Register::Table_c::MatrixDataHandle_c Phobos::Register::Table_c::GetMatrix(const String_c &key) const
+const Phobos::Register::Table_c::MatrixDataHandle_c Phobos::Register::Table_c::GetMatrix(const String_t &key) const
 {
 	const Value_s &value = GetValue(this, key);
 
@@ -379,7 +379,7 @@ const Phobos::Register::Table_c::MatrixDataHandle_c Phobos::Register::Table_c::G
 	return MatrixDataHandle_c(value);
 }
 
-const Phobos::Register::Table_c::Value_s *Phobos::Register::Table_c::TryGetValue(const Table_c *current, const String_c &key)
+const Phobos::Register::Table_c::Value_s *Phobos::Register::Table_c::TryGetValue(const Table_c *current, const String_t &key)
 {
 	do
 	{
@@ -395,7 +395,7 @@ const Phobos::Register::Table_c::Value_s *Phobos::Register::Table_c::TryGetValue
 	return NULL;
 }
 
-const Phobos::Register::Table_c::Value_s &Phobos::Register::Table_c::GetValue(const Table_c *current, const String_c &key)
+const Phobos::Register::Table_c::Value_s &Phobos::Register::Table_c::GetValue(const Table_c *current, const String_t &key)
 {
 	const Value_s *foundValue = TryGetValue(current, key);
 	if(!foundValue)
@@ -408,7 +408,7 @@ const Phobos::Register::Table_c::Value_s &Phobos::Register::Table_c::GetValue(co
 	return *foundValue;
 }
 
-const Phobos::String_c *Phobos::Register::Table_c::TryGetString(const Table_c *current, const String_c &key)
+const Phobos::String_t *Phobos::Register::Table_c::TryGetString(const Table_c *current, const String_t &key)
 {
 	const Value_s *value = TryGetValue(current, key);
 

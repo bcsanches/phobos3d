@@ -16,45 +16,45 @@ subject to the following restrictions:
 
 #include "Phobos/System/Button.h"
 
-#include <PH_Context.h>
-#include <PH_ContextUtils.h>
-#include <PH_Error.h>
+#include <Phobos/Shell/Context.h>
+#include <Phobos/Shell/Utils.h>
+#include <Phobos/Error.h>
 
 
-Phobos::System::Button_c::Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context):
+Phobos::System::Button::Button(const String_t &up, const String_t &down, const String_t &update, Shell::IContext *context):
 	fpValue(0),
-	cmdUp(up),
-	cmdDown(down),
-	cmdUpdate(update)
+	m_cmdUp(up),
+	m_cmdDown(down),
+	m_cmdUpdate(update)
 {
-	cmdUp.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
-	cmdDown.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
-	cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Button_c::CmdProc, this));
+	m_cmdUp.SetProc(PH_CONTEXT_CMD_BIND(&Button::CmdProc, this));
+	m_cmdDown.SetProc(PH_CONTEXT_CMD_BIND(&Button::CmdProc, this));
+	m_cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Button::CmdProc, this));
 
 	if(context)
 		this->Enable(*context);
 }
 
-void Phobos::System::Button_c::Enable(IContext_c &context)
+void Phobos::System::Button::Enable(Shell::IContext  &context)
 {
-	context.AddContextCmd(cmdUp);
-	context.AddContextCmd(cmdDown);
-	context.AddContextCmd(cmdUpdate);
+	context.AddContextCommand(m_cmdUp);
+	context.AddContextCommand(m_cmdDown);
+	context.AddContextCommand(m_cmdUpdate);
 }
 
-void Phobos::System::Button_c::Disable()
+void Phobos::System::Button::Disable()
 {
-	cmdUp.Unlink();
-	cmdDown.Unlink();
-	cmdUpdate.Unlink();
+	m_cmdUp.Unlink();
+	m_cmdDown.Unlink();
+	m_cmdUpdate.Unlink();
 
 	fpValue = 0;
 }
 
-void Phobos::System::Button_c::CmdProc(const StringVector_t &args, Context_c & )
+void Phobos::System::Button::CmdProc(const Shell::StringVector_t &args, Shell::Context & )
 {
 	PH_ASSERT(args.size() >= 4);
 
-	fpValue = StringToFloat(args[3]);
-}	
+	fpValue = std::stof(args[3]);
+}
 

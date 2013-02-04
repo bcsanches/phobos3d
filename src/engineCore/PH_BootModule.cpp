@@ -25,7 +25,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	BootModule_c::BootModule_c(const String_c &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager):
+	BootModule_c::BootModule_c(const String_t &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager):
 		CoreModule_c("BootModule"),
 		strCfgName(cfgName),
 		iFixedUpdateCount(0),

@@ -56,7 +56,7 @@ namespace Phobos
 
 	void Log::RemoveListener(Listener &listener)
 	{
-		listener.hkListener.unlink();
+		listener.m_hkListener.unlink();
 	}
 
 	size_t Log::GetListenersCount() const

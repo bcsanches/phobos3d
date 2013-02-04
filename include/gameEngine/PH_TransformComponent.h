@@ -26,12 +26,12 @@ namespace Phobos
 	class TransformComponent_c: public EntityComponent_c
 	{
 		public:
-			static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
+			static EntityComponent_c *Create(const String_t &name, Entity_c &owner);
 
 			~TransformComponent_c();
 
 		protected:
-			TransformComponent_c(const String_c &name, Entity_c &owner);			
+			TransformComponent_c(const String_t &name, Entity_c &owner);			
 
 			virtual void OnLoad(const Register::Table_c &table);
 

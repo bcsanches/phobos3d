@@ -16,37 +16,37 @@ subject to the following restrictions:
 
 #include "Phobos/System/Thumb.h"
 
-#include <PH_Context.h>
-#include <PH_ContextUtils.h>
+#include <Phobos/Shell/IContext.h>
+#include <Phobos/Shell/Utils.h>
 
 
-Phobos::System::Thumb_c::Thumb_c(const String_c &cmd, IContext_c *context):
-	cmdUpdate(cmd)
+Phobos::System::Thumb::Thumb(const String_t &cmd, Shell::IContext *context):
+	m_cmdUpdate(cmd)
 {
-	cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Thumb_c::CmdProc, this));
+	m_cmdUpdate.SetProc(PH_CONTEXT_CMD_BIND(&Thumb::CmdProc, this));
 
-	fpPoint[0] = fpPoint[1] = 0;
+	m_fpPoint[0] = m_fpPoint[1] = 0;
 
 	if(context)
 		this->Enable(*context);		
 }
 
-void Phobos::System::Thumb_c::Enable(IContext_c &context)
+void Phobos::System::Thumb::Enable(Shell::IContext &context)
 {	
-	context.AddContextCmd(cmdUpdate);	
+	context.AddContextCommand(m_cmdUpdate);	
 }
 
-void Phobos::System::Thumb_c::Disable()
+void Phobos::System::Thumb::Disable()
 {
-	cmdUpdate.Unlink();
-	fpPoint[0] = fpPoint[1] = 0;
+	m_cmdUpdate.Unlink();
+	m_fpPoint[0] = m_fpPoint[1] = 0;
 }
 
 
-void Phobos::System::Thumb_c::CmdProc(const StringVector_t &args, Context_c &)
+void Phobos::System::Thumb::CmdProc(const Shell::StringVector_t &args, Shell::Context &)
 {
 	PH_ASSERT(args.size() >= 5);
 		
-	fpPoint[0] = StringToFloat(args[3]);
-	fpPoint[1] = StringToFloat(args[4]);
+	m_fpPoint[0] = std::stof(args[3]);
+	m_fpPoint[1] = std::stof(args[4]);
 }

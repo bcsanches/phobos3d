@@ -33,12 +33,12 @@ namespace Phobos
 		public:
 			static void OnBoot();
 
-			static UInt32_t DecodeCollisionMask(const String_c &config);
+			static UInt32_t DecodeCollisionMask(const String_t &config);
 			static Physics::CollisionTag_c LoadCollisionTag(const Register::Table_c &table);
 
 			static Physics::CollisionTag_c CreateStaticWorldCollisionTag();
 
-			static const Register::Table_c *TryGetStaticMeshCollisionShapeDef(const String_c &name);
+			static const Register::Table_c *TryGetStaticMeshCollisionShapeDef(const String_t &name);
 	};
 }
 

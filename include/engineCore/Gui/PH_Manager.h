@@ -54,7 +54,7 @@ namespace Phobos
 				static Manager_c &GetInstance(void);			
 				static void ReleaseInstance(void);
 
-				Gui::ContextPtr_t CreateContext(const String_c &name);
+				Gui::ContextPtr_t CreateContext(const String_t &name);
 
 				~Manager_c();
 
@@ -102,7 +102,7 @@ namespace Phobos
 				LocalInputDeviceListener_c clKeyboardListener;
 				LocalInputDeviceListener_c clMouseListener;
 
-				std::list<String_c> lstFontFacesToLoad;
+				std::list<String_t> lstFontFacesToLoad;
 
 				bool				fInputActive;
 				bool				fDisableInput;

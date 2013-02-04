@@ -140,7 +140,7 @@ namespace Phobos
 		return boost::make_shared<OgitorGameWorld_c>();
 	}
 
-	void OgitorMapLoader_c::Load(const String_c &fileName)
+	void OgitorMapLoader_c::Load(const String_t &fileName)
 	{		
 		rapidxml::xml_document<> doc;
 

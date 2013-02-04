@@ -43,8 +43,8 @@ namespace Phobos
 		private:
 			friend struct TempStaticObject_s;			
 			
-			bool LoadGlobalObject(const String_c &type, const Register::Table_c &dict);
-			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Register::Table_c &dict);
+			bool LoadGlobalObject(const String_t &type, const Register::Table_c &dict);
+			bool LoadStaticObject(StaticObject_s &object, const String_t &name, const String_t &type, const Register::Table_c &dict);
 
 			void LoadEntityObject(TempStaticObject_s &temp, const Register::Table_c &dict);
 			void LoadNodeObject(TempStaticObject_s &temp, const Register::Table_c &dict);
@@ -56,7 +56,7 @@ namespace Phobos
 			void Proc() {};
 
 		private:
-			typedef std::map<String_c, StaticObject_s> StaticObjectsMap_t;
+			typedef std::map<String_t, StaticObject_s> StaticObjectsMap_t;
 			StaticObjectsMap_t mapStaticObjects;
 
 			Ogre::TerrainGroup			*pclTerrainGroup;

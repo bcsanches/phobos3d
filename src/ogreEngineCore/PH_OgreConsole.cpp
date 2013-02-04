@@ -169,7 +169,7 @@ namespace Phobos
 					if(i == CONSOLE_LINE_COUNT)
 						break;
 
-					const String_c &str = (*it);
+					const String_t &str = (*it);
 
 					if(str.length() > CONSOLE_LINE_LENGHT)
 					{

@@ -27,7 +27,7 @@ namespace Phobos
 			virtual void FixedUpdate() = 0;
 
 		protected:
-			MoverComponent_c(const String_c &name, Entity_c &owner);
+			MoverComponent_c(const String_t &name, Entity_c &owner);
 			~MoverComponent_c();
 	};
 }

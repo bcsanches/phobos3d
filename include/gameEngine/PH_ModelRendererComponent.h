@@ -30,7 +30,7 @@ namespace Phobos
 	class PH_GAME_ENGINE_API ModelRendererComponent_c: public EntityComponent_c
 	{
 		public:
-			static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
+			static EntityComponent_c *Create(const String_t &name, Entity_c &owner);
 
 			~ModelRendererComponent_c();
 
@@ -44,17 +44,17 @@ namespace Phobos
 			);
 
 			void AttachObjectToBone(
-				const String_c &boneName, 
+				const String_t &boneName, 
 				Ogre::MovableObject &movable, 
 				const Ogre::Quaternion &offsetOrientation = Ogre::Quaternion::IDENTITY, 
 				const Ogre::Vector3 &offsetPosition = Ogre::Vector3::ZERO
 			);
 
 			Ogre::Bone &GetBone(const char *boneName);
-			Ogre::Bone &GetBone(const String_c &boneName);
+			Ogre::Bone &GetBone(const String_t &boneName);
 
 		protected:
-			ModelRendererComponent_c(const String_c &name, Entity_c &owner);			
+			ModelRendererComponent_c(const String_t &name, Entity_c &owner);			
 
 			virtual void OnLoad(const Register::Table_c &table);
 			virtual void OnLoadFinished();
@@ -69,7 +69,7 @@ namespace Phobos
 			Ogre::SceneNode *pclSceneNode;
 			Ogre::Entity *pclMeshEntity;
 
-			String_c	strParentNode;
+			String_t	strParentNode;
 
 			TransformProperty_c *pprpTransform;
 	};

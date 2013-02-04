@@ -47,7 +47,7 @@ namespace Phobos
 		ipInstance_gl.reset();
 	}
 			
-	Console_c::Console_c(const String_c &name, UInt32_t flags):
+	Console_c::Console_c(const String_t &name, UInt32_t flags):
 		CoreModule_c(name, flags),
 		cmdLs("ls"),
 		cmdCd("cd"),
@@ -78,17 +78,17 @@ namespace Phobos
 		ipInstance_gl = console;
 	}
 
-	const String_c &Console_c::EditBoxStr() const
+	const String_t &Console_c::EditBoxStr() const
 	{
 		return clEditBox.GetStr();
 	}
 
-	void Console_c::Execute(const String_c &cmdLine)
+	void Console_c::Execute(const String_t &cmdLine)
 	{
 		this->QueueCommand(cmdLine);
 	}
 
-	void Console_c::ExecuteFromFile(const String_c &fileName)
+	void Console_c::ExecuteFromFile(const String_t &fileName)
 	{
 		clContext.ExecuteFromFile(fileName);
 	}
@@ -119,7 +119,7 @@ namespace Phobos
 
 	void Console_c::OnEnter(void)
 	{
-		const String_c &cmdLine = clEditBox.GetStr();
+		const String_t &cmdLine = clEditBox.GetStr();
 
 		Kernel_c::GetInstance().LogStream() << "> " << cmdLine;
 		
@@ -130,21 +130,21 @@ namespace Phobos
 		clEditBox.Clear();
 	}
 
-	void Console_c::QueueCommand(const String_c &cmd)
+	void Console_c::QueueCommand(const String_t &cmd)
 	{
 		clCommandBuffer << cmd << std::endl;
 	}
 
 	void Console_c::FlushCommandBuffer()
 	{
-		String_c buffer = clCommandBuffer.str();
-		clCommandBuffer.str(String_c());
+		String_t buffer = clCommandBuffer.str();
+		clCommandBuffer.str(String_t());
 		clCommandBuffer.clear();
 
 		clContext.Execute(buffer);				
 	}
 
-	void Console_c::AddToHistory(const String_c &str)
+	void Console_c::AddToHistory(const String_t &str)
 	{
 		if(!lstHistory.empty() && lstHistory.front().compare(str) == 0)
 			return;
@@ -153,7 +153,7 @@ namespace Phobos
 		itPrevCmd = lstHistory.begin();
 	}
 
-	bool Console_c::GetPreviousCommand(String_c &str)
+	bool Console_c::GetPreviousCommand(String_t &str)
 	{
 		if(!lstHistory.empty() && (itPrevCmd != lstHistory.end()))
 		{
@@ -166,7 +166,7 @@ namespace Phobos
 		return(false);
 	}
 
-	bool Console_c::GetNextCommand(String_c &str)
+	bool Console_c::GetNextCommand(String_t &str)
 	{
 		if(!lstHistory.empty() && (itPrevCmd != lstHistory.begin()))
 		{
@@ -181,7 +181,7 @@ namespace Phobos
 
 	void Console_c::OnPreviousCommand(void)
 	{
-		String_c tmp;
+		String_t tmp;
 
 		if(this->GetPreviousCommand(tmp))
 		{			
@@ -193,7 +193,7 @@ namespace Phobos
 
 	void Console_c::OnNextCommand(void)
 	{
-		String_c tmp;
+		String_t tmp;
 
 		if(this->GetNextCommand(tmp))
 		{			
@@ -203,9 +203,9 @@ namespace Phobos
 		}
 	}	
 
-	void Console_c::Print(const String_c &str)
+	void Console_c::Print(const String_t &str)
 	{
-		String_c line;
+		String_t line;
 		size_t splitPos = 0;
 
 		while(StringSplitBy(line, str, '\n', splitPos, &splitPos))
@@ -254,7 +254,7 @@ namespace Phobos
 		return false;
 	}
 
-	void Console_c::Message(const String_c &msg)
+	void Console_c::Message(const String_t &msg)
 	{
 		this->Print(msg);
 	}
@@ -450,14 +450,14 @@ namespace Phobos
 		uCursorPos = 0;
 	}
 
-	inline void Console_c::EditBox_c::SetStr(const String_c &str)
+	inline void Console_c::EditBox_c::SetStr(const String_t &str)
 	{
 		strStr = str;
 
 		uCursorPos = strStr.length();
 	}
 
-	inline const String_c &Console_c::EditBox_c::GetStr(void) const
+	inline const String_t &Console_c::EditBox_c::GetStr(void) const
 	{
 		return(strStr);
 	}

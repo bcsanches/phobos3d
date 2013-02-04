@@ -18,61 +18,61 @@ subject to the following restrictions:
 
 #include <sstream>
 
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Folders.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Folders.h>
+#include <Phobos/ObjectManager.h>
+#include <Phobos/Path.h>
 
 #include "Phobos/System/InputDevice.h"
 
 
 namespace
 {
-	static const Phobos::String_c strKeyboardName_gl("kb");
-	static const Phobos::String_c strMouseName_gl("mouse");
-	static const Phobos::String_c strPadName_gl("pad");	
+	static const Phobos::String_t strKeyboardName_gl("kb");
+	static const Phobos::String_t strMouseName_gl("mouse");
+	static const Phobos::String_t strPadName_gl("pad");	
 }
 
 PH_DEFINE_SINGLETON_VAR(Phobos::System::InputManager);
 
-Phobos::System::InputManager_c &Phobos::System::InputManager_c::CreateInstance(const Phobos::String_c &name)
+Phobos::System::InputManager &Phobos::System::InputManager::CreateInstance(const Phobos::String_t &name)
 {
-	PH_ASSERT_MSG(!ipInstance_gl, "[InputManager_c::CreateInstance]: Instance already exists");
+	PH_ASSERT_MSG(!ipInstance_gl, "[InputManager::CreateInstance]: Instance already exists");
 
-	ipInstance_gl = InputManager_c::CreateInstanceImpl(name);
+	ipInstance_gl = InputManager::CreateInstanceImpl(name);
 
-	Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
+	ObjectManager::AddObject(*ipInstance_gl, Path(PH_SYSTEM_FOLDER));
 
 	return *ipInstance_gl;
 }
 
-Phobos::System::InputManager_c &Phobos::System::InputManager_c::GetInstance()
+Phobos::System::InputManager &Phobos::System::InputManager::GetInstance()
 {
-	PH_ASSERT_MSG(ipInstance_gl, "[InputManager_c::GetInstance]: Instance does not exists, use CreateInstance");
+	PH_ASSERT_MSG(ipInstance_gl, "[InputManager::GetInstance]: Instance does not exists, use CreateInstance");
 
 	return *ipInstance_gl;
 }
 
-void Phobos::System::InputManager_c::ReleaseInstance()
+void Phobos::System::InputManager::ReleaseInstance()
 {
-	PH_ASSERT_MSG(ipInstance_gl, "[InputManager_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
+	PH_ASSERT_MSG(ipInstance_gl, "[InputManager::ReleaseInstance]: Instance does not exists, use CreateInstance");
 
 	ipInstance_gl->RemoveSelf();
 	ipInstance_gl.reset();
 }
 
-Phobos::System::InputManager_c::InputManager_c(const String_c &name):
-	Node_c(name, NodeFlags::PRIVATE_CHILDREN)
+Phobos::System::InputManager::InputManager(const String_t &name):
+	Node(name, NodeFlags::PRIVATE_CHILDREN)
 {
 }
 
-Phobos::System::InputManager_c::~InputManager_c(void)
+Phobos::System::InputManager::~InputManager(void)
 {
 	//empty
 }
 
-void Phobos::System::InputManager_c::Update(void)
+void Phobos::System::InputManager::Update(void)
 {
 	this->PollDevices();
 
@@ -84,30 +84,30 @@ void Phobos::System::InputManager_c::Update(void)
 	Call update on all devices attacheds to input manager.
 
 */
-void Phobos::System::InputManager_c::UpdateDevices(void)
+void Phobos::System::InputManager::UpdateDevices(void)
 {
-	for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
-	{
-		static_cast<InputDevice_c *>(it->second)->Update();
-	}
+	for(auto it : *this)
+	{		
+		static_cast<InputDevice *>(it.second)->Update();		
+	}	
 }
 
-Phobos::System::InputDevice_c &Phobos::System::InputManager_c::GetDevice(const InputDeviceTypes_e deviceType, UInt_t id)
+Phobos::System::InputDevice &Phobos::System::InputManager::GetDevice(const InputDeviceTypes_e deviceType, UInt_t id)
 {
-	String_c name;
+	String_t name;
 
-	InputManager_c::BuildDeviceName(name, deviceType, id);
+	InputManager::BuildDeviceName(name, deviceType, id);
 
 	//Because children is private we can control the types that are added
 	//so we can safely do a static cast
-	return static_cast<InputDevice_c &>(this->GetChild(name));
+	return static_cast<InputDevice &>(this->GetChild(name));
 }
 
-Phobos::System::InputDevice_c &Phobos::System::InputManager_c::GetDevice(const InputDeviceTypes_e deviceType)
+Phobos::System::InputDevice &Phobos::System::InputManager::GetDevice(const InputDeviceTypes_e deviceType)
 {
 	//Because children is private we can control the types that are added
 	//so we can safely do a static cast
-	return static_cast<InputDevice_c &>(this->GetChild(this->GetDeviceTypeName(deviceType)));
+	return static_cast<InputDevice &>(this->GetChild(this->GetDeviceTypeName(deviceType)));
 }
 
 /**
@@ -115,16 +115,16 @@ Phobos::System::InputDevice_c &Phobos::System::InputManager_c::GetDevice(const I
 
 
 */
-void Phobos::System::InputManager_c::AttachDevice(InputDevice_c &device, UInt_t id)
+void Phobos::System::InputManager::AttachDevice(InputDevice &device, UInt_t id)
 {
 	//InputDeviceTypes_e	type = device->GetDeviceType();
 	//Kernel_c			&kernel = Kernel_c::GetInstance();
 
-	//String_c			tempName;
+	//String_t			tempName;
 
 
 	//Set the name of the device (concat: name + id)
-	//InputManager_c::BuildDeviceName(tempName, type, id);
+	//InputManager::BuildDeviceName(tempName, type, id);
 	//device->SetName(tempName);
 
 	this->AddPrivateChild(device);
@@ -132,21 +132,21 @@ void Phobos::System::InputManager_c::AttachDevice(InputDevice_c &device, UInt_t 
 	//SEND ATTACH EVENT
 	InputManagerEvent_s event(INPUT_MANAGER_EVENT_DEVICE_ATTACHED, device);
 
-	for(auto &listener: lstListeners)
+	for(auto &listener: m_lstListeners)
 	{
-		listener.InputManagerEvent(event);
+		listener.OnInputManagerEvent(event);
 	}	
 }
 
 
-void Phobos::System::InputManager_c::AddListenerToDevice(const String_c &deviceName, InputDeviceListener_c &listener)
+void Phobos::System::InputManager::AddListenerToDevice(const String_t &deviceName, InputDeviceListener &listener)
 {
-	InputDevice_c &device = static_cast<InputDevice_c &>(this->GetChild(deviceName));
+	auto &device = static_cast<InputDevice &>(this->GetChild(deviceName));
 
 	device.AddListener(listener);
 }
 
-const Phobos::String_c &Phobos::System::InputManager_c::GetDeviceTypeName(InputDeviceTypes_e type)
+const Phobos::String_t &Phobos::System::InputManager::GetDeviceTypeName(InputDeviceTypes_e type)
 {
 	switch(type)
 	{
@@ -160,18 +160,18 @@ const Phobos::String_c &Phobos::System::InputManager_c::GetDeviceTypeName(InputD
 			return(strMouseName_gl);
 
 		default:
-			PH_ASSERT_MSG(false, "Invalid type for InputManager_c::GetDeviceTypeName");
+			PH_ASSERT_MSG(false, "Invalid type for InputManager::GetDeviceTypeName");
 			{
 				std::stringstream stream;
 				stream << "Invalid parameter type: " << type;
-				PH_RAISE(INVALID_OPERATION_EXCEPTION, "InputManager_c::GetDeviceTypeName", stream.str());
+				PH_RAISE(INVALID_OPERATION_EXCEPTION, "InputManager::GetDeviceTypeName", stream.str());
 			}
 	}
 }
 
-void Phobos::System::InputManager_c::BuildDeviceName(String_c &out, InputDeviceTypes_e type, UInt_t id)
+void Phobos::System::InputManager::BuildDeviceName(String_t &out, InputDeviceTypes_e type, UInt_t id)
 {
-	const String_c &deviceBaseName = GetDeviceTypeName(type);
+	const String_t &deviceBaseName = GetDeviceTypeName(type);
 
 	std::stringstream stream;
 
@@ -181,5 +181,5 @@ void Phobos::System::InputManager_c::BuildDeviceName(String_c &out, InputDeviceT
 	out = stream.str();
 }
 
-PH_DEFINE_LISTENER_PROCS(Phobos::System::InputManager_c, Phobos::System::InputManagerListener_c, lstListeners);
+PH_DEFINE_LISTENER_PROCS(Phobos::System::InputManager, Phobos::System::InputManagerListener, m_lstListeners);
 

@@ -80,32 +80,32 @@ namespace Phobos
 			void AddRenderQueueListener(Ogre::RenderQueueListener &listener);
 			void RemoveRenderQueueListener(Ogre::RenderQueueListener &listener);
 			
-			//Ogre::SceneNode *GetOrCreateSceneNode(const String_c &name);
-			Ogre::SceneNode *CreateSceneNode(const String_c &name);
+			//Ogre::SceneNode *GetOrCreateSceneNode(const String_t &name);
+			Ogre::SceneNode *CreateSceneNode(const String_t &name);
 			Ogre::SceneNode *CreateSceneNode();
 			void DestroySceneNode(Ogre::SceneNode *node);
-			Ogre::SceneNode *GetSceneNode(const String_c &name);
+			Ogre::SceneNode *GetSceneNode(const String_t &name);
 
-			Ogre::Entity	*CreateEntity(const String_c &meshName, UInt32_t flags = 0);
-			Ogre::Entity	*CreateEntity(const String_c &entityName, const String_c &meshName, UInt32_t flags = 0);
+			Ogre::Entity	*CreateEntity(const String_t &meshName, UInt32_t flags = 0);
+			Ogre::Entity	*CreateEntity(const String_t &entityName, const String_t &meshName, UInt32_t flags = 0);
 			void DestroyEntity(Ogre::Entity *entity);
 
 			Ogre::Light		*CreateLight();
-			Ogre::Light		*CreateLight(const String_c &name);
+			Ogre::Light		*CreateLight(const String_t &name);
 			void DestroyLight(Ogre::Light *light);
 
 			Ogre::Camera	*CreateCamera();
-			Ogre::Camera	*CreateCamera(const String_c &name);
+			Ogre::Camera	*CreateCamera(const String_t &name);
 			void DestroyCamera(Ogre::Camera *camera);
 
-			Ogre::ParticleSystem *CreateParticleSystem(const String_c &templateName);
-			Ogre::ParticleSystem *CreateParticleSystem(const String_c &name, const String_c &templateName);
+			Ogre::ParticleSystem *CreateParticleSystem(const String_t &templateName);
+			Ogre::ParticleSystem *CreateParticleSystem(const String_t &name, const String_t &templateName);
 			void DestroyParticleSystem(Ogre::ParticleSystem *ps);
 
 			Ogre::TerrainGroup *CreateTerrainGroup(Ogre::Terrain::Alignment align, UInt16_t terrainSize, Float_t terrainWorldSize);
 			void DestroyTerrainGroup(Ogre::TerrainGroup *group);
 
-			void SetSkyBox(bool enable, const String_c &materialName, Float_t distance = 5000, bool drawFirst = true, const Ogre::Quaternion &orientation = Ogre::Quaternion::IDENTITY);
+			void SetSkyBox(bool enable, const String_t &materialName, Float_t distance = 5000, bool drawFirst = true, const Ogre::Quaternion &orientation = Ogre::Quaternion::IDENTITY);
 			void SetAmbientColor(const Ogre::ColourValue &value);
 			Ogre::ColourValue GetAmbientColor() const;
 
@@ -116,7 +116,7 @@ namespace Phobos
 
 			const Ogre::RenderTarget::FrameStats &GetFrameStats();
 
-			void LoadCaelum(const String_c &fileName);
+			void LoadCaelum(const String_t &fileName);
 			void UnloadCaelum();
 
 			void SetShadowMode(Ogre::ShadowTechnique tech);
@@ -151,7 +151,7 @@ namespace Phobos
 			void CmdSetShadowMode(const StringVector_t &args, Context_c &);
 			void CmdSetShadowFarDistance(const StringVector_t &args, Context_c &);
 
-			void VarRCaelumChanged(const ContextVar_c &var, const String_c &currentValue, const String_c &newValue);
+			void VarRCaelumChanged(const ContextVar_c &var, const String_t &currentValue, const String_t &newValue);
 
 		private:
 			// =====================================================
@@ -191,7 +191,7 @@ namespace Phobos
 
 			Ogre::ShadowTechnique										eShadowMode;			
 
-			typedef std::list<String_c>			StringList_t;
+			typedef std::list<String_t>			StringList_t;
 			StringList_t						lstPluginsName;
 
 		public:		

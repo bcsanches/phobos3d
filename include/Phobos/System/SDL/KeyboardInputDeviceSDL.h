@@ -25,18 +25,18 @@ namespace Phobos
 {
 	namespace System
 	{
-		class KeyboardInputDeviceSDL_c: public KeyboardInputDevice_c, private EventListener_c
+		class KeyboardInputDeviceSDL: public KeyboardInputDevice, private EventListener
 		{
 			public:
-				static InputDevicePtr_t Create(const String_c &name);
+				static InputDevicePtr_t Create(const String_t &name);
 
-				KeyboardInputDeviceSDL_c(const String_c &name);
-				~KeyboardInputDeviceSDL_c(void);
+				KeyboardInputDeviceSDL(const String_t &name);
+				~KeyboardInputDeviceSDL(void);
 
-				virtual void Update(void);
+				virtual void Update(void) override;
 
 			private:			
-				virtual void Event(struct Event_s &event);
+				virtual void OnEvent(struct Event_s &event) override;
 		};
 	}
 }

@@ -37,7 +37,7 @@ namespace Phobos
 		protected:
 			struct StaticObject_s
 			{
-				String_c strParent;
+				String_t strParent;
 
 				Ogre::SceneNode *pclSceneNode;
 				Ogre::Entity *pclEntity;
@@ -63,7 +63,7 @@ namespace Phobos
 				Ogre::Light *pclLight;		
 
 				bool fParent;
-				String_c strName;
+				String_t strName;
 
 				TempStaticObject_s():
 					pclEntity(NULL),

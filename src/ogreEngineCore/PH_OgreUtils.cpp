@@ -31,7 +31,7 @@ namespace Phobos
 		Kernel_c::GetInstance().LogStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
 	}
 
-	String_c &GenerateOgreName(String_c &out)
+	String_t &GenerateOgreName(String_t &out)
 	{		
 		out = "name_";
 		out += NumberToString(++tCount_gl);	

@@ -19,9 +19,9 @@ subject to the following restrictions:
 
 #include "Phobos/System/SystemAPI.h"
 
-#include <PH_Node.h>
-#include <PH_Singleton.h>
-#include <PH_Types.h>
+#include <Phobos/Node.h>
+#include <Phobos/Singleton.h>
+#include <Phobos/Types.h>
 
 #include "Phobos/System/InputDefs.h"
 #include "Phobos/System/InputDeviceListener.h"
@@ -30,8 +30,8 @@ namespace Phobos
 {
 	namespace System
 	{
-		class InputDevice_c;
-		class InputDeviceListener_c;
+		class InputDevice;
+		class InputDeviceListener;
 
 		enum InputManagerEventType_e
 		{
@@ -41,23 +41,24 @@ namespace Phobos
 
 		struct InputManagerEvent_s
 		{
-			InputManagerEventType_e eType;
-			InputDevice_c			&rclDevice;
+			InputManagerEventType_e m_eType;
+			InputDevice				&m_rclDevice;
 
-			inline InputManagerEvent_s(InputManagerEventType_e type, InputDevice_c &device):
-				eType(type),
-				rclDevice(device)
+			inline InputManagerEvent_s(InputManagerEventType_e type, InputDevice &device):
+				m_eType(type),
+				m_rclDevice(device)
 
 			{
+				//empty
 			}
 		};
 
-		class InputManagerListener_c
+		class InputManagerListener
 		{
 			public:
-				virtual ~InputManagerListener_c() {};
+				virtual ~InputManagerListener() {};
 
-				virtual void InputManagerEvent(const InputManagerEvent_s &event) = 0;
+				virtual void OnInputManagerEvent(const InputManagerEvent_s &event) = 0;
 
 			public:
 				PH_DECLARE_LISTENER_HOOK;
@@ -65,7 +66,7 @@ namespace Phobos
 
 		PH_DECLARE_SINGLETON_PTR(InputManager);
 
-		class PH_SYSTEM_API InputManager_c: public Node_c
+		class PH_SYSTEM_API InputManager: public Node
 		{
 			PH_DECLARE_NAMED_SINGLETON_METHODS(InputManager)
 
@@ -75,24 +76,24 @@ namespace Phobos
 				// =====================================================
 				virtual void Update(void);
 
-				void AddListenerToDevice(const String_c &deviceName,  InputDeviceListener_c &listener);
+				void AddListenerToDevice(const String_t &deviceName,  InputDeviceListener &listener);
 
-				InputDevice_c &GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
-				InputDevice_c &GetDevice(const InputDeviceTypes_e deviceType);
+				InputDevice &GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
+				InputDevice &GetDevice(const InputDeviceTypes_e deviceType);
 
-				PH_DECLARE_LISTENER_PROCS(InputManagerListener_c);
+				PH_DECLARE_LISTENER_PROCS(InputManagerListener);
 
 			protected:
 				// =====================================================
 				// PROTECTED METHODS
 				// =====================================================
-				InputManager_c(const String_c &name);
-				~InputManager_c(void);
+				InputManager(const String_t &name);
+				~InputManager(void);
 
 				virtual void PollDevices(void) = 0;
 
-				void AttachDevice(InputDevice_c &device, UInt_t id);
-				void DetachDevice(InputDevice_c &device);
+				void AttachDevice(InputDevice &device, UInt_t id);
+				void DetachDevice(InputDevice &device);
 
 			private:
 				// =====================================================
@@ -104,17 +105,17 @@ namespace Phobos
 				// =====================================================
 				// STATIC PUBLIC METHODS
 				// =====================================================
-				static const String_c &GetDeviceTypeName(InputDeviceTypes_e type);
-				static void BuildDeviceName(String_c &out, InputDeviceTypes_e type, UInt_t id);
+				static const String_t &GetDeviceTypeName(InputDeviceTypes_e type);
+				static void BuildDeviceName(String_t &out, InputDeviceTypes_e type, UInt_t id);
 
 			private:
 				// =====================================================
 				// STATIC PRIVATE METHODS
 				// =====================================================
-				static InputManagerPtr_t CreateInstanceImpl(const String_c &name);
+				static InputManagerPtr_t CreateInstanceImpl(const String_t &name);
 
 			private:
-				PH_DECLARE_LISTENER_LIST(InputManagerListener_c, lstListeners);
+				PH_DECLARE_LISTENER_LIST(InputManagerListener, m_lstListeners);
 		};
 	}
 }

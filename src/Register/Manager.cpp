@@ -91,7 +91,7 @@ void Phobos::Register::Finalize()
 	spManager_gl.reset();
 }
 
-void Phobos::Register::Load(const String_c &fileName)
+void Phobos::Register::Load(const String_t &fileName)
 {
 	using namespace std;
 
@@ -100,7 +100,7 @@ void Phobos::Register::Load(const String_c &fileName)
 	Load(file);
 }
 
-Phobos::Register::Hive_c &Phobos::Register::CreateCustomHive(const String_c &name)
+Phobos::Register::Hive_c &Phobos::Register::CreateCustomHive(const String_t &name)
 {
 	std::unique_ptr<Hive_c> hivePtr(PH_NEW Hive_c(name));
 
@@ -116,7 +116,7 @@ void Phobos::Register::Load(std::istream &file)
 	Parser_c parser;
 	parser.SetStream(&file);
 
-	String_c tokenValue;
+	String_t tokenValue;
 	for(;;)
 	{
 		ParserTokens_e token = parser.GetToken(&tokenValue);
@@ -142,7 +142,7 @@ void Phobos::Register::Load(std::istream &file)
 	}
 }
 
-void Phobos::Register::LoadAll(const String_c &path)
+void Phobos::Register::LoadAll(const String_t &path)
 {
 	using namespace std;
 	using namespace boost::filesystem;
@@ -173,22 +173,22 @@ void Phobos::Register::LoadAll(const String_c &path)
 	}
 }
 
-Phobos::Register::Hive_c &Phobos::Register::GetHive(const String_c &name)
+Phobos::Register::Hive_c &Phobos::Register::GetHive(const String_t &name)
 {
 	return static_cast<Hive_c&>(spManager_gl->GetChild(name));
 }
 
-Phobos::Register::Hive_c *Phobos::Register::TryGetHive(const String_c &name)
+Phobos::Register::Hive_c *Phobos::Register::TryGetHive(const String_t &name)
 {
 	return static_cast<Hive_c*>(spManager_gl->TryGetChild(name));
 }
 
-Phobos::Register::Table_c &Phobos::Register::GetTable(const String_c &hive, const String_c &table)
+Phobos::Register::Table_c &Phobos::Register::GetTable(const String_t &hive, const String_t &table)
 {
 	return GetHive(hive).GetTable(table);
 }
 
-Phobos::Register::Table_c *Phobos::Register::TryGetTable(const String_c &hive, const String_c &table)
+Phobos::Register::Table_c *Phobos::Register::TryGetTable(const String_t &hive, const String_t &table)
 {
 	Hive_c *hivePtr = TryGetHive(hive);
 		

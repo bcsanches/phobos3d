@@ -32,7 +32,7 @@ namespace Phobos
 	class MapLoader_c: boost::noncopyable
 	{
 		public:
-			virtual void Load(const String_c &fileName) = 0;
+			virtual void Load(const String_t &fileName) = 0;
 
 			static void OnBoot();			
 				
@@ -62,7 +62,7 @@ namespace Phobos
 			static Register::Hive_c *pclDynamicEntitiesHive_g;
 			static Register::Hive_c *pclCurrentLevelHive_g;
 
-			String_c strWorldSpawnEntityType;
+			String_t strWorldSpawnEntityType;
 	};	
 
 	typedef std::shared_ptr<MapLoader_c> MapLoaderPtr_t;

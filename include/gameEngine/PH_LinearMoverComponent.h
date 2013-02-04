@@ -26,14 +26,14 @@ namespace Phobos
 	class LinearMoverComponent_c: public MoverComponent_c
 	{
 		public:
-			static EntityComponent_c *Create(const String_c &name, Entity_c &owner);	
+			static EntityComponent_c *Create(const String_t &name, Entity_c &owner);	
 
 			~LinearMoverComponent_c();		
 
 			virtual void FixedUpdate();
 
 		protected:
-			LinearMoverComponent_c(const String_c &name, Entity_c &owner);					
+			LinearMoverComponent_c(const String_t &name, Entity_c &owner);					
 
 			virtual void OnLoad(const Register::Table_c &table);
 

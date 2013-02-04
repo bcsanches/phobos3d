@@ -27,7 +27,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(EventManagerSDL);
 
-		class PH_SYSTEM_API EventManagerSDL_c: public EventManager_c
+		class PH_SYSTEM_API EventManagerSDL: public EventManager
 		{
 			public:
 				void Update();
@@ -35,9 +35,9 @@ namespace Phobos
 			protected:
 
 			private:
-				EventManagerSDL_c(const String_c &name);
+				EventManagerSDL(const String_t &name);
 
-				friend class EventManager_c;
+				friend class EventManager;
 
 				inline bool IsValidSDLToPhobosKeyCode(SDLKey key);
 				bool BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event);

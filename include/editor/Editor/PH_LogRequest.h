@@ -18,7 +18,7 @@ namespace Phobos
 				virtual void OnExecute(JsonCreator::StringWriter &response) override;
 
 			private:
-				String_c strMessage;
+				String_t strMessage;
 		};
 	}
 }

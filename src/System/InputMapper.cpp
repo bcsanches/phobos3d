@@ -25,80 +25,81 @@ Phobos 3d
 
 #include "Phobos/System/InputMapper.h"
 
-#include <PH_ContextUtils.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
-#include <PH_Path.h>
+#include <Phobos/Shell/Utils.h>
+
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
+#include <Phobos/Memory.h>
+#include <Phobos/Path.h>
 
 #include "Phobos/System/InputEvent.h"
 #include "Phobos/System/InputManager.h"
 
-Phobos::System::InputMapperPtr_t Phobos::System::InputMapper_c::Create(const String_c &name, IContext_c &context)
+Phobos::System::InputMapperPtr_t Phobos::System::InputMapper::Create(const String_t &name, Shell::IContext &context)
 {
-	return InputMapperPtr_t(PH_NEW InputMapper_c(name, context));
+	return InputMapperPtr_t(PH_NEW InputMapper(name, context));
 }
 
-Phobos::System::InputMapper_c::InputMapper_c(const String_c &name, IContext_c &context):
-	Node_c(name),
-	rclContext(context),
-	fDisable(false),
-	cmdBind("bind"),
-	cmdUnbind("unbind"),
-	cmdPushButton("pushButton"),
-	cmdReleaseButton("releaseButton")
+Phobos::System::InputMapper::InputMapper(const String_t &name, Shell::IContext &context):
+	Node(name),
+	m_rclContext(context),
+	m_fDisable(false),
+	m_cmdBind("bind"),
+	m_cmdUnbind("unbind"),
+	m_cmdPushButton("pushButton"),
+	m_cmdReleaseButton("releaseButton")
 {
-	InputManager_c &manager = InputManager_c::GetInstance();
+	auto &manager = InputManager::GetInstance();
 
 	manager.AddListener(*this);
 
-	cmdBind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdBind, this));
-	cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdUnbind, this));
-	cmdPushButton.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdPushButton, this));
-	cmdReleaseButton.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper_c::CmdReleaseButton, this));
+	m_cmdBind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper::CmdBind, this));
+	m_cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper::CmdUnbind, this));
+	m_cmdPushButton.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper::CmdPushButton, this));
+	m_cmdReleaseButton.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper::CmdReleaseButton, this));
 
-	rclContext.AddContextCmd(cmdBind);
-	rclContext.AddContextCmd(cmdUnbind);
-	rclContext.AddContextCmd(cmdPushButton);
-	rclContext.AddContextCmd(cmdReleaseButton);
+	m_rclContext.AddContextCommand(m_cmdBind);
+	m_rclContext.AddContextCommand(m_cmdUnbind);
+	m_rclContext.AddContextCommand(m_cmdPushButton);
+	m_rclContext.AddContextCommand(m_cmdReleaseButton);
 }
 
-Phobos::System::InputMapper_c::~InputMapper_c(void)
+Phobos::System::InputMapper::~InputMapper(void)
 {
 	//empty
 }
 
-void Phobos::System::InputMapper_c::Execute(const std::string &cmd)
+void Phobos::System::InputMapper::Execute(const std::string &cmd)
 {
-	if(!fDisable)
-		rclContext.Execute(cmd);
+	if(!m_fDisable)
+		m_rclContext.Execute(cmd);
 }
 
-Phobos::System::InputMapper_c::DeviceMapper_c::DeviceMapper_c(InputMapper_c &mapper, InputDevice_c &device):
-	clInputDevice(device),
-	rclInputMapper(mapper)
+Phobos::System::InputMapper::DeviceMapper::DeviceMapper(InputMapper &mapper, InputDevice &device):
+	m_clInputDevice(device),
+	m_rclInputMapper(mapper)
 {
-	clInputDevice.AddListener(*this);
+	m_clInputDevice.AddListener(*this);
 }
 
-Phobos::System::InputMapper_c::DeviceMapper_c::DeviceMapper_c(const DeviceMapper_c &rhs):
-	mapActions(rhs.mapActions),
-	clInputDevice(rhs.clInputDevice),
-	rclInputMapper(rhs.rclInputMapper)
+Phobos::System::InputMapper::DeviceMapper::DeviceMapper(const DeviceMapper &rhs):
+	m_mapActions(rhs.m_mapActions),
+	m_clInputDevice(rhs.m_clInputDevice),
+	m_rclInputMapper(rhs.m_rclInputMapper)
 {
-	if(rhs.hkListener.is_linked())
-		clInputDevice.AddListener(*this);
+	if(rhs.m_hkListener.is_linked())
+		m_clInputDevice.AddListener(*this);
 }
 
-Phobos::System::InputMapper_c::DeviceMapper_c &Phobos::System::InputMapper_c::GetDeviceMapper(const String_c &deviceName)
+Phobos::System::InputMapper::DeviceMapper &Phobos::System::InputMapper::GetDeviceMapper(const String_t &deviceName)
 {
-	InputDeviceMap_t::iterator	it = mapInputDevices.find(deviceName);
-	if(it == mapInputDevices.end())
+	InputDeviceMap_t::iterator	it = m_mapInputDevices.find(deviceName);
+	if(it == m_mapInputDevices.end())
 	{
 		//device is not mapped yet, on this case binding fails
 		std::stringstream stream;
 		stream << "Device " << deviceName << " was not attached" << std::endl;
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "InputMapper_c::GetDeviceMapper", stream.str());
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "InputMapper::GetDeviceMapper", stream.str());
 	}
 
 	return it->second;
@@ -112,7 +113,7 @@ Phobos::System::InputMapper_c::DeviceMapper_c &Phobos::System::InputMapper_c::Ge
 
 		If the command is preceed by the '+' symbol it will only be called when the
 		button state is IM_InputManager_c::BUTTON_STATE_DOWN. In this case, the
-		InputMapper_c will automatically call the same command preceed by '=' and
+		InputMapper will automatically call the same command preceed by '=' and
 		'-' when a event IM_InputManager_c::BUTTON_STATE_UPDATE and IM_InputManager_c::BUTTON_STATE_UP
 		are received, respectively.
 
@@ -123,107 +124,107 @@ Phobos::System::InputMapper_c::DeviceMapper_c &Phobos::System::InputMapper_c::Ge
 	\return IM_SUCCESS if no errors occurs.
 
 */
-void Phobos::System::InputMapper_c::Bind(const String_c &devicePathName, const String_c &actionName, const String_c &cmd)
+void Phobos::System::InputMapper::Bind(const String_t &devicePathName, const String_t &actionName, const String_t &cmd)
 {
 	this->GetDeviceMapper(devicePathName).Bind(actionName, cmd);
 }
 
-void Phobos::System::InputMapper_c::Unbind(const String_c &devicePathName, const String_c &actionName)
+void Phobos::System::InputMapper::Unbind(const String_t &devicePathName, const String_t &actionName)
 {
 	this->GetDeviceMapper(devicePathName).Unbind(actionName);
 }
 
-void Phobos::System::InputMapper_c::InputManagerEvent(const InputManagerEvent_s &event)
+void Phobos::System::InputMapper::OnInputManagerEvent(const InputManagerEvent_s &event)
 {
-	const String_c &deviceName = event.rclDevice.GetName();
-	switch(event.eType)
+	const String_t &deviceName = event.m_rclDevice.GetName();
+	switch(event.m_eType)
 	{
 		case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
 			{
-				InputDeviceMap_t::iterator it = mapInputDevices.lower_bound(deviceName);
-				if((it != mapInputDevices.end()) && !(mapInputDevices.key_comp()(deviceName, it->first)))
+				InputDeviceMap_t::iterator it = m_mapInputDevices.lower_bound(deviceName);
+				if((it != m_mapInputDevices.end()) && !(m_mapInputDevices.key_comp()(deviceName, it->first)))
 				{
 					std::stringstream stream;
 					stream << "Input device " << deviceName << " already attached." << std::endl;
-					PH_RAISE(INVALID_OPERATION_EXCEPTION, "InputMapper_c::InputManagerEvent", stream.str());
+					PH_RAISE(INVALID_OPERATION_EXCEPTION, "InputMapper::InputManagerEvent", stream.str());
 				}
 				else
 				{
-					mapInputDevices.insert(it, std::make_pair(deviceName, DeviceMapper_c(*this, event.rclDevice)));
+					m_mapInputDevices.insert(it, std::make_pair(deviceName, DeviceMapper(*this, event.m_rclDevice)));
 				}
 			}
 			break;
 
 		case INPUT_MANAGER_EVENT_DEVICE_DETACHED:
-			mapInputDevices.erase(event.rclDevice.GetName());
+			m_mapInputDevices.erase(event.m_rclDevice.GetName());
 			break;
 	}
 }
 
-void Phobos::System::InputMapper_c::DeviceMapper_c::AddEventButtonInfo(std::stringstream &stream, const InputEvent_s &event) const
+void Phobos::System::InputMapper::DeviceMapper::AddEventButtonInfo(std::stringstream &stream, const InputEvent_s &event) const
 {
 	stream << ' ' <<
 		INPUT_EVENT_BUTTON << ' ' <<
-		event.stButton.uId << ' ' <<
-		event.stButton.fpPression << ' ' <<
-		event.stButton.eState << ' ' <<
-		clInputDevice.GetName();
+		event.m_stButton.m_uId << ' ' <<
+		event.m_stButton.m_fpPression << ' ' <<
+		event.m_stButton.m_eState << ' ' <<
+		m_clInputDevice.GetName();
 }
 
-void Phobos::System::InputMapper_c::DeviceMapper_c::OnInputEventButton(const InputEvent_s &event)
+void Phobos::System::InputMapper::DeviceMapper::OnInputEventButton(const InputEvent_s &event)
 {
-	ActionBindMap_t::iterator it =	mapActions.find(event.stButton.uId);
+	ActionBindMap_t::iterator it =	m_mapActions.find(event.m_stButton.m_uId);
 
-	if(it == mapActions.end())
+	if(it == m_mapActions.end())
 		return;
 
 	ActionBind_s &bind = it->second;
 	std::stringstream	stream;
 
-	switch(event.stButton.eState)
+	switch(event.m_stButton.m_eState)
 	{
 		case BUTTON_STATE_DOWN:
-			stream << bind.strCommand;
+			stream << bind.m_strCommand;
 			this->AddEventButtonInfo(stream, event);
 
-			rclInputMapper.Execute(stream.str());
+			m_rclInputMapper.Execute(stream.str());
 			break;
 
 		case BUTTON_STATE_UPDATE:
-			if(bind.strCommand[0] == '+')
+			if(bind.m_strCommand[0] == '+')
 			{
-				stream << '=' << bind.strCommand.c_str()+1;
+				stream << '=' << bind.m_strCommand.c_str()+1;
 				this->AddEventButtonInfo(stream, event);
 
-				rclInputMapper.Execute(stream.str());
+				m_rclInputMapper.Execute(stream.str());
 			}
 			break;
 
 		case BUTTON_STATE_UP:
-			if(bind.strCommand[0] == '+')
+			if(bind.m_strCommand[0] == '+')
 			{
-				stream << '-' << bind.strCommand.c_str()+1;
+				stream << '-' << bind.m_strCommand.c_str()+1;
 				this->AddEventButtonInfo(stream, event);
 
-				rclInputMapper.Execute(stream.str());
+				m_rclInputMapper.Execute(stream.str());
 			}
 			break;
 	}
 }
 
-void Phobos::System::InputMapper_c::DeviceMapper_c::OnInputEventThumb(const InputEvent_s &event)
+void Phobos::System::InputMapper::DeviceMapper::OnInputEventThumb(const InputEvent_s &event)
 {
-	ActionBindMap_t::iterator it =	mapActions.find(event.stButton.uId);
+	ActionBindMap_t::iterator it =	m_mapActions.find(event.m_stButton.m_uId);
 
-	if(it == mapActions.end())
+	if(it == m_mapActions.end())
 		return;
 
 	ActionBind_s &bind = it->second;
 	std::stringstream	stream;
 
-	stream << bind.strCommand << ' ' << INPUT_EVENT_THUMB << ' ' << event.stThumb.uId << ' ' << event.stThumb.fpAxis[0] << ' ' << event.stThumb.fpAxis[1];
+	stream << bind.m_strCommand << ' ' << INPUT_EVENT_THUMB << ' ' << event.m_stThumb.m_uId << ' ' << event.m_stThumb.m_fpAxis[0] << ' ' << event.m_stThumb.m_fpAxis[1];
 
-	rclInputMapper.Execute(stream.str());
+	m_rclInputMapper.Execute(stream.str());
 }
 
 /**
@@ -236,12 +237,12 @@ void Phobos::System::InputMapper_c::DeviceMapper_c::OnInputEventThumb(const Inpu
 	This is called by a IM_ContextManager_c command.
 
 */
-void Phobos::System::InputMapper_c::CmdBind(const StringVector_t &args, Context_c &)
+void Phobos::System::InputMapper::CmdBind(const Shell::StringVector_t &args, Shell::Context &)
 {
 	//We need four parameters: bind device action cmd
 	if(args.size() < 4)
 	{
-		Kernel_c::GetInstance().LogMessage("Usage: bind <devicePathName> <actionName> <cmd>\nExample: bind kb0 UP_ARROW forward");
+		Phobos::LogMessage("Usage: bind <devicePathName> <actionName> <cmd>\nExample: bind kb0 UP_ARROW forward");
 
 		return;
 	}
@@ -251,19 +252,19 @@ void Phobos::System::InputMapper_c::CmdBind(const StringVector_t &args, Context_
 		{
 			this->Bind(args[1], args[2], args[3]);
 		}
-		catch(Exception_c &e)
+		catch(Exception &e)
 		{
-			Kernel_c::GetInstance().LogMessage(e.what());
+			LogMessage(e.what());
 		}
 	}
 }
 
-void Phobos::System::InputMapper_c::CmdUnbind(const StringVector_t &args, Context_c &)
+void Phobos::System::InputMapper::CmdUnbind(const Shell::StringVector_t &args, Shell::Context &)
 {
 	//We need three parameters: bind device action
 	if(args.size() < 3)
 	{
-		Kernel_c::GetInstance().LogMessage("Usage: unbind <devicePathName> <actionName>\nExample: unbind kb0 UP_ARROW");
+		LogMessage("Usage: unbind <devicePathName> <actionName>\nExample: unbind kb0 UP_ARROW");
 
 		return;
 	}
@@ -273,14 +274,14 @@ void Phobos::System::InputMapper_c::CmdUnbind(const StringVector_t &args, Contex
 		{
 			this->Unbind(args[1], args[2]);
 		}
-		catch(Exception_c &e)
+		catch(Exception &e)
 		{
-			Kernel_c::GetInstance().LogMessage(e.what());
+			LogMessage(e.what());
 		}
 	}
 }
 
-void Phobos::System::InputMapper_c::ForceButtonState(const String_c &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure)
+void Phobos::System::InputMapper::ForceButtonState(const String_t &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure)
 {
 	std::stringstream	stream;
 
@@ -295,14 +296,14 @@ void Phobos::System::InputMapper_c::ForceButtonState(const String_c &commandName
 	state << ' ' <<
 	"user";
 
-	rclContext.Execute(stream.str());
+	m_rclContext.Execute(stream.str());
 }
 
-void Phobos::System::InputMapper_c::CmdPushButton(const StringVector_t &args, Context_c &)
+void Phobos::System::InputMapper::CmdPushButton(const Shell::StringVector_t &args, Shell::Context &)
 {
 	if(args.size() < 2)
 	{
-		Kernel_c::GetInstance().LogMessage("Usage: pushButton <buttonName>");			
+		LogMessage("Usage: pushButton <buttonName>");			
 	}
 	else
 	{
@@ -310,11 +311,11 @@ void Phobos::System::InputMapper_c::CmdPushButton(const StringVector_t &args, Co
 	}
 }
 
-void Phobos::System::InputMapper_c::CmdReleaseButton(const StringVector_t &args, Context_c &)
+void Phobos::System::InputMapper::CmdReleaseButton(const Shell::StringVector_t &args, Shell::Context &)
 {
 	if(args.size() < 2)
 	{
-		Kernel_c::GetInstance().LogMessage("Usage: releaseButton <buttonName>");			
+		LogMessage("Usage: releaseButton <buttonName>");			
 	}
 	else
 	{
@@ -322,25 +323,25 @@ void Phobos::System::InputMapper_c::CmdReleaseButton(const StringVector_t &args,
 	}
 }
 
-Phobos::UInt_t Phobos::System::InputMapper_c::DeviceMapper_c::GetActionId(const String_c &actionName)
+Phobos::UInt_t Phobos::System::InputMapper::DeviceMapper::GetActionId(const String_t &actionName)
 {
 	UInt_t actionId;
-	if(!clInputDevice.TryGetActionId(actionName, actionId))
+	if(!m_clInputDevice.TryGetActionId(actionName, actionId))
 	{
 		std::stringstream stream;
-		stream << "Device " << clInputDevice.GetName() << " does not have action " << actionName << std::endl;
+		stream << "Device " << m_clInputDevice.GetName() << " does not have action " << actionName << std::endl;
 		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "InputMapper::DeviceMapper::GetActionId", stream.str());
 	}
 
 	return actionId;
 }
 
-void Phobos::System::InputMapper_c::DeviceMapper_c::InputEvent(const InputEvent_s &event)
+void Phobos::System::InputMapper::DeviceMapper::OnInputEvent(const InputEvent_s &event)
 {
-	if(rclInputMapper.IsDisabled())
+	if(m_rclInputMapper.IsDisabled())
 		return;
 
-	switch(event.eType)
+	switch(event.m_eType)
 	{
 		case INPUT_EVENT_BUTTON:
 			this->OnInputEventButton(event);
@@ -355,23 +356,23 @@ void Phobos::System::InputMapper_c::DeviceMapper_c::InputEvent(const InputEvent_
 	}
 }
 
-void Phobos::System::InputMapper_c::DeviceMapper_c::Bind(const String_c &action, const String_c &cmd)
+void Phobos::System::InputMapper::DeviceMapper::Bind(const String_t &action, const String_t &cmd)
 {
 	UInt_t actionId = this->GetActionId(action);
-	mapActions[actionId] = ActionBind_s(cmd, action, actionId);
+	m_mapActions.insert(std::make_pair(actionId, ActionBind_s(cmd, action, actionId)));	
 }
 
-void Phobos::System::InputMapper_c::DeviceMapper_c::Unbind(const String_c &action)
+void Phobos::System::InputMapper::DeviceMapper::Unbind(const String_t &action)
 {
-	ActionBindMap_t::iterator it = mapActions.find(this->GetActionId(action));
-	if(it == mapActions.end())
+	ActionBindMap_t::iterator it = m_mapActions.find(this->GetActionId(action));
+	if(it == m_mapActions.end())
 	{
 		std::stringstream stream;
-		stream << "Action " << action << " not bound to device " << clInputDevice.GetName() << std::endl;
+		stream << "Action " << action << " not bound to device " << m_clInputDevice.GetName() << std::endl;
 		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "InputMapper::DeviceMapper::Unbind", stream.str());
 	}
 
-	mapActions.erase(it);
+	m_mapActions.erase(it);
 }
 
 

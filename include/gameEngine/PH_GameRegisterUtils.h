@@ -27,9 +27,9 @@ namespace Phobos
 {
 	namespace Register
 	{
-		inline Ogre::Vector3 GetVector3(const Table_c &dict, const String_c &key)
+		inline Ogre::Vector3 GetVector3(const Table_c &dict, const String_t &key)
 		{		
-			const String_c &value = dict.GetString(key);
+			const String_t &value = dict.GetString(key);
 
 			Ogre::Vector3 tmp;
 			sscanf(value.c_str(), "%f %f %f", &tmp.x, &tmp.y, &tmp.z);
@@ -37,9 +37,9 @@ namespace Phobos
 			return tmp;
 		}
 
-		inline Ogre::Vector3 TryGetVector3(const Table_c &dict, const String_c &key, const Ogre::Vector3 &defaultValue)
+		inline Ogre::Vector3 TryGetVector3(const Table_c &dict, const String_t &key, const Ogre::Vector3 &defaultValue)
 		{		
-			const String_c *value = dict.TryGetString(key);
+			const String_t *value = dict.TryGetString(key);
 			if(value)
 			{
 				Ogre::Vector3 tmp;
@@ -53,9 +53,9 @@ namespace Phobos
 			}
 		}
 
-		inline Ogre::Quaternion GetQuaternion(const Table_c &dict, const String_c &key)
+		inline Ogre::Quaternion GetQuaternion(const Table_c &dict, const String_t &key)
 		{
-			const String_c &value = dict.GetString(key);
+			const String_t &value = dict.GetString(key);
 
 			Ogre::Quaternion q;
 			sscanf(value.c_str(), "%f %f %f %f", &q.w, &q.x, &q.y, &q.z);
@@ -63,9 +63,9 @@ namespace Phobos
 			return q;
 		}
 
-		inline Ogre::ColourValue GetColour(const Table_c &dict, const String_c &key)
+		inline Ogre::ColourValue GetColour(const Table_c &dict, const String_t &key)
 		{
-			const String_c &value = dict.GetString(key);
+			const String_t &value = dict.GetString(key);
 
 			Ogre::ColourValue colour;
 

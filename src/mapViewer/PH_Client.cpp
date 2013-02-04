@@ -140,17 +140,17 @@ namespace Phobos
 		Session_c::GetInstance().SetGuiForm(NULL);
 	}	
 	
-	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_t &oldValue, const String_t &newValue)
 	{
 		clSpectatorCameraCommandProducer.SetMoveSpeed(StringToFloat(newValue));
 	}
 
-	void Client_c::VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	void Client_c::VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_t &oldValue, const String_t &newValue)
 	{
 		clSpectatorCameraCommandProducer.SetTurnSpeed(StringToFloat(newValue));
 	}
 
-	void Client_c::VarMouseSensitivityChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	void Client_c::VarMouseSensitivityChanged(const class ContextVar_c &var, const String_t &oldValue, const String_t &newValue)
 	{
 		clSpectatorCameraCommandProducer.SetMouseSensitivity(StringToFloat(newValue));
 	}

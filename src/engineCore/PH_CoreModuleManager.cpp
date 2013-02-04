@@ -29,12 +29,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	CoreModuleManagerPtr_t CoreModuleManager_c::Create(const String_c &name)
+	CoreModuleManagerPtr_t CoreModuleManager_c::Create(const String_t &name)
 	{
 		return CoreModuleManagerPtr_t(PH_NEW CoreModuleManager_c(name));
 	}
 
-	CoreModuleManager_c::CoreModuleManager_c(const Phobos::String_c &name, UInt32_t flags):
+	CoreModuleManager_c::CoreModuleManager_c(const Phobos::String_t &name, UInt32_t flags):
 		CoreModule_c(name, flags),
 		fLaunchedBoot(false),
 		fPendingSort(false),
@@ -218,7 +218,7 @@ namespace Phobos
 		}
 	}
 	
-	void CoreModuleManager_c::LaunchBootModule(const String_c &cfgName, int argc, char *const argv[])
+	void CoreModuleManager_c::LaunchBootModule(const String_t &cfgName, int argc, char *const argv[])
 	{
 		if(fLaunchedBoot)
 			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core_c::LaunchBootModule", "Boot module already launched");

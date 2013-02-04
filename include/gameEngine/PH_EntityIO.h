@@ -34,7 +34,7 @@ namespace Phobos
 	class PH_GAME_ENGINE_API EntityIO_c: public Node_c
 	{
 		protected:
-			explicit EntityIO_c(const String_c &name, UInt32_t flags = 0);
+			explicit EntityIO_c(const String_t &name, UInt32_t flags = 0);
 			explicit EntityIO_c(const Char_t *name, UInt32_t flags = 0);
 			
 			~EntityIO_c();
@@ -71,12 +71,12 @@ namespace Phobos
 		public:
 			EntityOutputManager_c();
 
-			void AddConnector(const String_c &name, OutputProcConnector_t proc);
+			void AddConnector(const String_t &name, OutputProcConnector_t proc);
 
 			void Connect(EntityIO_c &outputOwner, const std::string &outputName, EntityIO_c &inputOwner, InputProc_t input);
 
 		private:
-			typedef std::map<String_c, OutputProcConnector_t> ConnectorsMap_t;
+			typedef std::map<String_t, OutputProcConnector_t> ConnectorsMap_t;
 			ConnectorsMap_t mapConnectors;
 	};
 
@@ -85,10 +85,10 @@ namespace Phobos
 		public:
 			EntityInputManager_c();
 
-			void AddSlot(const String_c &name, InputProc_t proc);
+			void AddSlot(const String_t &name, InputProc_t proc);
 
 		private:
-			typedef std::map<String_c, InputProc_t> InputMap_t;
+			typedef std::map<String_t, InputProc_t> InputMap_t;
 			InputMap_t mapInputs;
 	};
 
@@ -97,7 +97,7 @@ namespace Phobos
 		class AutoOutputRegister_c
 		{
 			public:
-				AutoOutputRegister_c(EntityOutputManager_c &manager, const String_c &outputName, OutputProcConnector_t proc)
+				AutoOutputRegister_c(EntityOutputManager_c &manager, const String_t &outputName, OutputProcConnector_t proc)
 				{
 					manager.AddConnector(outputName, proc);
 				}
@@ -106,7 +106,7 @@ namespace Phobos
 		class AutoInputRegister_c
 		{
 			public:
-				AutoInputRegister_c(EntityInputManager_c &manager, const String_c &inputName, InputProc_t proc)
+				AutoInputRegister_c(EntityInputManager_c &manager, const String_t &inputName, InputProc_t proc)
 				{
 					manager.AddSlot(inputName, proc);
 				}

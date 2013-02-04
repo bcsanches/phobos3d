@@ -59,11 +59,11 @@ namespace Phobos
 		public:
 			~WorldManager_c();		
 
-			void LoadMap(const String_c &mapName);
+			void LoadMap(const String_t &mapName);
 			void UnloadMap();
 
-			Entity_c *TryGetEntityByType(const String_c &className) const;
-			Entity_c &GetEntityByName(const String_c &name) const;			
+			Entity_c *TryGetEntityByType(const String_t &className) const;
+			Entity_c &GetEntityByName(const String_t &name) const;			
 
 			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);	
 

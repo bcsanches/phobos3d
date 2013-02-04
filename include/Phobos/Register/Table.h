@@ -76,7 +76,7 @@ namespace Phobos
 				{
 					ValueType_e eType;
 
-					String_c strValue;
+					String_t strValue;
 
 					UInt16_t u16NumRows;
 					UInt16_t u16NumColumns;
@@ -89,7 +89,7 @@ namespace Phobos
 						//empty
 					}
 					
-					explicit inline Value_s(const String_c &value):
+					explicit inline Value_s(const String_t &value):
 						strValue(value),
 						eType(STRING),
 						u16NumColumns(0),
@@ -98,7 +98,7 @@ namespace Phobos
 						//empty
 					}
 
-					explicit inline Value_s(const String_c &value, UInt16_t numRows, UInt16_t numColumns):
+					explicit inline Value_s(const String_t &value, UInt16_t numRows, UInt16_t numColumns):
 						strValue(value),
 						eType(CHAR_MATRIX),
 						u16NumColumns(numColumns),
@@ -149,58 +149,58 @@ namespace Phobos
 				};	
 
 			public:
-				static TablePtr_t Create(const String_c &name);
-				Table_c(const String_c &name);
+				static TablePtr_t Create(const String_t &name);
+				Table_c(const String_t &name);
 
 				~Table_c();
 
 				void Load(Parser_c &parser);
 
-				const String_c &GetString(const String_c &key) const;
-				bool TryGetString(const String_c &key, String_c &out) const;
-				const String_c *TryGetString(const String_c &key) const;
+				const String_t &GetString(const String_t &key) const;
+				bool TryGetString(const String_t &key, String_t &out) const;
+				const String_t *TryGetString(const String_t &key) const;
 
-				const MatrixDataHandle_c GetMatrix(const String_c &key) const;
+				const MatrixDataHandle_c GetMatrix(const String_t &key) const;
 
-				bool GetBool(const String_c &key) const;
-				bool TryGetBool(bool &outValue, const String_c &key) const;
+				bool GetBool(const String_t &key) const;
+				bool TryGetBool(bool &outValue, const String_t &key) const;
 
-				void Get4Float(float values[4], const String_c &key) const;
-				bool TryGet4Float(float values[4], const String_c &key) const;
-				void Get3Float(float values[3], const String_c &key) const;
-				int GetInt(const String_c &key) const;
-				float GetFloat(const String_c &key) const;
-				bool TryGetFloat(float &outValue, const String_c &key) const;
+				void Get4Float(float values[4], const String_t &key) const;
+				bool TryGet4Float(float values[4], const String_t &key) const;
+				void Get3Float(float values[3], const String_t &key) const;
+				int GetInt(const String_t &key) const;
+				float GetFloat(const String_t &key) const;
+				bool TryGetFloat(float &outValue, const String_t &key) const;
 
-				void SetString(const String_c &key, const String_c &value);
-				void SetCharMatrix(const String_c &key, const String_c &data, UInt16_t numRows, UInt16_t numColumns);
+				void SetString(const String_t &key, const String_t &value);
+				void SetCharMatrix(const String_t &key, const String_t &data, UInt16_t numRows, UInt16_t numColumns);
 			
 				const Table_c *GetInherited() const;
 
-				void SetInherited(const String_c &base);
-				void SetBaseHive(const String_c &baseHive);
+				void SetInherited(const String_t &base);
+				void SetBaseHive(const String_t &baseHive);
 
 			private:			
-				static const String_c *TryGetString(const Table_c *current, const String_c &key);
+				static const String_t *TryGetString(const Table_c *current, const String_t &key);
 
-				static const Value_s *TryGetValue(const Table_c *current, const String_c &key);
-				static const Value_s &GetValue(const Table_c *current, const String_c &key);
+				static const Value_s *TryGetValue(const Table_c *current, const String_t &key);
+				static const Value_s &GetValue(const Table_c *current, const String_t &key);
 
-				void ParseSpecialValue(const String_c &idName, Parser_c &parser);
+				void ParseSpecialValue(const String_t &idName, Parser_c &parser);
 
-				void CheckInvalidKey(const String_c &key, const char *keys[], const char *message) const;
-				void CheckForKeyword(const String_c &key) const;		
+				void CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const;
+				void CheckForKeyword(const String_t &key) const;		
 
-				const Value_s *TryGetValue(const String_c &key) const;
+				const Value_s *TryGetValue(const String_t &key) const;
 
 			private:
-				typedef std::unordered_map<String_c, Value_s> ValueMap_t;
+				typedef std::unordered_map<String_t, Value_s> ValueMap_t;
 				typedef ValueMap_t::const_iterator ValueMapConstIterator_t;
 
 				ValueMap_t mapValues;
 
-				String_c strInherit;
-				String_c strBaseHive;
+				String_t strInherit;
+				String_t strBaseHive;
 				mutable const Table_c *pclInherit;
 		};	
 	}

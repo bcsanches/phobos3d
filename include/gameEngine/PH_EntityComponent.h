@@ -36,10 +36,10 @@ namespace Phobos
 
 			inline Handle_s GetEntityHandle() const;
 
-			inline const String_c &GetEntityName() const;
+			inline const String_t &GetEntityName() const;
 
 		protected:
-			EntityComponent_c(const String_c &name, Entity_c &owner);
+			EntityComponent_c(const String_t &name, Entity_c &owner);
 
 			virtual void OnLoad(const Register::Table_c &table) {};
 			virtual void OnLoadFinished() {};
@@ -59,7 +59,7 @@ namespace Phobos
 		return rclEntity.GetHandle();
 	}
 
-	inline const String_c &EntityComponent_c::GetEntityName() const
+	inline const String_t &EntityComponent_c::GetEntityName() const
 	{
 		return rclEntity.GetName();
 	}

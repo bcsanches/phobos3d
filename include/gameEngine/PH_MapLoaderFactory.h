@@ -33,7 +33,7 @@ namespace Phobos
 		public:
 			static MapLoaderFactory_c &GetInstance();			
 
-			MapLoaderPtr_t Create(const String_c &type);
+			MapLoaderPtr_t Create(const String_t &type);
 
 			void Register(Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Register::Table_c, Phobos::MapLoaderFactory_c> &creator)
 			{
@@ -43,7 +43,7 @@ namespace Phobos
 			inline const Register::Hive_c &GetStaticEntitiesHive() const;
 			inline const Register::Hive_c &GetDynamicEntitiesHive() const;		
 
-			std::list<String_c> CreateMapFileExtensionsList() const;
+			std::list<String_t> CreateMapFileExtensionsList() const;
 
 		private:
 			MapLoaderFactory_c();

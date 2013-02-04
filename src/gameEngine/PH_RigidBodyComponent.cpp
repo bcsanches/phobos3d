@@ -36,7 +36,7 @@ namespace Phobos
 	{
 		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_RIGID_BODY_COMPONENT_NAME, RigidBodyComponent_c);		
 
-		RigidBodyComponent_c::RigidBodyComponent_c(const String_c &name, Entity_c &owner):
+		RigidBodyComponent_c::RigidBodyComponent_c(const String_t &name, Entity_c &owner):
 			EntityComponent_c(name, owner),			
 			pprpTransform(NULL)
 		{

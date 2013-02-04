@@ -22,18 +22,18 @@ namespace Phobos
 {
 	namespace System
 	{
-		class KeyboardInputDevice_c: public InputDevice_c
+		class KeyboardInputDevice: public InputDevice
 		{		
 			public:
 				// =====================================================
 				// PUBLIC METHODS
 				// =====================================================
-				virtual bool TryGetActionName(UInt_t action, String_c &out) const;
-				virtual bool TryGetActionId(const String_c &name, UInt_t &out) const;
+				virtual bool TryGetActionName(UInt_t action, String_t &out) const override;
+				virtual bool TryGetActionId(const String_t &name, UInt_t &out) const override;
 
 			protected:
-				KeyboardInputDevice_c(const String_c &name);
-				~KeyboardInputDevice_c(void);					
+				KeyboardInputDevice(const String_t &name);
+				~KeyboardInputDevice(void);					
 		};
 	}
 }

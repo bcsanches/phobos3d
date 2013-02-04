@@ -38,9 +38,9 @@ namespace Phobos
 		class PH_ENGINE_CORE_API Context_c: public Node_c
 		{			
 			public:
-				static ContextPtr_t Create(const String_c &name, size_t screenWidth, size_t screenHeight);
+				static ContextPtr_t Create(const String_t &name, size_t screenWidth, size_t screenHeight);
 
-				Context_c(const String_c &name, size_t screenWidth, size_t screenHeight);
+				Context_c(const String_t &name, size_t screenWidth, size_t screenHeight);
 				~Context_c();
 
 				void Update();

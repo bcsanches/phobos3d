@@ -36,17 +36,17 @@ namespace Phobos
 		PH_REGISTER_API void Init();
 		PH_REGISTER_API void Finalize();
 
-		PH_REGISTER_API void Load(const String_c &fileName);
+		PH_REGISTER_API void Load(const String_t &fileName);
 		PH_REGISTER_API void Load(std::istream &stream);
 
-		PH_REGISTER_API void LoadAll(const String_c &path);
+		PH_REGISTER_API void LoadAll(const String_t &path);
 
-		PH_REGISTER_API Hive_c &CreateCustomHive(const String_c &name);			
+		PH_REGISTER_API Hive_c &CreateCustomHive(const String_t &name);			
 
-		PH_REGISTER_API Hive_c &GetHive(const String_c &name);
-		PH_REGISTER_API Hive_c *TryGetHive(const String_c &name);
-		PH_REGISTER_API Table_c &GetTable(const String_c &hive, const String_c &table);
-		PH_REGISTER_API Table_c *TryGetTable(const String_c &hive, const String_c &table);
+		PH_REGISTER_API Hive_c &GetHive(const String_t &name);
+		PH_REGISTER_API Hive_c *TryGetHive(const String_t &name);
+		PH_REGISTER_API Table_c &GetTable(const String_t &hive, const String_t &table);
+		PH_REGISTER_API Table_c *TryGetTable(const String_t &hive, const String_t &table);
 		PH_REGISTER_API Table_c &GetTable(const Path_c &relativePath);
 
 		PH_REGISTER_API void RegisterCommands(IContext_c &context);

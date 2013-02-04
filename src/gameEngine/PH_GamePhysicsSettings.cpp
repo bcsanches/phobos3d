@@ -35,11 +35,11 @@ namespace Phobos
 		pclStaticMeshCollisionShapeDefHive_gl = Register::TryGetHive("StaticMeshCollisionShapeDef");					
 	}
 
-	UInt32_t GamePhysicsSettings_c::DecodeCollisionMask(const String_c &config)
+	UInt32_t GamePhysicsSettings_c::DecodeCollisionMask(const String_t &config)
 	{
 		UInt32_t flags = 0;
 
-		String_c stringFlag;
+		String_t stringFlag;
 		size_t pos = 0;
 		while(StringSplitBy(stringFlag, config, '|', pos, &pos))
 		{
@@ -64,7 +64,7 @@ namespace Phobos
 		return GamePhysicsSettings_c::LoadCollisionTag(*pclStaticWorldCollision_gl);
 	}
 
-	const Register::Table_c *GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(const String_c &name)
+	const Register::Table_c *GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(const String_t &name)
 	{
 		return pclStaticMeshCollisionShapeDefHive_gl ? pclStaticMeshCollisionShapeDefHive_gl->TryGetTable(name) : NULL;
 	}

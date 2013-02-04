@@ -51,7 +51,7 @@ namespace Phobos
 			static void ReleaseInstance();
 			static Core_c &GetInstance();
 
-			Core_c(const String_c &name);
+			Core_c(const String_t &name);
 			~Core_c();
 			
 			void Shutdown(void);
@@ -87,7 +87,7 @@ namespace Phobos
 			void CmdQuit(const StringVector_t &, Context_c &);
 
 		private:			
-			static const String_c DEFAULT_NAME;
+			static const String_t DEFAULT_NAME;
 			static CorePtr_t ipInstance_gl;
 
 			CoreSimInfo_s	stSimInfo;

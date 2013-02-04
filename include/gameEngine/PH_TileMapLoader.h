@@ -28,7 +28,7 @@ namespace Phobos
 
 			TileMapLoader_c(const Register::Table_c &settings);
 
-			void Load(const String_c &fileName);
+			void Load(const String_t &fileName);
 
 		protected:
 			virtual GameWorldPtr_t CreateGameWorld();

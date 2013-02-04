@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	CoreModule_c::CoreModule_c(const String_c &name, UInt32_t flags):
+	CoreModule_c::CoreModule_c(const String_t &name, UInt32_t flags):
 		Node_c(name, flags)
 	{
 		//empty

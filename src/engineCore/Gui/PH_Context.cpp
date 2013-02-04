@@ -22,12 +22,12 @@ subject to the following restrictions:
 #include <Phobos/System/InputDevice.h>
 #include <Phobos/System/InputEvent.h>
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_c &name, size_t screenWidth, size_t screenHeight)
+Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_t &name, size_t screenWidth, size_t screenHeight)
 {
 	return boost::make_shared<Context_c>(name, screenWidth, screenHeight);
 }
 
-Phobos::Gui::Context_c::Context_c(const String_c &name, size_t screenWidth, size_t screenHeight):
+Phobos::Gui::Context_c::Context_c(const String_t &name, size_t screenWidth, size_t screenHeight):
 	Node_c(name),
 	pclContext(NULL)
 {	

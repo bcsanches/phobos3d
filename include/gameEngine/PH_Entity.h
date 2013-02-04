@@ -32,18 +32,18 @@ namespace Phobos
 	class PH_GAME_ENGINE_API Entity_c: public EntityIO_c
 	{
 		public:
-			static Entity_c *Create(const String_c &name);
+			static Entity_c *Create(const String_t &name);
 
 			void Load(const Register::Table_c &table);
 			void LoadFinished();
 
-			inline const String_c &GetEntityClassName() const;
+			inline const String_t &GetEntityClassName() const;
 
 			inline void SetHandle(Handle_s handle);
 			const Handle_s GetHandle() const;
 
 		protected:
-			Entity_c(const String_c &name);
+			Entity_c(const String_t &name);
 
 			virtual void OnLoad(const Register::Table_c &table) {};
 
@@ -54,13 +54,13 @@ namespace Phobos
 			inline const Register::Table_c &GetTable() const;
 
 		private:			
-			String_c			strClassName;
+			String_t			strClassName;
 			const Register::Table_c	*pclTable;
 
 			Handle_s hHandle;
 	};
 
-	inline const String_c &Entity_c::GetEntityClassName() const
+	inline const String_t &Entity_c::GetEntityClassName() const
 	{
 		return strClassName;
 	}

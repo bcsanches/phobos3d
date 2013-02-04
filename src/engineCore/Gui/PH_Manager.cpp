@@ -134,7 +134,7 @@ void Phobos::Gui::Manager_c::LoadFonts()
 	lstFontFacesToLoad.clear();
 }
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
+Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_t &name)
 {
 	ContextPtr_t ptr = Context_c::Create(name, this->GetScreenWidth(), this->GetScreenHeight());
 

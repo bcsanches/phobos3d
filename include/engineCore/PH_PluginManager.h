@@ -38,8 +38,8 @@ namespace Phobos
 
 			~PluginManager_c();
 
-			void LoadPlugin(const String_c &name);
-			void UnloadPlugin(const String_c &name);
+			void LoadPlugin(const String_t &name);
+			void UnloadPlugin(const String_t &name);
 
 		protected:
 			void OnPrepareToBoot();
@@ -57,7 +57,7 @@ namespace Phobos
 		private:
 			ContextCmd_c	cmdLoadPlugin;
 			ContextCmd_c	cmdUnloadPlugin;
-			std::list<String_c> lstPluginsToActivate;
+			std::list<String_t> lstPluginsToActivate;
 
 			bool				fSystemReady;
 

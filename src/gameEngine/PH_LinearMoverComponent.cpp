@@ -34,7 +34,7 @@ namespace Phobos
 
 	PH_DEFINE_ENTITY_OUTPUT(LinearMoverComponent_c, PositionChanged);	
 		
-	LinearMoverComponent_c::LinearMoverComponent_c(const String_c &name, Entity_c &owner):
+	LinearMoverComponent_c::LinearMoverComponent_c(const String_t &name, Entity_c &owner):
 		MoverComponent_c(name, owner)
 	{		
 		//empty

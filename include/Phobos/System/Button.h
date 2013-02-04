@@ -18,39 +18,38 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_BUTTON_H
 #define PH_SYSTEM_BUTTON_H
 
-#include <PH_Types.h>
-#include <PH_ContextCmd.h>
+#include <Phobos/Types.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/IContext.h>
 
 #include "Phobos/System/SystemAPI.h"
 
 namespace Phobos
-{	
-	class IContext_c;
-
+{		
 	namespace System
 	{
-		class PH_SYSTEM_API Button_c
+		class PH_SYSTEM_API Button
 		{
 			public:
-				Button_c(const String_c &up, const String_c &down, const String_c &update, IContext_c *context = NULL);		
+				Button(const String_t &up, const String_t &down, const String_t &update, Shell::IContext *context = NULL);		
 
 				inline Float_t GetValue(void) const
 				{
 					return(fpValue);
 				}
 
-				void Enable(IContext_c &context);
+				void Enable(Phobos::Shell::IContext &context);
 				void Disable();
 
 			private:
-				void CmdProc(const StringVector_t &args, Context_c & );
+				void CmdProc(const Shell::StringVector_t &args, Shell::Context & );
 
 			private:
 				Float_t fpValue;
 
-				ContextCmd_c cmdUp;
-				ContextCmd_c cmdDown;
-				ContextCmd_c cmdUpdate;
+				Shell::Command m_cmdUp;
+				Shell::Command m_cmdDown;
+				Shell::Command m_cmdUpdate;
 		};
 	}
 }

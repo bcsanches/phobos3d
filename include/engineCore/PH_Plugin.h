@@ -33,9 +33,9 @@ namespace Phobos
 	class Plugin_c: public Node_c
 	{
 		public:
-			static PluginPtr_t Create(const String_c &name);
+			static PluginPtr_t Create(const String_t &name);
 
-			Plugin_c(const String_c &name);
+			Plugin_c(const String_t &name);
 			~Plugin_c();
 
 			void Init();

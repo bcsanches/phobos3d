@@ -33,15 +33,15 @@ namespace Phobos
 		class PH_REGISTER_API Hive_c: public Node_c
 		{
 			public:
-				static HivePtr_t Create(const String_c &name);
+				static HivePtr_t Create(const String_t &name);
 
-				Hive_c(const String_c &name);
+				Hive_c(const String_t &name);
 				~Hive_c();
 
 				void Load(Parser_c &parser);
 
-				Table_c &GetTable(const String_c &name);
-				Table_c *TryGetTable(const String_c &name);
+				Table_c &GetTable(const String_t &name);
+				Table_c *TryGetTable(const String_t &name);
 
 				void AddTable(std::unique_ptr<Table_c> &&dict);
 

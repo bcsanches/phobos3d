@@ -29,12 +29,12 @@ namespace Phobos
 	class PointEntity_c: public Entity_c
 	{
 		public:
-			static Entity_c *Create(const String_c &name);
+			static Entity_c *Create(const String_t &name);
 
 			inline const Transform_c &GetTransform() const;
 
 		protected:
-			PointEntity_c(const String_c &name);
+			PointEntity_c(const String_t &name);
 
 			void OnLoad(const Register::Table_c &table);
 

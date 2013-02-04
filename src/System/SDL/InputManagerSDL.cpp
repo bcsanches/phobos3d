@@ -16,33 +16,33 @@ subject to the following restrictions:
 
 #include "Phobos/System/SDL/InputManagerSDL.h"
 
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+#include <Phobos/Log.h>
+#include <Phobos/Memory.h>
 
 #include "Phobos/System/InputDefs.h"
 
 
-Phobos::System::InputManagerPtr_t Phobos::System::InputManager_c::CreateInstanceImpl(const String_c &name)
+Phobos::System::InputManagerPtr_t Phobos::System::InputManager::CreateInstanceImpl(const String_t &name)
 {
-	return InputManagerPtr_t(PH_NEW InputManagerSDL_c(name));
+	return InputManagerPtr_t(PH_NEW InputManagerSDL(name));
 }
 
-Phobos::System::InputManagerSDL_c::InputManagerSDL_c(const String_c &name):
-	InputManager_c(name),
-	clKeyboardDevice(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_KEYBOARD)),
-	clMouseDevice(InputManager_c::GetDeviceTypeName(INPUT_DEVICE_MOUSE)),
-	fPooled(false)
+Phobos::System::InputManagerSDL::InputManagerSDL(const String_t &name):
+	InputManager(name),
+	m_clKeyboardDevice(InputManager::GetDeviceTypeName(INPUT_DEVICE_KEYBOARD)),
+	m_clMouseDevice(InputManager::GetDeviceTypeName(INPUT_DEVICE_MOUSE)),
+	m_fPooled(false)
 {
-	Kernel_c::GetInstance().LogMessage("[InputManagerSDL] Created.");
+	LogMessage("[InputManagerSDL] Created.");
 }
 
-void Phobos::System::InputManagerSDL_c::PollDevices(void)
+void Phobos::System::InputManagerSDL::PollDevices(void)
 {
-	if(fPooled)
+	if(m_fPooled)
 		return;
 
-	fPooled = true;
-	this->AttachDevice(clKeyboardDevice, 0);
-	this->AttachDevice(clMouseDevice, 0);
+	m_fPooled = true;
+	this->AttachDevice(m_clKeyboardDevice, 0);
+	this->AttachDevice(m_clMouseDevice, 0);
 }
 

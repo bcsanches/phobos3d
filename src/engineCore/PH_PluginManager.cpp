@@ -87,7 +87,7 @@ namespace Phobos
 
 		while(!lstPluginsToActivate.empty())
 		{
-			String_c pluginName;
+			String_t pluginName;
 			pluginName.swap(lstPluginsToActivate.front());
 			lstPluginsToActivate.pop_front();
 
@@ -99,7 +99,7 @@ namespace Phobos
 		}
 	}
 
-	void PluginManager_c::LoadPlugin(const String_c &name)
+	void PluginManager_c::LoadPlugin(const String_t &name)
 	{
 		{
 			std::unique_ptr<Plugin_c> plugin(PH_NEW Plugin_c(name));			
@@ -110,7 +110,7 @@ namespace Phobos
 		lstPluginsToActivate.push_back(name);
 	}
 
-	void PluginManager_c::UnloadPlugin(const String_c &name)
+	void PluginManager_c::UnloadPlugin(const String_t &name)
 	{
 		this->RemoveChild(this->GetChild(name));
 	}

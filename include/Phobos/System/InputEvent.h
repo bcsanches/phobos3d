@@ -33,14 +33,14 @@ namespace Phobos
 		*/
 		struct InputEvent_s
 		{
-			InputEventType_e	eType;
-			InputDevice_c		*pclDevice;
+			InputEventType_e	m_eType;
+			InputDevice			*m_pclDevice;
 
 			union
 			{
-				InputEventButton_s 	stButton;
-				InputEventChar_s	stChar;	
-				InputEventThumb_s	stThumb;
+				InputEventButton_s 	m_stButton;
+				InputEventChar_s	m_stChar;	
+				InputEventThumb_s	m_stThumb;
 			};
 		};
 	}

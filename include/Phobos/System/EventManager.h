@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_EVENT_MANAGER_H
 #define PH_SYSTEM_EVENT_MANAGER_H
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 #include "Phobos/System/EventListener.h"
 #include "Phobos/System/EventManagerFwd.h"
@@ -59,10 +59,10 @@ namespace Phobos
 
 		struct EventSystem_s
 		{
-			SystemEventType_e eType;
+			SystemEventType_e m_eType;
 
-			bool fMinimized;
-			bool fActive;
+			bool m_fMinimized;
+			bool m_fActive;
 		};
 
 		struct EventWindow_s
@@ -72,66 +72,66 @@ namespace Phobos
 
 		struct EventKeyboard_s
 		{
-			KeyboardEventType_e eType;
+			KeyboardEventType_e m_eType;
 
-			UInt16_t u16Code;
+			UInt16_t m_u16Code;
 		};
 
 		struct EventMouse_s
 		{
-			MouseEventType_e eType;
+			MouseEventType_e m_eType;
 
-			UInt16_t	u16ButtonId;
+			UInt16_t	m_u16ButtonId;
 
-			UInt16_t	u16X;
-			UInt16_t	u16Y;
+			UInt16_t	m_u16X;
+			UInt16_t	m_u16Y;
 		};
 
 		struct Event_s
 		{
-			EventType_e eType;
+			EventType_e m_eType;
 
 			union
 			{
-				EventWindow_s 	stWindow;
-				EventKeyboard_s	stKeyboard;
-				EventMouse_s	stMouse;
-				EventSystem_s	stSystem;
+				EventWindow_s 	m_stWindow;
+				EventKeyboard_s	m_stKeyboard;
+				EventMouse_s	m_stMouse;
+				EventSystem_s	m_stSystem;
 			};
 
-			void *pParam;
+			void *m_pParam;
 		};
 
-		class PH_SYSTEM_API EventManager_c: public Node_c
+		class PH_SYSTEM_API EventManager: public Node
 		{
 			public:	
-				static EventManager_c &CreateInstance(const String_c &name);
+				static EventManager &CreateInstance(const String_t &name);
 				static void ReleaseInstance();
-				static EventManager_c &GetInstance();	
-				static const String_c &GetDefaultName();
+				static EventManager &GetInstance();	
+				static const String_t &GetDefaultName();
 
 			public:
 				virtual void Update() = 0;
 
-				void AddListener(EventListener_c &listener, EventType_e type);
-				void RemoveListener(EventListener_c &listener);
+				void AddListener(EventListener &listener, EventType_e type);
+				void RemoveListener(EventListener &listener);
 
 			protected:
-				static EventManagerPtr_t CreateInstanceImpl(const String_c &name);			
+				static EventManagerPtr_t CreateInstanceImpl(const String_t &name);			
 
-				EventManager_c(const String_c &name);
+				EventManager(const String_t &name);
 
 				bool IsListenersListEmpty(EventType_e type);
 				void NotityListeners(Event_s &event);
 
 			private:			
-				static const String_c DEFAULT_NAME;
+				static const String_t DEFAULT_NAME;
 				static EventManagerPtr_t ipInstance_gl;
 
 			private:
-				PH_DECLARE_LISTENER_LIST_TYPE(EventListener_c);
+				PH_DECLARE_LISTENER_LIST_TYPE(EventListener);
 
-				ListenersList_t arlstListeners[EVENT_TYPE_NUM];
+				ListenersList_t m_arlstListeners[EVENT_TYPE_NUM];
 
 		};
 	}

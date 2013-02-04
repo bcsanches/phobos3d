@@ -20,7 +20,7 @@ namespace Phobos
 		return boost::make_shared<TileGameWorld_c>();
 	}
 	
-	void TileMapLoader_c::Load(const String_c &fileName)
+	void TileMapLoader_c::Load(const String_t &fileName)
 	{
 		MapLoader_c::ClearAllHives();
 

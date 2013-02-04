@@ -19,18 +19,18 @@ subject to the following restrictions:
 
 #include <SDL.h>
 
-Phobos::System::Timer_c::Timer_c():
-	uLastTime(SDL_GetTicks()),
-	fpMinInterval(0)
+Phobos::System::Timer::Timer():
+	m_uLastTime(SDL_GetTicks()),
+	m_fpMinInterval(0)
 {
 }
 
-void Phobos::System::Timer_c::Reset()
+void Phobos::System::Timer::Reset()
 {
-	uLastTime = SDL_GetTicks();
+	m_uLastTime = SDL_GetTicks();
 }
 
-Phobos::Float_t Phobos::System::Timer_c::Elapsed()
+Phobos::Float_t Phobos::System::Timer::Elapsed()
 {
 	UInt_t ticks = SDL_GetTicks();		
 		
@@ -41,13 +41,13 @@ Phobos::Float_t Phobos::System::Timer_c::Elapsed()
 		ticks = uLastTime+1;
 #endif
 
-	UInt_t elapsed = ticks - uLastTime;		
+	UInt_t elapsed = ticks - m_uLastTime;		
 
 	Float_t elapsedSeconds = elapsed / 1000.0f;
-	if((elapsedSeconds < fpMinInterval) || (elapsed == 0))
+	if((elapsedSeconds < m_fpMinInterval) || (elapsed == 0))
 		return 0.0f;
 
-	uLastTime = ticks;
+	m_uLastTime = ticks;
 
 	return elapsedSeconds;
 }	

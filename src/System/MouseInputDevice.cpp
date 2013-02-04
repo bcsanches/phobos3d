@@ -44,13 +44,13 @@ namespace Phobos
 }
 
 
-Phobos::System::MouseInputDevice_c::MouseInputDevice_c(const String_c &name):
-	InputDevice_c(name, INPUT_DEVICE_MOUSE)
+Phobos::System::MouseInputDevice::MouseInputDevice(const String_t &name):
+	InputDevice(name, INPUT_DEVICE_MOUSE)
 {
 	//empty
 }
 
-bool Phobos::System::MouseInputDevice_c::TryGetActionName(UInt_t action, String_c &out) const
+bool Phobos::System::MouseInputDevice::TryGetActionName(UInt_t action, String_t &out) const
 {
 	for(int i = 0;stActions_gl[i].pstrzName; ++i)
 	{
@@ -64,7 +64,7 @@ bool Phobos::System::MouseInputDevice_c::TryGetActionName(UInt_t action, String_
 	return false;
 }
 
-bool Phobos::System::MouseInputDevice_c::TryGetActionId(const String_c &name, UInt_t &out) const
+bool Phobos::System::MouseInputDevice::TryGetActionId(const String_t &name, UInt_t &out) const
 {
 	for(int i = 0;stActions_gl[i].pstrzName; ++i)
 	{			

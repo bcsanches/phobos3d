@@ -65,12 +65,12 @@ namespace Phobos
 		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
 	}
 
-	void WorldManager_c::LoadMap(const String_c &mapName)
+	void WorldManager_c::LoadMap(const String_t &mapName)
 	{
 		this->UnloadMap();
 
 		Path_c path(mapName);
-		String_c extension;
+		String_t extension;
 		path.GetExtension(extension);
 
 		spMapLoader = MapLoaderFactory_c::GetInstance().Create(extension.c_str());
@@ -124,7 +124,7 @@ namespace Phobos
 		}
 	}
 
-	Entity_c *WorldManager_c::TryGetEntityByType(const String_c &className) const
+	Entity_c *WorldManager_c::TryGetEntityByType(const String_t &className) const
 	{
 		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
@@ -136,7 +136,7 @@ namespace Phobos
 		return NULL;
 	}
 
-	Entity_c &WorldManager_c::GetEntityByName(const String_c &name) const
+	Entity_c &WorldManager_c::GetEntityByName(const String_t &name) const
 	{
 		return static_cast<Entity_c &>(this->GetChild(name));
 	}

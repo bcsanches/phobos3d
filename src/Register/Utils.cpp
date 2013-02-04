@@ -20,7 +20,7 @@ subject to the following restrictions:
 #include <PH_Parser.h>
 
 
-void Phobos::Register::RaiseParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_c &token, const char *module)
+void Phobos::Register::RaiseParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_t &token, const char *module)
 {
 	std::stringstream stream;
 

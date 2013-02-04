@@ -35,7 +35,7 @@ namespace Phobos
 		class PH_GAME_ENGINE_API CharacterBodyComponent_c: public EntityComponent_c
 		{
 			public:
-				static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
+				static EntityComponent_c *Create(const String_t &name, Entity_c &owner);
 
 				~CharacterBodyComponent_c();
 
@@ -43,7 +43,7 @@ namespace Phobos
 				void FinishPhysicsFrame();
 
 			protected:
-				CharacterBodyComponent_c(const String_c &name, Entity_c &owner);				
+				CharacterBodyComponent_c(const String_t &name, Entity_c &owner);				
 
 				void OnLoad(const Register::Table_c &table);
 				void OnLoadFinished();

@@ -56,7 +56,7 @@ namespace Phobos
 	class PH_ENGINE_CORE_API CoreModuleManager_c: public CoreModule_c
 	{
 		public:
-			static CoreModuleManagerPtr_t Create(const String_c &name);
+			static CoreModuleManagerPtr_t Create(const String_t &name);
 
 			~CoreModuleManager_c();
 
@@ -66,12 +66,12 @@ namespace Phobos
 
 			void OnEvent(CoreEvents::Enum event);
 
-			void LaunchBootModule(const String_c &cfgName, int argc, char *const argv[]);
+			void LaunchBootModule(const String_t &cfgName, int argc, char *const argv[]);
 
 			void LogCoreModules();
 
 		protected:
-			CoreModuleManager_c(const String_c &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);			
+			CoreModuleManager_c(const String_t &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);			
 
 			virtual void OnUpdate();
 			virtual void OnFixedUpdate();

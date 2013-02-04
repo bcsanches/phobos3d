@@ -16,10 +16,12 @@ subject to the following restrictions:
 
 #include "Phobos/System/InputDevice.h"
 
-void Phobos::System::InputDevice_c::DispatchEvent(const Phobos::System::InputEvent_s &e)
+void Phobos::System::InputDevice::DispatchEvent(const Phobos::System::InputEvent_s &e)
 {	
-	for(auto &listener: lstListeners)
+	for(auto &listener: m_lstListeners)
 	{
-		listener.InputEvent(e);
+		listener.OnInputEvent(e);
 	}	
 }
+
+PH_DEFINE_LISTENER_PROCS(Phobos::System::InputDevice, InputDeviceListener, m_lstListeners);

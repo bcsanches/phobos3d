@@ -20,12 +20,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PluginPtr_t Plugin_c::Create(const String_c &name)
+	PluginPtr_t Plugin_c::Create(const String_t &name)
 	{
 		return PluginPtr_t(PH_NEW Plugin_c(name));
 	}
 
-	Plugin_c::Plugin_c(const String_c &name):
+	Plugin_c::Plugin_c(const String_t &name):
 		Node_c(name)
 	{
 		clLibrary.Load(name);

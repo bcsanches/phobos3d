@@ -70,7 +70,7 @@ namespace Phobos
 	void BaseOgreGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform_c &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag) const
 	{		
 		const Ogre::MeshPtr mesh = staticObj.pclEntity->getMesh();
-		const String_c &meshName = mesh->getName();
+		const String_t &meshName = mesh->getName();
 		
 		Path_c path(meshName);
 		path.StripExtension();

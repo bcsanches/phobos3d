@@ -35,7 +35,7 @@ namespace Phobos
 
 	EntityInputManager_c ModelRendererComponent_c::clInputManager_gl;
 		
-	ModelRendererComponent_c::ModelRendererComponent_c(const String_c &name, Entity_c &owner):
+	ModelRendererComponent_c::ModelRendererComponent_c(const String_t &name, Entity_c &owner):
 		EntityComponent_c(name, owner),
 		pclSceneNode(NULL),
 		pclMeshEntity(NULL),
@@ -56,7 +56,7 @@ namespace Phobos
 
 	void ModelRendererComponent_c::OnLoad(const Register::Table_c &table)
 	{
-		const String_c &meshName = table.GetString(PH_ENTITY_KEY_MESH_FILE);
+		const String_t &meshName = table.GetString(PH_ENTITY_KEY_MESH_FILE);
 
 		Render_c &render = Render_c::GetInstance();
 
@@ -106,7 +106,7 @@ namespace Phobos
 	}
 
 	void ModelRendererComponent_c::AttachObjectToBone(
-				const String_c &boneName, 
+				const String_t &boneName, 
 				Ogre::MovableObject &movable, 
 				const Ogre::Quaternion &offsetOrientation, 
 				const Ogre::Vector3 &offsetPosition
@@ -120,7 +120,7 @@ namespace Phobos
 		return *pclMeshEntity->getSkeleton()->getBone(boneName);
 	}
 
-	Ogre::Bone &ModelRendererComponent_c::GetBone(const String_c &boneName)
+	Ogre::Bone &ModelRendererComponent_c::GetBone(const String_t &boneName)
 	{
 		return *pclMeshEntity->getSkeleton()->getBone(boneName);
 	}

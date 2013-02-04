@@ -429,14 +429,14 @@ namespace Phobos
 		pclMainSceneManager->removeRenderQueueListener(&listener);
 	}
 
-	Ogre::SceneNode *Render_c::GetSceneNode(const String_c &name)
+	Ogre::SceneNode *Render_c::GetSceneNode(const String_t &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
 		return pclMainSceneManager->getSceneNode(name);
 	}
 
-	Ogre::SceneNode *Render_c::CreateSceneNode(const String_c &name)
+	Ogre::SceneNode *Render_c::CreateSceneNode(const String_t &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
@@ -457,20 +457,20 @@ namespace Phobos
 		pclMainSceneManager->destroySceneNode(node->getName());
 	}
 
-	Ogre::Entity* Render_c::CreateEntity(const String_c &meshName, UInt32_t flags)
+	Ogre::Entity* Render_c::CreateEntity(const String_t &meshName, UInt32_t flags)
 	{
-		String_c tmpName;
+		String_t tmpName;
 		GenerateOgreName(tmpName);
 
 		return this->CreateEntity(tmpName, meshName, flags);
 	}
 
-	Ogre::Entity *Render_c::CreateEntity(const String_c &entityName, const String_c &meshName, UInt32_t flags)
+	Ogre::Entity *Render_c::CreateEntity(const String_t &entityName, const String_t &meshName, UInt32_t flags)
 	{
-		String_c tmpPath;		
-		String_c extension;
+		String_t tmpPath;		
+		String_t extension;
 
-		const String_c *meshNameToUse = &meshName;
+		const String_t *meshNameToUse = &meshName;
 
 		//Newer ogitor does nto include .mesh in mesh names, so fix it here
 		bool found = Path_c::GetExtension(extension, meshName);		 
@@ -507,13 +507,13 @@ namespace Phobos
 
 	Ogre::Light *Render_c::CreateLight()
 	{
-		String_c str;
+		String_t str;
 		GenerateOgreName(str);
 
 		return this->CreateLight(str);
 	}
 
-	Ogre::Light *Render_c::CreateLight(const String_c &name)
+	Ogre::Light *Render_c::CreateLight(const String_t &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
@@ -530,14 +530,14 @@ namespace Phobos
 
 	Ogre::Camera *Render_c::CreateCamera()
 	{
-		String_c tmp;
+		String_t tmp;
 
 		GenerateOgreName(tmp);
 
 		return this->CreateCamera(tmp);
 	}
 
-	Ogre::Camera *Render_c::CreateCamera(const String_c &name)
+	Ogre::Camera *Render_c::CreateCamera(const String_t &name)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
@@ -551,15 +551,15 @@ namespace Phobos
 		pclMainSceneManager->destroyCamera(camera);
 	}
 
-	Ogre::ParticleSystem *Render_c::CreateParticleSystem(const String_c &templateName)
+	Ogre::ParticleSystem *Render_c::CreateParticleSystem(const String_t &templateName)
 	{
-		String_c name;
+		String_t name;
 		GenerateOgreName(name);
 
 		return this->CreateParticleSystem(name, templateName);
 	}
 
-	Ogre::ParticleSystem *Render_c::CreateParticleSystem(const String_c &name, const String_c &templateName)
+	Ogre::ParticleSystem *Render_c::CreateParticleSystem(const String_t &name, const String_t &templateName)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
@@ -585,7 +585,7 @@ namespace Phobos
 		delete group;
 	}
 
-	void Render_c::SetSkyBox(bool enable, const String_c &materialName, Float_t distance, bool drawFirst, const Ogre::Quaternion& orientation)
+	void Render_c::SetSkyBox(bool enable, const String_t &materialName, Float_t distance, bool drawFirst, const Ogre::Quaternion& orientation)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 
@@ -640,7 +640,7 @@ namespace Phobos
 	}
 
 	/*
-	IM_ErrorHandler_t Render_c::LoadCaelum(const String_c &fileName)
+	IM_ErrorHandler_t Render_c::LoadCaelum(const String_t &fileName)
 	{
 		PH_ASSERT_VALID(pclMainSceneManager);
 		PH_ASSERT_VALID(pclOgreWindow);
@@ -817,7 +817,7 @@ namespace Phobos
 	}
 
 	/*
-	IM_Bool_t Render_c::VarRCaelumChanged(const IM_ContextVar_c &var, const String_c &currentValue, const String_c &newValue)
+	IM_Bool_t Render_c::VarRCaelumChanged(const IM_ContextVar_c &var, const String_t &currentValue, const String_t &newValue)
 	{
 		//caleum turned off?
 		if(!IM_StringToBoolean(newValue))
@@ -868,7 +868,7 @@ namespace Phobos
 		{
 			try
 			{
-				const String_c &name = args[i];
+				const String_t &name = args[i];
 
 				if(manager.resourceGroupExists(name) && manager.isResourceGroupInitialised(name))
 				{

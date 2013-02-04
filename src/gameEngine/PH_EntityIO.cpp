@@ -23,7 +23,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	EntityIO_c::EntityIO_c(const String_c &name, UInt32_t flags):
+	EntityIO_c::EntityIO_c(const String_t &name, UInt32_t flags):
 		Node_c(name, flags),
 		fFixedUpdateEnabled(false),
 		fUpdateEnabled(false)
@@ -104,7 +104,7 @@ namespace Phobos
 		//empty
 	}
 
-	void EntityOutputManager_c::AddConnector(const String_c &name, OutputProcConnector_t proc)
+	void EntityOutputManager_c::AddConnector(const String_t &name, OutputProcConnector_t proc)
 	{
 		ConnectorsMap_t::iterator it = mapConnectors.lower_bound(name);
 		if((it != mapConnectors.end()) && (!mapConnectors.key_comp()(name, it->first)))
@@ -135,7 +135,7 @@ namespace Phobos
 		//empty
 	}
 
-	void EntityInputManager_c::AddSlot(const String_c &name, InputProc_t proc)
+	void EntityInputManager_c::AddSlot(const String_t &name, InputProc_t proc)
 	{
 		InputMap_t::iterator it = mapInputs.lower_bound(name);
 		if((it != mapInputs.end()) && (!mapInputs.key_comp()(name, it->first)))

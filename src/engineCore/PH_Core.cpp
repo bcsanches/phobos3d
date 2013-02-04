@@ -38,7 +38,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	const String_c Core_c::DEFAULT_NAME = "Core";
+	const String_t Core_c::DEFAULT_NAME = "Core";
 	CorePtr_t Core_c::ipInstance_gl;
 
 	Core_c &Core_c::CreateInstance()
@@ -67,7 +67,7 @@ namespace Phobos
 		return *ipInstance_gl;
 	}
 
-	Core_c::Core_c(const Phobos::String_c &name):
+	Core_c::Core_c(const Phobos::String_t &name):
 		CoreModuleManager_c(name, NodeFlags::PRIVATE_CHILDREN),
 		cmdTime("time"),
 		cmdToggleTimerPause("toggleTimerPause"),
@@ -309,7 +309,7 @@ namespace Phobos
 			return;
 		}
 
-		const String_c &timerName(args[1]);
+		const String_t &timerName(args[1]);
 
 		for(int i = 0;pauseInfo[i].pstrzName; ++i)
 		{
