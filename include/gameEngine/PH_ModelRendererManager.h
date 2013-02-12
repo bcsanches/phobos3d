@@ -23,17 +23,17 @@ namespace Phobos
 {		
 	PH_DECLARE_SINGLETON_PTR(ModelRendererManager);
 
-	class ModelRendererComponent_c;
+	class ModelRendererComponent;
 
-	class PH_GAME_ENGINE_API ModelRendererManager_c: public GenericComponentManagerModule_c<ModelRendererComponent_c>
+	class PH_GAME_ENGINE_API ModelRendererManager: public GenericComponentManagerModule<ModelRendererComponent>
 	{
 		PH_DECLARE_SINGLETON_METHODS(ModelRendererManager);
 
 		public:
-			~ModelRendererManager_c();
+			~ModelRendererManager();
 		
 		protected:
-			ModelRendererManager_c();			
+			ModelRendererManager();			
 
 			virtual void OnUpdate();
 	};

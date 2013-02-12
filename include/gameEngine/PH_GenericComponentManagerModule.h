@@ -24,16 +24,16 @@ subject to the following restrictions:
 namespace Phobos
 {			
 	template <typename T>
-	class PH_GAME_ENGINE_API GenericComponentManagerModule_c: public CoreModule_c, public GenericComponentManager_c<T>
+	class PH_GAME_ENGINE_API GenericComponentManagerModule: public CoreModule, public GenericComponentManager<T>
 	{				
 		protected:
-			GenericComponentManagerModule_c(const String_t &name, UInt32_t flags =0):
-				CoreModule_c(name, flags)
+			GenericComponentManagerModule(const String_t &name, UInt32_t flags =0):
+				CoreModule(name, flags)
 			{
 				//empty
 			}
 			
-			~GenericComponentManagerModule_c()
+			~GenericComponentManagerModule()
 			{
 				//empty
 			}		

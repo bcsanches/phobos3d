@@ -16,15 +16,14 @@ subject to the following restrictions:
 
 #include "PH_Console.h"
 
-#include <boost/foreach.hpp>
-
-#include <PH_ContextUtils.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <Phobos/Exception.h>
+#include <Phobos/ObjectManager.h>
+#include <Phobos/Path.h>
 
 #include <Phobos/Register/Table.h>
 #include <Phobos/Register/Manager.h>
+
+#include <Phobos/Shell/Utils.h>
 
 #include <Phobos/System/InputActions.h>
 #include <Phobos/System/InputEvent.h>
@@ -35,70 +34,70 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	ConsolePtr_t Console_c::ipInstance_gl;
+	ConsolePtr_t Console::ipInstance_gl;
 	
-	Console_c &Console_c::GetInstance(void)
+	Console &Console::GetInstance(void)
 	{
 		return *ipInstance_gl;
 	}
 
-	void Console_c::ReleaseInstance(void)
+	void Console::ReleaseInstance(void)
 	{
 		ipInstance_gl.reset();
 	}
 			
-	Console_c::Console_c(const String_t &name, UInt32_t flags):
-		CoreModule_c(name, flags),
-		cmdLs("ls"),
-		cmdCd("cd"),
-		cmdDumpTable("dumpTable"),		
-		lstText(CONSOLE_LINE_COUNT),
-		lstHistory(CONSOLE_HISTORY_COUNT),
-		strCurrentNodePathName("/"),
-		fActive(true)
+	Console::Console(const String_t &name, UInt32_t flags):
+		CoreModule(name, flags),
+		m_cmdLs("ls"),
+		m_cmdCd("cd"),
+		m_cmdDumpTable("dumpTable"),		
+		m_lstText(CONSOLE_LINE_COUNT),
+		m_lstHistory(CONSOLE_HISTORY_COUNT),
+		m_strCurrentNodePathName("/"),
+		m_fActive(true)
 	{
-		Kernel_c::GetInstance().AddLogListener(*this);				
+		LogAddListener(*this);				
 
-		cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdLs, this));
-		cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdCd, this));
-		cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console_c::CmdDumpTable, this));		
+		m_cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console::CmdLs, this));
+		m_cmdCd.SetProc(PH_CONTEXT_CMD_BIND(&Console::CmdCd, this));
+		m_cmdDumpTable.SetProc(PH_CONTEXT_CMD_BIND(&Console::CmdDumpTable, this));		
 
-		clContext.AddContextCmd(cmdLs);
-		clContext.AddContextCmd(cmdCd);
-		clContext.AddContextCmd(cmdDumpTable);
+		m_clContext.AddContextCommand(m_cmdLs);
+		m_clContext.AddContextCommand(m_cmdCd);
+		m_clContext.AddContextCommand(m_cmdDumpTable);
 	}
 
-	Console_c::~Console_c()
+	Console::~Console()
 	{
 		//empty
 	}
 
-	void Console_c::UpdateInstance(ConsolePtr_t console)
+	void Console::UpdateInstance(ConsolePtr_t console)
 	{
 		ipInstance_gl = console;
 	}
 
-	const String_t &Console_c::EditBoxStr() const
+	const String_t &Console::EditBoxStr() const
 	{
-		return clEditBox.GetStr();
+		return m_clEditBox.GetStr();
 	}
 
-	void Console_c::Execute(const String_t &cmdLine)
+	void Console::Execute(const String_t &cmdLine)
 	{
 		this->QueueCommand(cmdLine);
 	}
 
-	void Console_c::ExecuteFromFile(const String_t &fileName)
+	void Console::ExecuteFromFile(const String_t &fileName)
 	{
-		clContext.ExecuteFromFile(fileName);
+		m_clContext.ExecuteFromFile(fileName);
 	}
 
-	void Console_c::OnChar(Char_t ch)
+	void Console::OnChar(Char_t ch)
 	{		
 		switch(ch)
 		{
 			case System::KB_BACKSPACE:
-				clEditBox.Backspace();
+				m_clEditBox.Backspace();
 				break;
 
 			case System::KB_ENTER:
@@ -110,55 +109,55 @@ namespace Phobos
 				break;
 
 			default:
-				clEditBox.AddChar(ch);
+				m_clEditBox.AddChar(ch);
 				break;
 		}
 
 		this->OnEditBoxChanged();
 	}
 
-	void Console_c::OnEnter(void)
+	void Console::OnEnter(void)
 	{
-		const String_t &cmdLine = clEditBox.GetStr();
+		const String_t &cmdLine = m_clEditBox.GetStr();
 
-		Kernel_c::GetInstance().LogStream() << "> " << cmdLine;
+		LogMakeStream() << "> " << cmdLine;
 		
 		this->QueueCommand(cmdLine);		
 
 		this->AddToHistory(cmdLine);
 
-		clEditBox.Clear();
+		m_clEditBox.Clear();
 	}
 
-	void Console_c::QueueCommand(const String_t &cmd)
+	void Console::QueueCommand(const String_t &cmd)
 	{
-		clCommandBuffer << cmd << std::endl;
+		m_clCommandBuffer << cmd << std::endl;
 	}
 
-	void Console_c::FlushCommandBuffer()
+	void Console::FlushCommandBuffer()
 	{
-		String_t buffer = clCommandBuffer.str();
-		clCommandBuffer.str(String_t());
-		clCommandBuffer.clear();
+		String_t buffer = m_clCommandBuffer.str();
+		m_clCommandBuffer.str(String_t());
+		m_clCommandBuffer.clear();
 
-		clContext.Execute(buffer);				
+		m_clContext.Execute(buffer);				
 	}
 
-	void Console_c::AddToHistory(const String_t &str)
+	void Console::AddToHistory(const String_t &str)
 	{
-		if(!lstHistory.empty() && lstHistory.front().compare(str) == 0)
+		if(!m_lstHistory.empty() && m_lstHistory.front().compare(str) == 0)
 			return;
 
-		lstHistory.push_front(str);
-		itPrevCmd = lstHistory.begin();
+		m_lstHistory.push_front(str);
+		m_itPrevCmd = m_lstHistory.begin();
 	}
 
-	bool Console_c::GetPreviousCommand(String_t &str)
+	bool Console::GetPreviousCommand(String_t &str)
 	{
-		if(!lstHistory.empty() && (itPrevCmd != lstHistory.end()))
+		if(!m_lstHistory.empty() && (m_itPrevCmd != m_lstHistory.end()))
 		{
-			str = *itPrevCmd;
-			++itPrevCmd;
+			str = *m_itPrevCmd;
+			++m_itPrevCmd;
 
 			return(true);
 		}
@@ -166,12 +165,12 @@ namespace Phobos
 		return(false);
 	}
 
-	bool Console_c::GetNextCommand(String_t &str)
+	bool Console::GetNextCommand(String_t &str)
 	{
-		if(!lstHistory.empty() && (itPrevCmd != lstHistory.begin()))
+		if(!m_lstHistory.empty() && (m_itPrevCmd != m_lstHistory.begin()))
 		{
-			--itPrevCmd;
-			str = *itPrevCmd;
+			--m_itPrevCmd;
+			str = *m_itPrevCmd;
 
 			return(true);
 		}
@@ -179,66 +178,66 @@ namespace Phobos
 		return(false);
 	}
 
-	void Console_c::OnPreviousCommand(void)
+	void Console::OnPreviousCommand(void)
 	{
 		String_t tmp;
 
 		if(this->GetPreviousCommand(tmp))
 		{			
-			clEditBox.SetStr(tmp);
+			m_clEditBox.SetStr(tmp);
 
 			this->OnEditBoxChanged();
 		}
 	}
 
-	void Console_c::OnNextCommand(void)
+	void Console::OnNextCommand(void)
 	{
 		String_t tmp;
 
 		if(this->GetNextCommand(tmp))
 		{			
-			clEditBox.SetStr(tmp);
+			m_clEditBox.SetStr(tmp);
 
 			this->OnEditBoxChanged();
 		}
 	}	
 
-	void Console_c::Print(const String_t &str)
+	void Console::Print(const String_t &str)
 	{
 		String_t line;
 		size_t splitPos = 0;
 
 		while(StringSplitBy(line, str, '\n', splitPos, &splitPos))
 		{
-			lstText.push_back(line);
+			m_lstText.push_back(line);
 		}
 
 		this->OnTextListChanged();		
 	}
 
-	bool Console_c::HandleInputEvent(const System::InputEvent_s &event)
+	bool Console::HandleInputEvent(const System::InputEvent_s &event)
 	{
-		switch(event.eType)
+		switch(event.m_eType)
 		{
 			case System::INPUT_EVENT_CHAR:
 				if(this->IsActive())
 				{
-					this->OnChar(static_cast<Char_t>(event.stChar.u16Char));
+					this->OnChar(static_cast<Char_t>(event.m_stChar.m_u16Char));
 					return true;
 				}
 				break;
 
 			case System::INPUT_EVENT_BUTTON:
-				if(event.stButton.eState == System::BUTTON_STATE_DOWN)
+				if(event.m_stButton.m_eState == System::BUTTON_STATE_DOWN)
 				{
 					if(this->IsActive())
 					{
-						if(event.stButton.uId == System::KB_UP_ARROW)
+						if(event.m_stButton.m_uId == System::KB_UP_ARROW)
 						{
 							this->OnPreviousCommand();
 							return true;
 						}
-						else if(event.stButton.uId == System::KB_DOWN_ARROW)
+						else if(event.m_stButton.m_uId == System::KB_DOWN_ARROW)
 						{
 							this->OnNextCommand();
 							return true;
@@ -254,18 +253,18 @@ namespace Phobos
 		return false;
 	}
 
-	void Console_c::Message(const String_t &msg)
+	void Console::OnLogMessage(const String_t &msg)
 	{
 		this->Print(msg);
 	}
 
-	void Console_c::ToggleConsole(void)
+	void Console::ToggleConsole(void)
 	{
 		const Char_t *msg;
 
 		//if just turning on
-		fActive = !fActive;
-		if(fActive)
+		m_fActive = !m_fActive;
+		if(m_fActive)
 		{			
 			msg = "enabled";					
 		}
@@ -276,33 +275,63 @@ namespace Phobos
 
 		std::string tmp("Console ");
 		tmp.append(msg);
-		Kernel_c::GetInstance().LogMessage(tmp);
+		LogMessage(tmp);
 
 		this->OnToggleConsole();
 	}	
 
-	void Console_c::CmdLs(const StringVector_t &args, Context_c &)
+	void Console::AddContextVariable(Shell::Variable &var)
 	{
-		Kernel_c	&kernel = Kernel_c::GetInstance();
-		Node_c		*currentNode;
+		return m_clContext.AddContextVariable(var);
+	}
+
+	void Console::AddContextCommand(Shell::Command &cmd)
+	{
+		return m_clContext.AddContextCommand(cmd);
+	}	
+
+	void Console::RemoveContextCommand(Shell::Command &cmd)
+	{
+		return m_clContext.RemoveContextCommand(cmd);
+	}
+
+	const Shell::Variable &Console::GetContextVariable(const String_t &name) const
+	{
+		return m_clContext.GetContextVariable(name);
+	}
+
+	/*
+	Shell::Variable *Console::TryGetContextVariable(const String_t &name)
+	{
+		return m_clContext.TryGetContextVariable(name);
+	}*/
+
+	const Shell::Variable *Console::TryGetContextVariable(const String_t &name) const
+	{
+		return m_clContext.TryGetContextVariable(name);
+	}
+
+	void Console::CmdLs(const Shell::StringVector_t &args, Shell::Context &)
+	{		
+		Node		*currentNode;
 
 		if(args.size() > 1)
 		{
-			Path_c path(args[1]);
+			Path path(args[1]);
 
 			if(path.IsRelative())
 			{
-				path = strCurrentNodePathName;
+				path = m_strCurrentNodePathName;
 				path.AddName(args[1]);
 			}
 
 			try
 			{
-				currentNode = &kernel.LookupObject(path);
+				currentNode = &ObjectManager::LookupObject(path);
 			}
-			catch(ObjectNotFoundException_c &)
+			catch(ObjectNotFoundException &)
 			{
-				kernel.LogStream() << "[OgreConsole_c::CmdLs] Invalid path: " << path.GetStr();
+				LogMakeStream() << "[OgreConsole::CmdLs] Invalid path: " << path.GetStr();
 
 				return;
 			}
@@ -311,13 +340,13 @@ namespace Phobos
 		{
 			try
 			{
-				currentNode = &kernel.LookupObject(Path_c(strCurrentNodePathName));
+				currentNode = &ObjectManager::LookupObject(Path(m_strCurrentNodePathName));
 			}
-			catch(ObjectNotFoundException_c &)
+			catch(ObjectNotFoundException &)
 			{
-				kernel.LogStream() << "[OgreConsole_c::CmdLs] Invalid node (" << strCurrentNodePathName << "), going to root";
+				LogMakeStream() << "[OgreConsole::CmdLs] Invalid node (" << m_strCurrentNodePathName << "), going to root";
 
-				strCurrentNodePathName = "/";
+				m_strCurrentNodePathName = "/";
 				return;
 			}
 		}
@@ -325,58 +354,57 @@ namespace Phobos
 		std::stringstream stream;
 
 		stream << "\t.\n\t..\n";
-		BOOST_FOREACH(const Node_c::NodeMapPair_t &pair, currentNode->GetNodes())
+		for(const auto &pair : currentNode->GetNodes())		
 		{
 			stream << "\t" << pair.second->GetName() << "\n";
 		}
 
-		kernel.LogMessage(stream.str());
+		LogMessage(stream.str());
 	}
 
-	void Console_c::CmdCd(const StringVector_t &args, Context_c &)
+	void Console::CmdCd(const Shell::StringVector_t &args, Shell::Context &)
 	{
 		if(args.size() == 2)
-		{
-			Kernel_c	&kernel = Kernel_c::GetInstance();
-			Node_c		*currentNode;
-			Path_c		path(args[1]);
+		{			
+			Node	*currentNode;
+			Path	path(args[1]);
 
 			if(path.IsRelative())
 			{
-				path = strCurrentNodePathName;
+				path = m_strCurrentNodePathName;
 				path.AddName(args[1]);
 			}
 
 			try
 			{
-				currentNode = &kernel.LookupObject(path);
+				currentNode = &ObjectManager::LookupObject(path);
 				currentNode->GetThisPath(path);
 
 				//if we are at root, we set the path manually, otherwise the path will be empty
 				if(currentNode->GetParent() == NULL)
-					strCurrentNodePathName = '/';
+					m_strCurrentNodePathName = '/';
 				else
-					strCurrentNodePathName = path.GetStr();
+					m_strCurrentNodePathName = path.GetStr();
 			}
-			catch(const Exception_c &)
+			catch(const Exception &)
 			{
-				kernel.LogStream() << "[OgreConsole_c::CmdCd] Invalid dir " << args[1];
+				LogMakeStream() << "[OgreConsole::CmdCd] Invalid dir " << args[1];
 			}
 		}
 		else
-			Kernel_c::GetInstance().LogMessage("[OgreConsole_c::CmdCd] Insuficient parameters");
+			LogMessage("[OgreConsole::CmdCd] Insuficient parameters");
 	}
 
-	void Console_c::CmdDumpTable(const StringVector_t &args, Context_c &)
+	void Console::CmdDumpTable(const Shell::StringVector_t &args, Shell::Context &)
 	{
-		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
+		auto stream = LogMakeStream();
 
 		try
 		{
-			Register::Table_c *table;
+			Register::Table *table;
 			if(args.size() == 2)
 			{
-				table = &Register::GetTable(Path_c(args[1]));
+				table = &Register::GetTable(Path(args[1]));
 				stream << "Values on " << args[1] << '\n';
 			}
 			else if(args.size() == 3)
@@ -386,7 +414,7 @@ namespace Phobos
 			}
 			else
 			{
-				stream << "[OgreConsole_c::CmdDumpTable] Insuficient parameters, usage: dumpTable <path>\n";
+				stream << "[OgreConsole::CmdDumpTable] Insuficient parameters, usage: dumpTable <path>\n";
 				return;
 			}
 
@@ -409,56 +437,56 @@ namespace Phobos
 	//EDIT BOX
 	//
 	//
-	inline Console_c::EditBox_c::EditBox_c(void):
-		uCursorPos(0)
+	inline Console::EditBox::EditBox(void):
+		m_uCursorPos(0)
 	{
 
 	}
 
-	inline void Console_c::EditBox_c::AddChar(Char_t ch)
+	inline void Console::EditBox::AddChar(Char_t ch)
 	{
-		strStr.insert(uCursorPos, 1, ch);
+		m_strStr.insert(m_uCursorPos, 1, ch);
 
-		++uCursorPos;
+		++m_uCursorPos;
 	}
 
 
-	inline void Console_c::EditBox_c::RetreatCursor(void)
+	inline void Console::EditBox::RetreatCursor(void)
 	{
-		if(uCursorPos > 0)
-			--uCursorPos;
+		if(m_uCursorPos > 0)
+			--m_uCursorPos;
 	}
 
-	inline void Console_c::EditBox_c::AdvanceCursor(void)
+	inline void Console::EditBox::AdvanceCursor(void)
 	{
-		if(uCursorPos <= strStr.length())
-			++uCursorPos;
+		if(m_uCursorPos <= m_strStr.length())
+			++m_uCursorPos;
 	}
 
-	inline void Console_c::EditBox_c::Backspace(void)
+	inline void Console::EditBox::Backspace(void)
 	{
-		if(uCursorPos > 0)
+		if(m_uCursorPos > 0)
 		{
-			--uCursorPos;
-			strStr.erase(uCursorPos, 1);
+			--m_uCursorPos;
+			m_strStr.erase(m_uCursorPos, 1);
 		}
 	}
 
-	inline void Console_c::EditBox_c::Clear(void)
+	inline void Console::EditBox::Clear(void)
 	{
-		strStr.clear();
-		uCursorPos = 0;
+		m_strStr.clear();
+		m_uCursorPos = 0;
 	}
 
-	inline void Console_c::EditBox_c::SetStr(const String_t &str)
+	inline void Console::EditBox::SetStr(const String_t &str)
 	{
-		strStr = str;
+		m_strStr = str;
 
-		uCursorPos = strStr.length();
+		m_uCursorPos = m_strStr.length();
 	}
 
-	inline const String_t &Console_c::EditBox_c::GetStr(void) const
+	inline const String_t &Console::EditBox::GetStr(void) const
 	{
-		return(strStr);
+		return(m_strStr);
 	}
 }

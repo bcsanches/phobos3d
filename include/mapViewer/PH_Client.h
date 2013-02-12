@@ -18,10 +18,10 @@ subject to the following restrictions:
 #ifndef PH_CLIENT_H
 #define PH_CLIENT_H
 
-#include <PH_ContextCmd.h>
-#include <PH_ContextVar.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/Variable.h>
 #include <PH_GamePlugin.h>
-#include <PH_Singleton.h>
+#include <Phobos/Singleton.h>
 #include <PH_WorldManager.h>
 
 #include "PH_BaseClient.h"
@@ -31,49 +31,49 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(Client);
 
-	class Client_c: public BaseClient_c, private WorldManagerListener_c
+	class Client: public BaseClient, private WorldManagerListener
 	{
 		PH_DECLARE_SINGLETON_METHODS(Client);
 
 		public:
 			PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL;
 
-			virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd);
+			virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd) override;
 
-			virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm);
+			virtual EscAction HandleEsc(Gui::Form *&outForm) override;
 
 		protected:
-			void OnFixedUpdate();
-			void OnUpdate();			
-			void OnPrepareToBoot();
-			void OnBoot();			
+			virtual void OnFixedUpdate() override;
+			virtual void OnUpdate() override;			
+			virtual void OnPrepareToBoot() override;
+			virtual void OnBoot() override;			
 
 		private:
-			Client_c();
+			Client();
 
 			void OnMapUnloaded();
 			void OnMapLoaded();
 			
-			void CmdToggleMouseCursorClip(const StringVector_t &args, Context_c &);			
+			void CmdToggleMouseCursorClip(const Shell::StringVector_t &args, Shell::Context &);			
 
-			void VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_t &oldValue, const String_t &newValue);
-			void VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_t &oldValue, const String_t &newValue);
-			void VarMouseSensitivityChanged(const class ContextVar_c &var, const String_t &oldValue, const String_t &newValue);
+			void VarSpectatorMoveSpeedChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue);
+			void VarSpectatorTurnSpeedChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue);
+			void VarMouseSensitivityChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue);
 
 			struct ConfigInfo_s GetConfig();
 
 		private:								
-			ContextVar_c		varMouseSensitivity;
+			Shell::Variable		m_varMouseSensitivity;
 
-			ContextVar_c		varSpectatorMoveSpeed;
-			ContextVar_c		varSpectatorTurnSpeed;
+			Shell::Variable		m_varSpectatorMoveSpeed;
+			Shell::Variable		m_varSpectatorTurnSpeed;
 
-			SpectatorCamera_c	clSpectatorCamera;
-			SpectatorCameraCommandProducer_c clSpectatorCameraCommandProducer;
+			SpectatorCamera	m_clSpectatorCamera;
+			SpectatorCameraCommandProducer_c m_clSpectatorCameraCommandProducer;
 
-			IPlayerCmdPtr_t		ipPlayerCmd;
+			IPlayerCmdPtr_t		m_ipPlayerCmd;
 			
-			bool fMapLoaded;
+			bool m_fMapLoaded;
 	};
 }
 

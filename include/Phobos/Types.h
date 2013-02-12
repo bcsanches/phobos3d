@@ -70,50 +70,81 @@ namespace Phobos
 	#error "Unknown platform"
 #endif //WIN32
 
+
+	template <typename T>
+	struct Size_s
+	{
+		inline Size_s():
+			m_tWidth(0),
+			m_tHeight(0)
+		{
+			//empty
+		}
+
+		inline Size_s(T width, T height):
+			m_tWidth(width),
+			m_tHeight(height)
+		{
+			//empty
+		}
+
+		inline Size_s(const Size_s &rhs):
+			m_tWidth(rhs.m_tWidth),
+			m_tHeight(rhs.m_tHeight)
+		{
+			//empty
+		}
+
+		T m_tWidth;
+		T m_tHeight;
+	};
+
+	typedef Size_s<UInt_t> UIntSize_t;
+
+	template <typename T>
+	struct Rect_s
+	{
+		inline Rect_s()
+		{
+			tOrigin[0] = tOrigin[1] = 0;
+		}
+
+		inline Rect_s(T x, T y, const Size_s<T> &size):
+			m_tSize(size)
+		{
+			tOrigin[0] = x;
+			tOrigin[1] = y;		
+		}
+
+		inline Rect_s(T x, T y, T width, T height):
+			m_tSize(width, height)
+		{
+			tOrigin[0] = x;
+			tOrigin[1] = y;		
+		}
+
+		inline Rect_s(const Rect_s &rhs):
+			m_tSize(rhs.m_tSize)		
+		{
+			tOrigin[0] = rhs.tOrigin[0];
+			tOrigin[1] = rhs.tOrigin[1];
+		}
+
+
+		inline Rect_s &operator=(const Rect_s &other)
+		{
+			m_tOrigin[0] = other.m_tOrigin[0];
+			m_tOrigin[1] = other.m_tOrigin[1];
+
+			m_tSize = other.m_tSize;		
+
+			return *this;
+		}
+
+		T			m_tOrigin[2];
+		Size_s<T>	m_tSize;	
+	};
 }
-
-template <typename T>
-struct Rect_s
-{
-	inline Rect_s():
-		tWidth(0),
-		tHeight(0)
-	{
-		tOrigin[0] = tOrigin[1] = 0;
-	}
-
-	inline Rect_s(T x, T y, T width, T height)	
-	{
-		tOrigin[0] = x;
-		tOrigin[1] = y;
-		tWidth = width;
-		tHeight = height;
-	}
-
-	inline Rect_s(const Rect_s &rhs):
-		tWidth(rhs.tWidth),
-		tHeight(rhs.tHeight)
-	{
-		tOrigin[0] = rhs.tOrigin[0];
-		tOrigin[1] = rhs.tOrigin[1];
-	}
-
-
-	inline Rect_s &operator=(const Rect_s &other)
-	{
-		tOrigin[0] = other.tOrigin[0];
-		tOrigin[1] = other.tOrigin[1];
-
-		tWidth = other.tWidth;
-		tHeight = other.tHeight;
-
-		return *this;
-	}
-
-	T tOrigin[2];
-	T tWidth;
-	T tHeight;
-};
 
 
 #endif //PH_TYPES_H

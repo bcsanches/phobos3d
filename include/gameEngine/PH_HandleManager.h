@@ -17,8 +17,8 @@ subject to the following restrictions:
 #ifndef PH_ENTITY_CONTAINER_H
 #define PH_ENTITY_CONTAINER_H
 
-#include <PH_Exception.h>
-#include <PH_Types.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Types.h>
 
 //Based on http://gamesfromwithin.com/managing-data-relationships
 namespace Phobos
@@ -26,124 +26,124 @@ namespace Phobos
 	struct Handle_s
 	{
 		Handle_s():
-			u12Index(0),
-			u20Counter(0)
+			m_u12Index(0),
+			m_u20Counter(0)
 		{
 		}
 
 		Handle_s(UInt32_t index, UInt32_t counter):
-            u12Index(index),
-			u20Counter(counter)
+            m_u12Index(index),
+			m_u20Counter(counter)
 		{
 			//empty
 		}
 
 		inline operator UInt32_t () const
 		{
-			return u20Counter << 12 | u12Index;
+			return m_u20Counter << 12 | m_u12Index;
 		}
 
-		UInt32_t u12Index : 12;
-		UInt32_t u20Counter: 20;
+		UInt32_t m_u12Index : 12;
+		UInt32_t m_u20Counter: 20;
 	};
 
 	template <typename T>
-	class HandleManager_c
+	class HandleManager
 	{
 		public:
 			enum { MAX_ENTRIES = 4096 };
 
-			HandleManager_c()
+			HandleManager()
 			{
 				this->Clear();
 			}
 
 			void Clear()
 			{
-				uNextFreeItem = 0;
-				uActiveObjects = 0;
+				m_uNextFreeItem = 0;
+				m_uActiveObjects = 0;
 
 				for(int i = 0;i < MAX_ENTRIES; ++i)
 				{
-					arstObjects[i].u12NextFreeItem = i + 1;
+					m_arstObjects[i].m_u12NextFreeItem = i + 1;
 				}
 
-				arstObjects[MAX_ENTRIES-1].u12NextFreeItem = 0;
+				m_arstObjects[MAX_ENTRIES-1].m_u12NextFreeItem = 0;
 			}
 
 			Handle_s AddObject(T *ptr)
 			{
-				if(uActiveObjects == MAX_ENTRIES)
-					PH_RAISE(INVALID_OPERATION_EXCEPTION, "[HandleManager_c::AddObject]", "HandleManager is full.");
+				if(m_uActiveObjects == MAX_ENTRIES)
+					PH_RAISE(INVALID_OPERATION_EXCEPTION, "[HandleManager::AddObject]", "HandleManager is full.");
 
-				const int index = uNextFreeItem;
-				uNextFreeItem = arstObjects[index].u12NextFreeItem;
+				const int index = m_uNextFreeItem;
+				m_uNextFreeItem = m_arstObjects[index].m_u12NextFreeItem;
 
-				arstObjects[index].u20Counter++;
+				m_arstObjects[index].m_u20Counter++;
 
 				//Never allow counter 0, to avoid blank handles
-				if(arstObjects[index].u20Counter == 0)
-					arstObjects[index].u20Counter = 1;
+				if(m_arstObjects[index].m_u20Counter == 0)
+					m_arstObjects[index].m_u20Counter = 1;
 
-				arstObjects[index].ptObject = ptr;
+				m_arstObjects[index].m_ptObject = ptr;
 
-				++uActiveObjects;
+				++m_uActiveObjects;
 
-				return Handle_s(index, arstObjects[index].u20Counter);
+				return Handle_s(index, m_arstObjects[index].m_u20Counter);
 			}
 
 			void RemoveObject(const Handle_s handle)
 			{
-				const UInt_t index = handle.u12Index;
-				if(arstObjects[index].u20Counter != handle.u20Counter)
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[HandleManager_c::RemoveObject]", "Invalid counter value.");
+				const UInt_t index = handle.m_u12Index;
+				if(m_arstObjects[index].m_u20Counter != handle.m_u20Counter)
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[HandleManager::RemoveObject]", "Invalid counter value.");
 
-				if(arstObjects[index].ptObject == NULL)
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[HandleManager_c::RemoveObject]", "Object already removed, ptObject == NULL");
+				if(m_arstObjects[index].m_ptObject == NULL)
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[HandleManager::RemoveObject]", "Object already removed, ptObject == NULL");
 
-				arstObjects[index].ptObject = NULL;
-				arstObjects[index].u12NextFreeItem = uNextFreeItem;
-				uNextFreeItem = index;
+				m_arstObjects[index].m_ptObject = NULL;
+				m_arstObjects[index].m_u12NextFreeItem = m_uNextFreeItem;
+				m_uNextFreeItem = index;
 
-				--uActiveObjects;
+				--m_uActiveObjects;
 			}
 
 			T *TryGetObject(const Handle_s handle) const
 			{
-				const UInt_t index = handle.u12Index;
+				const UInt_t index = handle.m_u12Index;
 
-				if(arstObjects[index].u20Counter != handle.u20Counter)
+				if(m_arstObjects[index].m_u20Counter != handle.m_u20Counter)
 					return NULL;
 
-				return arstObjects[index].ptObject;
+				return m_arstObjects[index].m_ptObject;
 			}
 
 			inline UInt_t GetNumActiveObjects() const
 			{
-				return uActiveObjects;
+				return m_uActiveObjects;
 			}
 
 
 		private:
 			struct HandleItem_s
 			{
-				UInt32_t u12NextFreeItem:12;
-				UInt32_t u20Counter:20;
+				UInt32_t m_u12NextFreeItem:12;
+				UInt32_t m_u20Counter:20;
 
-				T *ptObject;
+				T *m_ptObject;
 
 				HandleItem_s():
-					u12NextFreeItem(0),
-					u20Counter(0),
-					ptObject(NULL)
+					m_u12NextFreeItem(0),
+					m_u20Counter(0),
+					m_ptObject(NULL)
 				{
 					//empty
 				}
 			};
 
-			HandleItem_s arstObjects[MAX_ENTRIES];
-			UInt_t uNextFreeItem;
-			UInt_t uActiveObjects;
+			HandleItem_s m_arstObjects[MAX_ENTRIES];
+			UInt_t m_uNextFreeItem;
+			UInt_t m_uActiveObjects;
 	};
 }
 

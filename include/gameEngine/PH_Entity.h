@@ -25,16 +25,16 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	class EntityComponent_c;
+	class EntityComponent;
 
 	PH_DECLARE_NODE_PTR(Entity);
 
-	class PH_GAME_ENGINE_API Entity_c: public EntityIO_c
+	class PH_GAME_ENGINE_API Entity: public EntityIO
 	{
 		public:
-			static Entity_c *Create(const String_t &name);
+			static Entity *Create(const String_t &name);
 
-			void Load(const Register::Table_c &table);
+			void Load(const Register::Table &table);
 			void LoadFinished();
 
 			inline const String_t &GetEntityClassName() const;
@@ -43,41 +43,41 @@ namespace Phobos
 			const Handle_s GetHandle() const;
 
 		protected:
-			Entity_c(const String_t &name);
+			Entity(const String_t &name);
 
-			virtual void OnLoad(const Register::Table_c &table) {};
+			virtual void OnLoad(const Register::Table &table) {};
 
 			virtual void OnLoadFinished() {};
 
-			EntityComponent_c &GetComponent(const char *typeName);
+			EntityComponent &GetComponent(const char *typeName);
 
-			inline const Register::Table_c &GetTable() const;
+			inline const Register::Table &GetTable() const;
 
 		private:			
-			String_t			strClassName;
-			const Register::Table_c	*pclTable;
+			String_t				m_strClassName;
+			const Register::Table	*m_pclTable;
 
-			Handle_s hHandle;
+			Handle_s m_hHandle;
 	};
 
-	inline const String_t &Entity_c::GetEntityClassName() const
+	inline const String_t &Entity::GetEntityClassName() const
 	{
-		return strClassName;
+		return m_strClassName;
 	}
 
-	inline void Entity_c::SetHandle(Handle_s handle)
+	inline void Entity::SetHandle(Handle_s handle)
 	{
-		hHandle = handle;
+		m_hHandle = handle;
 	}
 
-	inline const Handle_s Entity_c::GetHandle() const
+	inline const Handle_s Entity::GetHandle() const
 	{
-		return hHandle;
+		return m_hHandle;
 	}
 
-	inline const Register::Table_c &Entity_c::GetTable() const
+	inline const Register::Table &Entity::GetTable() const
 	{
-		return *pclTable;
+		return *m_pclTable;
 	}
 }
 

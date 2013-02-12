@@ -2,24 +2,24 @@
 
 #include "Editor/PH_RequestFactory.h"
 
-#include <PH_Kernel.h>
+#include <Phobos/Log.h>
 
 namespace Phobos
 {
 	namespace Editor
 	{
-		PH_FULL_REQUEST_CREATOR("Log", LogRequest_c);
+		PH_FULL_REQUEST_CREATOR("Log", LogRequest);
 	}
 }
 
-Phobos::Editor::LogRequest_c::LogRequest_c(const rapidjson::Value &obj):
-	Request_c(obj),
-	strMessage(obj["message"].GetString())
+Phobos::Editor::LogRequest::LogRequest(const rapidjson::Value &obj):
+	Request(obj),
+	m_strMessage(obj["message"].GetString())
 {				
 	//empty
 }
 
-void Phobos::Editor::LogRequest_c::OnExecute(JsonCreator::StringWriter &)
+void Phobos::Editor::LogRequest::OnExecute(JsonCreator::StringWriter &)
 {
-	Kernel_c::GetInstance().LogMessage(strMessage);
+	LogMessage(m_strMessage);
 }

@@ -45,7 +45,7 @@ namespace Phobos
 			All devices should derive from this class.
 
 		*/
-		class InputDevice: public Node
+		class PH_SYSTEM_API InputDevice: public Node
 		{		
 			public:
 				/**		

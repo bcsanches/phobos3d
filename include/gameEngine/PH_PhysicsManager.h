@@ -19,15 +19,13 @@ subject to the following restrictions:
 
 #include <map>
 
-#include <boost/weak_ptr.hpp>
-
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <OgreMesh.h>
 
-#include <PH_ContextVar.h>
-#include <PH_Singleton.h>
+#include <Phobos/Shell/Variable.h>
+#include <Phobos/Singleton.h>
 
 #include "PH_CollisionMesh.h"
 #include "PH_CollisionShape.h"
@@ -39,7 +37,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Transform_c;
+	class Transform;
 
 	namespace Physics
 	{						
@@ -47,34 +45,34 @@ namespace Phobos
 
 		struct SweepCollisionResult_s
 		{	
-			btVector3				v3HitPointWorld;
-			btVector3				v3HitNormalWorld;
+			btVector3				m_v3HitPointWorld;
+			btVector3				m_v3HitNormalWorld;
 
-			Float_t					fpFraction;
+			Float_t					m_fpFraction;
 
-			bool					fHasHit;
+			bool					m_fHasHit;
 
-			//RigidBody_c				*pclContact;
+			//RigidBody				*pclContact;
 		};				
 
-		class CharacterBodyComponent_c;
-		class RigidBodyComponent_c;
+		class CharacterBodyComponent;
+		class RigidBodyComponent;
 
-		class PH_GAME_ENGINE_API Manager_c: public CoreModule_c
+		class PH_GAME_ENGINE_API Manager: public CoreModule
 		{
 			PH_DECLARE_SINGLETON_METHODS(Manager);
 
 			public:
-				~Manager_c();				
+				~Manager();				
 
 				/**
 
 					For quick and easy rigid body creation.
 
 				*/
-				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
-				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, Float_t radius, Float_t height);
-				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
+				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height);
+				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
 				/**
 					Methods for manually creating a collision shape
@@ -93,9 +91,9 @@ namespace Phobos
 					Create a rigid body from an existing collision shape.
 
 				*/
-				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform_c &transform, Float_t mass, const CollisionTag_c &collisionTag, CollisionShapePtr_t shape);
+				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape);
 
-				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag_c &collisionTag, Float_t stepHeight, Float_t radius, Float_t height);
+				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag &collisionTag, Float_t stepHeight, Float_t radius, Float_t height);
 
 				void SetGravity(const Ogre::Vector3 &gravity);
 
@@ -105,11 +103,11 @@ namespace Phobos
 				//
 				//
 				//Components
-				void RegisterRigidBodyComponent(RigidBodyComponent_c &comp);
-				void UnregisterRigidBodyComponent(RigidBodyComponent_c &comp);
+				void RegisterRigidBodyComponent(RigidBodyComponent &comp);
+				void UnregisterRigidBodyComponent(RigidBodyComponent &comp);
 
-				void RegisterCharacterBodyComponent(CharacterBodyComponent_c &comp);
-				void UnregisterCharacterBodyComponent(CharacterBodyComponent_c &comp);
+				void RegisterCharacterBodyComponent(CharacterBodyComponent &comp);
+				void UnregisterCharacterBodyComponent(CharacterBodyComponent &comp);
 
 			protected:
 				virtual void OnPrepareToBoot();
@@ -123,14 +121,14 @@ namespace Phobos
 				CollisionShapePtr_t CreateGenericCylinderShape(Float_t radius, Float_t height, CollisionShapeTypes_t type);
 
 			private:								
-				typedef boost::intrusive::set<CollisionShape_c, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
-				typedef boost::intrusive::set<CollisionMesh_c, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
+				typedef boost::intrusive::set<CollisionShape, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
+				typedef boost::intrusive::set<CollisionMesh, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
 
 			private:
 
-				Manager_c();											
+				Manager();											
 
-				bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape_c::Key_s &key);
+				bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape::Key_s &key);
 
 				CollisionMeshPtr_t RetrieveCollisionMesh(const Ogre::Mesh &mesh);						
 
@@ -139,10 +137,10 @@ namespace Phobos
 				//
 				//
 				//RigidBody class interface
-				void RegisterRigidBody(btRigidBody &body, const CollisionTag_c &collisionTag);
+				void RegisterRigidBody(btRigidBody &body, const CollisionTag &collisionTag);
 				void UnregisterRigidBody(btRigidBody &body);
 
-				void AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag_c &collisionTag);
+				void AddCollisionObject(btCollisionObject &collisionObject,const CollisionTag &collisionTag);
 				void RemoveCollisionObject(btCollisionObject &collisionObject);				
 
 				//
@@ -158,40 +156,40 @@ namespace Phobos
 				void ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end);
 
 			private:
-				std::unique_ptr<btDiscreteDynamicsWorld> upWorld;
-				std::unique_ptr<btCollisionDispatcher> upCollisionDispatcher;
+				std::unique_ptr<btDiscreteDynamicsWorld> m_upWorld;
+				std::unique_ptr<btCollisionDispatcher> m_upCollisionDispatcher;
 
-				btDefaultCollisionConfiguration			clCollisionConfig;
-				btAxisSweep3							clBroadphase;
-				btSequentialImpulseConstraintSolver		clConstraintSolver;		
+				btDefaultCollisionConfiguration			m_clCollisionConfig;
+				btAxisSweep3							m_clBroadphase;
+				btSequentialImpulseConstraintSolver		m_clConstraintSolver;		
 
-				btGhostPairCallback						clGhostPairCallback;
+				btGhostPairCallback						m_clGhostPairCallback;
 
-				Float_t									fpScale;
+				Float_t									m_fpScale;
 
-				ContextVar_c							varPhysicsScale;
+				Shell::Variable							m_varPhysicsScale;
 
 				
-				CollisionShapesSet_t setCollisionShapesCache;
+				CollisionShapesSet_t m_setCollisionShapesCache;
 
 				//Because scaled meshes references the original mesh we keep a cache of all meshes that were been loaded
-				CollisionMeshesSet_t setCollisionMeshesCache;
+				CollisionMeshesSet_t m_setCollisionMeshesCache;
 
-				GenericComponentManager_c<RigidBodyComponent_c>			clRigidBodyComponents;
-				GenericComponentManager_c<CharacterBodyComponent_c>	clCharacterBodyComponents;
+				GenericComponentManager<RigidBodyComponent>			m_clRigidBodyComponents;
+				GenericComponentManager<CharacterBodyComponent>		m_clCharacterBodyComponents;
 
-				friend class RigidBody_c;
-				friend class SweepCharacterBody_c;
-				friend class GhostCharacterBody_c;
+				friend class RigidBody;
+				friend class SweepCharacterBody;
+				friend class GhostCharacterBody;
 
 		};
 
-		inline Float_t Manager_c::GetScale() const
+		inline Float_t Manager::GetScale() const
 		{
-			return fpScale;
+			return m_fpScale;
 		}
 
-		inline Float_t Manager_c::GetPhysicsToGameScale() const
+		inline Float_t Manager::GetPhysicsToGameScale() const
 		{
 			return 1.0f / this->GetScale() ;
 		}

@@ -19,9 +19,9 @@ subject to the following restrictions:
 
 #include <list>
 
-#include <PH_ContextCmd.h>
+#include <Phobos/Shell/Command.h>
 #include <PH_CoreModule.h>
-#include <PH_Singleton.h>
+#include <Phobos/Singleton.h>
 
 #include <Gui/PH_ContextFwd.h>
 #include <Gui/PH_Form.h>
@@ -34,47 +34,47 @@ namespace Phobos
 	{
 		PH_DECLARE_SINGLETON_PTR(LevelSelector);
 
-		class DataGridController_c;
-		class LevelFileDataSource_c;		
+		class DataGridController;
+		class LevelFileDataSource;		
 
-		class PH_GAME_ENGINE_API LevelSelector_c: public CoreModule_c, public Gui::Form_c
+		class PH_GAME_ENGINE_API LevelSelector: public CoreModule, public Gui::Form
 		{
 			PH_DECLARE_SINGLETON_METHODS(LevelSelector);
 
 			public:
-				~LevelSelector_c();
+				~LevelSelector();
 
 				virtual void Open();
 				virtual void Close();
 
-				virtual EscAction::Enum HandleEsc(Phobos::Gui::Form_c *&outForm);				
+				virtual EscAction HandleEsc(Phobos::Gui::Form *&outForm);				
 
 			protected:
-				LevelSelector_c();				
+				LevelSelector();				
 
 				virtual void OnPrepareToBoot();
 				virtual void OnFinalize();
 				virtual void OnFixedUpdate();
 
 			private:
-				friend class LevelSelectorEventListener_c;
+				friend class LevelSelectorEventListener;
 
 				void OnLoadButtonClick();
 				void OnQuitButtonClick();
 
-				void CmdAddLevelPath(const Phobos::StringVector_t &args, Phobos::Context_c &);
+				void CmdAddLevelPath(const Shell::StringVector_t &args, Shell::Context &);
 
 			private:
-				std::list<Phobos::String_t> lstLevelPaths;
+				std::list<Phobos::String_t> m_lstLevelPaths;
 
-				Gui::ContextPtr_t	spGuiContext;
+				Gui::ContextPtr_t	m_spGuiContext;
 
-				ContextCmd_c		cmdAddLevelPath;
+				Shell::Command		m_cmdAddLevelPath;
 
-				bool				fCloseRequested;
+				bool				m_fCloseRequested;
 
-				std::unique_ptr<LevelFileDataSource_c> upDataSource;
-				std::unique_ptr<DataGridController_c> upDataGridController;
+				std::unique_ptr<LevelFileDataSource> m_upDataSource;
+				std::unique_ptr<DataGridController> m_upDataGridController;
 		};
 	}
 }

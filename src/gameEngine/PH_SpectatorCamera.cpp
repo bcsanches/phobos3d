@@ -20,17 +20,17 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	SpectatorCamera_c::SpectatorCamera_c()
+	SpectatorCamera::SpectatorCamera()
 	{
-		clCamera.SetNearClipDistance(0.1f);		
-		clCamera.SetFarClipDistance(100);
+		m_clCamera.SetNearClipDistance(0.1f);		
+		m_clCamera.SetFarClipDistance(100);
 		
-		clCamera.EnableViewport();		
+		m_clCamera.EnableViewport();		
 	}
 
-	void SpectatorCamera_c::FixedUpdate(IPlayerCmdPtr_t playerCmd)
+	void SpectatorCamera::FixedUpdate(IPlayerCmdPtr_t playerCmd)
 	{
-		SpectatorCameraCmdPtr_t cmd = boost::static_pointer_cast<SpectatorCameraCmd_c>(playerCmd);
+		auto cmd = std::static_pointer_cast<SpectatorCameraCmd>(playerCmd);
 
 		using namespace Ogre;
 
@@ -39,7 +39,7 @@ namespace Phobos
 
 		Vector3 axis[3];
 		
-		const Quaternion &q = clCurrentTransform.GetRotation();
+		const Quaternion &q = m_clCurrentTransform.GetRotation();
 
 		q.ToAxes(axis[0], axis[1], axis[2]);	
 
@@ -48,39 +48,39 @@ namespace Phobos
 		axis[1] = (Vector3::UNIT_Y * cmd->GetMoveUp());
 
 		Vector3 movement = axis[0] + axis[1] + axis[2];
-		clCurrentTransform.Translate(movement);	
+		m_clCurrentTransform.Translate(movement);	
 
-		dTurn += turnAngle;
-		dLook += lookAngle;
+		m_dTurn += turnAngle;
+		m_dLook += lookAngle;
 
-		Quaternion rot(dTurn, Vector3::UNIT_Y);
-		rot = rot * Quaternion(dLook, Vector3::UNIT_X);	
+		Quaternion rot(m_dTurn, Vector3::UNIT_Y);
+		rot = rot * Quaternion(m_dLook, Vector3::UNIT_X);	
 
-		clCurrentTransform.SetRotation(rot);
+		m_clCurrentTransform.SetRotation(rot);
 
-		clTransformInterpolator.SetValue(clCurrentTransform);
+		m_clTransformInterpolator.SetValue(m_clCurrentTransform);
 	}
 
-	void SpectatorCamera_c::Update()
+	void SpectatorCamera::Update()
 	{
-		clCamera.SetTransform(clTransformInterpolator.GetValue(Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpDelta));
+		m_clCamera.SetTransform(m_clTransformInterpolator.GetValue(Core::GetInstance().GetSimInfo().m_stTimers[CORE_SYS_TIMER].m_fpDelta));
 	}
 
-	void SpectatorCamera_c::SetTransform(const Transform_c &transform)
+	void SpectatorCamera::SetTransform(const Transform &transform)
 	{
-		clCurrentTransform = transform;
+		m_clCurrentTransform = transform;
 
-		dTurn = transform.GetRotation().getYaw().valueDegrees();
-		dLook = transform.GetRotation().getPitch().valueDegrees();
+		m_dTurn = transform.GetRotation().getYaw().valueDegrees();
+		m_dLook = transform.GetRotation().getPitch().valueDegrees();
 	}
 	
-	void SpectatorCamera_c::Enable()
+	void SpectatorCamera::Enable()
 	{
-		clCamera.Enable();		
+		m_clCamera.Enable();		
 	}
 
-	void SpectatorCamera_c::Disable()
+	void SpectatorCamera::Disable()
 	{
-		clCamera.Disable();		
+		m_clCamera.Disable();		
 	}
 }

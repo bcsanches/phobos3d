@@ -32,40 +32,40 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_CHARACTER_BODY_COMPONENT_NAME, CharacterBodyComponent_c);
+		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_CHARACTER_BODY_COMPONENT_NAME, CharacterBodyComponent);
 		
-		CharacterBodyComponent_c::CharacterBodyComponent_c(const String_t &name, Entity_c &owner):
-			EntityComponent_c(name, owner),			
-			pprpTransform(NULL),
-			prpVelocity("velocity"),
-			prpCharacterPosition("characterPosition")
+		CharacterBodyComponent::CharacterBodyComponent(const String_t &name, Entity &owner):
+			EntityComponent(name, owner),			
+			m_pprpTransform(NULL),
+			m_prpVelocity("velocity"),
+			m_prpCharacterPosition("characterPosition")
 		{
-			owner.AddProperty(prpVelocity);
-			owner.AddProperty(prpCharacterPosition);
+			owner.AddProperty(m_prpVelocity);
+			owner.AddProperty(m_prpCharacterPosition);
 		}
 
-		CharacterBodyComponent_c::~CharacterBodyComponent_c()
+		CharacterBodyComponent::~CharacterBodyComponent()
 		{			
-			Manager_c::GetInstance().UnregisterCharacterBodyComponent(*this);
+			Manager::GetInstance().UnregisterCharacterBodyComponent(*this);
 		}
 
-		void CharacterBodyComponent_c::FinishPhysicsFrame()
+		void CharacterBodyComponent::FinishPhysicsFrame()
 		{			
-			prpCharacterPosition.SetVector(spCharacterBody->GetPosition());
+			m_prpCharacterPosition.SetVector(m_spCharacterBody->GetPosition());
 		}
 
-		void CharacterBodyComponent_c::PreparePhysicsFrame(Float_t delta)
+		void CharacterBodyComponent::PreparePhysicsFrame(Float_t delta)
 		{			
-			spCharacterBody->SetVelocityForTimeInterval(prpVelocity.GetVector(), delta);			
+			m_spCharacterBody->SetVelocityForTimeInterval(m_prpVelocity.GetVector(), delta);			
 		}
 
-		void CharacterBodyComponent_c::OnLoad(const Register::Table_c &table)
+		void CharacterBodyComponent::OnLoad(const Register::Table &table)
 		{	
-			Transform_c transform;
+			Transform transform;
 
 			EntityLoadTransform(transform, table);						
 
-			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
+			Physics::Manager &physicsManager = Manager::GetInstance();
 
 			Float_t height = table.GetFloat("height");
 			Float_t radius = table.GetFloat("radius");
@@ -77,19 +77,19 @@ namespace Phobos
 			Ogre::Vector3 startPos = transform.GetOrigin();
 			startPos.y += offset;
 
-			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(table);
+			Physics::CollisionTag collisionTag = GamePhysicsSettings::LoadCollisionTag(table);
 
-			prpCharacterPosition.SetVector(startPos);
-			spCharacterBody = physicsManager.CreateCharacterBody(startPos, collisionTag, stepHeight, radius, height);											
+			m_prpCharacterPosition.SetVector(startPos);
+			m_spCharacterBody = physicsManager.CreateCharacterBody(startPos, collisionTag, stepHeight, radius, height);											
 		}
 
-		void CharacterBodyComponent_c::OnLoadFinished()
+		void CharacterBodyComponent::OnLoadFinished()
 		{
-			Physics::Manager_c &manager = Manager_c::GetInstance();
+			Physics::Manager &manager = Manager::GetInstance();
 			manager.RegisterCharacterBodyComponent(*this);
-			spCharacterBody->Register();			
+			m_spCharacterBody->Register();			
 
-			pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
+			m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 		}
 	}
 }

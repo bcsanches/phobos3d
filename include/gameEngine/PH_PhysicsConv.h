@@ -45,14 +45,14 @@ namespace Phobos
 			return btQuaternion(q.x, q.y, q.z, q.w);
 		}
 
-		inline btTransform MakeTransform(const Transform_c &transform, const Float_t scale)
+		inline btTransform MakeTransform(const Transform &transform, const Float_t scale)
 		{
 			return btTransform(MakeQuaternion(transform.GetRotation()), MakeVector3(transform.GetOrigin(), scale));
 		}				
 
-		inline Transform_c MakeTransform(const btTransform &transform , Float_t physicsToGameScale)
+		inline Transform MakeTransform(const btTransform &transform , Float_t physicsToGameScale)
 		{
-			return Transform_c(MakeVector3(transform.getOrigin(), physicsToGameScale), MakeQuaternion(transform.getRotation()));
+			return Transform(MakeVector3(transform.getOrigin(), physicsToGameScale), MakeQuaternion(transform.getRotation()));
 		}
 	}
 }

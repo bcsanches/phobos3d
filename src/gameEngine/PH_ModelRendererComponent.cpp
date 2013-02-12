@@ -31,101 +31,101 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR(PH_MODEL_RENDERER_COMPONENT_NAME, ModelRendererComponent_c);
+	PH_FULL_ENTITY_COMPONENT_CREATOR(PH_MODEL_RENDERER_COMPONENT_NAME, ModelRendererComponent);
 
-	EntityInputManager_c ModelRendererComponent_c::clInputManager_gl;
+	EntityInputManager ModelRendererComponent::clInputManager_gl;
 		
-	ModelRendererComponent_c::ModelRendererComponent_c(const String_t &name, Entity_c &owner):
-		EntityComponent_c(name, owner),
-		pclSceneNode(NULL),
-		pclMeshEntity(NULL),
-		pprpTransform(NULL)
+	ModelRendererComponent::ModelRendererComponent(const String_t &name, Entity &owner):
+		EntityComponent(name, owner),
+		m_pclSceneNode(NULL),
+		m_pclMeshEntity(NULL),
+		m_pprpTransform(NULL)
 	{		
-		ModelRendererManager_c::GetInstance().Register(*this);
+		ModelRendererManager::GetInstance().Register(*this);
 	}
 
-	ModelRendererComponent_c::~ModelRendererComponent_c()
+	ModelRendererComponent::~ModelRendererComponent()
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 
-		render.DestroyEntity(pclMeshEntity);
-		render.DestroySceneNode(pclSceneNode);
+		render.DestroyEntity(m_pclMeshEntity);
+		render.DestroySceneNode(m_pclSceneNode);
 
-		ModelRendererManager_c::GetInstance().Unregister(*this);
+		ModelRendererManager::GetInstance().Unregister(*this);
 	}
 
-	void ModelRendererComponent_c::OnLoad(const Register::Table_c &table)
+	void ModelRendererComponent::OnLoad(const Register::Table &table)
 	{
 		const String_t &meshName = table.GetString(PH_ENTITY_KEY_MESH_FILE);
 
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 
-		pclSceneNode = render.CreateSceneNode(this->GetEntityName());
-		pclMeshEntity = render.CreateEntity(meshName);
+		m_pclSceneNode = render.CreateSceneNode(this->GetEntityName());
+		m_pclMeshEntity = render.CreateEntity(meshName);
 
-		pclSceneNode->attachObject(pclMeshEntity);
+		m_pclSceneNode->attachObject(m_pclMeshEntity);
 		
-		pclSceneNode->setScale(Register::GetVector3(table, PH_ENTITY_KEY_SCALE));		
+		m_pclSceneNode->setScale(Register::GetVector3(table, PH_ENTITY_KEY_SCALE));		
 
-		strParentNode = table.GetString(PH_ENTITY_KEY_PARENT_NODE);
+		m_strParentNode = table.GetString(PH_ENTITY_KEY_PARENT_NODE);
 	}
 
-	void ModelRendererComponent_c::OnLoadFinished()
+	void ModelRendererComponent::OnLoadFinished()
 	{
-		EntityComponent_c::OnLoadFinished();		
+		EntityComponent::OnLoadFinished();		
 
-		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
+		m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 
 		//Force node transform update
 		this->Update();
 
-		if(strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
+		if(m_strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
 		{
-			Render_c &render = Render_c::GetInstance();
+			Render &render = Render::GetInstance();
 
-			pclSceneNode->getParent()->removeChild(pclSceneNode);
+			m_pclSceneNode->getParent()->removeChild(m_pclSceneNode);
 
-			render.GetSceneNode(strParentNode)->addChild(pclSceneNode);
+			render.GetSceneNode(m_strParentNode)->addChild(m_pclSceneNode);
 		}		
 	}
 
-	void ModelRendererComponent_c::Update()
+	void ModelRendererComponent::Update()
 	{		
-		pclSceneNode->setPosition(pprpTransform->GetOrigin());
-		pclSceneNode->setOrientation(pprpTransform->GetRotation());
+		m_pclSceneNode->setPosition(m_pprpTransform->GetOrigin());
+		m_pclSceneNode->setOrientation(m_pprpTransform->GetRotation());
 	}
 
-	void ModelRendererComponent_c::AttachObjectToBone(
+	void ModelRendererComponent::AttachObjectToBone(
 				const Char_t *boneName, 
 				Ogre::MovableObject &movable, 
 				const Ogre::Quaternion &offsetOrientation, 
 				const Ogre::Vector3 &offsetPosition
 			)
 	{
-		pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
+		m_pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
 	}
 
-	void ModelRendererComponent_c::AttachObjectToBone(
+	void ModelRendererComponent::AttachObjectToBone(
 				const String_t &boneName, 
 				Ogre::MovableObject &movable, 
 				const Ogre::Quaternion &offsetOrientation, 
 				const Ogre::Vector3 &offsetPosition
 			)
 	{
-		pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
+		m_pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
 	}
 
-	Ogre::Bone &ModelRendererComponent_c::GetBone(const char *boneName)
+	Ogre::Bone &ModelRendererComponent::GetBone(const char *boneName)
 	{
-		return *pclMeshEntity->getSkeleton()->getBone(boneName);
+		return *m_pclMeshEntity->getSkeleton()->getBone(boneName);
 	}
 
-	Ogre::Bone &ModelRendererComponent_c::GetBone(const String_t &boneName)
+	Ogre::Bone &ModelRendererComponent::GetBone(const String_t &boneName)
 	{
-		return *pclMeshEntity->getSkeleton()->getBone(boneName);
+		return *m_pclMeshEntity->getSkeleton()->getBone(boneName);
 	}
 
-	PH_BEGIN_ENTITY_INPUT(ModelRendererComponent_c, SetPosition)
+	PH_BEGIN_ENTITY_INPUT(ModelRendererComponent, SetPosition)
 	{
 
 	}

@@ -17,8 +17,9 @@ subject to the following restrictions:
 #ifndef PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 #define PH_SPECTATOR_CAMERA_COMMAND_PRODUCER_H
 
-#include <PH_ContextVar.h>
-#include <PH_Types.h>
+#include <Phobos/Shell/ContextFwd.h>
+#include <Phobos/Shell/Variable.h>
+#include <Phobos/Types.h>
 
 #include <Phobos/System/AxisButton.h>
 #include <Phobos/System/Button.h>
@@ -29,21 +30,20 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Context_c;
-	class SpectatorCameraCmd_c;
+	class SpectatorCameraCmd;
 	
-	typedef boost::shared_ptr<SpectatorCameraCmd_c> SpectatorCameraCmdPtr_t;
+	typedef std::shared_ptr<SpectatorCameraCmd> SpectatorCameraCmdPtr_t;
 
-	class PH_GAME_ENGINE_API SpectatorCameraCmd_c: public IPlayerCmd_c
+	class PH_GAME_ENGINE_API SpectatorCameraCmd: public IPlayerCmd
 	{
 		public:
-			inline SpectatorCameraCmd_c(Float_t move, Float_t strafe, Float_t moveUp, Float_t turn, Float_t look)
+			inline SpectatorCameraCmd(Float_t move, Float_t strafe, Float_t moveUp, Float_t turn, Float_t look)
 			{
-				fpMove = move;
-				fpMoveUp = moveUp;
-				fpStrafe = strafe;
-				fpTurn = turn;
-				fpLook = look;			
+				m_fpMove = move;
+				m_fpMoveUp = moveUp;
+				m_fpStrafe = strafe;
+				m_fpTurn = turn;
+				m_fpLook = look;			
 			}		
 
 			inline Float_t GetMove() const;
@@ -53,44 +53,44 @@ namespace Phobos
 			inline Float_t GetLook() const;
 
 		private:
-			Float_t fpMove;
-			Float_t fpMoveUp;
-			Float_t fpStrafe;
-			Float_t fpTurn;
-			Float_t fpLook;	
+			Float_t m_fpMove;
+			Float_t m_fpMoveUp;
+			Float_t m_fpStrafe;
+			Float_t m_fpTurn;
+			Float_t m_fpLook;	
 	};
 
-	inline Float_t SpectatorCameraCmd_c::GetMove() const
+	inline Float_t SpectatorCameraCmd::GetMove() const
 	{
-		return fpMove;
+		return m_fpMove;
 	}
 
-	inline Float_t SpectatorCameraCmd_c::GetMoveUp() const
+	inline Float_t SpectatorCameraCmd::GetMoveUp() const
 	{
-		return fpMoveUp;
+		return m_fpMoveUp;
 	}
 
-	inline Float_t SpectatorCameraCmd_c::GetStrafe() const
+	inline Float_t SpectatorCameraCmd::GetStrafe() const
 	{
-		return fpStrafe;
+		return m_fpStrafe;
 	}
 
-	inline Float_t SpectatorCameraCmd_c::GetTurn() const
+	inline Float_t SpectatorCameraCmd::GetTurn() const
 	{
-		return fpTurn;
+		return m_fpTurn;
 	}
 
-	inline Float_t SpectatorCameraCmd_c::GetLook() const
+	inline Float_t SpectatorCameraCmd::GetLook() const
 	{
-		return fpLook;
+		return m_fpLook;
 	}
 
 	#define PH_MOUSE_THUMB_CMD_NAME "mouseThumb"
 
-	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer_c
+	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer
 	{
 		public:
-			SpectatorCameraCommandProducer_c(Context_c *context = NULL);
+			SpectatorCameraCommandProducer_c(Shell::Context *context = NULL);
 
 			virtual IPlayerCmdPtr_t CreateCmd();
 
@@ -104,18 +104,18 @@ namespace Phobos
 			void SetMouseSensitivity(Float_t v);		
 
 		private:
-			System::AxisButton_c	clMoveButton;
-			System::AxisButton_c	clMoveUpDown;
-			System::AxisButton_c	clStrafeButton;
-			System::AxisButton_c	clTurnButton;
-			System::AxisButton_c	clLookButton;		
-			System::Thumb_c			clMouseThumb;			
+			System::AxisButton	m_clMoveButton;
+			System::AxisButton	m_clMoveUpDown;
+			System::AxisButton	m_clStrafeButton;
+			System::AxisButton	m_clTurnButton;
+			System::AxisButton	m_clLookButton;		
+			System::Thumb		m_clMouseThumb;			
 
-			Float_t			fpMoveSpeed;
-			Float_t			fpTurnSpeed;
-			Float_t			fpMouseSensitivity;
+			Float_t			m_fpMoveSpeed;
+			Float_t			m_fpTurnSpeed;
+			Float_t			m_fpMouseSensitivity;
 
-			bool			fMouseActive;
+			bool			m_fMouseActive;
 	};
 }
 

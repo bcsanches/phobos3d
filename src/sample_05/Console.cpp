@@ -17,49 +17,47 @@ subject to the following restrictions:
 
 #include "Console.h"
 
-#include <boost/make_shared.hpp>
-
-Console_c &Console_c::CreateInstance(void)
+Console &Console::CreateInstance(void)
 {		
-	Phobos::Console_c::UpdateInstance(boost::make_shared<Console_c>());
+	Phobos::Console::UpdateInstance(std::make_shared<Console>());
 
-	return static_cast<Console_c&>(Phobos::Console_c::GetInstance());
+	return static_cast<Console&>(Phobos::Console::GetInstance());
 }
 
-Console_c::Console_c(void):
-	Phobos::Console_c("Console"),		
-	fEditBoxChanged(true),
-	fTextBufferChanged(true)
+Console::Console(void):
+	Phobos::Console("Console"),		
+	m_fEditBoxChanged(true),
+	m_fTextBufferChanged(true)
 {				
 	//empty
 }
 
-Console_c::~Console_c(void)
+Console::~Console(void)
 {
 	//empty
 }	
 
-void Console_c::OnEditBoxChanged()
+void Console::OnEditBoxChanged()
 {
-	fEditBoxChanged = true;
+	m_fEditBoxChanged = true;
 }
 
-void Console_c::OnTextListChanged()
+void Console::OnTextListChanged()
 {
-	fTextBufferChanged = true;
+	m_fTextBufferChanged = true;
 }
 
-void Console_c::OnUpdate(void)
+void Console::OnUpdate(void)
 {
-	fTextBufferChanged = fEditBoxChanged = false;		
+	m_fTextBufferChanged = m_fEditBoxChanged = false;		
 }
 
-void Console_c::OnRenderReady(void)
+void Console::OnRenderReady(void)
 {
 	//empty
 }	
 
-void Console_c::OnToggleConsole()
+void Console::OnToggleConsole()
 {
 	//empty
 }	

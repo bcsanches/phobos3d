@@ -15,8 +15,6 @@ subject to the following restrictions:
 */
 #include "PH_OgitorGameWorld.h"
 
-#include <boost/foreach.hpp>
-
 #include <OgreEntity.h>
 #include <OgreLight.h>
 #include <OgreSceneNode.h>
@@ -25,8 +23,8 @@ subject to the following restrictions:
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>
 
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
 #include <PH_Render.h>
 #include <PH_Transform.h>
 
@@ -43,37 +41,37 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	OgitorGameWorld_c::OgitorGameWorld_c():		
-		pclTerrainGroup(NULL),
-		pclTerrainOptions(NULL),
-		pclTerrainLight(NULL),
-		pclTerrainGroupTable(NULL),
-		pclTerrainPageTable(NULL)
+	OgitorGameWorld::OgitorGameWorld():		
+		m_pclTerrainGroup(NULL),
+		m_pclTerrainOptions(NULL),
+		m_pclTerrainLight(NULL),
+		m_pclTerrainGroupTable(NULL),
+		m_pclTerrainPageTable(NULL)
 	{
 		//empty
 	}
 
-	OgitorGameWorld_c::~OgitorGameWorld_c()
+	OgitorGameWorld::~OgitorGameWorld()
 	{		
-		if(pclTerrainGroup)
-			Render_c::GetInstance().DestroyTerrainGroup(pclTerrainGroup);
+		if(m_pclTerrainGroup)
+			Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
 
-		if(pclTerrainOptions)
-			delete pclTerrainOptions;		
+		if(m_pclTerrainOptions)
+			delete m_pclTerrainOptions;		
 
-		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
+		for(auto &pair : m_mapStaticObjects)
 		{
 			pair.second.Clear();			
 		}
 	}
 
-	void OgitorGameWorld_c::Load(const MapLoader_c &loader, const Register::Table_c &worldEntityDef)
+	void OgitorGameWorld::Load(const MapLoader &loader, const Register::Table &worldEntityDef)
 	{
 		const auto &hive = loader.GetStaticEntitiesHive();
 
-		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
+		for(auto it : hive)		
 		{
-			Register::Table_c *dict = static_cast<Register::Table_c *>(it->second);
+			Register::Table *dict = static_cast<Register::Table *>(it.second);
 
 			try
 			{
@@ -84,10 +82,10 @@ namespace Phobos
 					continue;
 
 				//make sure this is not duplicated
-				StaticObjectsMap_t::iterator objIt = mapStaticObjects.lower_bound(name);
-				if((objIt != mapStaticObjects.end()) && !(mapStaticObjects.key_comp()(name, objIt->first)))
+				StaticObjectsMap_t::iterator objIt = m_mapStaticObjects.lower_bound(name);
+				if((objIt != m_mapStaticObjects.end()) && !(m_mapStaticObjects.key_comp()(name, objIt->first)))
 				{
-					Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::Load] Static object " << name << " is duplicated\n";
+					LogMakeStream() << "[OgitorGameWorld::Load] Static object " << name << " is duplicated\n";
 					continue;
 				}
 
@@ -95,73 +93,73 @@ namespace Phobos
 				if(!this->LoadStaticObject(object, name, type, *dict))
 					continue;
 
-				mapStaticObjects.insert(objIt, std::make_pair(name, object));
+				m_mapStaticObjects.insert(objIt, std::make_pair(name, object));
 
 			}
-			catch(Exception_c &ex)
+			catch(Exception &ex)
 			{
-				Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::Load] Exception loading static object: " << ex.what();
+				LogMakeStream() << "[OgitorGameWorld::Load] Exception loading static object: " << ex.what();
 			}
 		}
 
 		//time to fix parents
-		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
+		for(StaticObjectsMap_t::value_type &pair : m_mapStaticObjects)
 		{
 			StaticObject_s &object = pair.second;
 
 			if(StringIsBlank(object.strParent) || (object.strParent.compare("SceneManager") == 0))
 				continue;
 
-			StaticObjectsMap_t::iterator it = mapStaticObjects.find(object.strParent);
-			if(it == mapStaticObjects.end())
+			StaticObjectsMap_t::iterator it = m_mapStaticObjects.find(object.strParent);
+			if(it == m_mapStaticObjects.end())
 			{
-				Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::Load] Static object " << pair.first << " without parent " << object.strParent << "\n";
+				LogMakeStream() << "[OgitorGameWorld::Load] Static object " << pair.first << " without parent " << object.strParent << "\n";
 				continue;
 			}
 
-			if(object.pclSceneNode->getParent())
-				object.pclSceneNode->getParent()->removeChild(object.pclSceneNode);
-			it->second.pclSceneNode->addChild(object.pclSceneNode);
+			if(object.m_pclSceneNode->getParent())
+				object.m_pclSceneNode->getParent()->removeChild(object.m_pclSceneNode);
+			it->second.m_pclSceneNode->addChild(object.m_pclSceneNode);
 		}
 
 		//configure physics
-		Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
+		Physics::Manager &physicsManager = Physics::Manager::GetInstance();
 
-		Physics::CollisionTag_c staticCollisionTag = GamePhysicsSettings_c::CreateStaticWorldCollisionTag();
+		Physics::CollisionTag staticCollisionTag = GamePhysicsSettings::CreateStaticWorldCollisionTag();
 
-		BOOST_FOREACH(StaticObjectsMap_t::value_type &pair, mapStaticObjects)
+		for(auto &pair : m_mapStaticObjects)
 		{
 			StaticObject_s &object = pair.second;
 
-			if(object.pclEntity == NULL)
+			if(object.m_pclEntity == NULL)
 				continue;
 
 			//Why using those _ functions: http://89.151.96.106/forums/viewtopic.php?f=22&t=62386
 			//http://www.ogre3d.org/forums/viewtopic.php?p=221113
 			//http://www.ogre3d.org/tikiwiki/-SceneNode
-			Transform_c transform(
-				object.pclSceneNode->_getDerivedPosition(), 
-				object.pclSceneNode->_getDerivedOrientation()
+			Transform transform(
+				object.m_pclSceneNode->_getDerivedPosition(), 
+				object.m_pclSceneNode->_getDerivedOrientation()
 			);
 
-			BaseOgreGameWorld_c::CreateStaticObjectRigidBody(object, transform, object.pclSceneNode->_getDerivedScale(), staticCollisionTag);
+			BaseOgreGameWorld::CreateStaticObjectRigidBody(object, transform, object.m_pclSceneNode->_getDerivedScale(), staticCollisionTag);
 		}
 		
 
-		if(pclTerrainGroupTable != NULL)
+		if(m_pclTerrainGroupTable != NULL)
 		{
-			this->LoadTerrainGroup(*pclTerrainGroupTable);
-			pclTerrainGroupTable = NULL;
+			this->LoadTerrainGroup(*m_pclTerrainGroupTable);
+			m_pclTerrainGroupTable = NULL;
 		}
 
-		if(pclTerrainPageTable != NULL)
+		if(m_pclTerrainPageTable != NULL)
 		{
-			this->LoadTerrainPage(*pclTerrainPageTable, worldEntityDef);
-			pclTerrainPageTable = NULL;
+			this->LoadTerrainPage(*m_pclTerrainPageTable, worldEntityDef);
+			m_pclTerrainPageTable = NULL;
 		}		
 	}
 
-	bool OgitorGameWorld_c::LoadGlobalObject(const String_t &type, const Register::Table_c &dict)
+	bool OgitorGameWorld::LoadGlobalObject(const String_t &type, const Register::Table &dict)
 	{
 		if((type.compare("Caelum Object") == 0) ||
 		   (type.compare("Viewport Object") == 0))
@@ -170,20 +168,20 @@ namespace Phobos
 		}
 		else if(type.compare("OctreeSceneManager") == 0)
 		{
-			Render_c &render = Render_c::GetInstance();
+			Render &render = Render::GetInstance();
 			render.SetAmbientColor(Register::GetColour(dict, "ambient"));
 
 			return true;
 		}
 		else if(type.compare("Terrain Group Object") == 0)
 		{
-			pclTerrainGroupTable = &dict;
+			m_pclTerrainGroupTable = &dict;
 
 			return true;
 		}
 		else if(type.compare("Terrain Page Object") == 0)
 		{
-			pclTerrainPageTable = &dict;
+			m_pclTerrainPageTable = &dict;
 
 			return true;
 		}
@@ -191,47 +189,47 @@ namespace Phobos
 		return false;
 	}
 
-	void OgitorGameWorld_c::LoadTerrainGroup(const Register::Table_c &dict)
+	void OgitorGameWorld::LoadTerrainGroup(const Register::Table &dict)
 	{
-		pclTerrainOptions = new Ogre::TerrainGlobalOptions();
+		m_pclTerrainOptions = new Ogre::TerrainGlobalOptions();
 
-		pclTerrainOptions->setMaxPixelError(dict.GetFloat("tuning::maxpixelerror"));
-		pclTerrainOptions->setLightMapSize(dict.GetInt("lightmap::texturesize"));
-		pclTerrainOptions->setCompositeMapSize(dict.GetInt("tuning::compositemaptexturesize"));
-		pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));
-		pclTerrainOptions->setLayerBlendMapSize(dict.GetInt("blendmap::texturesize"));
+		m_pclTerrainOptions->setMaxPixelError(dict.GetFloat("tuning::maxpixelerror"));
+		m_pclTerrainOptions->setLightMapSize(dict.GetInt("lightmap::texturesize"));
+		m_pclTerrainOptions->setCompositeMapSize(dict.GetInt("tuning::compositemaptexturesize"));
+		m_pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));
+		m_pclTerrainOptions->setLayerBlendMapSize(dict.GetInt("blendmap::texturesize"));
 
-		Render_c &render = Render_c::GetInstance();
+		auto &render = Render::GetInstance();
 
 		//u16TerrainSize = dict.GetInt("pagemapsize");
 		//pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, u16TerrainSize, dict.GetFloat("pageworldsize"));
-		pclTerrainGroup = render.CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, dict.GetInt("pagemapsize"), dict.GetFloat("pageworldsize"));
-		pclTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
-		pclTerrainGroup->setFilenameConvention("Page", "ogt");
+		m_pclTerrainGroup = render.CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, dict.GetInt("pagemapsize"), dict.GetFloat("pageworldsize"));
+		m_pclTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+		m_pclTerrainGroup->setFilenameConvention("Page", "ogt");
 
-		if(pclTerrainLight != NULL)
+		if(m_pclTerrainLight != NULL)
 		{
-			pclTerrainOptions->setLightMapDirection(pclTerrainLight->getDirection());
-			pclTerrainOptions->setCompositeMapAmbient(render.GetAmbientColor());
-			pclTerrainOptions->setCompositeMapDiffuse(pclTerrainLight->getDiffuseColour());
+			m_pclTerrainOptions->setLightMapDirection(m_pclTerrainLight->getDirection());
+			m_pclTerrainOptions->setCompositeMapAmbient(render.GetAmbientColor());
+			m_pclTerrainOptions->setCompositeMapDiffuse(m_pclTerrainLight->getDiffuseColour());
 		}
 	}
 
-	void OgitorGameWorld_c::LoadTerrainPage(const Register::Table_c &terrainPageTable, const Register::Table_c &worldEntityDef)
+	void OgitorGameWorld::LoadTerrainPage(const Register::Table &terrainPageTable, const Register::Table &worldEntityDef)
 	{
 		auto &levelInfo = Register::GetHive("LevelInfo");
 
-		String_t name = levelInfo.GetTable("LevelFile").GetString("path") + "/" + worldEntityDef.GetString("terrainDir") + "/" + pclTerrainGroup->generateFilename(0, 0);
-		pclTerrainGroup->defineTerrain(0, 0, name);
-		pclTerrainGroup->loadTerrain(0, 0, true);
+		String_t name = levelInfo.GetTable("LevelFile").GetString("path") + "/" + worldEntityDef.GetString("terrainDir") + "/" + m_pclTerrainGroup->generateFilename(0, 0);
+		m_pclTerrainGroup->defineTerrain(0, 0, name);
+		m_pclTerrainGroup->loadTerrain(0, 0, true);
 	}
 
-	bool OgitorGameWorld_c::LoadStaticObject(StaticObject_s &object, const String_t &name, const String_t &type, const Register::Table_c &dict)
+	bool OgitorGameWorld::LoadStaticObject(StaticObject_s &object, const String_t &name, const String_t &type, const Register::Table &dict)
 	{
 		TempStaticObject_s temp;
 
-		temp.fParent = dict.TryGetString(PH_ENTITY_KEY_PARENT_NODE, object.strParent) && (object.strParent.compare(PH_WORLD_SCENE_MANAGER_NAME) != 0);
-		temp.strName = name;
+		temp.m_fParent = dict.TryGetString(PH_ENTITY_KEY_PARENT_NODE, object.strParent) && (object.strParent.compare(PH_WORLD_SCENE_MANAGER_NAME) != 0);
+		temp.m_strName = name;
 
 		if(type.compare("Node Object") == 0)
 		{
@@ -247,69 +245,69 @@ namespace Phobos
 		}
 		else
 		{
-			Kernel_c::GetInstance().LogStream() << "[OgitorGameWorld_c::LoadStaticObject] Error, unknown static object type: " << type << "\n";
+			LogMakeStream() << "[OgitorGameWorld::LoadStaticObject] Error, unknown static object type: " << type << "\n";
 			return false;
 		}
 
 		temp.Commit(object);
 
 		//Check if we have a directional light after commit, to avoid dangling pointers
-		if((object.pclLight != NULL) && (object.pclLight->getType() == Ogre::Light::LT_DIRECTIONAL))
-			pclTerrainLight = object.pclLight;
+		if((object.m_pclLight != NULL) && (object.m_pclLight->getType() == Ogre::Light::LT_DIRECTIONAL))
+			m_pclTerrainLight = object.m_pclLight;
 
 		return true;
 	}
 
-	void OgitorGameWorld_c::LoadNodeObject(TempStaticObject_s &temp, const Register::Table_c &dict)
+	void OgitorGameWorld::LoadNodeObject(TempStaticObject_s &temp, const Register::Table &dict)
 	{
-		temp.pclSceneNode = Render_c::GetInstance().CreateSceneNode(temp.strName);
+		temp.m_pclSceneNode = Render::GetInstance().CreateSceneNode(temp.m_strName);
 
-		temp.pclSceneNode->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
-		temp.pclSceneNode->setOrientation(Register::GetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
+		temp.m_pclSceneNode->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
+		temp.m_pclSceneNode->setOrientation(Register::GetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
 	}
 
-	void OgitorGameWorld_c::LoadEntityObject(TempStaticObject_s &temp, const Register::Table_c &dict)
+	void OgitorGameWorld::LoadEntityObject(TempStaticObject_s &temp, const Register::Table &dict)
 	{
 		this->LoadNodeObject(temp, dict);
 
-		temp.pclEntity = Render_c::GetInstance().CreateEntity(dict.GetString("meshfile"));
-		temp.pclEntity->setCastShadows(dict.GetBool("castshadows"));
-		temp.pclSceneNode->attachObject(temp.pclEntity);		
+		temp.m_pclEntity = Render::GetInstance().CreateEntity(dict.GetString("meshfile"));
+		temp.m_pclEntity->setCastShadows(dict.GetBool("castshadows"));
+		temp.m_pclSceneNode->attachObject(temp.m_pclEntity);		
 	}
 
-	void OgitorGameWorld_c::LoadLightObject(TempStaticObject_s &temp, const Register::Table_c &dict)
+	void OgitorGameWorld::LoadLightObject(TempStaticObject_s &temp, const Register::Table &dict)
 	{
-		temp.pclLight = Render_c::GetInstance().CreateLight();
+		temp.m_pclLight = Render::GetInstance().CreateLight();
 
-		if(temp.fParent)
+		if(temp.m_fParent)
 		{
 			this->LoadNodeObject(temp, dict);
-			temp.pclSceneNode->attachObject(temp.pclLight);
+			temp.m_pclSceneNode->attachObject(temp.m_pclLight);
 		}
 
-		temp.pclLight->setCastShadows(dict.GetBool("castshadows"));
+		temp.m_pclLight->setCastShadows(dict.GetBool("castshadows"));
 
 		switch(dict.GetInt("lighttype"))
 		{
 			case 0:
-				temp.pclLight->setType(Ogre::Light::LT_POINT);
-				if(!temp.fParent)
-					temp.pclLight->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
+				temp.m_pclLight->setType(Ogre::Light::LT_POINT);
+				if(!temp.m_fParent)
+					temp.m_pclLight->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
 				break;
 
 			case 1:
-				temp.pclLight->setType(Ogre::Light::LT_DIRECTIONAL);
+				temp.m_pclLight->setType(Ogre::Light::LT_DIRECTIONAL);
 				break;
 
 			case 2:
 				{
-					temp.pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
+					temp.m_pclLight->setType(Ogre::Light::LT_SPOTLIGHT);
 
-					if(!temp.fParent)
-						temp.pclLight->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
+					if(!temp.m_fParent)
+						temp.m_pclLight->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
 
 					Ogre::Vector3 lightRange = Register::GetVector3(dict, "lightrange");
-					temp.pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
+					temp.m_pclLight->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
 				}
 				break;
 
@@ -318,21 +316,21 @@ namespace Phobos
 					std::stringstream stream;
 
 					stream << "Invalid light type " << dict.GetInt("lighttype") << " for object " << dict.GetString("name");
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "OgitorGameWorld_c::LoadLightObject", stream.str());
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "OgitorGameWorld::LoadLightObject", stream.str());
 				}
 				break;
 		}
 
 		float attenuation[4];
 		dict.Get4Float(attenuation, "attenuation");
-		temp.pclLight->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
+		temp.m_pclLight->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
 
-		temp.pclLight->setDiffuseColour(Register::GetColour(dict, "diffuse"));
+		temp.m_pclLight->setDiffuseColour(Register::GetColour(dict, "diffuse"));
 
-		if(!temp.fParent)
-			temp.pclLight->setDirection(Register::GetVector3(dict, "direction"));
+		if(!temp.m_fParent)
+			temp.m_pclLight->setDirection(Register::GetVector3(dict, "direction"));
 
-		temp.pclLight->setPowerScale(dict.GetFloat("power"));
-		temp.pclLight->setSpecularColour(Register::GetColour(dict, "specular"));		
+		temp.m_pclLight->setPowerScale(dict.GetFloat("power"));
+		temp.m_pclLight->setSpecularColour(Register::GetColour(dict, "specular"));		
 	}		
 }

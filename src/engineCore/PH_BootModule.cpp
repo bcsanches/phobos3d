@@ -16,65 +16,65 @@ subject to the following restrictions:
 
 #include "PH_BootModule.h"
 
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
+#include <Phobos/Memory.h>
 
 #include "PH_Console.h"
 #include "PH_CoreModuleManager.h"
 
 namespace Phobos
 {
-	BootModule_c::BootModule_c(const String_t &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager):
-		CoreModule_c("BootModule"),
-		strCfgName(cfgName),
-		iFixedUpdateCount(0),
-		fUpdateDone(false),
-		fPrepareFired(false),
-		fBootFired(false),
-		rclManager(manager)
+	BootModule::BootModule(const String_t &cfgName, int argc, char *const argv[], CoreModuleManager &manager):
+		CoreModule("BootModule"),
+		m_strCfgName(cfgName),
+		m_iFixedUpdateCount(0),
+		m_fUpdateDone(false),
+		m_fPrepareFired(false),
+		m_fBootFired(false),
+		m_rclManager(manager)
 	{
 		if(argc > 1)
 		{
-			vecArgs.reserve(argc-1);
+			m_vecArgs.reserve(argc-1);
 
 			for(int i = 1;i < argc; ++i)
-				vecArgs.push_back(argv[i]);
+				m_vecArgs.push_back(argv[i]);
 		}
 	}
 
-	void BootModule_c::OnFixedUpdate()
+	void BootModule::OnFixedUpdate()
 	{
-		++iFixedUpdateCount;
+		++m_iFixedUpdateCount;
 
-		if(fUpdateDone && (iFixedUpdateCount > 2))
+		if(m_fUpdateDone && (m_iFixedUpdateCount > 2))
 		{
 			//First time, tell the system that we are ready to go
-			if(!fPrepareFired)
+			if(!m_fPrepareFired)
 			{
-				rclManager.OnEvent(CoreEvents::PREPARE_TO_BOOT);
-				fPrepareFired = true;
+				m_rclManager.OnEvent(CoreEvents::PREPARE_TO_BOOT);
+				m_fPrepareFired = true;
 
 				//restart count
-				iFixedUpdateCount = 0;
-				fUpdateDone = 0;
+				m_iFixedUpdateCount = 0;
+				m_fUpdateDone = 0;
 			}
-			else if(!fBootFired)
+			else if(!m_fBootFired)
 			{
-				Console_c &console = Console_c::GetInstance();
+				Console &console = Console::GetInstance();
 
 				try
 				{										
-					console.ExecuteFromFile(strCfgName);					
+					console.ExecuteFromFile(m_strCfgName);					
 				}
-				catch(FileNotFoundException_c &e)
+				catch(FileNotFoundException &e)
 				{
-					Kernel_c::GetInstance().LogStream() << "[BootModule_c::OnFixedUpdate] Warning, boot failed: " << e.what();
+					LogMakeStream() << "[BootModule::OnFixedUpdate] Warning, boot failed: " << e.what();
 				}
 
-				if(!vecArgs.empty())
+				if(!m_vecArgs.empty())
 				{						
-					std::for_each(vecArgs.begin(), vecArgs.end(), [&console](const std::string &arg)
+					std::for_each(m_vecArgs.begin(), m_vecArgs.end(), [&console](const std::string &arg)
 						{
 							console.Execute(arg);
 						}
@@ -84,11 +84,11 @@ namespace Phobos
 				}
 
 				//Time to boot and game over for us
-				rclManager.OnEvent(CoreEvents::BOOT);
+				m_rclManager.OnEvent(CoreEvents::BOOT);
 
-				fBootFired = true;
+				m_fBootFired = true;
 
-				rclManager.RemoveModule(*this);
+				m_rclManager.RemoveModule(*this);
 
 				//suicide
 				delete this;
@@ -96,8 +96,8 @@ namespace Phobos
 		}
 	}
 
-	void BootModule_c::OnUpdate()
+	void BootModule::OnUpdate()
 	{
-		fUpdateDone = true;
+		m_fUpdateDone = true;
 	}
 }

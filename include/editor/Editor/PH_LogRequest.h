@@ -3,22 +3,22 @@
 
 #include "Editor/PH_Request.h"
 
-#include <PH_String.h>
+#include <Phobos/String.h>
 
 namespace Phobos
 {
 	namespace Editor
 	{
-		class LogRequest_c: public Request_c
+		class LogRequest: public Request
 		{
 			public:
-				LogRequest_c(const rapidjson::Value &value);
+				LogRequest(const rapidjson::Value &value);
 
 			protected:
 				virtual void OnExecute(JsonCreator::StringWriter &response) override;
 
 			private:
-				String_t strMessage;
+				String_t m_strMessage;
 		};
 	}
 }

@@ -26,9 +26,9 @@ subject to the following restrictions:
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>
 
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
+#include <Phobos/Path.h>
 
 #include "PH_MapLoaderFactory.h"
 #include "PH_OgitorGameWorld.h"
@@ -38,7 +38,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_MAP_LOADER_CREATOR("OgitorMapLoader", OgitorMapLoader_c);
+	PH_FULL_MAP_LOADER_CREATOR("OgitorMapLoader", OgitorMapLoader);
 	
 	static const char *GetChildNodeValue(const rapidxml::xml_node<> &element, const char *nodeName)
 	{		
@@ -89,9 +89,9 @@ namespace Phobos
 		return (strcmp(attribute->value(), "Marker Object") == 0) || (strcmp(attribute->value(), "Camera Object") == 0);
 	}
 
-	static void LoadProperties(Register::Table_c &dict, const rapidxml::xml_node<> &element)
+	static void LoadProperties(Register::Table &dict, const rapidxml::xml_node<> &element)
 	{
-		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
+		auto stream = LogMakeStream();
 
 		for(const rapidxml::xml_node<> *elem = element.first_node(PROPERTY_NODE_NAME); elem; elem = elem->next_sibling(PROPERTY_NODE_NAME))
 		{
@@ -100,13 +100,13 @@ namespace Phobos
 
 			if(name == NULL)
 			{
-				stream << "[OgitorMapLoader_c::LoadProperties] id attribute not found on CUSTOMPROPERTY node\n";
+				stream << "[OgitorMapLoader::LoadProperties] id attribute not found on CUSTOMPROPERTY node\n";
 				continue;
 			}
 
 			if(value == NULL)
 			{
-				stream << "[OgitorMapLoader_c::LoadProperties] value attribute not found on CUSTOMPROPERTY node\n";
+				stream << "[OgitorMapLoader::LoadProperties] value attribute not found on CUSTOMPROPERTY node\n";
 				continue;
 			}
 
@@ -114,7 +114,7 @@ namespace Phobos
 		}
 	}
 
-	static void LoadTable(Register::Table_c &dict, const rapidxml::xml_node<> &element)
+	static void LoadTable(Register::Table &dict, const rapidxml::xml_node<> &element)
 	{
 		for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
 		{
@@ -129,36 +129,36 @@ namespace Phobos
 			LoadProperties(dict, *custom);
 	}
 
-	OgitorMapLoader_c::OgitorMapLoader_c(const Register::Table_c &settings):
-		MapLoader_c(settings)
+	OgitorMapLoader::OgitorMapLoader(const Register::Table &settings):
+		MapLoader(settings)
 	{
 		//empty
 	}
 
-	GameWorldPtr_t OgitorMapLoader_c::CreateGameWorld()
+	GameWorldPtr_t OgitorMapLoader::CreateGameWorld()
 	{
-		return boost::make_shared<OgitorGameWorld_c>();
+		return std::make_shared<OgitorGameWorld>();
 	}
 
-	void OgitorMapLoader_c::Load(const String_t &fileName)
+	void OgitorMapLoader::Load(const String_t &fileName)
 	{		
 		rapidxml::xml_document<> doc;
 
 		std::ifstream input(fileName.c_str(), std::ios_base::in);
 
 		if(input.fail())			
-			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "OgitorMapLoader_c::LoadOgitor", "'" + fileName + "' not found");
+			PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "OgitorMapLoader::LoadOgitor", "'" + fileName + "' not found");
 
 		std::vector<char> fileData( (std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
 		fileData.push_back('\0');
 		
 		doc.parse<0>(&fileData[0] );	
 
-		MapLoader_c::ClearAllHives();
+		MapLoader::ClearAllHives();
 
 		rapidxml::xml_node<> *root = doc.first_node();
 		if(root == NULL)
-			PH_RAISE(PARSER_EXCEPTION, "OgitorMapLoader_c::LoadOgitor", "'" + fileName + "' appears to be empty");		
+			PH_RAISE(PARSER_EXCEPTION, "OgitorMapLoader::LoadOgitor", "'" + fileName + "' appears to be empty");		
 
 		for(rapidxml::xml_node<> *elem = root->first_node("OBJECT");elem; elem = elem->next_sibling())
 		{			
@@ -167,7 +167,7 @@ namespace Phobos
 				rapidxml::xml_attribute<> *nameAttribute = elem->first_attribute("name");
 				if(nameAttribute == NULL)
 				{
-					Kernel_c::GetInstance().LogMessage("[OgitorMapLoader_c::LoadOgitor] Object without name, ignored");
+					LogMessage("[OgitorMapLoader::LoadOgitor] Object without name, ignored");
 					continue;
 				}
 
@@ -175,19 +175,19 @@ namespace Phobos
 				if(dynamicEntity && IsEditorOnly(*elem))
 					continue;
 				
-				std::unique_ptr<Register::Table_c> dict(PH_NEW Register::Table_c(nameAttribute->value()));				
+				std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(nameAttribute->value()));				
 
 				LoadTable(*dict, *elem);
 
 				(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddTable(std::move(dict));				
 			}
-			catch(Exception_c &e)
+			catch(Exception &e)
 			{
-				Kernel_c::GetInstance().LogMessage(e.what());
+				LogMessage(e.what());
 			}			
 		}
 
-		std::unique_ptr<Register::Table_c> dict = this->CreateWorldSpawnEntityDef();
+		std::unique_ptr<Register::Table> dict = this->CreateWorldSpawnEntityDef();
 
 		//load project data
 		if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
@@ -201,12 +201,12 @@ namespace Phobos
 		pclCurrentLevelHive_g->AddTable(std::move(dict));
 
 		//fill out basic level data
-		dict.reset(PH_NEW Register::Table_c("LevelFile"));
+		dict.reset(PH_NEW Register::Table("LevelFile"));
 
 		dict->SetString("pathName", fileName);
 
-		Path_c path(fileName);
-		Path_c filePath, onlyFileName;
+		Path path(fileName);
+		Path filePath, onlyFileName;
 		path.ExtractPathAndFilename(&filePath, &onlyFileName);
 
 		dict->SetString("path", filePath.GetStr());

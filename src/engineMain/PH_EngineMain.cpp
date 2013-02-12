@@ -16,99 +16,96 @@ subject to the following restrictions:
 
 #include <sstream>
 
+#include <Phobos/ProcVector.h>
+#include <Phobos/Register/Manager.h>
+#include <Phobos/Shell/Variable.h>
+#include <Phobos/Shell/Utils.h>
+#include <Phobos/System/Timer.h>
 
 #include <Gui/PH_OgreManager.h>
 
 #include <PH_OgreConsole.h>
-#include <PH_ContextVar.h>
-#include <PH_ContextUtils.h>
 #include <PH_Core.h>
 #include <PH_EventManagerModule.h>
 #include <PH_GameEventManager.h>
-#include <PH_Kernel.h>
 #include <PH_ModelRendererManager.h>
 #include <PH_MoverManager.h>
 #include <PH_PhysicsManager.h>
 #include <PH_PluginManager.h>
-#include <PH_ProcVector.h>
 #include <PH_Render.h>
 #include <PH_Session.h>
 #include <PH_WorldManager.h>
-
-#include <Phobos/Register/Manager.h>
-#include <Phobos/System/Timer.h>
 
 #include <Gui/PH_LevelSelector.h>
 
 namespace Phobos
 {
-	class EngineMain_c
+	class EngineMain
 	{
 		public:
-			EngineMain_c(int argc, char *const argv[]);
-			~EngineMain_c();
+			EngineMain(int argc, char *const argv[]);
+			~EngineMain();
 
 			void MainLoop(void);					
 
 		private:			
-			ProcVector_c	clSingletons;
+			ProcVector	m_clSingletons;
 	};
 
-	EngineMain_c::EngineMain_c(int argc, char * const argv[])
+	EngineMain::EngineMain(int argc, char * const argv[])
 	{
-		Kernel_c::CreateInstance("phobos.log");
-		Core_c &core = Core_c::CreateInstance();
-		clSingletons.AddProc(Core_c::ReleaseInstance);
+		Core &core = Core::CreateInstance();
+		m_clSingletons.AddProc(Core::ReleaseInstance);
 
 		Register::Init();
-		clSingletons.AddProc(Register::Finalize);		
+		m_clSingletons.AddProc(Register::Finalize);		
 
-		EventManagerModule_c &eventManager = EventManagerModule_c::CreateInstance();
-		clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
+		EventManagerModule &eventManager = EventManagerModule::CreateInstance();
+		m_clSingletons.AddProc(EventManagerModule::ReleaseInstance);
 		core.AddModule(eventManager);
 
-		Console_c &console = OgreConsole_c::CreateInstance();
-		clSingletons.AddProc(Console_c::ReleaseInstance);
+		Console &console = OgreConsole::CreateInstance();
+		m_clSingletons.AddProc(Console::ReleaseInstance);
 		core.AddModule(console);		
 
-		Session_c &session = Session_c::CreateInstance();
-		clSingletons.AddProc(Session_c::ReleaseInstance);
+		Session &session = Session::CreateInstance();
+		m_clSingletons.AddProc(Session::ReleaseInstance);
 		core.AddModule(session);
 
-		WorldManager_c &worldManager = WorldManager_c::CreateInstance();
-		clSingletons.AddProc(WorldManager_c::ReleaseInstance);
+		WorldManager &worldManager = WorldManager::CreateInstance();
+		m_clSingletons.AddProc(WorldManager::ReleaseInstance);
 		core.AddModule(worldManager);
 
-		Gui::LevelSelector_c &levelSelector = Gui::LevelSelector_c::CreateInstance();
-		clSingletons.AddProc(Gui::LevelSelector_c::ReleaseInstance);
+		Gui::LevelSelector &levelSelector = Gui::LevelSelector::CreateInstance();
+		m_clSingletons.AddProc(Gui::LevelSelector::ReleaseInstance);
 		core.AddModule(levelSelector);
 
-		GameEventManager_c &gameEventManager = GameEventManager_c::CreateInstance();
-		clSingletons.AddProc(GameEventManager_c::ReleaseInstance);
+		GameEventManager &gameEventManager = GameEventManager::CreateInstance();
+		m_clSingletons.AddProc(GameEventManager::ReleaseInstance);
 		core.AddModule(gameEventManager);
 
-		PluginManager_c &pluginManager = PluginManager_c::CreateInstance();
-		clSingletons.AddProc(PluginManager_c::ReleaseInstance);
+		PluginManager &pluginManager = PluginManager::CreateInstance();
+		m_clSingletons.AddProc(PluginManager::ReleaseInstance);
 		core.AddModule(pluginManager, CoreModulePriorities::NORMAL-1);		
 
-		MoverManager_c &moverManager = MoverManager_c::CreateInstance();
-		clSingletons.AddProc(MoverManager_c::ReleaseInstance);
+		MoverManager &moverManager = MoverManager::CreateInstance();
+		m_clSingletons.AddProc(MoverManager::ReleaseInstance);
 		core.AddModule(moverManager);
 
-		Physics::Manager_c &physicsManager = Physics::Manager_c::CreateInstance();
-		clSingletons.AddProc(Physics::Manager_c::ReleaseInstance);
+		Physics::Manager &physicsManager = Physics::Manager::CreateInstance();
+		m_clSingletons.AddProc(Physics::Manager::ReleaseInstance);
 		core.AddModule(physicsManager, CoreModulePriorities::LOWEST+3);
 
-		ModelRendererManager_c &modelRendererManager = ModelRendererManager_c::CreateInstance();
-		clSingletons.AddProc(ModelRendererManager_c::ReleaseInstance);
+		ModelRendererManager &modelRendererManager = ModelRendererManager::CreateInstance();
+		m_clSingletons.AddProc(ModelRendererManager::ReleaseInstance);
 		core.AddModule(modelRendererManager, CoreModulePriorities::LOWEST+2);
 
-		Gui::OgreManager_c &guiManager = Gui::OgreManager_c::CreateInstance();
-		clSingletons.AddProc(Gui::Manager_c::ReleaseInstance);
+		Gui::OgreManager &guiManager = Gui::OgreManager::CreateInstance();
+		m_clSingletons.AddProc(Gui::Manager::ReleaseInstance);
 		core.AddModule(guiManager, CoreModulePriorities::LOWEST+1);
 
-		Render_c &render = Render_c::CreateInstance();
-		clSingletons.AddProc(Render_c::ReleaseInstance);
+		Render &render = Render::CreateInstance();
+		m_clSingletons.AddProc(Render::ReleaseInstance);
 		core.AddModule(render, CoreModulePriorities::LOWEST);
 
 		core.RegisterCommands(console);
@@ -117,13 +114,11 @@ namespace Phobos
 		core.LaunchBootModule("autoexec.cfg", argc, argv);
 	}
 
-	EngineMain_c::~EngineMain_c()
+	EngineMain::~EngineMain()
 	{
-		Core_c::GetInstance().Shutdown();
+		Core::GetInstance().Shutdown();
 
-		clSingletons.CallAll();
-
-		Kernel_c::ReleaseInstance();
+		m_clSingletons.CallAll();
 	}			
 
 	/**
@@ -131,9 +126,9 @@ namespace Phobos
 		The engine main loop
 
 	*/
-	void EngineMain_c::MainLoop(void)
+	void EngineMain::MainLoop(void)
 	{
-		Core_c::GetInstance().MainLoop();
+		Core::GetInstance().MainLoop();
 	}
 }
 
@@ -146,7 +141,7 @@ extern "C" int SDL_main(int argc, char *argv[])
 	#endif
 
 	{
-		Phobos::EngineMain_c engine(argc, argv);
+		Phobos::EngineMain engine(argc, argv);
 
 	#ifndef PH_DEBUG
 		try
@@ -160,7 +155,7 @@ extern "C" int SDL_main(int argc, char *argv[])
 			std::stringstream stream;
 			stream << "main: Unhandled excetion: ";
 			stream << e.what();
-			Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+			Phobos::LogMessage(stream.str());
 
 			exit(EXIT_FAILURE);
 		}

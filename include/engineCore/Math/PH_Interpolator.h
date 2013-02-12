@@ -17,52 +17,52 @@ subject to the following restrictions:
 #ifndef PH_MATH_INTERPOLATOR_H
 #define PH_MATH_INTERPOLATOR_H
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 namespace Phobos
 {
 	namespace Math
 	{
 		template <typename T>
-		class Interpolator_c
+		class Interpolator
 		{
 			public:
 				typedef T &Reference_t;
 
 
 			public:
-				inline Interpolator_c(void)
+				inline Interpolator(void)
 				{
 					//empty
 				}
 
-				inline Interpolator_c(const T &t):
-					tCurrent(t),
-					tLast(t)
+				inline Interpolator(const T &t):
+					m_tCurrent(t),
+					m_tLast(t)
 				{
 				}
 
 				inline void SetValue(const T &v)
 				{
-					tLast = tCurrent;
-					tCurrent = v;
+					m_tLast = m_tCurrent;
+					m_tCurrent = v;
 				}
 
 				inline void Reset(const T &v)
 				{
-					tLast = v;
-					tCurrent = v;
+					m_tLast = v;
+					m_tCurrent = v;
 				}
 
 				inline void SetValues(const T &from, const T &to)
 				{
-					tLast = from;
-					tCurrent = to;
+					m_tLast = from;
+					m_tCurrent = to;
 				}
 
 				inline T GetValue(Float_t alpha)
 				{
-					return Interpolate(tLast, tCurrent, alpha);
+					return Interpolate(m_tLast, m_tCurrent, alpha);
 				}
 
 				inline T & GetValue(T &out, Float_t alpha)
@@ -73,93 +73,93 @@ namespace Phobos
 
 				inline const T & GetCurrent(void) const
 				{
-					return(tCurrent);
+					return(m_tCurrent);
 				}
 
 				inline const T & GetLast(void) const
 				{
-					return(tLast);
+					return(m_tLast);
 				}
 
 			private:
-				T tCurrent;
-				T tLast;
+				T m_tCurrent;
+				T m_tLast;
 		};
 
 		template <typename T>
-		class LinearInterpolator_c
+		class LinearInterpolator
 		{
 			public:
-				LinearInterpolator_c():
-					fpStartTime(0),
-					fpDuration(0),
-					fpCurrentTime(0)
+				LinearInterpolator():
+					m_fpStartTime(0),
+					m_fpDuration(0),
+					m_fpCurrentTime(0)
 				{
 				}
 
-				LinearInterpolator_c(const float startTime, const float duration, const T &startValue, const T &endValue)			
+				LinearInterpolator(const float startTime, const float duration, const T &startValue, const T &endValue)			
 				{
 					this->Start(startTime, duration, startValue, endValue);
 				}
 
 				void Start(const float startTime, const float duration, const T &startValue, const T &endValue)
 				{
-					fpStartTime = startTime;
-					fpDuration = duration;
-					fpCurrentTime = fpStartTime;
-					tStartValue = startValue;
-					tEndValue = endValue;
-					tCurrentValue = startValue;
+					m_fpStartTime = startTime;
+					m_fpDuration = duration;
+					m_fpCurrentTime = m_fpStartTime;
+					m_tStartValue = startValue;
+					m_tEndValue = endValue;
+					m_tCurrentValue = startValue;
 				}
 
 				void Update(Float_t ticks)
 				{
 					//Force a value update
-					this->GetValue(fpCurrentTime + ticks);
+					this->GetValue(m_fpCurrentTime + ticks);
 				}
 
 				T GetValue(Float_t time)
 				{
-					if(time != fpCurrentTime)
+					if(time != m_fpCurrentTime)
 					{
-						float delta = time - fpStartTime;
+						float delta = time - m_fpStartTime;
 						if(delta <= 0)
 						{
-							tCurrentValue = tStartValue;
+							m_tCurrentValue = m_tStartValue;
 						}
-						else if(delta >= fpDuration)
+						else if(delta >= m_fpDuration)
 						{
-							tCurrentValue = tEndValue;
+							m_tCurrentValue = m_tEndValue;
 						}
 						else
 						{
-							tCurrentValue = tStartValue + (tEndValue - tStartValue) * (delta / fpDuration);
+							m_tCurrentValue = m_tStartValue + (m_tEndValue - m_tStartValue) * (delta / m_fpDuration);
 						}
 
-						fpCurrentTime = time;
+						m_fpCurrentTime = time;
 					}
 
-					return tCurrentValue;
+					return m_tCurrentValue;
 				}
 
 				T GetCurrentValue() const
 				{
-					return tCurrentValue;
+					return m_tCurrentValue;
 				}
 
 				Float_t GetCurrentTime() const
 				{
-					return fpCurrentTime;
+					return m_fpCurrentTime;
 				}
 
 			private:
-				Float_t fpStartTime;
-				Float_t fpDuration;
-				Float_t fpCurrentTime;
+				Float_t m_fpStartTime;
+				Float_t m_fpDuration;
+				Float_t m_fpCurrentTime;
 
-				T		tStartValue;
-				T		tEndValue;
-				T		tCurrentValue;
+				T		m_tStartValue;
+				T		m_tEndValue;
+				T		m_tCurrentValue;
 		};
 	}
 }

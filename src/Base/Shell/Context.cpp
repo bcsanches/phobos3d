@@ -168,7 +168,7 @@ Phobos::Shell::Context::Context(void):
 
 void Phobos::Shell::Context::AddContextVariable(Variable &var)
 {
-	AddItem(m_setVariables, var, "Variable", "Context_c::AddContextVar");
+	AddItem(m_setVariables, var, "Variable", "Context::AddContextVariable");
 }
 
 void Phobos::Shell::Context::RemoveContextVariable(Variable &var)
@@ -190,7 +190,7 @@ const Phobos::Shell::Variable &Phobos::Shell::Context::GetContextVariable(const 
 	{
 		std::stringstream str;
 		str << "Variable " << name << " not found.";
-		PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "&Context_c::GetContextVar", str.str());
+		PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "&Context::GetContextVar", str.str());
 	}
 
 	return *p;
@@ -218,7 +218,7 @@ Phobos::Shell::Command *Phobos::Shell::Context::TryGetContextCommand(const Strin
 
 void Phobos::Shell::Context::AddContextCommand(Command &cmd)
 {
-	AddItem(m_setCommands, cmd, "Command", "Context_c::AddContextCmd");
+	AddItem(m_setCommands, cmd, "Command", "Context::AddContextCommand");
 }
 
 void Phobos::Shell::Context::RemoveContextCommand(Command &cmd)
@@ -349,7 +349,7 @@ void Phobos::Shell::Context::ParseCmdParam(String_t &result, const String_t &par
 			auto *var = this->TryGetContextVariable(result);
 			if(var == NULL)
 			{
-				Phobos::LogMakeStream() << "[Context_c::ParseCmdParam] Error: cant find variable " << result;
+				Phobos::LogMakeStream() << "[Context::ParseCmdParam] Error: cant find variable " << result;
 				return;
 			}
 			else
@@ -445,7 +445,7 @@ void Phobos::Shell::Context::ExecuteCmdLine(StringVector_t &args)
 	auto *cmd = this->TryGetContextCommand(cmdName);
 	if(cmd == NULL)
 	{
-		LogMakeStream() << "[Context_c::ExecuteCmdLine] Command " << cmdName << " not found";
+		LogMakeStream() << "[Context::ExecuteCmdLine] Command " << cmdName << " not found";
 	}
 	else
 		cmd->Execute(args, *this);
@@ -494,7 +494,7 @@ void Phobos::Shell::Context::ExecuteFromFile(const String_t &fileName)
 	std::ifstream input(fileName.c_str(), ios_base::in);		
 
 	if(input.fail())
-		PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "Context_c::ExecuteFromFile", "'" + fileName + "' not found");
+		PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "Context::ExecuteFromFile", "'" + fileName + "' not found");
 
 	String_t line;
 	while(input.good())

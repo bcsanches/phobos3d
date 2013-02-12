@@ -7,22 +7,22 @@
 
 namespace Phobos
 {
-	PH_FULL_MAP_LOADER_CREATOR("TileMapLoader", TileMapLoader_c);
+	PH_FULL_MAP_LOADER_CREATOR("TileMapLoader", TileMapLoader);
 
-	TileMapLoader_c::TileMapLoader_c(const Register::Table_c &settings):
-		MapLoader_c(settings)
+	TileMapLoader::TileMapLoader(const Register::Table &settings):
+		MapLoader(settings)
 	{
 		//empty
 	}
 
-	GameWorldPtr_t TileMapLoader_c::CreateGameWorld()
+	GameWorldPtr_t TileMapLoader::CreateGameWorld()
 	{
-		return boost::make_shared<TileGameWorld_c>();
+		return std::make_shared<TileGameWorld>();
 	}
 	
-	void TileMapLoader_c::Load(const String_t &fileName)
+	void TileMapLoader::Load(const String_t &fileName)
 	{
-		MapLoader_c::ClearAllHives();
+		MapLoader::ClearAllHives();
 
 		Register::Load(fileName);
 	}

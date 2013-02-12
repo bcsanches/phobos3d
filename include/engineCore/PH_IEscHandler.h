@@ -21,22 +21,19 @@ namespace Phobos
 {
 	namespace Gui
 	{
-		class Form_c;
+		class Form;
 	}
 
-	namespace EscAction
-	{
-		enum Enum
-		{
-			IGNORE_ESC,
-			SET_GUI
-		};
-	}
+	enum class EscAction
+	{		
+		IGNORE_ESC,
+		SET_GUI		
+	};
 
-	class IEscHandler_c
+	class IEscHandler
 	{
 		public:
-			virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm) = 0;
+			virtual EscAction HandleEsc(Gui::Form *&outForm) = 0;
 	};
 }
 

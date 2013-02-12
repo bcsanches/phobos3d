@@ -27,7 +27,7 @@ namespace Phobos
 {
 	namespace Register
 	{
-		inline Ogre::Vector3 GetVector3(const Table_c &dict, const String_t &key)
+		inline Ogre::Vector3 GetVector3(const Table &dict, const String_t &key)
 		{		
 			const String_t &value = dict.GetString(key);
 
@@ -37,7 +37,7 @@ namespace Phobos
 			return tmp;
 		}
 
-		inline Ogre::Vector3 TryGetVector3(const Table_c &dict, const String_t &key, const Ogre::Vector3 &defaultValue)
+		inline Ogre::Vector3 TryGetVector3(const Table &dict, const String_t &key, const Ogre::Vector3 &defaultValue)
 		{		
 			const String_t *value = dict.TryGetString(key);
 			if(value)
@@ -53,7 +53,7 @@ namespace Phobos
 			}
 		}
 
-		inline Ogre::Quaternion GetQuaternion(const Table_c &dict, const String_t &key)
+		inline Ogre::Quaternion GetQuaternion(const Table &dict, const String_t &key)
 		{
 			const String_t &value = dict.GetString(key);
 
@@ -63,7 +63,7 @@ namespace Phobos
 			return q;
 		}
 
-		inline Ogre::ColourValue GetColour(const Table_c &dict, const String_t &key)
+		inline Ogre::ColourValue GetColour(const Table &dict, const String_t &key)
 		{
 			const String_t &value = dict.GetString(key);
 

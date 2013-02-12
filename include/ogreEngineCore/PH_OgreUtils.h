@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <OgreException.h>
 
-#include <PH_String.h>
+#include <Phobos/String.h>
 
 namespace Phobos
 {

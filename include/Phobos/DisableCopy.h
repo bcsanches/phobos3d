@@ -18,6 +18,6 @@ subject to the following restrictions:
 #ifndef PH_DISABLE_COPY_H
 #define PH_DISABLE_COPY_H
 
-#define PH_DISABLE_COPY(X) private: X(const X &); X operator=(const X&);
+#define PH_DISABLE_COPY(X) private: X(const X &); X &operator=(const X&);
 
 #endif

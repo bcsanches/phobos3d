@@ -16,7 +16,8 @@ subject to the following restrictions:
 
 #include "PH_RigidBodyComponent.h"
 
-#include <PH_Enum.h>
+#include <Phobos/Enum.h>
+
 #include <PH_Transform.h>
 #include <PH_TransformProperty.h>
 
@@ -34,54 +35,54 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_RIGID_BODY_COMPONENT_NAME, RigidBodyComponent_c);		
+		PH_FULL_ENTITY_COMPONENT_CREATOR(PH_RIGID_BODY_COMPONENT_NAME, RigidBodyComponent);		
 
-		RigidBodyComponent_c::RigidBodyComponent_c(const String_t &name, Entity_c &owner):
-			EntityComponent_c(name, owner),			
-			pprpTransform(NULL)
+		RigidBodyComponent::RigidBodyComponent(const String_t &name, Entity &owner):
+			EntityComponent(name, owner),			
+			m_pprpTransform(NULL)
 		{
 			//empty
 		}
 
-		RigidBodyComponent_c::~RigidBodyComponent_c()
+		RigidBodyComponent::~RigidBodyComponent()
 		{			
-			Manager_c::GetInstance().UnregisterRigidBodyComponent(*this);
+			Manager::GetInstance().UnregisterRigidBodyComponent(*this);
 		}
 
-		void RigidBodyComponent_c::SaveTransform()
+		void RigidBodyComponent::SaveTransform()
 		{			
-			clPreviousTransform = spRigidBody->GetTransform();
+			m_clPreviousTransform = m_spRigidBody->GetTransform();
 		}
 
-		void RigidBodyComponent_c::UpdateTransform(Float_t delta)
+		void RigidBodyComponent::UpdateTransform(Float_t delta)
 		{			
-			pprpTransform->SetTransform(Transform_c::Interpolate(clPreviousTransform, spRigidBody->GetTransform(), delta));
+			m_pprpTransform->SetTransform(Transform::Interpolate(m_clPreviousTransform, m_spRigidBody->GetTransform(), delta));
 		}
 
-		void RigidBodyComponent_c::OnLoad(const Register::Table_c &table)
+		void RigidBodyComponent::OnLoad(const Register::Table &table)
 		{	
-			Transform_c transform;
+			Transform transform;
 
 			EntityLoadTransform(transform, table);						
 
-			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
+			Physics::Manager &physicsManager = Manager::GetInstance();
 
-			Physics::CollisionTag_c collisionTag = GamePhysicsSettings_c::LoadCollisionTag(table);
+			Physics::CollisionTag collisionTag = GamePhysicsSettings::LoadCollisionTag(table);
 
-			PH_ASSERT(!spRigidBody);			
+			PH_ASSERT(!m_spRigidBody);			
 			
 			Float_t mass = table.GetFloat("mass");
 
-			spRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(table, Ogre::Vector3(1, 1, 1)));
+			m_spRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(table, Ogre::Vector3(1, 1, 1)));
 		}
 
-		void RigidBodyComponent_c::OnLoadFinished()
+		void RigidBodyComponent::OnLoadFinished()
 		{
-			Physics::Manager_c &manager = Manager_c::GetInstance();
+			Physics::Manager &manager = Manager::GetInstance();
 			manager.RegisterRigidBodyComponent(*this);
-			spRigidBody->Register();			
+			m_spRigidBody->Register();			
 
-			pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
+			m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 
 			this->SaveTransform();
 		}

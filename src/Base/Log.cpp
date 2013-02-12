@@ -33,7 +33,7 @@ namespace Phobos
 	}
 
 	Log::~Log()
-	{
+	{		
 		//empty
 	}
 

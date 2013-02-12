@@ -22,107 +22,107 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		SweepCharacterBody_c::SweepCharacterBody_c(RigidBodyPtr_t rigidBody, Float_t stepHeight):
-			fpStepHeight(stepHeight * Manager_c::GetInstance().GetScale()),
-			spRigidBody(rigidBody),
-			v3WalkDirection(0, 0, 0),
-			fGroundPlane(false),
-			fWalking(false)
+		SweepCharacterBody::SweepCharacterBody(RigidBodyPtr_t rigidBody, Float_t stepHeight):
+			m_fpStepHeight(stepHeight * Manager::GetInstance().GetScale()),
+			m_spRigidBody(rigidBody),
+			m_v3WalkDirection(0, 0, 0),
+			m_fGroundPlane(false),
+			m_fWalking(false)
 		{
 			//empty
 		}
 
-		SweepCharacterBody_c::~SweepCharacterBody_c()
+		SweepCharacterBody::~SweepCharacterBody()
 		{
 			this->Unregister();
 		}
 
-		void SweepCharacterBody_c::Register()
+		void SweepCharacterBody::Register()
 		{
-			spRigidBody->Register();
-			Manager_c::GetInstance().AddAction(*this);
+			m_spRigidBody->Register();
+			Manager::GetInstance().AddAction(*this);
 		}
 		
-		void SweepCharacterBody_c::Unregister()
+		void SweepCharacterBody::Unregister()
 		{
-			Manager_c::GetInstance().RemoveAction(*this);
-			spRigidBody->Unregister();
+			Manager::GetInstance().RemoveAction(*this);
+			m_spRigidBody->Unregister();
 		}
 
-		void SweepCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
+		void SweepCharacterBody::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
-			v3WalkDirection = MakeVector3(velocity, Manager_c::GetInstance().GetScale());
+			m_v3WalkDirection = MakeVector3(velocity, Manager::GetInstance().GetScale());
 		}
 
-		Ogre::Vector3 SweepCharacterBody_c::GetPosition() const
+		Ogre::Vector3 SweepCharacterBody::GetPosition() const
 		{
-			return spRigidBody->GetTransform().GetOrigin();
+			return m_spRigidBody->GetTransform().GetOrigin();
 		}
 
-		void SweepCharacterBody_c::Teleport(const Ogre::Vector3 &position)
+		void SweepCharacterBody::Teleport(const Ogre::Vector3 &position)
 		{			
-			//spCharacterController->warp(MakeVector3(position, Manager_c::GetInstance()->GetScale()));
+			//spCharacterController->warp(MakeVector3(position, Manager::GetInstance()->GetScale()));
 		}
 
-		void SweepCharacterBody_c::updateAction( btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
+		void SweepCharacterBody::updateAction( btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 		{
-			const btTransform &fromTransform = spRigidBody->GetRigidBody().getWorldTransform();			
+			const btTransform &fromTransform = m_spRigidBody->GetRigidBody().getWorldTransform();			
 
 			//if not on ground
 			this->GroundTrace(fromTransform.getOrigin());			
 
 			//Apply gravity to movement
-			btVector3 movement = v3WalkDirection;
+			btVector3 movement = m_v3WalkDirection;
 
-			if(!fGroundPlane)
-				movement += Manager_c::GetInstance().GetPhysicsGravity() * deltaTimeStep;
+			if(!m_fGroundPlane)
+				movement += Manager::GetInstance().GetPhysicsGravity() * deltaTimeStep;
 			
 			btTransform toTransform;
 			this->Move(fromTransform, movement, toTransform, 1.0f);
 
-			spRigidBody->SetKinematicTransform(toTransform);
+			m_spRigidBody->SetKinematicTransform(toTransform);
 		}
 
-		void SweepCharacterBody_c::debugDraw(btIDebugDraw* debugDrawer)
+		void SweepCharacterBody::debugDraw(btIDebugDraw* debugDrawer)
 		{
 			//empty
 		}
 
-		bool SweepCharacterBody_c::GroundTrace(const btVector3 &position)
+		bool SweepCharacterBody::GroundTrace(const btVector3 &position)
 		{
 			btTransform toTransform(btQuaternion::getIdentity(), position + btVector3(0, GROUND_CHECK, 0));			
 	
 			SweepCollisionResult_s collisionResult;
 
-			Manager_c::GetInstance().ConvexSweepTest(
+			Manager::GetInstance().ConvexSweepTest(
 				collisionResult, 
-				spRigidBody->GetRigidBody(),
+				m_spRigidBody->GetRigidBody(),
 				btTransform(btQuaternion::getIdentity(), position),
 				toTransform
 			);
 
-			if(collisionResult.fHasHit)
+			if(collisionResult.m_fHasHit)
 			{
-				fGroundPlane = true;
-				v3GroundNormal = collisionResult.v3HitNormalWorld;
+				m_fGroundPlane = true;
+				m_v3GroundNormal = collisionResult.m_v3HitNormalWorld;
 
-				fWalking = v3GroundNormal.y() >= MIN_WALK_NORMAL;		
+				m_fWalking = m_v3GroundNormal.y() >= MIN_WALK_NORMAL;		
 
 				btTransform toTransform(btQuaternion::getIdentity(), position + btVector3(0, GROUND_CHECK*0.1f, 0));
-					Manager_c::GetInstance().ConvexSweepTest(
+					Manager::GetInstance().ConvexSweepTest(
 					collisionResult, 
-					spRigidBody->GetRigidBody(),
+					m_spRigidBody->GetRigidBody(),
 					btTransform(btQuaternion::getIdentity(), position),
 					toTransform
 				);
 			}
 			else
 			{
-				fGroundPlane = false;
-				fWalking = false;
+				m_fGroundPlane = false;
+				m_fWalking = false;
 			}	
 
-			return collisionResult.fHasHit;
+			return collisionResult.m_fHasHit;
 		}
 
 		void ClipVelocity( btVector3 &out, const btVector3 &in, const btVector3 &normal, Float_t overbounce)
@@ -151,7 +151,7 @@ namespace Phobos
 			}
 		}
 
-		void SweepCharacterBody_c::Move(const btTransform &originalfromTransform, const btVector3 &linearVel, btTransform &toTransform, Float_t timeStep)
+		void SweepCharacterBody::Move(const btTransform &originalfromTransform, const btVector3 &linearVel, btTransform &toTransform, Float_t timeStep)
 		{
 			btVector3 colNormals[MAX_CLIP_PLANES];
 			Float_t timeLeft = timeStep;
@@ -162,16 +162,16 @@ namespace Phobos
 
 			btVector3 velocity = linearVel;
 
-			Physics::Manager_c &physicsManager = Manager_c::GetInstance();
+			Physics::Manager &physicsManager = Manager::GetInstance();
 				
-			if(fGroundPlane)
+			if(m_fGroundPlane)
 			{
 				btVector3 v;
-				ClipVelocity(v, velocity, v3GroundNormal, 1.0f);
+				ClipVelocity(v, velocity, m_v3GroundNormal, 1.0f);
 				velocity = v;
 
 				numplanes = 1;
-				colNormals[0] = v3GroundNormal;
+				colNormals[0] = m_v3GroundNormal;
 			}	
 
 			btTransform fromTransform = originalfromTransform;
@@ -188,16 +188,16 @@ namespace Phobos
 				toTransform.setOrigin(fromTransform.getOrigin() + (velocity * timeLeft));
 
 				SweepCollisionResult_s cb;
-				physicsManager.ConvexSweepTest(cb, spRigidBody->GetRigidBody(), fromTransform, toTransform);			
+				physicsManager.ConvexSweepTest(cb, m_spRigidBody->GetRigidBody(), fromTransform, toTransform);			
 			
-				if( !cb.fHasHit || (cb.fHasHit && cb.fpFraction == 0))
+				if( !cb.m_fHasHit || (cb.m_fHasHit && cb.m_fpFraction == 0))
 				{				
-					if(cb.fHasHit)
+					if(cb.m_fHasHit)
 						toTransform = fromTransform;
 					break;		
 				}
 			
- 				float ratio  = cb.fpFraction;
+ 				float ratio  = cb.m_fpFraction;
 				float usedTime = timeLeft * ratio;
 
 				//move the distance
@@ -205,7 +205,7 @@ namespace Phobos
 				timeLeft -= usedTime;
 			
 				//move it away a bit from the plane
-				toTransform.setOrigin(toTransform.getOrigin() + (cb.v3HitNormalWorld * 0.01f));		
+				toTransform.setOrigin(toTransform.getOrigin() + (cb.m_v3HitNormalWorld * 0.01f));		
 				fromTransform = toTransform;
 
 				// cliped to another plane
@@ -215,7 +215,7 @@ namespace Phobos
 					break;
 				}
 
-				colNormals[numplanes] = cb.v3HitNormalWorld;
+				colNormals[numplanes] = cb.m_v3HitNormalWorld;
 				numplanes++;
 
 				// modify original_velocity so it parallels all of the clip planes

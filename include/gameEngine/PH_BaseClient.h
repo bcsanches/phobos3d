@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <PH_ContextCmd.h>
-#include <PH_ContextVar.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/Variable.h>
 #include <PH_CoreModule.h>
 #include <PH_IClient.h>
 
@@ -23,11 +23,11 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API BaseClient_c: public CoreModule_c, public IClient_c
+	class PH_GAME_ENGINE_API BaseClient: public CoreModule, public IClient
 	{	
 		protected:
-			BaseClient_c(const char *name);
+			BaseClient(const char *name);
 
-			virtual void OnPrepareToBoot();					
+			virtual void OnPrepareToBoot() override;					
 	};
 }

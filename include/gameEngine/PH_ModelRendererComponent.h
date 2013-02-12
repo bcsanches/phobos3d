@@ -25,14 +25,14 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TransformProperty_c;
+	class TransformProperty;
 
-	class PH_GAME_ENGINE_API ModelRendererComponent_c: public EntityComponent_c
+	class PH_GAME_ENGINE_API ModelRendererComponent: public EntityComponent
 	{
 		public:
-			static EntityComponent_c *Create(const String_t &name, Entity_c &owner);
+			static EntityComponent *Create(const String_t &name, Entity &owner);
 
-			~ModelRendererComponent_c();
+			~ModelRendererComponent();
 
 			void Update();
 
@@ -54,24 +54,24 @@ namespace Phobos
 			Ogre::Bone &GetBone(const String_t &boneName);
 
 		protected:
-			ModelRendererComponent_c(const String_t &name, Entity_c &owner);			
+			ModelRendererComponent(const String_t &name, Entity &owner);			
 
-			virtual void OnLoad(const Register::Table_c &table);
+			virtual void OnLoad(const Register::Table &table);
 			virtual void OnLoadFinished();
 
 		private:
 			PH_DECLARE_ENTITY_INPUT(SetPosition);			
 
 		protected:
-			static EntityInputManager_c clInputManager_gl;
+			static EntityInputManager clInputManager_gl;
 
 		private:
-			Ogre::SceneNode *pclSceneNode;
-			Ogre::Entity *pclMeshEntity;
+			Ogre::SceneNode *m_pclSceneNode;
+			Ogre::Entity *m_pclMeshEntity;
 
-			String_t	strParentNode;
+			String_t	m_strParentNode;
 
-			TransformProperty_c *pprpTransform;
+			TransformProperty *m_pprpTransform;
 	};
 }
 

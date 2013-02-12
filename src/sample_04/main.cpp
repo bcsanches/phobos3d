@@ -14,12 +14,14 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <PH_Context.h>
-#include <PH_ContextVar.h>
-#include <PH_ContextUtils.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
-#include <PH_ProcVector.h>
+
+#include <Phobos/Log.h>
+#include <Phobos/Memory.h>
+#include <Phobos/ProcVector.h>
+
+#include <Phobos/Shell/Context.h>
+#include <Phobos/Shell/Variable.h>
+#include <Phobos/Shell/Utils.h>
 
 #include <Phobos/System/EventManager.h>
 #include <Phobos/System/InputActions.h>
@@ -30,70 +32,68 @@ subject to the following restrictions:
 
 using namespace Phobos;
 
-class Sample_c: System::EventListener_c
+class Sample: System::EventListener
 {
 	public:
-		Sample_c();
-		~Sample_c();
+		Sample();
+		~Sample();
 
 		void Run();
 
-		void Event(System::Event_s &event);
+		virtual void OnEvent(System::Event_s &event) override;
 
 	private:
-		ProcVector_c		clSingletons;
-		System::WindowPtr_t			ipWindow;				
-		System::InputMapperPtr_t	ipInputMapper;
+		ProcVector					m_clSingletons;
+		System::WindowPtr_t			m_ipWindow;				
+		System::InputMapperPtr_t	m_ipInputMapper;
 
-		Context_c			clMainContext;
+		Shell::Context				m_clMainContext;
 
-		ContextVar_c		varQuit;
+		Shell::Variable				m_varQuit;
 };
 
-Sample_c::Sample_c():
-	varQuit("dvQuit", "false")
+Sample::Sample():
+	m_varQuit("dvQuit", "false")
 {
-	Kernel_c::CreateInstance("Sample_04.log");
-	clSingletons.AddProc(&Kernel_c::ReleaseInstance);
+	LogChangeFile("Sample_04.log");	
 
-	ipWindow = System::Window_c::Create("RenderWindow");
+	m_ipWindow = System::Window::Create("RenderWindow");
 
-	Rect_s<UInt_t> r(0, 0, 640, 480);
-	ipWindow->Open("Sample 04", r);
+	m_ipWindow->Open("Sample 04", UIntSize_t(640, 480));
 
-	auto &eventManager = System::EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&System::EventManager_c::ReleaseInstance);	
+	auto &eventManager = System::EventManager::CreateInstance("EventManager");
+	m_clSingletons.AddProc(&System::EventManager::ReleaseInstance);	
 
 	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	auto &inputManager = System::InputManager_c::CreateInstance("InputManager");
-	clSingletons.AddProc(&System::InputManager_c::ReleaseInstance);
+	auto &inputManager = System::InputManager::CreateInstance("InputManager");
+	m_clSingletons.AddProc(&System::InputManager::ReleaseInstance);
 
-	clMainContext.AddContextVar(varQuit);
+	m_clMainContext.AddContextVariable(m_varQuit);
 
-	ipInputMapper = System::InputMapper_c::Create("InputMapper", clMainContext);
+	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext);
 
 	//Force an update to allow device attachment
 	inputManager.Update();
 
-	ipInputMapper->Bind("kb", "ESCAPE", "set dvQuit true");
+	m_ipInputMapper->Bind("kb", "ESCAPE", "set dvQuit true");
 }
 
-Sample_c::~Sample_c()
+Sample::~Sample()
 {
-	ipWindow.reset();
+	m_ipWindow.reset();
 
-	clSingletons.CallAll();
+	m_clSingletons.CallAll();
 }
 
-void Sample_c::Event(System::Event_s &event)
+void Sample::OnEvent(System::Event_s &event)
 {
-	switch(event.eType)
+	switch(event.m_eType)
 	{
 		case System::EVENT_TYPE_SYSTEM:
-			if(event.stSystem.eType == System::SYSTEM_QUIT)
+			if(event.m_stSystem.m_eType == System::SYSTEM_QUIT)
 			{
-				varQuit.SetValue("true");
+				m_varQuit.SetValue("true");
 				break;
 			}
 			break;
@@ -103,12 +103,12 @@ void Sample_c::Event(System::Event_s &event)
 	}
 }
 
-void Sample_c::Run()
+void Sample::Run()
 {
-	while(!varQuit.GetBoolean())
+	while(!m_varQuit.GetBoolean())
 	{
-		System::EventManager_c::GetInstance().Update();
-		System::InputManager_c::GetInstance().Update();
+		System::EventManager::GetInstance().Update();
+		System::InputManager::GetInstance().Update();
 	}
 }
 
@@ -117,7 +117,7 @@ int main(int, char **)
 	Phobos::EnableMemoryTracker();
 
 	{
-		Sample_c sample;
+		Sample sample;
 
 		sample.Run();
 	}

@@ -11,11 +11,11 @@ namespace Phobos
 {
 	namespace Editor
 	{
-		class NetworkService_c
+		class NetworkService
 		{
 			public:
-				NetworkService_c();
-				~NetworkService_c();
+				NetworkService();
+				~NetworkService();
 
 				void Start();
 
@@ -24,8 +24,8 @@ namespace Phobos
 				std::vector<std::string> GetPendingMessages();
 
 			private:				
-				websocketpp::server clServerEndPoint;
-				boost::thread		clThread;
+				websocketpp::server m_clServerEndPoint;
+				boost::thread		m_clThread;
 		};
 	}
 }

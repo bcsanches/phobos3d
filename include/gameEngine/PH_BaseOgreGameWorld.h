@@ -21,7 +21,7 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 
-#include <PH_String.h>
+#include <Phobos/String.h>
 
 #include "PH_CollisionTagFwd.h"
 #include "PH_RigidBodyFwd.h"
@@ -30,27 +30,27 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	class Transform_c;
+	class Transform;
 
-	class PH_GAME_ENGINE_API BaseOgreGameWorld_c: public GameWorld_c
+	class PH_GAME_ENGINE_API BaseOgreGameWorld: public GameWorld
 	{
 		protected:
 			struct StaticObject_s
 			{
 				String_t strParent;
 
-				Ogre::SceneNode *pclSceneNode;
-				Ogre::Entity *pclEntity;
-				Ogre::Light *pclLight;
+				Ogre::SceneNode *m_pclSceneNode;
+				Ogre::Entity *m_pclEntity;
+				Ogre::Light *m_pclLight;
 				
-				Physics::RigidBodyPtr_t spRigidBody;
+				Physics::RigidBodyPtr_t m_spRigidBody;
 
 				void Clear();
 
 				inline StaticObject_s():
-					pclSceneNode(NULL),
-					pclEntity(NULL),
-					pclLight(NULL)
+					m_pclSceneNode(NULL),
+					m_pclEntity(NULL),
+					m_pclLight(NULL)
 				{
 					//empty
 				}
@@ -58,36 +58,36 @@ namespace Phobos
 
 			struct TempStaticObject_s
 			{
-				Ogre::Entity *pclEntity;
-				Ogre::SceneNode *pclSceneNode;
-				Ogre::Light *pclLight;		
+				Ogre::Entity *m_pclEntity;
+				Ogre::SceneNode *m_pclSceneNode;
+				Ogre::Light *m_pclLight;		
 
-				bool fParent;
-				String_t strName;
+				bool m_fParent;
+				String_t m_strName;
 
 				TempStaticObject_s():
-					pclEntity(NULL),
-					pclSceneNode(NULL),
-					pclLight(NULL),						
-					fParent(false)
+					m_pclEntity(NULL),
+					m_pclSceneNode(NULL),
+					m_pclLight(NULL),						
+					m_fParent(false)
 				{
 				}
 
 				inline void Commit(StaticObject_s &object)
 				{
-					object.pclEntity = pclEntity;
-					object.pclSceneNode = pclSceneNode;
-					object.pclLight = pclLight;						
+					object.m_pclEntity = m_pclEntity;
+					object.m_pclSceneNode = m_pclSceneNode;
+					object.m_pclLight = m_pclLight;						
 
-					pclEntity = NULL;
-					pclLight = NULL;
-					pclSceneNode = NULL;			
+					m_pclEntity = NULL;
+					m_pclLight = NULL;
+					m_pclSceneNode = NULL;			
 				}
 
 				~TempStaticObject_s();
 			};
 
-			void CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform_c &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag) const;
+			void CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag) const;
 	};
 }
 

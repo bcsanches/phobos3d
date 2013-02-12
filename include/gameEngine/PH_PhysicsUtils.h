@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include <Phobos/Register/TableFwd.h>
 
@@ -28,13 +28,13 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Transform_c;
+	class Transform;
 
 	namespace Physics
 	{
 		namespace Utils
 		{			
-			CollisionShapePtr_t CreateCollisionShape(const Register::Table_c &collisionDef, const Ogre::Vector3 &scale);
+			CollisionShapePtr_t CreateCollisionShape(const Register::Table &collisionDef, const Ogre::Vector3 &scale);
 		}
 	}
 }

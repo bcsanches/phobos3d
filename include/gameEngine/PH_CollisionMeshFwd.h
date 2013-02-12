@@ -17,15 +17,15 @@ subject to the following restrictions:
 #ifndef PH_COLLISION_MESH_FWD_H
 #define PH_COLLISION_MESH_FWD_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		class CollisionMesh_c;
+		class CollisionMesh;
 
-		typedef boost::shared_ptr<CollisionMesh_c> CollisionMeshPtr_t;
+		typedef std::shared_ptr<CollisionMesh> CollisionMeshPtr_t;
 	}
 }
 

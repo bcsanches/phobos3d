@@ -20,16 +20,15 @@ subject to the following restrictions:
 
 #include "Phobos/Defs.h"
 #include "Phobos/DisableCopy.h"
-#include "Phobos/PH_Exception.h"
-#include "Phobos/PH_String.h"
+#include "Phobos/Exception.h"
+#include "Phobos/String.h"
 
 namespace Phobos
 {
-
 	template <typename T>
-	class GenericFactory_c
+	class GenericFactory
 	{
-		PH_DISABLE_COPY(GenericFactory_c);
+		PH_DISABLE_COPY(GenericFactory);
 
 	    public:
             template<typename A>
@@ -68,7 +67,7 @@ namespace Phobos
 			}
 
 		protected:
-			GenericFactory_c()
+			GenericFactory()
 			{
 				//empty
 			}
@@ -77,7 +76,7 @@ namespace Phobos
 			{
 				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
 				if(it == setObjectCreators.end())
-					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory_c::Create]", className);
+					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory::Create]", className);
 
 				return *it;
 			}
@@ -90,14 +89,14 @@ namespace Phobos
 	typedef boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> > ObjectCreatorAutoUnlinkHook_t;
 
 	template <typename T, typename Y>
-	class ObjectCreatorBase_c: public ObjectCreatorAutoUnlinkHook_t
+	class BaseObjectCreator: public ObjectCreatorAutoUnlinkHook_t
 	{
 		public:
 			typedef T ObjectType_t;			
 			typedef Y ObjectCreatorProc_t;
 
 		public:
-			ObjectCreatorBase_c(const String_t &name, ObjectCreatorProc_t proc):
+			BaseObjectCreator(const String_t &name, ObjectCreatorProc_t proc):
 				strName(name),
 				pfnCreateProc(proc)
 			{
@@ -105,7 +104,7 @@ namespace Phobos
 				{
 					std::stringstream stream;
 					stream << "creator proc cant be null, entity " << name;
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[ObjectCreatorBase_c::ObjectCreatorBase_c]", stream.str());
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[BaseObjectCreator::BaseObjectCreator]", stream.str());
 				}
 			}
 
@@ -114,7 +113,7 @@ namespace Phobos
 				return strName;
 			}
 
-			inline bool operator<(const ObjectCreatorBase_c &rhs) const
+			inline bool operator<(const BaseObjectCreator &rhs) const
             {
                 return strName.compare(rhs.strName) < 0;
             }
@@ -127,13 +126,13 @@ namespace Phobos
 	};
 
 	template <typename T, typename FACTORY>
-	class ObjectCreator0_c: public ObjectCreatorBase_c<T, T(*)()>
+	class ObjectCreator0: public BaseObjectCreator<T, T(*)()>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, T(*)()> BaseType_t;			
+			typedef BaseObjectCreator<T, T(*)()> BaseType_t;			
 
 		public:
-			ObjectCreator0_c(const String_t &name, T(*proc)()):
+			ObjectCreator0(const String_t &name, T(*proc)()):
 				BaseType_t(name, proc)
 			{				
 				FACTORY::GetInstance().Register(*this);
@@ -146,14 +145,14 @@ namespace Phobos
 	};
 
 	template <typename T, typename PARAM1, typename FACTORY, typename CREATE_RET = T*>
-	class ObjectCreator1_c: public ObjectCreatorBase_c<T, CREATE_RET (*)(const PARAM1 &)>
+	class ObjectCreator1: public BaseObjectCreator<T, CREATE_RET (*)(const PARAM1 &)>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, CREATE_RET (*)(const PARAM1&)> BaseType_t;
+			typedef BaseObjectCreator<T, CREATE_RET (*)(const PARAM1&)> BaseType_t;
 			typedef CREATE_RET ObjectReturnType_t;			
 
 		public:
-			ObjectCreator1_c(const String_t &name, CREATE_RET (*proc)(const PARAM1 &)):
+			ObjectCreator1(const String_t &name, CREATE_RET (*proc)(const PARAM1 &)):
 				BaseType_t(name, proc)
 			{				
 				FACTORY::GetInstance().Register(*this);
@@ -166,19 +165,19 @@ namespace Phobos
 	};
 
 	template<typename T, typename PARAM1, typename PARAM2>
-	class GenericFactory2_c;
+	class GenericFactory2;
 
 	template <typename T, typename PARAM1, typename PARAM2, typename FACTORY, typename CREATE_RET = T*>
-	class ObjectCreator2_c: public ObjectCreatorBase_c<T, T*(*)(const PARAM1 &, PARAM2 )>
+	class ObjectCreator2: public BaseObjectCreator<T, T*(*)(const PARAM1 &, PARAM2 )>
 	{
 		public:
-			typedef ObjectCreatorBase_c<T, T*(*)(const PARAM1 &, PARAM2 )> BaseType_t;
+			typedef BaseObjectCreator<T, T*(*)(const PARAM1 &, PARAM2 )> BaseType_t;
 			typedef CREATE_RET ObjectReturnType_t;	
 
-			ObjectCreator2_c(const String_t &name,  T*(*proc)(const PARAM1 &, PARAM2 ) ):
+			ObjectCreator2(const String_t &name,  T*(*proc)(const PARAM1 &, PARAM2 ) ):
 				BaseType_t(name, proc)
 			{
-				//GenericFactory2_c<ObjectCreator2_c, Y >::GetInstance().Register(*this);
+				//GenericFactory2<ObjectCreator2, Y >::GetInstance().Register(*this);
 				FACTORY::GetInstance().Register(*this);
 			}
 
@@ -189,20 +188,20 @@ namespace Phobos
 	};
 
 	template <typename T>
-	class GenericFactory0_c: public GenericFactory_c<T>
+	class GenericFactory0: public GenericFactory<T>
 	{
 		public:
-			typename GenericFactory_c<T>::ObjectType_t *Create(const String_t &className) const
+			typename GenericFactory<T>::ObjectType_t *Create(const String_t &className) const
 			{
 				return this->GetObjectCreator(className).Create();
 			}
 	};
 
 	template <typename T, typename PARAM1>
-	class GenericFactory1_c: public GenericFactory_c<T>
+	class GenericFactory1: public GenericFactory<T>
 	{
 		public:
-			typename GenericFactory_c<T>::ObjectReturnType_t Create(const String_t &className, const PARAM1 &name) const
+			typename GenericFactory<T>::ObjectReturnType_t Create(const String_t &className, const PARAM1 &name) const
 			{
 				return this->GetObjectCreator(className).Create(name);
 			}
@@ -210,10 +209,10 @@ namespace Phobos
 	};
 
 	template <typename T, typename PARAM1, typename PARAM2>
-	class GenericFactory2_c: public GenericFactory_c<T>
+	class GenericFactory2: public GenericFactory<T>
 	{
 		public:
-			typename GenericFactory_c<T>::ObjectType_t *Create(const String_t &className, const PARAM1 &param1, PARAM2 param2) const
+			typename GenericFactory<T>::ObjectType_t *Create(const String_t &className, const PARAM1 &param1, PARAM2 param2) const
 			{
 				return this->GetObjectCreator(className).Create(param1, param2);
 			}

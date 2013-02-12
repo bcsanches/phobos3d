@@ -23,50 +23,50 @@ namespace Phobos
 {	
 	namespace Physics
 	{
-		RigidBody_c::RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag_c &collisionTag):
-			upRigidBody(new btRigidBody(info)),
-			spCollisionShape(shape),
-			upMotionState(motionState),
-			clCollisionTag(collisionTag)
+		RigidBody::RigidBody(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag &collisionTag):
+			m_upRigidBody(new btRigidBody(info)),
+			m_spCollisionShape(shape),
+			m_upMotionState(motionState),
+			m_clCollisionTag(collisionTag)
 		{
 			if(type == RBT_KINEMATIC)
 			{
-				upRigidBody->setCollisionFlags( upRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
-				upRigidBody->setActivationState(DISABLE_DEACTIVATION);
+				m_upRigidBody->setCollisionFlags( m_upRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
+				m_upRigidBody->setActivationState(DISABLE_DEACTIVATION);
 			}
 			else if(type == RBT_STATIC)
 			{
-				upRigidBody->setCollisionFlags( upRigidBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT );
+				m_upRigidBody->setCollisionFlags( m_upRigidBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT );
 			}
 		}
 
-		RigidBody_c::~RigidBody_c()
+		RigidBody::~RigidBody()
 		{
-			if(upRigidBody->isInWorld())
+			if(m_upRigidBody->isInWorld())
 				this->Unregister();
 		}
 
-		void RigidBody_c::Register()
+		void RigidBody::Register()
 		{
-			Manager_c::GetInstance().RegisterRigidBody(*upRigidBody, clCollisionTag);
+			Manager::GetInstance().RegisterRigidBody(*m_upRigidBody, m_clCollisionTag);
 		}
 		
-		void RigidBody_c::Unregister()
+		void RigidBody::Unregister()
 		{
-			Manager_c::GetInstance().UnregisterRigidBody(*upRigidBody);
+			Manager::GetInstance().UnregisterRigidBody(*m_upRigidBody);
 		}
 
-		Transform_c RigidBody_c::GetTransform() const
+		Transform RigidBody::GetTransform() const
 		{
 			btTransform bodyTransform;
-			upMotionState->getWorldTransform(bodyTransform);
+			m_upMotionState->getWorldTransform(bodyTransform);
 
-			return MakeTransform(bodyTransform, Manager_c::GetInstance().GetPhysicsToGameScale());
+			return MakeTransform(bodyTransform, Manager::GetInstance().GetPhysicsToGameScale());
 		}
 
-		void RigidBody_c::SetKinematicTransform(const btTransform &transform)
+		void RigidBody::SetKinematicTransform(const btTransform &transform)
 		{
-			upMotionState->setWorldTransform(transform);
+			m_upMotionState->setWorldTransform(transform);
 		}
 	}
 }

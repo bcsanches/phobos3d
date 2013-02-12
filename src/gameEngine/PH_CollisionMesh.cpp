@@ -21,19 +21,19 @@ subject to the following restrictions:
 
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
 
-#include <PH_Error.h>
-#include <PH_Memory.h>
+#include <Phobos/Error.h>
+#include <Phobos/Memory.h>
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		CollisionMeshData_c::CollisionMeshData_c(const Ogre::Mesh &mesh)
+		CollisionMeshData::CollisionMeshData(const Ogre::Mesh &mesh)
 		{
 			this->AddMesh(mesh);
 		}
 
-		void CollisionMeshData_c::AddMesh(const Ogre::Mesh &mesh)
+		void CollisionMeshData::AddMesh(const Ogre::Mesh &mesh)
 		{	
 			using namespace Ogre;
 
@@ -49,7 +49,7 @@ namespace Phobos
 				{
 					PH_ASSERT_VALID(subMesh.vertexData);
 
-					this->AddIndexData(*subMesh.indexData, vecVertices.size());
+					this->AddIndexData(*subMesh.indexData, m_vecVertices.size());
 					this->AddVertexData(*subMesh.vertexData);
 				}
 				else
@@ -63,16 +63,16 @@ namespace Phobos
 			indexedMesh.m_triangleIndexBase = (const unsigned char *) this->GetIndices();
 			indexedMesh.m_triangleIndexStride = sizeof(UInt32_t) * 3;
 			indexedMesh.m_numVertices = this->GetNumVertices();
-			indexedMesh.m_vertexStride = sizeof(CollisionMeshData_c::Vertex_s);
+			indexedMesh.m_vertexStride = sizeof(CollisionMeshData::Vertex_s);
 			indexedMesh.m_vertexBase = (const unsigned char *) this->GetVertices();
 
-			clIndexVertexArray.addIndexedMesh(indexedMesh);
+			m_clIndexVertexArray.addIndexedMesh(indexedMesh);
 		}
 
-		void CollisionMeshData_c::AddVertexData(const Ogre::VertexData &vertexData)
+		void CollisionMeshData::AddVertexData(const Ogre::VertexData &vertexData)
 		{
-			const size_t prevNumVertices = vecVertices.size();
-			vecVertices.resize(prevNumVertices + vertexData.vertexCount);
+			const size_t prevNumVertices = m_vecVertices.size();
+			m_vecVertices.resize(prevNumVertices + vertexData.vertexCount);
 
 			const Ogre::VertexElement* posElem = vertexData.vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);		
 
@@ -83,7 +83,7 @@ namespace Phobos
 
 			unsigned char	*vertex = static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
 			float			*pReal;
-			Vertex_s		*curVertices = &vecVertices[prevNumVertices];
+			Vertex_s		*curVertices = &m_vecVertices[prevNumVertices];
 
 			const unsigned int vertexCount = (unsigned int)vertexData.vertexCount;
 			for(unsigned int j = 0; j < vertexCount; ++j)
@@ -91,21 +91,21 @@ namespace Phobos
 				posElem->baseVertexPointerToElement(vertex, &pReal);
 				vertex += vSize;
 
-				curVertices->fp32Point[0] = (*pReal++);
-				curVertices->fp32Point[1] = (*pReal++);
-				curVertices->fp32Point[2] = (*pReal++);		
+				curVertices->m_fp32Point[0] = (*pReal++);
+				curVertices->m_fp32Point[1] = (*pReal++);
+				curVertices->m_fp32Point[2] = (*pReal++);		
 		            
 				curVertices++;
 			}
 			vbuf->unlock();
 		}
 
-		void CollisionMeshData_c::AddIndexData(const Ogre::IndexData &index, UInt_t offset)
+		void CollisionMeshData::AddIndexData(const Ogre::IndexData &index, UInt_t offset)
 		{
 			using namespace Ogre;
 
-			const UInt_t prevNumIndices = vecIndices.size();
-			vecIndices.resize(prevNumIndices + index.indexCount);
+			const UInt_t prevNumIndices = m_vecIndices.size();
+			m_vecIndices.resize(prevNumIndices + index.indexCount);
 			
 			const UInt_t numTris = (UInt_t) index.indexCount / 3;
 			HardwareIndexBufferSharedPtr ibuf = index.indexBuffer;	
@@ -117,9 +117,9 @@ namespace Phobos
 				const UInt32_t* pInt = static_cast<UInt32_t*>(ibuf->lock(HardwareBuffer::HBL_READ_ONLY));
 				for(unsigned int k = 0; k < numTris; ++k)
 				{
-					vecIndices[indexOffset ++] = offset + *pInt++;
-					vecIndices[indexOffset ++] = offset + *pInt++;
-					vecIndices[indexOffset ++] = offset + *pInt++;
+					m_vecIndices[indexOffset ++] = offset + *pInt++;
+					m_vecIndices[indexOffset ++] = offset + *pInt++;
+					m_vecIndices[indexOffset ++] = offset + *pInt++;
 				}
 				ibuf->unlock();
 			}
@@ -128,19 +128,19 @@ namespace Phobos
 				const UInt16_t* pShort = static_cast<UInt16_t*>(ibuf->lock(HardwareBuffer::HBL_READ_ONLY));
 				for(unsigned int k = 0; k < numTris; ++k)
 				{		
-					vecIndices[indexOffset ++] = offset + static_cast<UInt32_t> (*pShort++);
-					vecIndices[indexOffset ++] = offset + static_cast<UInt32_t> (*pShort++);
-					vecIndices[indexOffset ++] = offset + static_cast<UInt32_t> (*pShort++);
+					m_vecIndices[indexOffset ++] = offset + static_cast<UInt32_t> (*pShort++);
+					m_vecIndices[indexOffset ++] = offset + static_cast<UInt32_t> (*pShort++);
+					m_vecIndices[indexOffset ++] = offset + static_cast<UInt32_t> (*pShort++);
 				}
 				ibuf->unlock();
 			}
 		}
 
-		CollisionMesh_c::CollisionMesh_c(const Ogre::Mesh &mesh):
-			upMeshData(PH_NEW CollisionMeshData_c(mesh)),
-			strName(mesh.getName())			
+		CollisionMesh::CollisionMesh(const Ogre::Mesh &mesh):
+			m_upMeshData(PH_NEW CollisionMeshData(mesh)),
+			m_strName(mesh.getName())			
 		{			
-			upMeshShape.reset(new btBvhTriangleMeshShape(&upMeshData->GetMeshInterface(), true, true));
+			m_upMeshShape.reset(new btBvhTriangleMeshShape(&m_upMeshData->GetMeshInterface(), true, true));
 		}
 	}
 }

@@ -16,34 +16,34 @@ subject to the following restrictions:
 
 #include "PH_EntityIO.h"
 
-#include <PH_Exception.h>
+#include <Phobos/Exception.h>
 
 #include "PH_GameEventManager.h"
 #include "PH_WorldManager.h"
 
 namespace Phobos
 {
-	EntityIO_c::EntityIO_c(const String_t &name, UInt32_t flags):
-		Node_c(name, flags),
+	EntityIO::EntityIO(const String_t &name, UInt32_t flags):
+		Node(name, flags),
 		fFixedUpdateEnabled(false),
 		fUpdateEnabled(false)
 	{
 	}
 
-	EntityIO_c::EntityIO_c(const Char_t *name, UInt32_t flags):
-		Node_c(name, flags),
+	EntityIO::EntityIO(const Char_t *name, UInt32_t flags):
+		Node(name, flags),
 		fFixedUpdateEnabled(false),
 		fUpdateEnabled(false)
 	{
 	}
 
-	EntityIO_c::~EntityIO_c()
+	EntityIO::~EntityIO()
 	{
-		GameEventManager_c::GetInstance().CancelEvents(*this);		
+		GameEventManager::GetInstance().CancelEvents(*this);		
 
 		if(fFixedUpdateEnabled || fUpdateEnabled)
 		{
-			WorldManager_c &world = WorldManager_c::GetInstance();
+			WorldManager &world = WorldManager::GetInstance();
 
 			if(fFixedUpdateEnabled)
 				world.RemoveFromFixedUpdateList(*this);
@@ -53,96 +53,96 @@ namespace Phobos
 		}
 	}
 
-	void EntityIO_c::FixedUpdate()
+	void EntityIO::FixedUpdate()
 	{
 		this->OnFixedUpdate();
 	}
 
-	void EntityIO_c::Update()
+	void EntityIO::Update()
 	{
 		this->OnUpdate();
 	}
 
-	void EntityIO_c::EnableFixedUpdate()
+	void EntityIO::EnableFixedUpdate()
 	{
 		if(fFixedUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance().AddToFixedUpdateList(*this);
+		WorldManager::GetInstance().AddToFixedUpdateList(*this);
 		fFixedUpdateEnabled = true;
 	}
 
-	void EntityIO_c::EnableUpdate()
+	void EntityIO::EnableUpdate()
 	{
 		if(fUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance().AddToUpdateList(*this);
+		WorldManager::GetInstance().AddToUpdateList(*this);
 		fUpdateEnabled = true;
 	}
 
-	void EntityIO_c::DisableFixedUpdate()
+	void EntityIO::DisableFixedUpdate()
 	{
 		if(!fFixedUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance().RemoveFromFixedUpdateList(*this);
+		WorldManager::GetInstance().RemoveFromFixedUpdateList(*this);
 		fFixedUpdateEnabled = false;
 	}
 
-	void EntityIO_c::DisableUpdate()
+	void EntityIO::DisableUpdate()
 	{
 		if(!fUpdateEnabled)
 			return;
 
-		WorldManager_c::GetInstance().RemoveFromUpdateList(*this);
+		WorldManager::GetInstance().RemoveFromUpdateList(*this);
 		fUpdateEnabled = false;
 	}
 
-	EntityOutputManager_c::EntityOutputManager_c()
+	EntityOutputManager::EntityOutputManager()
 	{
 		//empty
 	}
 
-	void EntityOutputManager_c::AddConnector(const String_t &name, OutputProcConnector_t proc)
+	void EntityOutputManager::AddConnector(const String_t &name, OutputProcConnector_t proc)
 	{
 		ConnectorsMap_t::iterator it = mapConnectors.lower_bound(name);
 		if((it != mapConnectors.end()) && (!mapConnectors.key_comp()(name, it->first)))
 		{
 			std::stringstream stream;
 			stream << "Output " << name << " already exists.";
-			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[EntityOutputManager_c::AddConnector]", stream.str());
+			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[EntityOutputManager::AddConnector]", stream.str());
 		}
 
 		mapConnectors.insert(it, std::make_pair(name, proc));		
 	}
 
-	void EntityOutputManager_c::Connect(EntityIO_c &outputOwner, const std::string &outputName, EntityIO_c &inputOwner, InputProc_t input)
+	void EntityOutputManager::Connect(EntityIO &outputOwner, const std::string &outputName, EntityIO &inputOwner, InputProc_t input)
 	{
 		ConnectorsMap_t::iterator it = mapConnectors.find(outputName);
 		if(it == mapConnectors.end())
 		{
 			std::stringstream stream;
 			stream << "Output " << outputName << " not found.";
-			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityOutputManager_c::Connect]", stream.str());
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityOutputManager::Connect]", stream.str());
 		}
 
 		(outputOwner.*(it->second))(inputOwner, input);
 	}
 
-	EntityInputManager_c::EntityInputManager_c()
+	EntityInputManager::EntityInputManager()
 	{
 		//empty
 	}
 
-	void EntityInputManager_c::AddSlot(const String_t &name, InputProc_t proc)
+	void EntityInputManager::AddSlot(const String_t &name, InputProc_t proc)
 	{
 		InputMap_t::iterator it = mapInputs.lower_bound(name);
 		if((it != mapInputs.end()) && (!mapInputs.key_comp()(name, it->first)))
 		{
 			std::stringstream stream;
 			stream << "Output " << name << " already exists.";
-			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[EntityInputManager_c::AddSlot]", stream.str());
+			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[EntityInputManager::AddSlot]", stream.str());
 		}
 
 		mapInputs.insert(it, std::make_pair(name, proc));	

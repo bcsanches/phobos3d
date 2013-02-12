@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Transform_c;	
+	class Transform;	
 
-	void EntityLoadTransform(Transform_c &transform, const Register::Table_c &table);
+	void EntityLoadTransform(Transform &transform, const Register::Table &table);
 }

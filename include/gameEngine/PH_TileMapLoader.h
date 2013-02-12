@@ -21,12 +21,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TileMapLoader_c: public MapLoader_c
+	class TileMapLoader: public MapLoader
 	{
 		public:
-			static MapLoader_c *Create(const Register::Table_c &settings);
+			static MapLoader *Create(const Register::Table &settings);
 
-			TileMapLoader_c(const Register::Table_c &settings);
+			TileMapLoader(const Register::Table &settings);
 
 			void Load(const String_t &fileName);
 

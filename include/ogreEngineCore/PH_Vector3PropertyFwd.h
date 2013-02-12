@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Vector3Property_c;
+	class Vector3Property;
 }
 
 #endif

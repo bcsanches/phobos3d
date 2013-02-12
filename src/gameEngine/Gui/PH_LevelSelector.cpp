@@ -17,16 +17,14 @@ subject to the following restrictions:
 #include "Gui/PH_LevelSelector.h"
 
 #include <boost/filesystem.hpp>
-#include <boost/foreach.hpp>
 
 #include <vector>
 
 #include <Rocket/Controls.h>
 #include <Rocket/Controls/DataSource.h>
 
-#include <PH_ContextUtils.h>
+#include <Phobos/Shell/Utils.h>
 #include <PH_Console.h>
-#include <PH_Kernel.h>
 
 #include <Gui/PH_Context.h>
 #include <Gui/PH_Manager.h>
@@ -38,10 +36,10 @@ namespace Phobos
 {
 	namespace Gui
 	{		
-		class DataGridController_c: public Rocket::Core::EventListener
+		class DataGridController: public Rocket::Core::EventListener
 		{
 			public:
-				DataGridController_c():
+				DataGridController():
 					pclSelectedRow(NULL)
 				{
 					//empty
@@ -109,10 +107,10 @@ namespace Phobos
 				Rocket::Controls::ElementDataGridRow *pclSelectedRow;
 		};
 		
-		class LevelFileDataSource_c: public Rocket::Controls::DataSource
+		class LevelFileDataSource: public Rocket::Controls::DataSource
 		{
 			public:
-				LevelFileDataSource_c(const std::list<String_t> &directories);
+				LevelFileDataSource(const std::list<String_t> &directories);
 
 				virtual void GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns);
 				virtual int GetNumRows(const Rocket::Core::String& table);
@@ -123,53 +121,53 @@ namespace Phobos
 				std::vector<String_t> vecFiles;
 		};
 
-		class LevelSelectorEventListener_c: public Rocket::Core::EventListener
+		class LevelSelectorEventListener: public Rocket::Core::EventListener
 		{
 			public:
 				virtual void ProcessEvent(Rocket::Core::Event& event)
 				{
 					if(event.GetCurrentElement()->GetId() == "loadForm")
 					{
-						LevelSelector_c::GetInstance().OnLoadButtonClick();
+						LevelSelector::GetInstance().OnLoadButtonClick();
 					}
 					else if(event.GetCurrentElement()->GetId() == "quitForm")
 					{
-						LevelSelector_c::GetInstance().OnQuitButtonClick();
+						LevelSelector::GetInstance().OnQuitButtonClick();
 					}
 				}
 		};
 
-		static LevelSelectorEventListener_c clLevelSelectorEventListener_gl;
+		static LevelSelectorEventListener clLevelSelectorEventListener_gl;
 	}
 }
 
-Phobos::Gui::LevelFileDataSource_c::LevelFileDataSource_c(const std::list<String_t> &directories):
+Phobos::Gui::LevelFileDataSource::LevelFileDataSource(const std::list<String_t> &directories):
 	Rocket::Controls::DataSource("LevelFileDataSource")
 {		
 	std::set<String_t> setExtensions;
 
 	{
-		std::list<String_t> mapFileExtensions = MapLoaderFactory_c::GetInstance().CreateMapFileExtensionsList();	
+		auto mapFileExtensions = MapLoaderFactory::GetInstance().CreateMapFileExtensionsList();	
 
-		BOOST_FOREACH(String_t &ext, mapFileExtensions)
+		for(String_t &ext : mapFileExtensions)
 		{
 			setExtensions.insert("." + ext);
 		}
 	}
 
-	for(std::list<String_t>::const_iterator it = directories.begin(), end = directories.end(); it != end; ++it)
+	for(auto it = directories.begin(), end = directories.end(); it != end; ++it)
 	{
 		const String_t &dir = *it;
 
 		if(!boost::filesystem::exists(dir))
 		{
-			Kernel_c::GetInstance().LogStream() << "[LevelFileDataSource] Path " << dir << " does not exists.";
+			LogMakeStream() << "[LevelFileDataSource] Path " << dir << " does not exists.";
 			continue;
 		}
 
 		if(!boost::filesystem::is_directory(dir))
 		{
-			Kernel_c::GetInstance().LogStream() << "[LevelFileDataSource] Path " << dir << " is not a folder.";
+			LogMakeStream() << "[LevelFileDataSource] Path " << dir << " is not a folder.";
 			continue;
 		}
 
@@ -196,14 +194,14 @@ Phobos::Gui::LevelFileDataSource_c::LevelFileDataSource_c(const std::list<String
 	}	
 }
 
-void Phobos::Gui::LevelFileDataSource_c::GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns)
+void Phobos::Gui::LevelFileDataSource::GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns)
 {
 	if(table == "files")
 	{
 		row.push_back(vecFiles[row_index].c_str());
 	}
 }
-int Phobos::Gui::LevelFileDataSource_c::GetNumRows(const Rocket::Core::String& table)
+int Phobos::Gui::LevelFileDataSource::GetNumRows(const Rocket::Core::String& table)
 {
 	if(table== "files")
 		return vecFiles.size();
@@ -211,56 +209,56 @@ int Phobos::Gui::LevelFileDataSource_c::GetNumRows(const Rocket::Core::String& t
 		return 0;
 }
 
-const Phobos::String_t &Phobos::Gui::LevelFileDataSource_c::GetFile(int index)
+const Phobos::String_t &Phobos::Gui::LevelFileDataSource::GetFile(int index)
 {
 	return vecFiles[index];
 }
 
 PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::LevelSelector);
 
-Phobos::Gui::LevelSelector_c::LevelSelector_c():
-	CoreModule_c("GuiLevelSelector"),
-	cmdAddLevelPath("addLevelPath"),
-	fCloseRequested(false)
+Phobos::Gui::LevelSelector::LevelSelector():
+	CoreModule("GuiLevelSelector"),
+	m_cmdAddLevelPath("addLevelPath"),
+	m_fCloseRequested(false)
 {	
-	cmdAddLevelPath.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Gui::LevelSelector_c::CmdAddLevelPath, this));	
+	m_cmdAddLevelPath.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Gui::LevelSelector::CmdAddLevelPath, this));	
 }
 
-Phobos::Gui::LevelSelector_c::~LevelSelector_c()
+Phobos::Gui::LevelSelector::~LevelSelector()
 {
 	//empty
 }
 
-void Phobos::Gui::LevelSelector_c::OnPrepareToBoot()
+void Phobos::Gui::LevelSelector::OnPrepareToBoot()
 {
-	Console_c &console = Console_c::GetInstance();
+	Console &console = Console::GetInstance();
 
-	console.AddContextCmd(cmdAddLevelPath);
+	console.AddContextCommand(m_cmdAddLevelPath);
 }
 
-void Phobos::Gui::LevelSelector_c::OnFixedUpdate()
+void Phobos::Gui::LevelSelector::OnFixedUpdate()
 {
-	if(fCloseRequested)
+	if(m_fCloseRequested)
 	{
-		spGuiContext.reset();
-		fCloseRequested = false;
+		m_spGuiContext.reset();
+		m_fCloseRequested = false;
 	}
 }
 
-void Phobos::Gui::LevelSelector_c::Open()
+void Phobos::Gui::LevelSelector::Open()
 {
-	fCloseRequested = false;
+	m_fCloseRequested = false;
 
-	upDataSource.reset( PH_NEW LevelFileDataSource_c(lstLevelPaths));
-	upDataGridController.reset(PH_NEW(DataGridController_c));
+	m_upDataSource.reset( PH_NEW LevelFileDataSource(m_lstLevelPaths));
+	m_upDataGridController.reset(PH_NEW(DataGridController));
 
-	spGuiContext = Gui::Manager_c::GetInstance().CreateContext("LevelSelector");
+	m_spGuiContext = Gui::Manager::GetInstance().CreateContext("LevelSelector");
 
-	Rocket::Core::ElementDocument* cursor = spGuiContext->LoadMouseCursor("resources/gui/LevelSelector/cursor.rml");
+	Rocket::Core::ElementDocument* cursor = m_spGuiContext->LoadMouseCursor("resources/gui/LevelSelector/cursor.rml");
 	if (cursor)
 		cursor->RemoveReference();
 
-	Rocket::Core::ElementDocument* document = spGuiContext->LoadDocument("resources/gui/LevelSelector/main.rml");
+	Rocket::Core::ElementDocument* document = m_spGuiContext->LoadDocument("resources/gui/LevelSelector/main.rml");
 	if (document)
 	{
 		document->SetTitle(Rocket::Core::String("Select Level"));
@@ -272,20 +270,20 @@ void Phobos::Gui::LevelSelector_c::Open()
 
 		int numRows = dataGrid->GetNumRows();
 
-		dataGrid->AddEventListener("rowadd", upDataGridController.get());
-		dataGrid->AddEventListener("keydown", upDataGridController.get());
+		dataGrid->AddEventListener("rowadd", m_upDataGridController.get());
+		dataGrid->AddEventListener("keydown", m_upDataGridController.get());
 
 		document->GetElementById("loadForm")->AddEventListener("submit", &clLevelSelectorEventListener_gl);
 		document->GetElementById("quitForm")->AddEventListener("submit", &clLevelSelectorEventListener_gl);
 	}
 }
 
-void Phobos::Gui::LevelSelector_c::Close()
+void Phobos::Gui::LevelSelector::Close()
 {
-	fCloseRequested = true;
+	m_fCloseRequested = true;
 }
 
-Phobos::EscAction::Enum Phobos::Gui::LevelSelector_c::HandleEsc(Phobos::Gui::Form_c *&outForm)
+Phobos::EscAction Phobos::Gui::LevelSelector::HandleEsc(Phobos::Gui::Form *&outForm)
 {
 	this->Close();
 
@@ -295,36 +293,36 @@ Phobos::EscAction::Enum Phobos::Gui::LevelSelector_c::HandleEsc(Phobos::Gui::For
 }
 
 
-void Phobos::Gui::LevelSelector_c::OnFinalize()
+void Phobos::Gui::LevelSelector::OnFinalize()
 {
 	//make sure it is destroyed before gui is shutdown
-	upDataSource.reset();
-	spGuiContext.reset();
+	m_upDataSource.reset();
+	m_spGuiContext.reset();
 }
 
-void Phobos::Gui::LevelSelector_c::OnLoadButtonClick()
+void Phobos::Gui::LevelSelector::OnLoadButtonClick()
 {
-	int row = upDataGridController->GetSelectedRowIndex();
+	int row = m_upDataGridController->GetSelectedRowIndex();
 	if(row < 0)
 		return;
 
-	const String_t &levelFile = upDataSource->GetFile(row);
-	WorldManager_c::GetInstance().LoadMap(levelFile);	
+	const String_t &levelFile = m_upDataSource->GetFile(row);
+	WorldManager::GetInstance().LoadMap(levelFile);	
 }
 
-void Phobos::Gui::LevelSelector_c::OnQuitButtonClick()
+void Phobos::Gui::LevelSelector::OnQuitButtonClick()
 {
-	Console_c::GetInstance().Execute("quit");
+	Console::GetInstance().Execute("quit");
 }
 
-void Phobos::Gui::LevelSelector_c::CmdAddLevelPath(const Phobos::StringVector_t &args, Phobos::Context_c &)
+void Phobos::Gui::LevelSelector::CmdAddLevelPath(const Shell::StringVector_t &args, Shell::Context &)
 {
 	if(args.size() < 2)
 	{
-		Kernel_c::GetInstance().LogMessage("[Phobos::Gui::LevelSelector_c::CmdAddLevelPath] ERROR: insuficient parameters, usage: addLevelPath <path>");
+		LogMessage("[Phobos::Gui::LevelSelector::CmdAddLevelPath] ERROR: insuficient parameters, usage: addLevelPath <path>");
 
 		return;
 	}
 
-	lstLevelPaths.push_back(args[1]);		
+	m_lstLevelPaths.push_back(args[1]);		
 }

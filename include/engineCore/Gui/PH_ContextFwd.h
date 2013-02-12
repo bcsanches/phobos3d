@@ -18,7 +18,7 @@ subject to the following restrictions:
 #ifndef PH_GUI_CONTEXT_FWD_H
 #define PH_GUI_CONTEXT_FWD_H
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 namespace Phobos
 {
@@ -26,7 +26,7 @@ namespace Phobos
 	{	
 		PH_DECLARE_NODE_PTR(Context);
 
-		class Context_c;		
+		class Context;		
 	}
 }
 

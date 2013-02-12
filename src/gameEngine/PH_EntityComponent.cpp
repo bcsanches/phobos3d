@@ -18,19 +18,19 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	EntityComponent_c::EntityComponent_c(const String_t &name, Entity_c &owner):
-		EntityIO_c(name),
-		rclEntity(owner)
+	EntityComponent::EntityComponent(const String_t &name, Entity &owner):
+		EntityIO(name),
+		m_rclEntity(owner)
 	{
 		//empty
 	}
 
-	void EntityComponent_c::Load(const Register::Table_c &table)
+	void EntityComponent::Load(const Register::Table &table)
 	{
 		this->OnLoad(table);
 	}		
 
-	void EntityComponent_c::LoadFinished()
+	void EntityComponent::LoadFinished()
 	{
 		this->OnLoadFinished();
 	}

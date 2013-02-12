@@ -7,10 +7,10 @@ namespace Phobos
 {
 	namespace Editor
 	{
-		class AssetListRequest_c: public Request_c
+		class AssetListRequest: public Request
 		{
 			public:
-				AssetListRequest_c(const rapidjson::Value &value);
+				AssetListRequest(const rapidjson::Value &value);
 
 			private:
 				virtual void OnExecute(JsonCreator::StringWriter &response) override;

@@ -4,14 +4,14 @@
 
 namespace Phobos
 {
-	BaseClient_c::BaseClient_c(const char *name):
-		CoreModule_c(name)		
+	BaseClient::BaseClient(const char *name):
+		CoreModule(name)		
 	{
 		//empty
 	}
 
-	void BaseClient_c::OnPrepareToBoot()
+	void BaseClient::OnPrepareToBoot()
 	{
-		Session_c::GetInstance().SetClient(this);
+		Session::GetInstance().SetClient(this);
 	}
 }

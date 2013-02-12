@@ -20,7 +20,7 @@ subject to the following restrictions:
 
 BOOST_AUTO_TEST_CASE(Accelerometer_basic)
 {
-	Phobos::Math::Accelerometer_c accel(5);	
+	Phobos::Math::Accelerometer accel(5);	
 
 	BOOST_CHECK(accel.GetValue() == 0);
 

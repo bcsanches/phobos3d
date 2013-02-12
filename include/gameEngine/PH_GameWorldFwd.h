@@ -17,14 +17,14 @@ subject to the following restrictions:
 #ifndef PH_GAME_WORLD_FWD_H
 #define PH_GAME_WORLD_FWD_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {	
-	class GameWorld_c;	
-	typedef boost::shared_ptr<GameWorld_c> GameWorldPtr_t;
+	class GameWorld;	
+	typedef std::shared_ptr<GameWorld> GameWorldPtr_t;
 }
 
 #endif

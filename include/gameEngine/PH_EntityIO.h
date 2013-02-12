@@ -22,25 +22,25 @@ subject to the following restrictions:
 #include <boost/bind.hpp>
 #include <boost/signal.hpp>
 
-#include <PH_Node.h>
-#include <PH_String.h>
+#include <Phobos/Node.h>
+#include <Phobos/String.h>
 
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
-	class EntityEvent_c;
+	class EntityEvent;
 
-	class PH_GAME_ENGINE_API EntityIO_c: public Node_c
+	class PH_GAME_ENGINE_API EntityIO: public Node
 	{
 		protected:
-			explicit EntityIO_c(const String_t &name, UInt32_t flags = 0);
-			explicit EntityIO_c(const Char_t *name, UInt32_t flags = 0);
+			explicit EntityIO(const String_t &name, UInt32_t flags = 0);
+			explicit EntityIO(const Char_t *name, UInt32_t flags = 0);
 			
-			~EntityIO_c();
+			~EntityIO();
 
 		public:
-			typedef boost::signal1<void, EntityEvent_c &> OutputSignal_t;
+			typedef boost::signal1<void, EntityEvent &> OutputSignal_t;
 
 		public:
 			void FixedUpdate();
@@ -60,30 +60,30 @@ namespace Phobos
 			bool fUpdateEnabled;
 	};
 
-	typedef void (EntityIO_c::*InputProc_t)(EntityEvent_c &);
+	typedef void (EntityIO::*InputProc_t)(EntityEvent &);
 
 	//Connects the given input to a signal
-	typedef void (EntityIO_c::*OutputProcConnector_t)(EntityIO_c &ent, InputProc_t input);
+	typedef void (EntityIO::*OutputProcConnector_t)(EntityIO &ent, InputProc_t input);
 
 	//Keeps a list with all Signals from a object
-	class EntityOutputManager_c
+	class EntityOutputManager
 	{
 		public:
-			EntityOutputManager_c();
+			EntityOutputManager();
 
 			void AddConnector(const String_t &name, OutputProcConnector_t proc);
 
-			void Connect(EntityIO_c &outputOwner, const std::string &outputName, EntityIO_c &inputOwner, InputProc_t input);
+			void Connect(EntityIO &outputOwner, const std::string &outputName, EntityIO &inputOwner, InputProc_t input);
 
 		private:
 			typedef std::map<String_t, OutputProcConnector_t> ConnectorsMap_t;
 			ConnectorsMap_t mapConnectors;
 	};
 
-	class EntityInputManager_c
+	class EntityInputManager
 	{
 		public:
-			EntityInputManager_c();
+			EntityInputManager();
 
 			void AddSlot(const String_t &name, InputProc_t proc);
 
@@ -91,63 +91,60 @@ namespace Phobos
 			typedef std::map<String_t, InputProc_t> InputMap_t;
 			InputMap_t mapInputs;
 	};
-
-	namespace EntityIO
+	
+	class AutoOutputRegister
 	{
-		class AutoOutputRegister_c
-		{
-			public:
-				AutoOutputRegister_c(EntityOutputManager_c &manager, const String_t &outputName, OutputProcConnector_t proc)
-				{
-					manager.AddConnector(outputName, proc);
-				}
-		};
+		public:
+			AutoOutputRegister(EntityOutputManager &manager, const String_t &outputName, OutputProcConnector_t proc)
+			{
+				manager.AddConnector(outputName, proc);
+			}
+	};
 
-		class AutoInputRegister_c
-		{
-			public:
-				AutoInputRegister_c(EntityInputManager_c &manager, const String_t &inputName, InputProc_t proc)
-				{
-					manager.AddSlot(inputName, proc);
-				}
-		};
-	}
+	class AutoInputRegister
+	{
+		public:
+			AutoInputRegister(EntityInputManager &manager, const String_t &inputName, InputProc_t proc)
+			{
+				manager.AddSlot(inputName, proc);
+			}
+	};	
 }
 
 #define PH_DECLARE_ENTITY_INPUT(NAME)		\
-	void Input_##NAME(EntityEvent_c &ev);	\
-	static Phobos::EntityIO::AutoInputRegister_c clAutoInputRegister##NAME##_gl;
+	void Input_##NAME(EntityEvent &ev);	\
+	static Phobos::AutoInputRegister m_clAutoInputRegister##NAME##_gl;
 
 #define PH_BEGIN_ENTITY_INPUT(CLASS, NAME)																				\
-	Phobos::EntityIO::AutoInputRegister_c CLASS::clAutoInputRegister##NAME##_gl(CLASS::clInputManager_gl, "##NAME", reinterpret_cast<InputProc_t>(&CLASS::Input_##NAME));	\
-	void CLASS::Input_##NAME(EntityEvent_c &event)
+	Phobos::AutoInputRegister CLASS::m_clAutoInputRegister##NAME##_gl(CLASS::clInputManager_gl, "##NAME", reinterpret_cast<InputProc_t>(&CLASS::Input_##NAME));	\
+	void CLASS::Input_##NAME(EntityEvent &event)
 
 #define PH_DECLARE_ENTITY_OUTPUT(NAME)												\
 	OutputSignal_t sig##NAME;														\
-	static Phobos::EntityIO::AutoOutputRegister_c clAutoOutputRegister##NAME##_gl;	\
-	void Connect_##NAME(EntityIO_c &other, InputProc_t proc);
+	static Phobos::AutoOutputRegister m_clAutoOutputRegister##NAME##_gl;	\
+	void Connect_##NAME(EntityIO &other, InputProc_t proc);
 
 #define PH_DEFINE_ENTITY_OUTPUT(CLASS, NAME)																																\
-	Phobos::EntityIO::AutoOutputRegister_c CLASS::clAutoOutputRegister##NAME##_gl(CLASS::GetOutputManager(), "##NAME", reinterpret_cast<OutputProcConnector_t>(&CLASS::Connect_##NAME));	\
-	void CLASS::Connect_##NAME(EntityIO_c &other, InputProc_t proc)																											\
+	Phobos::AutoOutputRegister CLASS::m_clAutoOutputRegister##NAME##_gl(CLASS::GetOutputManager(), "##NAME", reinterpret_cast<OutputProcConnector_t>(&CLASS::Connect_##NAME));	\
+	void CLASS::Connect_##NAME(EntityIO &other, InputProc_t proc)																											\
 	{																																										\
 		sig##NAME.connect(boost::bind(proc, &other, _1));																													\
 	}
 
-#define PH_DECLARE_ENTITY_OUTPUT_MANAGER static EntityOutputManager_c &GetOutputManager();
+#define PH_DECLARE_ENTITY_OUTPUT_MANAGER static EntityOutputManager &GetOutputManager();
 #define PH_DEFINE_ENTITY_OUTPUT_MANAGER(CLASS)				\
-	EntityOutputManager_c& CLASS::GetOutputManager()		\
+	EntityOutputManager& CLASS::GetOutputManager()		\
 	{														\
-		static EntityOutputManager_c clOutputManager_gl;	\
+		static EntityOutputManager clOutputManager_gl;	\
 															\
 		return clOutputManager_gl;							\
 	}
 
-#define PH_DECLARE_ENTITY_INPUT_MANAGER static EntityInputManager_c &GetInputManager();
+#define PH_DECLARE_ENTITY_INPUT_MANAGER static EntityInputManager &GetInputManager();
 #define PH_DEFINE_ENTITY_INPUT_MANAGER(CLASS)				\
-	EntityInputManager_c& CLASS::GetInputManager()		\
+	EntityInputManager& CLASS::GetInputManager()		\
 	{														\
-		static EntityInputManager_c clInputManager_gl;	\
+		static EntityInputManager clInputManager_gl;	\
 															\
 		return clInputManager_gl;							\
 	}

@@ -25,11 +25,11 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Transform_c
+	class Transform
 	{
 		public:
-			inline Transform_c(const Ogre::Vector3 &origin = Ogre::Vector3::ZERO, const Ogre::Quaternion &q = Ogre::Quaternion::IDENTITY);		
-			inline Transform_c(const Transform_c &from, const Transform_c &to, Float_t delta);
+			inline Transform(const Ogre::Vector3 &origin = Ogre::Vector3::ZERO, const Ogre::Quaternion &q = Ogre::Quaternion::IDENTITY);		
+			inline Transform(const Transform &from, const Transform &to, Float_t delta);
 
 			inline const Ogre::Vector3 &GetOrigin(void) const;
 			inline const Ogre::Quaternion &GetRotation(void) const;
@@ -46,54 +46,54 @@ namespace Phobos
 
 			inline void Rotate(const Ogre::Vector3 &axis, const Ogre::Degree &angle);
 
-			inline static void Interpolate(Transform_c &out, const Transform_c &a, const Transform_c &b, Float_t delta);
-			inline static Transform_c Interpolate(const Transform_c &a, const Transform_c &b, Float_t delta);
+			inline static void Interpolate(Transform &out, const Transform &a, const Transform &b, Float_t delta);
+			inline static Transform Interpolate(const Transform &a, const Transform &b, Float_t delta);
 
 		private:
 			Ogre::Vector3 v3Origin;
 			Ogre::Quaternion qRotation;
 	};
 
-	inline Transform_c::Transform_c(const Ogre::Vector3 &origin, const Ogre::Quaternion &q):
+	inline Transform::Transform(const Ogre::Vector3 &origin, const Ogre::Quaternion &q):
 		v3Origin(origin),
 		qRotation(q)
 	{
 		//empty
 	}
 
-	inline Transform_c::Transform_c(const Transform_c &from, const Transform_c &to, Float_t delta):
+	inline Transform::Transform(const Transform &from, const Transform &to, Float_t delta):
 		v3Origin(Math::Interpolate(from.v3Origin, to.v3Origin, delta)),
 		qRotation(Math::Interpolate(from.qRotation, to.qRotation, delta))
 	{
 		//empty
 	}
 
-	inline const Ogre::Vector3 &Transform_c::GetOrigin(void) const
+	inline const Ogre::Vector3 &Transform::GetOrigin(void) const
 	{
 		return(v3Origin);
 	}
 
-	inline const Ogre::Quaternion &Transform_c::GetRotation(void) const
+	inline const Ogre::Quaternion &Transform::GetRotation(void) const
 	{
 		return(qRotation);
 	}
 
-	inline void Transform_c::RotateX(const Ogre::Degree &angle)
+	inline void Transform::RotateX(const Ogre::Degree &angle)
 	{
 		this->Rotate(Ogre::Vector3::UNIT_X, angle);
 	}
 
-	inline void Transform_c::RotateY(const Ogre::Degree &angle)
+	inline void Transform::RotateY(const Ogre::Degree &angle)
 	{
 		this->Rotate(Ogre::Vector3::UNIT_Y, angle);
 	}
 
-	inline void Transform_c::RotateZ(const Ogre::Degree &angle)
+	inline void Transform::RotateZ(const Ogre::Degree &angle)
 	{
 		this->Rotate(Ogre::Vector3::UNIT_Z, angle);
 	}
 
-	inline void Transform_c::Rotate(const Ogre::Vector3 &axis, const Ogre::Degree &angle)
+	inline void Transform::Rotate(const Ogre::Vector3 &axis, const Ogre::Degree &angle)
 	{
 		//Ogre::Quaternion q(angle, axis);
 		Ogre::Quaternion q;
@@ -102,42 +102,42 @@ namespace Phobos
 		this->Rotate(q);
 	}
 
-	inline void Transform_c::SetRotation(const Ogre::Quaternion &q)
+	inline void Transform::SetRotation(const Ogre::Quaternion &q)
 	{
 		qRotation = q;
 	}
 
-	inline void Transform_c::Rotate(const Ogre::Quaternion &q)
+	inline void Transform::Rotate(const Ogre::Quaternion &q)
 	{
 		qRotation = qRotation * q;
 	}
 
-	inline void Transform_c::SetOrigin(const Ogre::Vector3 &v)
+	inline void Transform::SetOrigin(const Ogre::Vector3 &v)
 	{
 		v3Origin = v;
 	}
 
-	inline void Transform_c::Translate(const Ogre::Vector3 &v)
+	inline void Transform::Translate(const Ogre::Vector3 &v)
 	{
 		v3Origin += v;
 	}
 
-	inline void Transform_c::Interpolate(Transform_c &out, const Transform_c &a, const Transform_c &b, Float_t delta)
+	inline void Transform::Interpolate(Transform &out, const Transform &a, const Transform &b, Float_t delta)
 	{
-		out = Transform_c(a, b, delta);	
+		out = Transform(a, b, delta);	
 	}
 
-	inline Transform_c Transform_c::Interpolate(const Transform_c &a, const Transform_c &b, Float_t delta)
+	inline Transform Transform::Interpolate(const Transform &a, const Transform &b, Float_t delta)
 	{
-		return Transform_c(a, b, delta);
+		return Transform(a, b, delta);
 	}
 
 	namespace Math
 	{
 		template <>
-		inline Transform_c Interpolate(const Transform_c &a, const Transform_c &b, Float_t alpha)
+		inline Transform Interpolate(const Transform &a, const Transform &b, Float_t alpha)
 		{
-			return(Transform_c(
+			return(Transform(
 				Interpolate(a.GetOrigin(), b.GetOrigin(), alpha), 
 				Interpolate(a.GetRotation(), b.GetRotation(), alpha)
 			));
@@ -145,7 +145,7 @@ namespace Phobos
 	}
 
 
-	typedef Math::Interpolator_c<Transform_c> TransformInterpolator_c;
+	typedef Math::Interpolator<Transform> TransformInterpolator_c;
 }
 
 

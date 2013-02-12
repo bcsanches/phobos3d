@@ -17,69 +17,67 @@ subject to the following restrictions:
 
 #include "Gui/PH_Context.h"
 
-#include <boost/make_shared.hpp>
-
 #include <Phobos/System/InputDevice.h>
 #include <Phobos/System/InputEvent.h>
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Context_c::Create(const String_t &name, size_t screenWidth, size_t screenHeight)
+Phobos::Gui::ContextPtr_t Phobos::Gui::Context::Create(const String_t &name, size_t screenWidth, size_t screenHeight)
 {
-	return boost::make_shared<Context_c>(name, screenWidth, screenHeight);
+	return std::make_shared<Context>(name, screenWidth, screenHeight);
 }
 
-Phobos::Gui::Context_c::Context_c(const String_t &name, size_t screenWidth, size_t screenHeight):
-	Node_c(name),
-	pclContext(NULL)
+Phobos::Gui::Context::Context(const String_t &name, size_t screenWidth, size_t screenHeight):
+	Node(name),
+	m_pclContext(NULL)
 {	
-	pclContext = Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(screenWidth, screenHeight));
+	m_pclContext = Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(screenWidth, screenHeight));
 }
 
-Phobos::Gui::Context_c::~Context_c()
+Phobos::Gui::Context::~Context()
 {
-	pclContext->RemoveReference();
+	m_pclContext->RemoveReference();
 }
 
-void Phobos::Gui::Context_c::InputEvent(const System::InputEvent_s &event)
+void Phobos::Gui::Context::OnInputEvent(const System::InputEvent_s &event)
 {
-	if(event.pclDevice->GetDeviceType() == System::INPUT_DEVICE_MOUSE)
+	if(event.m_pclDevice->GetDeviceType() == System::INPUT_DEVICE_MOUSE)
 	{
-		if(event.eType == System::INPUT_EVENT_THUMB)
+		if(event.m_eType == System::INPUT_EVENT_THUMB)
 		{
-			pclContext->ProcessMouseMove(static_cast<int>(event.stThumb.fpAxis[0]), static_cast<int>(event.stThumb.fpAxis[1]), 0);
+			m_pclContext->ProcessMouseMove(static_cast<int>(event.m_stThumb.m_fpAxis[0]), static_cast<int>(event.m_stThumb.m_fpAxis[1]), 0);
 		}
-		else if(event.eType == System::INPUT_EVENT_BUTTON)
+		else if(event.m_eType == System::INPUT_EVENT_BUTTON)
 		{
-			if(event.stButton.fpPression > 0)
-				pclContext->ProcessMouseButtonDown(event.stButton.uId-1, 0);
+			if(event.m_stButton.m_fpPression > 0)
+				m_pclContext->ProcessMouseButtonDown(event.m_stButton.m_uId-1, 0);
 			else
-				pclContext->ProcessMouseButtonUp(event.stButton.uId-1, 0);
+				m_pclContext->ProcessMouseButtonUp(event.m_stButton.m_uId-1, 0);
 		}	
 	}
 }
 
-void Phobos::Gui::Context_c::ResetMousePosition(short x, short y)
+void Phobos::Gui::Context::ResetMousePosition(short x, short y)
 {
-	pclContext->ProcessMouseMove(x, y, 0);
+	m_pclContext->ProcessMouseMove(x, y, 0);
 }
 
-void Phobos::Gui::Context_c::Update()
+void Phobos::Gui::Context::Update()
 {
-	pclContext->Update();	
+	m_pclContext->Update();	
 }
 
-void Phobos::Gui::Context_c::Render()
+void Phobos::Gui::Context::Render()
 {
-	pclContext->Render();
+	m_pclContext->Render();
 }
 
-Rocket::Core::ElementDocument *Phobos::Gui::Context_c::LoadMouseCursor(const Char_t *path)
+Rocket::Core::ElementDocument *Phobos::Gui::Context::LoadMouseCursor(const Char_t *path)
 {
-	return pclContext->LoadMouseCursor(path);
+	return m_pclContext->LoadMouseCursor(path);
 }
 
-Rocket::Core::ElementDocument *Phobos::Gui::Context_c::LoadDocument(const Char_t *path)
+Rocket::Core::ElementDocument *Phobos::Gui::Context::LoadDocument(const Char_t *path)
 {
-	return pclContext->LoadDocument(path);
+	return m_pclContext->LoadDocument(path);
 }
 
 

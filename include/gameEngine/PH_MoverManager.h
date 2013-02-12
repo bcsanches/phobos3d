@@ -23,17 +23,17 @@ namespace Phobos
 {		
 	PH_DECLARE_SINGLETON_PTR(MoverManager);
 
-	class MoverComponent_c;
+	class MoverComponent;
 
-	class PH_GAME_ENGINE_API MoverManager_c: public GenericComponentManagerModule_c<MoverComponent_c>
+	class PH_GAME_ENGINE_API MoverManager: public GenericComponentManagerModule<MoverComponent>
 	{
 		PH_DECLARE_SINGLETON_METHODS(MoverManager);		
 
 		public:
-			~MoverManager_c();
+			~MoverManager();
 
 		protected:
-			MoverManager_c();			
+			MoverManager();			
 
 			virtual void OnFixedUpdate();
 	};

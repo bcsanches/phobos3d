@@ -144,6 +144,9 @@
     <ProjectReference Include="..\..\..\contrib\SDL-1.2.15\VisualC\SDL\SDL.vcxproj">
       <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

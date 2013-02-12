@@ -17,43 +17,43 @@ subject to the following restrictions:
 #include "PH_SpectatorCameraCommandProducer.h"
 
 #include <PH_Console.h>
-#include <PH_ContextUtils.h>
+#include <Phobos/Shell/Utils.h>
 #include <PH_Core.h>
 #include <PH_CoreTimer.h>
-#include <PH_Exception.h>
-#include <PH_Memory.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Memory.h>
 
 namespace Phobos
 {
-	SpectatorCameraCommandProducer_c::SpectatorCameraCommandProducer_c(Context_c *context):
-		clMoveButton("-moveBwd", "+moveBwd", "=moveBwd", "-moveFwd", "+moveFwd", "=moveFwd", context),
-		clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),
-		clStrafeButton("-strafeRight", "+strafeRight", "=strafeRight", "-strafeLeft", "+strafeLeft", "=strafeLeft", context),
-		clTurnButton( "-turnRight", "+turnRight", "=turnRight", "-turnLeft", "+turnLeft", "=turnLeft", context),
-		clLookButton("-lookUp", "+lookUp", "=lookUp", "-lookDown", "+lookDown", "=lookDown", context),
-		clMouseThumb(PH_MOUSE_THUMB_CMD_NAME, context),
-		fpMoveSpeed(8),
-		fpTurnSpeed(70),
-		fpMouseSensitivity(0.3f),		
-		fMouseActive(false)
+	SpectatorCameraCommandProducer_c::SpectatorCameraCommandProducer_c(Shell::Context *context):
+		m_clMoveButton("-moveBwd", "+moveBwd", "=moveBwd", "-moveFwd", "+moveFwd", "=moveFwd", context),
+		m_clMoveUpDown("-moveDown", "+moveDown", "=moveDown", "-moveUp", "+moveUp", "=moveUp", context),
+		m_clStrafeButton("-strafeRight", "+strafeRight", "=strafeRight", "-strafeLeft", "+strafeLeft", "=strafeLeft", context),
+		m_clTurnButton( "-turnRight", "+turnRight", "=turnRight", "-turnLeft", "+turnLeft", "=turnLeft", context),
+		m_clLookButton("-lookUp", "+lookUp", "=lookUp", "-lookDown", "+lookDown", "=lookDown", context),
+		m_clMouseThumb(PH_MOUSE_THUMB_CMD_NAME, context),
+		m_fpMoveSpeed(8),
+		m_fpTurnSpeed(70),
+		m_fpMouseSensitivity(0.3f),		
+		m_fMouseActive(false)
 	{		
 		this->Disable();
 	}
 
 	IPlayerCmdPtr_t SpectatorCameraCommandProducer_c::CreateCmd()
 	{
-		const Float_t ticks = Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpFrameTime;
+		const Float_t ticks = Core::GetInstance().GetSimInfo().m_stTimers[CORE_SYS_TIMER].m_fpFrameTime;
 
-		const Float_t fwd = clMoveButton.GetValue() * ticks * fpMoveSpeed;
-		const Float_t strafe = clStrafeButton.GetValue() * ticks * fpMoveSpeed;
-		const Float_t upDown = clMoveUpDown.GetValue() * ticks * fpMoveSpeed;
+		const Float_t fwd = m_clMoveButton.GetValue() * ticks * m_fpMoveSpeed;
+		const Float_t strafe = m_clStrafeButton.GetValue() * ticks * m_fpMoveSpeed;
+		const Float_t upDown = m_clMoveUpDown.GetValue() * ticks * m_fpMoveSpeed;
 
-		const Float_t *thumb = clMouseThumb.GetPoint();
+		const Float_t *thumb = m_clMouseThumb.GetPoint();
 
-		const Float_t turnAngle(((clTurnButton.GetValue() * fpTurnSpeed) + (-thumb[0] * fpTurnSpeed * fpMouseSensitivity)) * ticks);
-		const Float_t lookAngle(((clLookButton.GetValue() * fpTurnSpeed) + (thumb[1] * fpTurnSpeed * fpMouseSensitivity)) * ticks);
+		const Float_t turnAngle(((m_clTurnButton.GetValue() * m_fpTurnSpeed) + (-thumb[0] * m_fpTurnSpeed * m_fpMouseSensitivity)) * ticks);
+		const Float_t lookAngle(((m_clLookButton.GetValue() * m_fpTurnSpeed) + (thumb[1] * m_fpTurnSpeed * m_fpMouseSensitivity)) * ticks);
 
-		return IPlayerCmdPtr_t(PH_NEW SpectatorCameraCmd_c(
+		return IPlayerCmdPtr_t(PH_NEW SpectatorCameraCmd(
 			fwd,
 			strafe,
 			upDown,
@@ -64,24 +64,24 @@ namespace Phobos
 
 	void SpectatorCameraCommandProducer_c::Enable()
 	{
-		Console_c &console = Console_c::GetInstance();
+		Console &console = Console::GetInstance();
 
-		clMoveButton.Enable(console);
-		clStrafeButton.Enable(console);
-		clMoveUpDown.Enable(console);
-		clTurnButton.Enable(console);
-		clLookButton.Enable(console);	
-		clMouseThumb.Enable(console);
+		m_clMoveButton.Enable(console);
+		m_clStrafeButton.Enable(console);
+		m_clMoveUpDown.Enable(console);
+		m_clTurnButton.Enable(console);
+		m_clLookButton.Enable(console);	
+		m_clMouseThumb.Enable(console);
 	}
 
 	void SpectatorCameraCommandProducer_c::Disable()
 	{
-		clMoveButton.Disable();
-		clStrafeButton.Disable();
-		clMoveUpDown.Disable();
-		clTurnButton.Disable();
-		clLookButton.Disable();		
-		clMouseThumb.Disable();
+		m_clMoveButton.Disable();
+		m_clStrafeButton.Disable();
+		m_clMoveUpDown.Disable();
+		m_clTurnButton.Disable();
+		m_clLookButton.Disable();		
+		m_clMouseThumb.Disable();
 	}
 
 	bool SpectatorCameraCommandProducer_c::IsMouseClipped() const
@@ -91,12 +91,12 @@ namespace Phobos
 	
 	void SpectatorCameraCommandProducer_c::SetMoveSpeed(Float_t v)
 	{
-		fpMoveSpeed = v;
+		m_fpMoveSpeed = v;
 	}
 
 	void SpectatorCameraCommandProducer_c::SetTurnSpeed(Float_t v)
 	{
-		fpTurnSpeed = v;
+		m_fpTurnSpeed = v;
 	}
 
 	void SpectatorCameraCommandProducer_c::SetMouseSensitivity(Float_t v)
@@ -104,6 +104,6 @@ namespace Phobos
 		if(v <= 0)
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "SpectatorCameraCommandProducer_c::SetMouseSensitivity", "Mouse sensitivity must be greater than zero");
 
-		fpMouseSensitivity = v;
+		m_fpMouseSensitivity = v;
 	}
 }

@@ -16,8 +16,7 @@ subject to the following restrictions:
 
 #include "PH_EventManagerModule.h"
 
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+#include <Phobos/Memory.h>
 
 #include "PH_Console.h"
 #include "PH_Core.h"
@@ -25,54 +24,54 @@ subject to the following restrictions:
 namespace Phobos
 {
 
-	EventManagerModulePtr_t EventManagerModule_c::ipInstance_gl;
+	EventManagerModulePtr_t EventManagerModule::ipInstance_gl;
 
-	EventManagerModule_c::EventManagerModule_c():
-		CoreModule_c("EventManagerModule")
+	EventManagerModule::EventManagerModule():
+		CoreModule("EventManagerModule")
 	{
-		auto &manager = System::EventManager_c::CreateInstance("EventManager");
+		auto &manager = System::EventManager::CreateInstance("EventManager");
 		manager.AddListener(*this, System::EVENT_TYPE_SYSTEM);		
 	}
 
-	EventManagerModule_c::~EventManagerModule_c()
+	EventManagerModule::~EventManagerModule()
 	{
-		System::EventManager_c::ReleaseInstance();
+		System::EventManager::ReleaseInstance();
 	}
 
-	EventManagerModule_c &EventManagerModule_c::CreateInstance()
+	EventManagerModule &EventManagerModule::CreateInstance()
 	{
-		PH_ASSERT_MSG(!ipInstance_gl, "[EventManagerModule_c::CreateInstance]: Instance already exists");
+		PH_ASSERT_MSG(!ipInstance_gl, "[EventManagerModule::CreateInstance]: Instance already exists");
 
-		ipInstance_gl = EventManagerModulePtr_t(PH_NEW EventManagerModule_c());
+		ipInstance_gl = EventManagerModulePtr_t(PH_NEW EventManagerModule());
 
 		return *ipInstance_gl;
 	}
 
-	void EventManagerModule_c::ReleaseInstance()
+	void EventManagerModule::ReleaseInstance()
 	{
-		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
+		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule::ReleaseInstance]: Instance does not exists, use CreateInstance");
 
 		ipInstance_gl.reset();
 	}
 
-	EventManagerModule_c &EventManagerModule_c::GetInstance()
+	EventManagerModule &EventManagerModule::GetInstance()
 	{
-		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule_c::GetInstance]: Instance does not exists, use CreateInstance");
+		PH_ASSERT_MSG(ipInstance_gl, "[EventManagerModule::GetInstance]: Instance does not exists, use CreateInstance");
 
 		return *ipInstance_gl;
 	}
 
-	void EventManagerModule_c::OnFixedUpdate()
+	void EventManagerModule::OnFixedUpdate()
 	{
-		System::EventManager_c::GetInstance().Update();
+		System::EventManager::GetInstance().Update();
 	}
 
-	void EventManagerModule_c::Event(System::Event_s &event)
+	void EventManagerModule::OnEvent(System::Event_s &event)
 	{
-		switch(event.stSystem.eType)
+		switch(event.m_stSystem.m_eType)
 		{
 			case System::SYSTEM_QUIT:
-				Console_c::GetInstance().Execute("quit");
+				Console::GetInstance().Execute("quit");
 				break;
 
             default:

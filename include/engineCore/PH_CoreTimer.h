@@ -37,38 +37,38 @@ namespace Phobos
 	struct CoreTimer_s
 	{
 		//* Number of ticks occurred since started.
-		Float_t	fpTotalTicks;
+		Float_t	m_fpTotalTicks;
 
 		//* Number of ticks for simulation frame
-		Float_t	fpFrameTime;
+		Float_t	m_fpFrameTime;
 
 		//* number of ticks for the rendering frame
-		Float_t	fpRenderFrameTime;
+		Float_t	m_fpRenderFrameTime;
 
 
-		Float_t	fpTotalRenderFrameTime;
+		Float_t	m_fpTotalRenderFrameTime;
 
 		//*number of frames occurred
-		unsigned int uFrameCount;
+		unsigned int m_uFrameCount;
 
 		//*delta used for rendering interpolation
-		Float_t	fpDelta;
+		Float_t	m_fpDelta;
 
-		UInt32_t u32Flags;
+		UInt32_t m_u32Flags;
 
 		inline bool IsPaused(void) const
 		{
-			return(u32Flags & TIMER_PAUSED);
+			return(m_u32Flags & TIMER_PAUSED);
 		}
 
 		inline void Pause(void)
 		{
-			u32Flags |= TIMER_PAUSED;
+			m_u32Flags |= TIMER_PAUSED;
 		}
 
 		inline void Unpause(void)
 		{
-			u32Flags &= ~TIMER_PAUSED;
+			m_u32Flags &= ~TIMER_PAUSED;
 		}
 
 		inline void TogglePause(void)
@@ -81,12 +81,12 @@ namespace Phobos
 
 		inline void Reset(void)
 		{
-			fpTotalTicks = 0;
-			fpFrameTime = 0;
-			fpRenderFrameTime = 0;
-			fpTotalRenderFrameTime = 0;
-			uFrameCount = 0;
-			fpDelta = 0;
+			m_fpTotalTicks = 0;
+			m_fpFrameTime = 0;
+			m_fpRenderFrameTime = 0;
+			m_fpTotalRenderFrameTime = 0;
+			m_uFrameCount = 0;
+			m_fpDelta = 0;
 		}
 	};
 }

@@ -21,7 +21,7 @@ class btPairCachingGhostObject;
 
 #include <OgrePrerequisites.h>
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_ICharacterBody.h"
 #include "PH_CollisionShapeFwd.h"
@@ -32,13 +32,13 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class KinematicCharacterController_c;
+		class KinematicCharacterController;
 
-		class PH_GAME_ENGINE_API GhostCharacterBody_c: public ICharacterBody_c
+		class PH_GAME_ENGINE_API GhostCharacterBody: public ICharacterBody
 		{
 			public:
-				GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape, const CollisionTag_c &collisionTag);
-				virtual ~GhostCharacterBody_c();
+				GhostCharacterBody(Float_t stepHeight, CollisionShapePtr_t collisionShape, const CollisionTag &collisionTag);
+				virtual ~GhostCharacterBody();
 				
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
 
@@ -50,12 +50,12 @@ namespace Phobos
 				virtual void Teleport(const Ogre::Vector3 &position);
 
 			private:
-				std::unique_ptr<btPairCachingGhostObject> upGhostObject;				
-				std::unique_ptr<KinematicCharacterController_c> upCharacterController;
+				std::unique_ptr<btPairCachingGhostObject> m_upGhostObject;				
+				std::unique_ptr<KinematicCharacterController> m_upCharacterController;
 
-				CollisionShapePtr_t	spCollisionShape;
+				CollisionShapePtr_t	m_spCollisionShape;
 
-				CollisionTag_c clCollisionTag;
+				CollisionTag m_clCollisionTag;
 		};
 	}
 }

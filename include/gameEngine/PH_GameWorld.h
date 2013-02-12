@@ -24,7 +24,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {		
-	class MapLoader_c;			
+	class MapLoader;			
 
 	enum PhysicsCollisionGroups
 	{
@@ -34,14 +34,14 @@ namespace Phobos
 		PCG_PlayerCharacter = 0x0008
 	};
 
-	class PH_GAME_ENGINE_API GameWorld_c
+	class PH_GAME_ENGINE_API GameWorld
 	{
 		public:			
-			virtual void Load(const MapLoader_c &loader, const Register::Table_c &worldEntityTable) = 0;
+			virtual void Load(const MapLoader &loader, const Register::Table &worldEntityTable) = 0;
 		
 		protected:
-			GameWorld_c() {};
-			virtual ~GameWorld_c() {};			
+			GameWorld() {};
+			virtual ~GameWorld() {};			
 	};
 }
 

@@ -18,65 +18,57 @@ subject to the following restrictions:
 
 #include <PH_Console.h>
 #include <PH_Core.h>
-#include <PH_Kernel.h>
 
 PH_DEFINE_DEFAULT_SINGLETON(Render);
 
-Render_c::Render_c():
-	CoreModule_c("Render"),
-	varRScreenX("dvRScreenX", "800"),
-	varRScreenY("dvRScreenY", "600"),
-	varRVSync("dvRVSync", "1"),
-	varRFullScreen("dvRFullScreen", "0"),
-	cmdScreenshot("screenshot")
+Render::Render():
+	CoreModule("Render"),
+	m_varRScreenX("dvRScreenX", "800"),
+	m_varRScreenY("dvRScreenY", "600"),
+	m_varRVSync("dvRVSync", "1"),
+	m_varRFullScreen("dvRFullScreen", "0"),
+	m_cmdScreenshot("screenshot")
 {
 	using namespace Phobos;
 
-	Kernel_c &kernel = Kernel_c::GetInstance();
+	LogMessage("[Render] Initializing");
 
-	kernel.LogMessage("[Render] Initializing");
-
-	kernel.LogMessage("[Render] Initialized.");
+	LogMessage("[Render] Initialized.");
 }
 
-void Render_c::OnBoot(void)
+void Render::OnBoot(void)
 {
 	using namespace Phobos;
 
-	Kernel_c	&kernel(Kernel_c::GetInstance());
-	kernel.LogMessage("[Render_c::OnBoot] Starting");
+	LogMessage("[Render::OnBoot] Starting");
 
-	ipWindow = System::Window_c::Create("RenderWindow");
+	m_ipWindow = System::Window::Create("RenderWindow");
 
-	Rect_s<UInt_t> r;
+	UIntSize_t size(m_varRScreenX.GetInt(), m_varRScreenY.GetInt());
+	
+	bool fullScreen = m_varRFullScreen.GetBoolean();
+	bool vsync = m_varRVSync.GetBoolean();
 
-	r.tOrigin[0] = 0;
-	r.tOrigin[1] = 0;
-	r.tWidth = varRScreenX.GetInt();
-	r.tHeight = varRScreenY.GetInt();
-	bool fullScreen = varRFullScreen.GetBoolean();
-	bool vsync = varRVSync.GetBoolean();
+	LogMessage("[Render::OnBoot] Opening render window");
+	m_ipWindow->Open("Phobos Engine", size);
 
-	kernel.LogMessage("[Render_c::OnBoot] Opening render window");
-	ipWindow->Open("Phobos Engine", r);
-
-	kernel.LogMessage("[Render_c::OnBoot] Ready.");
-	Core_c::GetInstance().OnEvent(CoreEvents::RENDER_READY);
+	LogMessage("[Render::OnBoot] Ready.");
+	Core::GetInstance().OnEvent(CoreEvents::RENDER_READY);
 }
 
-void Render_c::OnPrepareToBoot()
+void Render::OnPrepareToBoot()
 {
-	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
+	Phobos::Console &console = Phobos::Console::GetInstance();
 	
-	console.AddContextCmd(cmdScreenshot);
+	console.AddContextCommand(m_cmdScreenshot);
 	
-	console.AddContextVar(varRScreenX);
-	console.AddContextVar(varRScreenY);
-	console.AddContextVar(varRFullScreen);
-	console.AddContextVar(varRVSync);
+	console.AddContextVariable(m_varRScreenX);
+	console.AddContextVariable(m_varRScreenY);
+	console.AddContextVariable(m_varRFullScreen);
+	console.AddContextVariable(m_varRVSync);
 }
 
-void Render_c::CmdScreenshot(const Phobos::StringVector_t &container, Phobos::Context_c &)
+void Render::CmdScreenshot(const Phobos::Shell::StringVector_t &container, Phobos::Shell::Context &)
 {
 	//empty
 }

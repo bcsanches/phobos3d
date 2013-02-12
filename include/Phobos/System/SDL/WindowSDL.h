@@ -33,16 +33,16 @@ namespace Phobos
 			public:			
 				~WindowSDL();
 
-				void Open(	const String_t &name, const Rect_s<size_t> &rect, void *parentWindow = NULL);
+				virtual void Open(	const String_t &name, const UIntSize_t &size, void *parentWindow = NULL) override;
 
-				size_t GetWidth(void) const;
-				size_t GetHeight(void) const;
+				virtual size_t GetWidth(void) const override;
+				virtual size_t GetHeight(void) const override;
 
-				void GetRect(Rect_s<size_t> &out);
+				virtual UIntSize_t GetSize() const override;
 
-				virtual void *GetHandler() const;
+				virtual void *GetHandler() const override;
 
-				virtual bool HasGLContext();
+				virtual bool HasGLContext() override;
 
 			private:			
 				WindowSDL(const String_t &name);
@@ -51,9 +51,7 @@ namespace Phobos
 				friend WindowPtr_t Window::Create(const String_t &name);
 
 			private:
-				EventManagerSDLPtr_t m_ipEventManager;
-
-				Rect_s<size_t> rect;
+				EventManagerSDLPtr_t m_ipEventManager;				
 		};
 	}
 }

@@ -22,7 +22,7 @@ class btKinematicCharacterController;
 #include <BulletDynamics/Dynamics/btActionInterface.h>
 #include <LinearMath/btVector3.h>
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_ICharacterBody.h"
 #include "PH_GameEngineAPI.h"
@@ -32,11 +32,11 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API SweepCharacterBody_c: public ICharacterBody_c,  private btActionInterface
+		class PH_GAME_ENGINE_API SweepCharacterBody: public ICharacterBody,  private btActionInterface
 		{
 			public:
-				SweepCharacterBody_c(RigidBodyPtr_t rigidBody, Float_t stepHeight);
-				~SweepCharacterBody_c();				
+				SweepCharacterBody(RigidBodyPtr_t rigidBody, Float_t stepHeight);
+				~SweepCharacterBody();				
 
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
 
@@ -58,16 +58,16 @@ namespace Phobos
 				void Move(const btTransform &fromTransform, const btVector3 &linearVel, btTransform &toTransform, Float_t timeStep);
 
 			private:
-				RigidBodyPtr_t spRigidBody;
+				RigidBodyPtr_t m_spRigidBody;
 
-				Float_t fpStepHeight;
+				Float_t m_fpStepHeight;
 
-				btVector3 v3WalkDirection;
+				btVector3 m_v3WalkDirection;
 
-				btVector3 v3GroundNormal;
+				btVector3 m_v3GroundNormal;
 
-				bool fGroundPlane;
-				bool fWalking;
+				bool m_fGroundPlane;
+				bool m_fWalking;
 		};
 	}
 }

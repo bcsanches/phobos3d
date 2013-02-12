@@ -20,7 +20,7 @@ subject to the following restrictions:
 #include <map>
 
 #include <PH_CoreModule.h>
-#include <PH_Singleton.h>
+#include <Phobos/Singleton.h>
 
 #include "PH_GameEngineAPI.h"
 #include "PH_GameEvent.h"
@@ -29,27 +29,27 @@ namespace Phobos
 {
 	PH_DECLARE_SINGLETON_PTR(GameEventManager);
 
-	class PH_GAME_ENGINE_API GameEventManager_c: public CoreModule_c
+	class PH_GAME_ENGINE_API GameEventManager: public CoreModule
 	{
 		PH_DECLARE_SINGLETON_METHODS(GameEventManager);
 
 		public:			
-			~GameEventManager_c();
+			~GameEventManager();
 
-			void Schedule(EntityIO_c &receiver, GameEvent_c::EventProc_t proc, Float_t delay);
+			void Schedule(EntityIO &receiver, GameEvent::EventProc_t proc, Float_t delay);
 
-			void CancelEvents(const EntityIO_c &receiver);
+			void CancelEvents(const EntityIO &receiver);
 
 		protected:
 			virtual void OnFixedUpdate();
 
 		private:
-			GameEventManager_c();			
+			GameEventManager();			
 
 		private:
-			typedef std::multimap<Float_t, GameEvent_c> GameEventMap_t;
+			typedef std::multimap<Float_t, GameEvent> GameEventMap_t;
 
-			GameEventMap_t mapEvents;
+			GameEventMap_t m_mapEvents;
 	};
 }
 

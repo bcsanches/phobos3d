@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <list>
 
-#include <PH_ContextCmd.h>
+#include <Phobos/Shell/Command.h>
 
 #include "PH_CoreModule.h"
 
@@ -29,14 +29,14 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(PluginManager);
 
-	class PH_ENGINE_CORE_API PluginManager_c: public CoreModule_c
+	class PH_ENGINE_CORE_API PluginManager: public CoreModule
 	{
 		public:
-			static PluginManager_c &CreateInstance(void);
-			static PluginManager_c &GetInstance(void);
+			static PluginManager &CreateInstance(void);
+			static PluginManager &GetInstance(void);
 			static void ReleaseInstance(void);
 
-			~PluginManager_c();
+			~PluginManager();
 
 			void LoadPlugin(const String_t &name);
 			void UnloadPlugin(const String_t &name);
@@ -49,17 +49,17 @@ namespace Phobos
 			void OnUpdate();
 
 		private:
-			PluginManager_c();			
+			PluginManager();			
 
-			void CmdLoadPlugin(const StringVector_t &args, Context_c &);
-			void CmdUnloadPlugin(const StringVector_t &args, Context_c &);
+			void CmdLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdUnloadPlugin(const Shell::StringVector_t &args, Shell::Context &);
 
 		private:
-			ContextCmd_c	cmdLoadPlugin;
-			ContextCmd_c	cmdUnloadPlugin;
-			std::list<String_t> lstPluginsToActivate;
+			Shell::Command	m_cmdLoadPlugin;
+			Shell::Command	m_cmdUnloadPlugin;
+			std::list<String_t> m_lstPluginsToActivate;
 
-			bool				fSystemReady;
+			bool				m_fSystemReady;
 
 			// =====================================================
 			// STATIC PRIVATE ATTRIBUTES

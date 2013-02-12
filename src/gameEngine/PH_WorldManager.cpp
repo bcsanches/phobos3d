@@ -17,14 +17,11 @@ subject to the following restrictions:
 
 #include "PH_WorldManager.h"
 
-#include <boost/bind.hpp>
-
 #include <PH_Console.h>
-#include <PH_ContextUtils.h>
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <Phobos/Shell/Utils.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Path.h>
 
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>
@@ -39,96 +36,98 @@ namespace Phobos
 {
 	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);
 
-	WorldManager_c::WorldManager_c():
-		CoreModule_c("WorldManager", NodeFlags::PRIVATE_CHILDREN),
-		cmdLoadMap("loadMap"),
-		cmdUnloadMap("unloadMap"),
-		cmdDumpFactoryCreators("dumpFactoryCreators")
+	WorldManager::WorldManager():
+		CoreModule("WorldManager", NodeFlags::PRIVATE_CHILDREN),
+		m_cmdLoadMap("loadMap"),
+		m_cmdUnloadMap("unloadMap"),
+		m_cmdDumpFactoryCreators("dumpFactoryCreators")
 	{
-		cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdLoadMap, this));
-		cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdUnloadMap, this));
-		cmdDumpFactoryCreators.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager_c::CmdDumpFactoryCreators, this));
+		m_cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdLoadMap, this));
+		m_cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdUnloadMap, this));
+		m_cmdDumpFactoryCreators.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdDumpFactoryCreators, this));
 	}
 
-	WorldManager_c::~WorldManager_c()
+	WorldManager::~WorldManager()
 	{
 		//empty
 	}	
 
-	void WorldManager_c::UnloadMap()
+	void WorldManager::UnloadMap()
 	{
 		this->RemoveAllChildren();
-		clEntityManager.Clear();
+		m_clEntityManager.Clear();
 
-		spGameWorld.reset();
+		m_spGameWorld.reset();
 
-		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapUnloaded, _1));
+		for(auto &listener: m_lstListeners)
+			listener.OnMapUnloaded();		
 	}
 
-	void WorldManager_c::LoadMap(const String_t &mapName)
+	void WorldManager::LoadMap(const String_t &mapName)
 	{
 		this->UnloadMap();
 
-		Path_c path(mapName);
+		Path path(mapName);
 		String_t extension;
 		path.GetExtension(extension);
 
-		spMapLoader = MapLoaderFactory_c::GetInstance().Create(extension.c_str());
-		spMapLoader->Load(mapName);
+		m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
+		m_spMapLoader->Load(mapName);
 
 		{
-			auto world(spMapLoader->CreateAndLoadWorldSpawn());
+			auto world(m_spMapLoader->CreateAndLoadWorldSpawn());
 			this->AddPrivateChild(std::move(world));
 		}
 
-		spGameWorld = spMapLoader->CreateAndLoadWorld();
+		m_spGameWorld = m_spMapLoader->CreateAndLoadWorld();
 
 		this->LoadEntities();
 
-		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			Entity_c *entity = static_cast<Entity_c *>(it->second);
+			Entity *entity = static_cast<Entity *>(it->second);
 
 			entity->LoadFinished();
 		}
 
-		std::for_each(lstListeners.begin(), lstListeners.end(), boost::bind(&WorldManagerListener_c::OnMapLoaded, _1));
+		for(auto &listener: m_lstListeners)
+			listener.OnMapLoaded();		
 	}
 
-	Entity_c &WorldManager_c::LoadEntity(const Register::Table_c &entityDef)
+	Entity &WorldManager::LoadEntity(const Register::Table &entityDef)
 	{
-		std::unique_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
+		std::unique_ptr<Entity> ptr(EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 
 		//Update handle before loading entity, so components would have a valid handle
-		Handle_s h = clEntityManager.AddObject(ptr.get());
+		Handle_s h = m_clEntityManager.AddObject(ptr.get());
 		ptr->SetHandle(h);
 			
 		ptr->Load(entityDef);
 				
-		Entity_c &entityRef = *ptr;
+		Entity &entityRef = *ptr;
 
 		this->AddPrivateChild(std::move(ptr));
 
 		return entityRef;
 	}
 
-	void WorldManager_c::LoadEntities()
+	void WorldManager::LoadEntities()
 	{
-		auto &hive = spMapLoader->GetDynamicEntitiesHive();		
+		auto &hive = m_spMapLoader->GetDynamicEntitiesHive();		
 
-		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
+		for(Node::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 		{
-			auto *dict = static_cast<Register::Table_c *>(it->second);
+			auto *dict = static_cast<Register::Table *>(it->second);
 
 			this->LoadEntity(*dict);						
 		}
 	}
 
-	Entity_c *WorldManager_c::TryGetEntityByType(const String_t &className) const
+	Entity *WorldManager::TryGetEntityByType(const String_t &className) const
 	{
-		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			Entity_c *entity = static_cast<Entity_c *>(it->second);
+			Entity *entity = static_cast<Entity *>(it->second);
 			if(entity->GetEntityClassName().compare(className) == 0)
 				return entity;
 		}
@@ -136,64 +135,64 @@ namespace Phobos
 		return NULL;
 	}
 
-	Entity_c &WorldManager_c::GetEntityByName(const String_t &name) const
+	Entity &WorldManager::GetEntityByName(const String_t &name) const
 	{
-		return static_cast<Entity_c &>(this->GetChild(name));
+		return static_cast<Entity &>(this->GetChild(name));
 	}
 
-	void WorldManager_c::OnPrepareToBoot()
+	void WorldManager::OnPrepareToBoot()
 	{
-		Console_c &console = Console_c::GetInstance();
+		Console &console = Console::GetInstance();
 
-		console.AddContextCmd(cmdLoadMap);
-		console.AddContextCmd(cmdUnloadMap);
-		console.AddContextCmd(cmdDumpFactoryCreators);
+		console.AddContextCommand(m_cmdLoadMap);
+		console.AddContextCommand(m_cmdUnloadMap);
+		console.AddContextCommand(m_cmdDumpFactoryCreators);
 	}
 
-	void WorldManager_c::OnBoot()
+	void WorldManager::OnBoot()
 	{
-		MapLoader_c::OnBoot();
-		GamePhysicsSettings_c::OnBoot();
+		MapLoader::OnBoot();
+		GamePhysicsSettings::OnBoot();
 	}
 
-	void WorldManager_c::OnFinalize()
+	void WorldManager::OnFinalize()
 	{		
 		this->UnloadMap();
 
-		spMapLoader.reset();
+		m_spMapLoader.reset();
 	}
 
-	void WorldManager_c::CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)())
+	void WorldManager::CallEntityIOProc(EntityIOList_t &list, void (EntityIO::*proc)())
 	{
-		for(EntityIOList_t::iterator it = list.begin();it != list.end();)
+		for(auto it = list.begin();it != list.end();)
 		{
-			EntityIOList_t::iterator workIt = it++;
+			auto workIt = it++;
 
 			(*workIt->*proc)();
 		}
 	}
 
-	void WorldManager_c::OnFixedUpdate()
+	void WorldManager::OnFixedUpdate()
 	{
-		this->CallEntityIOProc(lstFixedUpdate, &EntityIO_c::FixedUpdate);
+		this->CallEntityIOProc(m_lstFixedUpdate, &EntityIO::FixedUpdate);
 	}
 
-	void WorldManager_c::OnUpdate()
+	void WorldManager::OnUpdate()
 	{
-		this->CallEntityIOProc(lstUpdate, &EntityIO_c::Update);
+		this->CallEntityIOProc(m_lstUpdate, &EntityIO::Update);
 	}
 
-	void WorldManager_c::AddToFixedUpdateList(EntityIO_c &io)
+	void WorldManager::AddToFixedUpdateList(EntityIO &io)
 	{
-		lstFixedUpdate.push_back(&io);
+		m_lstFixedUpdate.push_back(&io);
 	}
 
-	void WorldManager_c::AddToUpdateList(EntityIO_c &io)
+	void WorldManager::AddToUpdateList(EntityIO &io)
 	{
-		lstUpdate.push_back(&io);
+		m_lstUpdate.push_back(&io);
 	}
 
-	bool WorldManager_c::RemoveFromList(EntityIOList_t &list, EntityIO_c &io)
+	bool WorldManager::RemoveFromList(EntityIOList_t &list, EntityIO &io)
 	{
 		for(EntityIOList_t::iterator it = list.begin(), end = list.end();it != end; ++it)
 		{
@@ -208,21 +207,21 @@ namespace Phobos
 	}
 
 
-	void WorldManager_c::RemoveFromFixedUpdateList(EntityIO_c &io)
+	void WorldManager::RemoveFromFixedUpdateList(EntityIO &io)
 	{
-		PH_VERIFY_MSG(this->RemoveFromList(lstFixedUpdate, io), "Entity not in FixedUpdate list");
+		PH_VERIFY_MSG(this->RemoveFromList(m_lstFixedUpdate, io), "Entity not in FixedUpdate list");
 	}
 
-	void WorldManager_c::RemoveFromUpdateList(EntityIO_c &io)
+	void WorldManager::RemoveFromUpdateList(EntityIO &io)
 	{
-		PH_VERIFY_MSG(this->RemoveFromList(lstUpdate, io), "Entity not in Update list");
+		PH_VERIFY_MSG(this->RemoveFromList(m_lstUpdate, io), "Entity not in Update list");
 	}
 
-	void WorldManager_c::CmdLoadMap(const StringVector_t &args, Context_c &)
+	void WorldManager::CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &)
 	{
 		if(args.size() < 2)
 		{
-			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] Insuficient parameters, usage: loadMap <mapName>");
+			LogMessage("[CmdLoadMap] Insuficient parameters, usage: loadMap <mapName>");
 
 			return;
 		}
@@ -231,31 +230,31 @@ namespace Phobos
 		{
 			this->LoadMap(args[1]);
 		}
-		catch(Exception_c &ex)
+		catch(Exception &ex)
 		{
-			Kernel_c::GetInstance().LogMessage(ex.what());
+			LogMessage(ex.what());
 		}
 	}
 
-	void WorldManager_c::CmdUnloadMap(const StringVector_t &args, Context_c &)
+	void WorldManager::CmdUnloadMap(const Shell::StringVector_t &args, Shell::Context &)
 	{
 		this->UnloadMap();
 	}
 
-	void WorldManager_c::CmdDumpFactoryCreators(const StringVector_t &args, Context_c &)
+	void WorldManager::CmdDumpFactoryCreators(const Shell::StringVector_t &args, Shell::Context &)
 	{
-		Log_c::Stream_c stream = Kernel_c::GetInstance().LogStream();
+		auto stream = LogMakeStream();
 
 		stream << "Entity Factory creators:\n";
 
-		EntityFactory_c &factory = EntityFactory_c::GetInstance();
-		for(EntityFactory_c::ObjectCreatorSet_t::const_iterator it = factory.begin(), end = factory.end(); it != end; ++it)
+		EntityFactory &factory = EntityFactory::GetInstance();
+		for(auto it : factory)		
 		{
-			stream << "\t" << it->GetName() << "\n";
+			stream << "\t" << it.GetName() << "\n";
 		}
 
 		stream << "End.";
 	}
 
-	PH_DEFINE_LISTENER_PROCS(WorldManager_c, WorldManagerListener_c, lstListeners);
+	PH_DEFINE_LISTENER_PROCS(WorldManager, WorldManagerListener, m_lstListeners);
 }

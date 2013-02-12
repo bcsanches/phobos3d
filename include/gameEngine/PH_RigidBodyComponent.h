@@ -26,31 +26,31 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TransformProperty_c;
+	class TransformProperty;
 
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API RigidBodyComponent_c: public EntityComponent_c
+		class PH_GAME_ENGINE_API RigidBodyComponent: public EntityComponent
 		{
 			public:
-				static EntityComponent_c *Create(const String_t &name, Entity_c &owner);
+				static EntityComponent *Create(const String_t &name, Entity &owner);
 
-				~RigidBodyComponent_c();
+				~RigidBodyComponent();
 
 				void SaveTransform();
 				void UpdateTransform(Float_t delta);
 
 			protected:
-				RigidBodyComponent_c(const String_t &name, Entity_c &owner);				
+				RigidBodyComponent(const String_t &name, Entity &owner);				
 
-				void OnLoad(const Register::Table_c &table);
+				void OnLoad(const Register::Table &table);
 				void OnLoadFinished();
 
 			private:				
-				RigidBodyPtr_t		spRigidBody;
+				RigidBodyPtr_t		m_spRigidBody;
 
-				TransformProperty_c *pprpTransform;
-				Transform_c			clPreviousTransform;
+				TransformProperty	*m_pprpTransform;
+				Transform			m_clPreviousTransform;
 		};
 	}
 }

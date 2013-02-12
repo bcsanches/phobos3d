@@ -27,39 +27,39 @@ namespace Phobos
 {
 	namespace Physics
 	{	
-		DynamicCharacterBody_c::DynamicCharacterBody_c(RigidBodyPtr_t rigidBody):
-			spRigidBody(rigidBody)
+		DynamicCharacterBody::DynamicCharacterBody(RigidBodyPtr_t rigidBody):
+			m_spRigidBody(rigidBody)
 		{
 			//empty
 		}
 
-		DynamicCharacterBody_c::~DynamicCharacterBody_c()
+		DynamicCharacterBody::~DynamicCharacterBody()
 		{
 			//empty
 		}
 
-		void DynamicCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
+		void DynamicCharacterBody::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
 
 		}
 
-		Ogre::Vector3 DynamicCharacterBody_c::GetPosition() const
+		Ogre::Vector3 DynamicCharacterBody::GetPosition() const
 		{
-			return spRigidBody->GetTransform().GetOrigin();
+			return m_spRigidBody->GetTransform().GetOrigin();
 		}
 
 
-		void DynamicCharacterBody_c::Register()
+		void DynamicCharacterBody::Register()
 		{
-			spRigidBody->Register();
+			m_spRigidBody->Register();
 		}
 
-		void DynamicCharacterBody_c::Unregister()
+		void DynamicCharacterBody::Unregister()
 		{
-			spRigidBody->Unregister();
+			m_spRigidBody->Unregister();
 		}
 
-		void DynamicCharacterBody_c::Teleport(const Ogre::Vector3 &position)
+		void DynamicCharacterBody::Teleport(const Ogre::Vector3 &position)
 		{
 
 		}			

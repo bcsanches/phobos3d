@@ -21,7 +21,7 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class CollisionTag_c;
+		class CollisionTag;
 	}
 }
 

@@ -20,7 +20,7 @@ subject to the following restrictions:
 #include <Phobos/System/InputDeviceListener.h>
 #include <Phobos/System/InputManager.h>
 #include <Phobos/System/InputMapper.h>
-#include <PH_Singleton.h>
+#include <Phobos/Singleton.h>
 
 #include "PH_EngineCoreAPI.h"
 
@@ -30,41 +30,41 @@ namespace Phobos
 {	
 	PH_DECLARE_SINGLETON_PTR(Session);
 
-	class IPlayerCommandProducer_c;
-	class IClient_c;
+	class IPlayerCommandProducer;
+	class IClient;
 
 	namespace System
 	{
-		class MouseInputDevice_c;
+		class MouseInputDevice;
 	}
 
 	namespace Gui
 	{
-		class Form_c;
+		class Form;
 	}
 
-	class PH_ENGINE_CORE_API Session_c: public CoreModule_c,
-		private System::InputManagerListener_c, 
-		private System::InputDeviceListener_c
+	class PH_ENGINE_CORE_API Session: public CoreModule,
+		private System::InputManagerListener, 
+		private System::InputDeviceListener
 	{
 		PH_DECLARE_SINGLETON_METHODS(Session);
 
 		public:
-			~Session_c();
+			~Session();
 
-			void SetPlayerCommandProducer(IPlayerCommandProducer_c *commandProducer);
-			void SetClient(IClient_c *client);
-			void SetGuiForm(Gui::Form_c *form);
+			void SetPlayerCommandProducer(IPlayerCommandProducer *commandProducer);
+			void SetClient(IClient *client);
+			void SetGuiForm(Gui::Form *form);
 			void CloseConsole();
 
 		protected:
-			virtual void OnFixedUpdate();
+			virtual void OnFixedUpdate() override;
 
 		private:
-			Session_c();			
+			Session();			
 
-			void InputManagerEvent(const System::InputManagerEvent_s &event);
-			void InputEvent(const System::InputEvent_s &event);
+			virtual void OnInputManagerEvent(const System::InputManagerEvent_s &event) override;
+			virtual void OnInputEvent(const System::InputEvent_s &event) override;
 			
 			void ClipMouseCursor();
 			void UnclipMouseCursor();
@@ -75,18 +75,18 @@ namespace Phobos
 		private:
 			struct ConfigInfo_s
 			{
-				System::MouseInputDevice_c *pclMouse;				
+				System::MouseInputDevice *m_pclMouse;				
 			};		
 
 			struct ConfigInfo_s GetConfig();
 
 		private:			
-			System::InputMapperPtr_t	ipInputMapper;
-			bool						fIgnoreConsoleKey;
+			System::InputMapperPtr_t	m_ipInputMapper;
+			bool						m_fIgnoreConsoleKey;
 
-			IPlayerCommandProducer_c	*pclPlayerCommandProducer;
-			IClient_c					*pclClient;
-			Gui::Form_c					*pclForm;
+			IPlayerCommandProducer	*m_pclPlayerCommandProducer;
+			IClient					*m_pclClient;
+			Gui::Form				*m_pclForm;
 
 	};
 }

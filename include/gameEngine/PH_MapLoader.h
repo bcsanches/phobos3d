@@ -17,9 +17,8 @@ subject to the following restrictions:
 #ifndef PH_MAP_LOADER_H
 #define PH_MAP_LOADER_H
 
-#include <boost/noncopyable.hpp>
-
-#include <PH_String.h>
+#include <Phobos/DisableCopy.h>
+#include <Phobos/String.h>
 
 #include <Phobos/Register/HiveFwd.h>
 #include <Phobos/Register/TableFwd.h>
@@ -29,43 +28,45 @@ subject to the following restrictions:
 
 namespace Phobos
 {		
-	class MapLoader_c: boost::noncopyable
+	class MapLoader
 	{
 		public:
 			virtual void Load(const String_t &fileName) = 0;
 
 			static void OnBoot();			
 				
-			const Register::Hive_c &GetStaticEntitiesHive() const;
-			const Register::Hive_c &GetDynamicEntitiesHive() const ;
-			const Register::Hive_c &GetCurrentLevelHive() const;
+			const Register::Hive &GetStaticEntitiesHive() const;
+			const Register::Hive &GetDynamicEntitiesHive() const ;
+			const Register::Hive &GetCurrentLevelHive() const;
 
-			std::unique_ptr<Entity_c> CreateAndLoadWorldSpawn();
+			std::unique_ptr<Entity> CreateAndLoadWorldSpawn();
 
 			GameWorldPtr_t CreateAndLoadWorld();
 
 		protected:
 			static void ClearAllHives();
 
-			MapLoader_c(const Register::Table_c &settings);
+			MapLoader(const Register::Table &settings);
 
 			/**
 				Creates a basic register entry that can be used to 
 				instantiate a WorldSpawn entity
 			*/
-			std::unique_ptr<Register::Table_c> CreateWorldSpawnEntityDef();
+			std::unique_ptr<Register::Table> CreateWorldSpawnEntityDef();
 
 			virtual GameWorldPtr_t CreateGameWorld() = 0;
 
 		protected:			
-			static Register::Hive_c *pclStaticEntitiesHive_g;
-			static Register::Hive_c *pclDynamicEntitiesHive_g;
-			static Register::Hive_c *pclCurrentLevelHive_g;
+			static Register::Hive *pclStaticEntitiesHive_g;
+			static Register::Hive *pclDynamicEntitiesHive_g;
+			static Register::Hive *pclCurrentLevelHive_g;
 
-			String_t strWorldSpawnEntityType;
+			String_t m_strWorldSpawnEntityType;
+
+			PH_DISABLE_COPY(MapLoader);
 	};	
 
-	typedef std::shared_ptr<MapLoader_c> MapLoaderPtr_t;
+	typedef std::shared_ptr<MapLoader> MapLoaderPtr_t;
 }
 
 #endif

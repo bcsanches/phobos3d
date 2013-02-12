@@ -16,71 +16,70 @@ subject to the following restrictions:
 
 #include "PH_GamePlugin.h"
 
-#include <boost/foreach.hpp>
-
 #include <PH_Core.h>
 #include <PH_CoreModuleManager.h>
-#include <PH_ProcVector.h>
+
+#include <Phobos/ProcVector.h>
 
 namespace Phobos
 {	
-	const char *GamePlugin_c::szCfgName_g = NULL;
-	const char *GamePlugin_c::szModuleName_g = NULL;
+	const char *GamePlugin::szCfgName_g = NULL;
+	const char *GamePlugin::szModuleName_g = NULL;
 
-	GamePlugin_c &GamePlugin_c::GetInstance()
+	GamePlugin &GamePlugin::GetInstance()
 	{
-		static GamePlugin_c plugin;
+		static GamePlugin plugin;
 
 		return plugin;
 	}
 
-	void GamePlugin_c::Configure(const char *moduleName, const char *cfgName)
+	void GamePlugin::Configure(const char *moduleName, const char *cfgName)
 	{
 		szModuleName_g = moduleName;
 		szCfgName_g = cfgName;
 	}
 
-	void GamePlugin_c::Init()
+	void GamePlugin::Init()
 	{
-		ipManager = CoreModuleManager_c::Create(szModuleName_g);
+		ipManager = CoreModuleManager::Create(szModuleName_g);
 
-		Core_c::GetInstance().AddModule(*ipManager);	
+		Core::GetInstance().AddModule(*ipManager);	
 
-		BOOST_FOREACH(Register_s &info, vecModules)
+		for(auto &info : m_vecModules)		
 		{
-			ipManager->AddModule(info.pfnCreate());
+			ipManager->AddModule(info.m_pfnCreate());
 		}
 
 		ipManager->LaunchBootModule(szCfgName_g, 0, nullptr);
 	}
 
-	void GamePlugin_c::Finalize()
+	void GamePlugin::Finalize()
 	{
-		Core_c::GetInstance().RemoveModule(*ipManager);		
+		Core::GetInstance().RemoveModule(*ipManager);		
 
-		BOOST_FOREACH(Register_s &info, vecModules)
+		for(auto &info : m_vecModules)		
 		{
-			info.pfnRelease();
+			info.m_pfnRelease();
 		}
 
 		ipManager.reset();
 	}
 
-	void GamePlugin_c::AddModule(const Register_s &module)
+	void GamePlugin::AddModule(const Register_s &module)
 	{
-		vecModules.push_back(module);
+		m_vecModules.push_back(module);
 	}
 
-	GamePlugin_c::Register_s::Register_s(CreateInstanceProc_t createProc, ReleaseInstanceProc_t releaseProc):
-		pfnCreate(createProc),
-		pfnRelease(releaseProc)
+	GamePlugin::Register_s::Register_s(CreateInstanceProc_t createProc, ReleaseInstanceProc_t releaseProc):
+		m_pfnCreate(createProc),
+		m_pfnRelease(releaseProc)
 	{
-		GamePlugin_c::GetInstance().AddModule(*this);
+		GamePlugin::GetInstance().AddModule(*this);
 	}
 
-	GamePlugin_c::Register_s::Register_s(const Register_s &rhs):
-		pfnCreate(rhs.pfnCreate),
-		pfnRelease(rhs.pfnRelease)
+	GamePlugin::Register_s::Register_s(const Register_s &rhs):
+		m_pfnCreate(rhs.m_pfnCreate),
+		m_pfnRelease(rhs.m_pfnRelease)
 	{
 		//empty
 	}

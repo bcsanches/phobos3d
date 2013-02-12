@@ -17,15 +17,15 @@ subject to the following restrictions:
 #ifndef PH_RIGID_BODY_FWD_H
 #define PH_RIGID_BODY_FWD_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace Phobos
 {	
 	namespace Physics
 	{
-		class RigidBody_c;
+		class RigidBody;
 
-		typedef boost::shared_ptr<RigidBody_c> RigidBodyPtr_t;
+		typedef std::shared_ptr<RigidBody> RigidBodyPtr_t;
 
 		enum RigidBodyTypes_e
 		{

@@ -24,12 +24,12 @@ namespace Phobos
 		struct InputEvent_s;
 	}
 
-	class IInputHandler_c
+	class IInputHandler
 	{
 		public:
 			virtual bool HandleInputEvent(const System::InputEvent_s &event) = 0;
 
-			virtual ~IInputHandler_c() {}
+			virtual ~IInputHandler() {}
 	};
 }
 

@@ -18,23 +18,23 @@ subject to the following restrictions:
 
 #include <string>
 
-#include <boost/detail/atomic_count.hpp>
+#include <atomic>
 
-#include <PH_Kernel.h>
+#include <Phobos/Log.h>
 
 namespace Phobos
 {
-	static boost::detail::atomic_count tCount_gl(0);
+	static std::atomic_uint tCount_gl;
 
 	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
 	{		
-		Kernel_c::GetInstance().LogStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
+		LogMakeStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
 	}
 
 	String_t &GenerateOgreName(String_t &out)
 	{		
 		out = "name_";
-		out += NumberToString(++tCount_gl);	
+		out += std::to_string(++tCount_gl);	
 
 		return out;
 	}

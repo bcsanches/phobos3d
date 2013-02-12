@@ -21,7 +21,6 @@ subject to the following restrictions:
 #include <Phobos/System/InputEvent.h>
 #include <Phobos/System/InputManager.h>
 #include <Phobos/System/MouseInputDevice.h>
-#include <PH_Kernel.h>
 
 #include "Gui/PH_Form.h"
 #include "Gui/PH_Manager.h"
@@ -34,53 +33,53 @@ subject to the following restrictions:
 
 PH_DEFINE_DEFAULT_SINGLETON(Phobos::Session);
 
-Phobos::Session_c::Session_c():
-	CoreModule_c("Session"),
-	fIgnoreConsoleKey(false),
-	pclPlayerCommandProducer(NULL),
-	pclClient(NULL),
-	pclForm(NULL)
+Phobos::Session::Session():
+	CoreModule("Session"),
+	m_fIgnoreConsoleKey(false),
+	m_pclPlayerCommandProducer(NULL),
+	m_pclClient(NULL),
+	m_pclForm(NULL)
 {
-	System::InputManager_c::CreateInstance("InputManager").AddListener(*this);
+	System::InputManager::CreateInstance("InputManager").AddListener(*this);
 
-	ipInputMapper = System::InputMapper_c::Create("InputMapper", Console_c::GetInstance());
-	ipInputMapper->Disable();
+	m_ipInputMapper = System::InputMapper::Create("InputMapper", Console::GetInstance());
+	m_ipInputMapper->Disable();
 
-	this->AddChild(*ipInputMapper);
+	this->AddChild(*m_ipInputMapper);
 }
 
-Phobos::Session_c::~Session_c()
+Phobos::Session::~Session()
 {
-	System::InputManager_c::ReleaseInstance();
+	System::InputManager::ReleaseInstance();
 }
 
-void Phobos::Session_c::InputManagerEvent(const System::InputManagerEvent_s &event)
+void Phobos::Session::OnInputManagerEvent(const System::InputManagerEvent_s &event)
 {
 	std::stringstream stream;
 
-	switch(event.eType)
+	switch(event.m_eType)
 	{
 		case System::INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
-			stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " attached.";
-			if(event.rclDevice.GetDeviceType() == System::INPUT_DEVICE_KEYBOARD)
-				event.rclDevice.AddListener(*this);
+			stream << "[Console::InputManagerEvent] Device " << event.m_rclDevice.GetName() << " attached.";
+			if(event.m_rclDevice.GetDeviceType() == System::INPUT_DEVICE_KEYBOARD)
+				event.m_rclDevice.AddListener(*this);
 			break;
 
 		case System::INPUT_MANAGER_EVENT_DEVICE_DETACHED:
-			stream << "[Console_c::InputManagerEvent] Device " << event.rclDevice.GetName() << " detached.";
+			stream << "[Console::InputManagerEvent] Device " << event.m_rclDevice.GetName() << " detached.";
 			break;
 	}
 
-	Kernel_c::GetInstance().LogMessage(stream.str());
+	LogMessage(stream.str());
 }
 
-void Phobos::Session_c::InputEvent(const System::InputEvent_s &event)
+void Phobos::Session::OnInputEvent(const System::InputEvent_s &event)
 {
-	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
+	Phobos::Console &console = Phobos::Console::GetInstance();
 
-	if((event.eType == System::INPUT_EVENT_BUTTON) && (event.stButton.eState == Phobos::System::BUTTON_STATE_DOWN))
+	if((event.m_eType == System::INPUT_EVENT_BUTTON) && (event.m_stButton.m_eState == Phobos::System::BUTTON_STATE_DOWN))
 	{		
-		if(event.stButton.uId == Phobos::System::KB_ESCAPE)
+		if(event.m_stButton.m_uId == Phobos::System::KB_ESCAPE)
 		{
 			if(console.IsActive())
 			{
@@ -90,13 +89,13 @@ void Phobos::Session_c::InputEvent(const System::InputEvent_s &event)
 			{
 				//No console, so someone else must handle this
 
-				Gui::Form_c *newForm = NULL;
-				EscAction::Enum action = EscAction::IGNORE_ESC;
+				Gui::Form *newForm = NULL;
+				EscAction action = EscAction::IGNORE_ESC;
 
-				if(pclForm)
-					action = pclForm->HandleEsc(newForm);
-				else if(pclClient)
-					action = pclClient->HandleEsc(newForm);
+				if(m_pclForm)
+					action = m_pclForm->HandleEsc(newForm);
+				else if(m_pclClient)
+					action = m_pclClient->HandleEsc(newForm);
 
 				if(action == EscAction::SET_GUI)
 				{
@@ -105,15 +104,15 @@ void Phobos::Session_c::InputEvent(const System::InputEvent_s &event)
 
 			}
 		}
-		else if((event.stButton.uId == CONSOLE_KEY || event.stButton.uId == '\'') && !console.IsActive())
+		else if((event.m_stButton.m_uId == CONSOLE_KEY || event.m_stButton.m_uId == '\'') && !console.IsActive())
 		{
-			fIgnoreConsoleKey = true;
+			m_fIgnoreConsoleKey = true;
 			console.ToggleConsole();
 
-			if(pclForm)
+			if(m_pclForm)
 			{
-				Gui::Manager_c::GetInstance().DisableInput();
-				this->GetConfig().pclMouse->ShowCursor();
+				Gui::Manager::GetInstance().DisableInput();
+				this->GetConfig().m_pclMouse->ShowCursor();
 			}
 			else
 			{			
@@ -124,62 +123,62 @@ void Phobos::Session_c::InputEvent(const System::InputEvent_s &event)
 
 	if(console.IsActive())
 	{
-		if(event.eType == System::INPUT_EVENT_CHAR)
+		if(event.m_eType == System::INPUT_EVENT_CHAR)
 		{			
-			if(fIgnoreConsoleKey && (event.stButton.uId == CONSOLE_KEY || event.stButton.uId == '\''))
+			if(m_fIgnoreConsoleKey && (event.m_stButton.m_uId == CONSOLE_KEY || event.m_stButton.m_uId == '\''))
 			{
-				fIgnoreConsoleKey = false;
+				m_fIgnoreConsoleKey = false;
 				return;
 			}
-			fIgnoreConsoleKey = false;
+			m_fIgnoreConsoleKey = false;
 		}		
 
 		console.HandleInputEvent(event);	
 	}
 }
 
-void Phobos::Session_c::OnFixedUpdate()
+void Phobos::Session::OnFixedUpdate()
 {
-	System::InputManager_c::GetInstance().Update();
+	System::InputManager::GetInstance().Update();
 
-	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
+	Phobos::Console &console = Phobos::Console::GetInstance();
 
 	console.FlushCommandBuffer();
 
 	if(!console.IsActive())
 	{
-		if((pclPlayerCommandProducer) && (pclClient))
+		if((m_pclPlayerCommandProducer) && (m_pclClient))
 		{
-			IPlayerCmdPtr_t cmd = pclPlayerCommandProducer->CreateCmd();
-			pclClient->SetPlayerCmd(cmd);
+			IPlayerCmdPtr_t cmd = m_pclPlayerCommandProducer->CreateCmd();
+			m_pclClient->SetPlayerCmd(cmd);
 		}
 	}
 }
 
-void Phobos::Session_c::SetPlayerCommandProducer(IPlayerCommandProducer_c *commandProducer)
+void Phobos::Session::SetPlayerCommandProducer(IPlayerCommandProducer *commandProducer)
 {	
-	Phobos::Console_c &console = Phobos::Console_c::GetInstance();
+	Phobos::Console &console = Phobos::Console::GetInstance();
 
-	if(pclPlayerCommandProducer)
+	if(m_pclPlayerCommandProducer)
 	{
-		pclPlayerCommandProducer->Disable();
+		m_pclPlayerCommandProducer->Disable();
 
-		if(!console.IsActive() && !pclForm)
+		if(!console.IsActive() && !m_pclForm)
 			this->DisableGameInput();
 	}
 
-	pclPlayerCommandProducer = commandProducer;
+	m_pclPlayerCommandProducer = commandProducer;
 	
-	if(pclPlayerCommandProducer)
+	if(m_pclPlayerCommandProducer)
 	{
-		if(pclClient)
+		if(m_pclClient)
 		{
 			//Sets a default cmd
-			IPlayerCmdPtr_t cmd = pclPlayerCommandProducer->CreateCmd();
-			pclClient->SetPlayerCmd(cmd);
+			IPlayerCmdPtr_t cmd = m_pclPlayerCommandProducer->CreateCmd();
+			m_pclClient->SetPlayerCmd(cmd);
 		}
 			
-		if(!console.IsActive() && (!pclForm))
+		if(!console.IsActive() && (!m_pclForm))
 		{
 			this->EnableGameInput();			
 		}
@@ -190,14 +189,14 @@ void Phobos::Session_c::SetPlayerCommandProducer(IPlayerCommandProducer_c *comma
 	}
 }
 
-void Phobos::Session_c::SetClient(Phobos::IClient_c *client)
+void Phobos::Session::SetClient(Phobos::IClient *client)
 {
-	pclClient = client;
+	m_pclClient = client;
 }
 
-void Phobos::Session_c::CloseConsole()
+void Phobos::Session::CloseConsole()
 {
-	Console_c &console = Console_c::GetInstance();
+	Console &console = Console::GetInstance();
 	if(!console.IsActive())
 		return;
 
@@ -206,10 +205,10 @@ void Phobos::Session_c::CloseConsole()
 
 	//now give input focus to game or current form
 
-	if(pclForm)
+	if(m_pclForm)
 	{
-		Gui::Manager_c::GetInstance().EnableInput();
-		this->GetConfig().pclMouse->HideCursor();
+		Gui::Manager::GetInstance().EnableInput();
+		this->GetConfig().m_pclMouse->HideCursor();
 	}
 	else
 	{
@@ -217,83 +216,83 @@ void Phobos::Session_c::CloseConsole()
 	}
 }
 
-void Phobos::Session_c::SetGuiForm(Gui::Form_c *newForm)
+void Phobos::Session::SetGuiForm(Gui::Form *newForm)
 {
-	Console_c &console = Console_c::GetInstance();
+	Console &console = Console::GetInstance();
 
-	if((pclForm == NULL) && (!console.IsActive()))
+	if((m_pclForm == NULL) && (!console.IsActive()))
 	{
 		//no previous form, so game active, disable it
 		this->DisableGameInput();
 	}
 
-	if(pclForm)
+	if(m_pclForm)
 	{
-		pclForm->Close();
+		m_pclForm->Close();
 	}
 
-	pclForm = newForm;
+	m_pclForm = newForm;
 
 	if(!console.IsActive())
 	{
-		if(pclForm != NULL)
+		if(m_pclForm != NULL)
 		{
-			Gui::Manager_c::GetInstance().EnableInput();
+			Gui::Manager::GetInstance().EnableInput();
 
-			this->GetConfig().pclMouse->HideCursor();
+			this->GetConfig().m_pclMouse->HideCursor();
 		}
 		else
 		{
-			Gui::Manager_c::GetInstance().DisableInput();
-			this->GetConfig().pclMouse->ShowCursor();
+			Gui::Manager::GetInstance().DisableInput();
+			this->GetConfig().m_pclMouse->ShowCursor();
 			
 			this->EnableGameInput();
 		}
 	}
 }
 
-Phobos::Session_c::ConfigInfo_s Phobos::Session_c::GetConfig()
+Phobos::Session::ConfigInfo_s Phobos::Session::GetConfig()
 {
 	ConfigInfo_s info;
 	
-	info.pclMouse = static_cast<System::MouseInputDevice_c *>(&System::InputManager_c::GetInstance().GetDevice(System::INPUT_DEVICE_MOUSE));
+	info.m_pclMouse = static_cast<System::MouseInputDevice *>(&System::InputManager::GetInstance().GetDevice(System::INPUT_DEVICE_MOUSE));
 
 	return info;
 }
 
-void Phobos::Session_c::ClipMouseCursor()
+void Phobos::Session::ClipMouseCursor()
 {
 	ConfigInfo_s info = this->GetConfig();
 
-	info.pclMouse->ClipToWindow();
+	info.m_pclMouse->ClipToWindow();
 }
 
-void Phobos::Session_c::UnclipMouseCursor()
+void Phobos::Session::UnclipMouseCursor()
 {
 	ConfigInfo_s info = this->GetConfig();
 
-	info.pclMouse->Unclip();	
+	info.m_pclMouse->Unclip();	
 }
 
-void Phobos::Session_c::DisableGameInput()
+void Phobos::Session::DisableGameInput()
 {
-	ipInputMapper->Disable();
+	m_ipInputMapper->Disable();
 
-	if(pclPlayerCommandProducer)
-		pclPlayerCommandProducer->Disable();
+	if(m_pclPlayerCommandProducer)
+		m_pclPlayerCommandProducer->Disable();
 
 	this->UnclipMouseCursor();
 }
 
-void Phobos::Session_c::EnableGameInput()
+void Phobos::Session::EnableGameInput()
 {	
-	if(pclPlayerCommandProducer)
+	if(m_pclPlayerCommandProducer)
 	{
-		ipInputMapper->Enable();
+		m_ipInputMapper->Enable();
 
-		pclPlayerCommandProducer->Enable();
+		m_pclPlayerCommandProducer->Enable();
 
-		if(pclPlayerCommandProducer->IsMouseClipped())
+		if(m_pclPlayerCommandProducer->IsMouseClipped())
 			this->ClipMouseCursor();
 	}
 }

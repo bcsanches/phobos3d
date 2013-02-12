@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Entity_c;
+	class Entity;
 }
 
 #endif

@@ -8,10 +8,10 @@ namespace Phobos
 {
 	namespace Editor
 	{		
-		class Request_c
+		class Request
 		{
 			public:
-				Request_c(const rapidjson::Value &value);
+				Request(const rapidjson::Value &value);
 
 				void Execute(JsonCreator::StringWriter &response);
 

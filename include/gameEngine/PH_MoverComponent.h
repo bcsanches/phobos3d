@@ -21,14 +21,14 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class MoverComponent_c: public EntityComponent_c
+	class MoverComponent: public EntityComponent
 	{		
 		public:
 			virtual void FixedUpdate() = 0;
 
 		protected:
-			MoverComponent_c(const String_t &name, Entity_c &owner);
-			~MoverComponent_c();
+			MoverComponent(const String_t &name, Entity &owner);
+			~MoverComponent();
 	};
 }
 

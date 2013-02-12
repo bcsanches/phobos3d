@@ -20,7 +20,7 @@ subject to the following restrictions:
 
 #include <Rocket/Core.h>
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 #include "PH_EngineCoreAPI.h"
 
@@ -35,18 +35,18 @@ namespace Phobos
 
 	namespace Gui
 	{			
-		class PH_ENGINE_CORE_API Context_c: public Node_c
+		class PH_ENGINE_CORE_API Context: public Node
 		{			
 			public:
 				static ContextPtr_t Create(const String_t &name, size_t screenWidth, size_t screenHeight);
 
-				Context_c(const String_t &name, size_t screenWidth, size_t screenHeight);
-				~Context_c();
+				Context(const String_t &name, size_t screenWidth, size_t screenHeight);
+				~Context();
 
 				void Update();
 				void Render();
 
-				void InputEvent(const System::InputEvent_s &event);
+				void OnInputEvent(const System::InputEvent_s &event);
 
 				void ResetMousePosition(short x, short y);
 
@@ -54,7 +54,7 @@ namespace Phobos
 				Rocket::Core::ElementDocument *LoadDocument(const Char_t *path);				
 
 			protected:
-				Rocket::Core::Context *pclContext;
+				Rocket::Core::Context *m_pclContext;
 		};
 	}
 }
