@@ -19,12 +19,12 @@ subject to the following restrictions:
 
 #include <OgreException.h>
 
-#include <PH_String.h>
+#include <Phobos/String.h>
 
 namespace Phobos
 {
 	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex);
-	String_c &GenerateOgreName(String_c &out);
+	String_t &GenerateOgreName(String_t &out);
 }
 
 #endif

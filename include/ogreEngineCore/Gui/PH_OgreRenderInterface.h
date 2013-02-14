@@ -29,11 +29,11 @@ namespace Phobos
 	namespace Gui
 	{
 
-		class RenderInterfaceOgre_c : public Rocket::Core::RenderInterface
+		class RenderInterfaceOgre : public Rocket::Core::RenderInterface
 		{
 			public:
-				RenderInterfaceOgre_c(unsigned int window_width, unsigned int window_height);
-				virtual ~RenderInterfaceOgre_c();
+				RenderInterfaceOgre(unsigned int window_width, unsigned int window_height);
+				virtual ~RenderInterfaceOgre();
 
 				/// Called by Rocket when it wants to render geometry that it does not wish to optimise.
 				virtual void RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation);

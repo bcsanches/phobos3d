@@ -28,33 +28,33 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TransformProperty_c;
+	class TransformProperty;
 
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API CharacterBodyComponent_c: public EntityComponent_c
+		class PH_GAME_ENGINE_API CharacterBodyComponent: public EntityComponent
 		{
 			public:
-				static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
+				static EntityComponent *Create(const String_t &name, Entity &owner);
 
-				~CharacterBodyComponent_c();
+				~CharacterBodyComponent();
 
 				void PreparePhysicsFrame(Float_t delta);
 				void FinishPhysicsFrame();
 
 			protected:
-				CharacterBodyComponent_c(const String_c &name, Entity_c &owner);				
+				CharacterBodyComponent(const String_t &name, Entity &owner);				
 
-				void OnLoad(const Register::Table_c &table);
+				void OnLoad(const Register::Table &table);
 				void OnLoadFinished();
 
 			private:				
-				Vector3Property_c	prpVelocity;
-				Vector3Property_c	prpCharacterPosition;
+				Vector3Property	m_prpVelocity;
+				Vector3Property	m_prpCharacterPosition;
 
-				CharacterBodyPtr_t	spCharacterBody;
+				CharacterBodyPtr_t	m_spCharacterBody;
 
-				TransformProperty_c *pprpTransform;				
+				TransformProperty *m_pprpTransform;				
 		};
 	}
 }

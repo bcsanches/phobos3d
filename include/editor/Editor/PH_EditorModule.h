@@ -8,7 +8,7 @@
 #include <PH_CoreModule.h>
 #include <PH_GamePlugin.h>
 #include <PH_IClient.h>
-#include <PH_Singleton.h>
+#include <Phobos/Singleton.h>
 
 #include "PH_NetworkService.h"
 
@@ -18,7 +18,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(EditorModule)
 
-		class EditorModule_c: public CoreModule_c, public IClient_c
+		class EditorModule: public CoreModule, public IClient
 		{			
 			public:
 				PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL
@@ -26,7 +26,7 @@ namespace Phobos
 				PH_DECLARE_SINGLETON_METHODS(EditorModule);
 
 			public:				
-				virtual EscAction::Enum HandleEsc(Gui::Form_c *&outForm) override;
+				virtual EscAction HandleEsc(Gui::Form *&outForm) override;
 				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd) override;
 
 				virtual void OnFixedUpdate() override;
@@ -37,10 +37,10 @@ namespace Phobos
 			private:
 				void ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response);
 
-				EditorModule_c();
+				EditorModule();
 
 			private:
-				NetworkService_c clNetworkService;
+				NetworkService m_clNetworkService;
 		};
 	}
 }

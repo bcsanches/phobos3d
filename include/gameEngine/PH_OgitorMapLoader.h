@@ -17,9 +17,7 @@ subject to the following restrictions:
 #ifndef PH_OGITOR_MAP_LOADER_H
 #define PH_OGITOR_MAP_LOADER_H
 
-#include <boost/noncopyable.hpp>
-
-#include <PH_String.h>
+#include <Phobos/String.h>
 
 #include <Phobos/Register/Hive.h>
 
@@ -27,14 +25,14 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class OgitorMapLoader_c: public MapLoader_c
+	class OgitorMapLoader: public MapLoader
 	{
 		public:
-			static MapLoader_c *Create(const Register::Table_c &settings);
+			static MapLoader *Create(const Register::Table &settings);
 
-			void Load(const String_c &fileName);	
+			void Load(const String_t &fileName);	
 
-			OgitorMapLoader_c(const Register::Table_c &settings);
+			OgitorMapLoader(const Register::Table &settings);
 
 		protected:			
 			virtual GameWorldPtr_t CreateGameWorld();

@@ -23,20 +23,20 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TransformComponent_c: public EntityComponent_c
+	class TransformComponent: public EntityComponent
 	{
 		public:
-			static EntityComponent_c *Create(const String_c &name, Entity_c &owner);
+			static EntityComponent *Create(const String_t &name, Entity &owner);
 
-			~TransformComponent_c();
+			~TransformComponent();
 
 		protected:
-			TransformComponent_c(const String_c &name, Entity_c &owner);			
+			TransformComponent(const String_t &name, Entity &owner);			
 
-			virtual void OnLoad(const Register::Table_c &table);
+			virtual void OnLoad(const Register::Table &table);
 
 		private:
-			TransformProperty_c propTransform;
+			TransformProperty m_propTransform;
 	};
 }
 

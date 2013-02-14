@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_ICharacterBodyFwd.h"
 #include "PH_GameEngineAPI.h"
@@ -29,10 +29,10 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class PH_GAME_ENGINE_API ICharacterBody_c
+		class PH_GAME_ENGINE_API ICharacterBody
 		{
 			public:				
-				virtual ~ICharacterBody_c() {};
+				virtual ~ICharacterBody() {};
 				
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal) = 0;
 
@@ -44,7 +44,7 @@ namespace Phobos
 				virtual void Teleport(const Ogre::Vector3 &position) = 0;
 
 			protected:
-				ICharacterBody_c() { };
+				ICharacterBody() { };
 		};
 	}
 }

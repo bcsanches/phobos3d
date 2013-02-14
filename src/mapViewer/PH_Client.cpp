@@ -18,10 +18,11 @@ subject to the following restrictions:
 #include "PH_Client.h"
 
 #include <PH_Console.h>
-#include <PH_ContextUtils.h>
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
+
+#include <Phobos/Shell/Utils.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+
 #include <PH_PointEntity.h>
 #include <PH_Session.h>
 #include <PH_WorldManager.h>
@@ -38,28 +39,28 @@ namespace Phobos
 
 	PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
 
-	Client_c::Client_c():
-		BaseClient_c("Client"),		
-		varMouseSensitivity("dvMouseSensitivity", "0.1"),
-		varSpectatorMoveSpeed("dvSpectatorMoveSpeed", "2.0"),
-		varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),		
-		fMapLoaded(false)
+	Client::Client():
+		BaseClient("Client"),		
+		m_varMouseSensitivity("dvMouseSensitivity", "0.1"),
+		m_varSpectatorMoveSpeed("dvSpectatorMoveSpeed", "2.0"),
+		m_varSpectatorTurnSpeed("dvSpectatorTurnSpeed", "45.0"),		
+		m_fMapLoaded(false)
 	{
-		varSpectatorMoveSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorMoveSpeedChanged, this));
-		varSpectatorTurnSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarSpectatorTurnSpeedChanged, this));
-		varMouseSensitivity.SetCallback(PH_CONTEXT_VAR_BIND(&Client_c::VarMouseSensitivityChanged, this));
+		m_varSpectatorMoveSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client::VarSpectatorMoveSpeedChanged, this));
+		m_varSpectatorTurnSpeed.SetCallback(PH_CONTEXT_VAR_BIND(&Client::VarSpectatorTurnSpeedChanged, this));
+		m_varMouseSensitivity.SetCallback(PH_CONTEXT_VAR_BIND(&Client::VarMouseSensitivityChanged, this));
 
-		clSpectatorCamera.Disable();		
+		m_clSpectatorCamera.Disable();		
 	}
 
-	void Client_c::SetPlayerCmd(IPlayerCmdPtr_t cmd)
+	void Client::SetPlayerCmd(IPlayerCmdPtr_t cmd)
 	{
-		ipPlayerCmd = cmd;
+		m_ipPlayerCmd = cmd;
 	}
 
-	EscAction::Enum Client_c::HandleEsc(Gui::Form_c *&outForm)
+	EscAction Client::HandleEsc(Gui::Form *&outForm)
 	{
-		Gui::LevelSelector_c &levelSelector = Gui::LevelSelector_c::GetInstance();
+		Gui::LevelSelector &levelSelector = Gui::LevelSelector::GetInstance();
 		levelSelector.Open();
 
 		outForm = &levelSelector;
@@ -67,92 +68,92 @@ namespace Phobos
 		return EscAction::SET_GUI;
 	}
 
-	void Client_c::OnFixedUpdate()
+	void Client::OnFixedUpdate()
 	{
-		if(!fMapLoaded)
+		if(!m_fMapLoaded)
 			return;
 
-		clSpectatorCamera.FixedUpdate(ipPlayerCmd);
+		m_clSpectatorCamera.FixedUpdate(m_ipPlayerCmd);
 	}
 
-	void Client_c::OnUpdate()
+	void Client::OnUpdate()
 	{
-		if(!fMapLoaded)
+		if(!m_fMapLoaded)
 			return;
 
-		clSpectatorCamera.Update();
+		m_clSpectatorCamera.Update();
 	}
 
-	void Client_c::OnPrepareToBoot()
+	void Client::OnPrepareToBoot()
 	{
-		BaseClient_c::OnPrepareToBoot();
+		BaseClient::OnPrepareToBoot();
 
-		Console_c &console = Console_c::GetInstance();		
+		Console &console = Console::GetInstance();		
 
-		console.AddContextVar(varMouseSensitivity);
-		console.AddContextVar(varSpectatorMoveSpeed);
-		console.AddContextVar(varSpectatorTurnSpeed);
+		console.AddContextVariable(m_varMouseSensitivity);
+		console.AddContextVariable(m_varSpectatorMoveSpeed);
+		console.AddContextVariable(m_varSpectatorTurnSpeed);
 
-		WorldManager_c::GetInstance().AddListener(*this);
+		WorldManager::GetInstance().AddListener(*this);
 	}	
 
-	void Client_c::OnBoot()
+	void Client::OnBoot()
 	{
-		BaseClient_c::OnBoot();		
+		BaseClient::OnBoot();		
 
-		Gui::LevelSelector_c &levelSelector = Gui::LevelSelector_c::GetInstance();
+		Gui::LevelSelector &levelSelector = Gui::LevelSelector::GetInstance();
 		levelSelector.Open();
 
-		Session_c &session = Session_c::GetInstance();
+		Session &session = Session::GetInstance();
 		session.SetGuiForm(&levelSelector);
 		session.CloseConsole();
 	}
 
-	void Client_c::OnMapUnloaded()
+	void Client::OnMapUnloaded()
 	{
-		if(fMapLoaded)
+		if(m_fMapLoaded)
 		{
-			fMapLoaded = false;
-			clSpectatorCamera.Disable();
+			m_fMapLoaded = false;
+			m_clSpectatorCamera.Disable();
 		}
 	}
 
-	void Client_c::OnMapLoaded()
+	void Client::OnMapLoaded()
 	{
-		WorldManager_c &worldManager = WorldManager_c::GetInstance();
-		PointEntity_c *player = static_cast<PointEntity_c *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
+		WorldManager &worldManager = WorldManager::GetInstance();
+		PointEntity *player = static_cast<PointEntity *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
 		if(!player)
 		{
-			Kernel_c::GetInstance().LogMessage("[CmdLoadMap] World does not contains InfoPlayerStart entity");
+			LogMessage("[CmdLoadMap] World does not contains InfoPlayerStart entity");
 		}
 		else
 		{
-			clSpectatorCamera.SetTransform(player->GetTransform());
+			m_clSpectatorCamera.SetTransform(player->GetTransform());
 		}
 
-		Gui::LevelSelector_c::GetInstance().Close();
+		Gui::LevelSelector::GetInstance().Close();
 
-		fMapLoaded = true;
-		clSpectatorCamera.Enable();
-		Session_c::GetInstance().SetPlayerCommandProducer(&clSpectatorCameraCommandProducer);
+		m_fMapLoaded = true;
+		m_clSpectatorCamera.Enable();
+		Session::GetInstance().SetPlayerCommandProducer(&m_clSpectatorCameraCommandProducer);
 
 		//make sure no gui is present
-		Session_c::GetInstance().SetGuiForm(NULL);
+		Session::GetInstance().SetGuiForm(NULL);
 	}	
 	
-	void Client_c::VarSpectatorMoveSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	void Client::VarSpectatorMoveSpeedChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue)
 	{
-		clSpectatorCameraCommandProducer.SetMoveSpeed(StringToFloat(newValue));
+		m_clSpectatorCameraCommandProducer.SetMoveSpeed(std::stof(newValue));
 	}
 
-	void Client_c::VarSpectatorTurnSpeedChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	void Client::VarSpectatorTurnSpeedChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue)
 	{
-		clSpectatorCameraCommandProducer.SetTurnSpeed(StringToFloat(newValue));
+		m_clSpectatorCameraCommandProducer.SetTurnSpeed(std::stof(newValue));
 	}
 
-	void Client_c::VarMouseSensitivityChanged(const class ContextVar_c &var, const String_c &oldValue, const String_c &newValue)
+	void Client::VarMouseSensitivityChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue)
 	{
-		clSpectatorCameraCommandProducer.SetMouseSensitivity(StringToFloat(newValue));
+		m_clSpectatorCameraCommandProducer.SetMouseSensitivity(std::stof(newValue));
 	}
 }
 

@@ -17,8 +17,9 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_INPUT_MAPPER_H
 #define PH_SYSTEM_INPUT_MAPPER_H
 
-#include <PH_Context.h>
-#include <PH_Node.h>
+#include <Phobos/Shell/IContext.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Node.h>
 
 #include "Phobos/System/InputDevice.h"
 #include "Phobos/System/InputManager.h"
@@ -29,7 +30,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(InputMapper);	
 
-		class PH_SYSTEM_API InputMapper_c: public Node_c, private InputManagerListener_c
+		class PH_SYSTEM_API InputMapper: public Node, private InputManagerListener
 		{		
 			private:
 				// =====================================================
@@ -37,64 +38,60 @@ namespace Phobos
 				// =====================================================
 				struct ActionBind_s
 				{
-					inline ActionBind_s()
-					{
-					}
-
-					inline ActionBind_s(const String_c &command, const String_c &actionName, UInt_t action):
-						strCommand(command),
-						strActionName(actionName),
-						uDeviceAction(action)
+					inline ActionBind_s(const String_t &command, const String_t &actionName, UInt_t action):
+						m_strCommand(command),
+						m_strActionName(actionName),
+						m_uDeviceAction(action)
 					{
 						//empty
 					}
 
-					String_c	strCommand;
-					String_c	strActionName;			
-					UInt_t		uDeviceAction;
+					String_t	m_strCommand;
+					String_t	m_strActionName;			
+					UInt_t		m_uDeviceAction;
 				};
 
 				typedef std::map<UInt_t, ActionBind_s> ActionBindMap_t;
 				typedef ActionBindMap_t::value_type ActionBindMapPair_t;			
 
-				class DeviceMapper_c: private InputDeviceListener_c
+				class DeviceMapper: private InputDeviceListener
 				{
 					public:
-						DeviceMapper_c(InputMapper_c &mapper, InputDevice_c &device);
-						DeviceMapper_c(const DeviceMapper_c &rhs);
+						DeviceMapper(InputMapper &mapper, InputDevice &device);
+						DeviceMapper(const DeviceMapper &rhs);
 
-						DeviceMapper_c &operator =(const DeviceMapper_c &rhs);
+						DeviceMapper &operator =(const DeviceMapper &rhs);
 
-						void Bind(const String_c &actionName, const String_c &cmd);
-						void Unbind(const String_c &actionName);
+						void Bind(const String_t &actionName, const String_t &cmd);
+						void Unbind(const String_t &actionName);
 
 					private:
-						virtual void InputEvent(const InputEvent_s &event);
+						virtual void OnInputEvent(const InputEvent_s &event) override;
 
 						void OnInputEventButton(const InputEvent_s &event);
 						void OnInputEventThumb(const InputEvent_s &event);
 						void AddEventButtonInfo(std::stringstream &stream, const InputEvent_s &event) const;
 
-						UInt_t GetActionId(const String_c &name);					
+						UInt_t GetActionId(const String_t &name);					
 
 					private:
-						ActionBindMap_t					mapActions;
+						ActionBindMap_t				m_mapActions;
 
-						InputDevice_c					&clInputDevice;
-						InputMapper_c					&rclInputMapper;				
+						InputDevice					&m_clInputDevice;
+						InputMapper					&m_rclInputMapper;				
 				};				
 
 			public:
 				// =====================================================
 				// PUBLIC METHODS
 				// =====================================================
-				static InputMapperPtr_t Create(const String_c &name, IContext_c &context);
+				static InputMapperPtr_t Create(const String_t &name, Shell::IContext &context);
 
-				InputMapper_c(const String_c &name, IContext_c &context);
-				~InputMapper_c(void);
+				InputMapper(const String_t &name, Shell::IContext &context);
+				~InputMapper(void);
 
-				void Bind(const String_c &devicePathName, const String_c &actionName, const String_c &cmd);
-				void Unbind(const String_c &devicePathName, const String_c &actionName);						
+				void Bind(const String_t &devicePathName, const String_t &actionName, const String_t &cmd);
+				void Unbind(const String_t &devicePathName, const String_t &actionName);						
 
 				inline void Disable();
 				inline void Enable();
@@ -109,52 +106,52 @@ namespace Phobos
 				void OnDeviceAttached(InputDevicePtr_t &device);
 				void OnDeviceDetached(InputDevicePtr_t &device);
 
-				void AddEventButtonInfo(std::stringstream &stream, InputEvent_s &event, DeviceMapper_c &info) const;
+				void AddEventButtonInfo(std::stringstream &stream, InputEvent_s &event, DeviceMapper &info) const;
 
-				void OnInputEventButton(InputEvent_s &event, DeviceMapper_c &info);		
-				void OnInputEventThumb(InputEvent_s &event, DeviceMapper_c &info);
+				void OnInputEventButton(InputEvent_s &event, DeviceMapper &info);		
+				void OnInputEventThumb(InputEvent_s &event, DeviceMapper &info);
 			
-				DeviceMapper_c &GetDeviceMapper(const String_c &deviceName);
+				DeviceMapper &GetDeviceMapper(const String_t &deviceName);
 
-				void InputManagerEvent(const InputManagerEvent_s &event);			
+				virtual void OnInputManagerEvent(const InputManagerEvent_s &event) override;
 
-				void ForceButtonState(const String_c &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure);
+				void ForceButtonState(const String_t &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure);
 
-				void CmdUnbind(const StringVector_t &args, Context_c &);
-				void CmdBind(const StringVector_t &args, Context_c &);
-				void CmdPushButton(const StringVector_t &args, Context_c &);
-				void CmdReleaseButton(const StringVector_t &args, Context_c &);
+				void CmdUnbind(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdBind(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdPushButton(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdReleaseButton(const Shell::StringVector_t &args, Shell::Context &);
 
 			private:
 				// =====================================================
 				// PRIVATE ATRIBUTES
 				// =====================================================			
-				typedef std::map<String_c, DeviceMapper_c> InputDeviceMap_t;
-				InputDeviceMap_t		mapInputDevices;
+				typedef std::map<String_t, DeviceMapper> InputDeviceMap_t;
+				InputDeviceMap_t		m_mapInputDevices;
 
-				IContext_c				&rclContext;
+				Shell::IContext				&m_rclContext;
 
-				bool					fDisable;				
+				bool					m_fDisable;				
 
-				ContextCmd_c			cmdBind;
-				ContextCmd_c			cmdUnbind;
-				ContextCmd_c			cmdPushButton;
-				ContextCmd_c			cmdReleaseButton;
+				Shell::Command			m_cmdBind;
+				Shell::Command			m_cmdUnbind;
+				Shell::Command			m_cmdPushButton;
+				Shell::Command			m_cmdReleaseButton;
 		};
 
-		inline void InputMapper_c::Disable()
+		inline void InputMapper::Disable()
 		{
-			fDisable = true;
+			m_fDisable = true;
 		}
 
-		inline void InputMapper_c::Enable()
+		inline void InputMapper::Enable()
 		{
-			fDisable = false;
+			m_fDisable = false;
 		}
 
-		inline bool InputMapper_c::IsDisabled() const
+		inline bool InputMapper::IsDisabled() const
 		{
-			return(fDisable);
+			return(m_fDisable);
 		}
 	}
 }

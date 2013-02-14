@@ -17,22 +17,24 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_TIMER_H
 #define PH_SYSTEM_TIMER_H
 
+#include <Phobos/Types.h>
+
 #include "Phobos/System/SystemAPI.h"
-#include "PH_Types.h"
+
 
 namespace Phobos
 {
 	namespace System
 	{
-		class PH_SYSTEM_API Timer_c
+		class PH_SYSTEM_API Timer
 		{
 			private:
-				UInt_t uLastTime;
-				Float_t fpMinInterval;
+				UInt_t m_uLastTime;
+				Float_t m_fpMinInterval;
 
 
 			public:
-				Timer_c();
+				Timer();
 
 				Float_t Elapsed();
 
@@ -46,7 +48,7 @@ namespace Phobos
 				*/
 				inline void SetMinInterval(Float_t minInterval)
 				{
-					fpMinInterval = minInterval;
+					m_fpMinInterval = minInterval;
 				}
 		};
 	}

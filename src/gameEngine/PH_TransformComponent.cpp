@@ -22,24 +22,24 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR("Transform", TransformComponent_c);	
+	PH_FULL_ENTITY_COMPONENT_CREATOR("Transform", TransformComponent);	
 
-	TransformComponent_c::TransformComponent_c(const String_c &name, Entity_c &owner):
-		EntityComponent_c(name, owner),
-		propTransform("transform")
+	TransformComponent::TransformComponent(const String_t &name, Entity &owner):
+		EntityComponent(name, owner),
+		m_propTransform("transform")
 	{
-		owner.AddProperty(propTransform);
+		owner.AddProperty(m_propTransform);
 	}
 
-	TransformComponent_c::~TransformComponent_c()
+	TransformComponent::~TransformComponent()
 	{
 	}
 
-	void TransformComponent_c::OnLoad(const Register::Table_c &table)
+	void TransformComponent::OnLoad(const Register::Table &table)
 	{			
-		Transform_c transform;
+		Transform transform;
 		EntityLoadTransform(transform, table);
 
-		propTransform.SetTransform(transform);				
+		m_propTransform.SetTransform(transform);				
 	}
 }

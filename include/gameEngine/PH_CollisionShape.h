@@ -17,14 +17,13 @@ subject to the following restrictions:
 #ifndef PH_COLLISION_SHAPE_H
 #define PH_COLLISION_SHAPE_H
 
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/intrusive/set.hpp>
-#include <boost/noncopyable.hpp>
 
 #include <OgrePrerequisites.h>
 #include <OgreVector3.h>
 
-#include <PH_Types.h>
+#include <Phobos/DisableCopy.h>
+#include <Phobos/Types.h>
 
 #include "PH_CollisionShapeFwd.h"
 
@@ -34,42 +33,40 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		namespace CollisionShapeTypes
-		{
-			enum Enum
-			{
-				BOX,					
-				SPHERE,
-				CAPSULE,
-				CYLINDER_X,
-				CYLINDER_Y,
-				CYLINDER_Z,
-				MESH
-			};
-		}
-
-		typedef CollisionShapeTypes::Enum CollisionShapeTypes_t;
-
-		class CollisionShape_c: 
-			public boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> >, 
-			public boost::enable_shared_from_this<CollisionShape_c>,
-			public boost::noncopyable
+		enum class CollisionShapeTypes
 		{			
+			BOX,					
+			SPHERE,
+			CAPSULE,
+			CYLINDER_X,
+			CYLINDER_Y,
+			CYLINDER_Z,
+			MESH			
+		};
+
+		typedef CollisionShapeTypes CollisionShapeTypes_t;
+
+		class CollisionShape: 
+			public boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::auto_unlink> >, 
+			public std::enable_shared_from_this<CollisionShape>	
+		{			
+			PH_DISABLE_COPY(CollisionShape);
+
 			public:				
 				struct BoxShapeInfo_s
 				{
-					Float_t v3Dimension[3];
+					Float_t m_v3Dimension[3];
 				};
 
 				struct SphereShapeInfo_s
 				{
-					Float_t fpRadius;
+					Float_t m_fpRadius;
 				};
 
 				struct CylinderShapeInfo_s
 				{
-					Float_t fpRadius;
-					Float_t fpHeight;
+					Float_t m_fpRadius;
+					Float_t m_fpHeight;
 				};
 
 				struct Key_s
@@ -78,70 +75,70 @@ namespace Phobos
 					Key_s(CollisionShapeTypes_t type, const CylinderShapeInfo_s &info, Float_t physicsScale);
 					Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale);
 					
-					CollisionShapeTypes_t eType;
+					CollisionShapeTypes_t m_eType;
 
 					union 
 					{
-						BoxShapeInfo_s		stBox;
-						SphereShapeInfo_s	stSphere;
-						CylinderShapeInfo_s	stCylinder;
-					} uShapeInfo;
+						BoxShapeInfo_s		m_stBox;
+						SphereShapeInfo_s	m_stSphere;
+						CylinderShapeInfo_s	m_stCylinder;
+					} m_uShapeInfo;
 
 					//Valid only when eType == CST_MESH
 					//We do not insert it on the union because it is an smart pointer (no POD)
-					const Ogre::Mesh *pclMesh;
-					Ogre::Vector3 v3MeshScale;
+					const Ogre::Mesh *m_pclMesh;
+					Ogre::Vector3 m_v3MeshScale;
 				};
 
 				struct KeyComparator_s
 				{
-					inline bool operator()(const Key_s &lhs, const CollisionShape_c &rhs) const;
-					inline bool operator()(const CollisionShape_c &lhs, const Key_s &rhs) const;
+					inline bool operator()(const Key_s &lhs, const CollisionShape &rhs) const;
+					inline bool operator()(const CollisionShape &lhs, const Key_s &rhs) const;
 				};				
 
-				bool operator<(const CollisionShape_c &rhs) const;
+				bool operator<(const CollisionShape &rhs) const;
 
 				inline CollisionShapeTypes_t GetType() const;
 				
 				virtual btCollisionShape &GetCollisionShape() = 0;
 
 			protected:
-				CollisionShape_c(CollisionShapeTypes_t type);
+				CollisionShape(CollisionShapeTypes_t type);
 
-				virtual int Compare(const CollisionShape_c &other) const = 0;
+				virtual int Compare(const CollisionShape &other) const = 0;
 				virtual int Compare(const Key_s &other) const = 0;
 
 			private:
-				CollisionShapeTypes_t eType;
+				CollisionShapeTypes_t m_eType;
 		};	
 
-		inline CollisionShapeTypes_t CollisionShape_c::GetType() const
+		inline CollisionShapeTypes_t CollisionShape::GetType() const
 		{
-			return eType;
+			return m_eType;
 		}
 
-		inline bool CollisionShape_c::KeyComparator_s::operator()(const Key_s &lhs, const CollisionShape_c &rhs) const
+		inline bool CollisionShape::KeyComparator_s::operator()(const Key_s &lhs, const CollisionShape &rhs) const
 		{
-			if(lhs.eType == rhs.eType)
+			if(lhs.m_eType == rhs.m_eType)
 			{
 				return rhs.Compare(lhs) > 0;
 			}
 			else
 			{
-				return lhs.eType < rhs.eType;
+				return lhs.m_eType < rhs.m_eType;
 			}
 
 		}
 		
-		inline bool CollisionShape_c::KeyComparator_s::operator()(const CollisionShape_c &lhs, const Key_s &rhs) const
+		inline bool CollisionShape::KeyComparator_s::operator()(const CollisionShape &lhs, const Key_s &rhs) const
 		{
-			if(lhs.eType == rhs.eType)
+			if(lhs.m_eType == rhs.m_eType)
 			{
 				return lhs.Compare(rhs) < 0;
 			}
 			else
 			{
-				return lhs.eType < rhs.eType;
+				return lhs.m_eType < rhs.m_eType;
 			}
 		}
 	}

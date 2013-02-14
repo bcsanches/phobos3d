@@ -20,8 +20,9 @@ subject to the following restrictions:
 #include <set>
 #include <vector>
 
-#include <PH_ContextCmd.h>
-#include <PH_ContextVar.h>
+#include <Phobos/Shell/IContext.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/Variable.h>
 
 #include <Phobos/System/Timer.h>
 
@@ -30,29 +31,28 @@ subject to the following restrictions:
 #include "PH_EngineCoreAPI.h"
 
 namespace Phobos
-{
-	class IContext_c;
-	class Core_c;
+{	
+	class Core;
 
 	PH_DECLARE_NODE_PTR(Core);	
 
 	struct CoreSimInfo_s
 	{
-		Float_t		fpFrameRate;
+		Float_t		m_fpFrameRate;
 
-		CoreTimer_s	stTimers[CORE_MAX_TIMERS];
+		CoreTimer_s	m_stTimers[CORE_MAX_TIMERS];
 	};
 
 
-	class PH_ENGINE_CORE_API Core_c: public CoreModuleManager_c
+	class PH_ENGINE_CORE_API Core: public CoreModuleManager
 	{
 		public:
-			static Core_c &CreateInstance();
+			static Core &CreateInstance();
 			static void ReleaseInstance();
-			static Core_c &GetInstance();
+			static Core &GetInstance();
 
-			Core_c(const String_c &name);
-			~Core_c();
+			Core(const String_t &name);
+			~Core();
 			
 			void Shutdown(void);
 
@@ -62,7 +62,7 @@ namespace Phobos
 			inline const CoreTimer_s &GetGameTimer() const;
 			inline const CoreTimer_s &GetUiTimer() const;
 
-			void RegisterCommands(IContext_c &context);
+			void RegisterCommands(Shell::IContext &context);
 
 			void PauseTimer(CoreTimerTypes_e timer);
 			void UnpauseTimer(CoreTimerTypes_e timer);
@@ -81,50 +81,50 @@ namespace Phobos
 			inline Float_t GetUpdateTime(void);
 			inline Float_t GetMinFrameTime(void);			
 
-			void CmdTime(const StringVector_t &args, Context_c &);
-			void CmdToggleTimerPause(const StringVector_t &args, Context_c &);
-			void CmdListModules(const StringVector_t &args, Context_c &);
-			void CmdQuit(const StringVector_t &, Context_c &);
+			void CmdTime(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdToggleTimerPause(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdListModules(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdQuit(const Shell::StringVector_t &, Shell::Context &);
 
 		private:			
-			static const String_c DEFAULT_NAME;
+			static const String_t DEFAULT_NAME;
 			static CorePtr_t ipInstance_gl;
 
-			CoreSimInfo_s	stSimInfo;
+			CoreSimInfo_s	m_stSimInfo;
 
-			ContextCmd_c	cmdTime;
-			ContextCmd_c	cmdToggleTimerPause;
-			ContextCmd_c	cmdListModules;
-			ContextCmd_c	cmdQuit;
+			Shell::Command	m_cmdTime;
+			Shell::Command	m_cmdToggleTimerPause;
+			Shell::Command	m_cmdListModules;
+			Shell::Command	m_cmdQuit;
 
-			ContextVar_c	varFixedTime;
-			ContextVar_c	varEngineFPS;
-			ContextVar_c	varMinFrameTime;
+			Shell::Variable	m_varFixedTime;
+			Shell::Variable	m_varEngineFPS;
+			Shell::Variable	m_varMinFrameTime;
 
-			System::Timer_c	clTimer;
+			System::Timer	m_clTimer;
 
-			bool			fLaunchedBoot;
-			bool			fStopMainLoop;									
+			bool			m_fLaunchedBoot;
+			bool			m_fStopMainLoop;									
 	};
 
-	inline const CoreSimInfo_s &Core_c::GetSimInfo() const
+	inline const CoreSimInfo_s &Core::GetSimInfo() const
 	{
-		return(stSimInfo);
+		return(m_stSimInfo);
 	}
 
-	inline const CoreTimer_s &Core_c::GetGameTimer() const
+	inline const CoreTimer_s &Core::GetGameTimer() const
 	{
-		return stSimInfo.stTimers[CORE_GAME_TIMER];
+		return m_stSimInfo.m_stTimers[CORE_GAME_TIMER];
 	}
 
-	inline const CoreTimer_s &Core_c::GetUiTimer() const
+	inline const CoreTimer_s &Core::GetUiTimer() const
 	{
-		return stSimInfo.stTimers[CORE_UI_TIMER];
+		return m_stSimInfo.m_stTimers[CORE_UI_TIMER];
 	}
 
-	inline void Core_c::SetFrameRate(Float_t rate)
+	inline void Core::SetFrameRate(Float_t rate)
 	{
-		stSimInfo.fpFrameRate = rate;
+		m_stSimInfo.m_fpFrameRate = rate;
 	}
 }
 

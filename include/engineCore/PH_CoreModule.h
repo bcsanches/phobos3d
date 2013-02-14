@@ -17,14 +17,14 @@ subject to the following restrictions:
 #ifndef PH_CORE_MODULE_H
 #define PH_CORE_MODULE_H
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 #include "PH_CoreModuleFwd.h"
 #include "PH_EngineCoreAPI.h"
 
 namespace Phobos
 {
-	class PH_ENGINE_CORE_API CoreModule_c: public Node_c
+	class PH_ENGINE_CORE_API CoreModule: public Node
 	{
 		public:
 			virtual void OnUpdate() {}
@@ -36,11 +36,11 @@ namespace Phobos
 			virtual void OnStart() {}
 
 		protected:
-			explicit CoreModule_c(const String_c &name, UInt32_t flags = 0);
-			explicit CoreModule_c(const Char_t *name, UInt32_t flags = 0);			
+			explicit CoreModule(const String_t &name, UInt32_t flags = 0);
+			explicit CoreModule(const Char_t *name, UInt32_t flags = 0);			
 	};
 
-	typedef void (CoreModule_c::*CoreModuleProc_t)();
+	typedef void (CoreModule::*CoreModuleProc_t)();
 }
 
 #endif

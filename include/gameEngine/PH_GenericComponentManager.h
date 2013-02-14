@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_GENERIC_COMPONENT_MANAGER_H
 #define PH_GENERIC_COMPONENT_MANAGER_H
 
-#include <PH_Exception.h>
+#include <Phobos/Exception.h>
 
 #include "PH_GameEngineAPI.h"
 #include "PH_WorldManager.h"
@@ -25,49 +25,49 @@ subject to the following restrictions:
 namespace Phobos
 {			
 	template <typename T>
-	class PH_GAME_ENGINE_API GenericComponentManager_c
+	class PH_GAME_ENGINE_API GenericComponentManager
 	{		
 		public:
-			GenericComponentManager_c()				
+			GenericComponentManager()				
 			{
-				memset(arpclComponents, 0, sizeof(arpclComponents));
+				memset(m_arpclComponents, 0, sizeof(m_arpclComponents));
 			}
 
-			~GenericComponentManager_c()
+			~GenericComponentManager()
 			{
 				//empty
 			}
 
 			void Register(T &comp)
 			{
-				UInt_t index = comp.GetEntityHandle().u12Index;
-				if(arpclComponents[index] != NULL)
-					PH_RAISE(INVALID_OPERATION_EXCEPTION, "[ModelRendererManager_c::Register]", "Slot already in use");
+				UInt_t index = comp.GetEntityHandle().m_u12Index;
+				if(m_arpclComponents[index] != NULL)
+					PH_RAISE(INVALID_OPERATION_EXCEPTION, "[ModelRendererManager::Register]", "Slot already in use");
 
-				arpclComponents[index] = &comp;
+				m_arpclComponents[index] = &comp;
 			}
 
 			void Unregister(T &comp)
 			{
-				UInt_t index = comp.GetEntityHandle().u12Index;
+				UInt_t index = comp.GetEntityHandle().m_u12Index;
 
-				if(arpclComponents[index] != &comp)
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[ModelRendererManager_c::Unregister]", "Slot contains another component");
+				if(m_arpclComponents[index] != &comp)
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[ModelRendererManager::Unregister]", "Slot contains another component");
 
-				arpclComponents[index] = NULL;
+				m_arpclComponents[index] = NULL;
 			}			
 
 			void CallForAll(void (T::*proc)())
 			{
 				UInt_t count = 0;
-				UInt_t total = WorldManager_c::GetInstance().GetNumActiveEntities();
+				UInt_t total = WorldManager::GetInstance().GetNumActiveEntities();
 
-				for(int i = 0;i < EntityManager_c::MAX_ENTRIES && count < total; ++i)
+				for(int i = 0;i < EntityManager::MAX_ENTRIES && count < total; ++i)
 				{
-					if(arpclComponents[i] == NULL)
+					if(m_arpclComponents[i] == NULL)
 						continue;
 
-					(arpclComponents[i]->*proc)();
+					(m_arpclComponents[i]->*proc)();
 					++count;
 				}
 			}
@@ -76,20 +76,20 @@ namespace Phobos
 			void CallForAll1(void (T::*proc)(P1), P1 p1)
 			{
 				UInt_t count = 0;
-				UInt_t total = WorldManager_c::GetInstance().GetNumActiveEntities();
+				UInt_t total = WorldManager::GetInstance().GetNumActiveEntities();
 
-				for(int i = 0;i < EntityManager_c::MAX_ENTRIES && count < total; ++i)
+				for(int i = 0;i < EntityManager::MAX_ENTRIES && count < total; ++i)
 				{
-					if(arpclComponents[i] == NULL)
+					if(m_arpclComponents[i] == NULL)
 						continue;
 
-					(arpclComponents[i]->*proc)(p1);
+					(m_arpclComponents[i]->*proc)(p1);
 					++count;
 				}
 			}			
 
 		protected:
-			T *arpclComponents[EntityManager_c::MAX_ENTRIES];
+			T *m_arpclComponents[EntityManager::MAX_ENTRIES];
 	};
 }
 

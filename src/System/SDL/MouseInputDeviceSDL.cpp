@@ -16,35 +16,35 @@ subject to the following restrictions:
 
 #include "Phobos/System/SDL/MouseInputDeviceSDL.h"
 
-#include <PH_Error.h>
-#include <PH_Memory.h>
+#include <Phobos/Error.h>
+#include <Phobos/Memory.h>
 
 #include "Phobos/System/EventManager.h"
 #include "Phobos/System/InputActions.h"
 #include "Phobos/System/InputEvent.h"
 
 
-Phobos::System::InputDevicePtr_t Phobos::System::MouseInputDeviceSDL_c::Create(const String_c &name)
+Phobos::System::InputDevicePtr_t Phobos::System::MouseInputDeviceSDL::Create(const String_t &name)
 {
-	return InputDevicePtr_t(PH_NEW MouseInputDeviceSDL_c(name));
+	return InputDevicePtr_t(PH_NEW MouseInputDeviceSDL(name));
 }
 
-Phobos::System::MouseInputDeviceSDL_c::MouseInputDeviceSDL_c(const String_c &name):
-	MouseInputDevice_c(name),
+Phobos::System::MouseInputDeviceSDL::MouseInputDeviceSDL(const String_t &name):
+	MouseInputDevice(name),
 	fClipToWindow(false),
 	fAppActive(true)
 {
-	EventManager_c::GetInstance().AddListener(*this, EVENT_TYPE_MOUSE);
+	EventManager::GetInstance().AddListener(*this, EVENT_TYPE_MOUSE);
 
-	clSystemListener.SetOwner(this);
+	m_clSystemListener.SetOwner(this);
 }
 
-Phobos::System::MouseInputDeviceSDL_c::~MouseInputDeviceSDL_c(void)
+Phobos::System::MouseInputDeviceSDL::~MouseInputDeviceSDL(void)
 {
 	//empty
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::Update(void)
+void Phobos::System::MouseInputDeviceSDL::Update(void)
 {	    
 	//if the mouse is clipped, send update
 	if(fClipToWindow && fAppActive)
@@ -64,54 +64,54 @@ void Phobos::System::MouseInputDeviceSDL_c::Update(void)
 
 		InputEvent_s inputEvent;
 
-		inputEvent.eType = INPUT_EVENT_THUMB;
-		inputEvent.stThumb.uId = MOUSE_THUMB;
-		inputEvent.stThumb.fpAxis[0] = static_cast<Float_t>(x);
-		inputEvent.stThumb.fpAxis[1] = static_cast<Float_t>(y);
+		inputEvent.m_eType = INPUT_EVENT_THUMB;
+		inputEvent.m_stThumb.m_uId = MOUSE_THUMB;
+		inputEvent.m_stThumb.m_fpAxis[0] = static_cast<Float_t>(x);
+		inputEvent.m_stThumb.m_fpAxis[1] = static_cast<Float_t>(y);
 
-		inputEvent.pclDevice = this;
+		inputEvent.m_pclDevice = this;
 
 		this->DispatchEvent(inputEvent);
 	}		
 }
 
 
-void Phobos::System::MouseInputDeviceSDL_c::Event(struct Event_s &event)
+void Phobos::System::MouseInputDeviceSDL::OnEvent(Event_s &event)
 {
-	switch(event.eType)
+	switch(event.m_eType)
 	{
 		case EVENT_TYPE_MOUSE:
 			{
 				InputEvent_s inputEvent;
 
-				switch(event.stMouse.eType)
+				switch(event.m_stMouse.m_eType)
 				{
 					case MOUSE_MOVE:
 						if(fClipToWindow)
 							return;
 
-						inputEvent.eType = INPUT_EVENT_THUMB;
-						inputEvent.stThumb.uId = MOUSE_THUMB;
-						inputEvent.stThumb.fpAxis[0] = event.stMouse.u16X;
-						inputEvent.stThumb.fpAxis[1] = event.stMouse.u16Y;
+						inputEvent.m_eType = INPUT_EVENT_THUMB;
+						inputEvent.m_stThumb.m_uId = MOUSE_THUMB;
+						inputEvent.m_stThumb.m_fpAxis[0] = event.m_stMouse.m_u16X;
+						inputEvent.m_stThumb.m_fpAxis[1] = event.m_stMouse.m_u16Y;
 
 						break;
 
 					case MOUSE_BUTTON_DOWN:
 
-						inputEvent.eType = INPUT_EVENT_BUTTON;
-						inputEvent.stButton.eState = BUTTON_STATE_DOWN;
-						inputEvent.stButton.fpPression = 1.0f;
-						inputEvent.stButton.uId = event.stMouse.u16ButtonId;
+						inputEvent.m_eType = INPUT_EVENT_BUTTON;
+						inputEvent.m_stButton.m_eState = BUTTON_STATE_DOWN;
+						inputEvent.m_stButton.m_fpPression = 1.0f;
+						inputEvent.m_stButton.m_uId = event.m_stMouse.m_u16ButtonId;
 
 						break;
 
 					case MOUSE_BUTTON_UP:
 
-						inputEvent.eType = INPUT_EVENT_BUTTON;
-						inputEvent.stButton.eState = BUTTON_STATE_UP;
-						inputEvent.stButton.fpPression = 0;
-						inputEvent.stButton.uId = event.stMouse.u16ButtonId;
+						inputEvent.m_eType = INPUT_EVENT_BUTTON;
+						inputEvent.m_stButton.m_eState = BUTTON_STATE_UP;
+						inputEvent.m_stButton.m_fpPression = 0;
+						inputEvent.m_stButton.m_uId = event.m_stMouse.m_u16ButtonId;
 
 						break;
 
@@ -119,17 +119,17 @@ void Phobos::System::MouseInputDeviceSDL_c::Event(struct Event_s &event)
 						return;
 				}
 
-				inputEvent.pclDevice = this;
+				inputEvent.m_pclDevice = this;
 
 				this->DispatchEvent(inputEvent);
 			}
 			break;
 
 		case EVENT_TYPE_SYSTEM:
-			switch(event.stSystem.eType)
+			switch(event.m_stSystem.m_eType)
 			{
 				case SYSTEM_ACTIVATE:
-					if(event.stSystem.fMinimized || !event.stSystem.fActive)
+					if(event.m_stSystem.m_fMinimized || !event.m_stSystem.m_fActive)
 					{
 						fAppActive = false;
 
@@ -153,7 +153,7 @@ void Phobos::System::MouseInputDeviceSDL_c::Event(struct Event_s &event)
 	}
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::ClipToWindow()
+void Phobos::System::MouseInputDeviceSDL::ClipToWindow()
 {
 	fClipToWindow = true;
 	SDL_WM_GrabInput(SDL_GRAB_ON);
@@ -161,7 +161,7 @@ void Phobos::System::MouseInputDeviceSDL_c::ClipToWindow()
 	this->Enable();
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::Unclip(void)
+void Phobos::System::MouseInputDeviceSDL::Unclip(void)
 {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 
@@ -169,7 +169,7 @@ void Phobos::System::MouseInputDeviceSDL_c::Unclip(void)
 	fClipToWindow = false;
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::Enable()
+void Phobos::System::MouseInputDeviceSDL::Enable()
 {
 	if(!fClipToWindow)
 		return;
@@ -194,22 +194,22 @@ void Phobos::System::MouseInputDeviceSDL_c::Enable()
 	SDL_ShowCursor(SDL_DISABLE);		
 }
 	
-void Phobos::System::MouseInputDeviceSDL_c::Disable()
+void Phobos::System::MouseInputDeviceSDL::Disable()
 {
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::ShowCursor()
+void Phobos::System::MouseInputDeviceSDL::ShowCursor()
 {
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::HideCursor()
+void Phobos::System::MouseInputDeviceSDL::HideCursor()
 {
 	SDL_ShowCursor(SDL_DISABLE);
 }
 
-short Phobos::System::MouseInputDeviceSDL_c::GetX()
+short Phobos::System::MouseInputDeviceSDL::GetX()
 {
 	int x;
 	SDL_GetMouseState(&x, NULL);
@@ -217,7 +217,7 @@ short Phobos::System::MouseInputDeviceSDL_c::GetX()
 	return x;
 }
 
-short Phobos::System::MouseInputDeviceSDL_c::GetY()
+short Phobos::System::MouseInputDeviceSDL::GetY()
 {
 	int y;
 	SDL_GetMouseState(NULL, &y);
@@ -225,19 +225,19 @@ short Phobos::System::MouseInputDeviceSDL_c::GetY()
 	return y;
 }
 
-Phobos::System::MouseInputDeviceSDL_c::SytemEventListner_c::SytemEventListner_c():
-	pclOwner(NULL)
+Phobos::System::MouseInputDeviceSDL::SytemEventListner::SytemEventListner():
+	m_pclOwner(NULL)
 {
-	EventManager_c::GetInstance().AddListener(*this, EVENT_TYPE_SYSTEM);
+	EventManager::GetInstance().AddListener(*this, EVENT_TYPE_SYSTEM);
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::SytemEventListner_c::SetOwner(MouseInputDeviceSDL_c *owner)
+void Phobos::System::MouseInputDeviceSDL::SytemEventListner::SetOwner(MouseInputDeviceSDL *owner)
 {
-	pclOwner = owner;
+	m_pclOwner = owner;
 }
 
-void Phobos::System::MouseInputDeviceSDL_c::SytemEventListner_c::Event(struct Event_s &event)
+void Phobos::System::MouseInputDeviceSDL::SytemEventListner::OnEvent(struct Event_s &event)
 {
-	pclOwner->Event(event);
+	m_pclOwner->OnEvent(event);
 }
 

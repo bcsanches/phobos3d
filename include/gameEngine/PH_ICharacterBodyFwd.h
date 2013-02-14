@@ -14,13 +14,13 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		class ICharacterBody_c;
-		typedef boost::shared_ptr<ICharacterBody_c> CharacterBodyPtr_t;
+		class ICharacterBody;
+		typedef std::shared_ptr<ICharacterBody> CharacterBodyPtr_t;
 	}
 }

@@ -18,11 +18,10 @@ subject to the following restrictions:
 #ifndef PH_GAME_CAMERA_H
 #define PH_GAME_CAMERA_H
 
-#include <boost/noncopyable.hpp>
-
 #include <OgrePrerequisites.h>
 #include <OgreCamera.h>
 
+#include <Phobos/DisableCopy.h>
 #include <PH_Render.h>
 #include <PH_Transform.h>
 
@@ -30,16 +29,16 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API GameCamera_c: boost::noncopyable
+	class PH_GAME_ENGINE_API GameCamera
 	{
 		public:
-			GameCamera_c();
-			~GameCamera_c();
+			GameCamera();
+			~GameCamera();
 
 			void EnableViewport(int ZOrder = DefaultViewportZOrder::GAME);
 
-			void SetTransform(const Transform_c &t);
-			void SetCameraTransform(const Transform_c &t);
+			void SetTransform(const Transform &t);
+			void SetCameraTransform(const Transform &t);
 
 			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
 
@@ -57,13 +56,15 @@ namespace Phobos
 			void CreateCamera();
 
 		private:
-			Ogre::SceneNode	*pclRootNode;
-			Ogre::Camera	*pclCamera;
+			Ogre::SceneNode	*m_pclRootNode;
+			Ogre::Camera	*m_pclCamera;
 
-			int iViewportZOrder;
+			int m_iViewportZOrder;
 
-			Float_t fpNearPlane;
-			Float_t fpFarPlane;
+			Float_t m_fpNearPlane;
+			Float_t m_fpFarPlane;
+
+			PH_DISABLE_COPY(GameCamera);
 	};
 }
 

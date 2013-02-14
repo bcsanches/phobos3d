@@ -21,17 +21,17 @@ subject to the following restrictions:
 
 PH_DECLARE_NODE_PTR(Console);
 
-class Console_c: 
-	public Phobos::Console_c		
+class Console: 
+	public Phobos::Console		
 {
 	public:
 		// =====================================================
 		// PUBLIC METHODS
 		// =====================================================
-		static Console_c &CreateInstance(void);
+		static Console &CreateInstance(void);
 
-		Console_c(void);
-		~Console_c(void);
+		Console(void);
+		~Console(void);
 
 	protected:
 		// =====================================================
@@ -48,8 +48,8 @@ class Console_c:
 		// =====================================================
 		// PRIVATE ATTRIBUTES
 		// =====================================================
-		bool fEditBoxChanged;
-		bool fTextBufferChanged;
+		bool m_fEditBoxChanged;
+		bool m_fTextBufferChanged;
 };	
 
 #endif

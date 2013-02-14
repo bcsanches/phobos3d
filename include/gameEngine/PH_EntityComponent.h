@@ -27,41 +27,41 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(EntityComponent);
 
-	class PH_GAME_ENGINE_API EntityComponent_c: public EntityIO_c
+	class PH_GAME_ENGINE_API EntityComponent: public EntityIO
 	{
 		public:
-			void Load(const Register::Table_c &table);
+			void Load(const Register::Table &table);
 
 			void LoadFinished();
 
 			inline Handle_s GetEntityHandle() const;
 
-			inline const String_c &GetEntityName() const;
+			inline const String_t &GetEntityName() const;
 
 		protected:
-			EntityComponent_c(const String_c &name, Entity_c &owner);
+			EntityComponent(const String_t &name, Entity &owner);
 
-			virtual void OnLoad(const Register::Table_c &table) {};
+			virtual void OnLoad(const Register::Table &table) {};
 			virtual void OnLoadFinished() {};
 
 			template <typename T>
 			inline T &GetCustomEntityProperty(const char *name)
 			{
-				return rclEntity.GetCustomProperty<T>(name);
+				return m_rclEntity.GetCustomProperty<T>(name);
 			}
 
 		private:
-			Entity_c &rclEntity;
+			Entity &m_rclEntity;
 	};
 
-	inline Handle_s EntityComponent_c::GetEntityHandle() const
+	inline Handle_s EntityComponent::GetEntityHandle() const
 	{
-		return rclEntity.GetHandle();
+		return m_rclEntity.GetHandle();
 	}
 
-	inline const String_c &EntityComponent_c::GetEntityName() const
+	inline const String_t &EntityComponent::GetEntityName() const
 	{
-		return rclEntity.GetName();
+		return m_rclEntity.GetName();
 	}
 }
 

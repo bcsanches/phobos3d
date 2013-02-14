@@ -18,9 +18,9 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	EntityComponentFactory_c &EntityComponentFactory_c::GetInstance()
+	EntityComponentFactory &EntityComponentFactory::GetInstance()
 	{
-		static EntityComponentFactory_c clInstance_gl;
+		static EntityComponentFactory clInstance_gl;
 
 		return clInstance_gl;
 	}

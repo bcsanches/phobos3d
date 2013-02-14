@@ -37,8 +37,12 @@
     <ClInclude Include="..\..\..\include\engineCore\PH_Plugin.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_PluginManager.h" />
     <ClInclude Include="..\..\..\include\engineCore\PH_Session.h" />
-    <ClInclude Include="..\..\..\include\engineCore\PH_TransformProperty.h" />
-    <ClInclude Include="..\..\..\include\engineCore\PH_TransformPropertyFwd.h" />
+    <ClInclude Include="..\..\..\include\engineCore\Math\PH_Accelerometer.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\engineCore\Math\PH_Interpolator.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\engineCore\Gui\PH_Context.cpp">

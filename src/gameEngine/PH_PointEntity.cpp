@@ -22,17 +22,17 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity_c);
+	PH_FULL_ENTITY_CREATOR("PointEntity", PointEntity);
 
-	PointEntity_c::PointEntity_c(const String_c &name):
-		Entity_c(name)
+	PointEntity::PointEntity(const String_t &name):
+		Entity(name)
 	{
 	}
 
-	void PointEntity_c::OnLoad(const Register::Table_c &table)
+	void PointEntity::OnLoad(const Register::Table &table)
 	{
-		Entity_c::OnLoad(table);
+		Entity::OnLoad(table);
 		
-		EntityLoadTransform(clTransform, table);	
+		EntityLoadTransform(m_clTransform, table);	
 	}
 }

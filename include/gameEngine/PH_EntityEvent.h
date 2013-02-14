@@ -17,22 +17,22 @@ subject to the following restrictions:
 #ifndef PH_ENTITY_EVENT_H
 #define PH_ENTITY_EVENT_H
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 namespace Phobos
 {
-	class Entity_c;
+	class Entity;
 
-	class EntityEvent_c
+	class EntityEvent
 	{
 		public:
-			EntityEvent_c(UInt_t type, Entity_c &activator, Entity_c &caller);
+			EntityEvent(UInt_t type, Entity &activator, Entity &caller);
 
 		private:
-			Entity_c &rclActivator;
-			Entity_c &rclCaller;
+			Entity &m_rclActivator;
+			Entity &m_rclCaller;
 
-			UInt_t	uType;
+			UInt_t	m_uType;
 	};
 }
 

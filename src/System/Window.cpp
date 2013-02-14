@@ -17,7 +17,8 @@ subject to the following restrictions:
 #include "Phobos/System/Window.h"
 
 
-Phobos::System::Window_c::Window_c(const String_c &name):
-	Node_c(name)
+Phobos::System::Window::Window(const String_t &name):
+	Node(name)
 {
+	//empty
 }

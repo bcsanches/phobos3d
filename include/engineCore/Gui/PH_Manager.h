@@ -21,8 +21,8 @@ subject to the following restrictions:
 
 #include <Phobos/System/InputDeviceListener.h>
 
-#include <PH_ContextCmd.h>
-#include <PH_Singleton.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Singleton.h>
 
 #include "PH_CoreModule.h"
 #include "PH_EngineCoreAPI.h"
@@ -41,28 +41,28 @@ namespace Phobos
 {
 	namespace System
 	{
-		class InputDevice_c;
+		class InputDevice;
 	}
 
 	namespace Gui
 	{
 		PH_DECLARE_NODE_PTR(Manager);
 
-		class PH_ENGINE_CORE_API Manager_c: public CoreModule_c
+		class PH_ENGINE_CORE_API Manager: public CoreModule
 		{			
 			public:
-				static Manager_c &GetInstance(void);			
+				static Manager &GetInstance(void);			
 				static void ReleaseInstance(void);
 
-				Gui::ContextPtr_t CreateContext(const String_c &name);
+				Gui::ContextPtr_t CreateContext(const String_t &name);
 
-				~Manager_c();
+				~Manager();
 
 				void EnableInput();
 				void DisableInput();
 								
 			protected:
-				Manager_c();				
+				Manager();				
 
 				virtual void OnPrepareToBoot();				
 				virtual void OnFixedUpdate();
@@ -81,33 +81,33 @@ namespace Phobos
 				static void UpdateInstance(ManagerPtr_t manager);
 			
 			private:								
-				void CmdRocketLoadFonfFace(const StringVector_t &container, Phobos::Context_c &);
+				void CmdRocketLoadFonfFace(const Shell::StringVector_t &container, Phobos::Shell::Context &);
 
 			private:
-				class LocalInputDeviceListener_c: public System::InputDeviceListener_c
+				class LocalInputDeviceListener: public System::InputDeviceListener
 				{
 					public:
-						LocalInputDeviceListener_c();
+						LocalInputDeviceListener();
 
-						void SetOwner(Manager_c &manager);
+						void SetOwner(Manager &manager);
 
-						void ListenTo(System::InputDevice_c &device);
+						void ListenTo(System::InputDevice &device);
 
-						void InputEvent(const System::InputEvent_s &event);
+						virtual void OnInputEvent(const System::InputEvent_s &event) override;
 
 					private:
-						Manager_c *pclOwner;
+						Manager *m_pclOwner;
 				};
 
-				LocalInputDeviceListener_c clKeyboardListener;
-				LocalInputDeviceListener_c clMouseListener;
+				LocalInputDeviceListener m_clKeyboardListener;
+				LocalInputDeviceListener m_clMouseListener;
 
-				std::list<String_c> lstFontFacesToLoad;
+				std::list<String_t> m_lstFontFacesToLoad;
 
-				bool				fInputActive;
-				bool				fDisableInput;
+				bool				m_fInputActive;
+				bool				m_fDisableInput;
 
-				ContextCmd_c		cmdRocketLoadFontFace;				
+				Shell::Command		m_cmdRocketLoadFontFace;				
 		};
 	}
 }

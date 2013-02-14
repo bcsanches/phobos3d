@@ -25,11 +25,11 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(MouseInputDevice);
 	
-		class MouseInputDevice_c: public InputDevice_c
+		class MouseInputDevice: public InputDevice
 		{		
 			public:
-				virtual bool TryGetActionName(UInt_t action, String_c &out) const;
-				virtual bool TryGetActionId(const String_c &name, UInt_t &out) const;
+				virtual bool TryGetActionName(UInt_t action, String_t &out) const override;
+				virtual bool TryGetActionId(const String_t &name, UInt_t &out) const override;
 			
 				virtual void ClipToWindow() = 0;
 				virtual void Unclip(void) = 0;
@@ -41,7 +41,7 @@ namespace Phobos
 				virtual short GetY() = 0;
 
 			protected:
-				MouseInputDevice_c(const String_c &name);		
+				MouseInputDevice(const String_t &name);		
 		};
 	}
 }

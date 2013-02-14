@@ -41,7 +41,7 @@ namespace Phobos
 		///btKinematicCharacterController is an object that supports a sliding motion in a world.
 		///It uses a ghost object and convex sweep test to test for upcoming collisions. This is combined with discrete collision detection to recover from penetrations.
 		///Interaction between btKinematicCharacterController and dynamic rigid bodies needs to be explicity implemented by the user.
-		class KinematicCharacterController_c : public btCharacterControllerInterface
+		class KinematicCharacterController : public btCharacterControllerInterface
 		{
 			protected:
 				btScalar m_halfHeight;
@@ -99,8 +99,8 @@ namespace Phobos
 				void stepDown (btCollisionWorld* collisionWorld, btScalar dt);
 
 			public:
-				KinematicCharacterController_c (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis = 1);
-				~KinematicCharacterController_c ();
+				KinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis = 1);
+				~KinematicCharacterController ();
 				
 
 				///btActionInterface interface

@@ -21,7 +21,7 @@ namespace Phobos
 {
 	namespace System
 	{
-		class InputDevice_c;
+		class InputDevice;
 
 		PH_DECLARE_NODE_PTR(InputDevice);	
 	}

@@ -24,22 +24,22 @@ namespace Phobos
 {		
 	namespace System
 	{
-		class PH_SYSTEM_API AxisButton_c
+		class PH_SYSTEM_API AxisButton
 		{
 			public:
-				AxisButton_c(const String_c &upA, const String_c &downA, const String_c &updateA, const String_c &upB, const String_c &downB, const String_c &updateB, IContext_c *context = NULL);
+				AxisButton(const String_t &upA, const String_t &downA, const String_t &updateA, const String_t &upB, const String_t &downB, const String_t &updateB, Shell::IContext *context = NULL);
 
-				void Enable(IContext_c &context);
+				void Enable(Shell::IContext &context);
 				void Disable();
 
 				inline Float_t GetValue() const
 				{
-					return(clButtonB.GetValue() - clButtonA.GetValue());
+					return(m_clButtonB.GetValue() - m_clButtonA.GetValue());
 				}
 
 			private:		
-				Button_c	clButtonA;
-				Button_c	clButtonB;
+				Button	m_clButtonA;
+				Button	m_clButtonB;
 		};
 	}
 }

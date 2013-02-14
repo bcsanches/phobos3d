@@ -17,41 +17,41 @@ subject to the following restrictions:
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <PH_ContextCmd.h>
-#include <PH_ContextVar.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/Variable.h>
 #include <PH_CoreModule.h>
-#include <PH_Singleton.h>
+#include <Phobos/Singleton.h>
 #include <Phobos/System/Window.h>
 
 PH_DECLARE_SINGLETON_PTR(Render);
 
-class Render_c: public Phobos::CoreModule_c
+class Render: public Phobos::CoreModule
 {
 	PH_DECLARE_SINGLETON_METHODS(Render);
 
 	public:		
 
 	protected:		
-		Render_c();
+		Render();
 
 		void OnBoot();
 		void OnPrepareToBoot();
 
 	private:
-		void CmdScreenshot(const Phobos::StringVector_t &args, Phobos::Context_c &);
+		void CmdScreenshot(const Phobos::Shell::StringVector_t &args, Phobos::Shell::Context &);
 
 	private:
 		// =====================================================
 		// PRIVATE ATTRIBUTES
 		// =====================================================		
-		Phobos::System::WindowPtr_t ipWindow;
+		Phobos::System::WindowPtr_t m_ipWindow;
 
-		Phobos::ContextVar_c varRScreenX;
-		Phobos::ContextVar_c varRScreenY;
-		Phobos::ContextVar_c varRVSync;
-		Phobos::ContextVar_c varRFullScreen;
+		Phobos::Shell::Variable m_varRScreenX;
+		Phobos::Shell::Variable m_varRScreenY;
+		Phobos::Shell::Variable m_varRVSync;
+		Phobos::Shell::Variable m_varRFullScreen;
 
-		Phobos::ContextCmd_c cmdScreenshot;
+		Phobos::Shell::Command m_cmdScreenshot;
 };
 
 #endif

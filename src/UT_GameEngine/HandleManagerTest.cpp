@@ -17,26 +17,23 @@ subject to the following restrictions:
 #include <boost/test/unit_test.hpp>
 
 #include <PH_HandleManager.h>
-#include <PH_Memory.h>
-#include <PH_Kernel.h>
+#include <Phobos/Memory.h>
 
 BOOST_AUTO_TEST_CASE(HandleManager_Full)
-{
-	Phobos::Kernel_c::CreateInstance("UT_GameEngine_HandleManager_Full.log");
-
+{	
 	using namespace Phobos;
 
-	HandleManager_c<int> handleManager;
+	HandleManager<int> handleManager;
 
 	//Fill it 
 	Handle_s h;
-	for(int i = 0;i < HandleManager_c<int>::MAX_ENTRIES; ++i)
+	for(int i = 0;i < HandleManager<int>::MAX_ENTRIES; ++i)
 	{
 		h = handleManager.AddObject(reinterpret_cast<int *>(i));
 	}
 
 	//full, should fail
-	BOOST_REQUIRE_THROW(handleManager.AddObject(reinterpret_cast<int *>(5)), InvalidOperationException_c);
+	BOOST_REQUIRE_THROW(handleManager.AddObject(reinterpret_cast<int *>(5)), InvalidOperationException);
 
 	//remove last one
 	handleManager.RemoveObject(h);
@@ -44,30 +41,26 @@ BOOST_AUTO_TEST_CASE(HandleManager_Full)
 	//Add new one
 	Handle_s h1 = handleManager.AddObject(reinterpret_cast<int *>(5));
 
-	BOOST_REQUIRE(h1.u12Index == h.u12Index);
-	BOOST_REQUIRE(h1.u20Counter != h.u20Counter);
-
-	Phobos::Kernel_c::ReleaseInstance();
+	BOOST_REQUIRE(h1.m_u12Index == h.m_u12Index);
+	BOOST_REQUIRE(h1.m_u20Counter != h.m_u20Counter);
 }
 
 
 BOOST_AUTO_TEST_CASE(HandleManagerBasic)
 {
-	using namespace Phobos;
+	using namespace Phobos;	
 
-	Phobos::Kernel_c::CreateInstance("UT_GameEngine_HandleManagerBasic.log");
-
-	HandleManager_c<int> handleManager;
+	HandleManager<int> handleManager;
 
 	Handle_s h1 = handleManager.AddObject(PH_NEW int(1));
 	Handle_s h2 = handleManager.AddObject(PH_NEW int(2));
 
 	//Check basic handle
-	BOOST_REQUIRE(h1.u12Index == 0);
-	BOOST_REQUIRE(h1.u20Counter == 1);
+	BOOST_REQUIRE(h1.m_u12Index == 0);
+	BOOST_REQUIRE(h1.m_u20Counter == 1);
 
-	BOOST_REQUIRE(h2.u12Index == 1);
-	BOOST_REQUIRE(h2.u20Counter == 1);
+	BOOST_REQUIRE(h2.m_u12Index == 1);
+	BOOST_REQUIRE(h2.m_u20Counter == 1);
 
 	//Check get
 	int *p = handleManager.TryGetObject(h1);
@@ -79,21 +72,19 @@ BOOST_AUTO_TEST_CASE(HandleManagerBasic)
 
 	//Check if slot re-used and counter changed
 	h1 = handleManager.AddObject(p);
-	BOOST_REQUIRE(h1.u12Index == 0);
-	BOOST_REQUIRE(h1.u20Counter == 2);
+	BOOST_REQUIRE(h1.m_u12Index == 0);
+	BOOST_REQUIRE(h1.m_u20Counter == 2);
 
 	//Try invalid handle
 	BOOST_REQUIRE(handleManager.TryGetObject(Handle_s(55, 123)) == NULL);
 	BOOST_REQUIRE(handleManager.TryGetObject(Handle_s(0, 123)) == NULL);
 
 	//Try remove invalid
-	BOOST_REQUIRE_THROW(handleManager.RemoveObject(Handle_s(55, 123)), InvalidParameterException_c);
-	BOOST_REQUIRE_THROW(handleManager.RemoveObject(Handle_s(0, 123)), InvalidParameterException_c);
+	BOOST_REQUIRE_THROW(handleManager.RemoveObject(Handle_s(55, 123)), InvalidParameterException);
+	BOOST_REQUIRE_THROW(handleManager.RemoveObject(Handle_s(0, 123)), InvalidParameterException);
 
 	delete handleManager.TryGetObject(h1);
 	delete handleManager.TryGetObject(h2);
-
-	Phobos::Kernel_c::ReleaseInstance();
 }
 
 

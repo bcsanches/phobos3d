@@ -17,13 +17,13 @@ subject to the following restrictions:
 #ifndef PH_TILE_TRANSFORM_H
 #define PH_TILE_TRANSFORM_H
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API TileTransform_c
+	class PH_GAME_ENGINE_API TileTransform
 	{
 		public:
 			enum Direction_e
@@ -68,40 +68,40 @@ namespace Phobos
 			};
 
 		public:
-			TileTransform_c(UInt_t row, UInt_t col, Direction_e dir, Height_e height, Position_e position);
+			TileTransform(UInt_t row, UInt_t col, Direction_e dir, Height_e height, Position_e position);
 
 			inline int GetRow() const
 			{
-				return iRow;
+				return m_iRow;
 			}
 
 			inline int GetCol() const
 			{
-				return iCol;
+				return m_iCol;
 			}
 
 			Direction_e GetDirection() const
 			{
-				return eDirection;
+				return m_eDirection;
 			}
 
 			Height_e GetHeight() const
 			{
-				return eHeight;
+				return m_eHeight;
 			}
 
 			Position_e GetPosition() const
 			{
-				return ePosition;
+				return m_ePosition;
 			}
 
 		private:
-			UInt_t iRow;
-			UInt_t iCol;
+			UInt_t m_iRow;
+			UInt_t m_iCol;
 
-			Direction_e eDirection;
-			Height_e	eHeight;
-			Position_e	ePosition;
+			Direction_e m_eDirection;
+			Height_e	m_eHeight;
+			Position_e	m_ePosition;
 	};
 }
 

@@ -1,8 +1,8 @@
 #include "Editor/PH_RequestFactory.h"
 
-Phobos::Editor::RequestFactory_c &Phobos::Editor::RequestFactory_c::GetInstance()
+Phobos::Editor::RequestFactory &Phobos::Editor::RequestFactory::GetInstance()
 {
-	static RequestFactory_c clInstance_gl;
+	static RequestFactory clInstance_gl;
 
 	return clInstance_gl;
 }

@@ -17,82 +17,82 @@ subject to the following restrictions:
 #ifndef PH_TRANSFORM_PROPERTY_H
 #define PH_TRANSFORM_PROPERTY_H
 
-#include <PH_NodeProperty.h>
+#include <Phobos/NodeProperty.h>
 
 #include "PH_Transform.h"
 
 namespace Phobos
 {
-	class TransformProperty_c: public NodeProperty_c
+	class TransformProperty: public NodeProperty
 	{
 		private:
-			Transform_c clTransform;
+			Transform m_clTransform;
 			
 		public:
-			TransformProperty_c(const char *name):
-				NodeProperty_c(name)
+			TransformProperty(const char *name):
+				NodeProperty(name)
 			{
 				//empty
 			}			
 
-			inline void SetTransform(const Transform_c &transform)
+			inline void SetTransform(const Transform &transform)
 			{
-				clTransform = transform;
+				m_clTransform = transform;
 			}
 
 			inline const Ogre::Vector3 &GetOrigin(void) const
 			{
-				return clTransform.GetOrigin();
+				return m_clTransform.GetOrigin();
 			}
 
 			inline const Ogre::Quaternion &GetRotation(void) const
 			{
-				return clTransform.GetRotation();
+				return m_clTransform.GetRotation();
 			}
 
 			inline void SetRotation(const Ogre::Quaternion &q)
 			{
-				clTransform.SetRotation(q);
+				m_clTransform.SetRotation(q);
 			}
 
 			inline void SetOrigin(const Ogre::Vector3 &v)
 			{
-				clTransform.SetOrigin(v);
+				m_clTransform.SetOrigin(v);
 			}
 
 			inline void Translate(const Ogre::Vector3 &v)
 			{
-				clTransform.Translate(v);
+				m_clTransform.Translate(v);
 			}
 
 			inline void Rotate(const Ogre::Quaternion &q)
 			{
-				clTransform.Rotate(q);
+				m_clTransform.Rotate(q);
 			}
 
 			inline void RotateX(const Ogre::Degree &angle)
 			{
-				clTransform.RotateX(angle);
+				m_clTransform.RotateX(angle);
 			}
 
 			inline void RotateY(const Ogre::Degree &angle)
 			{
-				clTransform.RotateY(angle);
+				m_clTransform.RotateY(angle);
 			}
 
 			inline void RotateZ(const Ogre::Degree &angle)
 			{
-				clTransform.RotateZ(angle);
+				m_clTransform.RotateZ(angle);
 			}
 
 			inline void Rotate(const Ogre::Vector3 &axis, const Ogre::Degree &angle)
 			{
-				clTransform.Rotate(axis, angle);
+				m_clTransform.Rotate(axis, angle);
 			}
 
-			inline const Transform_c &GetTransform() const
+			inline const Transform &GetTransform() const
 			{
-				return clTransform;
+				return m_clTransform;
 			}
 	};
 }

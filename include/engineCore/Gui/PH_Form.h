@@ -23,10 +23,10 @@ namespace Phobos
 {
 	namespace Gui
 	{
-		class Form_c: public IEscHandler_c
+		class Form: public IEscHandler
 		{
 			public:
-				virtual ~Form_c() {};
+				virtual ~Form() {};
 
 				virtual void Open() = 0;
 				virtual void Close() = 0;				

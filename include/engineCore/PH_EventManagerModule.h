@@ -20,28 +20,28 @@ subject to the following restrictions:
 #include "PH_CoreModule.h"
 #include "PH_Core.h"
 #include <Phobos/System/EventManager.h>
-#include <PH_Error.h>
+#include <Phobos/Error.h>
 
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(EventManagerModule);	
 
-	class PH_ENGINE_CORE_API EventManagerModule_c: public CoreModule_c, private Phobos::System::EventListener_c
+	class PH_ENGINE_CORE_API EventManagerModule: public CoreModule, private Phobos::System::EventListener
 	{
 		public:
-			static EventManagerModule_c &CreateInstance();
+			static EventManagerModule &CreateInstance();
 			static void ReleaseInstance();
-			static EventManagerModule_c &GetInstance();
+			static EventManagerModule &GetInstance();
 
-			~EventManagerModule_c();
+			~EventManagerModule();
 
 		private:
 
-			void OnFixedUpdate();			
+			virtual void OnFixedUpdate() override;			
 
-			virtual void Event(struct System::Event_s &event);
+			virtual void OnEvent(System::Event_s &event) override;
 
-			EventManagerModule_c();			
+			EventManagerModule();			
 
 		private:			
 			static EventManagerModulePtr_t ipInstance_gl;

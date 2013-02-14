@@ -23,20 +23,20 @@ namespace Phobos
 {
 	PH_DEFINE_DEFAULT_SINGLETON(ModelRendererManager);	
 
-	ModelRendererManager_c::ModelRendererManager_c():
-		GenericComponentManagerModule_c("ModelRendererManager")
+	ModelRendererManager::ModelRendererManager():
+		GenericComponentManagerModule("ModelRendererManager")
 	{
 		//empty
 	}
 
-	ModelRendererManager_c::~ModelRendererManager_c()
+	ModelRendererManager::~ModelRendererManager()
 	{
 		//empty
 	}
 	
-	void ModelRendererManager_c::OnUpdate()
+	void ModelRendererManager::OnUpdate()
 	{
-		this->CallForAll(&ModelRendererComponent_c::Update);		
+		this->CallForAll(&ModelRendererComponent::Update);		
 	}
 }
 

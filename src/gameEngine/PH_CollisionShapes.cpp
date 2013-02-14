@@ -3,8 +3,8 @@
 #include <OgreMesh.h>
 #include <OgreVector3.h>
 
-#include <PH_Error.h>
-#include <PH_Exception.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
 
 #include "PH_CollisionMesh.h"
 #include "PH_PhysicsConv.h"
@@ -26,32 +26,32 @@ namespace Phobos
 			return 0;
 		}
 
-		BoxCollisionShape_c::BoxCollisionShape_c(const Ogre::Vector3 &dimensions, Float_t physicsScale):
-			CollisionShape_c(CollisionShapeTypes::BOX),
-			clBoxShape(MakeVector3(dimensions, physicsScale) * 0.5f)
+		BoxCollisionShape::BoxCollisionShape(const Ogre::Vector3 &dimensions, Float_t physicsScale):
+			CollisionShape(CollisionShapeTypes::BOX),
+			m_clBoxShape(MakeVector3(dimensions, physicsScale) * 0.5f)
 		{
 			//empty
 		}
 
-		int BoxCollisionShape_c::Compare(const CollisionShape_c &other) const
+		int BoxCollisionShape::Compare(const CollisionShape &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());
 
-			const BoxCollisionShape_c &bbox = static_cast<const BoxCollisionShape_c&>(other);
+			const BoxCollisionShape &bbox = static_cast<const BoxCollisionShape&>(other);
 
-			return CompareVectors(clBoxShape.getHalfExtentsWithoutMargin(), bbox.clBoxShape.getHalfExtentsWithoutMargin());
+			return CompareVectors(m_clBoxShape.getHalfExtentsWithoutMargin(), bbox.m_clBoxShape.getHalfExtentsWithoutMargin());
 		}				
 
-		int BoxCollisionShape_c::Compare(const Key_s &other) const
+		int BoxCollisionShape::Compare(const Key_s &other) const
 		{			
-			const btVector3 extents = this->clBoxShape.getHalfExtentsWithoutMargin() * 2;
+			const btVector3 extents = this->m_clBoxShape.getHalfExtentsWithoutMargin() * 2;
 
-			return CompareVectors(clBoxShape.getHalfExtentsWithoutMargin(), extents);
+			return CompareVectors(m_clBoxShape.getHalfExtentsWithoutMargin(), extents);
 		}
 
-		btCollisionShape &BoxCollisionShape_c::GetCollisionShape()
+		btCollisionShape &BoxCollisionShape::GetCollisionShape()
 		{
-			return clBoxShape;
+			return m_clBoxShape;
 		}
 
 		//
@@ -60,33 +60,33 @@ namespace Phobos
 		//
 		//
 		
-		CapsuleCollisionShape_c::CapsuleCollisionShape_c(Float_t radius, Float_t height, Float_t physicsScale):
-			CollisionShape_c(CollisionShapeTypes::CAPSULE),
-			clCapsuleShape(radius * physicsScale, (height - (2 * radius))* physicsScale)
+		CapsuleCollisionShape::CapsuleCollisionShape(Float_t radius, Float_t height, Float_t physicsScale):
+			CollisionShape(CollisionShapeTypes::CAPSULE),
+			m_clCapsuleShape(radius * physicsScale, (height - (2 * radius))* physicsScale)
 		{
 			if((radius * 2) > height)
-				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape_c::Key_s", "Capsule height must be > than 2 * radius");
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape::Key_s", "Capsule height must be > than 2 * radius");
 		}
 
 
-		btCollisionShape &CapsuleCollisionShape_c::GetCollisionShape()		
+		btCollisionShape &CapsuleCollisionShape::GetCollisionShape()		
 		{
-			return clCapsuleShape;
+			return m_clCapsuleShape;
 		}
 			
-		int CapsuleCollisionShape_c::Compare(const CollisionShape_c &other) const
+		int CapsuleCollisionShape::Compare(const CollisionShape &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());
 
-			const CapsuleCollisionShape_c &capsule = static_cast<const CapsuleCollisionShape_c&>(other);
+			const CapsuleCollisionShape &capsule = static_cast<const CapsuleCollisionShape&>(other);
 
-			Float_t left = clCapsuleShape.getRadius();
-			Float_t right = capsule.clCapsuleShape.getRadius();
+			Float_t left = m_clCapsuleShape.getRadius();
+			Float_t right = capsule.m_clCapsuleShape.getRadius();
 
 			if(left == right)
 			{
-				left = clCapsuleShape.getHalfHeight();
-				right = capsule.clCapsuleShape.getHalfHeight();
+				left = m_clCapsuleShape.getHalfHeight();
+				right = capsule.m_clCapsuleShape.getHalfHeight();
 			}
 
 			if(left < right)
@@ -98,15 +98,15 @@ namespace Phobos
 
 		}
 
-		int CapsuleCollisionShape_c::Compare(const Key_s &other) const
+		int CapsuleCollisionShape::Compare(const Key_s &other) const
 		{
-			Float_t left = clCapsuleShape.getRadius();
-			Float_t right = other.uShapeInfo.stCylinder.fpRadius;
+			Float_t left = m_clCapsuleShape.getRadius();
+			Float_t right = other.m_uShapeInfo.m_stCylinder.m_fpRadius;
 
 			if(left == right)
 			{
-				left = clCapsuleShape.getHalfHeight() * 2;
-				right = other.uShapeInfo.stCylinder.fpHeight;
+				left = m_clCapsuleShape.getHalfHeight() * 2;
+				right = other.m_uShapeInfo.m_stCylinder.m_fpHeight;
 			}
 
 			if(left < right)
@@ -124,45 +124,45 @@ namespace Phobos
 		//
 
 		
-		ScaledMeshCollissionShape_c::ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale, Float_t physicsScale):
-			CollisionShape_c(CollisionShapeTypes::MESH),
-			spOriginalMesh(collisionMesh),
-			clScaleTriangleMeshShape(&collisionMesh->GetTriangleMeshShape(), MakeVector3(localScale, physicsScale))
+		ScaledMeshCollissionShape::ScaledMeshCollissionShape(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale, Float_t physicsScale):
+			CollisionShape(CollisionShapeTypes::MESH),
+			m_spOriginalMesh(collisionMesh),
+			m_clScaleTriangleMeshShape(&collisionMesh->GetTriangleMeshShape(), MakeVector3(localScale, physicsScale))
 		{
 			//empty
 		}
 
-		int ScaledMeshCollissionShape_c::Compare(const CollisionShape_c &other) const
+		int ScaledMeshCollissionShape::Compare(const CollisionShape &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());			
 
-			const ScaledMeshCollissionShape_c &otherMesh = static_cast<const ScaledMeshCollissionShape_c&>(other);
+			const ScaledMeshCollissionShape &otherMesh = static_cast<const ScaledMeshCollissionShape&>(other);
 
-			int cmp = this->spOriginalMesh->GetName().compare(otherMesh.spOriginalMesh->GetName());
+			int cmp = this->m_spOriginalMesh->GetName().compare(otherMesh.m_spOriginalMesh->GetName());
 			if(cmp == 0)
 			{
-				return CompareVectors(this->clScaleTriangleMeshShape.getLocalScaling(), otherMesh.clScaleTriangleMeshShape.getLocalScaling());
+				return CompareVectors(this->m_clScaleTriangleMeshShape.getLocalScaling(), otherMesh.m_clScaleTriangleMeshShape.getLocalScaling());
 			}			
 			else
 				return cmp;
 		}				
 
-		int ScaledMeshCollissionShape_c::Compare(const Key_s &other) const
+		int ScaledMeshCollissionShape::Compare(const Key_s &other) const
 		{			
-			PH_ASSERT(other.eType == this->GetType());						
+			PH_ASSERT(other.m_eType == this->GetType());						
 
-			int cmp = this->spOriginalMesh->GetName().compare(other.pclMesh->getName());
+			int cmp = this->m_spOriginalMesh->GetName().compare(other.m_pclMesh->getName());
 			if(cmp == 0)
 			{
-				return CompareVectors(this->clScaleTriangleMeshShape.getLocalScaling(), btVector3(other.v3MeshScale.x, other.v3MeshScale.y, other.v3MeshScale.z));
+				return CompareVectors(this->m_clScaleTriangleMeshShape.getLocalScaling(), btVector3(other.m_v3MeshScale.x, other.m_v3MeshScale.y, other.m_v3MeshScale.z));
 			}			
 			else
 				return cmp;
 		}
 
-		btCollisionShape &ScaledMeshCollissionShape_c::GetCollisionShape()
+		btCollisionShape &ScaledMeshCollissionShape::GetCollisionShape()
 		{
-			return clScaleTriangleMeshShape;
+			return m_clScaleTriangleMeshShape;
 		}
 			
 		//
@@ -195,10 +195,10 @@ namespace Phobos
 		}
 
 		template <typename T>
-		int CompareCylinders(const T &lhs, const CollisionShape_c::Key_s &rhs)
+		int CompareCylinders(const T &lhs, const CollisionShape::Key_s &rhs)
 		{
 			Float_t left = lhs.getRadius();
-			Float_t right = rhs.uShapeInfo.stCylinder.fpRadius;
+			Float_t right = rhs.m_uShapeInfo.m_stCylinder.m_fpRadius;
 
 			if(left == right)
 			{
@@ -206,7 +206,7 @@ namespace Phobos
 
 				//get with margin, because radius also use margin
 				left = lhs.getHalfExtentsWithMargin()[upAxis] * 2;
-				right = rhs.uShapeInfo.stCylinder.fpHeight;
+				right = rhs.m_uShapeInfo.m_stCylinder.m_fpHeight;
 			}
 
 			if(left < right)
@@ -223,31 +223,31 @@ namespace Phobos
 		//
 		//
 
-		CylinderCollisionShapeX_c::CylinderCollisionShapeX_c(Float_t radius, Float_t height, Float_t physicsScale):
-			CollisionShape_c(CollisionShapeTypes::CYLINDER_X),
-			clCylinderShape(Physics::MakeVector3(Ogre::Vector3(height / 2.0f, radius, radius), physicsScale))
+		CylinderCollisionShapeX::CylinderCollisionShapeX(Float_t radius, Float_t height, Float_t physicsScale):
+			CollisionShape(CollisionShapeTypes::CYLINDER_X),
+			m_clCylinderShape(Physics::MakeVector3(Ogre::Vector3(height / 2.0f, radius, radius), physicsScale))
 		{
 			//empty
 		}
 
 
-		btCollisionShape &CylinderCollisionShapeX_c::GetCollisionShape()
+		btCollisionShape &CylinderCollisionShapeX::GetCollisionShape()
 		{
-			return clCylinderShape;
+			return m_clCylinderShape;
 		}
 
-		int CylinderCollisionShapeX_c::Compare(const CollisionShape_c &other) const
+		int CylinderCollisionShapeX::Compare(const CollisionShape &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());
 
-			const CylinderCollisionShapeX_c &cylinder = static_cast<const CylinderCollisionShapeX_c&>(other);
+			const CylinderCollisionShapeX &cylinder = static_cast<const CylinderCollisionShapeX&>(other);
 
-			return CompareCylinders(clCylinderShape, cylinder.clCylinderShape);
+			return CompareCylinders(m_clCylinderShape, cylinder.m_clCylinderShape);
 		}
 
-		int CylinderCollisionShapeX_c::Compare(const Key_s &other) const
+		int CylinderCollisionShapeX::Compare(const Key_s &other) const
 		{
-			return CompareCylinders(clCylinderShape, other);
+			return CompareCylinders(m_clCylinderShape, other);
 		}
 
 		//
@@ -256,31 +256,31 @@ namespace Phobos
 		//
 		//
 		
-		CylinderCollisionShapeY_c::CylinderCollisionShapeY_c(Float_t radius, Float_t height, Float_t physicsScale):
-			CollisionShape_c(CollisionShapeTypes::CYLINDER_Y),
-			clCylinderShape(Physics::MakeVector3(Ogre::Vector3(radius, height / 2.0f, radius), physicsScale))
+		CylinderCollisionShapeY::CylinderCollisionShapeY(Float_t radius, Float_t height, Float_t physicsScale):
+			CollisionShape(CollisionShapeTypes::CYLINDER_Y),
+			m_clCylinderShape(Physics::MakeVector3(Ogre::Vector3(radius, height / 2.0f, radius), physicsScale))
 		{
 			//empty
 		}
 
 
-		btCollisionShape &CylinderCollisionShapeY_c::GetCollisionShape()
+		btCollisionShape &CylinderCollisionShapeY::GetCollisionShape()
 		{
-			return clCylinderShape;
+			return m_clCylinderShape;
 		}
 
-		int CylinderCollisionShapeY_c::Compare(const CollisionShape_c &other) const
+		int CylinderCollisionShapeY::Compare(const CollisionShape &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());
 
-			const CylinderCollisionShapeY_c &cylinder = static_cast<const CylinderCollisionShapeY_c&>(other);
+			const CylinderCollisionShapeY &cylinder = static_cast<const CylinderCollisionShapeY&>(other);
 
-			return CompareCylinders(clCylinderShape, cylinder.clCylinderShape);
+			return CompareCylinders(m_clCylinderShape, cylinder.m_clCylinderShape);
 		}
 
-		int CylinderCollisionShapeY_c::Compare(const Key_s &other) const
+		int CylinderCollisionShapeY::Compare(const Key_s &other) const
 		{
-			return CompareCylinders(clCylinderShape, other);
+			return CompareCylinders(m_clCylinderShape, other);
 		}
 
 		//
@@ -289,31 +289,31 @@ namespace Phobos
 		//
 		//
 
-		CylinderCollisionShapeZ_c::CylinderCollisionShapeZ_c(Float_t radius, Float_t height, Float_t physicsScale):
-			CollisionShape_c(CollisionShapeTypes::CYLINDER_Z),
-			clCylinderShape(Physics::MakeVector3(Ogre::Vector3(radius, radius, height / 2.0f), physicsScale))
+		CylinderCollisionShapeZ::CylinderCollisionShapeZ(Float_t radius, Float_t height, Float_t physicsScale):
+			CollisionShape(CollisionShapeTypes::CYLINDER_Z),
+			m_clCylinderShape(Physics::MakeVector3(Ogre::Vector3(radius, radius, height / 2.0f), physicsScale))
 		{
 			//empty
 		}
 
 
-		btCollisionShape &CylinderCollisionShapeZ_c::GetCollisionShape()
+		btCollisionShape &CylinderCollisionShapeZ::GetCollisionShape()
 		{
-			return clCylinderShape;
+			return m_clCylinderShape;
 		}
 
-		int CylinderCollisionShapeZ_c::Compare(const CollisionShape_c &other) const
+		int CylinderCollisionShapeZ::Compare(const CollisionShape &other) const
 		{
 			PH_ASSERT(other.GetType() == this->GetType());
 
-			const CylinderCollisionShapeZ_c &cylinder = static_cast<const CylinderCollisionShapeZ_c&>(other);
+			const CylinderCollisionShapeZ &cylinder = static_cast<const CylinderCollisionShapeZ&>(other);
 
-			return CompareCylinders(clCylinderShape, cylinder.clCylinderShape);
+			return CompareCylinders(m_clCylinderShape, cylinder.m_clCylinderShape);
 		}
 
-		int CylinderCollisionShapeZ_c::Compare(const Key_s &other) const
+		int CylinderCollisionShapeZ::Compare(const Key_s &other) const
 		{
-			return CompareCylinders(clCylinderShape, other);
+			return CompareCylinders(m_clCylinderShape, other);
 		}
 	}
 }

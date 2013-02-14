@@ -16,34 +16,34 @@ subject to the following restrictions:
 
 #include "PH_Plugin.h"
 
-#include <PH_Memory.h>
+#include <Phobos/Memory.h>
 
 namespace Phobos
 {
-	PluginPtr_t Plugin_c::Create(const String_c &name)
+	PluginPtr_t Plugin::Create(const String_t &name)
 	{
-		return PluginPtr_t(PH_NEW Plugin_c(name));
+		return PluginPtr_t(PH_NEW Plugin(name));
 	}
 
-	Plugin_c::Plugin_c(const String_c &name):
-		Node_c(name)
+	Plugin::Plugin(const String_t &name):
+		Node(name)
 	{
-		clLibrary.Load(name);
+		m_clLibrary.Load(name);
 
-		PluginEntryPointProc_t proc = reinterpret_cast<PluginEntryPointProc_t>(clLibrary.GetSymbol("PH_PluginEntryPoint"));
+		PluginEntryPointProc_t proc = reinterpret_cast<PluginEntryPointProc_t>(m_clLibrary.GetSymbol("PH_PluginEntryPoint"));
 
-		pclPlugin = proc();
+		m_pclPlugin = proc();
 	}
 
-	void Plugin_c::Init()
+	void Plugin::Init()
 	{
-		if(pclPlugin != NULL)
-			pclPlugin->Init();
+		if(m_pclPlugin != NULL)
+			m_pclPlugin->Init();
 	}
 
-	Plugin_c::~Plugin_c()
+	Plugin::~Plugin()
 	{
-		if(pclPlugin != NULL)
-			pclPlugin->Finalize();
+		if(m_pclPlugin != NULL)
+			m_pclPlugin->Finalize();
 	}
 }

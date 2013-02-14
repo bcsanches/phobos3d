@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TransformProperty_c;
+	class TransformProperty;
 }
 
 #endif

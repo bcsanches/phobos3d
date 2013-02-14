@@ -15,99 +15,99 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class BoxCollisionShape_c: public CollisionShape_c
+		class BoxCollisionShape: public CollisionShape
 		{
 			public:
-				BoxCollisionShape_c(const Ogre::Vector3 &dimensions, Float_t physicsScale);
+				BoxCollisionShape(const Ogre::Vector3 &dimensions, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
 			protected:
-				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape &other) const;
 				virtual int Compare(const Key_s &other) const;				
 
 			private:
-				btBoxShape clBoxShape;
+				btBoxShape m_clBoxShape;
 		};
 
-		class CapsuleCollisionShape_c: public CollisionShape_c
+		class CapsuleCollisionShape: public CollisionShape
 		{
 			public:
-				CapsuleCollisionShape_c(Float_t radius, Float_t height, Float_t physicsScale);
+				CapsuleCollisionShape(Float_t radius, Float_t height, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
 			protected:
-				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape &other) const;
 				virtual int Compare(const Key_s &other) const;				
 
 			private:
-				btCapsuleShape clCapsuleShape;
+				btCapsuleShape m_clCapsuleShape;
 		};
 		
 
-		class ScaledMeshCollissionShape_c: public CollisionShape_c
+		class ScaledMeshCollissionShape: public CollisionShape
 		{
 			public:
-				ScaledMeshCollissionShape_c(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale, Float_t physicsScale);
+				ScaledMeshCollissionShape(CollisionMeshPtr_t collisionMesh, const Ogre::Vector3 &localScale, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();			
 
 			private:
-				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape &other) const;
 				virtual int Compare(const Key_s &other) const;
 
 			private:	
 				//This is used only to keep reference alive
-				CollisionMeshPtr_t				spOriginalMesh;
+				CollisionMeshPtr_t				m_spOriginalMesh;
 
-				btScaledBvhTriangleMeshShape	clScaleTriangleMeshShape;
+				btScaledBvhTriangleMeshShape	m_clScaleTriangleMeshShape;
 		};
 
-		class CylinderCollisionShapeX_c: public CollisionShape_c
+		class CylinderCollisionShapeX: public CollisionShape
 		{
 			public:
-				CylinderCollisionShapeX_c(Float_t radius, Float_t height, Float_t physicsScale);
+				CylinderCollisionShapeX(Float_t radius, Float_t height, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
 			protected:
-				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape &other) const;
 				virtual int Compare(const Key_s &other) const;
 
 			private:
-				btCylinderShapeX clCylinderShape;
+				btCylinderShapeX m_clCylinderShape;
 		};
 
-		class CylinderCollisionShapeY_c: public CollisionShape_c
+		class CylinderCollisionShapeY: public CollisionShape
 		{
 			public:
-				CylinderCollisionShapeY_c(Float_t radius, Float_t height, Float_t physicsScale);
+				CylinderCollisionShapeY(Float_t radius, Float_t height, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
 			protected:
-				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape &other) const;
 				virtual int Compare(const Key_s &other) const;				
 
 			private:
-				btCylinderShape clCylinderShape;
+				btCylinderShape m_clCylinderShape;
 
 		};
 
-		class CylinderCollisionShapeZ_c: public CollisionShape_c
+		class CylinderCollisionShapeZ: public CollisionShape
 		{
 			public:
-				CylinderCollisionShapeZ_c(Float_t radius, Float_t height, Float_t physicsScale);
+				CylinderCollisionShapeZ(Float_t radius, Float_t height, Float_t physicsScale);
 
 				virtual btCollisionShape &GetCollisionShape();
 
 			protected:
-				virtual int Compare(const CollisionShape_c &other) const;
+				virtual int Compare(const CollisionShape &other) const;
 				virtual int Compare(const Key_s &other) const;				
 
 			private:
-				btCylinderShapeZ clCylinderShape;
+				btCylinderShapeZ m_clCylinderShape;
 
 		};
 	}

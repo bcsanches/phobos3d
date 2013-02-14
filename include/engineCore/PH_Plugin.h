@@ -14,34 +14,34 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <PH_Node.h>
-#include <PH_DynamicLibrary.h>
+#include <Phobos/Node.h>
+#include <Phobos/DynamicLibrary.h>
 
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(Plugin);
 
-	class IPluginInstance_c
+	class IPluginInstance
 	{
 		public:
 			virtual void Init() = 0;
 			virtual void Finalize() = 0;			
 	};
 
-	typedef IPluginInstance_c *(*PluginEntryPointProc_t)();
+	typedef IPluginInstance *(*PluginEntryPointProc_t)();
 
-	class Plugin_c: public Node_c
+	class Plugin: public Node
 	{
 		public:
-			static PluginPtr_t Create(const String_c &name);
+			static PluginPtr_t Create(const String_t &name);
 
-			Plugin_c(const String_c &name);
-			~Plugin_c();
+			Plugin(const String_t &name);
+			~Plugin();
 
 			void Init();
 
 		private:
-			DynamicLibrary_c	clLibrary;
-			IPluginInstance_c	*pclPlugin;
+			DynamicLibrary		m_clLibrary;
+			IPluginInstance		*m_pclPlugin;
 	};
 }

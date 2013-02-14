@@ -105,18 +105,18 @@ namespace Phobos
 	}
 }
 
-Phobos::System::KeyboardInputDevice_c::KeyboardInputDevice_c(const String_c &name):
-	InputDevice_c(name, INPUT_DEVICE_KEYBOARD)
+Phobos::System::KeyboardInputDevice::KeyboardInputDevice(const String_t &name):
+	InputDevice(name, INPUT_DEVICE_KEYBOARD)
 {
 	//empty
 }
 
-Phobos::System::KeyboardInputDevice_c::~KeyboardInputDevice_c()
+Phobos::System::KeyboardInputDevice::~KeyboardInputDevice()
 {
 	//empty
 }
 
-bool Phobos::System::KeyboardInputDevice_c::TryGetActionName(UInt_t action, String_c &out) const
+bool Phobos::System::KeyboardInputDevice::TryGetActionName(UInt_t action, String_t &out) const
 {	
 	if(IS_ASCII_CHAR(action))
 	{			
@@ -142,7 +142,7 @@ bool Phobos::System::KeyboardInputDevice_c::TryGetActionName(UInt_t action, Stri
 	return false;
 }
 
-bool Phobos::System::KeyboardInputDevice_c::TryGetActionId(const String_c &name, UInt_t &out) const
+bool Phobos::System::KeyboardInputDevice::TryGetActionId(const String_t &name, UInt_t &out) const
 {	
 	if(name.length() == 1)
 	{

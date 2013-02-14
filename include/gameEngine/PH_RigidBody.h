@@ -20,7 +20,7 @@ subject to the following restrictions:
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <LinearMath/btDefaultMotionState.h>
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_CollisionShapeFwd.h"
 #include "PH_CollisionTag.h"
@@ -28,20 +28,20 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class Transform_c;
+	class Transform;
 
 	namespace Physics
 	{		
-		class RigidBody_c
+		class RigidBody
 		{
 			public:
-				RigidBody_c(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag_c &collisionTag);
-				~RigidBody_c();
+				RigidBody(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag &collisionTag);
+				~RigidBody();
 
 				void Register();
 				void Unregister();
 
-				Transform_c GetTransform() const;
+				Transform GetTransform() const;
 
 				inline const btRigidBody &GetRigidBody() const;
 
@@ -49,17 +49,17 @@ namespace Phobos
 
 			private:
 				//Unless we force this class to be allocated on 16 bytes aligned memory, we cannot create RigidBody without using new :(				
-				std::unique_ptr<btRigidBody>			upRigidBody;
-				std::unique_ptr<btDefaultMotionState>	upMotionState;
-				CollisionShapePtr_t						spCollisionShape;
+				std::unique_ptr<btRigidBody>			m_upRigidBody;
+				std::unique_ptr<btDefaultMotionState>	m_upMotionState;
+				CollisionShapePtr_t						m_spCollisionShape;
 
-				CollisionTag_c							clCollisionTag;
+				CollisionTag							m_clCollisionTag;
 
 		};
 
-		inline const btRigidBody &RigidBody_c::GetRigidBody() const
+		inline const btRigidBody &RigidBody::GetRigidBody() const
 		{
-			return *upRigidBody;
+			return *m_upRigidBody;
 		}
 	}
 }

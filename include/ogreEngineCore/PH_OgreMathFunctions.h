@@ -24,7 +24,7 @@ subject to the following restrictions:
 #include <OgreMath.h>
 
 #include <Math/PH_Functions.h>
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #define PH_FLOAT_EPSILON FLT_EPSILON
 

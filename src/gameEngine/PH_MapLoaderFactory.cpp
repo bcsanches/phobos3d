@@ -22,34 +22,34 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	MapLoaderFactory_c &MapLoaderFactory_c::GetInstance()
+	MapLoaderFactory &MapLoaderFactory::GetInstance()
 	{
-		static MapLoaderFactory_c clInstance_gl;
+		static MapLoaderFactory clInstance_gl;
 
 		return clInstance_gl;
 	}	
 
-	MapLoaderFactory_c::MapLoaderFactory_c()
+	MapLoaderFactory::MapLoaderFactory()
 	{
 		//empty
 	}
 
-	MapLoaderPtr_t MapLoaderFactory_c::Create(const String_c &type)
+	MapLoaderPtr_t MapLoaderFactory::Create(const String_t &type)
 	{
 		auto &table = Register::GetTable("MapLoader", type);
 
-		return MapLoaderPtr_t(clFactory.Create(table.GetString("loader"), table));
+		return MapLoaderPtr_t(m_clFactory.Create(table.GetString("loader"), table));
 	}
 
-	std::list<String_c> MapLoaderFactory_c::CreateMapFileExtensionsList() const
+	std::list<String_t> MapLoaderFactory::CreateMapFileExtensionsList() const
 	{
-		const Register::Hive_c &hive = Register::GetHive("MapLoader");
+		const auto &hive = Register::GetHive("MapLoader");
 
-		std::list<String_c> extensions;		
+		std::list<String_t> extensions;		
 
-		for(Node_c::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
+		for(auto it : hive)		
 		{
-			extensions.push_back(it->second->GetName());
+			extensions.push_back(it.second->GetName());
 		}
 
 		return extensions;

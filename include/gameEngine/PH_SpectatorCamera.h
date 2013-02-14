@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_SPECTATOR_CAMERA_H
 #define PH_SPECTATOR_CAMERA_H
 
-#include <boost/noncopyable.hpp>
+#include <Phobos/DisableCopy.h>
 
 #include <PH_GameCamera.h>
 #include <PH_IGameController.h>
@@ -26,10 +26,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API SpectatorCamera_c: public IGameController_c, boost::noncopyable
+	class PH_GAME_ENGINE_API SpectatorCamera: public IGameController
 	{
+		PH_DISABLE_COPY(SpectatorCamera);
+
 		public:
-			SpectatorCamera_c();
+			SpectatorCamera();
 
 			void FixedUpdate(IPlayerCmdPtr_t cmd);
 			void Update();
@@ -46,29 +48,29 @@ namespace Phobos
 			inline void SetCameraNearClipDistance(Float_t near);
 			inline void SetCameraFarClipDistance(Float_t far);
 
-			void SetTransform(const Transform_c &transform);		
+			void SetTransform(const Transform &transform);		
 
 		private:
-			GameCamera_c				clCamera;			
+			GameCamera					m_clCamera;			
 
-			Transform_c					clCurrentTransform;
+			Transform					m_clCurrentTransform;
 
-			TransformInterpolator_c		clTransformInterpolator;
+			TransformInterpolator_c		m_clTransformInterpolator;
 
-			float						fpAlpha;
+			float						m_fpAlpha;
 
-			Ogre::Degree				dTurn;
-			Ogre::Degree				dLook;	
+			Ogre::Degree				m_dTurn;
+			Ogre::Degree				m_dLook;	
 	};
 	
-	inline void SpectatorCamera_c::SetCameraNearClipDistance(Float_t nearDist)
+	inline void SpectatorCamera::SetCameraNearClipDistance(Float_t nearDist)
 	{
-		clCamera.SetNearClipDistance(nearDist);
+		m_clCamera.SetNearClipDistance(nearDist);
 	}
 
-	inline void SpectatorCamera_c::SetCameraFarClipDistance(Float_t farDist)
+	inline void SpectatorCamera::SetCameraFarClipDistance(Float_t farDist)
 	{
-		clCamera.SetFarClipDistance(farDist);
+		m_clCamera.SetFarClipDistance(farDist);
 	}
 }
 

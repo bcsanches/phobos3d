@@ -28,30 +28,30 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_COMPONENT_CREATOR("LinearMover", LinearMoverComponent_c);
+	PH_FULL_ENTITY_COMPONENT_CREATOR("LinearMover", LinearMoverComponent);
 
-	PH_DEFINE_ENTITY_OUTPUT_MANAGER(LinearMoverComponent_c);
+	PH_DEFINE_ENTITY_OUTPUT_MANAGER(LinearMoverComponent);
 
-	PH_DEFINE_ENTITY_OUTPUT(LinearMoverComponent_c, PositionChanged);	
+	PH_DEFINE_ENTITY_OUTPUT(LinearMoverComponent, PositionChanged);	
 		
-	LinearMoverComponent_c::LinearMoverComponent_c(const String_c &name, Entity_c &owner):
-		MoverComponent_c(name, owner)
+	LinearMoverComponent::LinearMoverComponent(const String_t &name, Entity &owner):
+		MoverComponent(name, owner)
 	{		
 		//empty
 	}
 
-	LinearMoverComponent_c::~LinearMoverComponent_c()
+	LinearMoverComponent::~LinearMoverComponent()
 	{
 		//empty
 	}
 
-	void LinearMoverComponent_c::OnLoad(const Register::Table_c &table)
+	void LinearMoverComponent::OnLoad(const Register::Table &table)
 	{
-		pprpTransform = &this->GetCustomEntityProperty<TransformProperty_c>(PH_ENTITY_PROP_TRANSFORM);
+		m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 	}
 
-	void LinearMoverComponent_c::FixedUpdate()
+	void LinearMoverComponent::FixedUpdate()
 	{		
-		pprpTransform->SetOrigin(pprpTransform->GetOrigin() + Ogre::Vector3(0.01f, 0, 0));
+		m_pprpTransform->SetOrigin(m_pprpTransform->GetOrigin() + Ogre::Vector3(0.01f, 0, 0));
 	}
 }

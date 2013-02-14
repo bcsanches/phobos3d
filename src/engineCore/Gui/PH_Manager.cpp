@@ -19,10 +19,10 @@ subject to the following restrictions:
 #include <Rocket/Core/SystemInterface.h>
 
 #include <PH_Console.h>
-#include <PH_ContextUtils.h>
 #include <PH_Core.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+
+#include <Phobos/Shell/Utils.h>
+#include <Phobos/Memory.h>
 
 #include <Phobos/System/InputManager.h>
 #include <Phobos/System/InputDevice.h>
@@ -32,7 +32,7 @@ subject to the following restrictions:
 
 namespace 
 {
-	class SystemInterface_c: public Rocket::Core::SystemInterface
+	class SystemInterface: public Rocket::Core::SystemInterface
 	{
 		public:
 			virtual float GetElapsedTime();
@@ -41,16 +41,16 @@ namespace
 			virtual bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message);
 	};
 
-	float SystemInterface_c::GetElapsedTime()
+	float SystemInterface::GetElapsedTime()
 	{
-		return Phobos::Core_c::GetInstance().GetUiTimer().fpTotalTicks;
+		return Phobos::Core::GetInstance().GetUiTimer().m_fpTotalTicks;
 	}
 					
-	bool SystemInterface_c::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
+	bool SystemInterface::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
 	{
 		std::stringstream stream;
 		stream << "Rocket: " << message.CString();
-		Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+		Phobos::LogMessage(stream.str());
 
 		return false;
 	}
@@ -58,163 +58,163 @@ namespace
 	static Phobos::Gui::ManagerPtr_t ipInstance_gl;
 }
 
-Phobos::Gui::Manager_c::LocalInputDeviceListener_c::LocalInputDeviceListener_c():
-	pclOwner(NULL)
+Phobos::Gui::Manager::LocalInputDeviceListener::LocalInputDeviceListener():
+	m_pclOwner(NULL)
 {
 	//empty
 }
 	
-void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::SetOwner(Phobos::Gui::Manager_c &owner)
+void Phobos::Gui::Manager::LocalInputDeviceListener::SetOwner(Phobos::Gui::Manager &owner)
 {						
-	pclOwner = &owner;
+	m_pclOwner = &owner;
 }
 
-void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::ListenTo(Phobos::System::InputDevice_c &device)
+void Phobos::Gui::Manager::LocalInputDeviceListener::ListenTo(Phobos::System::InputDevice &device)
 {
 	device.AddListener(*this);
 }
 
-void Phobos::Gui::Manager_c::LocalInputDeviceListener_c::InputEvent(const Phobos::System::InputEvent_s &event)
+void Phobos::Gui::Manager::LocalInputDeviceListener::OnInputEvent(const Phobos::System::InputEvent_s &event)
 {
-	pclOwner->InputEvent(event);
+	m_pclOwner->InputEvent(event);
 }
 
-Phobos::Gui::Manager_c &Phobos::Gui::Manager_c::GetInstance(void)
+Phobos::Gui::Manager &Phobos::Gui::Manager::GetInstance(void)
 {
 	return *ipInstance_gl;
 }
 
-void Phobos::Gui::Manager_c::ReleaseInstance(void)
+void Phobos::Gui::Manager::ReleaseInstance(void)
 {
 	ipInstance_gl.reset();
 }
 
-void Phobos::Gui::Manager_c::UpdateInstance(ManagerPtr_t manager)
+void Phobos::Gui::Manager::UpdateInstance(ManagerPtr_t manager)
 {
 	ipInstance_gl = manager;
 }
 
-Phobos::Gui::Manager_c::Manager_c():
-	CoreModule_c("GuiManager", NodeFlags::PRIVATE_CHILDREN),
-	cmdRocketLoadFontFace("rocketLoadFontFace"),
-	fInputActive(false),
-	fDisableInput(false)
+Phobos::Gui::Manager::Manager():
+	CoreModule("GuiManager", NodeFlags::PRIVATE_CHILDREN),
+	m_cmdRocketLoadFontFace("rocketLoadFontFace"),
+	m_fInputActive(false),
+	m_fDisableInput(false)
 {
-	cmdRocketLoadFontFace.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Gui::Manager_c::CmdRocketLoadFonfFace, this));
+	m_cmdRocketLoadFontFace.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Gui::Manager::CmdRocketLoadFonfFace, this));
 
-	clKeyboardListener.SetOwner(*this);
-	clMouseListener.SetOwner(*this);
+	m_clKeyboardListener.SetOwner(*this);
+	m_clMouseListener.SetOwner(*this);
 }
 
-Phobos::Gui::Manager_c::~Manager_c()
+Phobos::Gui::Manager::~Manager()
 {
 	//empty
 }
 
-void Phobos::Gui::Manager_c::OnPrepareToBoot()
+void Phobos::Gui::Manager::OnPrepareToBoot()
 {
-	Console_c &console = Console_c::GetInstance();
+	Console &console = Console::GetInstance();
 
-	console.AddContextCmd(cmdRocketLoadFontFace);
+	console.AddContextCommand(m_cmdRocketLoadFontFace);
 }
 
 
-Rocket::Core::SystemInterface *Phobos::Gui::Manager_c::CreateSystemInterface()
+Rocket::Core::SystemInterface *Phobos::Gui::Manager::CreateSystemInterface()
 {
-	return PH_NEW SystemInterface_c();
+	return PH_NEW SystemInterface();
 }
 
-void Phobos::Gui::Manager_c::LoadFonts()
+void Phobos::Gui::Manager::LoadFonts()
 {
-	for(auto &path : lstFontFacesToLoad)	
+	for(auto &path : m_lstFontFacesToLoad)	
 	{
 		Rocket::Core::FontDatabase::LoadFontFace(path.c_str());	
 	}
 
-	lstFontFacesToLoad.clear();
+	m_lstFontFacesToLoad.clear();
 }
 
-Phobos::Gui::ContextPtr_t Phobos::Gui::Manager_c::CreateContext(const Phobos::String_c &name)
+Phobos::Gui::ContextPtr_t Phobos::Gui::Manager::CreateContext(const Phobos::String_t &name)
 {
-	ContextPtr_t ptr = Context_c::Create(name, this->GetScreenWidth(), this->GetScreenHeight());
+	ContextPtr_t ptr = Context::Create(name, this->GetScreenWidth(), this->GetScreenHeight());
 
 	this->AddPrivateChild(*ptr);
 
 	return ptr;
 }
 
-void Phobos::Gui::Manager_c::EnableInput()
+void Phobos::Gui::Manager::EnableInput()
 {
-	if(!fInputActive)
+	if(!m_fInputActive)
 	{
-		auto &inputManager = System::InputManager_c::GetInstance();
+		auto &inputManager = System::InputManager::GetInstance();
 
-		auto &mouse = static_cast<System::MouseInputDevice_c &>(inputManager.GetDevice(System::INPUT_DEVICE_MOUSE));
+		auto &mouse = static_cast<System::MouseInputDevice &>(inputManager.GetDevice(System::INPUT_DEVICE_MOUSE));
 
-		clKeyboardListener.ListenTo(inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD));	
-		clMouseListener.ListenTo(mouse);	
+		m_clKeyboardListener.ListenTo(inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD));	
+		m_clMouseListener.ListenTo(mouse);	
 
-		fInputActive = true;
+		m_fInputActive = true;
 
 		int x = mouse.GetX();
 		int y = mouse.GetY();
 		
-		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			Context_c *context = static_cast<Context_c *>(it->second);
+			Context *context = static_cast<Context *>(it->second);
 
 			context->ResetMousePosition(x, y);
 		}
 	}
 }
 
-void Phobos::Gui::Manager_c::DisableInput()
+void Phobos::Gui::Manager::DisableInput()
 {
 	//we must delay input deactivation to avoid causing problem on listener lists
-	fDisableInput = true;	
+	m_fDisableInput = true;	
 }
 
-void Phobos::Gui::Manager_c::InputEvent(const System::InputEvent_s &event)
+void Phobos::Gui::Manager::InputEvent(const System::InputEvent_s &event)
 {	
-	for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+	for(auto it : *this)	
 	{
-		Context_c *context = static_cast<Context_c *>(it->second);
+		Context *context = static_cast<Context *>(it.second);
 
-		context->InputEvent(event);
+		context->OnInputEvent(event);
 	}	
 }
 
-void Phobos::Gui::Manager_c::OnFixedUpdate()
+void Phobos::Gui::Manager::OnFixedUpdate()
 {
-	if(fInputActive && fDisableInput)
+	if(m_fInputActive && m_fDisableInput)
 	{
-		auto &inputManager = System::InputManager_c::GetInstance();
+		auto &inputManager = System::InputManager::GetInstance();
 
-		inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD).RemoveListener(clKeyboardListener);
-		inputManager.GetDevice(System::INPUT_DEVICE_MOUSE).RemoveListener(clMouseListener);
+		inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD).RemoveListener(m_clKeyboardListener);
+		inputManager.GetDevice(System::INPUT_DEVICE_MOUSE).RemoveListener(m_clMouseListener);
 
-		fInputActive = fDisableInput = false;
+		m_fInputActive = m_fDisableInput = false;
 	}
 }
 
-void Phobos::Gui::Manager_c::OnUpdate()
+void Phobos::Gui::Manager::OnUpdate()
 {
-	for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+	for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 	{
-		Context_c *context = static_cast<Context_c *>(it->second);
+		Context *context = static_cast<Context *>(it->second);
 
 		context->Update();
 	}
 }
 
-void Phobos::Gui::Manager_c::CmdRocketLoadFonfFace(const StringVector_t &container, Phobos::Context_c &)
+void Phobos::Gui::Manager::CmdRocketLoadFonfFace(const Shell::StringVector_t &container, Phobos::Shell::Context &)
 {
 	if(container.size() < 2)
 	{
-		Kernel_c::GetInstance().LogMessage("[Phobos::Gui::Manager_c::CmdRocketLoadFonfFace] ERROR: insuficient parameters, usage: rocketLoadFontFace <fontName>");
+		LogMessage("[Phobos::Gui::Manager::CmdRocketLoadFonfFace] ERROR: insuficient parameters, usage: rocketLoadFontFace <fontName>");
 
 		return;
 	}
 
-	lstFontFacesToLoad.push_back(container[1]);		
+	m_lstFontFacesToLoad.push_back(container[1]);		
 }

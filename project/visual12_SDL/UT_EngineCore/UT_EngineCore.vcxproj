@@ -129,12 +129,11 @@
     <ClCompile Include="..\..\..\src\engineCoreTest\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\PH_System\PH_System.vcxproj">

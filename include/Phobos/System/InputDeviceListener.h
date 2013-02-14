@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_INPUT_DEVICE_LISTENER_H
 #define PH_SYSTEM_INPUT_DEVICE_LISTENER_H
 
-#include <PH_Listener.h>
+#include <Phobos/Listener.h>
 
 #include "Phobos/System/SystemAPI.h"
 
@@ -27,10 +27,10 @@ namespace Phobos
 	{
 		struct InputEvent_s;
 
-		class PH_SYSTEM_API InputDeviceListener_c
+		class PH_SYSTEM_API InputDeviceListener
 		{
 			public:			
-				virtual void InputEvent(const InputEvent_s &event) = 0;
+				virtual void OnInputEvent(const InputEvent_s &event) = 0;
 
 				PH_DECLARE_LISTENER_HOOK;
 		};

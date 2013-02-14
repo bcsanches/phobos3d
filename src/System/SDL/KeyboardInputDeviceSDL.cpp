@@ -16,62 +16,62 @@ subject to the following restrictions:
 
 #include "Phobos/System/SDL/KeyboardInputDeviceSDL.h"
 
-#include <PH_Error.h>
-#include <PH_Memory.h>
+#include <Phobos/Error.h>
+#include <Phobos/Memory.h>
 
 #include "Phobos/System/EventManager.h"
 #include "Phobos/System/InputEvent.h"
 
-Phobos::System::InputDevicePtr_t Phobos::System::KeyboardInputDeviceSDL_c::Create(const String_c &name)
+Phobos::System::InputDevicePtr_t Phobos::System::KeyboardInputDeviceSDL::Create(const String_t &name)
 {
-	return InputDevicePtr_t(PH_NEW KeyboardInputDeviceSDL_c(name));
+	return InputDevicePtr_t(PH_NEW KeyboardInputDeviceSDL(name));
 }
 
-Phobos::System::KeyboardInputDeviceSDL_c::KeyboardInputDeviceSDL_c(const String_c &name):
-	KeyboardInputDevice_c(name)
+Phobos::System::KeyboardInputDeviceSDL::KeyboardInputDeviceSDL(const String_t &name):
+	KeyboardInputDevice(name)
 {
-	EventManager_c::GetInstance().AddListener(*this, EVENT_TYPE_KEYBOARD);
+	EventManager::GetInstance().AddListener(*this, EVENT_TYPE_KEYBOARD);
 }
 
-Phobos::System::KeyboardInputDeviceSDL_c::~KeyboardInputDeviceSDL_c(void)
+Phobos::System::KeyboardInputDeviceSDL::~KeyboardInputDeviceSDL(void)
 {
 	//empty
 }
 
-void Phobos::System::KeyboardInputDeviceSDL_c::Update(void)
+void Phobos::System::KeyboardInputDeviceSDL::Update(void)
 {
 	//empty
 }
 
-void Phobos::System::KeyboardInputDeviceSDL_c::Event(struct Event_s &event)
+void Phobos::System::KeyboardInputDeviceSDL::OnEvent(Event_s &event)
 {
-	PH_ASSERT(event.eType == EVENT_TYPE_KEYBOARD);
+	PH_ASSERT(event.m_eType == EVENT_TYPE_KEYBOARD);
 
 	InputEvent_s inputEvent;		
 
-	switch(event.stKeyboard.eType)
+	switch(event.m_stKeyboard.m_eType)
 	{
 		case KEYBOARD_KEY_DOWN:
 		case KEYBOARD_KEY_UP:
-			inputEvent.eType = INPUT_EVENT_BUTTON;
-			inputEvent.pclDevice = this;
-			if(event.stKeyboard.eType == KEYBOARD_KEY_DOWN)
+			inputEvent.m_eType = INPUT_EVENT_BUTTON;
+			inputEvent.m_pclDevice = this;
+			if(event.m_stKeyboard.m_eType == KEYBOARD_KEY_DOWN)
 			{
-				inputEvent.stButton.eState = BUTTON_STATE_DOWN;
-				inputEvent.stButton.fpPression = 1.0f;
+				inputEvent.m_stButton.m_eState = BUTTON_STATE_DOWN;
+				inputEvent.m_stButton.m_fpPression = 1.0f;
 			}
 			else
 			{
-				inputEvent.stButton.eState = BUTTON_STATE_UP;
-				inputEvent.stButton.fpPression = 0.0f;
+				inputEvent.m_stButton.m_eState = BUTTON_STATE_UP;
+				inputEvent.m_stButton.m_fpPression = 0.0f;
 			}
-			inputEvent.stButton.uId = event.stKeyboard.u16Code;
+			inputEvent.m_stButton.m_uId = event.m_stKeyboard.m_u16Code;
 			break;
 
 		case KEYBOARD_CHAR:
-			inputEvent.eType = INPUT_EVENT_CHAR;
-			inputEvent.pclDevice = this;
-			inputEvent.stChar.u16Char = event.stKeyboard.u16Code;
+			inputEvent.m_eType = INPUT_EVENT_CHAR;
+			inputEvent.m_pclDevice = this;
+			inputEvent.m_stChar.m_u16Char = event.m_stKeyboard.m_u16Code;
 			break;
 
 		default:

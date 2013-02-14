@@ -14,55 +14,55 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		GhostCharacterBody_c::GhostCharacterBody_c(Float_t stepHeight, CollisionShapePtr_t collisionShape, const CollisionTag_c &collisionTag):
-			spCollisionShape(collisionShape),
-			upGhostObject(new btPairCachingGhostObject()),
-			clCollisionTag(collisionTag)
+		GhostCharacterBody::GhostCharacterBody(Float_t stepHeight, CollisionShapePtr_t collisionShape, const CollisionTag &collisionTag):
+			m_spCollisionShape(collisionShape),
+			m_upGhostObject(new btPairCachingGhostObject()),
+			m_clCollisionTag(collisionTag)
 		{
-			stepHeight *= Manager_c::GetInstance().GetScale();
+			stepHeight *= Manager::GetInstance().GetScale();
 
-			upGhostObject->setCollisionShape(&collisionShape->GetCollisionShape());
-			upGhostObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
+			m_upGhostObject->setCollisionShape(&collisionShape->GetCollisionShape());
+			m_upGhostObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
 
 			//spCharacterController.reset(PH_NEW btKinematicCharacterController(&*spGhostObject, static_cast<btConvexShape *>(&collisionShape->GetCollisionShape()), stepHeight));
-			upCharacterController.reset(PH_NEW KinematicCharacterController_c(&*upGhostObject, static_cast<btConvexShape *>(&collisionShape->GetCollisionShape()), stepHeight));
+			m_upCharacterController.reset(PH_NEW KinematicCharacterController(&*m_upGhostObject, static_cast<btConvexShape *>(&collisionShape->GetCollisionShape()), stepHeight));
 		}
 
-		GhostCharacterBody_c::~GhostCharacterBody_c()
+		GhostCharacterBody::~GhostCharacterBody()
 		{
 			this->Unregister();
 		}
 
-		void GhostCharacterBody_c::Register()
+		void GhostCharacterBody::Register()
 		{
-			Physics::Manager_c &manager = Manager_c::GetInstance();
+			Physics::Manager &manager = Manager::GetInstance();
 
 			//manager->AddCollisionObject(*spGhostObject, btBroadphaseProxy::CharacterFilter|1, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
-			manager.AddCollisionObject(*upGhostObject, clCollisionTag);
-			manager.AddAction(*upCharacterController);
+			manager.AddCollisionObject(*m_upGhostObject, m_clCollisionTag);
+			manager.AddAction(*m_upCharacterController);
 		}
 		
-		void GhostCharacterBody_c::Unregister()
+		void GhostCharacterBody::Unregister()
 		{
-			Physics::Manager_c &manager = Manager_c::GetInstance();
+			Physics::Manager &manager = Manager::GetInstance();
 
-			manager.RemoveCollisionObject(*upGhostObject);
-			manager.RemoveAction(*upCharacterController);
+			manager.RemoveCollisionObject(*m_upGhostObject);
+			manager.RemoveAction(*m_upCharacterController);
 		}
 
-		void GhostCharacterBody_c::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
+		void GhostCharacterBody::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
 		{
-			upCharacterController->setVelocityForTimeInterval(MakeVector3(velocity, Manager_c::GetInstance().GetScale()), timeInvertal);
+			m_upCharacterController->setVelocityForTimeInterval(MakeVector3(velocity, Manager::GetInstance().GetScale()), timeInvertal);
 		}
 
-		Ogre::Vector3 GhostCharacterBody_c::GetPosition() const
+		Ogre::Vector3 GhostCharacterBody::GetPosition() const
 		{
-			return MakeVector3(upGhostObject->getWorldTransform().getOrigin(), Manager_c::GetInstance().GetPhysicsToGameScale());
+			return MakeVector3(m_upGhostObject->getWorldTransform().getOrigin(), Manager::GetInstance().GetPhysicsToGameScale());
 		}
 
-		void GhostCharacterBody_c::Teleport(const Ogre::Vector3 &position)
+		void GhostCharacterBody::Teleport(const Ogre::Vector3 &position)
 		{
-			upCharacterController->warp(MakeVector3(position, Manager_c::GetInstance().GetScale()));
+			m_upCharacterController->warp(MakeVector3(position, Manager::GetInstance().GetScale()));
 		}
 	}
 }

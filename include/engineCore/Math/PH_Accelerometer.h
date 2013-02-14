@@ -24,10 +24,10 @@ namespace Phobos
 {
 	namespace Math
 	{
-		class Accelerometer_c
+		class Accelerometer
 		{
 			public:
-				inline Accelerometer_c(Float_t accelTime);
+				inline Accelerometer(Float_t accelTime);
 
 				inline void Reset();
 
@@ -41,69 +41,69 @@ namespace Phobos
 				inline Float_t GetValue() const;
 
 			private:
-				Float_t fpAccelTime;
-				Float_t fpButtonState;
-				Float_t fpRestBoost;
+				Float_t m_fpAccelTime;
+				Float_t m_fpButtonState;
+				Float_t m_fpRestBoost;
 
-				LinearInterpolator_c<Float_t> clInterpolator;
+				LinearInterpolator<Float_t> m_clInterpolator;
 		};
 
-		inline Accelerometer_c::Accelerometer_c(Float_t accelTime):
-			fpAccelTime(accelTime),
-			fpButtonState(0.0f),
-			clInterpolator(0, 0, 0, 0),
-			fpRestBoost(1)
+		inline Accelerometer::Accelerometer(Float_t accelTime):
+			m_fpAccelTime(accelTime),
+			m_fpButtonState(0.0f),
+			m_clInterpolator(0, 0, 0, 0),
+			m_fpRestBoost(1)
 		{
 		}
 
-		inline void Accelerometer_c::SetRestBoost(Float_t v)
+		inline void Accelerometer::SetRestBoost(Float_t v)
 		{
-			fpRestBoost = v;
+			m_fpRestBoost = v;
 		}
 
-		inline void Accelerometer_c::SetAccelerationTime(Float_t v)
+		inline void Accelerometer::SetAccelerationTime(Float_t v)
 		{
-			fpAccelTime = v;
+			m_fpAccelTime = v;
 		}
 
-		inline void Accelerometer_c::Reset()
+		inline void Accelerometer::Reset()
 		{
-			clInterpolator.Start(0, 0, 0, 0);
+			m_clInterpolator.Start(0, 0, 0, 0);
 		}
 
-		inline void Accelerometer_c::SetButtonState(Float_t buttonState)
+		inline void Accelerometer::SetButtonState(Float_t buttonState)
 		{
-			if(fpButtonState == buttonState)
+			if(m_fpButtonState == buttonState)
 				return;
 
-			Float_t currentValue = clInterpolator.GetCurrentValue();
+			Float_t currentValue = m_clInterpolator.GetCurrentValue();
 			
 			Float_t boost = 1;
 			if(buttonState == 0)
-				boost = fpRestBoost;
+				boost = m_fpRestBoost;
 
 
 			Float_t buttonDelta = (buttonState > currentValue) ? buttonState - currentValue : currentValue - buttonState;
 			if(buttonDelta == 0)
 			{
-				clInterpolator.Start(clInterpolator.GetCurrentTime(), 0, currentValue, currentValue);
+				m_clInterpolator.Start(m_clInterpolator.GetCurrentTime(), 0, currentValue, currentValue);
 			}
 			else
 			{
-				clInterpolator.Start(clInterpolator.GetCurrentTime(), buttonDelta * (fpAccelTime * boost), currentValue, buttonState);
+				m_clInterpolator.Start(m_clInterpolator.GetCurrentTime(), buttonDelta * (m_fpAccelTime * boost), currentValue, buttonState);
 			}
 					
-			fpButtonState = buttonState;
+			m_fpButtonState = buttonState;
 		}
 
-		inline void Accelerometer_c::Update(Float_t ticks)
+		inline void Accelerometer::Update(Float_t ticks)
 		{
-			clInterpolator.Update(ticks);
+			m_clInterpolator.Update(ticks);
 		}
 
-		inline Float_t Accelerometer_c::GetValue() const
+		inline Float_t Accelerometer::GetValue() const
 		{
-			return clInterpolator.GetCurrentValue();
+			return m_clInterpolator.GetCurrentValue();
 		}
 	}
 }

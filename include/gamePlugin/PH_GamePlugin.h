@@ -24,10 +24,10 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class GamePlugin_c: public IPluginInstance_c
+	class GamePlugin: public IPluginInstance
 	{
 		public:
-			typedef CoreModule_c &(*CreateInstanceProc_t)();
+			typedef CoreModule &(*CreateInstanceProc_t)();
 			typedef void (*ReleaseInstanceProc_t)();		
 
 			
@@ -36,8 +36,8 @@ namespace Phobos
 				Register_s(CreateInstanceProc_t createProc, ReleaseInstanceProc_t releaseProc);
 				Register_s(const Register_s &rhs);
 
-				CreateInstanceProc_t pfnCreate;
-				ReleaseInstanceProc_t pfnRelease;
+				CreateInstanceProc_t m_pfnCreate;
+				ReleaseInstanceProc_t m_pfnRelease;
 			};
 
 		public:
@@ -46,14 +46,14 @@ namespace Phobos
 
 			void AddModule(const Register_s &module);
 
-			static GamePlugin_c &GetInstance();
+			static GamePlugin &GetInstance();
 
 			static void Configure(const char *moduleName, const char *cfgName);
 		
 		private:			
 			CoreModuleManagerPtr_t ipManager;
 
-			std::vector<Register_s> vecModules;
+			std::vector<Register_s> m_vecModules;
 
 			static const char *szCfgName_g;
 			static const char *szModuleName_g;
@@ -61,19 +61,19 @@ namespace Phobos
 }
 
 #define PH_GAME_PLUGIN_ENTRY_POINT(MODULE_NAME, CFG_NAME)	\
-	PH_GAME_PLUGIN_ENTRY_POINT_PROC Phobos::IPluginInstance_c *PH_PluginEntryPoint(void)\
+	PH_GAME_PLUGIN_ENTRY_POINT_PROC Phobos::IPluginInstance *PH_PluginEntryPoint(void)	\
 	{																					\
-		Phobos::GamePlugin_c::Configure(MODULE_NAME, CFG_NAME);							\
+		Phobos::GamePlugin::Configure(MODULE_NAME, CFG_NAME);							\
 																						\
-		return &Phobos::GamePlugin_c::GetInstance();									\
+		return &Phobos::GamePlugin::GetInstance();										\
 	}
 
 #define PH_GAME_PLUGIN_REGISTER_MODULE(X)\
-	static Phobos::GamePlugin_c::Register_s X##Register_gl(X##_c::CreateModule, X##_c::ReleaseInstance);
+	static Phobos::GamePlugin::Register_s XRegister_gl(X::CreateModule, X::ReleaseInstance);
 
-#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::CoreModule_c &CreateModule();
+#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::CoreModule &CreateModule();
 #define PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(X)	\
-	Phobos::CoreModule_c &X##_c::CreateModule()		\
+	Phobos::CoreModule &X::CreateModule()			\
 	{												\
 		return CreateInstance();					\
 	}

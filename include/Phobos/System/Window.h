@@ -18,7 +18,7 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_WINDOW_H
 #define PH_SYSTEM_WINDOW_H
 
-#include <PH_Node.h>
+#include <Phobos/Node.h>
 
 #include "Phobos/System/SystemAPI.h"
 
@@ -26,24 +26,23 @@ namespace Phobos
 {
 	namespace System
 	{
-		PH_DECLARE_NODE_PTR(Window);	
+		PH_DECLARE_NODE_PTR(Window);			
 
-		class EventManager_c;
-
-		class PH_SYSTEM_API Window_c: public Node_c
+		class PH_SYSTEM_API Window: public Node
 		{
 			public:
-				static WindowPtr_t Create(const String_c &name);
+				static WindowPtr_t Create(const String_t &name);
 
-				virtual void Open(const String_c &name, const Rect_s<size_t> &rect, void *parentWindow = NULL) = 0;
+				virtual void Open(const String_t &name, const UIntSize_t &size, void *parentWindow = NULL) = 0;
 				virtual void *GetHandler() const = 0;
 				virtual bool HasGLContext() = 0;	
 
 				virtual size_t GetWidth(void) const = 0;
 				virtual size_t GetHeight(void) const = 0;
+				virtual UIntSize_t GetSize() const = 0;
 
 			protected:
-				Window_c(const String_c &name);		
+				Window(const String_t &name);		
 		};
 	}
 

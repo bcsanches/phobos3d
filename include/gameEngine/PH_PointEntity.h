@@ -26,25 +26,25 @@ namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(PointEntity);
 
-	class PointEntity_c: public Entity_c
+	class PointEntity: public Entity
 	{
 		public:
-			static Entity_c *Create(const String_c &name);
+			static Entity *Create(const String_t &name);
 
-			inline const Transform_c &GetTransform() const;
+			inline const Transform &GetTransform() const;
 
 		protected:
-			PointEntity_c(const String_c &name);
+			PointEntity(const String_t &name);
 
-			void OnLoad(const Register::Table_c &table);
+			void OnLoad(const Register::Table &table);
 
 		private:
-			Transform_c	clTransform;
+			Transform	m_clTransform;
 	};
 
-	inline const Transform_c &PointEntity_c::GetTransform() const
+	inline const Transform &PointEntity::GetTransform() const
 	{
-		return clTransform;
+		return m_clTransform;
 	}
 }
 

@@ -27,49 +27,49 @@ namespace Phobos
 {
 	namespace System
 	{
-		class MouseInputDeviceSDL_c: public MouseInputDevice_c, private EventListener_c
+		class MouseInputDeviceSDL: public MouseInputDevice, private EventListener
 		{
 			public:
-				static InputDevicePtr_t Create(const String_c &name);
+				static InputDevicePtr_t Create(const String_t &name);
 
-				MouseInputDeviceSDL_c(const String_c &name);
-				~MouseInputDeviceSDL_c(void);
+				MouseInputDeviceSDL(const String_t &name);
+				~MouseInputDeviceSDL(void);
 
-				virtual void Update(void);
+				virtual void Update(void) override;
 
-				virtual void ClipToWindow();
-				virtual void Unclip(void);
+				virtual void ClipToWindow() override;
+				virtual void Unclip(void) override;
 
-				virtual void ShowCursor();
-				virtual void HideCursor();
+				virtual void ShowCursor() override;
+				virtual void HideCursor() override;
 
-				virtual short GetX();
-				virtual short GetY();
+				virtual short GetX() override;
+				virtual short GetY() override;
 
 			private:
-				virtual void Event(struct Event_s &event);
+				virtual void OnEvent(struct Event_s &event) override;
 
 				void Enable();
 				void Disable();
 
 			private:
-				class SytemEventListner_c: EventListener_c
+				class SytemEventListner: EventListener
 				{
 					public:
-						SytemEventListner_c();
+						SytemEventListner();
 
-						inline void SetOwner(MouseInputDeviceSDL_c *owner);
-
-					private:
-						virtual void Event(struct Event_s &event);
+						inline void SetOwner(MouseInputDeviceSDL *owner);
 
 					private:
-						MouseInputDeviceSDL_c *pclOwner;
+						virtual void OnEvent(struct Event_s &event) override;
+
+					private:
+						MouseInputDeviceSDL *m_pclOwner;
 				};
 
-				friend class SytemEventListner_c;
+				friend class SytemEventListner;
 
-				SytemEventListner_c clSystemListener;
+				SytemEventListner m_clSystemListener;
 
 				//RECT		stOldClipRect;
 				//bool		fHasClipRect;

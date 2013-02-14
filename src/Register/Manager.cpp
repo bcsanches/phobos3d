@@ -21,15 +21,17 @@ subject to the following restrictions:
 
 #include <boost/filesystem.hpp>
 
-#include <PH_Context.h>
-#include <PH_ContextUtils.h>
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Node.h>
-#include <PH_Memory.h>
-#include <PH_Parser.h>
-#include <PH_Path.h>
+#include <Phobos/Shell/Context.h>
+#include <Phobos/Shell/Utils.h>
+
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
+#include <Phobos/Node.h>
+#include <Phobos/Memory.h>
+#include <Phobos/ObjectManager.h>
+#include <Phobos/Parser.h>
+#include <Phobos/Path.h>
 
 #include "Phobos/Register/Hive.h"
 #include "Phobos/Register/Table.h"
@@ -41,30 +43,30 @@ namespace Phobos
 	{
 		namespace
 		{
-			class Manager_c: public Node_c
+			class Manager: public Node
 			{
 				public:
-					Manager_c();
+					Manager();
 
-					void AddLocalPrivateChild(std::unique_ptr<Node_c> &&ptr);
+					void AddLocalPrivateChild(std::unique_ptr<Node> &&ptr);
 			};
 
-			Manager_c::Manager_c():
-				Node_c("Register", NodeFlags::PRIVATE_CHILDREN)
+			Manager::Manager():
+				Node("Register", NodeFlags::PRIVATE_CHILDREN)
 			{
 				//empty
 			}
 
-			inline void Manager_c::AddLocalPrivateChild(std::unique_ptr<Node_c> &&ptr)
+			inline void Manager::AddLocalPrivateChild(std::unique_ptr<Node> &&ptr)
 			{
 				this->AddPrivateChild(std::move(ptr));
 			}
 
-			void CmdLoadAllDeclarations(const StringVector_t &args, Context_c &)
+			void CmdLoadAllDeclarations(const Shell::StringVector_t &args, Shell::Context &)
 			{	
 				if(args.size() < 2)
 				{
-					Kernel_c::GetInstance().LogMessage("[DictionaryManager_c::CmdLoadAllDeclarations] Insuficient parameters, usage: loadAllDeclarations <path>\n");
+					LogMessage("[DictionaryManager::CmdLoadAllDeclarations] Insuficient parameters, usage: loadAllDeclarations <path>\n");
 
 					return;
 				}
@@ -73,17 +75,17 @@ namespace Phobos
 					LoadAll(args[i]);	
 			}
 
-			static ContextCmd_c cmdLoadAllDeclarations_gl("loadAllDeclarations", CmdLoadAllDeclarations);
-			static std::unique_ptr<Manager_c> spManager_gl;
+			static Shell::Command cmdLoadAllDeclarations_gl("loadAllDeclarations", CmdLoadAllDeclarations);
+			static std::unique_ptr<Manager> spManager_gl;
 		}
 	}
 }
 
 void Phobos::Register::Init()
 {
-	spManager_gl.reset(PH_NEW(Manager_c));
+	spManager_gl.reset(PH_NEW(Manager));
 
-	Kernel_c::GetInstance().AddObject(*spManager_gl, Path_c("/"));
+	ObjectManager::AddObject(*spManager_gl, Path("/"));
 }
 
 void Phobos::Register::Finalize()
@@ -91,7 +93,7 @@ void Phobos::Register::Finalize()
 	spManager_gl.reset();
 }
 
-void Phobos::Register::Load(const String_c &fileName)
+void Phobos::Register::Load(const String_t &fileName)
 {
 	using namespace std;
 
@@ -100,9 +102,9 @@ void Phobos::Register::Load(const String_c &fileName)
 	Load(file);
 }
 
-Phobos::Register::Hive_c &Phobos::Register::CreateCustomHive(const String_c &name)
+Phobos::Register::Hive &Phobos::Register::CreateCustomHive(const String_t &name)
 {
-	std::unique_ptr<Hive_c> hivePtr(PH_NEW Hive_c(name));
+	std::unique_ptr<Hive> hivePtr(PH_NEW Hive(name));
 
 	auto hive = hivePtr.get();
 
@@ -113,10 +115,10 @@ Phobos::Register::Hive_c &Phobos::Register::CreateCustomHive(const String_c &nam
 
 void Phobos::Register::Load(std::istream &file)
 {
-	Parser_c parser;
+	Parser parser;
 	parser.SetStream(&file);
 
-	String_c tokenValue;
+	String_t tokenValue;
 	for(;;)
 	{
 		ParserTokens_e token = parser.GetToken(&tokenValue);
@@ -125,12 +127,12 @@ void Phobos::Register::Load(std::istream &file)
 			break;
 
 		if(token != TOKEN_ID)
-			RaiseParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryManager_c::Load");
+			RaiseParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryManager::Load");
 
-		Hive_c *hive = TryGetHive(tokenValue);
+		Hive *hive = TryGetHive(tokenValue);
 		if(!hive)
 		{
-			std::unique_ptr<Hive_c> hivePtr(PH_NEW Hive_c(tokenValue));
+			std::unique_ptr<Hive> hivePtr(PH_NEW Hive(tokenValue));
 				
 			//load before adding, so if error occurs it is not added
 			hivePtr->Load(parser);
@@ -142,7 +144,7 @@ void Phobos::Register::Load(std::istream &file)
 	}
 }
 
-void Phobos::Register::LoadAll(const String_c &path)
+void Phobos::Register::LoadAll(const String_t &path)
 {
 	using namespace std;
 	using namespace boost::filesystem;
@@ -173,43 +175,43 @@ void Phobos::Register::LoadAll(const String_c &path)
 	}
 }
 
-Phobos::Register::Hive_c &Phobos::Register::GetHive(const String_c &name)
+Phobos::Register::Hive &Phobos::Register::GetHive(const String_t &name)
 {
-	return static_cast<Hive_c&>(spManager_gl->GetChild(name));
+	return static_cast<Hive&>(spManager_gl->GetChild(name));
 }
 
-Phobos::Register::Hive_c *Phobos::Register::TryGetHive(const String_c &name)
+Phobos::Register::Hive *Phobos::Register::TryGetHive(const String_t &name)
 {
-	return static_cast<Hive_c*>(spManager_gl->TryGetChild(name));
+	return static_cast<Hive*>(spManager_gl->TryGetChild(name));
 }
 
-Phobos::Register::Table_c &Phobos::Register::GetTable(const String_c &hive, const String_c &table)
+Phobos::Register::Table &Phobos::Register::GetTable(const String_t &hive, const String_t &table)
 {
 	return GetHive(hive).GetTable(table);
 }
 
-Phobos::Register::Table_c *Phobos::Register::TryGetTable(const String_c &hive, const String_c &table)
+Phobos::Register::Table *Phobos::Register::TryGetTable(const String_t &hive, const String_t &table)
 {
-	Hive_c *hivePtr = TryGetHive(hive);
+	Hive *hivePtr = TryGetHive(hive);
 		
 	return hivePtr ? hivePtr->TryGetTable(table) : NULL;
 }
 
-Phobos::Register::Table_c &Phobos::Register::GetTable(const Path_c &relativePath)
+Phobos::Register::Table &Phobos::Register::GetTable(const Path &relativePath)
 {
-	Path_c tmp;
+	Path tmp;
 	spManager_gl->GetThisPath(tmp);
 
 	tmp.Add(relativePath);
 
-	Node_c &node = Kernel_c::GetInstance().LookupObject(tmp);
+	Node &node = ObjectManager::LookupObject(tmp);
 
-	return static_cast<Table_c &>(node);
+	return static_cast<Table &>(node);
 }
 
-void Phobos::Register::RegisterCommands(IContext_c &context)
+void Phobos::Register::RegisterCommands(Shell::IContext &context)
 {
-	context.AddContextCmd(cmdLoadAllDeclarations_gl);
+	context.AddContextCommand(cmdLoadAllDeclarations_gl);
 }
 
 

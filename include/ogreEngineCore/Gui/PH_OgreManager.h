@@ -31,12 +31,12 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(OgreManager);
 
-		class PH_OGRE_ENGINE_CORE_API OgreManager_c: public Gui::Manager_c, Ogre::RenderQueueListener
+		class PH_OGRE_ENGINE_CORE_API OgreManager: public Gui::Manager, Ogre::RenderQueueListener
 		{			
 			public:				
-				static OgreManager_c &CreateInstance(void);
+				static OgreManager &CreateInstance(void);
 
-				virtual ~OgreManager_c();
+				virtual ~OgreManager();
 
 			protected:				
 				virtual void OnRenderReady();	
@@ -49,7 +49,7 @@ namespace Phobos
 				virtual void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation);				
 
 			private:
-				OgreManager_c();
+				OgreManager();
 
 				void ConfigureRenderSystem();
 				void BuildProjectionMatrix(Ogre::Matrix4& projection_matrix);
@@ -59,8 +59,8 @@ namespace Phobos
 					Here we need to have our own Scene and own camera to allow GUI rendering when no scenario is loaded
 
 				*/
-				Ogre::SceneManager	*pclSceneManager;
-				Ogre::Camera		*pclCamera;
+				Ogre::SceneManager	*m_pclSceneManager;
+				Ogre::Camera		*m_pclCamera;
 		};
 	}
 }

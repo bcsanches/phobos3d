@@ -24,6 +24,9 @@
     <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2010\websocketpp.vcxproj">
       <Project>{1c0fd04e-5aca-4031-b3d1-320a5360c9d0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
     </ProjectReference>
@@ -32,9 +35,6 @@
     </ProjectReference>
     <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

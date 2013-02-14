@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 #include <OgreEntity.h>
 
-#include <PH_Path.h>
+#include <Phobos/Path.h>
 #include <PH_Render.h>
 
 #include "PH_GamePhysicsSettings.h"
@@ -28,65 +28,65 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	void BaseOgreGameWorld_c::StaticObject_s::Clear()
+	void BaseOgreGameWorld::StaticObject_s::Clear()
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 
-		if(pclSceneNode)
+		if(m_pclSceneNode)
 		{
-			render.DestroySceneNode(pclSceneNode);
-			pclSceneNode = NULL;
+			render.DestroySceneNode(m_pclSceneNode);
+			m_pclSceneNode = NULL;
 		}
 
-		if(pclLight)
+		if(m_pclLight)
 		{
-			render.DestroyLight(pclLight);
-			pclLight = NULL;
+			render.DestroyLight(m_pclLight);
+			m_pclLight = NULL;
 		}
 
-		if(pclEntity)
+		if(m_pclEntity)
 		{
-			render.DestroyEntity(pclEntity);
-			pclEntity = NULL;
+			render.DestroyEntity(m_pclEntity);
+			m_pclEntity = NULL;
 		}
 
-		spRigidBody.reset();		
+		m_spRigidBody.reset();		
 	}
 
-	BaseOgreGameWorld_c::TempStaticObject_s::~TempStaticObject_s()
+	BaseOgreGameWorld::TempStaticObject_s::~TempStaticObject_s()
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 
-		if(pclSceneNode)
-			render.DestroySceneNode(pclSceneNode);
+		if(m_pclSceneNode)
+			render.DestroySceneNode(m_pclSceneNode);
 
-		if(pclLight)
-			render.DestroyLight(pclLight);
+		if(m_pclLight)
+			render.DestroyLight(m_pclLight);
 
-		if(pclEntity)
-			render.DestroyEntity(pclEntity);
+		if(m_pclEntity)
+			render.DestroyEntity(m_pclEntity);
 	}
 
-	void BaseOgreGameWorld_c::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform_c &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag) const
+	void BaseOgreGameWorld::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag) const
 	{		
-		const Ogre::MeshPtr mesh = staticObj.pclEntity->getMesh();
-		const String_c &meshName = mesh->getName();
+		const Ogre::MeshPtr mesh = staticObj.m_pclEntity->getMesh();
+		const String_t &meshName = mesh->getName();
 		
-		Path_c path(meshName);
+		Path path(meshName);
 		path.StripExtension();
 
-		Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
+		Physics::Manager &physicsManager = Physics::Manager::GetInstance();
 
-		auto collisionDef = GamePhysicsSettings_c::TryGetStaticMeshCollisionShapeDef(path.GetStr());
+		auto collisionDef = GamePhysicsSettings::TryGetStaticMeshCollisionShapeDef(path.GetStr());
 		if(collisionDef != NULL)
 		{
-			staticObj.spRigidBody = physicsManager.CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));
+			staticObj.m_spRigidBody = physicsManager.CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));
 		}
 		else
 		{			
-			staticObj.spRigidBody = physicsManager.CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.pclEntity->getMesh(), scale);					
+			staticObj.m_spRigidBody = physicsManager.CreateMeshRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, *staticObj.m_pclEntity->getMesh(), scale);					
 		}
 
-		staticObj.spRigidBody->Register();
+		staticObj.m_spRigidBody->Register();
 	}
 }

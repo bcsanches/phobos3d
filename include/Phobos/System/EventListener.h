@@ -17,18 +17,18 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_EVENT_LISTENER_H
 #define PH_SYSTEM_EVENT_LISTENER_H
 
-#include "PH_Listener.h"
+#include <Phobos/Listener.h>
 
 namespace Phobos
 {
 	namespace System
 	{
-		class EventListener_c
+		class EventListener
 		{					
 			public:
-				virtual ~EventListener_c() {};
+				virtual ~EventListener() {};
 
-				virtual void Event(struct Event_s &event) = 0;
+				virtual void OnEvent(struct Event_s &event) = 0;
 								
 				PH_DECLARE_LISTENER_HOOK;
 		};

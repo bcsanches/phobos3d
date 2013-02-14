@@ -16,19 +16,21 @@ subject to the following restrictions:
 
 #include "PH_Core.h"
 
-#include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
-#include <boost/thread.hpp>
 #include <sstream>
 
-#include <PH_Context.h>
-#include <PH_ContextUtils.h>
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Folders.h>
-#include <PH_Kernel.h>
-#include <PH_MemoryFunctions.h>
-#include <PH_Path.h>
+#include <chrono>
+#include <thread>
+
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Folders.h>
+#include <Phobos/Log.h>
+#include <Phobos/MemoryFunctions.h>
+#include <Phobos/ObjectManager.h>
+#include <Phobos/Path.h>
+
+#include <Phobos/Shell/Context.h>
+#include <Phobos/Shell/Utils.h>
 
 #include "PH_CoreModule.h"
 #include "PH_BootModule.h"
@@ -38,83 +40,83 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	const String_c Core_c::DEFAULT_NAME = "Core";
-	CorePtr_t Core_c::ipInstance_gl;
+	const String_t Core::DEFAULT_NAME = "Core";
+	CorePtr_t Core::ipInstance_gl;
 
-	Core_c &Core_c::CreateInstance()
+	Core &Core::CreateInstance()
 	{
-		PH_ASSERT_MSG(!ipInstance_gl, "[Core_c::CreateInstance]: Instance already exists");
+		PH_ASSERT_MSG(!ipInstance_gl, "[Core::CreateInstance]: Instance already exists");
 
-		ipInstance_gl = boost::make_shared<Core_c>(DEFAULT_NAME);
+		ipInstance_gl = std::make_shared<Core>(DEFAULT_NAME);
 
-		Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c("/"));
+		ObjectManager::AddObject(*ipInstance_gl, Path("/"));
 
 		return *ipInstance_gl;
 	}
 
-	void Core_c::ReleaseInstance()
+	void Core::ReleaseInstance()
 	{
-		PH_ASSERT_MSG(ipInstance_gl, "[Core_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
+		PH_ASSERT_MSG(ipInstance_gl, "[Core::ReleaseInstance]: Instance does not exists, use CreateInstance");
 
 		ipInstance_gl->RemoveSelf();
 		ipInstance_gl.reset();
 	}
 
-	Core_c &Core_c::GetInstance()
+	Core &Core::GetInstance()
 	{
-		PH_ASSERT_MSG(ipInstance_gl, "[Core_c::GetInstance]: Instance does not exists, use CreateInstance");
+		PH_ASSERT_MSG(ipInstance_gl, "[Core::GetInstance]: Instance does not exists, use CreateInstance");
 
 		return *ipInstance_gl;
 	}
 
-	Core_c::Core_c(const Phobos::String_c &name):
-		CoreModuleManager_c(name, NodeFlags::PRIVATE_CHILDREN),
-		cmdTime("time"),
-		cmdToggleTimerPause("toggleTimerPause"),
-		cmdListModules("listModules"),
-		cmdQuit("quit"),
-		varFixedTime("dvFixedTime", "0"),
-		varEngineFPS("dvEngineFPS", "60"),
-		varMinFrameTime("dvMinFrameTime", "0.01"),
-		fLaunchedBoot(false),
-		fStopMainLoop(false)
+	Core::Core(const Phobos::String_t &name):
+		CoreModuleManager(name, NodeFlags::PRIVATE_CHILDREN),
+		m_cmdTime("time"),
+		m_cmdToggleTimerPause("toggleTimerPause"),
+		m_cmdListModules("listModules"),
+		m_cmdQuit("quit"),
+		m_varFixedTime("dvFixedTime", "0"),
+		m_varEngineFPS("dvEngineFPS", "60"),
+		m_varMinFrameTime("dvMinFrameTime", "0.01"),
+		m_fLaunchedBoot(false),
+		m_fStopMainLoop(false)
 	{
-		MemoryZero(&stSimInfo, sizeof(stSimInfo));
+		MemoryZero(&m_stSimInfo, sizeof(m_stSimInfo));
 	}
 
-	Core_c::~Core_c()
+	Core::~Core()
 	{
 		//empty
 	}
 
-	void Core_c::Shutdown()
+	void Core::Shutdown()
 	{
 		this->OnFinalize();
 	}
 
-	Float_t Core_c::GetUpdateTime(void)
+	Float_t Core::GetUpdateTime(void)
 	{
-		const Float_t updateTime = varEngineFPS.GetFloat();
+		const Float_t updateTime = m_varEngineFPS.GetFloat();
 
 		if(updateTime > 0)
 			return(1.0f / updateTime);
 		else
 		{
-			Kernel_c::GetInstance().LogStream() << "[Core_c::GetUpdateTime] Warning: Invalid update time: " << updateTime << ", must be > 0";
-			varEngineFPS.SetValue("60");
+			LogMakeStream() << "[Core::GetUpdateTime] Warning: Invalid update time: " << updateTime << ", must be > 0";
+			m_varEngineFPS.SetValue("60");
 
 			return(1.0f / UPDATE_TIME);
 		}
 	}
 
-	Float_t Core_c::GetMinFrameTime(void)
+	Float_t Core::GetMinFrameTime(void)
 	{
-		Float_t minFrameTime = varMinFrameTime.GetFloat();
+		Float_t minFrameTime = m_varMinFrameTime.GetFloat();
 
 		if(minFrameTime > 0.05)
 		{
-			Kernel_c::GetInstance().LogStream() << "[Core_c::GetMinFrameTime] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
-			varMinFrameTime.SetValue("0.01");
+			LogMakeStream() << "[Core::GetMinFrameTime] Warning: Invalid minFrameTime: " << minFrameTime << ", must be < 0.05";
+			m_varMinFrameTime.SetValue("0.01");
 
 			minFrameTime = MIN_TIME;
 		}
@@ -122,31 +124,31 @@ namespace Phobos
 		return minFrameTime;
 	}
 
-	void Core_c::MainLoop()
+	void Core::MainLoop()
 	{
 		Float_t			executionTime = 0;		
 		Float_t			updateTime = GetUpdateTime();
 		
-		clTimer.Reset();
+		m_clTimer.Reset();
 		do
 		{
 			this->SetFrameRate(updateTime);
 						
-			Float_t lastFrameTime = clTimer.Elapsed();		
+			Float_t lastFrameTime = m_clTimer.Elapsed();		
 
 			//FIXME HACK, fIX THIS
 			if(lastFrameTime > 1)
 			{
-				clTimer.Reset();
+				m_clTimer.Reset();
 				continue;
 			}
 
-			if(varFixedTime.GetBoolean())
+			if(m_varFixedTime.GetBoolean())
 				lastFrameTime = updateTime;
 
 			if(lastFrameTime == 0.0f)
-			{
-				boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+			{				
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 				continue;
 			}					
 
@@ -175,110 +177,110 @@ namespace Phobos
 
 			//update it after frame
 			updateTime = GetUpdateTime();
-			clTimer.SetMinInterval( GetMinFrameTime() );				
+			m_clTimer.SetMinInterval( GetMinFrameTime() );				
 
-		} while(!fStopMainLoop);
+		} while(!m_fStopMainLoop);
 	}
 
-	void Core_c::Update(Float_t seconds, Float_t delta)
+	void Core::Update(Float_t seconds, Float_t delta)
 	{
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
-			if(stSimInfo.stTimers[i].IsPaused())
+			if(m_stSimInfo.m_stTimers[i].IsPaused())
 				continue;
 
-			stSimInfo.stTimers[i].fpRenderFrameTime = seconds;
-			stSimInfo.stTimers[i].fpTotalRenderFrameTime += seconds;
-			stSimInfo.stTimers[i].fpDelta = delta;
+			m_stSimInfo.m_stTimers[i].m_fpRenderFrameTime = seconds;
+			m_stSimInfo.m_stTimers[i].m_fpTotalRenderFrameTime += seconds;
+			m_stSimInfo.m_stTimers[i].m_fpDelta = delta;
 		}
 
-		CoreModuleManager_c::OnUpdate();
+		CoreModuleManager::OnUpdate();
 	}
 
-	void Core_c::FixedUpdate(Float_t seconds)
+	void Core::FixedUpdate(Float_t seconds)
 	{
 		for(int i = 0;i < CORE_MAX_TIMERS; ++i)
 		{
-			if(stSimInfo.stTimers[i].IsPaused())
+			if(m_stSimInfo.m_stTimers[i].IsPaused())
 				continue;
 
-			stSimInfo.stTimers[i].fpFrameTime = seconds;
-			stSimInfo.stTimers[i].fpTotalTicks += seconds;
-			++stSimInfo.stTimers[i].uFrameCount;
+			m_stSimInfo.m_stTimers[i].m_fpFrameTime = seconds;
+			m_stSimInfo.m_stTimers[i].m_fpTotalTicks += seconds;
+			++m_stSimInfo.m_stTimers[i].m_uFrameCount;
 		}
 
-		CoreModuleManager_c::OnFixedUpdate();
+		CoreModuleManager::OnFixedUpdate();
 	}
 
-	void Core_c::RegisterCommands(IContext_c &context)
+	void Core::RegisterCommands(Shell::IContext &context)
 	{
-		cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdTime, this));
-		cmdToggleTimerPause.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdToggleTimerPause, this));
-		cmdListModules.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdListModules, this));
-		cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Core_c::CmdQuit, this));
+		m_cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdTime, this));
+		m_cmdToggleTimerPause.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdToggleTimerPause, this));
+		m_cmdListModules.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdListModules, this));
+		m_cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdQuit, this));
 
-		context.AddContextCmd(cmdTime);
-		context.AddContextCmd(cmdToggleTimerPause);
-		context.AddContextCmd(cmdListModules);
-		context.AddContextCmd(cmdQuit);
+		context.AddContextCommand(m_cmdTime);
+		context.AddContextCommand(m_cmdToggleTimerPause);
+		context.AddContextCommand(m_cmdListModules);
+		context.AddContextCommand(m_cmdQuit);
 
-		context.AddContextVar(varFixedTime);
-		context.AddContextVar(varEngineFPS);
-		context.AddContextVar(varMinFrameTime);
+		context.AddContextVariable(m_varFixedTime);
+		context.AddContextVariable(m_varEngineFPS);
+		context.AddContextVariable(m_varMinFrameTime);
 	}
 
-	void Core_c::PauseTimer(CoreTimerTypes_e timer)
+	void Core::PauseTimer(CoreTimerTypes_e timer)
 	{
 		PH_ASSERT(timer < CORE_MAX_TIMERS);
 
 		if(timer == CORE_SYS_TIMER)
 		{
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core_c::PauseTimer", "Cant pause sys timer");
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core::PauseTimer", "Cant pause sys timer");
 		}
 
-		stSimInfo.stTimers[timer].Pause();
+		m_stSimInfo.m_stTimers[timer].Pause();
 	}
 
-	void Core_c::UnpauseTimer(CoreTimerTypes_e timer)
+	void Core::UnpauseTimer(CoreTimerTypes_e timer)
 	{
 		PH_ASSERT(timer < CORE_MAX_TIMERS);
 
-		stSimInfo.stTimers[timer].Unpause();
+		m_stSimInfo.m_stTimers[timer].Unpause();
 	}
 
-	void Core_c::ToggleTimerPause(CoreTimerTypes_e timer)
+	void Core::ToggleTimerPause(CoreTimerTypes_e timer)
 	{
 		PH_ASSERT(timer < CORE_MAX_TIMERS);
 
 		if(timer == CORE_SYS_TIMER)
 		{
-			Kernel_c::GetInstance().LogMessage("IM_Core_c::PauseTimer: Cant pause sys timer");
+			LogMessage("IM_Core::PauseTimer: Cant pause sys timer");
 			return;
 		}
 
-		stSimInfo.stTimers[timer].TogglePause();
+		m_stSimInfo.m_stTimers[timer].TogglePause();
 	}
 
-	void Core_c::ResetTimer(CoreTimerTypes_e timer)
+	void Core::ResetTimer(CoreTimerTypes_e timer)
 	{
 		PH_ASSERT(timer < CORE_MAX_TIMERS);
 
-		stSimInfo.stTimers[CORE_GAME_TIMER].Reset();
+		m_stSimInfo.m_stTimers[CORE_GAME_TIMER].Reset();
 	}
 
-	void Core_c::CmdTime(const StringVector_t &args, Context_c &)
+	void Core::CmdTime(const Shell::StringVector_t &args, Shell::Context &)
 	{
 		using namespace std;
 		stringstream stream;
 
-		stream	<< "[IM_Core] Current time:"<<endl<<"\tfpTotalTics: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpTotalTicks<<endl
-				<<"\tfpFrameTime: "<<stSimInfo.stTimers[CORE_SYS_TIMER].fpFrameTime<<endl
-				<<"\tFrameCount: "<<stSimInfo.stTimers[CORE_SYS_TIMER].uFrameCount;
+		stream	<< "[IM_Core] Current time:"<<endl<<"\tfpTotalTics: "<<m_stSimInfo.m_stTimers[CORE_SYS_TIMER].m_fpTotalTicks<<endl
+				<<"\tfpFrameTime: "<<m_stSimInfo.m_stTimers[CORE_SYS_TIMER].m_fpFrameTime<<endl
+				<<"\tFrameCount: "<<m_stSimInfo.m_stTimers[CORE_SYS_TIMER].m_uFrameCount;
 
-		Kernel_c::GetInstance().LogMessage(stream.str());
+		LogMessage(stream.str());
 	}
 
-	void Core_c::CmdToggleTimerPause(const StringVector_t &args, Context_c &)
+	void Core::CmdToggleTimerPause(const Shell::StringVector_t &args, Shell::Context &)
 	{
 		struct PauseInfo_s
 		{
@@ -299,17 +301,17 @@ namespace Phobos
 			using namespace std;
 			stringstream stream;
 
-			stream << "[Core_c::CmdToggleTimerPause] togglePause usage error, usage: togglePause ";
+			stream << "[Core::CmdToggleTimerPause] togglePause usage error, usage: togglePause ";
 			for(int i = 0;pauseInfo[i].pstrzName; ++i)
 			{
 				stream << pauseInfo[i].pstrzName << '|';
 			}
 
-			Kernel_c::GetInstance().LogMessage(stream.str());
+			LogMessage(stream.str());
 			return;
 		}
 
-		const String_c &timerName(args[1]);
+		const String_t &timerName(args[1]);
 
 		for(int i = 0;pauseInfo[i].pstrzName; ++i)
 		{
@@ -318,20 +320,20 @@ namespace Phobos
 				this->ToggleTimerPause(pauseInfo[i].eType);
 
 				std::stringstream stream;
-				stream << "[Core_c::CmdToggleTimerPause] " << (stSimInfo.stTimers[pauseInfo[i].eType].IsPaused() ? "Paused" : "Unpaused") << " " << pauseInfo[i].pstrzName;				
-				Kernel_c::GetInstance().LogMessage(stream.str());				
+				stream << "[Core::CmdToggleTimerPause] " << (m_stSimInfo.m_stTimers[pauseInfo[i].eType].IsPaused() ? "Paused" : "Unpaused") << " " << pauseInfo[i].pstrzName;				
+				LogMessage(stream.str());				
 				break;
 			}
 		}
 	}
 
-	void Core_c::CmdListModules(const StringVector_t &args, Context_c &)
+	void Core::CmdListModules(const Shell::StringVector_t &args, Shell::Context &)
 	{
 		this->LogCoreModules();
 	}
 
-	void Core_c::CmdQuit(const StringVector_t &, Context_c &)
+	void Core::CmdQuit(const Shell::StringVector_t &, Shell::Context &)
 	{
-		fStopMainLoop = true;
+		m_fStopMainLoop = true;
 	}
 }

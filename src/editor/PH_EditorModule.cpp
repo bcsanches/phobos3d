@@ -1,7 +1,7 @@
 #include "Editor/PH_EditorModule.h"
 
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
 #include <PH_Session.h>
 
 #include <rapidjson/document.h>
@@ -24,56 +24,54 @@ namespace Phobos
 	}
 }
 
-Phobos::Editor::EditorModule_c::EditorModule_c():
-	CoreModule_c("EditorModule")
+Phobos::Editor::EditorModule::EditorModule():
+	CoreModule("EditorModule")
 {
 	//empty
 }
 
-Phobos::EscAction::Enum Phobos::Editor::EditorModule_c::HandleEsc(Gui::Form_c *&outForm)
+Phobos::EscAction Phobos::Editor::EditorModule::HandleEsc(Gui::Form *&outForm)
 {
 	return EscAction::IGNORE_ESC;
 }
 
 
-void Phobos::Editor::EditorModule_c::SetPlayerCmd(IPlayerCmdPtr_t cmd)
+void Phobos::Editor::EditorModule::SetPlayerCmd(IPlayerCmdPtr_t cmd)
 {
-	PH_RAISE(INVALID_OPERATION_EXCEPTION, "Phobos::Editor::EditorModule_c::SetPlayerCmd", "Not implemented");
+	PH_RAISE(INVALID_OPERATION_EXCEPTION, "Phobos::Editor::EditorModule::SetPlayerCmd", "Not implemented");
 }
 
-void Phobos::Editor::EditorModule_c::OnBoot()
+void Phobos::Editor::EditorModule::OnBoot()
 {
-	Session_c &session = Session_c::GetInstance();
+	Session &session = Session::GetInstance();
 
 	session.SetClient(this);
 	session.SetGuiForm(nullptr);
 	session.SetPlayerCommandProducer(nullptr);
 
-	clNetworkService.Start();
+	m_clNetworkService.Start();
 }
 
-void Phobos::Editor::EditorModule_c::ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response)
+void Phobos::Editor::EditorModule::ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response)
 {		
 	const auto &command = obj["command"];
 	if(command.IsNull())
 	{		
-		Kernel_c::GetInstance().LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] JSON does not contains valid commands";
+		LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] JSON does not contains valid commands";
 		return;
 	}
 
-	auto &requestFactory = RequestFactory_c::GetInstance();
+	auto &requestFactory = RequestFactory::GetInstance();
 	auto request = requestFactory.Create(command.GetString(), obj);
 	request->Execute(response);
 }
 
-void Phobos::Editor::EditorModule_c::OnFixedUpdate()
+void Phobos::Editor::EditorModule::OnFixedUpdate()
 {
-	StringVector_t messages(clNetworkService.GetPendingMessages());
+	Phobos::Shell::StringVector_t messages(m_clNetworkService.GetPendingMessages());
 
 	if(messages.empty())
-		return;
-
-	Kernel_c &kernel = Kernel_c::GetInstance();	
+		return;	
 
 	rapidjson::Document document;
 
@@ -85,7 +83,7 @@ void Phobos::Editor::EditorModule_c::OnFixedUpdate()
 
 		if(document.HasParseError())		
 		{
-			kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Error parsing JSON: " << msg;
+			LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] Error parsing JSON: " << msg;
 			continue;
 		}
 
@@ -94,7 +92,7 @@ void Phobos::Editor::EditorModule_c::OnFixedUpdate()
 		{
 			if(!commandList.IsArray())
 			{
-				kernel.LogStream() << "[Phobos::Editor::EditorModule_c::OnFixedUpdate] Command list is no an array: " << msg;
+				LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] Command list is no an array: " << msg;
 				continue;
 			}
 
@@ -109,7 +107,7 @@ void Phobos::Editor::EditorModule_c::OnFixedUpdate()
 
 	if(response.GetSize() > 0)
 	{
-		clNetworkService.SendMessage(response.GetString());
+		m_clNetworkService.SendMessage(response.GetString());
 	}
 }
 

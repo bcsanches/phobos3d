@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 #include <Phobos/Register/Table.h>
 
-#include <PH_Enum.h>
+#include <Phobos/Enum.h>
 
 #include "PH_GameRegisterUtils.h"
 #include "PH_PhysicsManager.h"
@@ -45,9 +45,9 @@ namespace
 	};
 }
 			
-Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShape(const Phobos::Register::Table_c &collisionDef, const Ogre::Vector3 &scale)
+Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShape(const Phobos::Register::Table &collisionDef, const Ogre::Vector3 &scale)
 {
-	Enum_c<Phobos::Physics::CollisionShapeTypes_t,  ShapeTypeName_s> enumMap(stShapeTypeNameTable_gl);
+	Enum<Phobos::Physics::CollisionShapeTypes_t,  ShapeTypeName_s> enumMap(stShapeTypeNameTable_gl);
 
 	Physics::CollisionShapeTypes_t type;
 	if(!enumMap.TryGetValue(type, collisionDef.GetString("colliderType")))
@@ -59,7 +59,7 @@ Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShap
 
 	CollisionShapePtr_t shape;
 
-	Physics::Manager_c &physicsManager = Physics::Manager_c::GetInstance();
+	Physics::Manager &physicsManager = Physics::Manager::GetInstance();
 
 	switch(type)
 	{
@@ -100,7 +100,7 @@ Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShap
 			break;
 
 #ifdef false
-		case Manager_c::CST_MESH:
+		case Manager::CST_MESH:
 			{
 				//Ogre::MeshPtr mesh = Ogre::ResourceManager::ins
 				//spRigidBody = physicsManager->CreateMeshRigidBody(bodyType, transform, mass, collisionTag, boxDimensions.x, boxDimensions.y, boxDimensions.z );
@@ -108,7 +108,7 @@ Phobos::Physics::CollisionShapePtr_t Phobos::Physics::Utils::CreateCollisionShap
 #endif
 
 		default:
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "RigidBodyComponent_c::OnLoad", "Shape not supported");
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "RigidBodyComponent::OnLoad", "Shape not supported");
 			break;
 	}
 

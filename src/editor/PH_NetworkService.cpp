@@ -5,16 +5,18 @@
 #include <JsonCreator/StringWriter.h>
 #include <websocketpp.hpp>
 
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+#include <Phobos/Log.h>
+#include <Phobos/Memory.h>
 
 #include "Editor/PH_MessageQueue.h"
 
 namespace
 {
-	class ServerHandler_c: public websocketpp::server::handler
+	class ServerHandler: public websocketpp::server::handler
 	{		 
 		public:
+			ServerHandler();
+
 			void validate(connection_ptr con); 
     
 			// add new connection to the lobby
@@ -34,19 +36,24 @@ namespace
     
 			void send_to_all(std::string data);    		
 
-			Phobos::Editor::MessageQueue_c clMessageQueue;
+			Phobos::Editor::MessageQueue m_clMessageQueue;
 
-			connection_ptr spConnection;
+			connection_ptr m_spConnection;
 	};
 
-	void ServerHandler_c::validate(connection_ptr con)
+	ServerHandler::ServerHandler()
+	{
+		//empty
+	}
+
+	void ServerHandler::validate(connection_ptr con)
 	{
 		//nothing to validade
 	}
 
-    void ServerHandler_c::on_open(connection_ptr con)
+    void ServerHandler::on_open(connection_ptr con)
 	{
-		spConnection = con;
+		m_spConnection = con;
 
 		JsonCreator::StringWriter writer;
 
@@ -54,14 +61,14 @@ namespace
 			auto obj = JsonCreator::MakeObject(writer);
 
 			obj.AddStringValue("command", "Log");
-			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler_c::on_open] Connection opened");
+			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler::on_open] Connection opened");
 		}
 		
-		clMessageQueue.Push(writer.GetString());
+		m_clMessageQueue.Push(writer.GetString());
 	}
         
 	
-	void ServerHandler_c::on_close(connection_ptr con)
+	void ServerHandler::on_close(connection_ptr con)
 	{
 		JsonCreator::StringWriter writer;
 
@@ -69,61 +76,59 @@ namespace
 			auto obj = JsonCreator::MakeObject(writer);
 
 			obj.AddStringValue("command", "Log");
-			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler_c::on_open] Connection closed");
+			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler::on_open] Connection closed");
 		}
 
-		clMessageQueue.Push(writer.GetString());
+		m_clMessageQueue.Push(writer.GetString());
 
-		spConnection.reset();
+		m_spConnection.reset();
 	}
     
-	void ServerHandler_c::on_message(connection_ptr con, message_ptr msg)
+	void ServerHandler::on_message(connection_ptr con, message_ptr msg)
 	{
-		clMessageQueue.Push(msg->get_payload());
+		m_clMessageQueue.Push(msg->get_payload());
 	}
 
-	Phobos::Editor::StringVector_t ServerHandler_c::GetPendingMessages()
+	Phobos::Editor::StringVector_t ServerHandler::GetPendingMessages()
 	{
-		return clMessageQueue.GetPendingMessages();
+		return m_clMessageQueue.GetPendingMessages();
 	}
 
-	void ServerHandler_c::SendMessage(const std::string &msg)
+	void ServerHandler::SendMessage(const std::string &msg)
 	{
-		spConnection->send(msg);
+		m_spConnection->send(msg);
 	}
 }
 
-Phobos::Editor::NetworkService_c::NetworkService_c():
-	clServerEndPoint(boost::make_shared<ServerHandler_c>())	
+Phobos::Editor::NetworkService::NetworkService():
+	m_clServerEndPoint(boost::make_shared<ServerHandler>())	
 {
 	//empty
 }
 
-Phobos::Editor::NetworkService_c::~NetworkService_c()
+Phobos::Editor::NetworkService::~NetworkService()
 {
-	Kernel_c &kernel = Kernel_c::GetInstance();
+	LogMessage("[Phobos::Editor::NetworkService::~NetworkService] Stopping server.");
+	m_clServerEndPoint.stop();
 
-	kernel.LogMessage("[Phobos::Editor::NetworkService_c::~NetworkService_c] Stopping server.");
-	clServerEndPoint.stop();
+	LogMessage("[Phobos::Editor::NetworkService::~NetworkService] Server stopped, waiting thread.");
 
-	kernel.LogMessage("[Phobos::Editor::NetworkService_c::~NetworkService_c] Server stopped, waiting thread.");
+	m_clThread.join();
 
-	clThread.join();
-
-	kernel.LogMessage("[Phobos::Editor::NetworkService_c::~NetworkService_c] Thread joined.");
+	LogMessage("[Phobos::Editor::NetworkService::~NetworkService] Thread joined.");
 }
 
-void Phobos::Editor::NetworkService_c::Start()
+void Phobos::Editor::NetworkService::Start()
 {	
-	clThread.swap(boost::thread([&](){ clServerEndPoint.listen(2325); }));
+	m_clThread.swap(boost::thread([&](){ m_clServerEndPoint.listen(2325); }));
 }
 
-Phobos::Editor::StringVector_t Phobos::Editor::NetworkService_c::GetPendingMessages()
+Phobos::Editor::StringVector_t Phobos::Editor::NetworkService::GetPendingMessages()
 {	
-	return boost::static_pointer_cast<ServerHandler_c>(clServerEndPoint.get_handler())->GetPendingMessages();
+	return boost::static_pointer_cast<ServerHandler>(m_clServerEndPoint.get_handler())->GetPendingMessages();
 }
 
-void Phobos::Editor::NetworkService_c::SendMessage(const std::string &msg)
+void Phobos::Editor::NetworkService::SendMessage(const std::string &msg)
 {
-	boost::static_pointer_cast<ServerHandler_c>(clServerEndPoint.get_handler())->SendMessage(msg);
+	boost::static_pointer_cast<ServerHandler>(m_clServerEndPoint.get_handler())->SendMessage(msg);
 }

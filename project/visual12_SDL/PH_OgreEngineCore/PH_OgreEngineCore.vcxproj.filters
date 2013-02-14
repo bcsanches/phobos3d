@@ -6,9 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_ContextFwd.h">
-      <Filter>Gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_OgreManager.h">
       <Filter>Gui</Filter>
     </ClInclude>

@@ -17,9 +17,9 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_INPUT_DEVICE_H
 #define PH_SYSTEM_INPUT_DEVICE_H
 
-#include <PH_Node.h>
-#include <PH_Types.h>
-#include <PH_String.h>
+#include <Phobos/Node.h>
+#include <Phobos/Types.h>
+#include <Phobos/String.h>
 
 #include "Phobos/System/InputDefs.h"
 #include "Phobos/System/InputDeviceFwd.h"
@@ -45,7 +45,7 @@ namespace Phobos
 			All devices should derive from this class.
 
 		*/
-		class InputDevice_c: public Node_c
+		class PH_SYSTEM_API InputDevice: public Node
 		{		
 			public:
 				/**		
@@ -63,11 +63,11 @@ namespace Phobos
 					For example, calling with IM_KB_UP_ARROW (define in #IM_InputKeys_e) it will put "UP_ARROW" on out.
 
 					\param action the action to get the name
-					\param out pointer to a String_c to receive the action name
+					\param out pointer to a String_t to receive the action name
 
 					\return true if the action exists
 				*/
-				virtual bool TryGetActionName(UInt_t action, String_c &out) const = 0;
+				virtual bool TryGetActionName(UInt_t action, String_t &out) const = 0;
 
 				/**
 		
@@ -79,25 +79,24 @@ namespace Phobos
 					\return IM_SUCCESS if the action name is valid for this device
 		
 				*/
-				virtual bool TryGetActionId(const String_c &name, UInt_t &out) const = 0;
+				virtual bool TryGetActionId(const String_t &name, UInt_t &out) const = 0;
 
 				inline const InputDeviceTypes_e GetDeviceType(void) const;
 
-				inline void AddListener(InputDeviceListener_c &listener);
-				inline void RemoveListener(InputDeviceListener_c &listener);
+				PH_DECLARE_LISTENER_PROCS(InputDeviceListener);	
 
 			protected:
-				inline InputDevice_c(const String_c &name, InputDeviceTypes_e);
-				inline ~InputDevice_c(void);			
+				inline InputDevice(const String_t &name, InputDeviceTypes_e);
+				inline ~InputDevice(void);			
 
 				void DispatchEvent(const InputEvent_s &event);
 
 			private:
-				const InputDeviceTypes_e eDeviceType;		
+				const InputDeviceTypes_e m_eDeviceType;		
 
-				PH_DECLARE_LISTENER_LIST_TYPE(InputDeviceListener_c);
+				PH_DECLARE_LISTENER_LIST_TYPE(InputDeviceListener);
 			
-				ListenersList_t lstListeners;
+				ListenersList_t m_lstListeners;
 		};
 
 		// =====================================================
@@ -114,14 +113,14 @@ namespace Phobos
 			\param type the type of device that this class represents
 
 		*/
-		inline InputDevice_c::InputDevice_c(const String_c &name, InputDeviceTypes_e type):
-			Node_c(name),
-			eDeviceType(type)
+		inline InputDevice::InputDevice(const String_t &name, InputDeviceTypes_e type):
+			Node(name),
+			m_eDeviceType(type)
 		{
 			//empty
 		}
 
-		inline InputDevice_c::~InputDevice_c(void)
+		inline InputDevice::~InputDevice(void)
 		{
 			//empty
 		}
@@ -133,20 +132,10 @@ namespace Phobos
 			\return the device type, check IM_InputManager_c::DeviceTypes_e
 
 		*/
-		inline const InputDeviceTypes_e InputDevice_c::GetDeviceType(void) const
+		inline const InputDeviceTypes_e InputDevice::GetDeviceType(void) const
 		{
-			return(eDeviceType);
-		}
-
-		inline void InputDevice_c::AddListener(InputDeviceListener_c &listener)
-		{
-			lstListeners.push_back(listener);
-		}
-
-		inline void InputDevice_c::RemoveListener(InputDeviceListener_c &listener)
-		{
-			listener.hkListener.unlink();
-		}
+			return(m_eDeviceType);
+		}		
 	}
 }
 

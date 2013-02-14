@@ -18,197 +18,196 @@ subject to the following restrictions:
 
 #include <algorithm>
 
-#include <boost/foreach.hpp>
 
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Log.h>
+#include <Phobos/Memory.h>
 
 #include "PH_BootModule.h"
 
 namespace Phobos
 {	
-	CoreModuleManagerPtr_t CoreModuleManager_c::Create(const String_c &name)
+	CoreModuleManagerPtr_t CoreModuleManager::Create(const String_t &name)
 	{
-		return CoreModuleManagerPtr_t(PH_NEW CoreModuleManager_c(name));
+		return CoreModuleManagerPtr_t(PH_NEW CoreModuleManager(name));
 	}
 
-	CoreModuleManager_c::CoreModuleManager_c(const Phobos::String_c &name, UInt32_t flags):
-		CoreModule_c(name, flags),
-		fLaunchedBoot(false),
-		fPendingSort(false),
-		fPendingRemoveErase(false)
+	CoreModuleManager::CoreModuleManager(const Phobos::String_t &name, UInt32_t flags):
+		CoreModule(name, flags),
+		m_fLaunchedBoot(false),
+		m_fPendingSort(false),
+		m_fPendingRemoveErase(false)
 	{
 		//empty
 	}
 
-	CoreModuleManager_c::~CoreModuleManager_c()
+	CoreModuleManager::~CoreModuleManager()
 	{
 		//empty
 	}
 
-	void CoreModuleManager_c::SortModules()
+	void CoreModuleManager::SortModules()
 	{
-		if(fPendingSort)
+		if(m_fPendingSort)
 		{
-			std::sort(vecModules.begin(), vecModules.end());
-			fPendingSort = false;
+			std::sort(m_vecModules.begin(), m_vecModules.end());
+			m_fPendingSort = false;
 		}
 	}
 
-	void CoreModuleManager_c::OnPrepareToBoot()
+	void CoreModuleManager::OnPrepareToBoot()
 	{
 		this->OnEvent(CoreEvents::PREPARE_TO_BOOT);
 	}
 
-	void CoreModuleManager_c::OnBoot()
+	void CoreModuleManager::OnBoot()
 	{
 		this->OnEvent(CoreEvents::BOOT);
 	}
 
-	void CoreModuleManager_c::OnUpdate()
+	void CoreModuleManager::OnUpdate()
 	{
 		this->UpdateDestroyList();
 		this->DispatchEvents();
 		this->SortModules();
 
-		this->CallCoreModuleProc(&CoreModule_c::OnUpdate);	
+		this->CallCoreModuleProc(&CoreModule::OnUpdate);	
 	}
 
-	void CoreModuleManager_c::OnFixedUpdate()
+	void CoreModuleManager::OnFixedUpdate()
 	{
 		this->UpdateDestroyList();
 		this->DispatchEvents();		
 		this->SortModules();
 
-		this->CallCoreModuleProc(&CoreModule_c::OnFixedUpdate);		
+		this->CallCoreModuleProc(&CoreModule::OnFixedUpdate);		
 	}
 
-	void CoreModuleManager_c::OnRenderReady()
+	void CoreModuleManager::OnRenderReady()
 	{
 		this->OnEvent(CoreEvents::RENDER_READY);
 		this->OnEvent(CoreEvents::START);
 	}
 
-	void CoreModuleManager_c::OnFinalize()
+	void CoreModuleManager::OnFinalize()
 	{				
 		this->OnEvent(CoreEvents::FINALIZE);
 		this->DispatchEvents();
 		this->UpdateDestroyList();			
 	}
 
-	void CoreModuleManager_c::CallCoreModuleProc(CoreModuleProc_t proc)
+	void CoreModuleManager::CallCoreModuleProc(CoreModuleProc_t proc)
 	{
-		for(size_t i = 0, len = vecModules.size();i < len; ++i)		
+		for(size_t i = 0, len = m_vecModules.size();i < len; ++i)		
 		{	
-			if(!vecModules[i].pclModule)
+			if(!m_vecModules[i].m_pclModule)
 				continue;
 
-			((*vecModules[i].pclModule).*proc)();
+			((*m_vecModules[i].m_pclModule).*proc)();
 		}
 	}
 
-	void CoreModuleManager_c::AddModule(CoreModule_c &module, UInt32_t priority)
+	void CoreModuleManager::AddModule(CoreModule &module, UInt32_t priority)
 	{
-		if((priority == CoreModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule_c *>(&module) == NULL))
-			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CoreModuleManager_c::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module.GetName());
+		if((priority == CoreModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule *>(&module) == NULL))
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CoreModuleManager::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module.GetName());
 
 		this->AddPrivateChild(module);		
 
-		vecModules.push_back(ModuleInfo_s(module, priority));	
-		fPendingSort = true;
+		m_vecModules.push_back(ModuleInfo_s(module, priority));	
+		m_fPendingSort = true;
 	}
 
-	void CoreModuleManager_c::AddModuleToDestroyList(CoreModule_c &module)
+	void CoreModuleManager::AddModuleToDestroyList(CoreModule &module)
 	{
-		ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), module);
-		if(it == vecModules.end())
+		ModulesVector_t::iterator it = std::find(m_vecModules.begin(), m_vecModules.end(), module);
+		if(it == m_vecModules.end())
 		{
 			std::stringstream stream;
 			stream << "Module " << module.GetName() << " not found on core list.";
 
-			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "CoreModuleManager_c::AddModuleToDestroyList", stream.str());
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "CoreModuleManager::AddModuleToDestroyList", stream.str());
 		}
 		
-		setModulesToDestroy.insert(it->pclModule);
+		m_setModulesToDestroy.insert(it->m_pclModule);
 	}
 
-	void CoreModuleManager_c::RemoveModule(CoreModule_c &module)
+	void CoreModuleManager::RemoveModule(CoreModule &module)
 	{
-		ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), module);
-		if(it == vecModules.end())
+		ModulesVector_t::iterator it = std::find(m_vecModules.begin(), m_vecModules.end(), module);
+		if(it == m_vecModules.end())
 		{
 			std::stringstream stream;
 			stream << "Module " << module.GetName() << " not found on core list.";
 
-			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "CoreModuleManager_c::AddModuleToDestroyList", stream.str());
+			PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "CoreModuleManager::AddModuleToDestroyList", stream.str());
 		}
 		
 		
 		this->RemoveChild(module);		
-		it->pclModule = NULL;
-		fPendingRemoveErase = true;
+		it->m_pclModule = NULL;
+		m_fPendingRemoveErase = true;
 	}	
 
-	void CoreModuleManager_c::UpdateDestroyList()
+	void CoreModuleManager::UpdateDestroyList()
 	{
-		if(fPendingRemoveErase)
+		if(m_fPendingRemoveErase)
 		{
-			fPendingRemoveErase = false;
-			vecModules.erase(std::remove_if(vecModules.begin(), vecModules.end(), ModuleInfo_s::IsNull));
+			m_fPendingRemoveErase = false;
+			m_vecModules.erase(std::remove_if(m_vecModules.begin(), m_vecModules.end(), ModuleInfo_s::IsNull));
 		}
 
-		BOOST_FOREACH(CoreModule_c *ptr, setModulesToDestroy)
+		for(auto ptr : m_setModulesToDestroy)		
 		{			
-			ModulesVector_t::iterator it = std::find(vecModules.begin(), vecModules.end(), *ptr);
+			ModulesVector_t::iterator it = std::find(m_vecModules.begin(), m_vecModules.end(), *ptr);
 
-			PH_ASSERT_MSG(it != vecModules.end(), "Module on removed list is not registered!!!");
+			PH_ASSERT_MSG(it != m_vecModules.end(), "Module on removed list is not registered!!!");
 						
-			vecModules.erase(it);
+			m_vecModules.erase(it);
 			this->RemoveChild(*ptr);
 			ptr->OnFinalize();
 		}
 
-		setModulesToDestroy.clear();
+		m_setModulesToDestroy.clear();
 	}
 
-	void CoreModuleManager_c::OnEvent(CoreEvents::Enum event)
+	void CoreModuleManager::OnEvent(CoreEvents::Enum event)
 	{
-		vecEvents.push_back(event);
+		m_vecEvents.push_back(event);
 	}
 
-	void CoreModuleManager_c::DispatchEvents()
+	void CoreModuleManager::DispatchEvents()
 	{
-		if(vecEvents.empty())
+		if(m_vecEvents.empty())
 			return;
 
 		//use another vector, so we do not freeze on recursive events
 		EventsVector_t tmp;
-		tmp.swap(vecEvents);
+		tmp.swap(m_vecEvents);
 
-		BOOST_FOREACH(CoreEvents::Enum event, tmp)
+		for(auto event : tmp)		
 		{
 			switch(event)
 			{
-			case CoreEvents::PREPARE_TO_BOOT:
-					this->CallCoreModuleProc(&CoreModule_c::OnPrepareToBoot);
+				case CoreEvents::PREPARE_TO_BOOT:
+					this->CallCoreModuleProc(&CoreModule::OnPrepareToBoot);
 					break;
 
 				case CoreEvents::BOOT:
-					this->CallCoreModuleProc(&CoreModule_c::OnBoot);
+					this->CallCoreModuleProc(&CoreModule::OnBoot);
 					break;
 
 				case CoreEvents::RENDER_READY:
-					this->CallCoreModuleProc(&CoreModule_c::OnRenderReady);
+					this->CallCoreModuleProc(&CoreModule::OnRenderReady);
 					break;
 
 				case CoreEvents::START:
-					this->CallCoreModuleProc(&CoreModule_c::OnStart);
+					this->CallCoreModuleProc(&CoreModule::OnStart);
 					break;
 
 				case CoreEvents::FINALIZE:
-					this->CallCoreModuleProc(&CoreModule_c::OnFinalize);
+					this->CallCoreModuleProc(&CoreModule::OnFinalize);
 					break;
 
 				default:
@@ -218,34 +217,34 @@ namespace Phobos
 		}
 	}
 	
-	void CoreModuleManager_c::LaunchBootModule(const String_c &cfgName, int argc, char *const argv[])
+	void CoreModuleManager::LaunchBootModule(const String_t &cfgName, int argc, char *const argv[])
 	{
-		if(fLaunchedBoot)
-			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core_c::LaunchBootModule", "Boot module already launched");
+		if(m_fLaunchedBoot)
+			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core::LaunchBootModule", "Boot module already launched");
 
-		std::unique_ptr<CoreModule_c> ptr(PH_NEW BootModule_c(cfgName, argc, argv, *this));
+		std::unique_ptr<CoreModule> ptr(PH_NEW BootModule(cfgName, argc, argv, *this));
 		this->AddModule(*ptr, CoreModulePriorities::BOOT_MODULE);
 
 		ptr.release();
 	}	
 
-	void CoreModuleManager_c::LogCoreModules()
+	void CoreModuleManager::LogCoreModules()
 	{
 		using namespace std;
 		stringstream stream;
 
 		stream << "Core modules start: " << endl;		
-		BOOST_FOREACH(ModuleInfo_s &m, vecModules)
+		for(auto &m : m_vecModules)		
 		{			
-			if(!m.pclModule)
+			if(!m.m_pclModule)
 				continue;			
 
-			stream << '\t' << m.pclModule->GetName() << ' ' << m.u32Priority << endl;			
+			stream << '\t' << m.m_pclModule->GetName() << ' ' << m.m_u32Priority << endl;			
 
-			CoreModuleManager_c *subModule = dynamic_cast<CoreModuleManager_c *>(m.pclModule);
+			CoreModuleManager *subModule = dynamic_cast<CoreModuleManager *>(m.m_pclModule);
 			if(subModule)
 			{
-				Kernel_c::GetInstance().LogMessage(stream.str());
+				LogMessage(stream.str());				
 				subModule->LogCoreModules();
 
 				stream.str("");
@@ -253,6 +252,6 @@ namespace Phobos
 		}
 
 		stream << "core modules finished." << endl;
-		Kernel_c::GetInstance().LogMessage(stream.str());
+		LogMessage(stream.str());
 	}
 }

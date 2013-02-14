@@ -20,17 +20,19 @@ subject to the following restrictions:
 
 #include "PH_EngineCoreAPI.h"
 
+#include <memory>
+
 namespace Phobos
 {
-	class PH_ENGINE_CORE_API IPlayerCmd_c
+	class PH_ENGINE_CORE_API IPlayerCmd
 	{
 		public:		
-			virtual ~IPlayerCmd_c() {}
+			virtual ~IPlayerCmd() {}
 	};
 
-	typedef boost::shared_ptr<IPlayerCmd_c> IPlayerCmdPtr_t;
+	typedef std::shared_ptr<IPlayerCmd> IPlayerCmdPtr_t;
 
-	class PH_ENGINE_CORE_API IPlayerCommandProducer_c
+	class PH_ENGINE_CORE_API IPlayerCommandProducer
 	{
 		public:
 			virtual IPlayerCmdPtr_t CreateCmd() = 0;

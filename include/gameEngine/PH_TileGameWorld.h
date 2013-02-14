@@ -28,48 +28,48 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	class Transform_c;
-	class TileTransform_c;
+	class Transform;
+	class TileTransform;
 
-	class PH_GAME_ENGINE_API TileGameWorld_c: public BaseOgreGameWorld_c
+	class PH_GAME_ENGINE_API TileGameWorld: public BaseOgreGameWorld
 	{
 		public:			
-			TileGameWorld_c();
-			~TileGameWorld_c();
+			TileGameWorld();
+			~TileGameWorld();
 
-			virtual void Load(const MapLoader_c &loader, const Register::Table_c &worldEntityTable);
+			virtual void Load(const MapLoader &loader, const Register::Table &worldEntityTable);
 
-			TileTransform_c CreateTileTransform(const Register::Table_c &entity) const;
-			void LoadTileTransform(TileTransform_c &out, const Register::Table_c &entity) const;
-			void LoadTileTransform(Transform_c &out, const Register::Table_c &entity) const;
-			void TileTransform2Transform(Transform_c &out, const TileTransform_c &tileTransform) const;
+			TileTransform CreateTileTransform(const Register::Table &entity) const;
+			void LoadTileTransform(TileTransform &out, const Register::Table &entity) const;
+			void LoadTileTransform(Transform &out, const Register::Table &entity) const;
+			void TileTransform2Transform(Transform &out, const TileTransform &tileTransform) const;
 
 			Ogre::Vector3 CalculatePosition(int row, int col) const;
 		
 		private:			
-			void CreateFloorMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
-			void CreateCeilingMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
+			void CreateFloorMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
+			void CreateCeilingMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 
-			void CreateNorthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
-			void CreateSouthWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
-			void CreateWestWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
-			void CreateEastWallMesh(int row, int col, const String_c &meshName, Float_t tileScale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
+			void CreateNorthWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
+			void CreateSouthWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
+			void CreateWestWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
+			void CreateEastWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 
-			void SpawnMesh(int row, int col, const String_c &meshName, Float_t tileScale, const Transform_c &transform, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
-			void SpawnMesh(const TileTransform_c transform, const String_c &meshName, const Ogre::Vector3 &scale, const String_c *optionalMaterial, const Physics::CollisionTag_c &collisionTag);
+			void SpawnMesh(int row, int col, const String_t &meshName, Float_t tileScale, const Transform &transform, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
+			void SpawnMesh(const TileTransform transform, const String_t &meshName, const Ogre::Vector3 &scale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 
-			void CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform_c &tileTransform, const Ogre::Vector3 &scale);
-			void CreateStaticObjectNode(TempStaticObject_s &obj, const Register::Table_c &dict, const Ogre::Vector3 &scale);
-			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_c &meshName, const String_c *optionalMaterial) const;
+			void CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform &tileTransform, const Ogre::Vector3 &scale);
+			void CreateStaticObjectNode(TempStaticObject_s &obj, const Register::Table &dict, const Ogre::Vector3 &scale);
+			void CreateStaticObjectMesh(TempStaticObject_s &obj, const String_t &meshName, const String_t *optionalMaterial) const;
 
-			void CreateStaticObjectRigidBody(StaticObject_s &obj, const Ogre::Vector3 &scale, const Physics::CollisionTag_c &collisionTag);
+			void CreateStaticObjectRigidBody(StaticObject_s &obj, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag);
 
 			StaticObject_s &CommitTempObject(TempStaticObject_s &obj);
 
 		private:
-			std::vector<StaticObject_s> vecObjects;
+			std::vector<StaticObject_s> m_vecObjects;
 
-			Float_t fpTileSize;			
+			Float_t m_fpTileSize;
 	};
 }
 

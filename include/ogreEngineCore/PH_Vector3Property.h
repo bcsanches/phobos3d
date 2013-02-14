@@ -17,33 +17,33 @@ subject to the following restrictions:
 #ifndef PH_VECTOR3_PROPERTY_H
 #define PH_VECTOR3_PROPERTY_H
 
-#include <PH_NodeProperty.h>
+#include <Phobos/NodeProperty.h>
 
 #include <OgreVector3.h>
 
 namespace Phobos
 {
-	class Vector3Property_c: public NodeProperty_c
+	class Vector3Property: public NodeProperty
 	{
 		private:
-			Ogre::Vector3 v3Vector;
+			Ogre::Vector3 m_v3Vector;
 			
 		public:
-			Vector3Property_c(const char *name):
-				NodeProperty_c(name),
-				v3Vector(0, 0, 0)
+			Vector3Property(const char *name):
+				NodeProperty(name),
+				m_v3Vector(0, 0, 0)
 			{
 				//empty
 			}			
 
 			inline void SetVector(const Ogre::Vector3 &vector)
 			{
-				v3Vector = vector;
+				m_v3Vector = vector;
 			}
 
 			inline const Ogre::Vector3 &GetVector(void) const
 			{
-				return v3Vector;
+				return m_v3Vector;
 			}			
 	};
 }

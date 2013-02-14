@@ -24,8 +24,8 @@ subject to the following restrictions:
 #include <OgreTerrainGroup.h>
 #include <OgreTerrainPrerequisites.h>
 
-#include <PH_ContextCmd.h>
-#include <PH_ContextVar.h>
+#include <Phobos/Shell/Command.h>
+#include <Phobos/Shell/Variable.h>
 #include <PH_CoreModule.h>
 
 #include <Phobos/System/Window.h>
@@ -42,7 +42,7 @@ namespace Ogre
 
 namespace Phobos
 {
-	class Context_c;	
+	class Context;	
 	class ShaderGeneratorTechniqueResolverListener;
 
 	PH_DECLARE_NODE_PTR(Render);	
@@ -57,10 +57,10 @@ namespace Phobos
 		};
 	}
 
-	class PH_OGRE_ENGINE_CORE_API Render_c: public CoreModule_c
+	class PH_OGRE_ENGINE_CORE_API Render: public CoreModule
 	{		
 		public:
-			~Render_c();
+			~Render();
 
 			enum EntityMeshFlags_e
 			{
@@ -70,7 +70,7 @@ namespace Phobos
 			// =====================================================
 			// PUBLIC METHODS
 			// =====================================================			
-			void CreateDefaultCmds(Context_c &context);
+			void CreateDefaultCmds(Context &context);
 			
 			Ogre::SceneManager *CreateSceneManager(Ogre::SceneTypeMask typeMask);
 			void DestroySceneManager(Ogre::SceneManager *manager);
@@ -80,32 +80,32 @@ namespace Phobos
 			void AddRenderQueueListener(Ogre::RenderQueueListener &listener);
 			void RemoveRenderQueueListener(Ogre::RenderQueueListener &listener);
 			
-			//Ogre::SceneNode *GetOrCreateSceneNode(const String_c &name);
-			Ogre::SceneNode *CreateSceneNode(const String_c &name);
+			//Ogre::SceneNode *GetOrCreateSceneNode(const String_t &name);
+			Ogre::SceneNode *CreateSceneNode(const String_t &name);
 			Ogre::SceneNode *CreateSceneNode();
 			void DestroySceneNode(Ogre::SceneNode *node);
-			Ogre::SceneNode *GetSceneNode(const String_c &name);
+			Ogre::SceneNode *GetSceneNode(const String_t &name);
 
-			Ogre::Entity	*CreateEntity(const String_c &meshName, UInt32_t flags = 0);
-			Ogre::Entity	*CreateEntity(const String_c &entityName, const String_c &meshName, UInt32_t flags = 0);
+			Ogre::Entity	*CreateEntity(const String_t &meshName, UInt32_t flags = 0);
+			Ogre::Entity	*CreateEntity(const String_t &entityName, const String_t &meshName, UInt32_t flags = 0);
 			void DestroyEntity(Ogre::Entity *entity);
 
 			Ogre::Light		*CreateLight();
-			Ogre::Light		*CreateLight(const String_c &name);
+			Ogre::Light		*CreateLight(const String_t &name);
 			void DestroyLight(Ogre::Light *light);
 
 			Ogre::Camera	*CreateCamera();
-			Ogre::Camera	*CreateCamera(const String_c &name);
+			Ogre::Camera	*CreateCamera(const String_t &name);
 			void DestroyCamera(Ogre::Camera *camera);
 
-			Ogre::ParticleSystem *CreateParticleSystem(const String_c &templateName);
-			Ogre::ParticleSystem *CreateParticleSystem(const String_c &name, const String_c &templateName);
+			Ogre::ParticleSystem *CreateParticleSystem(const String_t &templateName);
+			Ogre::ParticleSystem *CreateParticleSystem(const String_t &name, const String_t &templateName);
 			void DestroyParticleSystem(Ogre::ParticleSystem *ps);
 
 			Ogre::TerrainGroup *CreateTerrainGroup(Ogre::Terrain::Alignment align, UInt16_t terrainSize, Float_t terrainWorldSize);
 			void DestroyTerrainGroup(Ogre::TerrainGroup *group);
 
-			void SetSkyBox(bool enable, const String_c &materialName, Float_t distance = 5000, bool drawFirst = true, const Ogre::Quaternion &orientation = Ogre::Quaternion::IDENTITY);
+			void SetSkyBox(bool enable, const String_t &materialName, Float_t distance = 5000, bool drawFirst = true, const Ogre::Quaternion &orientation = Ogre::Quaternion::IDENTITY);
 			void SetAmbientColor(const Ogre::ColourValue &value);
 			Ogre::ColourValue GetAmbientColor() const;
 
@@ -116,7 +116,7 @@ namespace Phobos
 
 			const Ogre::RenderTarget::FrameStats &GetFrameStats();
 
-			void LoadCaelum(const String_c &fileName);
+			void LoadCaelum(const String_t &fileName);
 			void UnloadCaelum();
 
 			void SetShadowMode(Ogre::ShadowTechnique tech);
@@ -132,74 +132,73 @@ namespace Phobos
 			// =====================================================
 			// PROTECTED METHODS
 			// =====================================================
-			Render_c();			
+			Render();			
 
-			void OnBoot();
-			void OnInit();
+			virtual void OnBoot() override;			
 
-			void OnUpdate();
+			virtual void OnUpdate() override;
 
-			void OnPrepareToBoot();
+			virtual void OnPrepareToBoot() override;
 
 		private:
 			// =====================================================
 			// PRIVATE METHODS
 			// =====================================================			
-			void CmdOgreLoadPlugin(const StringVector_t &args, Context_c &);
-			void CmdOgreAddResourceLocation(const StringVector_t &args, Context_c &);
-			void CmdOgreInitialiseResourceGroup(const StringVector_t &args, Context_c &);
-			void CmdScreenshot(const StringVector_t &args, Context_c &);
+			void CmdOgreLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdOgreAddResourceLocation(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdOgreInitialiseResourceGroup(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdScreenshot(const Shell::StringVector_t &args, Shell::Context &);
 
-			void CmdSetShadowMode(const StringVector_t &args, Context_c &);
-			void CmdSetShadowFarDistance(const StringVector_t &args, Context_c &);
+			void CmdSetShadowMode(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdSetShadowFarDistance(const Shell::StringVector_t &args, Shell::Context &);
 
-			void VarRCaelumChanged(const ContextVar_c &var, const String_c &currentValue, const String_c &newValue);
+			void VarRCaelumChanged(const Shell::Variable &var, const String_t &currentValue, const String_t &newValue);
 
 		private:
 			// =====================================================
 			// PRIVATE ATTRIBUTES
 			// =====================================================		
-			System::WindowPtr_t					ipWindow;
+			System::WindowPtr_t					m_ipWindow;
 		
-			Float_t								fpFrameTicks;
-			Float_t								fpCurrentFPS;
-			UInt_t								uFrameCount;
+			Float_t								m_fpFrameTicks;
+			Float_t								m_fpCurrentFPS;
+			UInt_t								m_uFrameCount;
 
-			ContextVar_c						varRScreenX;
-			ContextVar_c						varRScreenY;
-			ContextVar_c						varRVSync;
-			ContextVar_c						varRFullScreen;
-			ContextVar_c						varRRenderSystem;			
+			Shell::Variable						m_varRScreenX;
+			Shell::Variable						m_varRScreenY;
+			Shell::Variable						m_varRVSync;
+			Shell::Variable						m_varRFullScreen;
+			Shell::Variable						m_varRRenderSystem;			
 
-			ContextVar_c						varRShaderSystem;
-			ContextVar_c						varRShaderSystemLibPath;
+			Shell::Variable						m_varRShaderSystem;
+			Shell::Variable						m_varRShaderSystemLibPath;
 
-			ContextVar_c						varRCaelum;
-			ContextVar_c						varParentWindow;
+			Shell::Variable						m_varRCaelum;
+			Shell::Variable						m_varParentWindow;
 
-			ContextCmd_c						cmdOgreLoadPlugin;
-			ContextCmd_c						cmdOgreAddResourceLocation;
-			ContextCmd_c						cmdOgreInitialiseResourceGroup;
-			ContextCmd_c						cmdScreenshot;
+			Shell::Command						m_cmdOgreLoadPlugin;
+			Shell::Command						m_cmdOgreAddResourceLocation;
+			Shell::Command						m_cmdOgreInitialiseResourceGroup;
+			Shell::Command						m_cmdScreenshot;
 
-			ContextCmd_c						cmdSetShadowMode;
-			ContextCmd_c						cmdSetShadowFarDistance;			
+			Shell::Command						m_cmdSetShadowMode;
+			Shell::Command						m_cmdSetShadowFarDistance;			
 
-			std::unique_ptr<Ogre::Root>									upRoot;
-			std::unique_ptr<ShaderGeneratorTechniqueResolverListener>	upShaderGeneratorTechiniqueResolverListener;
-			Ogre::RenderWindow											*pclOgreWindow;
-			Ogre::SceneManager											*pclMainSceneManager;
-			Ogre::RTShader::ShaderGenerator								*pclShaderGenerator;
+			std::unique_ptr<Ogre::Root>									m_upRoot;
+			std::unique_ptr<ShaderGeneratorTechniqueResolverListener>	m_upShaderGeneratorTechiniqueResolverListener;
+			Ogre::RenderWindow											*m_pclOgreWindow;
+			Ogre::SceneManager											*m_pclMainSceneManager;
+			Ogre::RTShader::ShaderGenerator								*m_pclShaderGenerator;
 
-			Ogre::ShadowTechnique										eShadowMode;			
+			Ogre::ShadowTechnique										m_eShadowMode;			
 
-			typedef std::list<String_c>			StringList_t;
-			StringList_t						lstPluginsName;
+			typedef std::list<String_t>			StringList_t;
+			StringList_t						m_lstPluginsName;
 
 		public:		
-			static Render_c &CreateInstance();
+			static Render &CreateInstance();
 			static void ReleaseInstance();
-			static Render_c &GetInstance();			
+			static Render &GetInstance();			
 
 		private:
 			// =====================================================

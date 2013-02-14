@@ -23,31 +23,31 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	PH_FULL_ENTITY_CREATOR("Entity", Entity_c);
+	PH_FULL_ENTITY_CREATOR("Entity", Entity);
 
-	Entity_c::Entity_c(const String_c &name):
-		EntityIO_c(name, NodeFlags::PRIVATE_CHILDREN),
-		pclTable(NULL)
+	Entity::Entity(const String_t &name):
+		EntityIO(name, NodeFlags::PRIVATE_CHILDREN),
+		m_pclTable(NULL)
 	{
 	}
 
-	void Entity_c::Load(const Register::Table_c &table)
+	void Entity::Load(const Register::Table &table)
 	{
-		pclTable = &table;
+		m_pclTable = &table;
 
-		strClassName = table.GetInherited()->GetName();
+		m_strClassName = table.GetInherited()->GetName();
 
-		const String_c *components = table.TryGetString(PH_ENTITY_KEY_COMPONENTS);
+		const String_t *components = table.TryGetString(PH_ENTITY_KEY_COMPONENTS);
 		if(components)
 		{
-			EntityComponentFactory_c &factory = EntityComponentFactory_c::GetInstance();
+			EntityComponentFactory &factory = EntityComponentFactory::GetInstance();
 
-			String_c componentName;
+			String_t componentName;
 			size_t pos = 0;
 			
 			while(StringSplitBy(componentName, *components, '|', pos, &pos))
 			{				
-				std::unique_ptr<EntityComponent_c> comp(factory.Create(componentName, componentName, *this));
+				std::unique_ptr<EntityComponent> comp(factory.Create(componentName, componentName, *this));
 				
 				this->AddPrivateChild(std::move(comp));
 			}
@@ -57,26 +57,26 @@ namespace Phobos
 
 		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			EntityComponent_c &component = static_cast<EntityComponent_c &>(*it->second);
+			EntityComponent &component = static_cast<EntityComponent &>(*it->second);
 
 			component.Load(table);
 		}
 	}
 
-	void Entity_c::LoadFinished()
+	void Entity::LoadFinished()
 	{
 		this->OnLoadFinished();
 
 		for(NodeMap_t::iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			EntityComponent_c &component = static_cast<EntityComponent_c &>(*it->second);
+			EntityComponent &component = static_cast<EntityComponent &>(*it->second);
 
 			component.LoadFinished();
 		}
 	}
 
-	EntityComponent_c &Entity_c::GetComponent(const char *typeName)
+	EntityComponent &Entity::GetComponent(const char *typeName)
 	{
-		return static_cast<EntityComponent_c &>(this->GetChild(typeName));			
+		return static_cast<EntityComponent &>(this->GetChild(typeName));			
 	}
 }

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
+#include <Phobos/DisableCopy.h>
 
 namespace Phobos
 {
@@ -13,17 +13,21 @@ namespace Phobos
 	{
 		typedef std::vector<std::string> StringVector_t;
 
-		class MessageQueue_c: boost::noncopyable
+		class MessageQueue
 		{
-			public:				
+			PH_DISABLE_COPY(MessageQueue);
+
+			public:		
+				MessageQueue();
+
 				void Push(const std::string &msg);
 
 				StringVector_t GetPendingMessages();
 
 			private:
-				std::mutex		clMutex;
+				std::mutex		m_clMutex;
 
-				StringVector_t	clQueue;
+				StringVector_t	m_clQueue;
 		};
 	}
 }

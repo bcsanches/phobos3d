@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_CORE_MODULE_FWD_H
 #define PH_CORE_MODULE_FWD_H
 
-#include <PH_NodeFwd.h>
+#include <Phobos/NodeFwd.h>
 
 namespace Phobos
 {

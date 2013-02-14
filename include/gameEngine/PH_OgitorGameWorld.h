@@ -29,43 +29,43 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	class MapLoader_c;
+	class MapLoader;
 	struct TempStaticObject_s;
 
-	class PH_GAME_ENGINE_API OgitorGameWorld_c: public BaseOgreGameWorld_c
+	class PH_GAME_ENGINE_API OgitorGameWorld: public BaseOgreGameWorld
 	{
 		public:
-			virtual void Load(const MapLoader_c &loader, const Register::Table_c &worldEntityDef);
+			virtual void Load(const MapLoader &loader, const Register::Table &worldEntityDef);
 
-			OgitorGameWorld_c();			
-			~OgitorGameWorld_c();		
+			OgitorGameWorld();			
+			~OgitorGameWorld();		
 
 		private:
 			friend struct TempStaticObject_s;			
 			
-			bool LoadGlobalObject(const String_c &type, const Register::Table_c &dict);
-			bool LoadStaticObject(StaticObject_s &object, const String_c &name, const String_c &type, const Register::Table_c &dict);
+			bool LoadGlobalObject(const String_t &type, const Register::Table &dict);
+			bool LoadStaticObject(StaticObject_s &object, const String_t &name, const String_t &type, const Register::Table &dict);
 
-			void LoadEntityObject(TempStaticObject_s &temp, const Register::Table_c &dict);
-			void LoadNodeObject(TempStaticObject_s &temp, const Register::Table_c &dict);
-			void LoadLightObject(TempStaticObject_s &temp, const Register::Table_c &dict);
+			void LoadEntityObject(TempStaticObject_s &temp, const Register::Table &dict);
+			void LoadNodeObject(TempStaticObject_s &temp, const Register::Table &dict);
+			void LoadLightObject(TempStaticObject_s &temp, const Register::Table &dict);
 
-			void LoadTerrainGroup(const Register::Table_c &dict);
-			void LoadTerrainPage(const Register::Table_c &terrainPageTable, const Register::Table_c &worldEntityDef);
+			void LoadTerrainGroup(const Register::Table &dict);
+			void LoadTerrainPage(const Register::Table &terrainPageTable, const Register::Table &worldEntityDef);
 
 			void Proc() {};
 
 		private:
-			typedef std::map<String_c, StaticObject_s> StaticObjectsMap_t;
-			StaticObjectsMap_t mapStaticObjects;
+			typedef std::map<String_t, StaticObject_s> StaticObjectsMap_t;
+			StaticObjectsMap_t m_mapStaticObjects;
 
-			Ogre::TerrainGroup			*pclTerrainGroup;
-			Ogre::TerrainGlobalOptions	*pclTerrainOptions;			
+			Ogre::TerrainGroup			*m_pclTerrainGroup;
+			Ogre::TerrainGlobalOptions	*m_pclTerrainOptions;			
 
-			const Ogre::Light			*pclTerrainLight;
+			const Ogre::Light			*m_pclTerrainLight;
 
-			const Register::Table_c	*pclTerrainGroupTable;
-			const Register::Table_c	*pclTerrainPageTable;
+			const Register::Table	*m_pclTerrainGroupTable;
+			const Register::Table	*m_pclTerrainPageTable;
 	};
 }
 

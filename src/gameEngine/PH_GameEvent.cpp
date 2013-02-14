@@ -20,15 +20,15 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	GameEvent_c::GameEvent_c(EntityIO_c &receiver, EventProc_t proc):
-		rclReceiver(receiver),
-		pfnProc(proc)		
+	GameEvent::GameEvent(EntityIO &receiver, EventProc_t proc):
+		m_rclReceiver(receiver),
+		m_pfnProc(proc)		
 	{
 		//empty
 	}
 
-	void GameEvent_c::Fire()
+	void GameEvent::Fire()
 	{
-		(rclReceiver.*pfnProc)();
+		(m_rclReceiver.*m_pfnProc)();
 	}
 }

@@ -21,43 +21,43 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		class CollisionTag_c
+		class CollisionTag
 		{
 			private:
-				UInt32_t u32Group;
-				UInt32_t u32Filter;
+				UInt32_t m_u32Group;
+				UInt32_t m_u32Filter;
 
 			public:
-				inline CollisionTag_c(UInt32_t group, UInt32_t filter):
-					u32Group(group),
-					u32Filter(filter)
+				inline CollisionTag(UInt32_t group, UInt32_t filter):
+					m_u32Group(group),
+					m_u32Filter(filter)
 				{
 					//empty
 				}
 
-				inline CollisionTag_c(const CollisionTag_c &rhs):
-					u32Group(rhs.u32Group),
-					u32Filter(rhs.u32Filter)
+				inline CollisionTag(const CollisionTag &rhs):
+					m_u32Group(rhs.m_u32Group),
+					m_u32Filter(rhs.m_u32Filter)
 				{
 					//empty
 				}
 
-				CollisionTag_c &operator=(const CollisionTag_c &rhs)
+				CollisionTag &operator=(const CollisionTag &rhs)
 				{
-					u32Group = rhs.u32Group;
-					u32Filter = rhs.u32Filter;
+					m_u32Group = rhs.m_u32Group;
+					m_u32Filter = rhs.m_u32Filter;
 
 					return *this;
 				}
 
 				inline UInt32_t GetGroup() const
 				{
-					return u32Group;
+					return m_u32Group;
 				}
 
 				inline UInt32_t GetFilter() const
 				{
-					return u32Filter;
+					return m_u32Filter;
 				}
 		};
 	}

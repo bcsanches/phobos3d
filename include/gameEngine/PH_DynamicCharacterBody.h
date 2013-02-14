@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_CollisionShapeFwd.h"
 #include "PH_GameEngineAPI.h"
@@ -30,11 +30,11 @@ namespace Phobos
 {
 	namespace Physics
 	{	
-		class PH_GAME_ENGINE_API DynamicCharacterBody_c
+		class PH_GAME_ENGINE_API DynamicCharacterBody
 		{
 			public:
-				DynamicCharacterBody_c(RigidBodyPtr_t rigidBody);
-				virtual ~DynamicCharacterBody_c();
+				DynamicCharacterBody(RigidBodyPtr_t rigidBody);
+				virtual ~DynamicCharacterBody();
 				
 				virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
 
@@ -46,7 +46,7 @@ namespace Phobos
 				virtual void Teleport(const Ogre::Vector3 &position);
 
 			private:
-				RigidBodyPtr_t spRigidBody;
+				RigidBodyPtr_t m_spRigidBody;
 		};
 	}
 }

@@ -22,41 +22,40 @@ subject to the following restrictions:
 #include <OgreRoot.h>
 
 #include <PH_Console.h>
-#include <PH_Kernel.h>
 
 #include "Gui/PH_Context.h"
 #include "Gui/PH_OgreRenderInterface.h"
 
 #include "PH_Render.h"
 
-Phobos::Gui::OgreManager_c &Phobos::Gui::OgreManager_c::CreateInstance(void)
+Phobos::Gui::OgreManager &Phobos::Gui::OgreManager::CreateInstance(void)
 {		
-	Phobos::Gui::OgreManager_c::UpdateInstance(OgreManagerPtr_t(PH_NEW OgreManager_c()));		
+	Phobos::Gui::OgreManager::UpdateInstance(OgreManagerPtr_t(PH_NEW OgreManager()));		
 
-	return static_cast<OgreManager_c &>(OgreManager_c::GetInstance());
+	return static_cast<OgreManager &>(OgreManager::GetInstance());
 }
 
-Phobos::Gui::OgreManager_c::OgreManager_c():	
-	pclSceneManager(NULL),
-	pclCamera(NULL)
+Phobos::Gui::OgreManager::OgreManager():	
+	m_pclSceneManager(NULL),
+	m_pclCamera(NULL)
 {
 	//empty
 }
 
-Phobos::Gui::OgreManager_c::~OgreManager_c()
+Phobos::Gui::OgreManager::~OgreManager()
 {
 	//empty
 }
 
-void Phobos::Gui::OgreManager_c::OnRenderReady()
+void Phobos::Gui::OgreManager::OnRenderReady()
 {
 	Ogre::ResourceGroupManager::getSingleton().createResourceGroup("Rocket");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("./", "FileSystem", "Rocket");
 	Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Rocket");
 
-	Phobos::Render_c &render = Phobos::Render_c::GetInstance();
+	Phobos::Render &render = Phobos::Render::GetInstance();
 
-	RenderInterfaceOgre_c *renderer = PH_NEW RenderInterfaceOgre_c(render.GetScreenWidth(), render.GetScreenHeight());
+	RenderInterfaceOgre *renderer = PH_NEW RenderInterfaceOgre(render.GetScreenWidth(), render.GetScreenHeight());
 	Rocket::Core::SetRenderInterface(renderer);
 	renderer->Release();
 
@@ -69,42 +68,42 @@ void Phobos::Gui::OgreManager_c::OnRenderReady()
 
 	this->LoadFonts();
 
-	pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
-	pclCamera = pclSceneManager->createCamera("Phobos::Gui::Manager::Camera");
+	m_pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
+	m_pclCamera = m_pclSceneManager->createCamera("Phobos::Gui::Manager::Camera");
 	
-	pclSceneManager->addRenderQueueListener(this);
+	m_pclSceneManager->addRenderQueueListener(this);
 
-	Ogre::Viewport *vp = render.AddViewport(pclCamera, DefaultViewportZOrder::GUI);
+	Ogre::Viewport *vp = render.AddViewport(m_pclCamera, DefaultViewportZOrder::GUI);
 
 	vp->setClearEveryFrame(false, Ogre::FBT_COLOUR);
 }
 
-void Phobos::Gui::OgreManager_c::OnFinalize()
+void Phobos::Gui::OgreManager::OnFinalize()
 {
-	if(pclSceneManager)
+	if(m_pclSceneManager)
 	{
-		Phobos::Render_c &render = Phobos::Render_c::GetInstance();
+		Phobos::Render &render = Phobos::Render::GetInstance();
 
-		pclSceneManager->destroyCamera(pclCamera);
-		pclCamera = NULL;
+		m_pclSceneManager->destroyCamera(m_pclCamera);
+		m_pclCamera = NULL;
 
-		render.DestroySceneManager(pclSceneManager);
-		pclSceneManager = NULL;
+		render.DestroySceneManager(m_pclSceneManager);
+		m_pclSceneManager = NULL;
 	}
 
 	Rocket::Core::Shutdown();
 
-	Gui::Manager_c::OnFinalize();
+	Gui::Manager::OnFinalize();
 }
 
-void Phobos::Gui::OgreManager_c::BuildProjectionMatrix(Ogre::Matrix4& projection_matrix)
+void Phobos::Gui::OgreManager::BuildProjectionMatrix(Ogre::Matrix4& projection_matrix)
 {
 	float z_near = -1;
 	float z_far = 1;
 
 	projection_matrix = Ogre::Matrix4::ZERO;
 
-	Render_c &render = Render_c::GetInstance();
+	Render &render = Render::GetInstance();
 
 	// Set up matrices.
 	projection_matrix[0][0] = 2.0f / render.GetScreenWidth();
@@ -115,7 +114,7 @@ void Phobos::Gui::OgreManager_c::BuildProjectionMatrix(Ogre::Matrix4& projection
 	projection_matrix[3][3]= 1.0000000f;
 }
 
-void Phobos::Gui::OgreManager_c::ConfigureRenderSystem()
+void Phobos::Gui::OgreManager::ConfigureRenderSystem()
 {
 	Ogre::RenderSystem* render_system = Ogre::Root::getSingleton().getRenderSystem();
 
@@ -167,27 +166,27 @@ void Phobos::Gui::OgreManager_c::ConfigureRenderSystem()
 	render_system->_setDepthBias(0, 0);
 }
 
-void Phobos::Gui::OgreManager_c::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool &skipThisInvocation)
+void Phobos::Gui::OgreManager::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool &skipThisInvocation)
 {
 	if (queueGroupId == Ogre::RENDER_QUEUE_OVERLAY && Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled())
 	{
 		this->ConfigureRenderSystem();
 
-		for(Node_c::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
+		for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			Context_c *context = static_cast<Context_c *>(it->second);
+			Context *context = static_cast<Context *>(it->second);
 
 			context->Render();
 		}
 	}
 }
 
-size_t Phobos::Gui::OgreManager_c::GetScreenWidth()
+size_t Phobos::Gui::OgreManager::GetScreenWidth()
 {
-	return Render_c::GetInstance().GetScreenWidth();
+	return Render::GetInstance().GetScreenWidth();
 }
 
-size_t Phobos::Gui::OgreManager_c::GetScreenHeight()
+size_t Phobos::Gui::OgreManager::GetScreenHeight()
 {
-	return Render_c::GetInstance().GetScreenHeight();
+	return Render::GetInstance().GetScreenHeight();
 }

@@ -15,65 +15,60 @@ subject to the following restrictions:
 */
 
 
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
-#include <PH_ProcVector.h>
+#include <Phobos/Memory.h>
+#include <Phobos/ProcVector.h>
 
 #include <Phobos/System/Window.h>
 #include <Phobos/System/EventManager.h>
 
 using namespace Phobos;
 
-class Sample_c: Phobos::System::EventListener_c
+class Sample: Phobos::System::EventListener
 {
 	public:
-		Sample_c();
-		~Sample_c();
+		Sample();
+		~Sample();
 
 		void Run();
 
-		void Event(System::Event_s &event);
+		void OnEvent(System::Event_s &event) override;
 
 	private:
-		ProcVector_c	clSingletons;
-		Phobos::System::WindowPtr_t		ipWindow;
-		Phobos::System::EventManager_c	*pclEventManager;
+		ProcVector						m_clSingletons;
+		Phobos::System::WindowPtr_t		m_ipWindow;
+		Phobos::System::EventManager	*m_pclEventManager;
 
-		bool fQuit;
+		bool m_fQuit;
 };
 
-Sample_c::Sample_c():
-	fQuit(false)
-{
-	Kernel_c::CreateInstance("Sample_01.log");
-	clSingletons.AddProc(&Kernel_c::ReleaseInstance);
+Sample::Sample():
+	m_fQuit(false)
+{	
+	m_ipWindow = Phobos::System::Window::Create("RenderWindow");
+	
+	m_ipWindow->Open("Sample 01", UIntSize_t(640, 480));
 
-	ipWindow = Phobos::System::Window_c::Create("RenderWindow");
+	m_pclEventManager = &Phobos::System::EventManager::CreateInstance("EventManager");
+	m_clSingletons.AddProc(&Phobos::System::EventManager::ReleaseInstance);	
 
-	Rect_s<UInt_t> r(0, 0, 640, 480);
-	ipWindow->Open("Sample 01", r);
-
-	pclEventManager = &Phobos::System::EventManager_c::CreateInstance("EventManager");
-	clSingletons.AddProc(&Phobos::System::EventManager_c::ReleaseInstance);	
-
-	pclEventManager->AddListener(*this, Phobos::System::EVENT_TYPE_SYSTEM);
+	m_pclEventManager->AddListener(*this, Phobos::System::EVENT_TYPE_SYSTEM);
 }
 
-Sample_c::~Sample_c()
+Sample::~Sample()
 {
-	ipWindow.reset();
+	m_ipWindow.reset();
 
-	clSingletons.CallAll();
+	m_clSingletons.CallAll();
 }
 
-void Sample_c::Event(System::Event_s &event)
+void Sample::OnEvent(System::Event_s &event)
 {
-	switch(event.eType)
+	switch(event.m_eType)
 	{
 		case Phobos::System::EVENT_TYPE_SYSTEM:
-			if(event.stSystem.eType == Phobos::System::SYSTEM_QUIT)
+			if(event.m_stSystem.m_eType == Phobos::System::SYSTEM_QUIT)
 			{
-				fQuit = true;
+				m_fQuit = true;
 				break;
 			}
 			break;
@@ -83,11 +78,11 @@ void Sample_c::Event(System::Event_s &event)
 	}
 }
 
-void Sample_c::Run()
+void Sample::Run()
 {
-	while(!fQuit)
+	while(!m_fQuit)
 	{
-		pclEventManager->Update();
+		m_pclEventManager->Update();
 	}
 }
 
@@ -97,7 +92,7 @@ int main(int, char **)
 	//Phobos::BreakMemoryAllocation(150);
 
 	{
-		Sample_c sample;
+		Sample sample;
 
 		sample.Run();			
 	}

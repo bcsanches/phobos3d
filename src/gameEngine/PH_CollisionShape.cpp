@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include "PH_CollisionShape.h"
 
-#include <PH_Exception.h>
+#include <Phobos/Exception.h>
 
 #include <iostream>
 
@@ -24,53 +24,53 @@ namespace Phobos
 {
 	namespace Physics
 	{
-		CollisionShape_c::Key_s::Key_s(const BoxShapeInfo_s &info, Float_t physicsScale):
-			eType(CollisionShapeTypes::BOX),			
-			pclMesh(NULL)
+		CollisionShape::Key_s::Key_s(const BoxShapeInfo_s &info, Float_t physicsScale):
+			m_eType(CollisionShapeTypes::BOX),			
+			m_pclMesh(NULL)
 		{
-			uShapeInfo.stBox = info;
+			m_uShapeInfo.m_stBox = info;
 
 			for(int i = 0;i < 3; ++i)
-				uShapeInfo.stBox.v3Dimension[i] *= physicsScale;
+				m_uShapeInfo.m_stBox.m_v3Dimension[i] *= physicsScale;
 		}
 
-		CollisionShape_c::Key_s::Key_s(CollisionShapeTypes_t type, const CylinderShapeInfo_s &info, Float_t physicsScale):
-			eType(type),			
-			pclMesh(NULL)
+		CollisionShape::Key_s::Key_s(CollisionShapeTypes_t type, const CylinderShapeInfo_s &info, Float_t physicsScale):
+			m_eType(type),			
+			m_pclMesh(NULL)
 		{
 			if(type == CollisionShapeTypes::CAPSULE)
 			{
-				if((info.fpRadius * 2) > info.fpHeight)
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape_c::Key_s", "Capsule height must be > than 2 * radius");
+				if((info.m_fpRadius * 2) > info.m_fpHeight)
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "CollisionShape::Key_s", "Capsule height must be > than 2 * radius");
 
-				uShapeInfo.stCylinder.fpHeight = (info.fpHeight - (2 * info.fpRadius))* physicsScale;			
+				m_uShapeInfo.m_stCylinder.m_fpHeight = (info.m_fpHeight - (2 * info.m_fpRadius))* physicsScale;			
 			}
 			else
 			{
-				uShapeInfo.stCylinder.fpHeight = info.fpHeight * physicsScale;
+				m_uShapeInfo.m_stCylinder.m_fpHeight = info.m_fpHeight * physicsScale;
 			}
 
-			uShapeInfo.stCylinder.fpRadius = info.fpRadius * physicsScale;						
+			m_uShapeInfo.m_stCylinder.m_fpRadius = info.m_fpRadius * physicsScale;						
 		}
 				
-		CollisionShape_c::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale):
-			eType(CollisionShapeTypes::MESH),			
-			pclMesh(&mesh),
-			v3MeshScale(scale * physicsScale)
+		CollisionShape::Key_s::Key_s(const Ogre::Mesh &mesh, const Ogre::Vector3 &scale, Float_t physicsScale):
+			m_eType(CollisionShapeTypes::MESH),			
+			m_pclMesh(&mesh),
+			m_v3MeshScale(scale * physicsScale)
 		{
 			//empty
 		}
 
 
-		CollisionShape_c::CollisionShape_c(CollisionShapeTypes_t type):
-			eType(type)
+		CollisionShape::CollisionShape(CollisionShapeTypes_t type):
+			m_eType(type)
 		{
 			//empty
 		}
 
-		bool CollisionShape_c::operator<(const CollisionShape_c &rhs) const
+		bool CollisionShape::operator<(const CollisionShape &rhs) const
 		{
-			return eType == rhs.eType ? (this->Compare(rhs) < 0) : eType < rhs.eType;
+			return m_eType == rhs.m_eType ? (this->Compare(rhs) < 0) : m_eType < rhs.m_eType;
 		}		
 	}
 }

@@ -20,14 +20,14 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	MoverComponent_c::MoverComponent_c(const String_c &name, Entity_c &owner):
-		EntityComponent_c(name, owner)
+	MoverComponent::MoverComponent(const String_t &name, Entity &owner):
+		EntityComponent(name, owner)
 	{
-		MoverManager_c::GetInstance().Register(*this);
+		MoverManager::GetInstance().Register(*this);
 	}
 	
-	MoverComponent_c::~MoverComponent_c()
+	MoverComponent::~MoverComponent()
 	{
-		MoverManager_c::GetInstance().Unregister(*this);
+		MoverManager::GetInstance().Unregister(*this);
 	}
 }

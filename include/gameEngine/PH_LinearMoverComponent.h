@@ -21,21 +21,21 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class TransformProperty_c;
+	class TransformProperty;
 
-	class LinearMoverComponent_c: public MoverComponent_c
+	class LinearMoverComponent: public MoverComponent
 	{
 		public:
-			static EntityComponent_c *Create(const String_c &name, Entity_c &owner);	
+			static EntityComponent *Create(const String_t &name, Entity &owner);	
 
-			~LinearMoverComponent_c();		
+			~LinearMoverComponent();		
 
 			virtual void FixedUpdate();
 
 		protected:
-			LinearMoverComponent_c(const String_c &name, Entity_c &owner);					
+			LinearMoverComponent(const String_t &name, Entity &owner);					
 
-			virtual void OnLoad(const Register::Table_c &table);
+			virtual void OnLoad(const Register::Table &table);
 
 		protected:
 			PH_DECLARE_ENTITY_OUTPUT_MANAGER;
@@ -43,7 +43,7 @@ namespace Phobos
 		private:			
 			PH_DECLARE_ENTITY_OUTPUT(PositionChanged);
 
-			TransformProperty_c *pprpTransform;
+			TransformProperty *m_pprpTransform;
 	};
 }
 

@@ -16,79 +16,78 @@ subject to the following restrictions:
 
 #include "Phobos/System/EventManager.h"
 
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Folders.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Folders.h>
+#include <Phobos/ObjectManager.h>
+#include <Phobos/Path.h>
 
+Phobos::System::EventManagerPtr_t Phobos::System::EventManager::ipInstance_gl;
 
-Phobos::System::EventManagerPtr_t Phobos::System::EventManager_c::ipInstance_gl;
+const Phobos::String_t Phobos::System::EventManager::DEFAULT_NAME("EventManager");
 
-const Phobos::String_c Phobos::System::EventManager_c::DEFAULT_NAME("EventManager");
-
-Phobos::System::EventManager_c &Phobos::System::EventManager_c::CreateInstance(const String_c &name)
+Phobos::System::EventManager &Phobos::System::EventManager::CreateInstance(const String_t &name)
 {
-	PH_ASSERT_MSG(!ipInstance_gl, "[EventManager_c::CreateInstance]: Instance already exists");
+	PH_ASSERT_MSG(!ipInstance_gl, "[EventManager::CreateInstance]: Instance already exists");
 
-	ipInstance_gl = EventManager_c::CreateInstanceImpl(name);
+	ipInstance_gl = EventManager::CreateInstanceImpl(name);
 
-	Kernel_c::GetInstance().AddObject(*ipInstance_gl, Path_c(PH_SYSTEM_FOLDER));
+	Phobos::ObjectManager::AddObject(*ipInstance_gl, Path(PH_SYSTEM_FOLDER));
 
 	return *ipInstance_gl;
 }
 
-Phobos::System::EventManager_c &Phobos::System::EventManager_c::GetInstance()
+Phobos::System::EventManager &Phobos::System::EventManager::GetInstance()
 {
-	PH_ASSERT_MSG(ipInstance_gl, "[EventManager_c::GetInstance]: Instance does not exists, use CreateInstance");
+	PH_ASSERT_MSG(ipInstance_gl, "[EventManager::GetInstance]: Instance does not exists, use CreateInstance");
 
 	return *ipInstance_gl;
 }
 
-void Phobos::System::EventManager_c::ReleaseInstance()
+void Phobos::System::EventManager::ReleaseInstance()
 {	
-	PH_ASSERT_MSG(ipInstance_gl, "[EventManager_c::ReleaseInstance]: Instance does not exists, use CreateInstance");
+	PH_ASSERT_MSG(ipInstance_gl, "[EventManager::ReleaseInstance]: Instance does not exists, use CreateInstance");
 		
 	ipInstance_gl.reset();
 }
 
-const Phobos::String_c &Phobos::System::EventManager_c::GetDefaultName()
+const Phobos::String_t &Phobos::System::EventManager::GetDefaultName()
 {
 	return DEFAULT_NAME;
 }
 
-Phobos::System::EventManager_c::EventManager_c(const String_c &name):
-	Node_c(name)
+Phobos::System::EventManager::EventManager(const String_t &name):
+	Node(name)
 {
 
 }
 
-void Phobos::System::EventManager_c::AddListener(Phobos::System::EventListener_c &listener, EventType_e type)
+void Phobos::System::EventManager::AddListener(Phobos::System::EventListener &listener, EventType_e type)
 {
-	PH_ASSERT_MSG(type != EVENT_TYPE_NUM, "[EventManager_c::AddListener]: EventType value \"EVENT_TYPE_NUM\" is not valid for adding listeners");		
+	PH_ASSERT_MSG(type != EVENT_TYPE_NUM, "[EventManager::AddListener]: EventType value \"EVENT_TYPE_NUM\" is not valid for adding listeners");		
 
-	arlstListeners[type].push_back(listener);
+	m_arlstListeners[type].push_back(listener);
 }
 
-void Phobos::System::EventManager_c::RemoveListener(EventListener_c &listener)
+void Phobos::System::EventManager::RemoveListener(EventListener &listener)
 {
-	listener.hkListener.unlink();
+	listener.m_hkListener.unlink();
 }
 
-bool Phobos::System::EventManager_c::IsListenersListEmpty(EventType_e type)
+bool Phobos::System::EventManager::IsListenersListEmpty(EventType_e type)
 {
 	PH_ASSERT(type < EVENT_TYPE_NUM);
 
-	return arlstListeners[type].empty();
+	return m_arlstListeners[type].empty();
 }
 
-void Phobos::System::EventManager_c::NotityListeners(Event_s &event)
+void Phobos::System::EventManager::NotityListeners(Event_s &event)
 {
-	PH_ASSERT(event.eType < EVENT_TYPE_NUM);
+	PH_ASSERT(event.m_eType < EVENT_TYPE_NUM);
 
-	for(EventListener_c &listener : arlstListeners[event.eType])
+	for(EventListener &listener : m_arlstListeners[event.m_eType])
 	{				
-		listener.Event(event);
+		listener.OnEvent(event);
 	}
 }
 

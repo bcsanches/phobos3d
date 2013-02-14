@@ -17,14 +17,14 @@ subject to the following restrictions:
 #ifndef PH_COLLISION_SHAPE_FWD_H
 #define PH_COLLISION_SHAPE_FWD_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace Phobos
 {
 	namespace Physics
 	{
-		class CollisionShape_c;
-		typedef boost::shared_ptr<CollisionShape_c> CollisionShapePtr_t;
+		class CollisionShape;
+		typedef std::shared_ptr<CollisionShape> CollisionShapePtr_t;
 	}
 }
 

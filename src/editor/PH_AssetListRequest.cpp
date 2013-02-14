@@ -11,18 +11,18 @@ namespace Phobos
 {
 	namespace Editor
 	{
-		PH_FULL_REQUEST_CREATOR("AssetList", AssetListRequest_c);
+		PH_FULL_REQUEST_CREATOR("AssetList", AssetListRequest);
 	}
 }
 
-Phobos::Editor::AssetListRequest_c::AssetListRequest_c(const rapidjson::Value &value):
-	Request_c(value)
+Phobos::Editor::AssetListRequest::AssetListRequest(const rapidjson::Value &value):
+	Request(value)
 {
 	//empty
 }
 
 
-void Phobos::Editor::AssetListRequest_c::OnExecute(JsonCreator::StringWriter &response)
+void Phobos::Editor::AssetListRequest::OnExecute(JsonCreator::StringWriter &response)
 {
 	Ogre::StringVectorPtr pList = Ogre::ResourceGroupManager::getSingleton().findResourceNames("PH_GameData","*.mesh",false);
 	

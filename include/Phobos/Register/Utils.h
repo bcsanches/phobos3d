@@ -17,15 +17,15 @@ subject to the following restrictions:
 #ifndef PH_REGISTER_UTILS_H
 #define PH_REGISTER_UTILS_H
 
-#include <PH_Parser.h>
-#include <PH_String.h>
+#include <Phobos/Parser.h>
+#include <Phobos/String.h>
 
 namespace Phobos
 {	
 	namespace Register
 	{
-		void RaiseParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_c &token, const char *module);
-		void RaiseParseException(const Parser_c &parser, const char *expected, const char *got, const char *module);
+		void RaiseParseException(const Parser &parser, ParserTokens_e expected, ParserTokens_e got, const String_t &token, const char *module);
+		void RaiseParseException(const Parser &parser, const char *expected, const char *got, const char *module);
 	}
 }
 

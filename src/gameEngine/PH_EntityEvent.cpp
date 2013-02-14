@@ -18,10 +18,10 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	EntityEvent_c::EntityEvent_c(UInt_t type, Entity_c &activator, Entity_c &caller):		
-		rclActivator(activator),
-		rclCaller(caller),
-		uType(type)
+	EntityEvent::EntityEvent(UInt_t type, Entity &activator, Entity &caller):		
+		m_rclActivator(activator),
+		m_rclCaller(caller),
+		m_uType(type)
 	{
 		//empty
 	}

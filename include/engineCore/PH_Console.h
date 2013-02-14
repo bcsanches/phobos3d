@@ -18,14 +18,14 @@ subject to the following restrictions:
 
 #include <boost/circular_buffer.hpp>
 
-#include <PH_Context.h>
-#include <PH_Log.h>
+#include <Phobos/Shell/Context.h>
+#include <Phobos/Log.h>
 
 #include "PH_IInputHandler.h"
 
 namespace Phobos
 {
-	class Console_c;
+	class Console;
 
 	namespace
 	{
@@ -34,17 +34,17 @@ namespace Phobos
 
 	PH_DECLARE_NODE_PTR(Console);	
 
-	class PH_ENGINE_CORE_API Console_c: 
-		public CoreModule_c, 
-		public IContext_c,
-		private LogListener_c,
-		public IInputHandler_c
+	class PH_ENGINE_CORE_API Console: 
+		public CoreModule, 
+		public Shell::IContext,
+		private Log::Listener,
+		public IInputHandler
 	{
 		private:
-			class EditBox_c
+			class EditBox
 			{
 				public:
-					inline EditBox_c(void);		
+					inline EditBox(void);		
 
 					inline void AddChar(Char_t);
 
@@ -55,39 +55,39 @@ namespace Phobos
 
 					inline void Clear(void);
 
-					inline void SetStr(const String_c &str);
+					inline void SetStr(const String_t &str);
 
-					inline const String_c &GetStr(void) const;
+					inline const String_t &GetStr(void) const;
 
 				private:
 					// =====================================================
 					// PRIVATE ATTRIBUTES
 					// =====================================================
-					String_c	strStr;
+					String_t	m_strStr;
 
-					UInt_t		uCursorPos;
+					UInt_t		m_uCursorPos;
 
 			};
 
 		protected:
-			typedef boost::circular_buffer<String_c> TextList_t;
+			typedef boost::circular_buffer<String_t> TextList_t;
 
 		public:
-			static Console_c &GetInstance(void);			
+			static Console &GetInstance(void);			
 			static void ReleaseInstance(void);
 
-			void Execute(const String_c &cmdLine);
-			void ExecuteFromFile(const String_c &fileName);
+			void Execute(const String_t &cmdLine);
+			void ExecuteFromFile(const String_t &fileName);
 
-			inline void AddContextVar(ContextVar_c &var);
-			inline void AddContextCmd(ContextCmd_c &cmd);
-			inline void RemoveContextCmd(ContextCmd_c &cmd);			
+			virtual void AddContextVariable(Shell::Variable &var) override;
+			virtual void AddContextCommand(Shell::Command &cmd) override;
+			virtual void RemoveContextCommand(Shell::Command &cmd) override;
 
-			inline const ContextVar_c &GetContextVar(const String_c &name) const;
-			inline const ContextVar_c *TryGetContextVar(const String_c &name) const;
-			inline ContextVar_c *TryGetContextVar(const String_c &name);
+			virtual const Shell::Variable &GetContextVariable(const String_t &name) const override;
+			virtual const Shell::Variable *TryGetContextVariable(const String_t &name) const override;
+			//virtual Shell::Variable *TryGetContextVariable(const String_t &name) override;
 
-			void Print(const String_c &text);
+			void Print(const String_t &text);
 
 			inline bool IsActive(void) const;
 
@@ -98,8 +98,8 @@ namespace Phobos
 			bool HandleInputEvent(const System::InputEvent_s &event);
 
 		protected:
-			Console_c(const String_c &name, UInt32_t flags = 0);
-			virtual ~Console_c();
+			Console(const String_t &name, UInt32_t flags = 0);
+			virtual ~Console();
 
 			virtual void OnToggleConsole() = 0;
 			virtual void OnEditBoxChanged() = 0;
@@ -108,15 +108,15 @@ namespace Phobos
 			inline TextList_t::const_iterator ListTextBegin() const;
 			inline TextList_t::const_iterator ListTextEnd() const;
 
-			const String_c &EditBoxStr() const;
+			const String_t &EditBoxStr() const;
 
 		protected:
 			static void UpdateInstance(ConsolePtr_t console);
 
 		private:
-			void CmdCd(const StringVector_t &args, Context_c &);
-			void CmdLs(const StringVector_t &args, Context_c &);
-			void CmdDumpTable(const StringVector_t &args, Context_c &);			
+			void CmdCd(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdLs(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdDumpTable(const Shell::StringVector_t &args, Shell::Context &);			
 
 			void OnChar(Char_t ch);
 			void OnEnter(void);		
@@ -124,34 +124,34 @@ namespace Phobos
 			void OnPreviousCommand(void);
 			void OnNextCommand(void);
 
-			void AddToHistory(const String_c &str);
+			void AddToHistory(const String_t &str);
 
-			bool GetPreviousCommand(String_c &out);
-			bool GetNextCommand(String_c &out);
+			bool GetPreviousCommand(String_t &out);
+			bool GetNextCommand(String_t &out);
 
 			//Log message handler
-			void Message(const String_c &message);					
+			virtual void OnLogMessage(const String_t &message) override;
 
-			void QueueCommand(const String_c &cmd);
+			void QueueCommand(const String_t &cmd);
 
 		private:			
-			Context_c					clContext;
+			Shell::Context				m_clContext;
 
-			ContextCmd_c				cmdLs;
-			ContextCmd_c				cmdCd;
-			ContextCmd_c				cmdDumpTable;			
+			Shell::Command				m_cmdLs;
+			Shell::Command				m_cmdCd;
+			Shell::Command				m_cmdDumpTable;			
 			
-			String_c					strCurrentNodePathName;			
+			String_t					m_strCurrentNodePathName;			
 
-			EditBox_c					clEditBox;
-			std::stringstream			clCommandBuffer;
+			EditBox						m_clEditBox;
+			std::stringstream			m_clCommandBuffer;
 			
-			TextList_t	lstText;
-			TextList_t	lstHistory;
+			TextList_t	m_lstText;
+			TextList_t	m_lstHistory;
 
-			TextList_t::iterator		itPrevCmd;
+			TextList_t::iterator		m_itPrevCmd;
 			
-			bool fActive;
+			bool m_fActive;
 
 		private:
 			// =====================================================
@@ -164,48 +164,18 @@ namespace Phobos
 	// INLINE IMPLEMENTATION
 	// =====================================================
 
-	inline bool Console_c::IsActive(void) const
+	inline bool Console::IsActive(void) const
 	{		
-		return fActive;
-	}	
+		return m_fActive;
+	}		
 
-	inline void Console_c::AddContextVar(ContextVar_c &var)
+	inline Console::TextList_t::const_iterator Console::ListTextBegin() const
 	{
-		return clContext.AddContextVar(var);
+		return m_lstText.begin();
 	}
 
-	inline void Console_c::AddContextCmd(ContextCmd_c &cmd)
+	inline Console::TextList_t::const_iterator Console::ListTextEnd() const
 	{
-		return clContext.AddContextCmd(cmd);
-	}	
-
-	inline void Console_c::RemoveContextCmd(ContextCmd_c &cmd)
-	{
-		return clContext.RemoveContextCmd(cmd);
-	}
-
-	inline const ContextVar_c &Console_c::GetContextVar(const String_c &name) const
-	{
-		return clContext.GetContextVar(name);
-	}
-
-	inline ContextVar_c *Console_c::TryGetContextVar(const String_c &name)
-	{
-		return clContext.TryGetContextVar(name);
-	}
-
-	inline const ContextVar_c *Console_c::TryGetContextVar(const String_c &name) const
-	{
-		return clContext.TryGetContextVar(name);
-	}
-
-	inline Console_c::TextList_t::const_iterator Console_c::ListTextBegin() const
-	{
-		return lstText.begin();
-	}
-
-	inline Console_c::TextList_t::const_iterator Console_c::ListTextEnd() const
-	{
-		return lstText.end();
+		return m_lstText.end();
 	}	
 }

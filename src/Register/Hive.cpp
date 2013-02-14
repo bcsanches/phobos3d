@@ -16,43 +16,43 @@ subject to the following restrictions:
 
 #include "Phobos/Register/Hive.h"
 
-#include <PH_Memory.h>
-#include <PH_Parser.h>
+#include <Phobos/Memory.h>
+#include <Phobos/Parser.h>
 
 #include "Phobos/Register/Manager.h"
 #include "Phobos/Register/Table.h"
 #include "Phobos/Register/Utils.h"
 
-Phobos::Register::HivePtr_t Phobos::Register::Hive_c::Create(const String_c &name)
+Phobos::Register::HivePtr_t Phobos::Register::Hive::Create(const String_t &name)
 {
-	return HivePtr_t(PH_NEW Hive_c(name));
+	return HivePtr_t(PH_NEW Hive(name));
 }
 
-Phobos::Register::Hive_c::Hive_c(const String_c &name):
-	Node_c(name, NodeFlags::PRIVATE_CHILDREN),
-	uSequence(0)
-{
-	//empty
-}
-
-Phobos::Register::Hive_c::~Hive_c()
+Phobos::Register::Hive::Hive(const String_t &name):
+	Node(name, NodeFlags::PRIVATE_CHILDREN),
+	m_uSequence(0)
 {
 	//empty
 }
 
-void Phobos::Register::Hive_c::AddTable(std::unique_ptr<Table_c> &&dict)
+Phobos::Register::Hive::~Hive()
+{
+	//empty
+}
+
+void Phobos::Register::Hive::AddTable(std::unique_ptr<Table> &&dict)
 {				
 	this->AddPrivateChild(std::move(dict));
 }
 
-void Phobos::Register::Hive_c::Load(Parser_c &parser)
+void Phobos::Register::Hive::Load(Parser &parser)
 {
-	String_c tokenValue;
+	String_t tokenValue;
 	ParserTokens_e token = parser.GetToken(&tokenValue);
 
-	String_c dictName;
-	String_c inherit;
-	String_c baseHive;
+	String_t dictName;
+	String_t inherit;
+	String_t baseHive;
 
 	if(token == TOKEN_ID)
 	{
@@ -66,7 +66,7 @@ void Phobos::Register::Hive_c::Load(Parser_c &parser)
 		token = parser.GetToken(&baseHive);
 		if(token != TOKEN_ID)
 		{
-			RaiseParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
+			RaiseParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive::Load");
 		}			
 
 		token = parser.GetToken(&tokenValue);
@@ -75,14 +75,14 @@ void Phobos::Register::Hive_c::Load(Parser_c &parser)
 			token = parser.GetToken(&inherit);
 			if(token != TOKEN_ID)
 			{
-				RaiseParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive_c::Load");
+				RaiseParseException(parser, TOKEN_ID, token, tokenValue, "DictionaryHive::Load");
 			}				
 
 			//grab next token (must be a {, to be handled later if nameless)
 			token = parser.GetToken(&tokenValue);
 		}
 		else if(token != TOKEN_OPEN_BRACE)
-			RaiseParseException(parser, TOKEN_OPEN_BRACE, token, tokenValue, "DictionaryHive_c::Load");
+			RaiseParseException(parser, TOKEN_OPEN_BRACE, token, tokenValue, "DictionaryHive::Load");
 		else
 		{
 			inherit.swap(baseHive);
@@ -95,13 +95,13 @@ void Phobos::Register::Hive_c::Load(Parser_c &parser)
 		if(dictName.empty())
 		{
 			dictName = "#autoName_";
-			dictName += NumberToString(uSequence++);
+			dictName += std::to_string(m_uSequence++);
 		}
 
 		parser.PushToken();
 	}		
 
-	std::unique_ptr<Table_c> dict(PH_NEW Table_c(dictName));		
+	std::unique_ptr<Table> dict(PH_NEW Table(dictName));		
 
 	if(!baseHive.empty())
 		dict->SetBaseHive(baseHive);
@@ -114,12 +114,12 @@ void Phobos::Register::Hive_c::Load(Parser_c &parser)
 	this->AddTable(std::move(dict));
 }
 
-Phobos::Register::Table_c &Phobos::Register::Hive_c::GetTable(const String_c &name)
+Phobos::Register::Table &Phobos::Register::Hive::GetTable(const String_t &name)
 {
-	return static_cast<Table_c &>(this->GetChild(name));
+	return static_cast<Table &>(this->GetChild(name));
 }
 
-Phobos::Register::Table_c *Phobos::Register::Hive_c::TryGetTable(const String_c &name)
+Phobos::Register::Table *Phobos::Register::Hive::TryGetTable(const String_t &name)
 {
-	return static_cast<Phobos::Register::Table_c *>(this->TryGetChild(name));
+	return static_cast<Phobos::Register::Table *>(this->TryGetChild(name));
 }

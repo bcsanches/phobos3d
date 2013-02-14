@@ -6,10 +6,10 @@
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API IGameController_c
+	class PH_GAME_ENGINE_API IGameController
 	{
 		public:
-			virtual ~IGameController_c() {}
+			virtual ~IGameController() {}
 
 			virtual void Update() {}
 			virtual void FixedUpdate(IPlayerCmdPtr_t cmd)= 0;

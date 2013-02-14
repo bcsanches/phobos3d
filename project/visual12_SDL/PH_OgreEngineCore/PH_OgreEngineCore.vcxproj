@@ -69,7 +69,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\ogreEngineCore\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\dictionary\;$(ProjectDir)..\..\..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\ogreEngineCore\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_CORE_EXPORTS;PH_SDL;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_ContextFwd.h" />
     <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_OgreManager.h" />
     <ClInclude Include="..\..\..\include\ogreEngineCore\Gui\PH_OgreRenderInterface.h" />
     <ClInclude Include="..\..\..\include\ogreEngineCore\PH_OgreConsole.h" />
@@ -161,12 +160,11 @@
     <ClCompile Include="..\..\..\src\ogreEngineCore\PH_Render.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_Kernel\PH_Kernel.vcxproj">
-      <Project>{aa5050ba-66d0-497c-a832-246803410108}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\PH_System\PH_System.vcxproj">

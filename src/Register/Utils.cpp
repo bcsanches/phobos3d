@@ -16,21 +16,19 @@ subject to the following restrictions:
 
 #include "Phobos/Register/Utils.h"
 
-#include <PH_Exception.h>
-#include <PH_Parser.h>
+#include <Phobos/Exception.h>
 
-
-void Phobos::Register::RaiseParseException(const Parser_c &parser, ParserTokens_e expected, ParserTokens_e got, const String_c &token, const char *module)
+void Phobos::Register::RaiseParseException(const Parser &parser, ParserTokens_e expected, ParserTokens_e got, const String_t &token, const char *module)
 {
 	std::stringstream stream;
 
-	stream << "Expected " << Parser_c::GetTokenTypeName(expected) << " but got " << Parser_c::GetTokenTypeName(got) << " value: " << token << " line " << parser.GetCurrentLine() <<  std::endl;
+	stream << "Expected " << Parser::GetTokenTypeName(expected) << " but got " << Parser::GetTokenTypeName(got) << " value: " << token << " line " << parser.GetCurrentLine() <<  std::endl;
 	//stream << "On line " << parser.Get
 
 	PH_RAISE(PARSER_EXCEPTION, module, stream.str());
 }
 
-void Phobos::Register::RaiseParseException(const Parser_c &parser, const char *expected, const char *got, const char *module)
+void Phobos::Register::RaiseParseException(const Parser &parser, const char *expected, const char *got, const char *module)
 {
 	std::stringstream stream;
 

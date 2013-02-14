@@ -4,7 +4,6 @@
     <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_NetworkService.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_MessageQueue.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_Request.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_RequestFactory.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
@@ -14,7 +13,9 @@
     <ClCompile Include="..\..\..\src\editor\PH_AssetListRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\editor\PH_Request.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />

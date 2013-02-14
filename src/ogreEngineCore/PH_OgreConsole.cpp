@@ -19,9 +19,9 @@ subject to the following restrictions:
 #include <limits.h>
 
 #include <PH_Core.h>
-#include <PH_Error.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
+
+#include <Phobos/Error.h>
+#include <Phobos/Memory.h>
 
 #include <OgreOverlayContainer.h>
 #include <OgreOverlayElement.h>
@@ -41,106 +41,106 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	OgreConsole_c &OgreConsole_c::CreateInstance(void)
+	OgreConsole &OgreConsole::CreateInstance(void)
 	{		
-		Console_c::UpdateInstance(OgreConsolePtr_t(PH_NEW OgreConsole_c()));		
+		Console::UpdateInstance(OgreConsolePtr_t(PH_NEW OgreConsole()));		
 
-		return static_cast<OgreConsole_c &>(Console_c::GetInstance());
+		return static_cast<OgreConsole &>(Console::GetInstance());
 	}
 	
-	OgreConsole_c::OgreConsole_c(void):
-		Console_c("Console"),
-		pclRect(NULL),
-		pclTextBox(NULL),
-		pclOverlay(NULL),
-		pclRenderInfoOverlay(NULL),
-		fpHeight(0),		
-		varMaterialName("dvConsoleMaterialName", "PH_Console/Background"),
-		varShowRenderInfo("dvShowRenderInfo", "0"),
-		fEditBoxChanged(true),
-		fTextBufferChanged(true)
+	OgreConsole::OgreConsole(void):
+		Console("Console"),
+		m_pclRect(NULL),
+		m_pclTextBox(NULL),
+		m_pclOverlay(NULL),
+		m_pclRenderInfoOverlay(NULL),
+		m_fpHeight(0),		
+		m_varMaterialName("dvConsoleMaterialName", "PH_Console/Background"),
+		m_varShowRenderInfo("dvShowRenderInfo", "0"),
+		m_fEditBoxChanged(true),
+		m_fTextBufferChanged(true)
 	{				
-		this->AddContextVar(varMaterialName);
-		this->AddContextVar(varShowRenderInfo);		
+		this->AddContextVariable(m_varMaterialName);
+		this->AddContextVariable(m_varShowRenderInfo);		
 	}
 
-	OgreConsole_c::~OgreConsole_c(void)
+	OgreConsole::~OgreConsole(void)
 	{
 		//empty
 	}	
 
-	void OgreConsole_c::OnFinalize()
+	void OgreConsole::OnFinalize()
 	{
 		Ogre::OverlayManager& overlayManager = Ogre::OverlayManager::getSingleton();
 
-		overlayManager.destroyOverlayElement(pclRect);
-		overlayManager.destroyOverlayElement(pclTextBox);	
+		overlayManager.destroyOverlayElement(m_pclRect);
+		overlayManager.destroyOverlayElement(m_pclTextBox);	
 
-		overlayManager.destroy(pclOverlay);		
-		overlayManager.destroy(pclRenderInfoOverlay);		
+		overlayManager.destroy(m_pclOverlay);		
+		overlayManager.destroy(m_pclRenderInfoOverlay);		
 
-		if(pclSceneManager)
+		if(m_pclSceneManager)
 		{
-			if(pclCamera)
-				pclSceneManager->destroyCamera(pclCamera);
+			if(m_pclCamera)
+				m_pclSceneManager->destroyCamera(m_pclCamera);
 
-			Render_c &render = Render_c::GetInstance();
+			Render &render = Render::GetInstance();
 
-			render.DestroySceneManager(pclSceneManager);
+			render.DestroySceneManager(m_pclSceneManager);
 		}				
 	}
 
-	void OgreConsole_c::OnEditBoxChanged()
+	void OgreConsole::OnEditBoxChanged()
 	{
-		fEditBoxChanged = true;
+		m_fEditBoxChanged = true;
 	}
 	
-	void OgreConsole_c::OnTextListChanged()
+	void OgreConsole::OnTextListChanged()
 	{
-		fTextBufferChanged = true;
+		m_fTextBufferChanged = true;
 	}
 
-	void OgreConsole_c::OnUpdate(void)
+	void OgreConsole::OnUpdate(void)
 	{
-		if(pclRenderInfoOverlay)
+		if(m_pclRenderInfoOverlay)
 		{
-			if(varShowRenderInfo.GetBoolean())
+			if(m_varShowRenderInfo.GetBoolean())
 			{
-				if(!pclRenderInfoOverlay->isVisible())
-					pclRenderInfoOverlay->show();
+				if(!m_pclRenderInfoOverlay->isVisible())
+					m_pclRenderInfoOverlay->show();
 
 				this->UpdateRenderInfo();
 			}
-			else if(pclRenderInfoOverlay->isVisible())
-				pclRenderInfoOverlay->hide();
+			else if(m_pclRenderInfoOverlay->isVisible())
+				m_pclRenderInfoOverlay->hide();
 		}
 
-		if(!pclTextBox)
+		if(!m_pclTextBox)
 			return;
 
 		bool visible = true;
 
 		if(this->IsActive())
 		{
-			if(fpHeight < CONSOLE_HEIGHT)
+			if(m_fpHeight < CONSOLE_HEIGHT)
 			{
-				fpHeight += Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
-				fUIMoved = true;
-				if(fpHeight >= CONSOLE_HEIGHT)
+				m_fpHeight += Core::GetInstance().GetSimInfo().m_stTimers[CORE_SYS_TIMER].m_fpRenderFrameTime * CONSOLE_TIME;
+				m_fUIMoved = true;
+				if(m_fpHeight >= CONSOLE_HEIGHT)
 				{
-					fpHeight = CONSOLE_HEIGHT;
+					m_fpHeight = CONSOLE_HEIGHT;
 				}
 			}
 		}
-		else if(fpHeight > 0)
+		else if(m_fpHeight > 0)
 		{
-			fpHeight -= Core_c::GetInstance().GetSimInfo().stTimers[CORE_SYS_TIMER].fpRenderFrameTime * CONSOLE_TIME;
-			fUIMoved = true;
+			m_fpHeight -= Core::GetInstance().GetSimInfo().m_stTimers[CORE_SYS_TIMER].m_fpRenderFrameTime * CONSOLE_TIME;
+			m_fUIMoved = true;
 
-			if(fpHeight <= 0)
+			if(m_fpHeight <= 0)
 			{
-				pclOverlay->hide();
-				fpHeight = 0;
+				m_pclOverlay->hide();
+				m_fpHeight = 0;
 			}
 		}
 		else
@@ -152,13 +152,13 @@ namespace Phobos
 		{
 			//pclTextBox->setPosition(0,(fHeight-1)*0.5);
 			//pclRect->setCorners(-1,1+fHeight,1,1-fHeight);
-			if(fUIMoved)
+			if(m_fUIMoved)
 			{
-				pclRect->setPosition(0, (fpHeight - CONSOLE_HEIGHT));
-				fUIMoved = false;
+				m_pclRect->setPosition(0, (m_fpHeight - CONSOLE_HEIGHT));
+				m_fUIMoved = false;
 			}
 
-			if(fTextBufferChanged || fEditBoxChanged)
+			if(m_fTextBufferChanged || m_fEditBoxChanged)
 			{
 				Ogre::String text;
 
@@ -169,7 +169,7 @@ namespace Phobos
 					if(i == CONSOLE_LINE_COUNT)
 						break;
 
-					const String_c &str = (*it);
+					const String_t &str = (*it);
 
 					if(str.length() > CONSOLE_LINE_LENGHT)
 					{
@@ -187,7 +187,7 @@ namespace Phobos
 				try
 				{
 
-					pclTextBox->setCaption(text);
+					m_pclTextBox->setCaption(text);
 				}
 				catch(...)
 				{
@@ -195,72 +195,72 @@ namespace Phobos
 					//the fucking conversion to utf8 sometimes throw exceptions
 				}
 
-				fTextBufferChanged = fEditBoxChanged = false;
+				m_fTextBufferChanged = m_fEditBoxChanged = false;
 			}
 		}
 	}
 
-	void OgreConsole_c::OnRenderReady(void)
+	void OgreConsole::OnRenderReady(void)
     {
 		using namespace Ogre;
 
-		fpHeight = 0;
+		m_fpHeight = 0;
 
 		try
 		{  
-			Render_c &render = Render_c::GetInstance();
+			Render &render = Render::GetInstance();
 
-			pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
-			pclCamera = pclSceneManager->createCamera("PH_ConsoleCamera");
+			m_pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
+			m_pclCamera = m_pclSceneManager->createCamera("PH_ConsoleCamera");
 
 			// Create background rectangle covering the whole screen
 			OverlayManager& overlayManager = OverlayManager::getSingleton();
 
-			pclTextBox=overlayManager.createOverlayElement("TextArea","ConsoleText");
-			pclTextBox->setCaption("Phobos Engine Console");
-			pclTextBox->setMetricsMode(GMM_RELATIVE);
-			pclTextBox->setPosition(0,0);
-			pclTextBox->setParameter("font_name","PH_Console");
-			pclTextBox->setParameter("colour_top","1 1 1");
-			pclTextBox->setParameter("colour_bottom","1 1 1");
-			pclTextBox->setParameter("char_height","0.03");
+			m_pclTextBox=overlayManager.createOverlayElement("TextArea","ConsoleText");
+			m_pclTextBox->setCaption("Phobos Engine Console");
+			m_pclTextBox->setMetricsMode(GMM_RELATIVE);
+			m_pclTextBox->setPosition(0,0);
+			m_pclTextBox->setParameter("font_name","PH_Console");
+			m_pclTextBox->setParameter("colour_top","1 1 1");
+			m_pclTextBox->setParameter("colour_bottom","1 1 1");
+			m_pclTextBox->setParameter("char_height","0.03");
 
-			pclRect = static_cast<OverlayContainer *>(overlayManager.createOverlayElement("Panel", "panelName"));
-			pclRect->setMetricsMode(Ogre::GMM_RELATIVE);
-			pclRect->setPosition(0, -CONSOLE_HEIGHT);
-			pclRect->setDimensions(1, CONSOLE_HEIGHT);
-			pclRect->setMaterialName(varMaterialName.GetValue());
+			m_pclRect = static_cast<OverlayContainer *>(overlayManager.createOverlayElement("Panel", "panelName"));
+			m_pclRect->setMetricsMode(Ogre::GMM_RELATIVE);
+			m_pclRect->setPosition(0, -CONSOLE_HEIGHT);
+			m_pclRect->setDimensions(1, CONSOLE_HEIGHT);
+			m_pclRect->setMaterialName(m_varMaterialName.GetValue());
 
 
-			pclOverlay=overlayManager.create("Console");
-			pclOverlay->add2D(pclRect);
-			pclRect->addChild(pclTextBox);
+			m_pclOverlay=overlayManager.create("Console");
+			m_pclOverlay->add2D(m_pclRect);
+			m_pclRect->addChild(m_pclTextBox);
 
-			pclOverlay->setZOrder(650);
-			pclOverlay->show();
+			m_pclOverlay->setZOrder(650);
+			m_pclOverlay->show();
 
-			pclRenderInfoOverlay = overlayManager.getByName("Core/RenderInfoOverlay");
-			pclRenderInfoOverlay->show();
+			m_pclRenderInfoOverlay = overlayManager.getByName("Core/RenderInfoOverlay");
+			m_pclRenderInfoOverlay->show();
 
-			render.AddViewport(pclCamera, DefaultViewportZOrder::CONSOLE);
+			render.AddViewport(m_pclCamera, DefaultViewportZOrder::CONSOLE);
 		}
 		catch(Ogre::Exception &)
 		{
 			//FIXME
-			//LogOgreException("Console_c::OnRenderReady", e);
+			//LogOgreException("Console::OnRenderReady", e);
 			throw;
 		}
 	}	
 
-	void OgreConsole_c::OnToggleConsole()
+	void OgreConsole::OnToggleConsole()
 	{
-		if(this->IsActive() && pclOverlay)
+		if(this->IsActive() && m_pclOverlay)
 		{			
-			pclOverlay->show();
+			m_pclOverlay->show();
 		}
 	}					
 
-	void OgreConsole_c::UpdateRenderInfo()
+	void OgreConsole::UpdateRenderInfo()
 	{
 		using namespace Ogre;
 
@@ -279,7 +279,7 @@ namespace Phobos
 			OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("Core/BestFps");
 			OverlayElement* guiWorst = OverlayManager::getSingleton().getOverlayElement("Core/WorstFps");
 
-			const RenderTarget::FrameStats& stats = Render_c::GetInstance().GetFrameStats();
+			const RenderTarget::FrameStats& stats = Render::GetInstance().GetFrameStats();
 			guiAvg->setCaption(avgFps + StringConverter::toString(stats.avgFPS));
 			guiCurr->setCaption(currFps + StringConverter::toString(stats.lastFPS));
 			guiBest->setCaption(bestFps + StringConverter::toString(stats.bestFPS)

@@ -17,9 +17,9 @@ subject to the following restrictions:
 
 #include "Phobos/System/SDL/EventManagerSDL.h"
 
-#include <PH_Error.h>
-#include <PH_Exception.h>
-#include <PH_Memory.h>
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Memory.h>
 
 #include "Phobos/System/InputActions.h"
 
@@ -31,14 +31,14 @@ namespace Phobos
 		{
 			struct SDLToKeyCode_s
 			{
-				UInt16_t u16SDL;
-				UInt16_t u16Phobos;
+				UInt16_t m_u16SDL;
+				UInt16_t m_u16Phobos;
 			};
 
 			struct SDLToMouseButton_s
 			{
-				UInt16_t u16SDL;
-				UInt16_t u16Phobos;
+				UInt16_t m_u16SDL;
+				UInt16_t m_u16Phobos;
 			};
 
 			static SDLToMouseButton_s SDLToMouseButton_g[] =
@@ -420,9 +420,9 @@ namespace Phobos
 //
 //Creation HACK
 //
-Phobos::System::EventManagerPtr_t Phobos::System::EventManager_c::CreateInstanceImpl(const String_c &name)
+Phobos::System::EventManagerPtr_t Phobos::System::EventManager::CreateInstanceImpl(const String_t &name)
 {
-	return EventManagerPtr_t(PH_NEW EventManagerSDL_c(name));
+	return EventManagerPtr_t(PH_NEW EventManagerSDL(name));
 }
 
 //
@@ -431,21 +431,21 @@ Phobos::System::EventManagerPtr_t Phobos::System::EventManager_c::CreateInstance
 //
 //
 
-inline bool Phobos::System::EventManagerSDL_c::IsValidSDLToPhobosKeyCode(SDLKey key)
+inline bool Phobos::System::EventManagerSDL::IsValidSDLToPhobosKeyCode(SDLKey key)
 {
 	if(key >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
 		return(false);
 
-	if((stSDLToKeyCode_g[key].u16Phobos == 0) && (stSDLToKeyCode_g[key].u16SDL == 0))
+	if((stSDLToKeyCode_g[key].m_u16Phobos == 0) && (stSDLToKeyCode_g[key].m_u16SDL == 0))
 		return(false);
 
 	return(true);
 }
 
-bool Phobos::System::EventManagerSDL_c::BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
+bool Phobos::System::EventManagerSDL::BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
 {
-	event.eType = EVENT_TYPE_KEYBOARD;
-	event.pParam = &sdl_event;
+	event.m_eType = EVENT_TYPE_KEYBOARD;
+	event.m_pParam = &sdl_event;
 
 	switch(sdl_event.type)
 	{
@@ -453,8 +453,8 @@ bool Phobos::System::EventManagerSDL_c::BuildKeyboardEvent(Event_s &event, SDL_E
 
             if(sdl_event.key.keysym.unicode != 0)
             {
-                event.stKeyboard.eType   = KEYBOARD_CHAR;
-                event.stKeyboard.u16Code = sdl_event.key.keysym.unicode;
+                event.m_stKeyboard.m_eType   = KEYBOARD_CHAR;
+                event.m_stKeyboard.m_u16Code = sdl_event.key.keysym.unicode;
 
                 this->NotityListeners(event);
             }
@@ -462,8 +462,8 @@ bool Phobos::System::EventManagerSDL_c::BuildKeyboardEvent(Event_s &event, SDL_E
             if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
                 return(false);
 
-            event.stKeyboard.eType   = KEYBOARD_KEY_DOWN;
-            event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
+            event.m_stKeyboard.m_eType   = KEYBOARD_KEY_DOWN;
+            event.m_stKeyboard.m_u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].m_u16Phobos;
 
 			break;
 
@@ -471,8 +471,8 @@ bool Phobos::System::EventManagerSDL_c::BuildKeyboardEvent(Event_s &event, SDL_E
 			if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
 				return(false);
 
-			event.stKeyboard.eType   = KEYBOARD_KEY_UP;
-			event.stKeyboard.u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].u16Phobos;
+			event.m_stKeyboard.m_eType   = KEYBOARD_KEY_UP;
+			event.m_stKeyboard.m_u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].m_u16Phobos;
 			break;
 
         default:
@@ -482,33 +482,33 @@ bool Phobos::System::EventManagerSDL_c::BuildKeyboardEvent(Event_s &event, SDL_E
 	return true;
 }
 
-void Phobos::System::EventManagerSDL_c::BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
+void Phobos::System::EventManagerSDL::BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
 {
-	event.eType = EVENT_TYPE_MOUSE;
-	event.pParam = &sdl_event;
+	event.m_eType = EVENT_TYPE_MOUSE;
+	event.m_pParam = &sdl_event;
 
 	switch(sdl_event.type)
 	{
 		case SDL_MOUSEMOTION:
 
-			event.stMouse.eType         = MOUSE_MOVE;
-			event.stMouse.u16X          = sdl_event.motion.x;
-			event.stMouse.u16Y          = sdl_event.motion.y;
-            event.stMouse.u16ButtonId   = MOUSE_THUMB;
+			event.m_stMouse.m_eType         = MOUSE_MOVE;
+			event.m_stMouse.m_u16X          = sdl_event.motion.x;
+			event.m_stMouse.m_u16Y          = sdl_event.motion.y;
+            event.m_stMouse.m_u16ButtonId   = MOUSE_THUMB;
 
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
 
-            event.stMouse.u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].u16Phobos;
-			event.stMouse.eType = MOUSE_BUTTON_DOWN;
+            event.m_stMouse.m_u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].m_u16Phobos;
+			event.m_stMouse.m_eType = MOUSE_BUTTON_DOWN;
 
 			break;
 
         case SDL_MOUSEBUTTONUP:
 
-            event.stMouse.u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].u16Phobos;
-			event.stMouse.eType = MOUSE_BUTTON_UP;
+            event.m_stMouse.m_u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].m_u16Phobos;
+			event.m_stMouse.m_eType = MOUSE_BUTTON_UP;
 
             break;
 
@@ -517,24 +517,24 @@ void Phobos::System::EventManagerSDL_c::BuildMouseEvent(Event_s &event, SDL_Even
 	}
 }
 
-void Phobos::System::EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
+void Phobos::System::EventManagerSDL::BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
 {
-    event.eType  = EVENT_TYPE_SYSTEM;
-    event.pParam = &sdl_event;
+    event.m_eType  = EVENT_TYPE_SYSTEM;
+    event.m_pParam = &sdl_event;
 
 	switch(sdl_event.type)
 	{
 		case SDL_QUIT:
 
-			event.stSystem.eType = SYSTEM_QUIT;
+			event.m_stSystem.m_eType = SYSTEM_QUIT;
 
 			break;
 
 		case SDL_ACTIVEEVENT:
 
-			event.stSystem.eType = SYSTEM_ACTIVATE;
-			event.stSystem.fActive = true;
-			event.stSystem.fMinimized = false;
+			event.m_stSystem.m_eType = SYSTEM_ACTIVATE;
+			event.m_stSystem.m_fActive = true;
+			event.m_stSystem.m_fMinimized = false;
 
 			break;
 
@@ -550,13 +550,13 @@ void Phobos::System::EventManagerSDL_c::BuildSystemEvent(Event_s &event, SDL_Eve
 //
 //
 
-Phobos::System::EventManagerSDL_c::EventManagerSDL_c(const String_c &name):
-	EventManager_c(name)
+Phobos::System::EventManagerSDL::EventManagerSDL(const String_t &name):
+	EventManager(name)
 {
 	//empty
 }
 
-void Phobos::System::EventManagerSDL_c::Update()
+void Phobos::System::EventManagerSDL::Update()
 {
 	Event_s	event;
 	SDL_Event sdl_event;

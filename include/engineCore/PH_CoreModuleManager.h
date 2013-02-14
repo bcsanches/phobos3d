@@ -53,25 +53,25 @@ namespace Phobos
 		};
 	}
 
-	class PH_ENGINE_CORE_API CoreModuleManager_c: public CoreModule_c
+	class PH_ENGINE_CORE_API CoreModuleManager: public CoreModule
 	{
 		public:
-			static CoreModuleManagerPtr_t Create(const String_c &name);
+			static CoreModuleManagerPtr_t Create(const String_t &name);
 
-			~CoreModuleManager_c();
+			~CoreModuleManager();
 
-			void AddModule(CoreModule_c &module, UInt32_t priority = CoreModulePriorities::NORMAL);
-			void AddModuleToDestroyList(CoreModule_c &module);
-			void RemoveModule(CoreModule_c &module);
+			void AddModule(CoreModule &module, UInt32_t priority = CoreModulePriorities::NORMAL);
+			void AddModuleToDestroyList(CoreModule &module);
+			void RemoveModule(CoreModule &module);
 
 			void OnEvent(CoreEvents::Enum event);
 
-			void LaunchBootModule(const String_c &cfgName, int argc, char *const argv[]);
+			void LaunchBootModule(const String_t &cfgName, int argc, char *const argv[]);
 
 			void LogCoreModules();
 
 		protected:
-			CoreModuleManager_c(const String_c &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);			
+			CoreModuleManager(const String_t &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);			
 
 			virtual void OnUpdate();
 			virtual void OnFixedUpdate();
@@ -90,54 +90,54 @@ namespace Phobos
 		protected:
 			struct ModuleInfo_s
 			{
-				UInt32_t u32Priority;
-				CoreModule_c *pclModule;
+				UInt32_t m_u32Priority;
+				CoreModule *m_pclModule;
 
 				static inline bool IsNull(const ModuleInfo_s &info)
 				{
-					return !info.pclModule;
+					return !info.m_pclModule;
 				}
 
-				inline ModuleInfo_s(CoreModule_c &module, UInt32_t priority):
-					u32Priority(priority),
-					pclModule(&module)
+				inline ModuleInfo_s(CoreModule &module, UInt32_t priority):
+					m_u32Priority(priority),
+					m_pclModule(&module)
 				{
 				}
 
 				inline ModuleInfo_s(const ModuleInfo_s &rhs):
-					u32Priority(rhs.u32Priority),
-					pclModule(rhs.pclModule)
+					m_u32Priority(rhs.m_u32Priority),
+					m_pclModule(rhs.m_pclModule)
 				{
 				}
 
 				inline bool operator<(const ModuleInfo_s &rhs) const
 				{
-					return rhs.u32Priority < u32Priority;
+					return rhs.m_u32Priority < m_u32Priority;
 				}
 
-				inline bool operator==(const CoreModule_c &module) const
+				inline bool operator==(const CoreModule &module) const
 				{
-					return pclModule == &module;
+					return m_pclModule == &module;
 				}
 
 				inline bool operator==(const ModuleInfo_s &info) const
 				{
-					return pclModule == info.pclModule;
+					return m_pclModule == info.m_pclModule;
 				}
 			};
 
 			typedef std::vector<ModuleInfo_s>	ModulesVector_t;
-			ModulesVector_t						vecModules;
+			ModulesVector_t						m_vecModules;
 
-			typedef std::set<CoreModule_c *>	ModulesSet_t;
-			ModulesSet_t						setModulesToDestroy;
+			typedef std::set<CoreModule *>	ModulesSet_t;
+			ModulesSet_t					m_setModulesToDestroy;
 
 			typedef std::vector<CoreEvents::Enum>	EventsVector_t;
-			EventsVector_t							vecEvents;
+			EventsVector_t							m_vecEvents;
 
-			bool								fLaunchedBoot;
-			bool								fPendingSort;
-			bool								fPendingRemoveErase;
+			bool								m_fLaunchedBoot;
+			bool								m_fPendingSort;
+			bool								m_fPendingRemoveErase;
 	};
 }
 

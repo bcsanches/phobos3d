@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_SYSTEM_INPUT_DEFS_H
 #define PH_SYSTEM_INPUT_DEFS_H
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 namespace Phobos
 {
@@ -59,8 +59,8 @@ namespace Phobos
 		*/
 		struct InputEventThumb_s
 		{
-			UInt_t 	uId;
-			Float_t	fpAxis[2];
+			UInt_t 	m_uId;
+			Float_t	m_fpAxis[2];
 		};
 
 		/**
@@ -72,7 +72,7 @@ namespace Phobos
 		struct InputEventChar_s
 		{
 			//Always down
-			UInt16_t u16Char;
+			UInt16_t m_u16Char;
 		};
 
 		/**
@@ -101,13 +101,13 @@ namespace Phobos
 		struct InputEventButton_s
 		{
 			//!The id of the button, can use this with the device to get the button name						
-			UInt_t				uId;
+			UInt_t				m_uId;
 			
 			//!Pression of the button. If 1.0 button is released, if 0 button is completely pressed						
-			Float_t 			fpPression;
+			Float_t 			m_fpPression;
 				
 			//!The state of the button.						
-			InputEventButtonState_e	eState;
+			InputEventButtonState_e	m_eState;
 		};	
 	}
 

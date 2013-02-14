@@ -17,35 +17,35 @@ subject to the following restrictions:
 #ifndef PH_GAME_EVENT_H
 #define PH_GAME_EVENT_H
 
-#include <PH_Types.h>
+#include <Phobos/Types.h>
 
 #include "PH_GameEngineAPI.h"
 #include "PH_EntityIO.h"
 
-#define PH_MAKE_EVENT_PROC(X) reinterpret_cast<Phobos::GameEvent_c::EventProc_t>(X)
+#define PH_MAKE_EVENT_PROC(X) reinterpret_cast<Phobos::GameEvent::EventProc_t>(X)
 
 namespace Phobos
 {	
-	class PH_GAME_ENGINE_API GameEvent_c
+	class PH_GAME_ENGINE_API GameEvent
 	{
 		public:
-			typedef void (EntityIO_c::*EventProc_t)();
+			typedef void (EntityIO::*EventProc_t)();
 
 		public:
-			GameEvent_c(EntityIO_c &receiver, EventProc_t proc);		
+			GameEvent(EntityIO &receiver, EventProc_t proc);		
 
 			void Fire();
 
-			inline const EntityIO_c &GetReceiver() const;
+			inline const EntityIO &GetReceiver() const;
 
 		private:
-			EntityIO_c &rclReceiver;
-			EventProc_t pfnProc;
+			EntityIO &m_rclReceiver;
+			EventProc_t m_pfnProc;
 	};
 
-	inline const EntityIO_c &GameEvent_c::GetReceiver() const
+	inline const EntityIO &GameEvent::GetReceiver() const
 	{
-		return rclReceiver;
+		return m_rclReceiver;
 	}
 }
 

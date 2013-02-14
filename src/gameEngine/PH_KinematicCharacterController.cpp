@@ -108,7 +108,7 @@ namespace Phobos
 		 *
 		 * from: http://www-cs-students.stanford.edu/~adityagp/final/node3.html
 		 */
-		btVector3 KinematicCharacterController_c::computeReflectionDirection (const btVector3& direction, const btVector3& normal)
+		btVector3 KinematicCharacterController::computeReflectionDirection (const btVector3& direction, const btVector3& normal)
 		{
 			return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
 		}
@@ -116,7 +116,7 @@ namespace Phobos
 		/*
 		 * Returns the portion of 'direction' that is parallel to 'normal'
 		 */
-		btVector3 KinematicCharacterController_c::parallelComponent (const btVector3& direction, const btVector3& normal)
+		btVector3 KinematicCharacterController::parallelComponent (const btVector3& direction, const btVector3& normal)
 		{
 			btScalar magnitude = direction.dot(normal);
 			return normal * magnitude;
@@ -125,12 +125,12 @@ namespace Phobos
 		/*
 		 * Returns the portion of 'direction' that is perpindicular to 'normal'
 		 */
-		btVector3 KinematicCharacterController_c::perpindicularComponent (const btVector3& direction, const btVector3& normal)
+		btVector3 KinematicCharacterController::perpindicularComponent (const btVector3& direction, const btVector3& normal)
 		{
 			return direction - parallelComponent(direction, normal);
 		}
 
-		KinematicCharacterController_c::KinematicCharacterController_c (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis)
+		KinematicCharacterController::KinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis)
 		{
 			m_upAxis = upAxis;
 			m_addedMargin = 0.05f;
@@ -152,16 +152,16 @@ namespace Phobos
 			setMaxSlope(btRadians(45.0));
 		}
 
-		KinematicCharacterController_c::~KinematicCharacterController_c ()
+		KinematicCharacterController::~KinematicCharacterController ()
 		{
 		}
 
-		btPairCachingGhostObject* KinematicCharacterController_c::getGhostObject()
+		btPairCachingGhostObject* KinematicCharacterController::getGhostObject()
 		{
 			return m_ghostObject;
 		}
 
-		bool KinematicCharacterController_c::recoverFromPenetration ( btCollisionWorld* collisionWorld)
+		bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* collisionWorld)
 		{
 
 			bool penetration = false;
@@ -218,7 +218,7 @@ namespace Phobos
 			return penetration;
 		}
 
-		void KinematicCharacterController_c::stepUp ( btCollisionWorld* world)
+		void KinematicCharacterController::stepUp ( btCollisionWorld* world)
 		{
 			// phase 1: up
 			btTransform start, end;
@@ -261,7 +261,7 @@ namespace Phobos
 			}
 		}
 
-		void KinematicCharacterController_c::updateTargetPositionBasedOnCollision (const btVector3& hitNormal, btScalar tangentMag, btScalar normalMag)
+		void KinematicCharacterController::updateTargetPositionBasedOnCollision (const btVector3& hitNormal, btScalar tangentMag, btScalar normalMag)
 		{
 			btVector3 movementDirection = m_targetPosition - m_currentPosition;
 			btScalar movementLength = movementDirection.length();
@@ -297,7 +297,7 @@ namespace Phobos
 			}
 		}
 
-		void KinematicCharacterController_c::stepForwardAndStrafe ( btCollisionWorld* collisionWorld, const btVector3& walkMove)
+		void KinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* collisionWorld, const btVector3& walkMove)
 		{
 			// printf("m_normalizedDirection=%f,%f,%f\n",
 			// 	m_normalizedDirection[0],m_normalizedDirection[1],m_normalizedDirection[2]);
@@ -383,7 +383,7 @@ namespace Phobos
 			}
 		}
 
-		void KinematicCharacterController_c::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
+		void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
 		{
 			btTransform start, end;
 
@@ -438,7 +438,7 @@ namespace Phobos
 
 
 
-		void KinematicCharacterController_c::setWalkDirection
+		void KinematicCharacterController::setWalkDirection
 		(
 		const btVector3& walkDirection
 		)
@@ -450,7 +450,7 @@ namespace Phobos
 
 
 
-		void KinematicCharacterController_c::setVelocityForTimeInterval
+		void KinematicCharacterController::setVelocityForTimeInterval
 		(
 		const btVector3& velocity,
 		btScalar timeInterval
@@ -469,11 +469,11 @@ namespace Phobos
 
 
 
-		void KinematicCharacterController_c::reset ()
+		void KinematicCharacterController::reset ()
 		{
 		}
 
-		void KinematicCharacterController_c::warp (const btVector3& origin)
+		void KinematicCharacterController::warp (const btVector3& origin)
 		{
 			btTransform xform;
 			xform.setIdentity();
@@ -482,7 +482,7 @@ namespace Phobos
 		}
 
 
-		void KinematicCharacterController_c::preStep (  btCollisionWorld* collisionWorld)
+		void KinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
 		{
 			
 			int numPenetrationLoops = 0;
@@ -505,7 +505,7 @@ namespace Phobos
 			
 		}
 
-		void KinematicCharacterController_c::playerStep (  btCollisionWorld* collisionWorld, btScalar dt)
+		void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorld, btScalar dt)
 		{
 		//	printf("playerStep(): ");
 		//	printf("  dt = %f", dt);
@@ -563,27 +563,27 @@ namespace Phobos
 			m_ghostObject->setWorldTransform (xform);
 		}
 
-		void KinematicCharacterController_c::setFallSpeed (btScalar fallSpeed)
+		void KinematicCharacterController::setFallSpeed (btScalar fallSpeed)
 		{
 			m_fallSpeed = fallSpeed;
 		}
 
-		void KinematicCharacterController_c::setJumpSpeed (btScalar jumpSpeed)
+		void KinematicCharacterController::setJumpSpeed (btScalar jumpSpeed)
 		{
 			m_jumpSpeed = jumpSpeed;
 		}
 
-		void KinematicCharacterController_c::setMaxJumpHeight (btScalar maxJumpHeight)
+		void KinematicCharacterController::setMaxJumpHeight (btScalar maxJumpHeight)
 		{
 			m_maxJumpHeight = maxJumpHeight;
 		}
 
-		bool KinematicCharacterController_c::canJump () const
+		bool KinematicCharacterController::canJump () const
 		{
 			return onGround();
 		}
 
-		void KinematicCharacterController_c::jump ()
+		void KinematicCharacterController::jump ()
 		{
 			if (!canJump())
 				return;
@@ -602,41 +602,41 @@ namespace Phobos
 		#endif
 		}
 
-		void KinematicCharacterController_c::setGravity(btScalar gravity)
+		void KinematicCharacterController::setGravity(btScalar gravity)
 		{
 			m_gravity = gravity;
 		}
 
-		btScalar KinematicCharacterController_c::getGravity() const
+		btScalar KinematicCharacterController::getGravity() const
 		{
 			return m_gravity;
 		}
 
-		void KinematicCharacterController_c::setMaxSlope(btScalar slopeRadians)
+		void KinematicCharacterController::setMaxSlope(btScalar slopeRadians)
 		{
 			m_maxSlopeRadians = slopeRadians;
 			m_maxSlopeCosine = btCos(slopeRadians);
 		}
 
-		btScalar KinematicCharacterController_c::getMaxSlope() const
+		btScalar KinematicCharacterController::getMaxSlope() const
 		{
 			return m_maxSlopeRadians;
 		}
 
-		bool KinematicCharacterController_c::onGround () const
+		bool KinematicCharacterController::onGround () const
 		{
 			return m_verticalVelocity == 0.0 && m_verticalOffset == 0.0;
 		}
 
 
-		btVector3* KinematicCharacterController_c::getUpAxisDirections()
+		btVector3* KinematicCharacterController::getUpAxisDirections()
 		{
 			static btVector3 sUpAxisDirection[3] = { btVector3(1.0f, 0.0f, 0.0f), btVector3(0.0f, 1.0f, 0.0f), btVector3(0.0f, 0.0f, 1.0f) };
 			
 			return sUpAxisDirection;
 		}
 
-		void KinematicCharacterController_c::debugDraw(btIDebugDraw* debugDrawer)
+		void KinematicCharacterController::debugDraw(btIDebugDraw* debugDrawer)
 		{
 		}
 	}

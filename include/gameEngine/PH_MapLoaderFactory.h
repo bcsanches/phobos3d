@@ -17,9 +17,8 @@ subject to the following restrictions:
 #ifndef PH_MAP_LOADER_FACTORY_H
 #define PH_MAP_LOADER_FACTORY_H
 
-#include <boost/make_shared.hpp>
-
-#include <PH_GenericFactory.h>
+#include <Phobos/GenericFactory.h>
+#include <Phobos/Memory.h>
 
 #include <Phobos/Register/HiveFwd.h>
 
@@ -28,51 +27,51 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API MapLoaderFactory_c 
+	class PH_GAME_ENGINE_API MapLoaderFactory 
 	{
 		public:
-			static MapLoaderFactory_c &GetInstance();			
+			static MapLoaderFactory &GetInstance();			
 
-			MapLoaderPtr_t Create(const String_c &type);
+			MapLoaderPtr_t Create(const String_t &type);
 
-			void Register(Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Register::Table_c, Phobos::MapLoaderFactory_c> &creator)
+			void Register(Phobos::ObjectCreator1<Phobos::MapLoader, Register::Table, Phobos::MapLoaderFactory> &creator)
 			{
-				clFactory.Register(creator);
+				m_clFactory.Register(creator);
 			}
 
-			inline const Register::Hive_c &GetStaticEntitiesHive() const;
-			inline const Register::Hive_c &GetDynamicEntitiesHive() const;		
+			inline const Register::Hive &GetStaticEntitiesHive() const;
+			inline const Register::Hive &GetDynamicEntitiesHive() const;		
 
-			std::list<String_c> CreateMapFileExtensionsList() const;
-
-		private:
-			MapLoaderFactory_c();
+			std::list<String_t> CreateMapFileExtensionsList() const;
 
 		private:
-			Register::HivePtr_t ipStaticEntitiesHive;
-			Register::HivePtr_t	ipDynamicEntitiesHive;
-			Register::HivePtr_t ipCurrentLevelHive;
+			MapLoaderFactory();
 
-			GenericFactory1_c<ObjectCreator1_c<MapLoader_c, Register::Table_c, MapLoaderFactory_c>, Register::Table_c > clFactory;			
+		private:
+			Register::HivePtr_t m_ipStaticEntitiesHive;
+			Register::HivePtr_t	m_ipDynamicEntitiesHive;
+			Register::HivePtr_t m_ipCurrentLevelHive;
+
+			GenericFactory1<ObjectCreator1<MapLoader, Register::Table, MapLoaderFactory>, Register::Table > m_clFactory;			
 	};
 
-	inline const Register::Hive_c &MapLoaderFactory_c::GetStaticEntitiesHive() const
+	inline const Register::Hive &MapLoaderFactory::GetStaticEntitiesHive() const
 	{
-		return *ipStaticEntitiesHive;
+		return *m_ipStaticEntitiesHive;
 	}
 
-	inline const Register::Hive_c &MapLoaderFactory_c::GetDynamicEntitiesHive() const
+	inline const Register::Hive &MapLoaderFactory::GetDynamicEntitiesHive() const
 	{
-		return *ipDynamicEntitiesHive;
+		return *m_ipDynamicEntitiesHive;
 	}
 }
 
 #define PH_MAP_LOADER_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1_c<Phobos::MapLoader_c, Register::Table_c, Phobos::MapLoaderFactory_c> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+	static Phobos::ObjectCreator1<Phobos::MapLoader, Register::Table, Phobos::MapLoaderFactory> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
 
 #define PH_FULL_MAP_LOADER_CREATOR(NAME, TYPE)  							\
 	PH_MAP_LOADER_CREATOR(NAME, TYPE);										\
-	Phobos::MapLoader_c *TYPE::Create(const Register::Table_c &settings)			\
+	Phobos::MapLoader *TYPE::Create(const Register::Table &settings)		\
 	{																		\
 		return PH_NEW TYPE(settings);										\
 	}

@@ -21,89 +21,89 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	GameCamera_c::GameCamera_c():
-		iViewportZOrder(-1),
-		fpNearPlane(1)
+	GameCamera::GameCamera():
+		m_iViewportZOrder(-1),
+		m_fpNearPlane(1)
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 				
-		pclRootNode = render.CreateSceneNode();
+		m_pclRootNode = render.CreateSceneNode();
 
 		this->CreateCamera();
 	}
 
-	GameCamera_c::~GameCamera_c()
+	GameCamera::~GameCamera()
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 
-		if(iViewportZOrder >= 0)
-			render.RemoveViewport(iViewportZOrder);
+		if(m_iViewportZOrder >= 0)
+			render.RemoveViewport(m_iViewportZOrder);
 
-		if(pclCamera)
-			render.DestroyCamera(pclCamera);
+		if(m_pclCamera)
+			render.DestroyCamera(m_pclCamera);
 
-		if(pclRootNode)
-			render.DestroySceneNode(pclRootNode);
+		if(m_pclRootNode)
+			render.DestroySceneNode(m_pclRootNode);
 	}
 
-	void GameCamera_c::EnableViewport(int ZOrder)
+	void GameCamera::EnableViewport(int ZOrder)
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 
-		if(iViewportZOrder >= 0)
-			render.RemoveViewport(iViewportZOrder);
+		if(m_iViewportZOrder >= 0)
+			render.RemoveViewport(m_iViewportZOrder);
 
-		iViewportZOrder = ZOrder;
+		m_iViewportZOrder = ZOrder;
 
-		if(iViewportZOrder >= 0)
-			render.AddViewport(pclCamera, ZOrder);
+		if(m_iViewportZOrder >= 0)
+			render.AddViewport(m_pclCamera, ZOrder);
 	}
 
-	void GameCamera_c::SetTransform(const Transform_c &t)
+	void GameCamera::SetTransform(const Transform &t)
 	{		
-		pclRootNode->setPosition(t.GetOrigin());
-		pclRootNode->setOrientation(t.GetRotation());
+		m_pclRootNode->setPosition(t.GetOrigin());
+		m_pclRootNode->setOrientation(t.GetRotation());
 	}
 
-	void GameCamera_c::SetCameraTransform(const Transform_c &t)
+	void GameCamera::SetCameraTransform(const Transform &t)
 	{
-		pclCamera->setPosition(t.GetOrigin());
-		pclCamera->setOrientation(t.GetRotation());
+		m_pclCamera->setPosition(t.GetOrigin());
+		m_pclCamera->setOrientation(t.GetRotation());
 	}
 
-	void GameCamera_c::EnableFixedYawAxis(const Ogre::Vector3 &axis)
+	void GameCamera::EnableFixedYawAxis(const Ogre::Vector3 &axis)
 	{
-		pclCamera->setFixedYawAxis(true, axis);
+		m_pclCamera->setFixedYawAxis(true, axis);
 	}
 
-	void GameCamera_c::SetNearClipDistance(const Float_t distance)
+	void GameCamera::SetNearClipDistance(const Float_t distance)
 	{
-		fpNearPlane = distance;
-		pclCamera->setNearClipDistance(distance);
+		m_fpNearPlane = distance;
+		m_pclCamera->setNearClipDistance(distance);
 	}
 
-	void GameCamera_c::SetFarClipDistance(const Float_t distance)
+	void GameCamera::SetFarClipDistance(const Float_t distance)
 	{
-		fpFarPlane = distance;
-		pclCamera->setFarClipDistance(distance);
+		m_fpFarPlane = distance;
+		m_pclCamera->setFarClipDistance(distance);
 	}
 
-	void GameCamera_c::SetFov(Ogre::Degree angle)
+	void GameCamera::SetFov(Ogre::Degree angle)
 	{
-		pclCamera->setFOVy(Ogre::Radian(angle));
+		m_pclCamera->setFOVy(Ogre::Radian(angle));
 	}
 
-	void GameCamera_c::Enable()
+	void GameCamera::Enable()
 	{
 		//PH_ASSERT(pclCamera == NULL);
 
 		//this->CreateCamera();
-		this->EnableViewport(iViewportZOrder);
+		this->EnableViewport(m_iViewportZOrder);
 	}
 	
-	void GameCamera_c::Disable()
+	void GameCamera::Disable()
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 		/*
 		pclRootNode->detachObject(pclCamera);
 		
@@ -115,28 +115,28 @@ namespace Phobos
 
 		pclCamera = NULL;
 		*/
-		if(iViewportZOrder >= 0)
-			render.RemoveViewport(iViewportZOrder);
+		if(m_iViewportZOrder >= 0)
+			render.RemoveViewport(m_iViewportZOrder);
 	}
 
-	void GameCamera_c::AddCameraListener(Ogre::Camera::Listener &listener)
+	void GameCamera::AddCameraListener(Ogre::Camera::Listener &listener)
 	{
-		pclCamera->addListener(&listener);
+		m_pclCamera->addListener(&listener);
 	}
 
-	void GameCamera_c::CreateCamera()
+	void GameCamera::CreateCamera()
 	{
-		Render_c &render = Render_c::GetInstance();
+		Render &render = Render::GetInstance();
 		
-		pclCamera = render.CreateCamera();	
+		m_pclCamera = render.CreateCamera();	
 
-		pclRootNode->attachObject(pclCamera);
+		m_pclRootNode->attachObject(m_pclCamera);
 
-		if(iViewportZOrder >= 0)
-			render.AddViewport(pclCamera, iViewportZOrder);
+		if(m_iViewportZOrder >= 0)
+			render.AddViewport(m_pclCamera, m_iViewportZOrder);
 
-		pclCamera->setOrientation(Ogre::Quaternion(Ogre::Angle(180), Ogre::Vector3::UNIT_Y));	
-		pclCamera->setNearClipDistance(fpNearPlane);
+		m_pclCamera->setOrientation(Ogre::Quaternion(Ogre::Angle(180), Ogre::Vector3::UNIT_Y));	
+		m_pclCamera->setNearClipDistance(m_fpNearPlane);
 		
 		this->SetFov(Ogre::Degree(75));
 	}

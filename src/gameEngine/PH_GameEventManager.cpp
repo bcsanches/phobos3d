@@ -22,50 +22,50 @@ namespace Phobos
 {
 	PH_DEFINE_DEFAULT_SINGLETON(GameEventManager);	
 
-	GameEventManager_c::GameEventManager_c():
-		CoreModule_c("GameEventManager", NodeFlags::PRIVATE_CHILDREN)
+	GameEventManager::GameEventManager():
+		CoreModule("GameEventManager", NodeFlags::PRIVATE_CHILDREN)
 	{
 		//empty
 	}
 
-	GameEventManager_c::~GameEventManager_c()
+	GameEventManager::~GameEventManager()
 	{
 	}
 
-	void GameEventManager_c::OnFixedUpdate()
+	void GameEventManager::OnFixedUpdate()
 	{
-		Float_t ticks = Core_c::GetInstance().GetGameTimer().fpTotalTicks;
+		Float_t ticks = Core::GetInstance().GetGameTimer().m_fpTotalTicks;
 
-		while(!mapEvents.empty())
+		while(!m_mapEvents.empty())
 		{
-			GameEventMap_t::iterator it = mapEvents.begin();
+			GameEventMap_t::iterator it = m_mapEvents.begin();
 			
 			if(it->first > ticks)
 				break;
 
-			GameEvent_c event(it->second);
-			mapEvents.erase(it);
+			GameEvent event(it->second);
+			m_mapEvents.erase(it);
 
 			event.Fire();
 		}
 	}
 
-	void GameEventManager_c::Schedule(EntityIO_c &receiver, GameEvent_c::EventProc_t proc, Float_t delay)
+	void GameEventManager::Schedule(EntityIO &receiver, GameEvent::EventProc_t proc, Float_t delay)
 	{	
 		PH_ASSERT_VALID(proc);
 
-		mapEvents.insert(std::make_pair(delay + Core_c::GetInstance().GetGameTimer().fpTotalTicks, GameEvent_c(receiver, proc)));		
+		m_mapEvents.insert(std::make_pair(delay + Core::GetInstance().GetGameTimer().m_fpTotalTicks, GameEvent(receiver, proc)));		
 	}
 
-	void GameEventManager_c::CancelEvents(const EntityIO_c &receiver)
+	void GameEventManager::CancelEvents(const EntityIO &receiver)
 	{
-		for(GameEventMap_t::iterator it = mapEvents.begin();it != mapEvents.end();)
+		for(GameEventMap_t::iterator it = m_mapEvents.begin();it != m_mapEvents.end();)
 		{
 			GameEventMap_t::iterator eraseIt = it++;
 
 			if(&eraseIt->second.GetReceiver() == &receiver)
 			{
-				mapEvents.erase(eraseIt);
+				m_mapEvents.erase(eraseIt);
 			}
 		}
 	}

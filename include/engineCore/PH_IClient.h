@@ -24,10 +24,10 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PH_ENGINE_CORE_API IClient_c: public IEscHandler_c
+	class PH_ENGINE_CORE_API IClient: public IEscHandler
 	{
 		public:
-			virtual ~IClient_c() {};
+			virtual ~IClient() {};
 
 			virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd) = 0;
 	};

@@ -20,10 +20,10 @@ subject to the following restrictions:
 
 #include <list>
 
-#include <PH_ContextCmd.h>
+#include <Phobos/Shell/Command.h>
 #include <PH_CoreModule.h>
-#include <PH_Listener.h>
-#include <PH_Singleton.h>
+#include <Phobos/Listener.h>
+#include <Phobos/Singleton.h>
 
 #include "PH_Entity.h"
 #include "PH_GameEngineAPI.h"
@@ -33,14 +33,14 @@ namespace Phobos
 {	
 	PH_DECLARE_SINGLETON_PTR(WorldManager);
 
-	typedef HandleManager_c<Entity_c> EntityManager_c;
+	typedef HandleManager<Entity> EntityManager;
 
-	class EntityIO_c;	
+	class EntityIO;	
 
-	class WorldManagerListener_c
+	class WorldManagerListener
 	{
 		public:
-			virtual ~WorldManagerListener_c() {};
+			virtual ~WorldManagerListener() {};
 
 			virtual void OnMapUnloaded() = 0;
 			virtual void OnMapLoaded() = 0;
@@ -49,79 +49,79 @@ namespace Phobos
 			PH_DECLARE_LISTENER_HOOK;
 	};
 
-	class PH_GAME_ENGINE_API WorldManager_c: public CoreModule_c
+	class PH_GAME_ENGINE_API WorldManager: public CoreModule
 	{
 		PH_DECLARE_SINGLETON_METHODS(WorldManager);
 
 		public:
-			typedef std::list<EntityIO_c*> EntityIOList_t;
+			typedef std::list<EntityIO*> EntityIOList_t;
 
 		public:
-			~WorldManager_c();		
+			~WorldManager();		
 
-			void LoadMap(const String_c &mapName);
+			void LoadMap(const String_t &mapName);
 			void UnloadMap();
 
-			Entity_c *TryGetEntityByType(const String_c &className) const;
-			Entity_c &GetEntityByName(const String_c &name) const;			
+			Entity *TryGetEntityByType(const String_t &className) const;
+			Entity &GetEntityByName(const String_t &name) const;			
 
-			PH_DECLARE_LISTENER_PROCS(WorldManagerListener_c);	
+			PH_DECLARE_LISTENER_PROCS(WorldManagerListener);	
 
 			inline UInt_t GetNumActiveEntities() const;
 
-			void AddToFixedUpdateList(EntityIO_c &io);
-			void AddToUpdateList(EntityIO_c &io);
+			void AddToFixedUpdateList(EntityIO &io);
+			void AddToUpdateList(EntityIO &io);
 
-			void RemoveFromFixedUpdateList(EntityIO_c &io);
-			void RemoveFromUpdateList(EntityIO_c &io);
+			void RemoveFromFixedUpdateList(EntityIO &io);
+			void RemoveFromUpdateList(EntityIO &io);
 
-			inline const GameWorld_c *GetGameWorld() const;
+			inline const GameWorld *GetGameWorld() const;
 
 		protected:		
-			virtual void OnBoot();
-			virtual void OnFinalize();
-			virtual void OnFixedUpdate();
-			virtual void OnPrepareToBoot();
-			virtual void OnUpdate();
+			virtual void OnBoot() override;
+			virtual void OnFinalize() override;
+			virtual void OnFixedUpdate() override;
+			virtual void OnPrepareToBoot() override;
+			virtual void OnUpdate() override;
 
 		private:
-			WorldManager_c();					
+			WorldManager();					
 
 			void LoadEntities();
-			Entity_c &LoadEntity(const Register::Table_c &entityDef);
+			Entity &LoadEntity(const Register::Table &entityDef);
 
-			inline bool RemoveFromList(EntityIOList_t &list, EntityIO_c &io);
-			inline void CallEntityIOProc(EntityIOList_t &list, void (EntityIO_c::*proc)());
+			inline bool RemoveFromList(EntityIOList_t &list, EntityIO &io);
+			inline void CallEntityIOProc(EntityIOList_t &list, void (EntityIO::*proc)());
 
-			void CmdLoadMap(const StringVector_t &args, Context_c &);
-			void CmdUnloadMap(const StringVector_t &args, Context_c &);
-			void CmdDumpFactoryCreators(const StringVector_t &args, Context_c &);
+			void CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdUnloadMap(const Shell::StringVector_t &args, Shell::Context &);
+			void CmdDumpFactoryCreators(const Shell::StringVector_t &args, Shell::Context &);
 
 		private:
-			EntityManager_c clEntityManager;
+			EntityManager m_clEntityManager;
 
-			MapLoaderPtr_t	spMapLoader;
+			MapLoaderPtr_t	m_spMapLoader;
 
-			GameWorldPtr_t	spGameWorld;
+			GameWorldPtr_t	m_spGameWorld;
 
-			ContextCmd_c	cmdLoadMap;	
-			ContextCmd_c	cmdUnloadMap;	
-			ContextCmd_c	cmdDumpFactoryCreators;
+			Shell::Command	m_cmdLoadMap;	
+			Shell::Command	m_cmdUnloadMap;	
+			Shell::Command	m_cmdDumpFactoryCreators;
 
-			PH_DECLARE_LISTENER_LIST(WorldManagerListener_c, lstListeners);
+			PH_DECLARE_LISTENER_LIST(WorldManagerListener, m_lstListeners);
 
-			EntityIOList_t lstFixedUpdate;
-			EntityIOList_t lstUpdate;
+			EntityIOList_t m_lstFixedUpdate;
+			EntityIOList_t m_lstUpdate;
 	};
 
-	inline UInt_t WorldManager_c::GetNumActiveEntities() const
+	inline UInt_t WorldManager::GetNumActiveEntities() const
 	{
-		return clEntityManager.GetNumActiveObjects();
+		return m_clEntityManager.GetNumActiveObjects();
 	}
 
-	inline const GameWorld_c *WorldManager_c::GetGameWorld() const
+	inline const GameWorld *WorldManager::GetGameWorld() const
 	{
-		return spGameWorld.get();
+		return m_spGameWorld.get();
 	}
 }
 

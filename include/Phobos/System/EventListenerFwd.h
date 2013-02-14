@@ -21,7 +21,7 @@ namespace Phobos
 {
 	namespace System
 	{
-		class EventListener_c;	
+		class EventListener;	
 	}
 }
 

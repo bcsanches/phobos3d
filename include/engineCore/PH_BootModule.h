@@ -24,29 +24,29 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class BootModule_c;
-	class CoreModuleManager_c;
+	class BootModule;
+	class CoreModuleManager;
 
 	PH_DECLARE_NODE_PTR(BootModule);	
 
-	class BootModule_c: public CoreModule_c
+	class BootModule: public CoreModule
 	{
 		public:			
-			BootModule_c(const String_c &cfgName, int argc, char *const argv[], CoreModuleManager_c &manager);
+			BootModule(const String_t &cfgName, int argc, char *const argv[], CoreModuleManager &manager);
 
 			void OnUpdate();			
 			void OnFixedUpdate();
 
 		private:
-			String_c strCfgName;
-			std::vector<std::string> vecArgs;
+			String_t m_strCfgName;
+			std::vector<std::string> m_vecArgs;
 
-			int		iFixedUpdateCount;
-			bool	fUpdateDone;
-			bool	fPrepareFired;
-			bool	fBootFired;
+			int		m_iFixedUpdateCount;
+			bool	m_fUpdateDone;
+			bool	m_fPrepareFired;
+			bool	m_fBootFired;
 
-			CoreModuleManager_c &rclManager;
+			CoreModuleManager &m_rclManager;
 	};
 }
 

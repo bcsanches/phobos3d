@@ -27,11 +27,11 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	void EntityLoadTransform(Transform_c &transform, const Register::Table_c &table)
+	void EntityLoadTransform(Transform &transform, const Register::Table &table)
 	{
 		if(table.TryGetString(PH_ENTITY_KEY_TILE_ROW))
 		{						
-			const TileGameWorld_c *tileWorld = static_cast<const TileGameWorld_c *>(WorldManager_c::GetInstance().GetGameWorld());
+			const TileGameWorld *tileWorld = static_cast<const TileGameWorld *>(WorldManager::GetInstance().GetGameWorld());
 			tileWorld->LoadTileTransform(transform, table);
 		}
 		else

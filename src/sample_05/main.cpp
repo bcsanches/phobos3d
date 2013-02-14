@@ -39,50 +39,48 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include "Render.h"
 
 #include <PH_Session.h>
-#include <PH_ContextVar.h>
-#include <PH_ContextUtils.h>
+#include <Phobos/Shell/Variable.h>
+#include <Phobos/Shell/Utils.h>
 #include <PH_Core.h>
 #include <PH_EventManagerModule.h>
-#include <PH_Kernel.h>
-#include <PH_Memory.h>
-#include <PH_ProcVector.h>
+#include <Phobos/Memory.h>
+#include <Phobos/ProcVector.h>
 
 #include <Phobos/System/Timer.h>
 
-class EngineMain_c
+class EngineMain
 {
 	public:
-		EngineMain_c();
-		~EngineMain_c();
+		EngineMain();
+		~EngineMain();
 
 		void MainLoop(void);					
 
 	private:			
-		Phobos::ProcVector_c	clSingletons;
+		Phobos::ProcVector	m_clSingletons;
 };
 
-EngineMain_c::EngineMain_c()
+EngineMain::EngineMain()
 {
 	using namespace Phobos;
 
-	Kernel_c::CreateInstance("sample05.log");
-	Core_c &core = Core_c::CreateInstance();
-	clSingletons.AddProc(Core_c::ReleaseInstance);	
+	Core &core = Core::CreateInstance();
+	m_clSingletons.AddProc(Core::ReleaseInstance);	
 
-	EventManagerModule_c &eventManager = EventManagerModule_c::CreateInstance();
-	clSingletons.AddProc(EventManagerModule_c::ReleaseInstance);
+	EventManagerModule &eventManager = EventManagerModule::CreateInstance();
+	m_clSingletons.AddProc(EventManagerModule::ReleaseInstance);
 	core.AddModule(eventManager);
 
-	Phobos::Console_c &console = ::Console_c::CreateInstance();
-	clSingletons.AddProc(Phobos::Console_c::ReleaseInstance);
+	Phobos::Console &console = ::Console::CreateInstance();
+	m_clSingletons.AddProc(Phobos::Console::ReleaseInstance);
 	core.AddModule(console);
 
-	Phobos::Session_c &session = Phobos::Session_c::CreateInstance();
-	clSingletons.AddProc(Phobos::Session_c::ReleaseInstance);
+	Phobos::Session &session = Phobos::Session::CreateInstance();
+	m_clSingletons.AddProc(Phobos::Session::ReleaseInstance);
 	core.AddModule(session);
 
-	Render_c &render = Render_c::CreateInstance();
-	clSingletons.AddProc(Render_c::ReleaseInstance);
+	Render &render = Render::CreateInstance();
+	m_clSingletons.AddProc(Render::ReleaseInstance);
 	core.AddModule(render, CoreModulePriorities::LOWEST);
 
 	core.RegisterCommands(console);	
@@ -90,15 +88,13 @@ EngineMain_c::EngineMain_c()
 	core.LaunchBootModule("autoexec.cfg", 0, nullptr);
 }
 
-EngineMain_c::~EngineMain_c()
+EngineMain::~EngineMain()
 {
 	using namespace Phobos;
 
-	Core_c::GetInstance().Shutdown();
+	Core::GetInstance().Shutdown();
 
-	clSingletons.CallAll();
-
-	Kernel_c::ReleaseInstance();
+	m_clSingletons.CallAll();	
 }			
 
 /**
@@ -106,16 +102,16 @@ EngineMain_c::~EngineMain_c()
 	The engine main loop
 
 */
-void EngineMain_c::MainLoop(void)
+void EngineMain::MainLoop(void)
 {
-	Phobos::Core_c::GetInstance().MainLoop();
+	Phobos::Core::GetInstance().MainLoop();
 }
 
 int main(int, char **)
 {
 	//Phobos::EnableMemoryTracker();	
 	{
-		EngineMain_c engine;
+		EngineMain engine;
 
 #ifndef PH_DEBUG
 		try
@@ -129,7 +125,7 @@ int main(int, char **)
 			std::stringstream stream;
 			stream << "main: Unhandled excetion: ";
 			stream << e.what();
-			Phobos::Kernel_c::GetInstance().LogMessage(stream.str());
+			Phobos::LogMessage(stream.str());
 
 			exit(EXIT_FAILURE);
 		}

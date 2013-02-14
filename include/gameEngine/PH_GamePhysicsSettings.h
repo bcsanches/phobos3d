@@ -17,8 +17,8 @@ subject to the following restrictions:
 #ifndef PH_GAME_PHYSICS_SETTINGS_H
 #define PH_GAME_PHYSICS_SETTINGS_H
 
-#include <PH_String.h>
-#include <PH_Types.h>
+#include <Phobos/String.h>
+#include <Phobos/Types.h>
 
 #include <Phobos/Register/TableFwd.h>
 
@@ -28,17 +28,17 @@ subject to the following restrictions:
 
 namespace Phobos
 {		
-	class GamePhysicsSettings_c
+	class GamePhysicsSettings
 	{
 		public:
 			static void OnBoot();
 
-			static UInt32_t DecodeCollisionMask(const String_c &config);
-			static Physics::CollisionTag_c LoadCollisionTag(const Register::Table_c &table);
+			static UInt32_t DecodeCollisionMask(const String_t &config);
+			static Physics::CollisionTag LoadCollisionTag(const Register::Table &table);
 
-			static Physics::CollisionTag_c CreateStaticWorldCollisionTag();
+			static Physics::CollisionTag CreateStaticWorldCollisionTag();
 
-			static const Register::Table_c *TryGetStaticMeshCollisionShapeDef(const String_c &name);
+			static const Register::Table *TryGetStaticMeshCollisionShapeDef(const String_t &name);
 	};
 }
 

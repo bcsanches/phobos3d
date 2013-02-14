@@ -23,20 +23,20 @@ namespace Phobos
 {
 	PH_DEFINE_DEFAULT_SINGLETON(MoverManager);	
 
-	MoverManager_c::MoverManager_c():
-		GenericComponentManagerModule_c("MoverManager")
+	MoverManager::MoverManager():
+		GenericComponentManagerModule("MoverManager")
 	{
 		//empty
 	}
 
-	MoverManager_c::~MoverManager_c()
+	MoverManager::~MoverManager()
 	{
 		//empty
 	}
 	
-	void MoverManager_c::OnFixedUpdate()
+	void MoverManager::OnFixedUpdate()
 	{
-		this->CallForAll(&MoverComponent_c::FixedUpdate);		
+		this->CallForAll(&MoverComponent::FixedUpdate);		
 	}
 }
 

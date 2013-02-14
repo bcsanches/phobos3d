@@ -26,33 +26,33 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	class OgreConsole_c;
+	class OgreConsole;
 
 	PH_DECLARE_NODE_PTR(OgreConsole);	
 
-	class PH_OGRE_ENGINE_CORE_API OgreConsole_c: 
-		public Console_c		
+	class PH_OGRE_ENGINE_CORE_API OgreConsole: 
+		public Console		
 	{
 		public:
 			// =====================================================
 			// PUBLIC METHODS
 			// =====================================================		
-			static OgreConsole_c &CreateInstance(void);
+			static OgreConsole &CreateInstance(void);
 
-			~OgreConsole_c(void);
+			~OgreConsole(void);
 		protected:
 			// =====================================================
 			// PROTECTED METHODS
 			// =====================================================
-			OgreConsole_c(void);			
+			OgreConsole(void);			
 			
-			void OnUpdate();
-			void OnRenderReady();
-			virtual void OnFinalize();
+			virtual void OnUpdate() override;
+			virtual void OnRenderReady() override;
+			virtual void OnFinalize() override;
 
-			virtual void OnToggleConsole();
-			virtual void OnEditBoxChanged();
-			virtual void OnTextListChanged();
+			virtual void OnToggleConsole() override;
+			virtual void OnEditBoxChanged() override;
+			virtual void OnTextListChanged() override;
 
 		private:
 			// =====================================================
@@ -64,21 +64,21 @@ namespace Phobos
 			// =====================================================
 			// PRIVATE ATTRIBUTES
 			// =====================================================			
-			Ogre::OverlayContainer		*pclRect;		
-			Ogre::OverlayElement		*pclTextBox;
-			Ogre::Overlay				*pclOverlay;
-			Ogre::SceneManager			*pclSceneManager;
-			Ogre::Camera				*pclCamera;
-			Ogre::Overlay				*pclRenderInfoOverlay;
+			Ogre::OverlayContainer		*m_pclRect;		
+			Ogre::OverlayElement		*m_pclTextBox;
+			Ogre::Overlay				*m_pclOverlay;
+			Ogre::SceneManager			*m_pclSceneManager;
+			Ogre::Camera				*m_pclCamera;
+			Ogre::Overlay				*m_pclRenderInfoOverlay;
 
-			Float_t						fpHeight;			
+			Float_t						m_fpHeight;			
 
-			ContextVar_c				varMaterialName;
-			ContextVar_c				varShowRenderInfo;			
+			Shell::Variable				m_varMaterialName;
+			Shell::Variable				m_varShowRenderInfo;			
 												
-			bool fUIMoved;
-			bool fEditBoxChanged;
-			bool fTextBufferChanged;
+			bool m_fUIMoved;
+			bool m_fEditBoxChanged;
+			bool m_fTextBufferChanged;
 	};	
 }
 

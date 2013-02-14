@@ -26,21 +26,21 @@ namespace Phobos
 {
 	namespace System
 	{
-		class InputManagerSDL_c: public InputManager_c
+		class InputManagerSDL: public InputManager
 		{
 			protected:
 				virtual void PollDevices(void);
 
 			private:
-				InputManagerSDL_c(const String_c &name);
+				InputManagerSDL(const String_t &name);
 
-				friend class InputManager_c;
+				friend class InputManager;
 
 			private:
-				KeyboardInputDeviceSDL_c	clKeyboardDevice;
-				MouseInputDeviceSDL_c		clMouseDevice;
+				KeyboardInputDeviceSDL	m_clKeyboardDevice;
+				MouseInputDeviceSDL		m_clMouseDevice;
 
-				bool fPooled;
+				bool m_fPooled;
 		};
 	}
 }

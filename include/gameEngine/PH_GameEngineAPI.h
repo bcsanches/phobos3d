@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_GAME_ENGINE_API_H
 #define PH_GAME_ENGINE_API_H
 
-#include <PH_Defs.h>
+#include <Phobos/Defs.h>
 
 #ifdef PH_WIN32
 	#ifdef PH_GAME_ENGINE_EXPORTS

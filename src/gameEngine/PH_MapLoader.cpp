@@ -24,9 +24,8 @@ subject to the following restrictions:
 #include <Phobos/Register/Table.h>
 #include <Phobos/Register/Hive.h>
 
-#include <PH_Exception.h>
-#include <PH_Kernel.h>
-#include <PH_Path.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Path.h>
 
 #include "PH_EntityFactory.h"
 #include "PH_EntityKeys.h"
@@ -36,56 +35,56 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	Register::Hive_c *MapLoader_c::pclStaticEntitiesHive_g = NULL;
-	Register::Hive_c *MapLoader_c::pclDynamicEntitiesHive_g = NULL;
-	Register::Hive_c *MapLoader_c::pclCurrentLevelHive_g = NULL;
+	Register::Hive *MapLoader::pclStaticEntitiesHive_g = NULL;
+	Register::Hive *MapLoader::pclDynamicEntitiesHive_g = NULL;
+	Register::Hive *MapLoader::pclCurrentLevelHive_g = NULL;
 
-	void MapLoader_c::OnBoot()
+	void MapLoader::OnBoot()
 	{		
 		pclCurrentLevelHive_g = &Register::CreateCustomHive("LevelInfo");
 		pclStaticEntitiesHive_g = &Register::CreateCustomHive("StaticEntities");
 		pclDynamicEntitiesHive_g = &Register::CreateCustomHive("DynamicEntities");		
 	}	
 
-	const Register::Hive_c &MapLoader_c::GetStaticEntitiesHive() const
+	const Register::Hive &MapLoader::GetStaticEntitiesHive() const
 	{
 		return *pclStaticEntitiesHive_g;
 	}
 
-	const Register::Hive_c &MapLoader_c::GetDynamicEntitiesHive() const
+	const Register::Hive &MapLoader::GetDynamicEntitiesHive() const
 	{
 		return *pclDynamicEntitiesHive_g;
 	}
 
-	const Register::Hive_c &MapLoader_c::GetCurrentLevelHive() const
+	const Register::Hive &MapLoader::GetCurrentLevelHive() const
 	{
 		return *pclCurrentLevelHive_g;
 	}
 
-	void MapLoader_c::ClearAllHives()
+	void MapLoader::ClearAllHives()
 	{
 		pclCurrentLevelHive_g->RemoveAllChildren();
 		pclStaticEntitiesHive_g->RemoveAllChildren();
 		pclDynamicEntitiesHive_g->RemoveAllChildren();
 	}
 
-	MapLoader_c::MapLoader_c(const Register::Table_c &settings):
-		strWorldSpawnEntityType(settings.GetString("worldSpawnEntityDef"))
+	MapLoader::MapLoader(const Register::Table &settings):
+		m_strWorldSpawnEntityType(settings.GetString("worldSpawnEntityDef"))
 	{
 		//empty
 	}
 
-	std::unique_ptr<Entity_c> MapLoader_c::CreateAndLoadWorldSpawn()
+	std::unique_ptr<Entity> MapLoader::CreateAndLoadWorldSpawn()
 	{	
-		Register::Table_c &entityDef = pclCurrentLevelHive_g->GetTable(WORLD_SPAWN_ENTITY);
+		Register::Table &entityDef = pclCurrentLevelHive_g->GetTable(WORLD_SPAWN_ENTITY);
 
-		std::unique_ptr<Entity_c> ptr(EntityFactory_c::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
+		std::unique_ptr<Entity> ptr(EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 		ptr->Load(entityDef);
 
 		return ptr;
 	}
 
-	GameWorldPtr_t MapLoader_c::CreateAndLoadWorld()
+	GameWorldPtr_t MapLoader::CreateAndLoadWorld()
 	{
 		GameWorldPtr_t world = this->CreateGameWorld();
 
@@ -94,12 +93,12 @@ namespace Phobos
 		return world;
 	}
 
-	std::unique_ptr<Register::Table_c> MapLoader_c::CreateWorldSpawnEntityDef()
+	std::unique_ptr<Register::Table> MapLoader::CreateWorldSpawnEntityDef()
 	{
-		std::unique_ptr<Register::Table_c> dict(PH_NEW Register::Table_c(WORLD_SPAWN_ENTITY));
+		std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(WORLD_SPAWN_ENTITY));
 
 		dict->SetBaseHive("EntityDef");
-		dict->SetInherited(strWorldSpawnEntityType);
+		dict->SetInherited(m_strWorldSpawnEntityType);
 
 		return dict;
 	}

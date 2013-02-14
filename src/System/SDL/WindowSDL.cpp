@@ -16,28 +16,28 @@ subject to the following restrictions:
 
 #include "Phobos/System/SDL/WindowSDL.h"
 
-#include "PH_Error.h"
-#include "PH_Exception.h"
-#include "PH_Memory.h"
+#include <Phobos/Error.h>
+#include <Phobos/Exception.h>
+#include <Phobos/Memory.h>
 
 #include <string>
 
-Phobos::System::WindowPtr_t Phobos::System::Window_c::Create(const String_c &name)
+Phobos::System::WindowPtr_t Phobos::System::Window::Create(const String_t &name)
 {
-	return WindowPtr_t(PH_NEW WindowSDL_c(name));
+	return WindowPtr_t(PH_NEW WindowSDL(name));
 }
 
-Phobos::System::WindowSDL_c::WindowSDL_c(const String_c &name):
-	Window_c(name)
+Phobos::System::WindowSDL::WindowSDL(const String_t &name):
+	Window(name)
 {
 }
 
-Phobos::System::WindowSDL_c::~WindowSDL_c(void)
+Phobos::System::WindowSDL::~WindowSDL(void)
 {
         SDL_Quit();
 }
 
-void Phobos::System::WindowSDL_c::Open(const String_c &name, const Rect_s<size_t> &rect, void *parentWindow)
+void Phobos::System::WindowSDL::Open(const String_t &name, const UIntSize_t &size, void *parentWindow)
 {
 
 	SDL_Init(SDL_INIT_VIDEO);
@@ -51,7 +51,7 @@ void Phobos::System::WindowSDL_c::Open(const String_c &name, const Rect_s<size_t
 			if(parent)
 				flags = SDL_NOFRAME | SDL_RESIZABLE;
 
-            SDL_SetVideoMode(rect.tWidth, rect.tHeight, 32, flags);
+            SDL_SetVideoMode(size.m_tWidth, size.m_tHeight, 32, flags);
 
 			if(parent)
 			{
@@ -60,7 +60,7 @@ void Phobos::System::WindowSDL_c::Open(const String_c &name, const Rect_s<size_t
 				//not 100% trusted, but give us an extra check
 				if(!IsWindow(parent))
 				{
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[WindowSDL_c::Open]", "Invalid parent window handle");
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[WindowSDL::Open]", "Invalid parent window handle");
 				}
 
 				RECT parentRec;					
@@ -85,31 +85,30 @@ void Phobos::System::WindowSDL_c::Open(const String_c &name, const Rect_s<size_t
         #endif
 
         SDL_WM_SetCaption(name.c_str(), NULL);
-
-	this->rect = rect;
-
 }
 
-size_t Phobos::System::WindowSDL_c::GetWidth(void) const
+size_t Phobos::System::WindowSDL::GetWidth(void) const
 {
 	PH_ASSERT_VALID(this);
 
-	return rect.tWidth;
+	return SDL_GetVideoSurface()->w;
 }
 
-size_t Phobos::System::WindowSDL_c::GetHeight(void) const
+size_t Phobos::System::WindowSDL::GetHeight(void) const
 {
 	PH_ASSERT_VALID(this);
 
-	return rect.tHeight;
+	return SDL_GetVideoSurface()->h;
 }
 
-void Phobos::System::WindowSDL_c::GetRect(Rect_s<size_t> &out)
+Phobos::UIntSize_t Phobos::System::WindowSDL::GetSize() const
 {
-	out = rect;
+	auto surface = SDL_GetVideoSurface();
+
+	return UIntSize_t(surface->w, surface->h);
 }
 
-void *Phobos::System::WindowSDL_c::GetHandler() const
+void *Phobos::System::WindowSDL::GetHandler() const
 {
 	#ifdef PH_WIN32
 
@@ -124,7 +123,7 @@ void *Phobos::System::WindowSDL_c::GetHandler() const
     #endif
 }
 
-bool Phobos::System::WindowSDL_c::HasGLContext()
+bool Phobos::System::WindowSDL::HasGLContext()
 {
 	#ifdef PH_WIN32
         return false;
