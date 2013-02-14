@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_AssetListRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
     <ClCompile Include="..\..\..\src\editor\PH_LogRequest.cpp" />
@@ -26,6 +27,9 @@
     <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
       <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PH_GameEngine\PH_GameEngine.vcxproj">
+      <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
     </ProjectReference>
@@ -34,6 +38,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\editor\Editor\Camera.h" />
     <ClInclude Include="..\..\..\include\editor\Editor\PH_AssetListRequest.h" />
     <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />
     <ClInclude Include="..\..\..\include\editor\Editor\PH_LogRequest.h" />
@@ -87,7 +92,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\OgreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,6 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -126,6 +126,8 @@ namespace Phobos
 			size_t GetScreenWidth();
 			size_t GetScreenHeight();
 
+			void DrawLine(const Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::ColourValue colour);
+
 		protected:
 			// =====================================================
 			// PROTECTED METHODS
