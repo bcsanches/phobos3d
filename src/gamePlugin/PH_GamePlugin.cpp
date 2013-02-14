@@ -41,7 +41,7 @@ namespace Phobos
 
 	void GamePlugin::Init()
 	{
-		ipManager = CoreModuleManager::Create(szModuleName_g);
+		ipManager = ModuleManager::Create(szModuleName_g);
 
 		Core::GetInstance().AddModule(*ipManager);	
 

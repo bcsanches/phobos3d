@@ -25,7 +25,7 @@ subject to the following restrictions:
 
 PH_DECLARE_SINGLETON_PTR(Render);
 
-class Render: public Phobos::CoreModule
+class Render: public Phobos::Module
 {
 	PH_DECLARE_SINGLETON_METHODS(Render);
 

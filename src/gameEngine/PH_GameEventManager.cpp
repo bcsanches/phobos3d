@@ -23,7 +23,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(GameEventManager);	
 
 	GameEventManager::GameEventManager():
-		CoreModule("GameEventManager", NodeFlags::PRIVATE_CHILDREN)
+		Module("GameEventManager", NodeFlags::PRIVATE_CHILDREN)
 	{
 		//empty
 	}

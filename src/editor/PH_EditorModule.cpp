@@ -25,7 +25,7 @@ namespace Phobos
 }
 
 Phobos::Editor::EditorModule::EditorModule():
-	CoreModule("EditorModule")
+	Module("EditorModule")
 {
 	//empty
 }

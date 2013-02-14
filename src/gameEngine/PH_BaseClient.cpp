@@ -5,7 +5,7 @@
 namespace Phobos
 {
 	BaseClient::BaseClient(const char *name):
-		CoreModule(name)		
+		Module(name)		
 	{
 		//empty
 	}

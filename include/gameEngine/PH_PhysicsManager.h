@@ -58,7 +58,7 @@ namespace Phobos
 		class CharacterBodyComponent;
 		class RigidBodyComponent;
 
-		class PH_GAME_ENGINE_API Manager: public CoreModule
+		class PH_GAME_ENGINE_API Manager: public Module
 		{
 			PH_DECLARE_SINGLETON_METHODS(Manager);
 

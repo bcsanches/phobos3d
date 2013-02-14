@@ -22,7 +22,7 @@ subject to the following restrictions:
 PH_DEFINE_DEFAULT_SINGLETON(Render);
 
 Render::Render():
-	CoreModule("Render"),
+	Module("Render"),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
 	m_varRVSync("dvRVSync", "1"),

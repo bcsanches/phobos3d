@@ -217,7 +217,7 @@ const Phobos::String_t &Phobos::Gui::LevelFileDataSource::GetFile(int index)
 PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::LevelSelector);
 
 Phobos::Gui::LevelSelector::LevelSelector():
-	CoreModule("GuiLevelSelector"),
+	Module("GuiLevelSelector"),
 	m_cmdAddLevelPath("addLevelPath"),
 	m_fCloseRequested(false)
 {	

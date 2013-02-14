@@ -23,7 +23,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API BaseClient: public CoreModule, public IClient
+	class PH_GAME_ENGINE_API BaseClient: public Module, public IClient
 	{	
 		protected:
 			BaseClient(const char *name);

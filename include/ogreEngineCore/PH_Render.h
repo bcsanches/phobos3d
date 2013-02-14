@@ -57,7 +57,7 @@ namespace Phobos
 		};
 	}
 
-	class PH_OGRE_ENGINE_CORE_API Render: public CoreModule
+	class PH_OGRE_ENGINE_CORE_API Render: public Module
 	{		
 		public:
 			~Render();

@@ -140,7 +140,7 @@ namespace Phobos
 	}
 
 	Render::Render(void):
-		CoreModule("Render"),
+		Module("Render"),
 		m_varRScreenX("dvRScreenX", "800"),
 		m_varRScreenY("dvRScreenY", "600"),
 		m_varRVSync("dvRVSync", "1"),

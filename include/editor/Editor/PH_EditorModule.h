@@ -18,7 +18,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(EditorModule)
 
-		class EditorModule: public CoreModule, public IClient
+		class EditorModule: public Module, public IClient
 		{			
 			public:
 				PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL

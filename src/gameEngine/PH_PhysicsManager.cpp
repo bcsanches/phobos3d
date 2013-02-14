@@ -36,7 +36,7 @@ namespace Phobos
 		PH_DEFINE_DEFAULT_SINGLETON(Manager);
 
 		Manager::Manager():
-			CoreModule("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
+			Module("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
 			m_fpScale(1),
 			m_varPhysicsScale("dvPhysicsScale", "1"),
 			m_clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))

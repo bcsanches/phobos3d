@@ -37,7 +37,7 @@ namespace Phobos
 		class DataGridController;
 		class LevelFileDataSource;		
 
-		class PH_GAME_ENGINE_API LevelSelector: public CoreModule, public Gui::Form
+		class PH_GAME_ENGINE_API LevelSelector: public Module, public Gui::Form
 		{
 			PH_DECLARE_SINGLETON_METHODS(LevelSelector);
 

@@ -49,7 +49,7 @@ namespace Phobos
 			PH_DECLARE_LISTENER_HOOK;
 	};
 
-	class PH_GAME_ENGINE_API WorldManager: public CoreModule
+	class PH_GAME_ENGINE_API WorldManager: public Module
 	{
 		PH_DECLARE_SINGLETON_METHODS(WorldManager);
 

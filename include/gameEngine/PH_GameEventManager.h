@@ -29,7 +29,7 @@ namespace Phobos
 {
 	PH_DECLARE_SINGLETON_PTR(GameEventManager);
 
-	class PH_GAME_ENGINE_API GameEventManager: public CoreModule
+	class PH_GAME_ENGINE_API GameEventManager: public Module
 	{
 		PH_DECLARE_SINGLETON_METHODS(GameEventManager);
 

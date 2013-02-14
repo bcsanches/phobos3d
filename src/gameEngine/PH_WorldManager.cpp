@@ -37,7 +37,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);
 
 	WorldManager::WorldManager():
-		CoreModule("WorldManager", NodeFlags::PRIVATE_CHILDREN),
+		Module("WorldManager", NodeFlags::PRIVATE_CHILDREN),
 		m_cmdLoadMap("loadMap"),
 		m_cmdUnloadMap("unloadMap"),
 		m_cmdDumpFactoryCreators("dumpFactoryCreators")
