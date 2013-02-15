@@ -14,7 +14,7 @@ namespace Phobos
 				~Camera();
 
 			private:
-				GameCamera_c m_clCamera;
+				GameCamera m_clCamera;
 		};
 	}
 }

@@ -36,6 +36,9 @@
     <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
+      <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\editor\Editor\Camera.h" />

@@ -113,6 +113,7 @@
             this.tbSearch.Name = "tbSearch";
             this.tbSearch.Size = new System.Drawing.Size(75, 20);
             this.tbSearch.TabIndex = 0;
+            this.tbSearch.TextChanged += new System.EventHandler(this.tbSearch_TextChanged);
             // 
             // cbCategories
             // 
@@ -123,6 +124,7 @@
             this.cbCategories.Name = "cbCategories";
             this.cbCategories.Size = new System.Drawing.Size(75, 21);
             this.cbCategories.TabIndex = 3;
+            this.cbCategories.SelectedIndexChanged += new System.EventHandler(this.cbCategories_SelectedIndexChanged);
             // 
             // lvAssets
             // 
@@ -140,6 +142,7 @@
             this.lvAssets.TabIndex = 3;
             this.lvAssets.UseCompatibleStateImageBehavior = false;
             this.lvAssets.View = System.Windows.Forms.View.List;
+            this.lvAssets.DoubleClick += new System.EventHandler(this.lvAssets_DoubleClick);
             // 
             // AssetBrowser
             // 

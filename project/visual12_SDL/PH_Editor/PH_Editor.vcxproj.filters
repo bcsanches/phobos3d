@@ -16,6 +16,7 @@
     <ClCompile Include="..\..\..\src\editor\PH_Request.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />

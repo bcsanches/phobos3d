@@ -41,5 +41,15 @@ namespace SharpEditor.Assets
                 AssetAdded(null, args);
             }
         }
+
+        public static IList<Asset> GetAssetsForCategory(Category category)
+        {
+            return m_mapAssets.Select(x => x.Value).Where(x => x.Category == category).ToList();
+        }
+
+        public static IList<Asset> GetAllAssets()
+        {
+            return m_mapAssets.Select(x => x.Value).ToList();
+        }
     }
 }

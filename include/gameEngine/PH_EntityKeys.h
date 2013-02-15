@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_ENTITY_KEYS_H
 #define PH_ENTITY_KEYS_H
 
+#define PH_ENTITY_DEF_HIVE "EntityDef"
+
 #define PH_ENTITY_KEY_CLASS_NAME "className"
 #define PH_ENTITY_KEY_POSITION "position"
 #define PH_ENTITY_KEY_SCALE "scale"

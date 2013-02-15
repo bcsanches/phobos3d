@@ -97,7 +97,7 @@ namespace Phobos
 	{
 		std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(WORLD_SPAWN_ENTITY));
 
-		dict->SetBaseHive("EntityDef");
+		dict->SetBaseHive(PH_ENTITY_DEF_HIVE);
 		dict->SetInherited(m_strWorldSpawnEntityType);
 
 		return dict;

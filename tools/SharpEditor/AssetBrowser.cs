@@ -19,6 +19,11 @@ namespace SharpEditor
             InitializeComponent();                    
         }
 
+        private Assets.Category GetSelectedCategory()
+        {
+            return (Assets.Category)cbCategories.SelectedItem;
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -45,10 +50,60 @@ namespace SharpEditor
 
         void Manager_AssetAdded(object sender, Assets.AssetManagerEventArgs e)
         {
-            var item = new ListViewItem(e.Asset.Name);
-            item.Tag = e.Asset;
+            var asset = e.Asset;
+
+            //ignore if not in the current category
+            var selectedCategory = this.GetSelectedCategory();
+            if ((selectedCategory != m_CategoryAll) && (e.Asset.Category != selectedCategory))
+                return;
+
+            this.AddAsset(e.Asset);
+        }
+
+        private void AddAsset(Assets.Asset asset)
+        {
+            var item = new ListViewItem(asset.Name);
+            item.Tag = asset;
 
             lvAssets.Items.Add(item);
+        }
+
+        private void lvAssets_DoubleClick(object sender, EventArgs e)
+        {
+            var asset = (Assets.Asset) lvAssets.SelectedItems[0].Tag;
+
+            /*
+                {
+                    "command":"CreateObject",
+                    "asset":"barrel.mesh",
+                    "category":
+
+             */
+        }
+
+        private void cbCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lvAssets.Clear();
+
+            var selectedCategory = this.GetSelectedCategory();
+
+            var assetsList = selectedCategory == m_CategoryAll ? Assets.Manager.GetAllAssets() : Assets.Manager.GetAssetsForCategory(selectedCategory);
+
+            var nameFilter = tbSearch.Text.Trim().ToUpper();
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                assetsList = assetsList.Where(x => x.Name.ToUpper().Contains(nameFilter)).ToList();
+            }
+
+            foreach (var asset in assetsList)
+            {
+                this.AddAsset(asset);
+            }
+        }
+
+        private void tbSearch_TextChanged(object sender, EventArgs e)
+        {
+            this.cbCategories_SelectedIndexChanged(null, null);
         }        
     }
 }
