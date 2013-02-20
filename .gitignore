@@ -1026,3 +1026,9 @@
 /project/visual12_SDL/Sample_05/Phobos.log
 /project/visual12_SDL/UT_EngineCore/Phobos.log
 /project/visual12_SDL/UT_Register/Phobos.log
+
+/project/visual12_SDL/PH_OgreEngine/Debug/
+/project/visual12_SDL/PH_OgreEngine/Release/
+/project/visual12_SDL/PH_OgreEngine/Debug_rel/
+
+/project/visual12_SDL/UT_GameEngine/Phobos.log

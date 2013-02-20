@@ -16,7 +16,7 @@ subject to the following restrictions:
 Based on sample code provided by libRocket, original author: Peter Curry
 */
 
-#include "Gui/PH_OgreRenderInterface.h"
+#include "Phobos/OgreEngine/Gui/RenderInterface.h"
 
 #include <OgreHardwareBufferManager.h>
 #include <OgreHardwareVertexBuffer.h>
@@ -52,7 +52,7 @@ namespace
 	};
 }
 
-Phobos::Gui::RenderInterfaceOgre::RenderInterfaceOgre(unsigned int window_width, unsigned int window_height)
+Phobos::OgreEngine::Gui::RenderInterface::RenderInterface(unsigned int window_width, unsigned int window_height)
 {
 	render_system = Ogre::Root::getSingleton().getRenderSystem();
 
@@ -76,18 +76,18 @@ Phobos::Gui::RenderInterfaceOgre::RenderInterfaceOgre(unsigned int window_width,
 	scissor_bottom = (int) window_height;
 }
 
-Phobos::Gui::RenderInterfaceOgre::~RenderInterfaceOgre()
+Phobos::OgreEngine::Gui::RenderInterface::~RenderInterface()
 {
 }
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
-void Phobos::Gui::RenderInterfaceOgre::RenderGeometry(Rocket::Core::Vertex* ROCKET_UNUSED(vertices), int ROCKET_UNUSED(num_vertices), int* ROCKET_UNUSED(indices), int ROCKET_UNUSED(num_indices), Rocket::Core::TextureHandle ROCKET_UNUSED(texture), const Rocket::Core::Vector2f& ROCKET_UNUSED(translation))
+void Phobos::OgreEngine::Gui::RenderInterface::RenderGeometry(Rocket::Core::Vertex* ROCKET_UNUSED(vertices), int ROCKET_UNUSED(num_vertices), int* ROCKET_UNUSED(indices), int ROCKET_UNUSED(num_indices), Rocket::Core::TextureHandle ROCKET_UNUSED(texture), const Rocket::Core::Vector2f& ROCKET_UNUSED(translation))
 {
 	// We've chosen to not support non-compiled geometry in the Ogre3D renderer.
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.
-Rocket::Core::CompiledGeometryHandle Phobos::Gui::RenderInterfaceOgre::CompileGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture)
+Rocket::Core::CompiledGeometryHandle Phobos::OgreEngine::Gui::RenderInterface::CompileGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture)
 {
 	RocketOgre3DCompiledGeometry* geometry = new RocketOgre3DCompiledGeometry();
 	geometry->texture = texture == NULL ? NULL : (RocketOgre3DTexture*) texture;
@@ -149,7 +149,7 @@ Rocket::Core::CompiledGeometryHandle Phobos::Gui::RenderInterfaceOgre::CompileGe
 }
 
 // Called by Rocket when it wants to render application-compiled geometry.
-void Phobos::Gui::RenderInterfaceOgre::RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry, const Rocket::Core::Vector2f& translation)
+void Phobos::OgreEngine::Gui::RenderInterface::RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry, const Rocket::Core::Vector2f& translation)
 {
 	Ogre::Matrix4 transform;
 	transform.makeTrans(translation.x, translation.y, 0);
@@ -174,7 +174,7 @@ void Phobos::Gui::RenderInterfaceOgre::RenderCompiledGeometry(Rocket::Core::Comp
 }
 
 // Called by Rocket when it wants to release application-compiled geometry.
-void Phobos::Gui::RenderInterfaceOgre::ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry)
+void Phobos::OgreEngine::Gui::RenderInterface::ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry)
 {
 	RocketOgre3DCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketOgre3DCompiledGeometry*>(geometry);
 	delete ogre3d_geometry->render_operation.vertexData;
@@ -183,7 +183,7 @@ void Phobos::Gui::RenderInterfaceOgre::ReleaseCompiledGeometry(Rocket::Core::Com
 }
 
 // Called by Rocket when it wants to enable or disable scissoring to clip content.
-void Phobos::Gui::RenderInterfaceOgre::EnableScissorRegion(bool enable)
+void Phobos::OgreEngine::Gui::RenderInterface::EnableScissorRegion(bool enable)
 {
 	scissor_enable = enable;
 
@@ -194,7 +194,7 @@ void Phobos::Gui::RenderInterfaceOgre::EnableScissorRegion(bool enable)
 }
 
 // Called by Rocket when it wants to change the scissor region.
-void Phobos::Gui::RenderInterfaceOgre::SetScissorRegion(int x, int y, int width, int height)
+void Phobos::OgreEngine::Gui::RenderInterface::SetScissorRegion(int x, int y, int width, int height)
 {
 	scissor_left = x;
 	scissor_top = y;
@@ -206,7 +206,7 @@ void Phobos::Gui::RenderInterfaceOgre::SetScissorRegion(int x, int y, int width,
 }
 
 // Called by Rocket when a texture is required by the library.
-bool Phobos::Gui::RenderInterfaceOgre::LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source)
+bool Phobos::OgreEngine::Gui::RenderInterface::LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source)
 {
 	Ogre::TextureManager* texture_manager = Ogre::TextureManager::getSingletonPtr();
 	Ogre::TexturePtr ogre_texture = texture_manager->getByName(Ogre::String(source.CString()));
@@ -229,7 +229,7 @@ bool Phobos::Gui::RenderInterfaceOgre::LoadTexture(Rocket::Core::TextureHandle& 
 }
 
 // Called by Rocket when a texture is required to be built from an internally-generated sequence of pixels.
-bool Phobos::Gui::RenderInterfaceOgre::GenerateTexture(Rocket::Core::TextureHandle& texture_handle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& source_dimensions)
+bool Phobos::OgreEngine::Gui::RenderInterface::GenerateTexture(Rocket::Core::TextureHandle& texture_handle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& source_dimensions)
 {
 	static int texture_id = 1;
 
@@ -250,19 +250,19 @@ bool Phobos::Gui::RenderInterfaceOgre::GenerateTexture(Rocket::Core::TextureHand
 }
 
 // Called by Rocket when a loaded texture is no longer required.
-void Phobos::Gui::RenderInterfaceOgre::ReleaseTexture(Rocket::Core::TextureHandle texture)
+void Phobos::OgreEngine::Gui::RenderInterface::ReleaseTexture(Rocket::Core::TextureHandle texture)
 {
 	delete ((RocketOgre3DTexture*) texture);
 }
 
 // Returns the native horizontal texel offset for the renderer.
-float Phobos::Gui::RenderInterfaceOgre::GetHorizontalTexelOffset()
+float Phobos::OgreEngine::Gui::RenderInterface::GetHorizontalTexelOffset()
 {
 	return -render_system->getHorizontalTexelOffset();
 }
 
 // Returns the native vertical texel offset for the renderer.
-float Phobos::Gui::RenderInterfaceOgre::GetVerticalTexelOffset()
+float Phobos::OgreEngine::Gui::RenderInterface::GetVerticalTexelOffset()
 {
 	return -render_system->getVerticalTexelOffset();
 }

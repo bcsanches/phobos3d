@@ -21,47 +21,50 @@ subject to the following restrictions:
 
 #include <OgreRenderQueueListener.h>
 
-#include <Gui/PH_Manager.h>
+#include <Phobos/Engine/Gui/Manager.h>
 
-#include "PH_OgreEngineCoreAPI.h"
+#include "Phobos/OgreEngine/OgreEngineAPI.h"
 
 namespace Phobos
 {
-	namespace Gui
+	namespace OgreEngine
 	{
-		PH_DECLARE_NODE_PTR(OgreManager);
+		namespace Gui
+		{
+			PH_DECLARE_NODE_PTR(Manager);
 
-		class PH_OGRE_ENGINE_CORE_API OgreManager: public Gui::Manager, Ogre::RenderQueueListener
-		{			
-			public:				
-				static OgreManager &CreateInstance(void);
+			class PH_OGRE_ENGINE_API Manager: public Engine::Gui::Manager, Ogre::RenderQueueListener
+			{			
+				public:				
+					static Manager &CreateInstance(void);
 
-				virtual ~OgreManager();
+					virtual ~Manager();
 
-			protected:				
-				virtual void OnRenderReady();	
-				virtual void OnFinalize();
+				protected:				
+					virtual void OnRenderReady();	
+					virtual void OnFinalize();
 
-				virtual size_t GetScreenWidth();
-				virtual size_t GetScreenHeight();
+					virtual size_t GetScreenWidth();
+					virtual size_t GetScreenHeight();
 
-			private:
-				virtual void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation);				
+				private:
+					virtual void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation);				
 
-			private:
-				OgreManager();
+				private:
+					Manager();
 
-				void ConfigureRenderSystem();
-				void BuildProjectionMatrix(Ogre::Matrix4& projection_matrix);
+					void ConfigureRenderSystem();
+					void BuildProjectionMatrix(Ogre::Matrix4& projection_matrix);
 				
-			private:				
-				/**
-					Here we need to have our own Scene and own camera to allow GUI rendering when no scenario is loaded
+				private:				
+					/**
+						Here we need to have our own Scene and own camera to allow GUI rendering when no scenario is loaded
 
-				*/
-				Ogre::SceneManager	*m_pclSceneManager;
-				Ogre::Camera		*m_pclCamera;
-		};
+					*/
+					Ogre::SceneManager	*m_pclSceneManager;
+					Ogre::Camera		*m_pclCamera;
+			};
+		}
 	}
 }
 

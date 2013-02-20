@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{37e4e372-eccd-4dbf-994b-b93145cc330b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\OgreEngine\Console.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Render.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Utils.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Gui\Manager.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OgreEngine\Gui\RenderInterface.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Console.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\MathFunctions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\OgreEngineAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Render.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Transform.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\TransformProperty.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\TransformPropertyFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Utils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Vector3Property.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Vector3PropertyFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Gui\Manager.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Gui\RenderInterface.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -146,10 +146,6 @@
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\PH_OgreEngineCore\PH_OgreEngineCore.vcxproj">
-      <Project>{38679578-6b2c-4801-bd91-11bf34ec697b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

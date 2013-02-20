@@ -14,48 +14,48 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Gui/PH_OgreManager.h"
+#include "Phobos/OgreEngine/Gui/Manager.h"
 
 #include <Rocket/Controls.h>
 #include <Rocket/Core/SystemInterface.h>
 
 #include <OgreRoot.h>
 
-#include <PH_Console.h>
+#include <Phobos/Engine/Console.h>
 
-#include "Gui/PH_Context.h"
-#include "Gui/PH_OgreRenderInterface.h"
+#include "Phobos/Engine/Gui/Context.h"
+#include "Phobos/OgreEngine/Gui/RenderInterface.h"
 
-#include "PH_Render.h"
+#include "Phobos/OgreEngine/Render.h"
 
-Phobos::Gui::OgreManager &Phobos::Gui::OgreManager::CreateInstance(void)
+Phobos::OgreEngine::Gui::Manager &Phobos::OgreEngine::Gui::Manager::CreateInstance(void)
 {		
-	Phobos::Gui::OgreManager::UpdateInstance(OgreManagerPtr_t(PH_NEW OgreManager()));		
+	Manager::UpdateInstance(ManagerPtr_t(PH_NEW Manager()));		
 
-	return static_cast<OgreManager &>(OgreManager::GetInstance());
+	return static_cast<Manager &>(Manager::GetInstance());
 }
 
-Phobos::Gui::OgreManager::OgreManager():	
+Phobos::OgreEngine::Gui::Manager::Manager():	
 	m_pclSceneManager(NULL),
 	m_pclCamera(NULL)
 {
 	//empty
 }
 
-Phobos::Gui::OgreManager::~OgreManager()
+Phobos::OgreEngine::Gui::Manager::~Manager()
 {
 	//empty
 }
 
-void Phobos::Gui::OgreManager::OnRenderReady()
+void Phobos::OgreEngine::Gui::Manager::OnRenderReady()
 {
 	Ogre::ResourceGroupManager::getSingleton().createResourceGroup("Rocket");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("./", "FileSystem", "Rocket");
 	Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Rocket");
 
-	Phobos::Render &render = Phobos::Render::GetInstance();
+	auto &render = Phobos::OgreEngine::Render::GetInstance();
 
-	RenderInterfaceOgre *renderer = PH_NEW RenderInterfaceOgre(render.GetScreenWidth(), render.GetScreenHeight());
+	auto *renderer = PH_NEW RenderInterface(render.GetScreenWidth(), render.GetScreenHeight());
 	Rocket::Core::SetRenderInterface(renderer);
 	renderer->Release();
 
@@ -78,11 +78,11 @@ void Phobos::Gui::OgreManager::OnRenderReady()
 	vp->setClearEveryFrame(false, Ogre::FBT_COLOUR);
 }
 
-void Phobos::Gui::OgreManager::OnFinalize()
+void Phobos::OgreEngine::Gui::Manager::OnFinalize()
 {
 	if(m_pclSceneManager)
 	{
-		Phobos::Render &render = Phobos::Render::GetInstance();
+		auto &render = Phobos::OgreEngine::Render::GetInstance();
 
 		m_pclSceneManager->destroyCamera(m_pclCamera);
 		m_pclCamera = NULL;
@@ -93,10 +93,10 @@ void Phobos::Gui::OgreManager::OnFinalize()
 
 	Rocket::Core::Shutdown();
 
-	Gui::Manager::OnFinalize();
+	Engine::Gui::Manager::OnFinalize();
 }
 
-void Phobos::Gui::OgreManager::BuildProjectionMatrix(Ogre::Matrix4& projection_matrix)
+void Phobos::OgreEngine::Gui::Manager::BuildProjectionMatrix(Ogre::Matrix4& projection_matrix)
 {
 	float z_near = -1;
 	float z_far = 1;
@@ -114,7 +114,7 @@ void Phobos::Gui::OgreManager::BuildProjectionMatrix(Ogre::Matrix4& projection_m
 	projection_matrix[3][3]= 1.0000000f;
 }
 
-void Phobos::Gui::OgreManager::ConfigureRenderSystem()
+void Phobos::OgreEngine::Gui::Manager::ConfigureRenderSystem()
 {
 	Ogre::RenderSystem* render_system = Ogre::Root::getSingleton().getRenderSystem();
 
@@ -166,7 +166,7 @@ void Phobos::Gui::OgreManager::ConfigureRenderSystem()
 	render_system->_setDepthBias(0, 0);
 }
 
-void Phobos::Gui::OgreManager::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool &skipThisInvocation)
+void Phobos::OgreEngine::Gui::Manager::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool &skipThisInvocation)
 {
 	if (queueGroupId == Ogre::RENDER_QUEUE_OVERLAY && Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled())
 	{
@@ -174,19 +174,19 @@ void Phobos::Gui::OgreManager::renderQueueStarted(Ogre::uint8 queueGroupId, cons
 
 		for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
 		{
-			Context *context = static_cast<Context *>(it->second);
+			auto *context = static_cast<Engine::Gui::Context *>(it->second);
 
 			context->Render();
 		}
 	}
 }
 
-size_t Phobos::Gui::OgreManager::GetScreenWidth()
+size_t Phobos::OgreEngine::Gui::Manager::GetScreenWidth()
 {
 	return Render::GetInstance().GetScreenWidth();
 }
 
-size_t Phobos::Gui::OgreManager::GetScreenHeight()
+size_t Phobos::OgreEngine::Gui::Manager::GetScreenHeight()
 {
 	return Render::GetInstance().GetScreenHeight();
 }
