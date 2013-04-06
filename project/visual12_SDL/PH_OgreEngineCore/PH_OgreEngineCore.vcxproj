@@ -78,10 +78,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;OgreRTShaderSystem_d.lib;RocketCore_d.lib;RocketControls_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;OgreRTShaderSystem_d.lib;OgreOverlay_d.lib;RocketCore_d.lib;RocketControls_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)_d.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -103,7 +103,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;OgreRTShaderSystem.lib;RocketControls.lib;RocketCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -127,7 +127,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;OgreRTShaderSystem.lib;RocketControls.lib;RocketCore.lib;%(AdditionalDependencies)</AdditionalDependencies>

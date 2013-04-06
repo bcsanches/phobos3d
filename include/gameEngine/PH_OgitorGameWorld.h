@@ -19,8 +19,8 @@ subject to the following restrictions:
 #ifndef PH_OGITOR_GAME_WORLD_H
 #define PH_OGITOR_GAME_WORLD_H
 
-#include <OgreTerrainGroup.h>
-#include <OgreTerrainPrerequisites.h>
+#include <Terrain/OgreTerrainGroup.h>
+#include <Terrain/OgreTerrainPrerequisites.h>
 
 #include <Phobos/Register/TableFwd.h>
 

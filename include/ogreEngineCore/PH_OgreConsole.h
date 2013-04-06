@@ -17,8 +17,7 @@ subject to the following restrictions:
 #ifndef PH_CONSOLE_H
 #define PH_CONSOLE_H
 
-#include <OgrePrerequisites.h>
-#include <OgreRectangle2D.h>
+#include <Overlay/OgreOverlayContainer.h>
 
 #include <PH_Console.h>
 

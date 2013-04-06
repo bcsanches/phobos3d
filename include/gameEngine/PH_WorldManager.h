@@ -98,7 +98,7 @@ namespace Phobos
 			void CmdDumpFactoryCreators(const Shell::StringVector_t &args, Shell::Context &);
 
 		private:
-			EntityManager m_clEntityManager;
+			EntityManager	m_clEntityManager;
 
 			MapLoaderPtr_t	m_spMapLoader;
 

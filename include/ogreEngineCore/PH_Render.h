@@ -21,8 +21,8 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 #include <OgreSceneManager.h>
-#include <OgreTerrainGroup.h>
-#include <OgreTerrainPrerequisites.h>
+#include <Terrain/OgreTerrainGroup.h>
+#include <Terrain/OgreTerrainPrerequisites.h>
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>

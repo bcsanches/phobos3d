@@ -27,8 +27,7 @@ namespace SharpEditor
                 " \"loadPlugin PH_Editor_d\"";
 #else
                 " \"loadPlugin PH_Editor\"";
-#endif
-
+#endif            
             mProcess.StartInfo.UseShellExecute = false;
             mProcess.StartInfo.FileName = exeFile;
             mProcess.StartInfo.WorkingDirectory = workingDirectory;

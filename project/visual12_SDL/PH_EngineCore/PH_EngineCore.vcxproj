@@ -63,6 +63,18 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_d</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">$(ProjectName)_dr</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(LIB_ROCKET_HOME)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LIB_ROCKET_HOME)\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(LIB_ROCKET_HOME)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LIB_ROCKET_HOME)\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <IncludePath>$(LIB_ROCKET_HOME)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LIB_ROCKET_HOME)\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
