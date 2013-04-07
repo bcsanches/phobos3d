@@ -76,17 +76,7 @@ namespace Phobos
 		overlayManager.destroyOverlayElement(m_pclTextBox);	
 
 		overlayManager.destroy(m_pclOverlay);		
-		overlayManager.destroy(m_pclRenderInfoOverlay);		
-
-		if(m_pclSceneManager)
-		{
-			if(m_pclCamera)
-				m_pclSceneManager->destroyCamera(m_pclCamera);
-
-			Render &render = Render::GetInstance();
-
-			render.DestroySceneManager(m_pclSceneManager);
-		}				
+		overlayManager.destroy(m_pclRenderInfoOverlay);
 	}
 
 	void OgreConsole::OnEditBoxChanged()
@@ -208,11 +198,7 @@ namespace Phobos
 		try
 		{  
 			Render &render = Render::GetInstance();
-
-			m_pclSceneManager = render.CreateSceneManager(Ogre::ST_GENERIC);
-			m_pclCamera = m_pclSceneManager->createCamera("PH_ConsoleCamera");
-
-			// Create background rectangle covering the whole screen
+			
 			OverlayManager& overlayManager = OverlayManager::getSingleton();
 
 			m_pclTextBox=overlayManager.createOverlayElement("TextArea","ConsoleText");
@@ -235,13 +221,11 @@ namespace Phobos
 			m_pclOverlay->add2D(m_pclRect);
 			m_pclRect->addChild(m_pclTextBox);
 
-			m_pclOverlay->setZOrder(650);
+			m_pclOverlay->setZOrder(0);
 			m_pclOverlay->show();
 
 			m_pclRenderInfoOverlay = overlayManager.getByName("Core/RenderInfoOverlay");
-			m_pclRenderInfoOverlay->show();
-
-			render.AddViewport(m_pclCamera, DefaultViewportZOrder::CONSOLE);
+			m_pclRenderInfoOverlay->show();			
 		}
 		catch(Ogre::Exception &)
 		{

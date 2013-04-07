@@ -38,6 +38,10 @@ namespace SharpEditor
 
             for (; ; )
             {
+                info.mExternalProcess = Properties.Settings.Default.EngineExternalStart;
+                if (info.mExternalProcess)
+                    return true;
+
                 string exe = Properties.Settings.Default.EnginePath;
 #if DEBUG
                 exe = System.IO.Path.Combine(exe, "PH_EngineMain_d.exe");
@@ -51,9 +55,7 @@ namespace SharpEditor
                         return false;
 
                     continue;
-                }
-
-                info.mExternalProcess = Properties.Settings.Default.EngineExternalStart;
+                }                
 
                 string workingDir = Properties.Settings.Default.EngineWorkingDirectory;
                 if (string.IsNullOrEmpty(workingDir))

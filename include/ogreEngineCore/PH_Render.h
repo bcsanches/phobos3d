@@ -21,6 +21,7 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 #include <OgreSceneManager.h>
+#include <Overlay/OgreOverlaySystem.h>
 #include <Terrain/OgreTerrainGroup.h>
 #include <Terrain/OgreTerrainPrerequisites.h>
 
@@ -50,10 +51,11 @@ namespace Phobos
 	namespace DefaultViewportZOrder
 	{
 		enum Enum
-		{
-			CONSOLE = -4096,
+		{			
+			PRE_GAME = -4096,
 			GAME = 0,
-			GUI = 4096
+			GUI = 4096,
+			CONSOLE = 8192
 		};
 	}
 
@@ -74,6 +76,8 @@ namespace Phobos
 			
 			Ogre::SceneManager *CreateSceneManager(Ogre::SceneTypeMask typeMask);
 			void DestroySceneManager(Ogre::SceneManager *manager);
+
+			void EnableOverlay(Ogre::SceneManager &manager);
 
 			void ClearScene();
 
@@ -154,6 +158,9 @@ namespace Phobos
 
 			void VarRCaelumChanged(const Shell::Variable &var, const String_t &currentValue, const String_t &newValue);
 
+			void EnableHelperCamera();
+			void DisableHelperCamera();
+
 		private:
 			// =====================================================
 			// PRIVATE ATTRIBUTES
@@ -186,11 +193,16 @@ namespace Phobos
 
 			std::unique_ptr<Ogre::Root>									m_upRoot;
 			std::unique_ptr<ShaderGeneratorTechniqueResolverListener>	m_upShaderGeneratorTechiniqueResolverListener;
+			std::unique_ptr<Ogre::OverlaySystem>						m_upOverlaySystem;
+
+			Ogre::Camera												*m_pclHelperCamera;
+			Ogre::SceneManager											*m_pclHelperScene;
+
 			Ogre::RenderWindow											*m_pclOgreWindow;
 			Ogre::SceneManager											*m_pclMainSceneManager;
 			Ogre::RTShader::ShaderGenerator								*m_pclShaderGenerator;
 
-			Ogre::ShadowTechnique										m_eShadowMode;			
+			Ogre::ShadowTechnique										m_eShadowMode;
 
 			typedef std::list<String_t>			StringList_t;
 			StringList_t						m_lstPluginsName;

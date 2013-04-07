@@ -73,6 +73,8 @@ void Phobos::Gui::OgreManager::OnRenderReady()
 	
 	m_pclSceneManager->addRenderQueueListener(this);
 
+	render.EnableOverlay(*m_pclSceneManager);
+
 	Ogre::Viewport *vp = render.AddViewport(m_pclCamera, DefaultViewportZOrder::GUI);
 
 	vp->setClearEveryFrame(false, Ogre::FBT_COLOUR);

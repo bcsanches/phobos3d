@@ -65,9 +65,7 @@ namespace Phobos
 			// =====================================================			
 			Ogre::OverlayContainer		*m_pclRect;		
 			Ogre::OverlayElement		*m_pclTextBox;
-			Ogre::Overlay				*m_pclOverlay;
-			Ogre::SceneManager			*m_pclSceneManager;
-			Ogre::Camera				*m_pclCamera;
+			Ogre::Overlay				*m_pclOverlay;			
 			Ogre::Overlay				*m_pclRenderInfoOverlay;
 
 			Float_t						m_fpHeight;			

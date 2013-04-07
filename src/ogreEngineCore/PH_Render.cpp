@@ -159,7 +159,9 @@ namespace Phobos
 		m_pclOgreWindow(NULL),
 		m_pclMainSceneManager(NULL),
 		m_pclShaderGenerator(NULL),
-		m_eShadowMode(Ogre::SHADOWTYPE_NONE)
+		m_eShadowMode(Ogre::SHADOWTYPE_NONE),
+		m_pclHelperScene(nullptr),
+		m_pclHelperCamera(nullptr)
 	{
 		LogMessage("[Render] Initializing");
 
@@ -179,13 +181,17 @@ namespace Phobos
 		log->setDebugOutputEnabled(false);
 		log->addListener(&clOgreLogListener_gl);
 
+		m_upOverlaySystem.reset(new Ogre::OverlaySystem());
+
 		LogMessage("[Render] Initialized.");
 	}
 
 	Render::~Render(void)
 	{
 		//we must make sure that caelum is destroyed before ogre :(
-		//clCaelum.Shutdown();
+		//clCaelum.Shutdown();		
+
+		m_upOverlaySystem.reset();
 
 		if(m_ipWindow)
 		{
@@ -298,6 +304,12 @@ namespace Phobos
 		
 		LogMessage("[Render::OnBoot] Creating SceneManager");
 		m_pclMainSceneManager = m_upRoot->createSceneManager(Ogre::ST_GENERIC);
+		m_pclHelperScene = m_upRoot->createSceneManager(Ogre::ST_GENERIC);
+
+		//Add a sceneManager and camera just to allow clearing before we have anything to render full screen
+		m_pclHelperCamera = m_pclHelperScene->createCamera("HelperUselessCameraToClearScreen");
+		auto vp = m_pclOgreWindow->addViewport(m_pclHelperCamera, DefaultViewportZOrder::PRE_GAME);
+		vp->setClearEveryFrame(true, Ogre::FBT_COLOUR);
 		
 		m_pclMainSceneManager->setShadowFarDistance(100);
 
@@ -321,7 +333,7 @@ namespace Phobos
 		this->SetShadowMode(m_eShadowMode);
 
 		LogMessage("[Render::OnBoot] Initializing all resource groups");
-		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();		
 
 		LogMessage("[Render::OnBoot] Ready.");
 		Core::GetInstance().OnEvent(CoreEvents::RENDER_READY);
@@ -399,12 +411,19 @@ namespace Phobos
 
 	Ogre::SceneManager *Render::CreateSceneManager(Ogre::SceneTypeMask typeMask)
 	{
-		return m_upRoot->createSceneManager(typeMask);
+		auto manager =  m_upRoot->createSceneManager(typeMask);		
+
+		return manager;
 	}
 
 	void Render::DestroySceneManager(Ogre::SceneManager *manager)
 	{
 		m_upRoot->destroySceneManager(manager);
+	}
+
+	void Render::EnableOverlay(Ogre::SceneManager &manager)
+	{
+		manager.addRenderQueueListener(m_upOverlaySystem.get());
 	}
 
 	void Render::ClearScene()
@@ -606,10 +625,29 @@ namespace Phobos
 		m_pclMainSceneManager->setFog(mode, color, density, min, max);
 	}
 
+	void Render::EnableHelperCamera()
+	{
+		PH_ASSERT(m_pclHelperCamera == nullptr);
+
+		m_pclHelperCamera = m_pclMainSceneManager->createCamera("PH_HelperCamera");
+		m_pclMainSceneManager->getRootSceneNode()->attachObject(m_pclHelperCamera);
+
+		Ogre::Viewport *viewport = m_pclOgreWindow->addViewport(m_pclHelperCamera, DefaultViewportZOrder::PRE_GAME);
+		viewport->setClearEveryFrame(true, Ogre::FBT_COLOUR);
+	}
+
+	void Render::DisableHelperCamera()
+	{
+		PH_ASSERT(m_pclHelperCamera);
+
+		m_pclMainSceneManager->destroyCamera(m_pclHelperCamera);
+		m_pclHelperCamera = nullptr;
+	}
+
 	Ogre::Viewport *Render::AddViewport(Ogre::Camera *camera, int ZOrder)
 	{
 		PH_ASSERT_VALID(m_pclOgreWindow);
-
+		
 		Ogre::Viewport *viewport = m_pclOgreWindow->addViewport(camera, ZOrder);
 
 		if(m_varRShaderSystem.GetBoolean())
@@ -620,7 +658,7 @@ namespace Phobos
 
 	void Render::RemoveViewport(int ZOrder)
 	{
-		PH_ASSERT_VALID(m_pclOgreWindow);
+		PH_ASSERT_VALID(m_pclOgreWindow);		
 
 		m_pclOgreWindow->removeViewport(ZOrder);
 	}
