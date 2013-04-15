@@ -18,11 +18,10 @@ subject to the following restrictions:
 #define PH_LINEAR_MOVER_COMPONENT_H
 
 #include "PH_MoverComponent.h"
+#include <Phobos/OgreEngine/TransformPropertyFwd.h>
 
 namespace Phobos
-{
-	class TransformProperty;
-
+{	
 	class LinearMoverComponent: public MoverComponent
 	{
 		public:
@@ -43,7 +42,7 @@ namespace Phobos
 		private:			
 			PH_DECLARE_ENTITY_OUTPUT(PositionChanged);
 
-			TransformProperty *m_pprpTransform;
+			OgreEngine::TransformProperty *m_pprpTransform;
 	};
 }
 

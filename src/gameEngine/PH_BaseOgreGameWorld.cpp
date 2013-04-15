@@ -19,7 +19,7 @@ subject to the following restrictions:
 #include <OgreEntity.h>
 
 #include <Phobos/Path.h>
-#include <PH_Render.h>
+#include <Phobos/OgreEngine/Render.h>
 
 #include "PH_GamePhysicsSettings.h"
 #include "PH_PhysicsManager.h"
@@ -30,7 +30,7 @@ namespace Phobos
 {
 	void BaseOgreGameWorld::StaticObject_s::Clear()
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		if(m_pclSceneNode)
 		{
@@ -55,7 +55,7 @@ namespace Phobos
 
 	BaseOgreGameWorld::TempStaticObject_s::~TempStaticObject_s()
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		if(m_pclSceneNode)
 			render.DestroySceneNode(m_pclSceneNode);
@@ -67,7 +67,7 @@ namespace Phobos
 			render.DestroyEntity(m_pclEntity);
 	}
 
-	void BaseOgreGameWorld::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag) const
+	void BaseOgreGameWorld::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag) const
 	{		
 		const Ogre::MeshPtr mesh = staticObj.m_pclEntity->getMesh();
 		const String_t &meshName = mesh->getName();

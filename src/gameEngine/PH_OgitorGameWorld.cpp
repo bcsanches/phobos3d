@@ -25,8 +25,8 @@ subject to the following restrictions:
 
 #include <Phobos/Exception.h>
 #include <Phobos/Log.h>
-#include <PH_Render.h>
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 #include "PH_CollisionTag.h"
 #include "PH_GameRegisterUtils.h"
@@ -54,7 +54,7 @@ namespace Phobos
 	OgitorGameWorld::~OgitorGameWorld()
 	{		
 		if(m_pclTerrainGroup)
-			Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
+			OgreEngine::Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
 
 		if(m_pclTerrainOptions)
 			delete m_pclTerrainOptions;		
@@ -137,7 +137,7 @@ namespace Phobos
 			//Why using those _ functions: http://89.151.96.106/forums/viewtopic.php?f=22&t=62386
 			//http://www.ogre3d.org/forums/viewtopic.php?p=221113
 			//http://www.ogre3d.org/tikiwiki/-SceneNode
-			Transform transform(
+			Engine::Math::Transform transform(
 				object.m_pclSceneNode->_getDerivedPosition(), 
 				object.m_pclSceneNode->_getDerivedOrientation()
 			);
@@ -168,7 +168,7 @@ namespace Phobos
 		}
 		else if(type.compare("OctreeSceneManager") == 0)
 		{
-			Render &render = Render::GetInstance();
+			auto &render = OgreEngine::Render::GetInstance();
 			render.SetAmbientColor(Register::GetColour(dict, "ambient"));
 
 			return true;
@@ -199,7 +199,7 @@ namespace Phobos
 		m_pclTerrainOptions->setCompositeMapDistance(dict.GetFloat("tuning::compositemapdistance"));
 		m_pclTerrainOptions->setLayerBlendMapSize(dict.GetInt("blendmap::texturesize"));
 
-		auto &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		//u16TerrainSize = dict.GetInt("pagemapsize");
 		//pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, u16TerrainSize, dict.GetFloat("pageworldsize"));
@@ -260,7 +260,7 @@ namespace Phobos
 
 	void OgitorGameWorld::LoadNodeObject(TempStaticObject_s &temp, const Register::Table &dict)
 	{
-		temp.m_pclSceneNode = Render::GetInstance().CreateSceneNode(temp.m_strName);
+		temp.m_pclSceneNode = OgreEngine::Render::GetInstance().CreateSceneNode(temp.m_strName);
 
 		temp.m_pclSceneNode->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
 		temp.m_pclSceneNode->setOrientation(Register::GetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
@@ -270,14 +270,14 @@ namespace Phobos
 	{
 		this->LoadNodeObject(temp, dict);
 
-		temp.m_pclEntity = Render::GetInstance().CreateEntity(dict.GetString("meshfile"));
+		temp.m_pclEntity = OgreEngine::Render::GetInstance().CreateEntity(dict.GetString("meshfile"));
 		temp.m_pclEntity->setCastShadows(dict.GetBool("castshadows"));
 		temp.m_pclSceneNode->attachObject(temp.m_pclEntity);		
 	}
 
 	void OgitorGameWorld::LoadLightObject(TempStaticObject_s &temp, const Register::Table &dict)
 	{
-		temp.m_pclLight = Render::GetInstance().CreateLight();
+		temp.m_pclLight = OgreEngine::Render::GetInstance().CreateLight();
 
 		if(temp.m_fParent)
 		{

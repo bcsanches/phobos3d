@@ -5,9 +5,9 @@
 
 #include <JsonCreator/StringWriterFwd.h>
 
-#include <PH_CoreModule.h>
+#include <Phobos/Engine/Module.h>
 #include <PH_GamePlugin.h>
-#include <PH_IClient.h>
+#include <Phobos/Engine/IClient.h>
 #include <Phobos/Singleton.h>
 
 #include "PH_NetworkService.h"
@@ -18,7 +18,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(EditorModule)
 
-		class EditorModule: public CoreModule, public IClient
+		class EditorModule: public Engine::Module, public Engine::IClient
 		{			
 			public:
 				PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL
@@ -26,8 +26,8 @@ namespace Phobos
 				PH_DECLARE_SINGLETON_METHODS(EditorModule);
 
 			public:				
-				virtual EscAction HandleEsc(Gui::Form *&outForm) override;
-				virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd) override;
+				virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm) override;
+				virtual void SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd) override;
 
 				virtual void OnFixedUpdate() override;
 

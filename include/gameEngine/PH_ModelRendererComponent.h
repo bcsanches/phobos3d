@@ -19,14 +19,14 @@ subject to the following restrictions:
 
 #include "PH_EntityComponent.h"
 
+#include <Phobos/OgreEngine/TransformPropertyFwd.h>
+
 #include <OgreSceneNode.h>
 
 #define PH_MODEL_RENDERER_COMPONENT_NAME "ModelRenderer"
 
 namespace Phobos
-{
-	class TransformProperty;
-
+{	
 	class PH_GAME_ENGINE_API ModelRendererComponent: public EntityComponent
 	{
 		public:
@@ -71,7 +71,7 @@ namespace Phobos
 
 			String_t	m_strParentNode;
 
-			TransformProperty *m_pprpTransform;
+			OgreEngine::TransformProperty *m_pprpTransform;
 	};
 }
 

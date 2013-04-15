@@ -17,19 +17,17 @@ subject to the following restrictions:
 #ifndef PH_CHARACTER_BODY_COMPONENT_H
 #define PH_CHARACTER_BODY_COMPONENT_H
 
-#include <PH_Vector3Property.h>
+#include <Phobos/OgreEngine/Vector3Property.h>
+#include <Phobos/OgreEngine/TransformPropertyFwd.h>
 
 #include "PH_EntityComponent.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_PhysicsManager.h"
-#include "PH_Transform.h"
 
 #define PH_CHARACTER_BODY_COMPONENT_NAME "CharacterBody"
 
 namespace Phobos
-{
-	class TransformProperty;
-
+{	
 	namespace Physics
 	{
 		class PH_GAME_ENGINE_API CharacterBodyComponent: public EntityComponent
@@ -49,12 +47,12 @@ namespace Phobos
 				void OnLoadFinished();
 
 			private:				
-				Vector3Property	m_prpVelocity;
-				Vector3Property	m_prpCharacterPosition;
+				OgreEngine::Vector3Property	m_prpVelocity;
+				OgreEngine::Vector3Property	m_prpCharacterPosition;
 
 				CharacterBodyPtr_t	m_spCharacterBody;
 
-				TransformProperty *m_pprpTransform;				
+				OgreEngine::TransformProperty *m_pprpTransform;				
 		};
 	}
 }

@@ -2,7 +2,8 @@
 #define PH_IGAME_CONTROLLER_H
 
 #include "PH_GameEngineAPI.h"
-#include "PH_IPlayerCommandProducer.h"
+
+#include <Phobos/Engine/IPlayerCommandProducer.h>
 
 namespace Phobos
 {
@@ -12,7 +13,7 @@ namespace Phobos
 			virtual ~IGameController() {}
 
 			virtual void Update() {}
-			virtual void FixedUpdate(IPlayerCmdPtr_t cmd)= 0;
+			virtual void FixedUpdate(Engine::IPlayerCmdPtr_t cmd)= 0;
 
 			virtual void Enable() = 0;
 			virtual void Disable() = 0;

@@ -19,15 +19,15 @@ subject to the following restrictions:
 
 #include "PH_GamePluginAPI.h"
 
-#include <PH_CoreModuleManager.h>
-#include <PH_Plugin.h>
+#include <Phobos/Engine/ModuleManager.h>
+#include <Phobos/Engine/Plugin.h>
 
 namespace Phobos
 {
-	class GamePlugin: public IPluginInstance
+	class GamePlugin: public Engine::IPluginInstance
 	{
 		public:
-			typedef CoreModule &(*CreateInstanceProc_t)();
+			typedef Phobos::Engine::Module &(*CreateInstanceProc_t)();
 			typedef void (*ReleaseInstanceProc_t)();		
 
 			
@@ -51,7 +51,7 @@ namespace Phobos
 			static void Configure(const char *moduleName, const char *cfgName);
 		
 		private:			
-			CoreModuleManagerPtr_t ipManager;
+			Engine::ModuleManagerPtr_t ipManager;
 
 			std::vector<Register_s> m_vecModules;
 
@@ -61,7 +61,7 @@ namespace Phobos
 }
 
 #define PH_GAME_PLUGIN_ENTRY_POINT(MODULE_NAME, CFG_NAME)	\
-	PH_GAME_PLUGIN_ENTRY_POINT_PROC Phobos::IPluginInstance *PH_PluginEntryPoint(void)	\
+	PH_GAME_PLUGIN_ENTRY_POINT_PROC Phobos::Engine::IPluginInstance *PH_PluginEntryPoint(void)	\
 	{																					\
 		Phobos::GamePlugin::Configure(MODULE_NAME, CFG_NAME);							\
 																						\
@@ -71,9 +71,9 @@ namespace Phobos
 #define PH_GAME_PLUGIN_REGISTER_MODULE(X)\
 	static Phobos::GamePlugin::Register_s XRegister_gl(X::CreateModule, X::ReleaseInstance);
 
-#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::CoreModule &CreateModule();
+#define PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::Engine::Module &CreateModule();
 #define PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(X)	\
-	Phobos::CoreModule &X::CreateModule()			\
+	Phobos::Engine::Module &X::CreateModule()		\
 	{												\
 		return CreateInstance();					\
 	}

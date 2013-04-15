@@ -19,13 +19,13 @@ subject to the following restrictions:
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
-#include <PH_CoreModule.h>
+#include <Phobos/Engine/Module.h>
 #include <Phobos/Singleton.h>
 #include <Phobos/System/Window.h>
 
 PH_DECLARE_SINGLETON_PTR(Render);
 
-class Render: public Phobos::CoreModule
+class Render: public Phobos::Engine::Module
 {
 	PH_DECLARE_SINGLETON_METHODS(Render);
 

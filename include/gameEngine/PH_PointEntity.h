@@ -20,7 +20,7 @@ subject to the following restrictions:
 
 #include "PH_Entity.h"
 
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 namespace Phobos
 {
@@ -31,7 +31,7 @@ namespace Phobos
 		public:
 			static Entity *Create(const String_t &name);
 
-			inline const Transform &GetTransform() const;
+			inline const Engine::Math::Transform &GetTransform() const;
 
 		protected:
 			PointEntity(const String_t &name);
@@ -39,10 +39,10 @@ namespace Phobos
 			void OnLoad(const Register::Table &table);
 
 		private:
-			Transform	m_clTransform;
+			Engine::Math::Transform	m_clTransform;
 	};
 
-	inline const Transform &PointEntity::GetTransform() const
+	inline const Engine::Math::Transform &PointEntity::GetTransform() const
 	{
 		return m_clTransform;
 	}

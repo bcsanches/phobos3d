@@ -20,8 +20,8 @@ subject to the following restrictions:
 
 #include <Phobos/Register/Table.h>
 
-#include <PH_Render.h>
-#include <PH_TransformProperty.h>
+#include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/TransformProperty.h>
 
 #include "PH_BaseOgreGameWorld.h"
 #include "PH_GameRegisterUtils.h"
@@ -46,7 +46,7 @@ namespace Phobos
 
 	ModelRendererComponent::~ModelRendererComponent()
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		render.DestroyEntity(m_pclMeshEntity);
 		render.DestroySceneNode(m_pclSceneNode);
@@ -58,7 +58,7 @@ namespace Phobos
 	{
 		const String_t &meshName = table.GetString(PH_ENTITY_KEY_MESH_FILE);
 
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		m_pclSceneNode = render.CreateSceneNode(this->GetEntityName());
 		m_pclMeshEntity = render.CreateEntity(meshName);
@@ -74,14 +74,14 @@ namespace Phobos
 	{
 		EntityComponent::OnLoadFinished();		
 
-		m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
+		m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 
 		//Force node transform update
 		this->Update();
 
 		if(m_strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
 		{
-			Render &render = Render::GetInstance();
+			auto &render = OgreEngine::Render::GetInstance();
 
 			m_pclSceneNode->getParent()->removeChild(m_pclSceneNode);
 

@@ -17,7 +17,7 @@ subject to the following restrictions:
 
 #include "PH_WorldManager.h"
 
-#include <PH_Console.h>
+#include <Phobos/Engine/Console.h>
 #include <Phobos/Shell/Utils.h>
 #include <Phobos/Error.h>
 #include <Phobos/Exception.h>
@@ -37,7 +37,7 @@ namespace Phobos
 	PH_DEFINE_DEFAULT_SINGLETON(WorldManager);
 
 	WorldManager::WorldManager():
-		CoreModule("WorldManager", NodeFlags::PRIVATE_CHILDREN),
+		Module("WorldManager", NodeFlags::PRIVATE_CHILDREN),
 		m_cmdLoadMap("loadMap"),
 		m_cmdUnloadMap("unloadMap"),
 		m_cmdDumpFactoryCreators("dumpFactoryCreators")
@@ -142,7 +142,7 @@ namespace Phobos
 
 	void WorldManager::OnPrepareToBoot()
 	{
-		Console &console = Console::GetInstance();
+		auto &console = Engine::Console::GetInstance();
 
 		console.AddContextCommand(m_cmdLoadMap);
 		console.AddContextCommand(m_cmdUnloadMap);

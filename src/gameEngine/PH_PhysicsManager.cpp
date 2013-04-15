@@ -16,8 +16,8 @@ subject to the following restrictions:
 
 #include <memory>
 
-#include <PH_Console.h>
-#include <PH_Core.h>
+#include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/Core.h>
 
 #include "PH_CharacterBodyComponent.h"
 #include "PH_CollisionShapes.h"
@@ -36,7 +36,7 @@ namespace Phobos
 		PH_DEFINE_DEFAULT_SINGLETON(Manager);
 
 		Manager::Manager():
-			CoreModule("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
+			Module("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
 			m_fpScale(1),
 			m_varPhysicsScale("dvPhysicsScale", "1"),
 			m_clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))
@@ -51,7 +51,7 @@ namespace Phobos
 
 		void Manager::OnPrepareToBoot()
 		{
-			Console &console = Console::GetInstance();
+			auto &console = Engine::Console::GetInstance();
 
 			console.AddContextVariable(m_varPhysicsScale);
 		}
@@ -72,7 +72,7 @@ namespace Phobos
 			if(!m_upWorld)
 				return;
 
-			const CoreTimer_s &timer = Core::GetInstance().GetGameTimer();
+			auto &timer = Engine::Core::GetInstance().GetGameTimer();
 			if(timer.IsPaused())
 				return;
 
@@ -91,7 +91,7 @@ namespace Phobos
 				return;
 			
 			//No pause check, to allow client interpolation
-			m_clRigidBodyComponents.CallForAll1(&RigidBodyComponent::UpdateTransform, Core::GetInstance().GetGameTimer().m_fpDelta);
+			m_clRigidBodyComponents.CallForAll1(&RigidBodyComponent::UpdateTransform, Engine::Core::GetInstance().GetGameTimer().m_fpDelta);
 		}
 
 		void Manager::SetGravity(const Ogre::Vector3 &gravity)
@@ -119,28 +119,28 @@ namespace Phobos
 			return ptr;
 		}
 
-		RigidBodyPtr_t Manager::CreateMeshRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+		RigidBodyPtr_t Manager::CreateMeshRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateMeshShape(mesh, scale);
 
 			return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 		}
 
-		RigidBodyPtr_t Manager::CreateBoxRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
+		RigidBodyPtr_t Manager::CreateBoxRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateBoxShape(dimx, dimy, dimz);
 
 			return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 		}
 
-		RigidBodyPtr_t Manager::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height)
+		RigidBodyPtr_t Manager::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height)
 		{
 			CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
 
 			return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 		}
 
-		RigidBodyPtr_t Manager::CreateRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape)
+		RigidBodyPtr_t Manager::CreateRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape)
 		{
 			bool dynamic = mass != 0;
 

@@ -17,12 +17,12 @@ subject to the following restrictions:
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <PH_Console.h>
+#include <Phobos/Engine/Console.h>
 
 PH_DECLARE_NODE_PTR(Console);
 
 class Console: 
-	public Phobos::Console		
+	public Phobos::Engine::Console		
 {
 	public:
 		// =====================================================

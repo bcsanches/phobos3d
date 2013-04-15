@@ -21,8 +21,8 @@ subject to the following restrictions:
 #include <Phobos/Enum.h>
 #include <Phobos/Log.h>
 
-#include <PH_Render.h>
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 #include <Phobos/Register/Table.h>
 #include <Phobos/Register/Hive.h>
@@ -115,7 +115,7 @@ namespace Phobos
 
 	void TileGameWorld::CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag)
 	{
-		Transform transform(staticObj.m_pclSceneNode->_getDerivedPosition(), staticObj.m_pclSceneNode->_getDerivedOrientation());
+		Engine::Math::Transform transform(staticObj.m_pclSceneNode->_getDerivedPosition(), staticObj.m_pclSceneNode->_getDerivedOrientation());
 
 		BaseOgreGameWorld::CreateStaticObjectRigidBody(staticObj, transform, scale, collisionTag);		
 	}
@@ -132,9 +132,9 @@ namespace Phobos
 
 	void TileGameWorld::CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform &tileTransform, const Ogre::Vector3 &scale)
 	{
-		obj.m_pclSceneNode = Render::GetInstance().CreateSceneNode();
+		obj.m_pclSceneNode = OgreEngine::Render::GetInstance().CreateSceneNode();
 
-		Transform transform;
+		Engine::Math::Transform transform;
 		this->TileTransform2Transform(transform, tileTransform);
 
 		obj.m_pclSceneNode->setPosition(transform.GetOrigin());
@@ -149,7 +149,7 @@ namespace Phobos
 
 	void TileGameWorld::CreateStaticObjectMesh(TempStaticObject_s &obj, const String_t &meshName, const String_t *optionalMaterial) const
 	{
-		obj.m_pclEntity = Render::GetInstance().CreateEntity(meshName);
+		obj.m_pclEntity = OgreEngine::Render::GetInstance().CreateEntity(meshName);
 		obj.m_pclEntity->setCastShadows(true);		
 
 		if(optionalMaterial)
@@ -158,11 +158,11 @@ namespace Phobos
 		obj.m_pclSceneNode->attachObject(obj.m_pclEntity);
 	}
 
-	void TileGameWorld::SpawnMesh(int row, int col, const String_t &meshName, Float_t tileScale, const Transform &transform, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag)
+	void TileGameWorld::SpawnMesh(int row, int col, const String_t &meshName, Float_t tileScale, const Engine::Math::Transform &transform, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag)
 	{
 		TempStaticObject_s obj;
 
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 		obj.m_pclSceneNode = render.CreateSceneNode();
 
 		this->CreateStaticObjectMesh(obj, meshName, optionalMaterial);
@@ -188,17 +188,17 @@ namespace Phobos
 
 	void TileGameWorld::CreateCeilingMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag)
 	{		
-		this->SpawnMesh(row, col, meshName, tileScale, Transform(Ogre::Vector3(0, m_fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
+		this->SpawnMesh(row, col, meshName, tileScale, Engine::Math::Transform(Ogre::Vector3(0, m_fpTileSize, 0), Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
 	}
 
 	void TileGameWorld::CreateFloorMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag)
 	{
-		this->SpawnMesh(row, col, meshName, tileScale, Transform(), optionalMaterial, collisionTag);						
+		this->SpawnMesh(row, col, meshName, tileScale, Engine::Math::Transform(), optionalMaterial, collisionTag);						
 	}
 
 	void TileGameWorld::CreateNorthWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag)
 	{
-		this->SpawnMesh(row, col, meshName, tileScale, Transform(Ogre::Vector3(0, m_fpTileSize/2, -m_fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
+		this->SpawnMesh(row, col, meshName, tileScale, Engine::Math::Transform(Ogre::Vector3(0, m_fpTileSize/2, -m_fpTileSize/2), Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_X)), optionalMaterial, collisionTag);
 	}
 	
 	void TileGameWorld::CreateSouthWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag)
@@ -208,7 +208,7 @@ namespace Phobos
 			col, 
 			meshName, 
 			tileScale, 
-			Transform(
+			Engine::Math::Transform(
 				Ogre::Vector3(0, m_fpTileSize/2, m_fpTileSize/2), Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_X) * Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)
 			), 
 			optionalMaterial,
@@ -223,7 +223,7 @@ namespace Phobos
 			col, 
 			meshName, 
 			tileScale, 
-			Transform(
+			Engine::Math::Transform(
 				Ogre::Vector3(-m_fpTileSize/2, m_fpTileSize/2, 0), 
 				Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Z) * Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Y)
 			), 
@@ -239,7 +239,7 @@ namespace Phobos
 			col, 
 			meshName, 
 			tileScale, 
-			Transform(
+			Engine::Math::Transform(
 				Ogre::Vector3(m_fpTileSize/2, m_fpTileSize/2, 0), 
 				Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3::UNIT_Z) * Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_Y)
 			),
@@ -270,7 +270,7 @@ namespace Phobos
 
 		Register::Table::MatrixDataHandle handle = worldEntityTable.GetMatrix("map");
 
-		Render &render = Render::GetInstance();					
+		auto &render = OgreEngine::Render::GetInstance();					
 
 		render.SetAmbientColor(Register::GetColour(worldEntityTable, "ambientColor"));
 
@@ -526,7 +526,7 @@ namespace Phobos
 		return Ogre::Vector3((m_fpTileSize * col) + m_fpTileSize / 2, 0, (m_fpTileSize * row) + m_fpTileSize / 2);
 	}
 
-	void TileGameWorld::TileTransform2Transform(Transform &out, const TileTransform &tileTransform) const
+	void TileGameWorld::TileTransform2Transform(Engine::Math::Transform &out, const TileTransform &tileTransform) const
 	{				
 		out.SetOrigin(this->CalculatePosition(tileTransform.GetRow(), tileTransform.GetCol()));
 		out.SetRotation(Ogre::Quaternion(Ogre::Degree(static_cast<Ogre::Real>(tileTransform.GetDirection())), Ogre::Vector3::UNIT_Y));
@@ -597,7 +597,7 @@ namespace Phobos
 		out.Translate(translation);
 	}
 	
-	void TileGameWorld::LoadTileTransform(Transform &out, const Register::Table &entity) const
+	void TileGameWorld::LoadTileTransform(Engine::Math::Transform &out, const Register::Table &entity) const
 	{
 		this->TileTransform2Transform(out, this->CreateTileTransform(entity));
 	}

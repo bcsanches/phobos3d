@@ -38,11 +38,11 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include "Console.h"
 #include "Render.h"
 
-#include <PH_Session.h>
+#include <Phobos/Engine/Session.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Shell/Utils.h>
-#include <PH_Core.h>
-#include <PH_EventManagerModule.h>
+#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/EventManagerModule.h>
 #include <Phobos/Memory.h>
 #include <Phobos/ProcVector.h>
 
@@ -64,24 +64,24 @@ EngineMain::EngineMain()
 {
 	using namespace Phobos;
 
-	Core &core = Core::CreateInstance();
-	m_clSingletons.AddProc(Core::ReleaseInstance);	
+	auto &core = Engine::Core::CreateInstance();
+	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
 
-	EventManagerModule &eventManager = EventManagerModule::CreateInstance();
-	m_clSingletons.AddProc(EventManagerModule::ReleaseInstance);
+	auto &eventManager = Engine::EventManagerModule::CreateInstance();
+	m_clSingletons.AddProc(Engine::EventManagerModule::ReleaseInstance);
 	core.AddModule(eventManager);
 
-	Phobos::Console &console = ::Console::CreateInstance();
-	m_clSingletons.AddProc(Phobos::Console::ReleaseInstance);
+	auto &console = ::Console::CreateInstance();
+	m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
 	core.AddModule(console);
 
-	Phobos::Session &session = Phobos::Session::CreateInstance();
-	m_clSingletons.AddProc(Phobos::Session::ReleaseInstance);
+	auto &session = Engine::Session::CreateInstance();
+	m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
 	core.AddModule(session);
 
-	Render &render = Render::CreateInstance();
+	auto &render = Render::CreateInstance();
 	m_clSingletons.AddProc(Render::ReleaseInstance);
-	core.AddModule(render, CoreModulePriorities::LOWEST);
+	core.AddModule(render, Engine::ModulePriorities::LOWEST);
 
 	core.RegisterCommands(console);	
 
@@ -89,10 +89,8 @@ EngineMain::EngineMain()
 }
 
 EngineMain::~EngineMain()
-{
-	using namespace Phobos;
-
-	Core::GetInstance().Shutdown();
+{	
+	Phobos::Engine::Core::GetInstance().Shutdown();
 
 	m_clSingletons.CallAll();	
 }			
@@ -104,7 +102,7 @@ EngineMain::~EngineMain()
 */
 void EngineMain::MainLoop(void)
 {
-	Phobos::Core::GetInstance().MainLoop();
+	Phobos::Engine::Core::GetInstance().MainLoop();
 }
 
 int main(int, char **)

@@ -16,13 +16,13 @@ subject to the following restrictions:
 
 #include "Render.h"
 
-#include <PH_Console.h>
-#include <PH_Core.h>
+#include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/Core.h>
 
 PH_DEFINE_DEFAULT_SINGLETON(Render);
 
 Render::Render():
-	CoreModule("Render"),
+	Module("Render"),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
 	m_varRVSync("dvRVSync", "1"),
@@ -53,12 +53,12 @@ void Render::OnBoot(void)
 	m_ipWindow->Open("Phobos Engine", size);
 
 	LogMessage("[Render::OnBoot] Ready.");
-	Core::GetInstance().OnEvent(CoreEvents::RENDER_READY);
+	Engine::Core::GetInstance().OnEvent(Engine::Core::Events::RENDER_READY);
 }
 
 void Render::OnPrepareToBoot()
 {
-	Phobos::Console &console = Phobos::Console::GetInstance();
+	auto &console = Phobos::Engine::Console::GetInstance();
 	
 	console.AddContextCommand(m_cmdScreenshot);
 	

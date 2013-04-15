@@ -18,8 +18,8 @@ subject to the following restrictions:
 
 #include <Phobos/Enum.h>
 
-#include <PH_Transform.h>
-#include <PH_TransformProperty.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
+#include <Phobos/OgreEngine/TransformProperty.h>
 
 #include "PH_CollisionTag.h"
 #include "PH_EntityComponentFactory.h"
@@ -56,12 +56,12 @@ namespace Phobos
 
 		void RigidBodyComponent::UpdateTransform(Float_t delta)
 		{			
-			m_pprpTransform->SetTransform(Transform::Interpolate(m_clPreviousTransform, m_spRigidBody->GetTransform(), delta));
+			m_pprpTransform->SetTransform(Engine::Math::Transform::Interpolate(m_clPreviousTransform, m_spRigidBody->GetTransform(), delta));
 		}
 
 		void RigidBodyComponent::OnLoad(const Register::Table &table)
 		{	
-			Transform transform;
+			Engine::Math::Transform transform;
 
 			EntityLoadTransform(transform, table);						
 
@@ -82,7 +82,7 @@ namespace Phobos
 			manager.RegisterRigidBodyComponent(*this);
 			m_spRigidBody->Register();			
 
-			m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
+			m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 
 			this->SaveTransform();
 		}

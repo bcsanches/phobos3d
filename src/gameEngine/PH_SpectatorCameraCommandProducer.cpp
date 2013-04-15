@@ -16,10 +16,10 @@ subject to the following restrictions:
 
 #include "PH_SpectatorCameraCommandProducer.h"
 
-#include <PH_Console.h>
+#include <Phobos/Engine/Console.h>
 #include <Phobos/Shell/Utils.h>
-#include <PH_Core.h>
-#include <PH_CoreTimer.h>
+#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/CoreTimer.h>
 #include <Phobos/Exception.h>
 #include <Phobos/Memory.h>
 
@@ -40,9 +40,9 @@ namespace Phobos
 		this->Disable();
 	}
 
-	IPlayerCmdPtr_t SpectatorCameraCommandProducer_c::CreateCmd()
+	Engine::IPlayerCmdPtr_t SpectatorCameraCommandProducer_c::CreateCmd()
 	{
-		const Float_t ticks = Core::GetInstance().GetSimInfo().m_stTimers[CORE_SYS_TIMER].m_fpFrameTime;
+		const Float_t ticks = Engine::Core::GetInstance().GetSimInfo().m_stTimers[Engine::Core::TimerTypes::SYSTEM].m_fpFrameTime;
 
 		const Float_t fwd = m_clMoveButton.GetValue() * ticks * m_fpMoveSpeed;
 		const Float_t strafe = m_clStrafeButton.GetValue() * ticks * m_fpMoveSpeed;
@@ -53,7 +53,7 @@ namespace Phobos
 		const Float_t turnAngle(((m_clTurnButton.GetValue() * m_fpTurnSpeed) + (-thumb[0] * m_fpTurnSpeed * m_fpMouseSensitivity)) * ticks);
 		const Float_t lookAngle(((m_clLookButton.GetValue() * m_fpTurnSpeed) + (thumb[1] * m_fpTurnSpeed * m_fpMouseSensitivity)) * ticks);
 
-		return IPlayerCmdPtr_t(PH_NEW SpectatorCameraCmd(
+		return Engine::IPlayerCmdPtr_t(PH_NEW SpectatorCameraCmd(
 			fwd,
 			strafe,
 			upDown,
@@ -64,7 +64,7 @@ namespace Phobos
 
 	void SpectatorCameraCommandProducer_c::Enable()
 	{
-		Console &console = Console::GetInstance();
+		auto &console = Engine::Console::GetInstance();
 
 		m_clMoveButton.Enable(console);
 		m_clStrafeButton.Enable(console);

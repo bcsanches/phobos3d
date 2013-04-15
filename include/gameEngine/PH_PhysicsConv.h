@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <btBulletDynamicsCommon.h>
 
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 namespace Phobos
 {
@@ -45,14 +45,14 @@ namespace Phobos
 			return btQuaternion(q.x, q.y, q.z, q.w);
 		}
 
-		inline btTransform MakeTransform(const Transform &transform, const Float_t scale)
+		inline btTransform MakeTransform(const Engine::Math::Transform &transform, const Float_t scale)
 		{
 			return btTransform(MakeQuaternion(transform.GetRotation()), MakeVector3(transform.GetOrigin(), scale));
 		}				
 
-		inline Transform MakeTransform(const btTransform &transform , Float_t physicsToGameScale)
+		inline Engine::Math::Transform MakeTransform(const btTransform &transform , Float_t physicsToGameScale)
 		{
-			return Transform(MakeVector3(transform.getOrigin(), physicsToGameScale), MakeQuaternion(transform.getRotation()));
+			return Engine::Math::Transform(MakeVector3(transform.getOrigin(), physicsToGameScale), MakeQuaternion(transform.getRotation()));
 		}
 	}
 }

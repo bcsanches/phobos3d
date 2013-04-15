@@ -20,7 +20,7 @@ subject to the following restrictions:
 
 #include <Phobos/Register/Table.h>
 
-#include <PH_TransformProperty.h>
+#include <Phobos/OgreEngine/TransformProperty.h>
 
 #include "PH_GameRegisterUtils.h"
 #include "PH_EntityComponentFactory.h"
@@ -47,7 +47,7 @@ namespace Phobos
 
 	void LinearMoverComponent::OnLoad(const Register::Table &table)
 	{
-		m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
+		m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 	}
 
 	void LinearMoverComponent::FixedUpdate()

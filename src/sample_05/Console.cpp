@@ -19,13 +19,13 @@ subject to the following restrictions:
 
 Console &Console::CreateInstance(void)
 {		
-	Phobos::Console::UpdateInstance(std::make_shared<Console>());
+	Phobos::Engine::Console::UpdateInstance(std::make_shared<Console>());
 
-	return static_cast<Console&>(Phobos::Console::GetInstance());
+	return static_cast<Console&>(Phobos::Engine::Console::GetInstance());
 }
 
 Console::Console(void):
-	Phobos::Console("Console"),		
+	Phobos::Engine::Console("Console"),		
 	m_fEditBoxChanged(true),
 	m_fTextBufferChanged(true)
 {				

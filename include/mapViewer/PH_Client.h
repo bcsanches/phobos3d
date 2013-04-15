@@ -38,9 +38,9 @@ namespace Phobos
 		public:
 			PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL;
 
-			virtual void SetPlayerCmd(IPlayerCmdPtr_t cmd) override;
+			virtual void SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd) override;
 
-			virtual EscAction HandleEsc(Gui::Form *&outForm) override;
+			virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm) override;
 
 		protected:
 			virtual void OnFixedUpdate() override;
@@ -71,7 +71,7 @@ namespace Phobos
 			SpectatorCamera	m_clSpectatorCamera;
 			SpectatorCameraCommandProducer_c m_clSpectatorCameraCommandProducer;
 
-			IPlayerCmdPtr_t		m_ipPlayerCmd;
+			Engine::IPlayerCmdPtr_t		m_ipPlayerCmd;
 			
 			bool m_fMapLoaded;
 	};

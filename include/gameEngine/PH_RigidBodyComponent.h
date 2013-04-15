@@ -20,14 +20,14 @@ subject to the following restrictions:
 #include "PH_EntityComponent.h"
 #include "PH_GameEngineAPI.h"
 #include "PH_PhysicsManager.h"
-#include "PH_Transform.h"
+
+#include <Phobos/OgreEngine/Math/Transform.h>
+#include <Phobos/OgreEngine/TransformPropertyFwd.h>
 
 #define PH_RIGID_BODY_COMPONENT_NAME "RigidBody"
 
 namespace Phobos
-{
-	class TransformProperty;
-
+{	
 	namespace Physics
 	{
 		class PH_GAME_ENGINE_API RigidBodyComponent: public EntityComponent
@@ -49,8 +49,8 @@ namespace Phobos
 			private:				
 				RigidBodyPtr_t		m_spRigidBody;
 
-				TransformProperty	*m_pprpTransform;
-				Transform			m_clPreviousTransform;
+				OgreEngine::TransformProperty		*m_pprpTransform;
+				Engine::Math::Transform				m_clPreviousTransform;
 		};
 	}
 }

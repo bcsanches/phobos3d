@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include "PH_EntityComponent.h"
 
-#include <PH_TransformProperty.h>
+#include <Phobos/OgreEngine/TransformProperty.h>
 
 namespace Phobos
 {
@@ -36,7 +36,7 @@ namespace Phobos
 			virtual void OnLoad(const Register::Table &table);
 
 		private:
-			TransformProperty m_propTransform;
+			OgreEngine::TransformProperty m_propTransform;
 	};
 }
 

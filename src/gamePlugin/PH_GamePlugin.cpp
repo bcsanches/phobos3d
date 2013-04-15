@@ -16,8 +16,8 @@ subject to the following restrictions:
 
 #include "PH_GamePlugin.h"
 
-#include <PH_Core.h>
-#include <PH_CoreModuleManager.h>
+#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/ModuleManager.h>
 
 #include <Phobos/ProcVector.h>
 
@@ -41,9 +41,9 @@ namespace Phobos
 
 	void GamePlugin::Init()
 	{
-		ipManager = CoreModuleManager::Create(szModuleName_g);
+		ipManager = Engine::ModuleManager::Create(szModuleName_g);
 
-		Core::GetInstance().AddModule(*ipManager);	
+		Engine::Core::GetInstance().AddModule(*ipManager);	
 
 		for(auto &info : m_vecModules)		
 		{
@@ -55,7 +55,7 @@ namespace Phobos
 
 	void GamePlugin::Finalize()
 	{
-		Core::GetInstance().RemoveModule(*ipManager);		
+		Engine::Core::GetInstance().RemoveModule(*ipManager);		
 
 		for(auto &info : m_vecModules)		
 		{

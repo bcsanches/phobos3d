@@ -33,7 +33,7 @@ namespace Phobos
 		public:
 			SpectatorCamera();
 
-			void FixedUpdate(IPlayerCmdPtr_t cmd);
+			void FixedUpdate(Engine::IPlayerCmdPtr_t cmd);
 			void Update();
 
 			void EnableProducer();
@@ -48,14 +48,14 @@ namespace Phobos
 			inline void SetCameraNearClipDistance(Float_t near);
 			inline void SetCameraFarClipDistance(Float_t far);
 
-			void SetTransform(const Transform &transform);		
+			void SetTransform(const Engine::Math::Transform &transform);		
 
 		private:
 			GameCamera					m_clCamera;			
 
-			Transform					m_clCurrentTransform;
+			Engine::Math::Transform		m_clCurrentTransform;
 
-			TransformInterpolator_c		m_clTransformInterpolator;
+			Engine::Math::TransformInterpolator	m_clTransformInterpolator;
 
 			float						m_fpAlpha;
 

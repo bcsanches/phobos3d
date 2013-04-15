@@ -147,17 +147,15 @@
     <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
       <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
-      <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
+      <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PH_GameEngine\PH_GameEngine.vcxproj">
       <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\PH_OgreEngineCore\PH_OgreEngineCore.vcxproj">
-      <Project>{38679578-6b2c-4801-bd91-11bf34ec697b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\PH_OgreEngine\PH_OgreEngine.vcxproj">
+      <Project>{1652ed80-c688-4cab-b4e3-15a510c284b1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
       <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>

@@ -23,12 +23,12 @@ subject to the following restrictions:
 #include "PH_CollisionTagFwd.h"
 
 #include <Phobos/Register/TableFwd.h>
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
 
 #include <vector>
 
 namespace Phobos
-{	
-	class Transform;
+{		
 	class TileTransform;
 
 	class PH_GAME_ENGINE_API TileGameWorld: public BaseOgreGameWorld
@@ -41,8 +41,8 @@ namespace Phobos
 
 			TileTransform CreateTileTransform(const Register::Table &entity) const;
 			void LoadTileTransform(TileTransform &out, const Register::Table &entity) const;
-			void LoadTileTransform(Transform &out, const Register::Table &entity) const;
-			void TileTransform2Transform(Transform &out, const TileTransform &tileTransform) const;
+			void LoadTileTransform(Engine::Math::Transform &out, const Register::Table &entity) const;
+			void TileTransform2Transform(Engine::Math::Transform &out, const TileTransform &tileTransform) const;
 
 			Ogre::Vector3 CalculatePosition(int row, int col) const;
 		
@@ -55,7 +55,7 @@ namespace Phobos
 			void CreateWestWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 			void CreateEastWallMesh(int row, int col, const String_t &meshName, Float_t tileScale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 
-			void SpawnMesh(int row, int col, const String_t &meshName, Float_t tileScale, const Transform &transform, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
+			void SpawnMesh(int row, int col, const String_t &meshName, Float_t tileScale, const Engine::Math::Transform &transform, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 			void SpawnMesh(const TileTransform transform, const String_t &meshName, const Ogre::Vector3 &scale, const String_t *optionalMaterial, const Physics::CollisionTag &collisionTag);
 
 			void CreateStaticObjectNode(TempStaticObject_s &obj, const TileTransform &tileTransform, const Ogre::Vector3 &scale);

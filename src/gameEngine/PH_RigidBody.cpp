@@ -56,7 +56,7 @@ namespace Phobos
 			Manager::GetInstance().UnregisterRigidBody(*m_upRigidBody);
 		}
 
-		Transform RigidBody::GetTransform() const
+		Engine::Math::Transform RigidBody::GetTransform() const
 		{
 			btTransform bodyTransform;
 			m_upMotionState->getWorldTransform(bodyTransform);

@@ -20,11 +20,11 @@ subject to the following restrictions:
 #include <list>
 
 #include <Phobos/Shell/Command.h>
-#include <PH_CoreModule.h>
+#include <Phobos/Engine/Module.h>
 #include <Phobos/Singleton.h>
 
-#include <Gui/PH_ContextFwd.h>
-#include <Gui/PH_Form.h>
+#include <Phobos/Engine/Gui/ContextFwd.h>
+#include <Phobos/Engine/Gui/Form.h>
 
 #include "PH_GameEngineAPI.h"
 
@@ -37,7 +37,7 @@ namespace Phobos
 		class DataGridController;
 		class LevelFileDataSource;		
 
-		class PH_GAME_ENGINE_API LevelSelector: public CoreModule, public Gui::Form
+		class PH_GAME_ENGINE_API LevelSelector: public Engine::Module, public Engine::Gui::Form
 		{
 			PH_DECLARE_SINGLETON_METHODS(LevelSelector);
 
@@ -47,7 +47,7 @@ namespace Phobos
 				virtual void Open();
 				virtual void Close();
 
-				virtual EscAction HandleEsc(Phobos::Gui::Form *&outForm);				
+				virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm);				
 
 			protected:
 				LevelSelector();				
@@ -67,7 +67,7 @@ namespace Phobos
 			private:
 				std::list<Phobos::String_t> m_lstLevelPaths;
 
-				Gui::ContextPtr_t	m_spGuiContext;
+				Engine::Gui::ContextPtr_t	m_spGuiContext;
 
 				Shell::Command		m_cmdAddLevelPath;
 

@@ -15,10 +15,9 @@ subject to the following restrictions:
 */
 
 #include <Phobos/Register/TableFwd.h>
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
 
 namespace Phobos
-{
-	class Transform;	
-
-	void EntityLoadTransform(Transform &transform, const Register::Table &table);
+{	
+	void EntityLoadTransform(Engine::Math::Transform &transform, const Register::Table &table);
 }

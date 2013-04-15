@@ -25,7 +25,8 @@ subject to the following restrictions:
 #include <Phobos/System/Button.h>
 #include <Phobos/System/Thumb.h>
 
-#include "PH_IPlayerCommandProducer.h"
+#include <Phobos/Engine/IPlayerCommandProducer.h>
+
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
@@ -34,7 +35,7 @@ namespace Phobos
 	
 	typedef std::shared_ptr<SpectatorCameraCmd> SpectatorCameraCmdPtr_t;
 
-	class PH_GAME_ENGINE_API SpectatorCameraCmd: public IPlayerCmd
+	class PH_GAME_ENGINE_API SpectatorCameraCmd: public Engine::IPlayerCmd
 	{
 		public:
 			inline SpectatorCameraCmd(Float_t move, Float_t strafe, Float_t moveUp, Float_t turn, Float_t look)
@@ -87,12 +88,12 @@ namespace Phobos
 
 	#define PH_MOUSE_THUMB_CMD_NAME "mouseThumb"
 
-	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public IPlayerCommandProducer
+	class PH_GAME_ENGINE_API SpectatorCameraCommandProducer_c: public Engine::IPlayerCommandProducer
 	{
 		public:
 			SpectatorCameraCommandProducer_c(Shell::Context *context = NULL);
 
-			virtual IPlayerCmdPtr_t CreateCmd();
+			virtual Engine::IPlayerCmdPtr_t CreateCmd();
 
 			virtual void Enable();
 			virtual void Disable();

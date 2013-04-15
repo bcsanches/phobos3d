@@ -16,8 +16,8 @@ subject to the following restrictions:
 
 #include "PH_CharacterBodyComponent.h"
 
-#include <PH_Transform.h>
-#include <PH_TransformProperty.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
+#include <Phobos/OgreEngine/TransformProperty.h>
 
 #include "PH_CollisionTag.h"
 #include "PH_EntityComponentFactory.h"
@@ -61,7 +61,7 @@ namespace Phobos
 
 		void CharacterBodyComponent::OnLoad(const Register::Table &table)
 		{	
-			Transform transform;
+			Engine::Math::Transform transform;
 
 			EntityLoadTransform(transform, table);						
 
@@ -89,7 +89,7 @@ namespace Phobos
 			manager.RegisterCharacterBodyComponent(*this);
 			m_spCharacterBody->Register();			
 
-			m_pprpTransform = &this->GetCustomEntityProperty<TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
+			m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 		}
 	}
 }

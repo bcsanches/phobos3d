@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <map>
 
-#include <PH_CoreModule.h>
+#include <Phobos/Engine/Module.h>
 #include <Phobos/Singleton.h>
 
 #include "PH_GameEngineAPI.h"
@@ -29,7 +29,7 @@ namespace Phobos
 {
 	PH_DECLARE_SINGLETON_PTR(GameEventManager);
 
-	class PH_GAME_ENGINE_API GameEventManager: public CoreModule
+	class PH_GAME_ENGINE_API GameEventManager: public Engine::Module
 	{
 		PH_DECLARE_SINGLETON_METHODS(GameEventManager);
 

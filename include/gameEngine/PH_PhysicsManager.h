@@ -25,6 +25,7 @@ subject to the following restrictions:
 #include <OgreMesh.h>
 
 #include <Phobos/Shell/Variable.h>
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
 #include <Phobos/Singleton.h>
 
 #include "PH_CollisionMesh.h"
@@ -36,9 +37,7 @@ subject to the following restrictions:
 #include "PH_RigidBodyFwd.h"
 
 namespace Phobos
-{
-	class Transform;
-
+{	
 	namespace Physics
 	{						
 		PH_DECLARE_SINGLETON_PTR(Manager);
@@ -58,7 +57,7 @@ namespace Phobos
 		class CharacterBodyComponent;
 		class RigidBodyComponent;
 
-		class PH_GAME_ENGINE_API Manager: public CoreModule
+		class PH_GAME_ENGINE_API Manager: public Engine::Module
 		{
 			PH_DECLARE_SINGLETON_METHODS(Manager);
 
@@ -70,9 +69,9 @@ namespace Phobos
 					For quick and easy rigid body creation.
 
 				*/
-				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
-				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height);
-				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+				RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
+				RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height);
+				RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
 				/**
 					Methods for manually creating a collision shape
@@ -91,7 +90,7 @@ namespace Phobos
 					Create a rigid body from an existing collision shape.
 
 				*/
-				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape);
+				RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape);
 
 				CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag &collisionTag, Float_t stepHeight, Float_t radius, Float_t height);
 

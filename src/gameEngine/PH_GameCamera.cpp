@@ -16,8 +16,8 @@ subject to the following restrictions:
 
 #include "PH_GameCamera.h"
 
-#include <PH_Render.h>
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 namespace Phobos
 {
@@ -25,7 +25,7 @@ namespace Phobos
 		m_iViewportZOrder(-1),
 		m_fpNearPlane(1)
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 				
 		m_pclRootNode = render.CreateSceneNode();
 
@@ -34,7 +34,7 @@ namespace Phobos
 
 	GameCamera::~GameCamera()
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		if(m_iViewportZOrder >= 0)
 			render.RemoveViewport(m_iViewportZOrder);
@@ -48,7 +48,7 @@ namespace Phobos
 
 	void GameCamera::EnableViewport(int ZOrder)
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 
 		if(m_iViewportZOrder >= 0)
 			render.RemoveViewport(m_iViewportZOrder);
@@ -59,13 +59,13 @@ namespace Phobos
 			render.AddViewport(m_pclCamera, ZOrder);
 	}
 
-	void GameCamera::SetTransform(const Transform &t)
+	void GameCamera::SetTransform(const Engine::Math::Transform &t)
 	{		
 		m_pclRootNode->setPosition(t.GetOrigin());
 		m_pclRootNode->setOrientation(t.GetRotation());
 	}
 
-	void GameCamera::SetCameraTransform(const Transform &t)
+	void GameCamera::SetCameraTransform(const Engine::Math::Transform &t)
 	{
 		m_pclCamera->setPosition(t.GetOrigin());
 		m_pclCamera->setOrientation(t.GetRotation());
@@ -103,7 +103,7 @@ namespace Phobos
 	
 	void GameCamera::Disable()
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 		/*
 		pclRootNode->detachObject(pclCamera);
 		
@@ -126,7 +126,7 @@ namespace Phobos
 
 	void GameCamera::CreateCamera()
 	{
-		Render &render = Render::GetInstance();
+		auto &render = OgreEngine::Render::GetInstance();
 		
 		m_pclCamera = render.CreateCamera();	
 

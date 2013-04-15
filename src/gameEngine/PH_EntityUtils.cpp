@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 #include <Phobos/Register/Table.h>
 
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 #include "PH_EntityKeys.h"
 #include "PH_GameRegisterUtils.h"
@@ -27,7 +27,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	void EntityLoadTransform(Transform &transform, const Register::Table &table)
+	void EntityLoadTransform(Engine::Math::Transform &transform, const Register::Table &table)
 	{
 		if(table.TryGetString(PH_ENTITY_KEY_TILE_ROW))
 		{						

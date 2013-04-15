@@ -14,16 +14,19 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_GAME_BASE_CLIENT_H
+#define PH_GAME_BASE_CLIENT_H
+
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
-#include <PH_CoreModule.h>
-#include <PH_IClient.h>
+#include <Phobos/Engine/Module.h>
+#include <Phobos/Engine/IClient.h>
 
 #include "PH_GameEngineAPI.h"
 
 namespace Phobos
 {
-	class PH_GAME_ENGINE_API BaseClient: public CoreModule, public IClient
+	class PH_GAME_ENGINE_API BaseClient: public Engine::Module, public Engine::IClient
 	{	
 		protected:
 			BaseClient(const char *name);
@@ -31,3 +34,5 @@ namespace Phobos
 			virtual void OnPrepareToBoot() override;					
 	};
 }
+
+#endif

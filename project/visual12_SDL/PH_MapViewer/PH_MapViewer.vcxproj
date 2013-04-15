@@ -138,9 +138,8 @@
     <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
       <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PH_EngineCore\PH_EngineCore.vcxproj">
-      <Project>{d4333b77-e967-4c0f-90a4-bb7f51f6311e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
+      <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PH_GameEngine\PH_GameEngine.vcxproj">
       <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
@@ -148,10 +147,6 @@
     </ProjectReference>
     <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_OgreEngineCore\PH_OgreEngineCore.vcxproj">
-      <Project>{38679578-6b2c-4801-bd91-11bf34ec697b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

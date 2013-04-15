@@ -37,7 +37,7 @@ namespace Phobos
 
 	void TransformComponent::OnLoad(const Register::Table &table)
 	{			
-		Transform transform;
+		Engine::Math::Transform transform;
 		EntityLoadTransform(transform, table);
 
 		m_propTransform.SetTransform(transform);				

@@ -17,14 +17,14 @@ subject to the following restrictions:
 
 #include "PH_Client.h"
 
-#include <PH_Console.h>
+#include <Phobos/Engine/Console.h>
 
 #include <Phobos/Shell/Utils.h>
 #include <Phobos/Error.h>
 #include <Phobos/Exception.h>
 
 #include <PH_PointEntity.h>
-#include <PH_Session.h>
+#include <Phobos/Engine/Session.h>
 #include <PH_WorldManager.h>
 
 #include "Gui/PH_LevelSelector.h"
@@ -53,19 +53,19 @@ namespace Phobos
 		m_clSpectatorCamera.Disable();		
 	}
 
-	void Client::SetPlayerCmd(IPlayerCmdPtr_t cmd)
+	void Client::SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd)
 	{
 		m_ipPlayerCmd = cmd;
 	}
 
-	EscAction Client::HandleEsc(Gui::Form *&outForm)
+	Phobos::Engine::EscAction Client::HandleEsc(Engine::Gui::Form *&outForm)
 	{
 		Gui::LevelSelector &levelSelector = Gui::LevelSelector::GetInstance();
 		levelSelector.Open();
 
 		outForm = &levelSelector;
 
-		return EscAction::SET_GUI;
+		return Engine::EscAction::SET_GUI;
 	}
 
 	void Client::OnFixedUpdate()
@@ -88,7 +88,7 @@ namespace Phobos
 	{
 		BaseClient::OnPrepareToBoot();
 
-		Console &console = Console::GetInstance();		
+		auto &console = Engine::Console::GetInstance();		
 
 		console.AddContextVariable(m_varMouseSensitivity);
 		console.AddContextVariable(m_varSpectatorMoveSpeed);
@@ -104,7 +104,7 @@ namespace Phobos
 		Gui::LevelSelector &levelSelector = Gui::LevelSelector::GetInstance();
 		levelSelector.Open();
 
-		Session &session = Session::GetInstance();
+		auto &session = Engine::Session::GetInstance();
 		session.SetGuiForm(&levelSelector);
 		session.CloseConsole();
 	}
@@ -135,10 +135,10 @@ namespace Phobos
 
 		m_fMapLoaded = true;
 		m_clSpectatorCamera.Enable();
-		Session::GetInstance().SetPlayerCommandProducer(&m_clSpectatorCameraCommandProducer);
+		Engine::Session::GetInstance().SetPlayerCommandProducer(&m_clSpectatorCameraCommandProducer);
 
 		//make sure no gui is present
-		Session::GetInstance().SetGuiForm(NULL);
+		Engine::Session::GetInstance().SetGuiForm(NULL);
 	}	
 	
 	void Client::VarSpectatorMoveSpeedChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue)

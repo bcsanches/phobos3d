@@ -21,15 +21,14 @@ subject to the following restrictions:
 #include <LinearMath/btDefaultMotionState.h>
 
 #include <Phobos/Types.h>
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
 
 #include "PH_CollisionShapeFwd.h"
 #include "PH_CollisionTag.h"
 #include "PH_RigidBodyFwd.h"
 
 namespace Phobos
-{
-	class Transform;
-
+{	
 	namespace Physics
 	{		
 		class RigidBody
@@ -41,7 +40,7 @@ namespace Phobos
 				void Register();
 				void Unregister();
 
-				Transform GetTransform() const;
+				Engine::Math::Transform GetTransform() const;
 
 				inline const btRigidBody &GetRigidBody() const;
 

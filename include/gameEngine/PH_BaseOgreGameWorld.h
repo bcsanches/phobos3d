@@ -23,15 +23,15 @@ subject to the following restrictions:
 
 #include <Phobos/String.h>
 
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
+
 #include "PH_CollisionTagFwd.h"
 #include "PH_RigidBodyFwd.h"
 
 #define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
 
 namespace Phobos
-{	
-	class Transform;
-
+{		
 	class PH_GAME_ENGINE_API BaseOgreGameWorld: public GameWorld
 	{
 		protected:
@@ -87,7 +87,7 @@ namespace Phobos
 				~TempStaticObject_s();
 			};
 
-			void CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Transform &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag) const;
+			void CreateStaticObjectRigidBody(StaticObject_s &staticObj, const Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Physics::CollisionTag &collisionTag) const;
 	};
 }
 

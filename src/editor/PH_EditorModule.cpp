@@ -2,7 +2,7 @@
 
 #include <Phobos/Exception.h>
 #include <Phobos/Log.h>
-#include <PH_Session.h>
+#include <Phobos/Engine/Session.h>
 
 #include <rapidjson/document.h>
 
@@ -25,25 +25,25 @@ namespace Phobos
 }
 
 Phobos::Editor::EditorModule::EditorModule():
-	CoreModule("EditorModule")
+	Module("EditorModule")
 {
 	//empty
 }
 
-Phobos::EscAction Phobos::Editor::EditorModule::HandleEsc(Gui::Form *&outForm)
+Phobos::Engine::EscAction Phobos::Editor::EditorModule::HandleEsc(Engine::Gui::Form *&outForm)
 {
-	return EscAction::IGNORE_ESC;
+	return Engine::EscAction::IGNORE_ESC;
 }
 
 
-void Phobos::Editor::EditorModule::SetPlayerCmd(IPlayerCmdPtr_t cmd)
+void Phobos::Editor::EditorModule::SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd)
 {
 	PH_RAISE(INVALID_OPERATION_EXCEPTION, "Phobos::Editor::EditorModule::SetPlayerCmd", "Not implemented");
 }
 
 void Phobos::Editor::EditorModule::OnBoot()
 {
-	Session &session = Session::GetInstance();
+	auto &session = Engine::Session::GetInstance();
 
 	session.SetClient(this);
 	session.SetGuiForm(nullptr);

@@ -24,10 +24,10 @@ subject to the following restrictions:
 #include <Rocket/Controls/DataSource.h>
 
 #include <Phobos/Shell/Utils.h>
-#include <PH_Console.h>
+#include <Phobos/Engine/Console.h>
 
-#include <Gui/PH_Context.h>
-#include <Gui/PH_Manager.h>
+#include <Phobos/Engine/Gui/Context.h>
+#include <Phobos/Engine/Gui/Manager.h>
 
 #include "PH_MapLoaderFactory.h"
 #include "PH_WorldManager.h"
@@ -217,7 +217,7 @@ const Phobos::String_t &Phobos::Gui::LevelFileDataSource::GetFile(int index)
 PH_DEFINE_DEFAULT_SINGLETON(Phobos::Gui::LevelSelector);
 
 Phobos::Gui::LevelSelector::LevelSelector():
-	CoreModule("GuiLevelSelector"),
+	Module("GuiLevelSelector"),
 	m_cmdAddLevelPath("addLevelPath"),
 	m_fCloseRequested(false)
 {	
@@ -231,7 +231,7 @@ Phobos::Gui::LevelSelector::~LevelSelector()
 
 void Phobos::Gui::LevelSelector::OnPrepareToBoot()
 {
-	Console &console = Console::GetInstance();
+	auto &console = Engine::Console::GetInstance();
 
 	console.AddContextCommand(m_cmdAddLevelPath);
 }
@@ -252,7 +252,7 @@ void Phobos::Gui::LevelSelector::Open()
 	m_upDataSource.reset( PH_NEW LevelFileDataSource(m_lstLevelPaths));
 	m_upDataGridController.reset(PH_NEW(DataGridController));
 
-	m_spGuiContext = Gui::Manager::GetInstance().CreateContext("LevelSelector");
+	m_spGuiContext = Engine::Gui::Manager::GetInstance().CreateContext("LevelSelector");
 
 	Rocket::Core::ElementDocument* cursor = m_spGuiContext->LoadMouseCursor("resources/gui/LevelSelector/cursor.rml");
 	if (cursor)
@@ -283,13 +283,13 @@ void Phobos::Gui::LevelSelector::Close()
 	m_fCloseRequested = true;
 }
 
-Phobos::EscAction Phobos::Gui::LevelSelector::HandleEsc(Phobos::Gui::Form *&outForm)
+Phobos::Engine::EscAction Phobos::Gui::LevelSelector::HandleEsc(Phobos::Engine::Gui::Form *&outForm)
 {
 	this->Close();
 
 	outForm = NULL;
 
-	return EscAction::SET_GUI;
+	return Engine::EscAction::SET_GUI;
 }
 
 
@@ -312,7 +312,7 @@ void Phobos::Gui::LevelSelector::OnLoadButtonClick()
 
 void Phobos::Gui::LevelSelector::OnQuitButtonClick()
 {
-	Console::GetInstance().Execute("quit");
+	Engine::Console::GetInstance().Execute("quit");
 }
 
 void Phobos::Gui::LevelSelector::CmdAddLevelPath(const Shell::StringVector_t &args, Shell::Context &)

@@ -17,18 +17,18 @@ subject to the following restrictions:
 #ifndef PH_GENERIC_COMPONENT_MANAGER_MODULE_H
 #define PH_GENERIC_COMPONENT_MANAGER_MODULE_H
 
-#include <PH_CoreModule.h>
+#include <Phobos/Engine/Module.h>
 
 #include "PH_GenericComponentManager.h"
 
 namespace Phobos
 {			
 	template <typename T>
-	class PH_GAME_ENGINE_API GenericComponentManagerModule: public CoreModule, public GenericComponentManager<T>
+	class PH_GAME_ENGINE_API GenericComponentManagerModule: public Engine::Module, public GenericComponentManager<T>
 	{				
 		protected:
 			GenericComponentManagerModule(const String_t &name, UInt32_t flags =0):
-				CoreModule(name, flags)
+				Module(name, flags)
 			{
 				//empty
 			}

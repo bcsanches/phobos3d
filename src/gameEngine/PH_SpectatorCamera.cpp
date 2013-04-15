@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include "PH_SpectatorCamera.h"
 
-#include <PH_Core.h>
+#include <Phobos/Engine/Core.h>
 
 namespace Phobos
 {
@@ -28,7 +28,7 @@ namespace Phobos
 		m_clCamera.EnableViewport();		
 	}
 
-	void SpectatorCamera::FixedUpdate(IPlayerCmdPtr_t playerCmd)
+	void SpectatorCamera::FixedUpdate(Engine::IPlayerCmdPtr_t playerCmd)
 	{
 		auto cmd = std::static_pointer_cast<SpectatorCameraCmd>(playerCmd);
 
@@ -63,10 +63,10 @@ namespace Phobos
 
 	void SpectatorCamera::Update()
 	{
-		m_clCamera.SetTransform(m_clTransformInterpolator.GetValue(Core::GetInstance().GetSimInfo().m_stTimers[CORE_SYS_TIMER].m_fpDelta));
+		m_clCamera.SetTransform(m_clTransformInterpolator.GetValue(Engine::Core::GetInstance().GetSimInfo().m_stTimers[Engine::Core::TimerTypes::SYSTEM].m_fpDelta));
 	}
 
-	void SpectatorCamera::SetTransform(const Transform &transform)
+	void SpectatorCamera::SetTransform(const Engine::Math::Transform &transform)
 	{
 		m_clCurrentTransform = transform;
 

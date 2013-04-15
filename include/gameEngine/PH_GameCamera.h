@@ -22,8 +22,8 @@ subject to the following restrictions:
 #include <OgreCamera.h>
 
 #include <Phobos/DisableCopy.h>
-#include <PH_Render.h>
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 #include "PH_GameEngineAPI.h"
 
@@ -35,10 +35,10 @@ namespace Phobos
 			GameCamera();
 			~GameCamera();
 
-			void EnableViewport(int ZOrder = DefaultViewportZOrder::GAME);
+			void EnableViewport(int ZOrder = OgreEngine::DefaultViewportZOrder::GAME);
 
-			void SetTransform(const Transform &t);
-			void SetCameraTransform(const Transform &t);
+			void SetTransform(const Engine::Math::Transform &t);
+			void SetCameraTransform(const Engine::Math::Transform &t);
 
 			void EnableFixedYawAxis(const Ogre::Vector3 &axis);
 

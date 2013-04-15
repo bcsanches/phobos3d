@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 #include <OgreVector3.h>
 
-#include <PH_Transform.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
 
 #include "PH_RigidBody.h"
 

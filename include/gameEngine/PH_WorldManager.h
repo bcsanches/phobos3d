@@ -21,7 +21,7 @@ subject to the following restrictions:
 #include <list>
 
 #include <Phobos/Shell/Command.h>
-#include <PH_CoreModule.h>
+#include <Phobos/Engine/Module.h>
 #include <Phobos/Listener.h>
 #include <Phobos/Singleton.h>
 
@@ -49,7 +49,7 @@ namespace Phobos
 			PH_DECLARE_LISTENER_HOOK;
 	};
 
-	class PH_GAME_ENGINE_API WorldManager: public CoreModule
+	class PH_GAME_ENGINE_API WorldManager: public Phobos::Engine::Module
 	{
 		PH_DECLARE_SINGLETON_METHODS(WorldManager);
 

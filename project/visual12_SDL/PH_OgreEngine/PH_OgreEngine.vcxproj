@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1652ED80-C688-4CAB-B4E3-15A510C284B1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PH_OgreEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_EXPORTS;PH_SDL;PH_CHECK_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(OGRE_HOME)\Components\RTShaderSystem\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;OgreRTShaderSystem_d.lib;OgreOverlay_d.lib;RocketCore_d.lib;RocketControls_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_OGREENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\OgreEngine\Console.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Gui\Manager.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Gui\RenderInterface.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Render.cpp" />
+    <ClCompile Include="..\..\..\src\OgreEngine\Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Console.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Gui\Manager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Gui\RenderInterface.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Math\Functions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Math\Transform.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Math\TransformFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\OgreEngineAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Render.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Transform.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\TransformProperty.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\TransformPropertyFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Utils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Vector3Property.h" />
+    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Vector3PropertyFwd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
+      <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_System\PH_System.vcxproj">
+      <Project>{49ad3e51-f626-4c97-b051-a9f40f6b3858}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

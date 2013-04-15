@@ -1,17 +1,17 @@
 #include "PH_BaseClient.h"
 
-#include <PH_Session.h>
+#include <Phobos/Engine/Session.h>
 
 namespace Phobos
 {
 	BaseClient::BaseClient(const char *name):
-		CoreModule(name)		
+		Module(name)		
 	{
 		//empty
 	}
 
 	void BaseClient::OnPrepareToBoot()
 	{
-		Session::GetInstance().SetClient(this);
+		Engine::Session::GetInstance().SetClient(this);
 	}
 }
