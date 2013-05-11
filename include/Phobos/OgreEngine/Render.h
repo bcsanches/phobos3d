@@ -54,10 +54,11 @@ namespace Phobos
 		namespace DefaultViewportZOrder
 		{
 			enum Enum
-			{
-				CONSOLE = -4096,
+			{			
+				PRE_GAME = -4096,
 				GAME = 0,
-				GUI = 4096
+				GUI = 4096,
+				CONSOLE = 8192
 			};
 		}
 
@@ -191,6 +192,9 @@ namespace Phobos
 				std::unique_ptr<Ogre::Root>									m_upRoot;
 				std::unique_ptr<ShaderGeneratorTechniqueResolverListener>	m_upShaderGeneratorTechiniqueResolverListener;
 				std::unique_ptr<Ogre::OverlaySystem>						m_upOverlaySystem;
+
+				Ogre::Camera												*m_pclHelperCamera;
+				Ogre::SceneManager											*m_pclHelperScene;
 
 				Ogre::RenderWindow											*m_pclOgreWindow;
 				Ogre::SceneManager											*m_pclMainSceneManager;

@@ -166,7 +166,9 @@ Phobos::OgreEngine::Render::Render(void):
 	m_pclOgreWindow(NULL),
 	m_pclMainSceneManager(NULL),
 	m_pclShaderGenerator(NULL),
-	m_eShadowMode(Ogre::SHADOWTYPE_NONE)
+	m_eShadowMode(Ogre::SHADOWTYPE_NONE),
+	m_pclHelperScene(nullptr),
+	m_pclHelperCamera(nullptr)
 {
 	LogMessage("[Render] Initializing");
 
@@ -309,6 +311,12 @@ void Phobos::OgreEngine::Render::OnBoot(void)
 		
 	LogMessage("[Render::OnBoot] Creating SceneManager");
 	m_pclMainSceneManager = m_upRoot->createSceneManager(Ogre::ST_GENERIC);
+	m_pclHelperScene = m_upRoot->createSceneManager(Ogre::ST_GENERIC);
+
+	//Add a sceneManager and camera just to allow clearing before we have anything to render full screen
+	m_pclHelperCamera = m_pclHelperScene->createCamera("HelperUselessCameraToClearScreen");
+	auto vp = m_pclOgreWindow->addViewport(m_pclHelperCamera, DefaultViewportZOrder::PRE_GAME);
+	vp->setClearEveryFrame(true, Ogre::FBT_COLOUR);
 		
 	m_pclMainSceneManager->setShadowFarDistance(100);
 
