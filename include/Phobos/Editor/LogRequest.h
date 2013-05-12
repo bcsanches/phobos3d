@@ -1,7 +1,7 @@
 #ifndef PH_EDITOR_LOG_REQUEST_H
 #define PH_EDITOR_LOG_REQUEST_H
 
-#include "Editor/PH_Request.h"
+#include "Phobos/Editor/Request.h"
 
 #include <Phobos/String.h>
 

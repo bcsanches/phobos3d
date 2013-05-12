@@ -1,4 +1,4 @@
-#include "Editor/PH_EditorModule.h"
+#include "Phobos/Editor/EditorModule.h"
 
 #include <Phobos/Exception.h>
 #include <Phobos/Log.h>
@@ -8,7 +8,7 @@
 
 #include <JsonCreator/StringWriter.h>
 
-#include "Editor/PH_RequestFactory.h"
+#include "Phobos/Editor/RequestFactory.h"
 
 PH_GAME_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
 

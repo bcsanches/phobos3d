@@ -1,6 +1,6 @@
-#include "Editor/PH_LogRequest.h"
+#include "Phobos/Editor/LogRequest.h"
 
-#include "Editor/PH_RequestFactory.h"
+#include "Phobos/Editor/RequestFactory.h"
 
 #include <Phobos/Log.h>
 

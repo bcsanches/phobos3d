@@ -1,6 +1,6 @@
-#include "Editor/PH_AssetListRequest.h"
+#include "Phobos/Editor/AssetListRequest.h"
 
-#include "Editor/PH_RequestFactory.h"
+#include "Phobos/Editor/RequestFactory.h"
 
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>

@@ -1,7 +1,7 @@
 #ifndef PH_EDITOR_ASSET_LIST_REQUEST_H
 #define PH_EDITOR_ASSET_LIST_REQUEST_H
 
-#include "Editor/PH_Request.h"
+#include "Phobos/Editor/Request.h"
 
 namespace Phobos
 {

@@ -1,4 +1,4 @@
-#include "Editor/Camera.h"
+#include "Phobos/Editor/Camera.h"
 
 Phobos::Editor::Camera::Camera()
 {

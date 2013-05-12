@@ -11,14 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\editor\AssetListRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_AssetListRequest.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_EditorModule.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_LogRequest.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_MessageQueue.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_NetworkService.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_Request.cpp" />
-    <ClCompile Include="..\..\..\src\editor\PH_RequestFactory.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\editor\LogRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\MessageQueue.cpp" />
+    <ClCompile Include="..\..\..\src\editor\NetworkService.cpp" />
+    <ClCompile Include="..\..\..\src\editor\Request.cpp" />
+    <ClCompile Include="..\..\..\src\editor\RequestFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2010\websocketpp.vcxproj">
@@ -41,14 +41,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\editor\Editor\Camera.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_AssetListRequest.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_EditorModule.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_LogRequest.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_MessageQueue.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_NetworkService.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_Request.h" />
-    <ClInclude Include="..\..\..\include\editor\Editor\PH_RequestFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\AssetListRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\MessageQueue.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NetworkService.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\Request.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\RequestFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}</ProjectGuid>
@@ -95,7 +95,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\editor\;$(ProjectDir)..\..\..\include\kernel\;$(ProjectDir)..\..\..\include\engineCore\;$(ProjectDir)..\..\..\include\gamePlugin\;$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\OgreEngineCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;$(ProjectDir)..\..\..\include\OgreEngineCore;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\gamePlugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>

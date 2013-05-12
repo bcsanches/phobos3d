@@ -10,7 +10,7 @@
 #include <Phobos/Engine/IClient.h>
 #include <Phobos/Singleton.h>
 
-#include "PH_NetworkService.h"
+#include "Phobos/Editor/NetworkService.h"
 
 namespace Phobos
 {

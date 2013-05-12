@@ -1,4 +1,4 @@
-#include "Editor/PH_NetworkService.h"
+#include "Phobos/Editor/NetworkService.h"
 
 #include <boost/make_shared.hpp>
 #include <JsonCreator/Object.h>
@@ -8,7 +8,7 @@
 #include <Phobos/Log.h>
 #include <Phobos/Memory.h>
 
-#include "Editor/PH_MessageQueue.h"
+#include "Phobos/Editor/MessageQueue.h"
 
 namespace
 {
