@@ -135,7 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\engineMain\PH_EngineMain.cpp" />
+    <ClCompile Include="..\..\..\src\engineMain\EngineMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\contrib\SDL-1.2.15\VisualC\SDLmain\SDLmain.vcxproj">

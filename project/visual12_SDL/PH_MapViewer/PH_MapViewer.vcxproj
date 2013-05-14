@@ -128,13 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\mapViewer\PH_Client.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\include\mapViewer\PH_Client.h" />
-    <ClInclude Include="..\..\..\include\mapViewer\PH_MapViewerAPI.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
       <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
     </ProjectReference>
@@ -149,6 +142,13 @@
       <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\mapViewer\Client.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\mapViewer\Client.h" />
+    <ClInclude Include="..\..\..\src\mapViewer\MapViewerAPI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
