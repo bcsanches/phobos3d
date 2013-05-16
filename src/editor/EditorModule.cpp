@@ -10,7 +10,7 @@
 
 #include "Phobos/Editor/RequestFactory.h"
 
-PH_GAME_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
+PH_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
 
 namespace Phobos
 {	
@@ -18,9 +18,9 @@ namespace Phobos
 	{
 		PH_DEFINE_DEFAULT_SINGLETON(EditorModule);
 
-		PH_GAME_PLUGIN_REGISTER_MODULE(EditorModule);
+		PH_PLUGIN_REGISTER_MODULE(EditorModule);
 
-		PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(EditorModule);				
+		PH_PLUGIN_CREATE_MODULE_PROC_IMPL(EditorModule);				
 	}
 }
 

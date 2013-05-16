@@ -138,9 +138,8 @@
       <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
-      <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\PH_LibPlugin\PH_LibPlugin.vcxproj">
+      <Project>{ef04e841-546f-4b39-90e8-e983fc8f8660}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

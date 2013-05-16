@@ -29,15 +29,15 @@ subject to the following restrictions:
 
 #include "Gui/PH_LevelSelector.h"
 
-PH_GAME_PLUGIN_ENTRY_POINT("MapViewerPlugin", "game.cfg");
+PH_PLUGIN_ENTRY_POINT("MapViewerPlugin", "game.cfg");
 
 namespace Phobos
 {
 	PH_DEFINE_DEFAULT_SINGLETON(Client);
 
-	PH_GAME_PLUGIN_REGISTER_MODULE(Client);
+	PH_PLUGIN_REGISTER_MODULE(Client);
 
-	PH_GAME_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
+	PH_PLUGIN_CREATE_MODULE_PROC_IMPL(Client);
 
 	Client::Client():
 		BaseClient("Client"),		

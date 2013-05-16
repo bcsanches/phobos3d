@@ -33,8 +33,8 @@
     <ProjectReference Include="..\PH_GameEngine\PH_GameEngine.vcxproj">
       <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PH_GamePlugin\PH_GamePlugin.vcxproj">
-      <Project>{0e8c1152-d14c-4a78-b076-7f9c86568d15}</Project>
+    <ProjectReference Include="..\PH_LibPlugin\PH_LibPlugin.vcxproj">
+      <Project>{ef04e841-546f-4b39-90e8-e983fc8f8660}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
       <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>

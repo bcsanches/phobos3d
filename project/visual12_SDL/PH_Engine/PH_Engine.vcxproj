@@ -89,7 +89,7 @@
     <ClCompile Include="..\..\..\src\Engine\EventManagerModule.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Gui\Context.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Gui\Manager.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Plugin.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\PluginInstance.cpp" />
     <ClCompile Include="..\..\..\src\Engine\PluginManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Session.cpp" />
   </ItemGroup>
@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Console.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Core.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Module.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleManager.h" />
@@ -113,7 +114,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\Math\Accelerometer.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Math\Functions.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Math\Interpolator.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Engine\Plugin.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\PluginInstance.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\PluginManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Session.h" />
   </ItemGroup>

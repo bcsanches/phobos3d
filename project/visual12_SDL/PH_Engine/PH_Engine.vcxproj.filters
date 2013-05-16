@@ -17,7 +17,6 @@
     <ClCompile Include="..\..\..\src\Engine\Console.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core.cpp" />
     <ClCompile Include="..\..\..\src\Engine\EventManagerModule.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Plugin.cpp" />
     <ClCompile Include="..\..\..\src\Engine\PluginManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Session.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Gui\Context.cpp">
@@ -28,6 +27,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Module.cpp" />
     <ClCompile Include="..\..\..\src\Engine\ModuleManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\PluginInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
@@ -39,7 +39,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\IEscHandler.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IInputHandler.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlayerCommandProducer.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Engine\Plugin.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\PluginManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Session.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Gui\Context.h">
@@ -66,5 +65,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\Module.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\PluginInstance.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
   </ItemGroup>
 </Project>

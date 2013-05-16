@@ -1,6 +1,6 @@
 /*
 Phobos 3d
-September 2010
+February 2010
 Copyright (c) 2005-2011 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
@@ -17,39 +17,72 @@ subject to the following restrictions:
 #ifndef PH_ENGINE_PLUGIN_H
 #define PH_ENGINE_PLUGIN_H
 
-#include <Phobos/Node.h>
-#include <Phobos/DynamicLibrary.h>
+#include <Phobos/Engine/ModuleManager.h>
+#include <Phobos/Engine/IPlugin.h>
 
 namespace Phobos
 {
 	namespace Engine
 	{
-		PH_DECLARE_NODE_PTR(Plugin);
-
-		class IPluginInstance
+		class Plugin: public IPlugin
 		{
 			public:
-				virtual void Init() = 0;
-				virtual void Finalize() = 0;			
-		};
+				typedef Phobos::Engine::Module &(*CreateInstanceProc_t)();
+				typedef void (*ReleaseInstanceProc_t)();		
 
-		typedef IPluginInstance *(*PluginEntryPointProc_t)();
+			
+				struct Register_s
+				{	
+					Register_s(CreateInstanceProc_t createProc, ReleaseInstanceProc_t releaseProc);
+					Register_s(const Register_s &rhs);
 
-		class Plugin: public Node
-		{
+					CreateInstanceProc_t m_pfnCreate;
+					ReleaseInstanceProc_t m_pfnRelease;
+				};
+
 			public:
-				static PluginPtr_t Create(const String_t &name);
-
-				Plugin(const String_t &name);
-				~Plugin();
-
 				void Init();
+				void Finalize();
 
-			private:
-				DynamicLibrary		m_clLibrary;
-				IPluginInstance		*m_pclPlugin;
+				void AddModule(const Register_s &module);
+
+				static Plugin &GetInstance();
+
+				static void Configure(const char *moduleName, const char *cfgName);
+		
+			private:			
+				Engine::ModuleManagerPtr_t ipManager;
+
+				std::vector<Register_s> m_vecModules;
+
+				static const char *szCfgName_g;
+				static const char *szModuleName_g;
 		};
 	}
 }
+
+#ifdef PH_WIN32
+	#define PH_PLUGIN_ENTRY_POINT_EXPORT __declspec(dllexport)
+#elif defined PH_LINUX
+	#define PH_PLUGIN_ENTRY_POINT_EXPORT
+#endif
+
+#define PH_PLUGIN_ENTRY_POINT(MODULE_NAME, CFG_NAME)											\
+	extern "C" PH_PLUGIN_ENTRY_POINT_EXPORT Phobos::Engine::IPlugin *PH_PluginEntryPoint(void)	\
+	{																							\
+		Phobos::Engine::Plugin::Configure(MODULE_NAME, CFG_NAME);								\
+																								\
+		return &Phobos::Engine::Plugin::GetInstance();											\
+	}
+
+#define PH_PLUGIN_REGISTER_MODULE(X)\
+	static Phobos::Engine::Plugin::Register_s XRegister_gl(X::CreateModule, X::ReleaseInstance);
+
+#define PH_PLUGIN_CREATE_MODULE_PROC_DECL static Phobos::Engine::Module &CreateModule();
+#define PH_PLUGIN_CREATE_MODULE_PROC_IMPL(X)	\
+	Phobos::Engine::Module &X::CreateModule()		\
+	{												\
+		return CreateInstance();					\
+	}
 
 #endif

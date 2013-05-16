@@ -6,7 +6,7 @@
 #include <JsonCreator/StringWriterFwd.h>
 
 #include <Phobos/Engine/Module.h>
-#include <PH_GamePlugin.h>
+#include <Phobos/Engine/Plugin.h>
 #include <Phobos/Engine/IClient.h>
 #include <Phobos/Singleton.h>
 
@@ -21,7 +21,7 @@ namespace Phobos
 		class EditorModule: public Engine::Module, public Engine::IClient
 		{			
 			public:
-				PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL
+				PH_PLUGIN_CREATE_MODULE_PROC_DECL
 
 				PH_DECLARE_SINGLETON_METHODS(EditorModule);
 

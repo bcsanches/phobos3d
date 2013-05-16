@@ -22,7 +22,7 @@ subject to the following restrictions:
 #include <Phobos/Memory.h>
 
 #include "Phobos/Engine/Console.h"
-#include "Phobos/Engine/Plugin.h"
+#include "Phobos/Engine/PluginInstance.h"
 
 Phobos::Engine::PluginManagerPtr_t Phobos::Engine::PluginManager::ipInstance_gl;
 
@@ -89,7 +89,7 @@ void Phobos::Engine::PluginManager::OnUpdate()
 		pluginName.swap(m_lstPluginsToActivate.front());
 		m_lstPluginsToActivate.pop_front();
 
-		Plugin *plugin = static_cast<Plugin *>(this->TryGetChild(pluginName));
+		PluginInstance *plugin = static_cast<PluginInstance *>(this->TryGetChild(pluginName));
 		if(plugin)
 		{
 			plugin->Init();
@@ -100,7 +100,7 @@ void Phobos::Engine::PluginManager::OnUpdate()
 void Phobos::Engine::PluginManager::LoadPlugin(const String_t &name)
 {
 	{
-		std::unique_ptr<Plugin> plugin(PH_NEW Plugin(name));			
+		std::unique_ptr<PluginInstance> plugin(PH_NEW PluginInstance(name));			
 
 		this->AddPrivateChild(std::move(plugin));
 	}

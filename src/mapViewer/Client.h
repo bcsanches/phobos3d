@@ -20,7 +20,7 @@ subject to the following restrictions:
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
-#include <PH_GamePlugin.h>
+#include <Phobos/Engine/Plugin.h>
 #include <Phobos/Singleton.h>
 #include <PH_WorldManager.h>
 
@@ -36,7 +36,7 @@ namespace Phobos
 		PH_DECLARE_SINGLETON_METHODS(Client);
 
 		public:
-			PH_GAME_PLUGIN_CREATE_MODULE_PROC_DECL;
+			PH_PLUGIN_CREATE_MODULE_PROC_DECL;
 
 			virtual void SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd) override;
 
