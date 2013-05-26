@@ -1,7 +1,7 @@
 #ifndef PH_EDITOR_CAMERA_H
 #define PH_EDITOR_CAMERA_H
 
-#include <PH_GameCamera.h>
+#include <Phobos/Game/Camera.h>
 
 namespace Phobos
 {
@@ -14,7 +14,7 @@ namespace Phobos
 				~Camera();
 
 			private:
-				GameCamera m_clCamera;
+				Game::Camera m_clCamera;
 		};
 	}
 }

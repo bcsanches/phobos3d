@@ -6,7 +6,7 @@
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
-#include <PH_EntityKeys.h>
+#include <Phobos/Game/Things/Keys.h>
 
 #include <OgreResourceGroupManager.h>
 

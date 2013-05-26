@@ -23,11 +23,11 @@ subject to the following restrictions:
 #include <Phobos/Error.h>
 #include <Phobos/Exception.h>
 
-#include <PH_PointEntity.h>
+#include <Phobos/Game/Things/PointEntity.h>
 #include <Phobos/Engine/Session.h>
-#include <PH_WorldManager.h>
+#include <Phobos/Game/WorldManager.h>
 
-#include "Gui/PH_LevelSelector.h"
+#include <Phobos/Game/Gui/LevelSelector.h>
 
 PH_PLUGIN_ENTRY_POINT("MapViewerPlugin", "game.cfg");
 
@@ -60,7 +60,7 @@ namespace Phobos
 
 	Phobos::Engine::EscAction Client::HandleEsc(Engine::Gui::Form *&outForm)
 	{
-		Gui::LevelSelector &levelSelector = Gui::LevelSelector::GetInstance();
+		auto &levelSelector = Game::Gui::LevelSelector::GetInstance();
 		levelSelector.Open();
 
 		outForm = &levelSelector;
@@ -94,14 +94,14 @@ namespace Phobos
 		console.AddContextVariable(m_varSpectatorMoveSpeed);
 		console.AddContextVariable(m_varSpectatorTurnSpeed);
 
-		WorldManager::GetInstance().AddListener(*this);
+		Game::WorldManager::GetInstance().AddListener(*this);
 	}	
 
 	void Client::OnBoot()
 	{
 		BaseClient::OnBoot();		
 
-		Gui::LevelSelector &levelSelector = Gui::LevelSelector::GetInstance();
+		auto &levelSelector = Game::Gui::LevelSelector::GetInstance();
 		levelSelector.Open();
 
 		auto &session = Engine::Session::GetInstance();
@@ -120,8 +120,8 @@ namespace Phobos
 
 	void Client::OnMapLoaded()
 	{
-		WorldManager &worldManager = WorldManager::GetInstance();
-		PointEntity *player = static_cast<PointEntity *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
+		auto &worldManager = Game::WorldManager::GetInstance();
+		auto *player = static_cast<Game::Things::PointEntity *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
 		if(!player)
 		{
 			LogMessage("[CmdLoadMap] World does not contains InfoPlayerStart entity");
@@ -131,7 +131,7 @@ namespace Phobos
 			m_clSpectatorCamera.SetTransform(player->GetTransform());
 		}
 
-		Gui::LevelSelector::GetInstance().Close();
+		Game::Gui::LevelSelector::GetInstance().Close();
 
 		m_fMapLoaded = true;
 		m_clSpectatorCamera.Enable();

@@ -134,9 +134,8 @@
     <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
       <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PH_GameEngine\PH_GameEngine.vcxproj">
-      <Project>{ba4d7f77-9968-4c99-8a83-2c1b68720a93}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\PH_Game\PH_Game.vcxproj">
+      <Project>{d3f292da-2bc0-486c-9505-a2c4bb7cb486}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PH_LibPlugin\PH_LibPlugin.vcxproj">
       <Project>{ef04e841-546f-4b39-90e8-e983fc8f8660}</Project>

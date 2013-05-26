@@ -16,12 +16,13 @@ subject to the following restrictions:
 
 #include <boost/test/unit_test.hpp>
 
-#include <PH_HandleManager.h>
+#include <Phobos/Game/Things/HandleManager.h>
 #include <Phobos/Memory.h>
 
 BOOST_AUTO_TEST_CASE(HandleManager_Full)
 {	
 	using namespace Phobos;
+	using namespace Phobos::Game::Things;
 
 	HandleManager<int> handleManager;
 
@@ -49,6 +50,7 @@ BOOST_AUTO_TEST_CASE(HandleManager_Full)
 BOOST_AUTO_TEST_CASE(HandleManagerBasic)
 {
 	using namespace Phobos;	
+	using namespace Phobos::Game::Things;
 
 	HandleManager<int> handleManager;
 

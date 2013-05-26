@@ -22,16 +22,15 @@ subject to the following restrictions:
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Engine/Plugin.h>
 #include <Phobos/Singleton.h>
-#include <PH_WorldManager.h>
-
-#include "PH_BaseClient.h"
-#include "PH_SpectatorCamera.h"
+#include <Phobos/Game/BaseClient.h>
+#include <Phobos/Game/SpectatorCamera.h>
+#include <Phobos/Game/WorldManager.h>
 
 namespace Phobos
 {
 	PH_DECLARE_NODE_PTR(Client);
 
-	class Client: public BaseClient, private WorldManagerListener
+	class Client: public Game::BaseClient, private Game::WorldManagerListener
 	{
 		PH_DECLARE_SINGLETON_METHODS(Client);
 
@@ -68,8 +67,8 @@ namespace Phobos
 			Shell::Variable		m_varSpectatorMoveSpeed;
 			Shell::Variable		m_varSpectatorTurnSpeed;
 
-			SpectatorCamera	m_clSpectatorCamera;
-			SpectatorCameraCommandProducer_c m_clSpectatorCameraCommandProducer;
+			Game::SpectatorCamera	m_clSpectatorCamera;
+			Game::SpectatorCameraCommandProducer_c m_clSpectatorCameraCommandProducer;
 
 			Engine::IPlayerCmdPtr_t		m_ipPlayerCmd;
 			

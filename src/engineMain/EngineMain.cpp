@@ -27,16 +27,16 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Engine/EventManagerModule.h>
-#include <PH_GameEventManager.h>
-#include <PH_ModelRendererManager.h>
-#include <PH_MoverManager.h>
-#include <PH_PhysicsManager.h>
+#include <Phobos/Game/Things/SignalManager.h>
+#include <Phobos/Game/Things/ModelRendererManager.h>
+#include <Phobos/Game/Things/MoverManager.h>
+#include <Phobos/Game/Physics/Manager.h>
 #include <Phobos/Engine/PluginManager.h>
 #include <Phobos/OgreEngine/Render.h>
 #include <Phobos/Engine/Session.h>
-#include <PH_WorldManager.h>
+#include <Phobos/Game/WorldManager.h>
 
-#include <Gui/PH_LevelSelector.h>
+#include <Phobos/Game/Gui/LevelSelector.h>
 
 namespace Phobos
 {
@@ -72,32 +72,32 @@ namespace Phobos
 		m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
 		core.AddModule(session);
 
-		WorldManager &worldManager = WorldManager::CreateInstance();
-		m_clSingletons.AddProc(WorldManager::ReleaseInstance);
+		auto &worldManager = Game::WorldManager::CreateInstance();
+		m_clSingletons.AddProc(Game::WorldManager::ReleaseInstance);
 		core.AddModule(worldManager);
 
-		Gui::LevelSelector &levelSelector = Gui::LevelSelector::CreateInstance();
-		m_clSingletons.AddProc(Gui::LevelSelector::ReleaseInstance);
+		auto &levelSelector = Game::Gui::LevelSelector::CreateInstance();
+		m_clSingletons.AddProc(Game::Gui::LevelSelector::ReleaseInstance);
 		core.AddModule(levelSelector);
 
-		GameEventManager &gameEventManager = GameEventManager::CreateInstance();
-		m_clSingletons.AddProc(GameEventManager::ReleaseInstance);
+		auto &gameEventManager = Game::Things::SignalManager::CreateInstance();
+		m_clSingletons.AddProc(Game::Things::SignalManager::ReleaseInstance);
 		core.AddModule(gameEventManager);
 
 		Engine::PluginManager &pluginManager = Engine::PluginManager::CreateInstance();
 		m_clSingletons.AddProc(Engine::PluginManager::ReleaseInstance);
 		core.AddModule(pluginManager, Engine::ModulePriorities::NORMAL-1);		
 
-		MoverManager &moverManager = MoverManager::CreateInstance();
-		m_clSingletons.AddProc(MoverManager::ReleaseInstance);
+		auto &moverManager = Game::Things::MoverManager::CreateInstance();
+		m_clSingletons.AddProc(Game::Things::MoverManager::ReleaseInstance);
 		core.AddModule(moverManager);
 
-		Physics::Manager &physicsManager = Physics::Manager::CreateInstance();
-		m_clSingletons.AddProc(Physics::Manager::ReleaseInstance);
+		auto &physicsManager = Game::Physics::Manager::CreateInstance();
+		m_clSingletons.AddProc(Game::Physics::Manager::ReleaseInstance);
 		core.AddModule(physicsManager, Engine::ModulePriorities::LOWEST+3);
 
-		ModelRendererManager &modelRendererManager = ModelRendererManager::CreateInstance();
-		m_clSingletons.AddProc(ModelRendererManager::ReleaseInstance);
+		auto &modelRendererManager = Game::Things::ModelRendererManager::CreateInstance();
+		m_clSingletons.AddProc(Game::Things::ModelRendererManager::ReleaseInstance);
 		core.AddModule(modelRendererManager, Engine::ModulePriorities::LOWEST+2);
 
 		auto &guiManager = OgreEngine::Gui::Manager::CreateInstance();
