@@ -21,7 +21,7 @@ subject to the following restrictions:
 	#define PH_MSVC
 	#define PH_WIN32
 
-	#ifdef _DEBUG
+	#if (defined(_DEBUG) || defined(PH_FORCE_DEBUG))
 		#define PH_DEBUG
 	#elif defined NDEBUG
 		#define PH_RELEASE

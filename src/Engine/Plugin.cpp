@@ -41,7 +41,8 @@ void Phobos::Engine::Plugin::Init()
 {
 	ipManager = Engine::ModuleManager::Create(szModuleName_g);
 
-	Engine::Core::GetInstance().AddModule(*ipManager);	
+	auto &core = Engine::Core::GetInstance();
+	core.AddModule(*ipManager);	
 
 	for(auto &info : m_vecModules)		
 	{
