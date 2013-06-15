@@ -36,7 +36,7 @@ namespace Phobos
 			class PH_GAME_API Entity: public Thing
 			{
 				public:
-					static Entity *Create(const String_t &name);
+					static std::unique_ptr<Entity> Create(const String_t &name);
 
 					void Load(const Register::Table &table);
 					void LoadFinished();

@@ -52,7 +52,7 @@ namespace Phobos
 			
 					while(StringSplitBy(componentName, *components, '|', pos, &pos))
 					{				
-						std::unique_ptr<Things::Component> comp(factory.Create(componentName, componentName, *this));
+						auto comp(factory.Create(componentName, componentName, *this));
 				
 						this->AddPrivateChild(std::move(comp));
 					}

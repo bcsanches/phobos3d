@@ -30,7 +30,7 @@ namespace Phobos
 			class TransformComponent: public Component
 			{
 				public:
-					static Component *Create(const String_t &name, Entity &owner);
+					static std::unique_ptr<Component> Create(const String_t &name, Entity &owner);
 
 					~TransformComponent();
 

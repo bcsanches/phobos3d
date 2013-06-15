@@ -22,6 +22,7 @@ subject to the following restrictions:
 #define PH_DECLARE_SINGLETON_PTR(X)	PH_DECLARE_NODE_PTR(X)	
 
 #define PH_DECLARE_SINGLETON_METHODS(X)		\
+		PH_DISABLE_COPY(X)					\
 	private:								\
 		static X##Ptr_t ipInstance_gl;		\
 											\

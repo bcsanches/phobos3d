@@ -33,7 +33,7 @@ namespace Phobos
 
 			void Signal::Fire()
 			{
-				m_pfnProc(m_rclReceiver);			
+				(m_rclReceiver.*m_pfnProc)();			
 			}
 		}
 	}

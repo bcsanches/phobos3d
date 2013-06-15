@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_GAME_COMPONENTS_FACTORY_H
 #define PH_GAME_COMPONENTS_FACTORY_H
 
+#include <memory>
+
 #include <Phobos/GenericFactory.h>
 #include <Phobos/Memory.h>
 
@@ -29,7 +31,7 @@ namespace Phobos
 	{
 		namespace Things
 		{
-			class PH_GAME_API ComponentFactory: public GenericFactory2<ObjectCreator2<Component, String_t, Phobos::Game::Things::Entity &, ComponentFactory>, String_t, Phobos::Game::Things::Entity & >
+			class PH_GAME_API ComponentFactory: public GenericFactory2<ObjectCreator2<Component, String_t, Phobos::Game::Things::Entity &, ComponentFactory, std::unique_ptr<Component>>, String_t, Phobos::Game::Things::Entity & >
 			{
 				public:
 					static ComponentFactory &GetInstance();			
@@ -39,13 +41,13 @@ namespace Phobos
 }
 
 #define PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE)										\
-	static ObjectCreator2<Phobos::Game::Things::Component, String_t, Phobos::Game::Things::Entity &, Phobos::Game::Things::ComponentFactory> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
+	static ObjectCreator2<Phobos::Game::Things::Component, String_t, Phobos::Game::Things::Entity &, Phobos::Game::Things::ComponentFactory, std::unique_ptr<Phobos::Game::Things::Component>> TYPE##_CreatorObject_gl(NAME, &TYPE::Create);
 
 #define PH_FULL_ENTITY_COMPONENT_CREATOR(NAME, TYPE)						\
 	PH_ENTITY_COMPONENT_CREATOR(NAME, TYPE);								\
-	Phobos::Game::Things::Component *TYPE::Create(const String_t &name, Phobos::Game::Things::Entity &owner)	\
+	std::unique_ptr<Phobos::Game::Things::Component> TYPE::Create(const String_t &name, Phobos::Game::Things::Entity &owner)	\
 	{																		\
-		return PH_NEW TYPE(name, owner); 									\
+		return std::unique_ptr<Phobos::Game::Things::Component>(new TYPE(name, owner)); 										\
 	}
 
 #endif

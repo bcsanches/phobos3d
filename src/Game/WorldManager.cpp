@@ -99,7 +99,7 @@ namespace Phobos
 
 		Things::Entity &WorldManager::LoadEntity(const Register::Table &entityDef)
 		{
-			std::unique_ptr<Things::Entity> ptr(Things::EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
+			auto ptr = Things::EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName());
 
 			//Update handle before loading entity, so components would have a valid handle
 			Things::Handle_s h = m_clEntityManager.AddObject(ptr.get());

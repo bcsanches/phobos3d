@@ -52,7 +52,7 @@ namespace Phobos
 
 		class PH_GAME_API WorldManager: public Phobos::Engine::Module
 		{
-			PH_DECLARE_SINGLETON_METHODS(WorldManager);
+			PH_DECLARE_SINGLETON_METHODS(WorldManager);			
 
 			public:
 				typedef std::list<Things::Thing*> ThingList_t;

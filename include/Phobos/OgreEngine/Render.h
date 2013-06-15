@@ -18,6 +18,7 @@ subject to the following restrictions:
 #define PH_RENDER_H
 
 #include <list>
+#include <memory>
 
 #include <OgrePrerequisites.h>
 #include <OgreSceneManager.h>
@@ -64,6 +65,8 @@ namespace Phobos
 
 		class PH_OGRE_ENGINE_API Render: public Engine::Module
 		{		
+			PH_DISABLE_COPY(Render);
+
 			public:
 				~Render();
 

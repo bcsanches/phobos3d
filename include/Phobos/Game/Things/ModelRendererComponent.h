@@ -34,7 +34,7 @@ namespace Phobos
 			class PH_GAME_API ModelRendererComponent: public Component
 			{
 				public:
-					static Component *Create(const String_t &name, Entity &owner);
+					static std::unique_ptr<Component> Create(const String_t &name, Entity &owner);
 
 					~ModelRendererComponent();
 

@@ -17,8 +17,6 @@ subject to the following restrictions:
 #ifndef PH_GAME_SIGNAL_H
 #define PH_GAME_SIGNAL_H
 
-#include <functional>
-
 #include <Phobos/Types.h>
 
 #include "Phobos/Game/GameAPI.h"
@@ -34,7 +32,7 @@ namespace Phobos
 			class PH_GAME_API Signal
 			{				
 				public:
-					typedef std::function<void(Thing &)> SignalProc_t;
+					typedef void (Thing::*SignalProc_t)();
 
 				public:
 					Signal(Thing &receiver, SignalProc_t proc);		

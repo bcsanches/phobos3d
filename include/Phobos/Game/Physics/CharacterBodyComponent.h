@@ -35,7 +35,7 @@ namespace Phobos
 			class PH_GAME_API CharacterBodyComponent: public Things::Component
 			{
 				public:
-					static Things::Component *Create(const String_t &name, Things::Entity &owner);
+					static std::unique_ptr<Component> Create(const String_t &name, Things::Entity &owner);
 
 					~CharacterBodyComponent();
 

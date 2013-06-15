@@ -33,7 +33,7 @@ namespace Phobos
 			class PointEntity: public Entity
 			{
 				public:
-					static Entity *Create(const String_t &name);
+					static std::unique_ptr<Entity> Create(const String_t &name);
 
 					inline const Engine::Math::Transform &GetTransform() const;
 

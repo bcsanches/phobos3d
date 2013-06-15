@@ -26,6 +26,8 @@ subject to the following restrictions:
 
 #include "Phobos/Game/Things/Signal.h"
 
+#define PH_MAKE_SIGNAL_PROC(X) static_cast<Phobos::Game::Things::Signal::SignalProc_t>(X)
+
 namespace Phobos
 {
 	namespace Game

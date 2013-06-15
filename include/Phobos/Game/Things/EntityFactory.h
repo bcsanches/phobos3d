@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_ENTITY_FACTORY_H
 #define PH_ENTITY_FACTORY_H
 
+#include <memory>
+
 #include <Phobos/GenericFactory.h>
 #include <Phobos/Memory.h>
 
@@ -28,7 +30,7 @@ namespace Phobos
 	{
 		namespace Things
 		{
-			class PH_GAME_API EntityFactory: public GenericFactory1<ObjectCreator1<Entity, String_t, EntityFactory>, String_t >
+			class PH_GAME_API EntityFactory: public GenericFactory1<ObjectCreator1<Entity, String_t, EntityFactory, std::unique_ptr<Entity>>, String_t >
 			{
 				public:
 					static EntityFactory &GetInstance();			
@@ -38,13 +40,13 @@ namespace Phobos
 }
 
 #define PH_ENTITY_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1<Phobos::Game::Things::Entity, Phobos::String_t, Phobos::Game::Things::EntityFactory> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+	static Phobos::ObjectCreator1<Phobos::Game::Things::Entity, Phobos::String_t, Phobos::Game::Things::EntityFactory, std::unique_ptr<Phobos::Game::Things::Entity>> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
 
 #define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  		\
 	PH_ENTITY_CREATOR(NAME, TYPE);					\
-	Phobos::Game::Things::Entity *TYPE::Create(const Phobos::String_t &name)	\
+	std::unique_ptr<Phobos::Game::Things::Entity> TYPE::Create(const Phobos::String_t &name)	\
 	{												\
-		return PH_NEW TYPE(name);					\
+		return std::unique_ptr<Phobos::Game::Things::Entity>(new TYPE(name));					\
 	}
 
 #endif

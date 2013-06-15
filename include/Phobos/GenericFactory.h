@@ -168,13 +168,13 @@ namespace Phobos
 	class GenericFactory2;
 
 	template <typename T, typename PARAM1, typename PARAM2, typename FACTORY, typename CREATE_RET = T*>
-	class ObjectCreator2: public BaseObjectCreator<T, T*(*)(const PARAM1 &, PARAM2 )>
+	class ObjectCreator2: public BaseObjectCreator<T, CREATE_RET (*)(const PARAM1 &, PARAM2 )>
 	{
 		public:
-			typedef BaseObjectCreator<T, T*(*)(const PARAM1 &, PARAM2 )> BaseType_t;
+			typedef BaseObjectCreator<T, CREATE_RET (*)(const PARAM1 &, PARAM2 )> BaseType_t;
 			typedef CREATE_RET ObjectReturnType_t;	
 
-			ObjectCreator2(const String_t &name,  T*(*proc)(const PARAM1 &, PARAM2 ) ):
+			ObjectCreator2(const String_t &name,  CREATE_RET (*proc)(const PARAM1 &, PARAM2 ) ):
 				BaseType_t(name, proc)
 			{
 				//GenericFactory2<ObjectCreator2, Y >::GetInstance().Register(*this);
@@ -212,7 +212,7 @@ namespace Phobos
 	class GenericFactory2: public GenericFactory<T>
 	{
 		public:
-			typename GenericFactory<T>::ObjectType_t *Create(const String_t &className, const PARAM1 &param1, PARAM2 param2) const
+			typename GenericFactory<T>::ObjectReturnType_t Create(const String_t &className, const PARAM1 &param1, PARAM2 param2) const
 			{
 				return this->GetObjectCreator(className).Create(param1, param2);
 			}
