@@ -21,14 +21,16 @@ subject to the following restrictions:
 
 #include "Phobos/Game/GameAPI.h"
 
+//Do not forward declare this, otherwise the member function pointer will cause bad things on certain projects
+//Looks like visual try to guess the size and get it wrong, this corrupt callstack in certain builds
+#include "Phobos/Game/Things/Thing.h"
+
 namespace Phobos
 {	
 	namespace Game
 	{
 		namespace Things
 		{
-			class Thing;
-
 			class PH_GAME_API Signal
 			{				
 				public:

@@ -36,7 +36,7 @@ namespace Phobos
 			void *GetSymbol(const String_t &name);
 
 		private:
-			void RaiseException(const char *module);
+			void RaiseException(const char *module, const char *dll);
 
 		private:
 			String_t	m_strName;

@@ -27,7 +27,7 @@ namespace Phobos
 			PH_DEFINE_DEFAULT_SINGLETON(SignalManager);	
 
 			SignalManager::SignalManager():
-				Module("GameEventManager", NodeFlags::PRIVATE_CHILDREN)
+				Module("SignalManager", NodeFlags::PRIVATE_CHILDREN)
 			{
 				//empty
 			}

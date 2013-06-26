@@ -76,7 +76,7 @@ namespace Phobos
 		
 		if(m_upHandle == NULL)
 		{
-			this->RaiseException("DynamicLibrary_c::Load");
+			this->RaiseException("DynamicLibrary_c::Load", name.c_str());
 		}
 	}
 
@@ -90,13 +90,13 @@ namespace Phobos
 		void *ptr = this->TryGetSymbol(name);
 		if(ptr == NULL)
 		{
-			this->RaiseException("DynamicLibrary_c::GetSymbol");
+			this->RaiseException("DynamicLibrary_c::GetSymbol", name.c_str());
 		}
 
 		return ptr;
 	}
 
-	void DynamicLibrary::RaiseException(const char *module)
+	void DynamicLibrary::RaiseException(const char *module, const char *dll)
 	{
 #if defined PH_LINUX
 		String_t ret = dlerror();
@@ -115,8 +115,12 @@ namespace Phobos
 			0,
 			NULL
 		);
-
+		
 		String_t ret = (char*)lpMsgBuf;
+
+		ret.append(" not found item ");
+		ret.append(dll);
+
 		// Free the buffer.
 		LocalFree( lpMsgBuf );
 

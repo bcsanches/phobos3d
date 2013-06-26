@@ -138,7 +138,7 @@ namespace Phobos
 		Engine::Session::GetInstance().SetPlayerCommandProducer(&m_clSpectatorCameraCommandProducer);
 
 		//make sure no gui is present
-		Engine::Session::GetInstance().SetGuiForm(NULL);
+		Engine::Session::GetInstance().SetGuiForm(nullptr);
 	}	
 	
 	void Client::VarSpectatorMoveSpeedChanged(const class Shell::Variable &var, const String_t &oldValue, const String_t &newValue)

@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_GAME_EVENT_MANAGER_H
-#define PH_GAME_EVENT_MANAGER_H
+#ifndef PH_SIGNAL_MANAGER_H
+#define PH_SIGNAL_MANAGER_H
 
 #include <map>
 
