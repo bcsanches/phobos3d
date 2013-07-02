@@ -16,6 +16,11 @@ StaticEntityDef PointLight : Light
   tileHeight = belowCeiling;
 }
 
+StaticEntityDef RedPointLight : PointLight
+{
+  diffuse="1 0 0 0";
+}
+
 StaticEntityDef StaticModel
 {
   type=Model;
@@ -30,3 +35,4 @@ StaticEntityDef StaticModel
   
   scale="1 1 1";
 }
+
