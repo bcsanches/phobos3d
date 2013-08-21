@@ -163,6 +163,7 @@ Phobos::OgreEngine::Render::Render(void):
 	m_cmdScreenshot("screenshot"),
 	m_cmdSetShadowMode("setShadowMode"),
 	m_cmdSetShadowFarDistance("setShadowFarDistance"),
+	m_cmdDumpSceneHierarchy("dumpSceneHierarchy"),
 	m_pclOgreWindow(NULL),
 	m_pclMainSceneManager(NULL),
 	m_pclShaderGenerator(NULL),
@@ -179,6 +180,8 @@ Phobos::OgreEngine::Render::Render(void):
 
 	m_cmdSetShadowMode.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdSetShadowMode, this));
 	m_cmdSetShadowFarDistance.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdSetShadowFarDistance, this));
+
+	m_cmdDumpSceneHierarchy.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdDumpSceneHierarchy, this));
 
 	//varRCaelum.SetCallback(VarCallback_t(this, &Render::VarRCaelumChanged));
 
@@ -397,6 +400,8 @@ void Phobos::OgreEngine::Render::OnPrepareToBoot()
 
 	console.AddContextCommand(m_cmdSetShadowMode);
 	console.AddContextCommand(m_cmdSetShadowFarDistance);
+
+	console.AddContextCommand(m_cmdDumpSceneHierarchy);
 
 	console.AddContextVariable(m_varRScreenX);
 	console.AddContextVariable(m_varRScreenY);
@@ -938,4 +943,27 @@ void Phobos::OgreEngine::Render::CmdScreenshot(const Shell::StringVector_t &cont
 			LogOgreException("Render::CmdScreenshot", e);
 		}
 	}
+}
+
+static void DumpSceneHierarchy_r(std::ostream &stream, const Ogre::SceneNode &node, unsigned int depth)
+{
+	std::string tabs(depth, '\t');
+
+	stream << tabs << node.getName() << std::endl;
+	stream << tabs << "position: " << node.getPosition() << std::endl;
+	stream << tabs << "orientation: " << node.getOrientation() << std::endl;
+	stream << tabs << "scale: " << node.getScale() << std::endl;
+
+	for(auto it = node.getChildIterator();	it.hasMoreElements(); it.moveNext())
+	{
+		DumpSceneHierarchy_r(stream, *static_cast<Ogre::SceneNode*>(it.current()->second), depth+1);
+	}
+	stream << std::endl;
+}
+
+void Phobos::OgreEngine::Render::CmdDumpSceneHierarchy(const Shell::StringVector_t &container, Shell::Context &)
+{
+	std::ofstream output("scene.txt");
+
+	DumpSceneHierarchy_r(output, *(m_pclMainSceneManager->getRootSceneNode()), 0);
 }

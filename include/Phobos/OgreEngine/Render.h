@@ -156,6 +156,7 @@ namespace Phobos
 				void CmdOgreAddResourceLocation(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdOgreInitialiseResourceGroup(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdScreenshot(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdDumpSceneHierarchy(const Shell::StringVector_t &args, Shell::Context &);
 
 				void CmdSetShadowMode(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdSetShadowFarDistance(const Shell::StringVector_t &args, Shell::Context &);
@@ -191,6 +192,7 @@ namespace Phobos
 
 				Shell::Command						m_cmdSetShadowMode;
 				Shell::Command						m_cmdSetShadowFarDistance;			
+				Shell::Command						m_cmdDumpSceneHierarchy;
 
 				std::unique_ptr<Ogre::Root>									m_upRoot;
 				std::unique_ptr<ShaderGeneratorTechniqueResolverListener>	m_upShaderGeneratorTechiniqueResolverListener;
