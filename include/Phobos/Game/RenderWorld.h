@@ -1,6 +1,23 @@
+/*
+Phobos 3d
+July 2013
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
 #ifndef PH_GAME_RENDER_WORLD_H
 #define PH_GAME_RENDER_WORLD_H
 
+#include <Phobos/HandlerList.h>
 #include <Phobos/Singleton.h>
 
 #include <Phobos/Register/HiveFwd.h>
@@ -17,19 +34,19 @@ namespace Phobos
 
 		class SceneNodeObject;
 
-		class SceneNodeHandler
+		class SceneNodeKeeper
 		{
 			private:
-				SceneNodeHandler(const SceneNodeHandler &rhs);
-				SceneNodeHandler &operator=(const SceneNodeHandler &rhs);
+				SceneNodeKeeper(const SceneNodeKeeper &rhs);
+				SceneNodeKeeper &operator=(const SceneNodeKeeper &rhs);
 
 			public:
-				~SceneNodeHandler();
-				SceneNodeHandler();
-				SceneNodeHandler(SceneNodeObject &object, UInt16_t index, UInt16_t serial);
-				SceneNodeHandler(SceneNodeHandler &&other);
+				~SceneNodeKeeper();
+				SceneNodeKeeper();
+				SceneNodeKeeper(SceneNodeObject &object, Handler h);
+				SceneNodeKeeper(SceneNodeKeeper &&other);
 
-				SceneNodeHandler &operator=(SceneNodeHandler &&other);
+				SceneNodeKeeper &operator=(SceneNodeKeeper &&other);
 
 				void SetPosition(const Ogre::Vector3 &position);
 				void SetOrientation(const Ogre::Quaternion &orientation);
@@ -39,8 +56,7 @@ namespace Phobos
 				//Must call RenderWorld::DestroyDynamicnode to destroy it
 				SceneNodeObject		*m_pclSceneNode;
 
-				UInt16_t			m_u16Index;
-				UInt16_t			m_u16Serial;
+				Handler				m_hHandler;				
 		};
 
 		class PH_GAME_API RenderWorld
@@ -51,7 +67,7 @@ namespace Phobos
 
 			public:
 				//The returned handler will owns the object, when it dies, it destroy the object
-				virtual SceneNodeHandler AcquireDynamicSceneNodeHandler(StringRef_t handler) = 0;
+				virtual SceneNodeKeeper AcquireDynamicSceneNodeKeeper(StringRef_t handler) = 0;
 
 			protected:
 				RenderWorld() {};

@@ -56,7 +56,7 @@ namespace Phobos
 			{
 				const String_t &renderObjectHandler = table.GetString(PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER);
 
-				m_hSceneNode = RenderWorld::GetInstance().AcquireDynamicSceneNodeHandler(renderObjectHandler);				
+				m_kpSceneNode = RenderWorld::GetInstance().AcquireDynamicSceneNodeKeeper(renderObjectHandler);				
 			}
 
 			void ModelRendererComponent::OnLoadFinished()
@@ -68,8 +68,8 @@ namespace Phobos
 
 			void ModelRendererComponent::Update()
 			{		
-				m_hSceneNode.SetPosition(m_pprpTransform->GetOrigin());
-				m_hSceneNode.SetOrientation(m_pprpTransform->GetRotation());
+				m_kpSceneNode.SetPosition(m_pprpTransform->GetOrigin());
+				m_kpSceneNode.SetOrientation(m_pprpTransform->GetRotation());
 			}
 
 #if 0

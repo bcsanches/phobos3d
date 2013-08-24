@@ -1,6 +1,23 @@
+/*
+Phobos 3d
+July 2013
+Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
 #include "Phobos/Game/RenderWorld.h"
 
 #include <Phobos/Exception.h>
+#include <Phobos/HandlerList.h>
 
 #include <Phobos/OgreEngine/Render.h>
 #include <Phobos/Register/Hive.h>
@@ -142,129 +159,13 @@ namespace
 	class RenderWorldImpl;
 
 	//Internal shortcut
-	static RenderWorldImpl *g_pclRenderWorld = nullptr;	
-
-	#define MAX_HANDLERS 0xFFFFu
-
-	template <typename T>
-	class ObjectList
-	{
-		public:
-			ObjectList():
-				m_u16NextFreeSlot(MAX_HANDLERS)
-			{
-				//empty
-			}
-
-			std::pair<Phobos::UInt32_t, T&> Add(T &&object)
-			{
-				auto slot = m_u16NextFreeSlot;
-
-				if(slot == MAX_HANDLERS)
-				{					
-					m_vecObjects.emplace_back(std::make_pair(MiniHandler(), std::move(object)));
-					slot = m_vecObjects.size()-1;
-				}
-				else
-				{					
-					m_u16NextFreeSlot = m_vecObjects[slot].first.m_u16NextFreeSlot;
-
-					m_vecObjects[slot].second = std::move(object);
-				}
-
-				return std::make_pair((m_vecObjects[slot].first.m_u16Serial << 16) | slot, std::ref(m_vecObjects[slot].second));
-			}
-
-			T Remove(Phobos::UInt16_t index, Phobos::UInt16_t serial)
-			{
-				if(index >= m_vecObjects.size())
-				{
-					PH_RAISE(Phobos::INVALID_PARAMETER_EXCEPTION, "[RenderWorldImpl::DestroyDynamicNode]", "handler is out of bounds");
-				}
-
-				if(m_vecObjects[index].first.m_u16Serial != serial)
-				{
-					PH_RAISE(Phobos::OBJECT_NOT_FOUND_EXCEPTION, "[RenderWorldImpl::DestroyDynamicNode]", "Object already destroyed");
-				}				
-
-				//increment serial to avoid re-use
-				m_vecObjects[index].first.m_u16Serial++;
-
-				//queue free slot
-				m_vecObjects[index].first.m_u16NextFreeSlot = m_u16NextFreeSlot;
-				m_u16NextFreeSlot = index;
-
-				//destory it
-				return std::move(m_vecObjects[index].second);
-			}
-
-			template <typename CARRIER>
-			CARRIER Acquire(Phobos::StringRef_t handler)
-			{
-				using namespace Phobos;
-
-				UInt32_t uHandler = std::stoi(handler.data());
-				
-				auto index = this->GetValidIndex(uHandler);
-
-				return CARRIER(m_vecObjects[index].second, index, m_vecObjects[index].first.m_u16Serial);
-			}
-
-			T &Get(Phobos::UInt32_t uHandler)
-			{				
-				return m_vecObjects[GetValidIndex(uHandler)].second;
-			}
-
-			void Clear()
-			{
-				m_u16NextFreeSlot = MAX_HANDLERS;
-				m_vecObjects.clear();
-			}
-
-		private:			
-
-			Phobos::UInt16_t GetValidIndex(Phobos::UInt32_t uHandler)
-			{
-				Phobos::UInt16_t index = uHandler & 0x0000FFFF;
-				Phobos::UInt16_t serial = (uHandler >> 16);
-
-				if(index >= m_vecObjects.size())
-				{
-					PH_RAISE(Phobos::INVALID_PARAMETER_EXCEPTION, "[RenderWorldImpl::AcquireDynamicSceneNodeHandler]", "handler is out of bounds");
-				}
-
-				if(m_vecObjects[index].first.m_u16Serial != serial)
-				{
-					PH_RAISE(Phobos::OBJECT_NOT_FOUND_EXCEPTION, "[RenderWorldImpl::AcquireDynamicSceneNodeHandler]", "Invalid serial for handler");
-				}
-
-				//return an valid index
-				return index;
-			}
-
-			struct MiniHandler
-			{
-				Phobos::UInt16_t m_u16Serial;
-				Phobos::UInt16_t m_u16NextFreeSlot;
-
-				MiniHandler():
-					m_u16Serial(1),
-					m_u16NextFreeSlot(MAX_HANDLERS)
-				{
-					//empty
-				}
-			};
-
-		private:
-			typedef std::vector<std::pair<MiniHandler, T>> Vector_t;
-
-			Vector_t m_vecObjects;
-
-			Phobos::UInt16_t m_u16NextFreeSlot;
-	};	
+	static RenderWorldImpl *g_pclRenderWorld = nullptr;			
 
 	class RenderWorldImpl: public Phobos::Game::RenderWorld
 	{
+		private:
+			typedef Phobos::HandlerList<Phobos::Game::SceneNodeObject> SceneNodeList_t;
+					
 		public:
 			RenderWorldImpl()				
 			{
@@ -276,16 +177,14 @@ namespace
 				g_pclRenderWorld = nullptr;
 			}
 
-			virtual Phobos::Game::SceneNodeHandler AcquireDynamicSceneNodeHandler(Phobos::StringRef_t serial) override;
-			void DestroyDynamicNode(Phobos::UInt16_t index, Phobos::UInt16_t serial);
+			virtual Phobos::Game::SceneNodeKeeper AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t serial) override;
+			void DestroyDynamicNode(Phobos::Handler h);
 
 		protected:			
 			virtual void Load(const Phobos::Register::Hive &hive) override;
 			virtual void Unload() override;
 
-		private:
-			typedef ObjectList<Phobos::Game::SceneNodeObject> SceneNodeList_t;
-
+		private:			
 			SceneNodeList_t			m_lstNodes;			
 	};	
 }
@@ -343,7 +242,7 @@ void RenderWorldImpl::Load(const Phobos::Register::Hive &hive)
 
 	auto &render = OgreEngine::Render::GetInstance();
 
-	std::vector<std::tuple<const String_t *, UInt32_t, Register::Table &>> vecObjectsCache;
+	std::vector<std::tuple<const String_t *, Handler, Register::Table &>> vecObjectsCache;
 	
 	for(auto it : hive)		
 	{
@@ -380,7 +279,7 @@ void RenderWorldImpl::Load(const Phobos::Register::Hive &hive)
 		auto result = m_lstNodes.Add(std::move(object));
 				
 		//Insert a key to allow entities to retrieve a handler to their nodes, so they can control it
-		dict.SetString(PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER, std::to_string(result.first));	
+		dict.SetString(PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER, result.first.ToString());	
 			
 		vecObjectsCache.emplace_back(dict.TryGetString(PH_GAME_OBJECT_KEY_PARENT_NODE), result.first, std::ref(dict));
 	}
@@ -415,18 +314,18 @@ void RenderWorldImpl::Unload()
 	m_lstNodes.Clear();
 }
 
-Phobos::Game::SceneNodeHandler RenderWorldImpl::AcquireDynamicSceneNodeHandler(Phobos::StringRef_t handler)
+Phobos::Game::SceneNodeKeeper RenderWorldImpl::AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t handler)
 {
-	return m_lstNodes.Acquire<Phobos::Game::SceneNodeHandler>(handler);	
+	return m_lstNodes.Acquire<Phobos::Game::SceneNodeKeeper>(Phobos::Handler(handler));	
 }
 
-void RenderWorldImpl::DestroyDynamicNode(Phobos::UInt16_t index, Phobos::UInt16_t serial)
+void RenderWorldImpl::DestroyDynamicNode(Phobos::Handler h)
 {
 	//Ignore nulls
-	if(!serial)
+	if(!h.GetSerial())
 		return;
 
-	m_lstNodes.Remove(index, serial);	
+	m_lstNodes.Remove(h);	
 }
 
 namespace Phobos
@@ -444,63 +343,54 @@ namespace Phobos
 	}
 }
 
-Phobos::Game::SceneNodeHandler::SceneNodeHandler():
-	m_pclSceneNode(nullptr),
-	m_u16Index(0),
-	m_u16Serial(0)
+Phobos::Game::SceneNodeKeeper::SceneNodeKeeper():
+	m_pclSceneNode(nullptr)
 {
 	//empty
 }
 
-Phobos::Game::SceneNodeHandler::SceneNodeHandler(SceneNodeObject &object, UInt16_t index, UInt16_t serial):
+Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeObject &object, Handler h):
 	m_pclSceneNode(&object),
-	m_u16Index(index),
-	m_u16Serial(serial)
+	m_hHandler(h)
 {
-	PH_ASSERT(serial && "Constructor with object requires a valid serial");
+	PH_ASSERT(m_hHandler && "Constructor with object requires a valid serial");
 }
 
-Phobos::Game::SceneNodeHandler::SceneNodeHandler(SceneNodeHandler &&other):
-	m_pclSceneNode(nullptr),
-	m_u16Index(0),
-	m_u16Serial()
+Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeKeeper &&other):
+	m_pclSceneNode(nullptr)	
 {
 	*this = std::move(other);	
 }
 
-Phobos::Game::SceneNodeHandler &Phobos::Game::SceneNodeHandler::operator=(SceneNodeHandler &&rhs)
+Phobos::Game::SceneNodeKeeper &Phobos::Game::SceneNodeKeeper::operator=(SceneNodeKeeper &&rhs)
 {
-	g_pclRenderWorld->DestroyDynamicNode(m_u16Index, m_u16Serial);
-
-	m_u16Serial = 0;
-	m_pclSceneNode = nullptr;
-
+	g_pclRenderWorld->DestroyDynamicNode(m_hHandler);
+	
 	this->m_pclSceneNode = rhs.m_pclSceneNode;
-	this->m_u16Serial = rhs.m_u16Serial;
-	this->m_u16Index = rhs.m_u16Index;
+	this->m_hHandler = rhs.m_hHandler;	
 
-	rhs.m_u16Serial = 0;
+	rhs.m_hHandler = Handler();
 	rhs.m_pclSceneNode = nullptr;
 
 	return *this;
 }
 
-void Phobos::Game::SceneNodeHandler::SetPosition(const Ogre::Vector3 &position)
+void Phobos::Game::SceneNodeKeeper::SetPosition(const Ogre::Vector3 &position)
 {
 	PH_ASSERT(m_pclSceneNode && "Invalid handler");
 
 	m_pclSceneNode->SetPosition(position);
 }
 
-void Phobos::Game::SceneNodeHandler::SetOrientation(const Ogre::Quaternion &orientation)
+void Phobos::Game::SceneNodeKeeper::SetOrientation(const Ogre::Quaternion &orientation)
 {
 	PH_ASSERT(m_pclSceneNode && "Invalid handler");
 
 	m_pclSceneNode->SetOrientation(orientation);
 }
 
-Phobos::Game::SceneNodeHandler::~SceneNodeHandler()
+Phobos::Game::SceneNodeKeeper::~SceneNodeKeeper()
 {	
-	g_pclRenderWorld->DestroyDynamicNode(m_u16Index, m_u16Serial);
+	g_pclRenderWorld->DestroyDynamicNode(m_hHandler);
 }
 

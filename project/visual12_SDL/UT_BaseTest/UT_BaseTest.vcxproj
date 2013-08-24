@@ -55,6 +55,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -117,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\UT_Base\HandleListTest.cpp" />
     <ClCompile Include="..\..\..\src\UT_Base\ShellCommandTest.cpp" />
     <ClCompile Include="..\..\..\src\UT_Base\ShellItemTest.cpp" />
     <ClCompile Include="..\..\..\src\UT_Base\ShellContextTest.cpp" />

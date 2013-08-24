@@ -73,7 +73,7 @@ namespace Phobos
 					//static EntityInputManager clInputManager_gl;
 
 				private:
-					SceneNodeHandler m_hSceneNode;
+					SceneNodeKeeper m_kpSceneNode;
 
 					OgreEngine::TransformProperty *m_pprpTransform;
 			};

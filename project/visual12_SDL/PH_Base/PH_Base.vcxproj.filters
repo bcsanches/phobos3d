@@ -88,5 +88,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Shell\IContext.h">
       <Filter>Shell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\HandlerList.h" />
   </ItemGroup>
 </Project>
