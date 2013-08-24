@@ -24,6 +24,7 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/TransformProperty.h>
 
 #include "Phobos/Game/BaseOgreWorld.h"
+#include "Phobos/Game/MapDefs.h"
 #include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/Things/ComponentFactory.h"
 #include "Phobos/Game/Things/Keys.h"
@@ -41,64 +42,37 @@ namespace Phobos
 		
 			ModelRendererComponent::ModelRendererComponent(const String_t &name, Entity &owner):
 				Component(name, owner),
-				m_pclSceneNode(NULL),
-				m_pclMeshEntity(NULL),
 				m_pprpTransform(NULL)
 			{		
 				ModelRendererManager::GetInstance().Register(*this);
 			}
 
 			ModelRendererComponent::~ModelRendererComponent()
-			{
-				auto &render = OgreEngine::Render::GetInstance();
-
-				render.DestroyEntity(m_pclMeshEntity);
-				render.DestroySceneNode(m_pclSceneNode);
-
+			{				
 				ModelRendererManager::GetInstance().Unregister(*this);
 			}
 
 			void ModelRendererComponent::OnLoad(const Register::Table &table)
 			{
-				const String_t &meshName = table.GetString(PH_ENTITY_KEY_MESH_FILE);
+				const String_t &renderObjectHandler = table.GetString(PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER);
 
-				auto &render = OgreEngine::Render::GetInstance();
-
-				m_pclSceneNode = render.CreateSceneNode(this->GetEntityName());
-				m_pclMeshEntity = render.CreateEntity(meshName);
-
-				m_pclSceneNode->attachObject(m_pclMeshEntity);
-		
-				m_pclSceneNode->setScale(Register::GetVector3(table, PH_ENTITY_KEY_SCALE));		
-
-				m_strParentNode = table.GetString(PH_ENTITY_KEY_PARENT_NODE);
+				m_hSceneNode = RenderWorld::GetInstance().AcquireDynamicSceneNodeHandler(renderObjectHandler);				
 			}
 
 			void ModelRendererComponent::OnLoadFinished()
 			{
 				Component::OnLoadFinished();		
 
-				m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
-
-				//Force node transform update
-				this->Update();
-
-				if(m_strParentNode != PH_WORLD_SCENE_MANAGER_NAME)
-				{
-					auto &render = OgreEngine::Render::GetInstance();
-
-					m_pclSceneNode->getParent()->removeChild(m_pclSceneNode);
-
-					render.GetSceneNode(m_strParentNode)->addChild(m_pclSceneNode);
-				}		
+				m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);					
 			}
 
 			void ModelRendererComponent::Update()
 			{		
-				m_pclSceneNode->setPosition(m_pprpTransform->GetOrigin());
-				m_pclSceneNode->setOrientation(m_pprpTransform->GetRotation());
+				m_hSceneNode.SetPosition(m_pprpTransform->GetOrigin());
+				m_hSceneNode.SetOrientation(m_pprpTransform->GetRotation());
 			}
 
+#if 0
 			void ModelRendererComponent::AttachObjectToBone(
 						const Char_t *boneName, 
 						Ogre::MovableObject &movable, 
@@ -128,6 +102,7 @@ namespace Phobos
 			{
 				return *m_pclMeshEntity->getSkeleton()->getBone(boneName);
 			}
+#endif
 
 			/*
 			PH_BEGIN_ENTITY_INPUT(ModelRendererComponent, SetPosition)

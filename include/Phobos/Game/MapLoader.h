@@ -33,20 +33,21 @@ namespace Phobos
 		class MapLoader
 		{
 			public:
-				virtual void Load(const String_t &fileName) = 0;
+				void Load(StringRef_t fileName);
+
+				void Unload();
 
 				static void OnBoot();			
-				
-				const Phobos::Register::Hive &GetStaticEntitiesHive() const;
-				const Phobos::Register::Hive &GetDynamicEntitiesHive() const ;
+								
+				const Phobos::Register::Hive &GetGameObjectsHive() const ;
 				const Phobos::Register::Hive &GetCurrentLevelHive() const;
 
 				std::unique_ptr<Things::Entity> CreateAndLoadWorldSpawn();
 
 				WorldPtr_t CreateAndLoadWorld();
 
-			protected:
-				static void ClearAllHives();
+			protected:				
+				virtual void OnLoad(StringRef_t fileName) = 0;
 
 				MapLoader(const Phobos::Register::Table &settings);
 
@@ -58,10 +59,15 @@ namespace Phobos
 
 				virtual WorldPtr_t CreateWorld() = 0;
 
-			protected:			
-				static Phobos::Register::Hive *pclStaticEntitiesHive_g;
-				static Phobos::Register::Hive *pclDynamicEntitiesHive_g;
-				static Phobos::Register::Hive *pclCurrentLevelHive_g;
+				void AddGameObject(std::unique_ptr<Phobos::Register::Table> obj);
+				void AddLevelObject(std::unique_ptr<Phobos::Register::Table> obj);
+
+			private:
+				static void ClearAllHives();
+
+			private:							
+				static Phobos::Register::Hive *g_pclGameObjectsHive;
+				static Phobos::Register::Hive *g_pclCurrentLevelHive;
 
 				String_t m_strWorldSpawnEntityType;
 

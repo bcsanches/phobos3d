@@ -31,13 +31,13 @@ namespace Phobos
 		{
 			public:
 				static MapLoader *Create(const Register::Table &settings);
-
-				void Load(const String_t &fileName);	
-
+					
 				OgitorMapLoader(const Register::Table &settings);
-
+			
 			protected:			
 				virtual WorldPtr_t CreateWorld() override;
+
+				virtual void OnLoad(StringRef_t fileName) override;
 		};	
 	}
 }

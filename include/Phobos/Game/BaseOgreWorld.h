@@ -28,8 +28,6 @@ subject to the following restrictions:
 #include "Physics/CollisionTagFwd.h"
 #include "Physics/RigidBodyFwd.h"
 
-#define PH_WORLD_SCENE_MANAGER_NAME "SceneManager"
-
 namespace Phobos
 {		
 	namespace Game

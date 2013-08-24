@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\..\src\Game\Things\ThingsUtils.cpp">
       <Filter>Things</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\RenderWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Game\BaseClient.h" />
@@ -277,5 +278,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingsUtils.h">
       <Filter>Things</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\RenderWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
   </ItemGroup>
 </Project>

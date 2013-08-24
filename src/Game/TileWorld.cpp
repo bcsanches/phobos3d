@@ -401,6 +401,7 @@ namespace Phobos
 				}
 			}
 
+#if 0
 			const auto &hive = loader.GetStaticEntitiesHive();
 
 			for(Node::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
@@ -464,6 +465,7 @@ namespace Phobos
 					LogMakeStream() << "[TileWorld::Load] Exception loading static object: " << ex.what();
 				}
 			}
+#endif
 		}
 
 		struct DirectionType_s

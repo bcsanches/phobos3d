@@ -27,6 +27,7 @@ subject to the following restrictions:
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
+#include "Phobos/Game/MapDefs.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
 
@@ -62,6 +63,8 @@ namespace Phobos
 
 			m_spGameWorld.reset();
 
+			m_spMapLoader->Unload();
+
 			for(auto &listener: m_lstListeners)
 				listener.OnMapUnloaded();		
 		}
@@ -77,12 +80,14 @@ namespace Phobos
 			m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
 			m_spMapLoader->Load(mapName);
 
+#if 0
 			{
 				auto world(m_spMapLoader->CreateAndLoadWorldSpawn());
 				this->AddPrivateChild(std::move(world));
 			}
 
 			m_spGameWorld = m_spMapLoader->CreateAndLoadWorld();
+#endif
 
 			this->LoadEntities();
 
@@ -116,13 +121,16 @@ namespace Phobos
 
 		void WorldManager::LoadEntities()
 		{
-			auto &hive = m_spMapLoader->GetDynamicEntitiesHive();		
+			auto &hive = m_spMapLoader->GetGameObjectsHive();		
 
 			for(Node::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
 			{
-				auto *dict = static_cast<Register::Table *>(it->second);
+				auto *dict = static_cast<const Register::Table *>(it->second);
 
-				this->LoadEntity(*dict);						
+				StringRef_t type = dict->GetString(PH_GAME_OBJECT_KEY_TYPE);
+
+				if(type.compare(PH_GAME_OBJECT_TYPE_ENTITY) == 0)
+					this->LoadEntity(*dict);						
 			}
 		}
 

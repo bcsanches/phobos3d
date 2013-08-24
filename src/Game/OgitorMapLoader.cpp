@@ -31,10 +31,100 @@ subject to the following restrictions:
 #include <Phobos/Path.h>
 
 #include "Phobos/Game/MapLoaderFactory.h"
+#include "Phobos/Game/MapDefs.h"
 #include "Phobos/Game/OgitorWorld.h"
 
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"
+
+namespace
+{
+	class ValueConversor
+	{
+		public:
+			typedef std::function<const char *(Phobos::StringRef_t)> ConversionProc_t;
+
+		public:
+			ValueConversor(const char *key, ConversionProc_t proc = nullptr):
+				m_pszKey(key),
+				m_pfnConversionProc(proc)
+		{
+			PH_ASSERT(key);
+		}
+
+		const char *GetKey() const
+		{
+			return m_pszKey;
+		}
+
+		const char *Convert(Phobos::StringRef_t value) const 
+		{
+			return m_pfnConversionProc ? m_pfnConversionProc(value) : value.data();
+		}
+
+		private:
+			const char			*m_pszKey;
+			ConversionProc_t	m_pfnConversionProc;
+	};
+
+	void OutputKeyValue(Phobos::Register::Table &table, Phobos::StringRef_t key, Phobos::StringRef_t value)
+	{
+		static bool g_fInitialized = false;
+		static std::map<Phobos::StringRef_t, ValueConversor> g_mapConversors;
+		static auto g_itEndConversors = g_mapConversors.end();
+
+		if(!g_fInitialized)
+		{
+			g_mapConversors.insert(std::make_pair("castshadows",	ValueConversor(PH_GAME_OBJECT_KEY_CAST_SHADOWS)));
+			g_mapConversors.insert(std::make_pair("meshfile",		ValueConversor(PH_GAME_OBJECT_KEY_MESH)));
+			g_mapConversors.insert(std::make_pair("lightrange",		ValueConversor(PH_GAME_OBJECT_KEY_LIGHT_RANGE)));
+			g_mapConversors.insert(std::make_pair("parentnode",		ValueConversor(PH_GAME_OBJECT_KEY_PARENT_NODE, [](Phobos::StringRef_t value)
+			{			
+				return value.compare("SceneManager") == 0 ? nullptr : value.data();
+			})));
+
+			g_mapConversors.insert(std::make_pair("lighttype", ValueConversor(PH_GAME_OBJECT_KEY_LIGHT_TYPE, [](Phobos::StringRef_t value)
+			{
+				switch(std::stoi(value.data()))
+				{								
+					case 0:
+						return PH_GAME_OBJECT_LIGHT_TYPE_POINT;										
+
+					case 1:
+						return PH_GAME_OBJECT_LIGHT_TYPE_DIRECTIONAL;					
+
+					case 2:
+						return PH_GAME_OBJECT_LIGHT_TYPE_SPOT;
+
+					default:
+						{
+							std::stringstream stream;
+
+							stream << "Invalid light type " << value;
+							PH_RAISE(Phobos::INVALID_PARAMETER_EXCEPTION, "OgitorWorld::OutputKeyValue", stream.str());
+						}
+					break;
+				}
+			})));			
+
+			g_itEndConversors = g_mapConversors.end();
+			g_fInitialized = true;
+		}
+		
+		auto it = g_mapConversors.find(key);
+		if(it != g_itEndConversors)
+		{
+			const char *convertedValue = it->second.Convert(value.data());
+
+			if(convertedValue)
+				table.SetString(it->second.GetKey(), convertedValue);
+		}
+		else
+		{
+			table.SetString(key, value);
+		}
+	}
+}
 
 namespace Phobos
 {
@@ -82,13 +172,40 @@ namespace Phobos
 				return false;
 		}
 
-		static bool IsDynamicEntity(const rapidxml::xml_node<> &element)
+		static const char *GetObjectType(const rapidxml::xml_node<> &element)
 		{
 			if(ContainsCustomProperties(element))
-				return true;
+				return PH_GAME_OBJECT_TYPE_ENTITY;			
 
 			const rapidxml::xml_attribute<> *attribute = element.first_attribute("typename");
-			return (strcmp(attribute->value(), "Marker Object") == 0) || (strcmp(attribute->value(), "Camera Object") == 0);
+			const char *attributeValue = attribute->value();
+
+			static const char *g_arpszIgnoreList[] =
+			{				
+				"Viewport Object",
+				nullptr
+			};
+
+			for(int i = 0;g_arpszIgnoreList[i]; ++i)
+			{
+				if(strcmp(g_arpszIgnoreList[i], attributeValue) == 0)
+					return nullptr;
+			}
+			
+			if ((strcmp(attributeValue, "Marker Object") == 0) || (strcmp(attributeValue, "Camera Object") == 0))
+				return PH_GAME_OBJECT_TYPE_ENTITY;
+			else if((strcmp(attributeValue, "Node Object") == 0) || (strcmp(attributeValue, "Entity Object") == 0))
+				return PH_GAME_OBJECT_TYPE_STATIC;
+			else if(strcmp(attributeValue, "Light Object") == 0)
+				return PH_GAME_OBJECT_TYPE_STATIC_LIGHT;
+			else if(strcmp(attributeValue, "OctreeSceneManager") == 0)
+				return PH_GAME_OBJECT_TYPE_SCENE_MANAGER;
+			else
+			{
+				std::stringstream stream;
+				stream << "Unknown object type: " << attributeValue;
+				PH_RAISE(INVALID_PARAMETER_EXCEPTION, "OgitorMapLoader::GetObjectType", stream.str());
+			}
 		}
 
 		static void LoadProperties(Register::Table &dict, const rapidxml::xml_node<> &element)
@@ -112,7 +229,7 @@ namespace Phobos
 					continue;
 				}
 
-				dict.SetString(name->value(), value->value());
+				OutputKeyValue(dict, name->value(), value->value());				
 			}
 		}
 
@@ -120,7 +237,7 @@ namespace Phobos
 		{
 			for(const rapidxml::xml_attribute<> *atr = element.first_attribute(); atr; atr = atr->next_attribute())
 			{
-				dict.SetString(atr->name(), atr->value());
+				OutputKeyValue(dict, atr->name(), atr->value());				
 			}		
 
 			const rapidxml::xml_node<> *custom = element.first_node(CUSTOM_PROPERTY_NODE_NAME);
@@ -132,7 +249,7 @@ namespace Phobos
 		}
 
 		OgitorMapLoader::OgitorMapLoader(const Register::Table &settings):
-			MapLoader(settings)
+			MapLoader(settings)	
 		{
 			//empty
 		}
@@ -142,25 +259,23 @@ namespace Phobos
 			return std::make_shared<OgitorWorld>();
 		}
 
-		void OgitorMapLoader::Load(const String_t &fileName)
+		void OgitorMapLoader::OnLoad(StringRef_t fileName)
 		{		
 			rapidxml::xml_document<> doc;
 
-			std::ifstream input(fileName.c_str(), std::ios_base::in);
+			std::ifstream input(fileName.data(), std::ios_base::in);
 
 			if(input.fail())			
-				PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "OgitorMapLoader::LoadOgitor", "'" + fileName + "' not found");
+				PH_RAISE(FILE_NOT_FOUND_EXCEPTION, "OgitorMapLoader::LoadOgitor", String_t("'") + fileName.data() + "' not found");
 
 			std::vector<char> fileData( (std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
 			fileData.push_back('\0');
 		
-			doc.parse<0>(&fileData[0] );	
-
-			MapLoader::ClearAllHives();
+			doc.parse<0>(&fileData[0]);	
 
 			rapidxml::xml_node<> *root = doc.first_node();
 			if(root == NULL)
-				PH_RAISE(PARSER_EXCEPTION, "OgitorMapLoader::LoadOgitor", "'" + fileName + "' appears to be empty");		
+				PH_RAISE(PARSER_EXCEPTION, "OgitorMapLoader::LoadOgitor", String_t("'") + fileName.data() + "' appears to be empty");		
 
 			for(rapidxml::xml_node<> *elem = root->first_node("OBJECT");elem; elem = elem->next_sibling())
 			{			
@@ -172,16 +287,25 @@ namespace Phobos
 						LogMessage("[OgitorMapLoader::LoadOgitor] Object without name, ignored");
 						continue;
 					}
-
-					bool dynamicEntity = IsDynamicEntity(*elem);
-					if(dynamicEntity && IsEditorOnly(*elem))
+					
+					auto objectType = GetObjectType(*elem);
+					if(!objectType)
 						continue;
 				
-					std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(nameAttribute->value()));				
+					std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(nameAttribute->value()));
 
+					dict->SetString(PH_GAME_OBJECT_KEY_TYPE, objectType);
 					LoadTable(*dict, *elem);
 
-					(dynamicEntity ? pclDynamicEntitiesHive_g : pclStaticEntitiesHive_g)->AddTable(std::move(dict));				
+					if(objectType == PH_GAME_OBJECT_TYPE_STATIC_LIGHT)
+					{
+						dict->SetString(PH_GAME_OBJECT_KEY_ORIENTATION, "1 0 0 0");
+					}
+
+					if(!dict->TryGetString(PH_GAME_OBJECT_KEY_SCALE))
+						dict->SetString(PH_GAME_OBJECT_KEY_SCALE, "1 1 1");
+
+					this->AddGameObject(std::move(dict));
 				}
 				catch(Exception &e)
 				{
@@ -189,33 +313,33 @@ namespace Phobos
 				}			
 			}
 
-			std::unique_ptr<Register::Table> dict = this->CreateWorldSpawnEntityDef();
+			//std::unique_ptr<Register::Table> dict = this->CreateWorldSpawnEntityDef();
 
 			//load project data
 			if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
 			{
-				if(const char *caelumDir = GetChildNodeValue(*project, "CAELUMDIR"))
-					dict->SetString("caelumDir", caelumDir);			
+				//if(const char *caelumDir = GetChildNodeValue(*project, "CAELUMDIR"))
+					//dict->SetString("caelumDir", caelumDir);			
 
 				if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
+				{
+					std::unique_ptr<Register::Table> dict(PH_NEW Register::Table("terrain"));
 					dict->SetString("terrainDir", terrainDir);
-			}
-			pclCurrentLevelHive_g->AddTable(std::move(dict));
 
-			//fill out basic level data
-			dict.reset(PH_NEW Register::Table("LevelFile"));
+					dict->SetString(PH_GAME_OBJECT_KEY_TYPE, PH_GAME_OBJECT_TYPE_TERRAIN);
 
-			dict->SetString("pathName", fileName);
+					dict->SetString("pathName", fileName);
 
-			Path path(fileName);
-			Path filePath, onlyFileName;
-			path.ExtractPathAndFilename(&filePath, &onlyFileName);
+					Path path(fileName);
+					Path filePath, onlyFileName;
+					path.ExtractPathAndFilename(&filePath, &onlyFileName);
 
-			dict->SetString("path", filePath.GetStr());
-			dict->SetString("fileName", onlyFileName.GetStr());
+					dict->SetString("path", filePath.GetStr());
+					dict->SetString("fileName", onlyFileName.GetStr());
 
-			pclCurrentLevelHive_g->AddTable(std::move(dict));
-		
+					this->AddGameObject(std::move(dict));
+				}
+			}											
 		}
 	}
 }

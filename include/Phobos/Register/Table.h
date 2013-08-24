@@ -89,8 +89,8 @@ namespace Phobos
 						//empty
 					}
 					
-					explicit inline Value_s(const String_t &value):
-						m_strValue(value),
+					explicit inline Value_s(StringRef_t  value):
+						m_strValue(value.data()),
 						m_eType(STRING),
 						m_u16NumColumns(0),
 						m_u16NumRows(0)
@@ -172,7 +172,7 @@ namespace Phobos
 				float GetFloat(const String_t &key) const;
 				bool TryGetFloat(float &outValue, const String_t &key) const;
 
-				void SetString(const String_t &key, const String_t &value);
+				void SetString(StringRef_t key, StringRef_t value);
 				void SetCharMatrix(const String_t &key, const String_t &data, UInt16_t numRows, UInt16_t numColumns);
 			
 				const Table *GetInherited() const;
@@ -188,8 +188,8 @@ namespace Phobos
 
 				void ParseSpecialValue(const String_t &idName, Parser &parser);
 
-				void CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const;
-				void CheckForKeyword(const String_t &key) const;		
+				void CheckInvalidKey(StringRef_t key, const char *keys[], const char *message) const;
+				void CheckForKeyword(StringRef_t key) const;		
 
 				const Value_s *TryGetValue(const String_t &key) const;
 

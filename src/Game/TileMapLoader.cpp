@@ -22,10 +22,8 @@ namespace Phobos
 			return std::make_shared<TileWorld>();
 		}
 	
-		void TileMapLoader::Load(const String_t &fileName)
-		{
-			MapLoader::ClearAllHives();
-
+		void TileMapLoader::OnLoad(StringRef_t fileName)
+		{			
 			Register::Load(fileName);
 		}
 	}

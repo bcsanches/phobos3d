@@ -27,6 +27,7 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Engine/EventManagerModule.h>
+#include <Phobos/Game/RenderWorld.h>
 #include <Phobos/Game/Things/SignalManager.h>
 #include <Phobos/Game/Things/ModelRendererManager.h>
 #include <Phobos/Game/Things/MoverManager.h>
@@ -75,6 +76,9 @@ namespace Phobos
 		auto &worldManager = Game::WorldManager::CreateInstance();
 		m_clSingletons.AddProc(Game::WorldManager::ReleaseInstance);
 		core.AddModule(worldManager);
+
+		auto &renderWorld = Game::RenderWorld::CreateInstance();
+		m_clSingletons.AddProc(Game::RenderWorld::ReleaseInstance);
 
 		auto &levelSelector = Game::Gui::LevelSelector::CreateInstance();
 		m_clSingletons.AddProc(Game::Gui::LevelSelector::ReleaseInstance);

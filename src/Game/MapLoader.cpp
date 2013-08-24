@@ -27,6 +27,7 @@ subject to the following restrictions:
 #include <Phobos/Exception.h>
 #include <Phobos/Path.h>
 
+#include "Phobos/Game/RenderWorld.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
 #include "Phobos/Game/World.h"
@@ -37,37 +38,45 @@ namespace Phobos
 {	
 	namespace Game
 	{
-		Register::Hive *MapLoader::pclStaticEntitiesHive_g = NULL;
-		Register::Hive *MapLoader::pclDynamicEntitiesHive_g = NULL;
-		Register::Hive *MapLoader::pclCurrentLevelHive_g = NULL;
+		Phobos::Register::Hive *MapLoader::g_pclGameObjectsHive = nullptr;
+		Phobos::Register::Hive *MapLoader::g_pclCurrentLevelHive = nullptr;
 
 		void MapLoader::OnBoot()
 		{		
-			pclCurrentLevelHive_g = &Register::CreateCustomHive("LevelInfo");
-			pclStaticEntitiesHive_g = &Register::CreateCustomHive("StaticEntities");
-			pclDynamicEntitiesHive_g = &Register::CreateCustomHive("DynamicEntities");		
+			g_pclCurrentLevelHive = &Register::CreateCustomHive("LevelInfo");
+			g_pclGameObjectsHive = &Register::CreateCustomHive("ObjectDef");
 		}	
 
-		const Register::Hive &MapLoader::GetStaticEntitiesHive() const
+		void MapLoader::Load(StringRef_t fileName)
 		{
-			return *pclStaticEntitiesHive_g;
+			ClearAllHives();
+
+			//delegate the load processing
+			this->OnLoad(fileName);			
+
+			//Load all rendering stuff
+			RenderWorldLoadAccess::Load(*g_pclGameObjectsHive);			
 		}
 
-		const Register::Hive &MapLoader::GetDynamicEntitiesHive() const
+		void MapLoader::Unload()
 		{
-			return *pclDynamicEntitiesHive_g;
+			RenderWorldLoadAccess::Unload();
+		}
+		
+		const Register::Hive &MapLoader::GetGameObjectsHive() const
+		{
+			return *g_pclGameObjectsHive;
 		}
 
 		const Register::Hive &MapLoader::GetCurrentLevelHive() const
 		{
-			return *pclCurrentLevelHive_g;
+			return *g_pclCurrentLevelHive;
 		}
 
 		void MapLoader::ClearAllHives()
 		{
-			pclCurrentLevelHive_g->RemoveAllChildren();
-			pclStaticEntitiesHive_g->RemoveAllChildren();
-			pclDynamicEntitiesHive_g->RemoveAllChildren();
+			g_pclCurrentLevelHive->RemoveAllChildren();
+			g_pclGameObjectsHive->RemoveAllChildren();			
 		}
 
 		MapLoader::MapLoader(const Register::Table &settings):
@@ -76,9 +85,19 @@ namespace Phobos
 			//empty
 		}
 
+		void MapLoader::AddGameObject(std::unique_ptr<Phobos::Register::Table> obj)
+		{
+			g_pclGameObjectsHive->AddTable(std::move(obj));
+		}
+
+		void MapLoader::AddLevelObject(std::unique_ptr<Phobos::Register::Table> obj)
+		{
+			g_pclCurrentLevelHive->AddTable(std::move(obj));
+		}
+
 		std::unique_ptr<Things::Entity> MapLoader::CreateAndLoadWorldSpawn()
 		{	
-			Register::Table &entityDef = pclCurrentLevelHive_g->GetTable(WORLD_SPAWN_ENTITY);
+			Register::Table &entityDef = g_pclCurrentLevelHive->GetTable(WORLD_SPAWN_ENTITY);
 
 			std::unique_ptr<Things::Entity> ptr(Things::EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
 			ptr->Load(entityDef);
@@ -90,7 +109,7 @@ namespace Phobos
 		{
 			WorldPtr_t world = this->CreateWorld();
 
-			world->Load(*this, pclCurrentLevelHive_g->GetTable(WORLD_SPAWN_ENTITY));
+			world->Load(*this, g_pclCurrentLevelHive->GetTable(WORLD_SPAWN_ENTITY));
 
 			return world;
 		}

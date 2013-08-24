@@ -23,9 +23,12 @@ subject to the following restrictions:
 #include "Phobos/BaseAPI.h"
 #include "Phobos/Types.h"
 
+#include <boost/utility/string_ref.hpp>
+
 namespace Phobos
 {
 	typedef std::string String_t;
+	typedef boost::string_ref StringRef_t;
 
 	enum StringTrimModes_e
 	{

@@ -93,11 +93,11 @@ void Phobos::Register::Finalize()
 	spManager_gl.reset();
 }
 
-void Phobos::Register::Load(const String_t &fileName)
+void Phobos::Register::Load(StringRef_t fileName)
 {
 	using namespace std;
 
-	ifstream file(fileName.c_str());
+	ifstream file(fileName.data());
 
 	Load(file);
 }
