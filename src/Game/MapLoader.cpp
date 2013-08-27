@@ -27,7 +27,7 @@ subject to the following restrictions:
 #include <Phobos/Exception.h>
 #include <Phobos/Path.h>
 
-#include "Phobos/Game/RenderWorld.h"
+#include "Phobos/Game/MapManager.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
 #include "Phobos/Game/World.h"
@@ -55,12 +55,12 @@ namespace Phobos
 			this->OnLoad(fileName);			
 
 			//Load all rendering stuff
-			RenderWorldLoadAccess::Load(*g_pclGameObjectsHive);			
+			MapManagerLoadAccess::Load(*g_pclGameObjectsHive);			
 		}
 
 		void MapLoader::Unload()
 		{
-			RenderWorldLoadAccess::Unload();
+			MapManagerLoadAccess::Unload();
 		}
 		
 		const Register::Hive &MapLoader::GetGameObjectsHive() const

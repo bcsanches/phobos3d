@@ -18,7 +18,7 @@ subject to the following restrictions:
 #define PH_MODEL_RENDERER_COMPONENT_H
 
 #include "Phobos/Game/Things/Component.h"
-#include "Phobos/Game/RenderWorld.h"
+#include "Phobos/Game/MapManager.h"
 
 #include <Phobos/OgreEngine/TransformPropertyFwd.h>
 

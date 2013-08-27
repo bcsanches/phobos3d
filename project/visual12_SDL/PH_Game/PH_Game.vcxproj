@@ -150,7 +150,7 @@
     <ClCompile Include="..\..\..\src\Game\Physics\RigidBodyComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\Settings.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\SweepCharacterBody.cpp" />
-    <ClCompile Include="..\..\..\src\Game\RenderWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapManager.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCamera.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCameraCommandProducer.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\Component.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Gui\LevelSelector.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\RenderWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFactory.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFwd.h" />

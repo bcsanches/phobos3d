@@ -56,7 +56,7 @@ namespace Phobos
 			{
 				const String_t &renderObjectHandler = table.GetString(PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER);
 
-				m_kpSceneNode = RenderWorld::GetInstance().AcquireDynamicSceneNodeKeeper(renderObjectHandler);				
+				m_kpSceneNode = MapManager::GetInstance().AcquireDynamicSceneNodeKeeper(renderObjectHandler);				
 			}
 
 			void ModelRendererComponent::OnLoadFinished()
