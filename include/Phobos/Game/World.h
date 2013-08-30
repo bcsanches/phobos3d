@@ -28,14 +28,6 @@ namespace Phobos
 	{
 		class MapLoader;			
 
-		enum PhysicsCollisionGroups
-		{
-			PCG_STATIC	= 0x0001,
-			PCG_DYNAMIC = 0x0002,
-			PCG_CHARACTER = 0x0004,
-			PCG_PLAYER_CHARACTER = 0x0008
-		};
-
 		class PH_GAME_API World
 		{
 			public:			

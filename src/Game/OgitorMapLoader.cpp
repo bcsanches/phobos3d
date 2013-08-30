@@ -254,12 +254,13 @@ namespace Phobos
 			//empty
 		}
 
+		/*
 		WorldPtr_t OgitorMapLoader::CreateWorld()
 		{
 			return std::make_shared<OgitorWorld>();
-		}
+		}*/
 
-		void OgitorMapLoader::OnLoad(StringRef_t fileName)
+		void OgitorMapLoader::OnLoad(StringRef_t fileName, Register::Hive &gameObjectsHive)
 		{		
 			rapidxml::xml_document<> doc;
 
@@ -305,7 +306,7 @@ namespace Phobos
 					if(!dict->TryGetString(PH_GAME_OBJECT_KEY_SCALE))
 						dict->SetString(PH_GAME_OBJECT_KEY_SCALE, "1 1 1");
 
-					this->AddGameObject(std::move(dict));
+					gameObjectsHive.AddTable(std::move(dict));
 				}
 				catch(Exception &e)
 				{
@@ -337,7 +338,7 @@ namespace Phobos
 					dict->SetString("path", filePath.GetStr());
 					dict->SetString("fileName", onlyFileName.GetStr());
 
-					this->AddGameObject(std::move(dict));
+					gameObjectsHive.AddTable(std::move(dict));
 				}
 			}											
 		}

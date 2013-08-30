@@ -14,7 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Phobos/Game/MapManager.h"
+#include "Phobos/Game/MapWorld.h"
 
 #include <Phobos/Exception.h>
 #include <Phobos/HandlerList.h>
@@ -33,8 +33,8 @@ subject to the following restrictions:
 #include <tuple>
 #include <utility>
 
-PH_SINGLETON_PROCS(Phobos::Game::MapManager,);
-PH_DEFINE_SINGLETON_VAR(Phobos::Game::MapManager);
+PH_SINGLETON_PROCS(Phobos::Game::MapWorld,);
+PH_DEFINE_SINGLETON_VAR(Phobos::Game::MapWorld);
 
 namespace Phobos
 {
@@ -156,25 +156,25 @@ namespace Phobos
 
 namespace
 {		
-	class MapManagerImpl;
+	class MapWorldImpl;
 
 	//Internal shortcut
-	static MapManagerImpl *g_pclMapManager = nullptr;			
+	static MapWorldImpl *g_pclMapWorld = nullptr;			
 
-	class MapManagerImpl: public Phobos::Game::MapManager
+	class MapWorldImpl: public Phobos::Game::MapWorld
 	{
 		private:
 			typedef Phobos::HandlerList<Phobos::Game::SceneNodeObject> SceneNodeList_t;
 					
 		public:
-			MapManagerImpl()				
+			MapWorldImpl()				
 			{
-				g_pclMapManager = this;
+				g_pclMapWorld = this;
 			}
 
-			virtual ~MapManagerImpl() override
+			virtual ~MapWorldImpl() override
 			{
-				g_pclMapManager = nullptr;
+				g_pclMapWorld = nullptr;
 			}
 
 			virtual Phobos::Game::SceneNodeKeeper AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t serial) override;
@@ -220,7 +220,7 @@ static void LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Registe
 		std::stringstream stream;
 
 		stream << "Invalid light type " << lightType;
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "MapManager::LoadLight", stream.str());
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "MapWorld::LoadLight", stream.str());
 	}
 
 	float attenuation[4];
@@ -236,7 +236,7 @@ static void LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Registe
 	light->setSpecularColour(Register::GetColour(dict, "specular"));		
 }
 
-void MapManagerImpl::Load(const Phobos::Register::Hive &hive)
+void MapWorldImpl::Load(const Phobos::Register::Hive &hive)
 {
 	using namespace Phobos;
 
@@ -309,17 +309,17 @@ void MapManagerImpl::Load(const Phobos::Register::Hive &hive)
 	}	
 }
 
-void MapManagerImpl::Unload()
+void MapWorldImpl::Unload()
 {
 	m_lstNodes.Clear();
 }
 
-Phobos::Game::SceneNodeKeeper MapManagerImpl::AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t handler)
+Phobos::Game::SceneNodeKeeper MapWorldImpl::AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t handler)
 {
 	return m_lstNodes.Acquire<Phobos::Game::SceneNodeKeeper>(Phobos::Handler(handler));	
 }
 
-void MapManagerImpl::DestroyDynamicNode(Phobos::Handler h)
+void MapWorldImpl::DestroyDynamicNode(Phobos::Handler h)
 {
 	//Ignore nulls
 	if(!h.GetSerial())
@@ -332,11 +332,11 @@ namespace Phobos
 {
 	namespace Game
 	{
-		MapManager &MapManager::CreateInstance()
+		MapWorld &MapWorld::CreateInstance()
 		{
 			PH_ASSERT(!ipInstance_gl);
 
-			ipInstance_gl.reset(PH_NEW MapManagerImpl());
+			ipInstance_gl.reset(PH_NEW MapWorldImpl());
 
 			return *ipInstance_gl;
 		}
@@ -364,7 +364,7 @@ Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeKeeper &&other):
 
 Phobos::Game::SceneNodeKeeper &Phobos::Game::SceneNodeKeeper::operator=(SceneNodeKeeper &&rhs)
 {
-	g_pclMapManager->DestroyDynamicNode(m_hHandler);
+	g_pclMapWorld->DestroyDynamicNode(m_hHandler);
 	
 	this->m_pclSceneNode = rhs.m_pclSceneNode;
 	this->m_hHandler = rhs.m_hHandler;	
@@ -391,6 +391,6 @@ void Phobos::Game::SceneNodeKeeper::SetOrientation(const Ogre::Quaternion &orien
 
 Phobos::Game::SceneNodeKeeper::~SceneNodeKeeper()
 {	
-	g_pclMapManager->DestroyDynamicNode(m_hHandler);
+	g_pclMapWorld->DestroyDynamicNode(m_hHandler);
 }
 

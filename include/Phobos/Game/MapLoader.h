@@ -23,9 +23,6 @@ subject to the following restrictions:
 #include <Phobos/Register/HiveFwd.h>
 #include <Phobos/Register/TableFwd.h>
 
-#include "Phobos/Game/Things/Entity.h"
-#include "Phobos/Game/WorldFwd.h"
-
 namespace Phobos
 {		
 	namespace Game
@@ -33,42 +30,16 @@ namespace Phobos
 		class MapLoader
 		{
 			public:
-				void Load(StringRef_t fileName);
+				void Load(StringRef_t fileName, Register::Hive &gameObjectsHive);
 
-				void Unload();
-
-				static void OnBoot();			
-								
-				const Phobos::Register::Hive &GetGameObjectsHive() const ;
-				const Phobos::Register::Hive &GetCurrentLevelHive() const;
-
-				std::unique_ptr<Things::Entity> CreateAndLoadWorldSpawn();
-
-				WorldPtr_t CreateAndLoadWorld();
+				void Unload();						
 
 			protected:				
-				virtual void OnLoad(StringRef_t fileName) = 0;
+				virtual void OnLoad(StringRef_t fileName, Register::Hive &gameObjectsHive) = 0;
 
-				MapLoader(const Phobos::Register::Table &settings);
-
-				/**
-					Creates a basic register entry that can be used to 
-					instantiate a WorldSpawn entity
-				*/
-				std::unique_ptr<Phobos::Register::Table> CreateWorldSpawnEntityDef();
-
-				virtual WorldPtr_t CreateWorld() = 0;
-
-				void AddGameObject(std::unique_ptr<Phobos::Register::Table> obj);
-				void AddLevelObject(std::unique_ptr<Phobos::Register::Table> obj);
-
-			private:
-				static void ClearAllHives();
-
-			private:							
-				static Phobos::Register::Hive *g_pclGameObjectsHive;
-				static Phobos::Register::Hive *g_pclCurrentLevelHive;
-
+				MapLoader(const Phobos::Register::Table &settings);				
+							
+			private:											
 				String_t m_strWorldSpawnEntityType;
 
 				PH_DISABLE_COPY(MapLoader);

@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_GAME_MAP_MANAGER_H
-#define PH_GAME_MAP_MANAGER_H
+#ifndef PH_GAME_MAP_WORLD_H
+#define PH_GAME_MAP_WORLD_H
 
 #include <Phobos/HandlerList.h>
 #include <Phobos/Singleton.h>
@@ -30,7 +30,7 @@ namespace Phobos
 {
 	namespace Game
 	{
-		PH_DECLARE_SINGLETON_PTR(MapManager);
+		PH_DECLARE_SINGLETON_PTR(MapWorld);
 
 		class SceneNodeObject;
 
@@ -53,46 +53,46 @@ namespace Phobos
 
 			private:
 				//The handler owns the object, not the memory
-				//Must call MapManager::DestroyDynamicnode to destroy it
+				//Must call MapWorld::DestroyDynamicnode to destroy it
 				SceneNodeObject		*m_pclSceneNode;
 
 				Handler				m_hHandler;				
 		};
 
-		class PH_GAME_API MapManager
+		class PH_GAME_API MapWorld
 		{
-			PH_DECLARE_SINGLETON_METHODS(MapManager);
-
-			friend class MapManagerLoadAccess;
-
+			PH_DECLARE_SINGLETON_METHODS(MapWorld);
+			
 			public:
 				//The returned handler will owns the object, when it dies, it destroy the object
 				virtual SceneNodeKeeper AcquireDynamicSceneNodeKeeper(StringRef_t handler) = 0;
 
+				class LoadAccess
+				{
+					friend class MapLoader;
+
+					private:
+						static void Load(const Register::Hive &hive)
+						{
+							MapWorld::GetInstance().Load(hive);
+						}
+
+						static void Unload()
+						{
+							MapWorld::GetInstance().Unload();
+						}
+				};
+
 			protected:
-				MapManager() {};
-				virtual ~MapManager() {}
+				MapWorld() {};
+				virtual ~MapWorld() {}
 
 			protected:
 				virtual void Load(const Register::Hive &hive) = 0;			
 				virtual void Unload() = 0;
 		};
 
-		class MapManagerLoadAccess
-		{
-			friend class MapLoader;
-
-			private:
-				static void Load(const Register::Hive &hive)
-				{
-					MapManager::GetInstance().Load(hive);
-				}
-
-				static void Unload()
-				{
-					MapManager::GetInstance().Unload();
-				}
-		};
+		
 	}
 }
 

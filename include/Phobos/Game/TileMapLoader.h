@@ -31,9 +31,9 @@ namespace Phobos
 				TileMapLoader(const Register::Table &settings);				
 
 			protected:
-				virtual void OnLoad(StringRef_t fileName) override;
+				virtual void OnLoad(StringRef_t fileName, Register::Hive &gameObjectsHive) override;
 
-				virtual WorldPtr_t CreateWorld() override;
+				//virtual WorldPtr_t CreateWorld() override;
 		};
 	}
 }

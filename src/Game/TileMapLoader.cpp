@@ -17,12 +17,13 @@ namespace Phobos
 			//empty
 		}
 
+		/*
 		WorldPtr_t TileMapLoader::CreateWorld()
 		{
 			return std::make_shared<TileWorld>();
-		}
+		}*/
 	
-		void TileMapLoader::OnLoad(StringRef_t fileName)
+		void TileMapLoader::OnLoad(StringRef_t fileName, Register::Hive &gameObjectsHive)
 		{			
 			Register::Load(fileName);
 		}

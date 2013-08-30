@@ -61,9 +61,12 @@ namespace Phobos
 			this->RemoveAllChildren();
 			m_clEntityManager.Clear();
 
-			m_spGameWorld.reset();
+			//m_spGameWorld.reset();
 
 			m_spMapLoader->Unload();
+
+			m_pclCurrentLevelHive->RemoveAllChildren();
+			m_pclGameObjectsHive->RemoveAllChildren();	
 
 			for(auto &listener: m_lstListeners)
 				listener.OnMapUnloaded();		
@@ -78,7 +81,7 @@ namespace Phobos
 			path.GetExtension(extension);
 
 			m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
-			m_spMapLoader->Load(mapName);
+			m_spMapLoader->Load(mapName, *m_pclGameObjectsHive);
 
 #if 0
 			{
@@ -120,12 +123,10 @@ namespace Phobos
 		}
 
 		void WorldManager::LoadEntities()
-		{
-			auto &hive = m_spMapLoader->GetGameObjectsHive();		
-
-			for(Node::const_iterator it = hive.begin(), end = hive.end(); it != end; ++it)
+		{			
+			for(auto &pair : *const_cast<const Register::Hive *>(m_pclGameObjectsHive))
 			{
-				auto *dict = static_cast<const Register::Table *>(it->second);
+				auto *dict = static_cast<const Register::Table *>(pair.second);
 
 				StringRef_t type = dict->GetString(PH_GAME_OBJECT_KEY_TYPE);
 
@@ -162,7 +163,9 @@ namespace Phobos
 
 		void WorldManager::OnBoot()
 		{
-			MapLoader::OnBoot();
+			m_pclCurrentLevelHive = &Register::CreateCustomHive("LevelInfo");
+			m_pclGameObjectsHive = &Register::CreateCustomHive("ObjectDef");
+
 			Physics::Settings::OnBoot();
 		}
 
