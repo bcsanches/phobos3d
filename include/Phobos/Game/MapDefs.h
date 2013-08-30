@@ -22,6 +22,7 @@ subject to the following restrictions:
 //
 //
 //Object types
+#define PH_GAME_OBJECT_TYPE_TERRAIN_PAGE "terrain_page"
 #define PH_GAME_OBJECT_TYPE_TERRAIN "terrain"
 #define PH_GAME_OBJECT_TYPE_STATIC "static"
 #define PH_GAME_OBJECT_TYPE_ENTITY "entity"

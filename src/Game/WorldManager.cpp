@@ -64,8 +64,7 @@ namespace Phobos
 			//m_spGameWorld.reset();
 
 			m_spMapLoader->Unload();
-
-			m_pclCurrentLevelHive->RemoveAllChildren();
+			
 			m_pclGameObjectsHive->RemoveAllChildren();	
 
 			for(auto &listener: m_lstListeners)
@@ -162,8 +161,7 @@ namespace Phobos
 		}
 
 		void WorldManager::OnBoot()
-		{
-			m_pclCurrentLevelHive = &Register::CreateCustomHive("LevelInfo");
+		{			
 			m_pclGameObjectsHive = &Register::CreateCustomHive("ObjectDef");
 
 			Physics::Settings::OnBoot();

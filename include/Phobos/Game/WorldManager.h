@@ -110,8 +110,7 @@ namespace Phobos
 				Shell::Command	m_cmdUnloadMap;	
 				Shell::Command	m_cmdDumpFactoryCreators;
 
-				Phobos::Register::Hive *m_pclGameObjectsHive;
-				Phobos::Register::Hive *m_pclCurrentLevelHive;
+				Phobos::Register::Hive *m_pclGameObjectsHive;				
 
 				PH_DECLARE_LISTENER_LIST(WorldManagerListener, m_lstListeners);
 

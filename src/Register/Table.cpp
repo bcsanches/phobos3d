@@ -51,7 +51,7 @@ Phobos::Register::TablePtr_t Phobos::Register::Table::Create(const String_t &nam
 }
 
 Phobos::Register::Table::Table(const String_t &name):
-	Node(name),
+	Node(name, NodeFlags::PRIVATE_CHILDREN),
 	m_pclInherit(NULL)
 {
 	//empty
@@ -414,3 +414,8 @@ const Phobos::String_t *Phobos::Register::Table::TryGetString(const Table *curre
 
 	return value != NULL ? &value->m_strValue : NULL;
 }	
+
+void Phobos::Register::Table::AddSubTable(std::unique_ptr<Table> &&table)
+{
+	this->AddPrivateChild(std::move(table));
+}

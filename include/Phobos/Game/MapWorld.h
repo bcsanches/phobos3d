@@ -72,9 +72,9 @@ namespace Phobos
 					friend class MapLoader;
 
 					private:
-						static void Load(const Register::Hive &hive)
+						static void Load(StringRef_t levelPath, const Register::Hive &gameObjectsHive)
 						{
-							MapWorld::GetInstance().Load(hive);
+							MapWorld::GetInstance().Load(levelPath, gameObjectsHive);
 						}
 
 						static void Unload()
@@ -88,7 +88,7 @@ namespace Phobos
 				virtual ~MapWorld() {}
 
 			protected:
-				virtual void Load(const Register::Hive &hive) = 0;			
+				virtual void Load(StringRef_t levelPath, const Register::Hive &hive) = 0;			
 				virtual void Unload() = 0;
 		};
 

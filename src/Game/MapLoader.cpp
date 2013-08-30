@@ -17,6 +17,7 @@ subject to the following restrictions:
 
 #include "Phobos/Game/MapLoader.h"
 
+#include <Phobos/Path.h>
 #include <Phobos/Register/Table.h>
 #include <Phobos/Register/Hive.h>
 
@@ -31,8 +32,13 @@ namespace Phobos
 			//delegate the load processing
 			this->OnLoad(fileName, gameObjectsHive);			
 
+			Path path(fileName);
+			Path filePath;
+
+			path.ExtractPathAndFilename(&filePath, nullptr);
+
 			//Load all rendering stuff
-			MapWorld::LoadAccess::Load(gameObjectsHive);			
+			MapWorld::LoadAccess::Load(filePath.GetStr(), gameObjectsHive);			
 		}
 
 		void MapLoader::Unload()

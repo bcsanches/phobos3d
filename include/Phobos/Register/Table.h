@@ -180,6 +180,8 @@ namespace Phobos
 				void SetInherited(const String_t &base);
 				void SetBaseHive(const String_t &baseHive);
 
+				void AddSubTable(std::unique_ptr<Table> &&table);
+
 			private:			
 				static const String_t *TryGetString(const Table *current, const String_t &key);
 

@@ -30,6 +30,9 @@ subject to the following restrictions:
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 
+#include <Terrain/OgreTerrainGroup.h>
+#include <Terrain/OgreTerrainPrerequisites.h>
+
 #include <tuple>
 #include <utility>
 
@@ -156,6 +159,76 @@ namespace Phobos
 
 namespace
 {		
+	class Terrain
+	{		
+		public:
+			Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &data, Ogre::Light *terrainLight);
+			Terrain(Terrain &&);
+			~Terrain();
+
+		private:
+			Terrain(const Terrain &);			
+			Terrain &operator=(const Terrain &);
+
+		private:
+			std::unique_ptr<Ogre::TerrainGlobalOptions> m_upGlobalOptions;
+			Ogre::TerrainGroup *m_pclTerrainGroup;
+	};
+}
+
+Terrain::Terrain(Terrain &&rhs):
+	m_upGlobalOptions(std::move(rhs.m_upGlobalOptions)),
+	m_pclTerrainGroup(rhs.m_pclTerrainGroup)
+{
+	rhs.m_pclTerrainGroup = nullptr;
+}
+
+Terrain::Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &data, Ogre::Light *terrainLight):
+	m_upGlobalOptions(new Ogre::TerrainGlobalOptions())
+{	
+	m_upGlobalOptions->setMaxPixelError(data.GetFloat("tuning::maxpixelerror"));
+	m_upGlobalOptions->setLightMapSize(data.GetInt("lightmap::texturesize"));
+	m_upGlobalOptions->setCompositeMapSize(data.GetInt("tuning::compositemaptexturesize"));
+	m_upGlobalOptions->setCompositeMapDistance(data.GetFloat("tuning::compositemapdistance"));
+	m_upGlobalOptions->setLayerBlendMapSize(data.GetInt("blendmap::texturesize"));
+
+	auto &render = Phobos::OgreEngine::Render::GetInstance();
+
+	//u16TerrainSize = dict.GetInt("pagemapsize");
+	//pclTerrainGroup = render->CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, u16TerrainSize, dict.GetFloat("pageworldsize"));
+	m_pclTerrainGroup = render.CreateTerrainGroup(Ogre::Terrain::ALIGN_X_Z, data.GetInt("pagemapsize"), data.GetFloat("pageworldsize"));
+	m_pclTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+	m_pclTerrainGroup->setFilenameConvention("Page", "ogt");
+
+	if(terrainLight != nullptr)
+	{
+		m_upGlobalOptions->setLightMapDirection(terrainLight->getDirection());
+		m_upGlobalOptions->setCompositeMapAmbient(render.GetAmbientColor());
+		m_upGlobalOptions->setCompositeMapDiffuse(terrainLight->getDiffuseColour());
+	}
+
+	Phobos::String_t baseName = Phobos::String_t(levelPath.data()) + "/" + data.GetString("terrainDir") + "/";
+
+	for(auto &pair : data)
+	{
+		auto &pageTable = *static_cast<const Phobos::Register::Table*>(pair.second);
+
+		int pageX = pageTable.GetInt("pagex");
+		int pageY = pageTable.GetInt("pagey");
+
+		Phobos::String_t name = baseName + m_pclTerrainGroup->generateFilename(pageX, pageY);
+		m_pclTerrainGroup->defineTerrain(pageX, pageY, name);
+		m_pclTerrainGroup->loadTerrain(pageX, pageY, true);
+	}
+}
+
+Terrain::~Terrain()
+{	
+	Phobos::OgreEngine::Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
+}
+
+namespace
+{
 	class MapWorldImpl;
 
 	//Internal shortcut
@@ -181,15 +254,17 @@ namespace
 			void DestroyDynamicNode(Phobos::Handler h);
 
 		protected:			
-			virtual void Load(const Phobos::Register::Hive &hive) override;
+			virtual void Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive) override;
 			virtual void Unload() override;
 
 		private:			
-			SceneNodeList_t			m_lstNodes;			
+			SceneNodeList_t			m_lstNodes;		
+
+			std::vector<Terrain>	m_vecTerrains;
 	};	
 }
 
-static void LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Register::Table &dict)
+static Ogre::Light &LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Register::Table &dict)
 {
 	using namespace Phobos;
 
@@ -233,16 +308,21 @@ static void LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Registe
 		light->setDirection(Register::GetVector3(dict, "direction"));
 
 	light->setPowerScale(dict.GetFloat("power"));
-	light->setSpecularColour(Register::GetColour(dict, "specular"));		
+	light->setSpecularColour(Register::GetColour(dict, "specular"));	
+
+	return *light;
 }
 
-void MapWorldImpl::Load(const Phobos::Register::Hive &hive)
+void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive)
 {
 	using namespace Phobos;
 
 	auto &render = OgreEngine::Render::GetInstance();
 
 	std::vector<std::tuple<const String_t *, Handler, Register::Table &>> vecObjectsCache;
+	std::vector<Register::Table *> vecTerrains;
+
+	Ogre::Light *terrainLight = nullptr;
 	
 	for(auto it : hive)		
 	{
@@ -250,7 +330,10 @@ void MapWorldImpl::Load(const Phobos::Register::Hive &hive)
 
 		StringRef_t ref = dict.GetString(PH_GAME_OBJECT_KEY_TYPE);
 		if(ref.compare(PH_GAME_OBJECT_TYPE_TERRAIN) == 0)
+		{
+			vecTerrains.push_back(&dict);
 			continue;
+		}
 
 		if(ref.compare(PH_GAME_OBJECT_TYPE_SCENE_MANAGER) == 0)
 		{
@@ -273,7 +356,12 @@ void MapWorldImpl::Load(const Phobos::Register::Hive &hive)
 
 		if(ref.compare(PH_GAME_OBJECT_TYPE_STATIC_LIGHT) == 0)
 		{
-			LoadLight(object, dict);
+			auto &light = LoadLight(object, dict);
+
+			if(!terrainLight && light.getType() == Ogre::Light::LT_DIRECTIONAL)
+			{
+				terrainLight = &light;
+			}
 		}
 		
 		auto result = m_lstNodes.Add(std::move(object));
@@ -297,6 +385,13 @@ void MapWorldImpl::Load(const Phobos::Register::Hive &hive)
 	}
 
 	//
+	//Load terrain
+	for(auto &table : vecTerrains)
+	{
+		m_vecTerrains.emplace_back(levelPath, *table, terrainLight);
+	}
+
+	//
 	//Save final transformation in world coordinates
 	for(auto tuple : vecObjectsCache)
 	{		
@@ -311,6 +406,7 @@ void MapWorldImpl::Load(const Phobos::Register::Hive &hive)
 
 void MapWorldImpl::Unload()
 {
+	m_vecTerrains.clear();
 	m_lstNodes.Clear();
 }
 

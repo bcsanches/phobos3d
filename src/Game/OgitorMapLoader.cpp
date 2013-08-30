@@ -200,6 +200,10 @@ namespace Phobos
 				return PH_GAME_OBJECT_TYPE_STATIC_LIGHT;
 			else if(strcmp(attributeValue, "OctreeSceneManager") == 0)
 				return PH_GAME_OBJECT_TYPE_SCENE_MANAGER;
+			else if(strcmp(attributeValue, "Terrain Group Object") == 0)
+				return PH_GAME_OBJECT_TYPE_TERRAIN;
+			else if(strcmp(attributeValue, "Terrain Page Object") == 0)
+				return PH_GAME_OBJECT_TYPE_TERRAIN_PAGE;
 			else
 			{
 				std::stringstream stream;
@@ -278,6 +282,16 @@ namespace Phobos
 			if(root == NULL)
 				PH_RAISE(PARSER_EXCEPTION, "OgitorMapLoader::LoadOgitor", String_t("'") + fileName.data() + "' appears to be empty");		
 
+			//std::unique_ptr<Register::Table> dict = this->CreateWorldSpawnEntityDef();
+
+			const char *terrainDir = nullptr;
+
+			//load project data
+			if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
+			{
+				terrainDir = GetChildNodeValue(*project, "TERRAINDIR");				
+			}													
+
 			for(rapidxml::xml_node<> *elem = root->first_node("OBJECT");elem; elem = elem->next_sibling())
 			{			
 				try
@@ -298,49 +312,33 @@ namespace Phobos
 					dict->SetString(PH_GAME_OBJECT_KEY_TYPE, objectType);
 					LoadTable(*dict, *elem);
 
-					if(objectType == PH_GAME_OBJECT_TYPE_STATIC_LIGHT)
+					if(strcmp(objectType, PH_GAME_OBJECT_TYPE_STATIC_LIGHT) == 0)
 					{
 						dict->SetString(PH_GAME_OBJECT_KEY_ORIENTATION, "1 0 0 0");
+					}
+					else if(strcmp(objectType, PH_GAME_OBJECT_TYPE_TERRAIN) == 0)
+					{
+						dict->SetString("terrainDir", terrainDir);
 					}
 
 					if(!dict->TryGetString(PH_GAME_OBJECT_KEY_SCALE))
 						dict->SetString(PH_GAME_OBJECT_KEY_SCALE, "1 1 1");
 
-					gameObjectsHive.AddTable(std::move(dict));
+					if(strcmp(objectType, PH_GAME_OBJECT_TYPE_TERRAIN_PAGE) == 0)
+					{
+						auto &parent = gameObjectsHive.GetTable(dict->GetString(PH_GAME_OBJECT_KEY_PARENT_NODE));
+						parent.AddSubTable(std::move(dict));
+					}
+					else
+					{
+						gameObjectsHive.AddTable(std::move(dict));
+					}
 				}
 				catch(Exception &e)
 				{
 					LogMessage(e.what());
 				}			
 			}
-
-			//std::unique_ptr<Register::Table> dict = this->CreateWorldSpawnEntityDef();
-
-			//load project data
-			if(rapidxml::xml_node<> *project = root->first_node("PROJECT"))
-			{
-				//if(const char *caelumDir = GetChildNodeValue(*project, "CAELUMDIR"))
-					//dict->SetString("caelumDir", caelumDir);			
-
-				if(const char *terrainDir = GetChildNodeValue(*project, "TERRAINDIR"))
-				{
-					std::unique_ptr<Register::Table> dict(PH_NEW Register::Table("terrain"));
-					dict->SetString("terrainDir", terrainDir);
-
-					dict->SetString(PH_GAME_OBJECT_KEY_TYPE, PH_GAME_OBJECT_TYPE_TERRAIN);
-
-					dict->SetString("pathName", fileName);
-
-					Path path(fileName);
-					Path filePath, onlyFileName;
-					path.ExtractPathAndFilename(&filePath, &onlyFileName);
-
-					dict->SetString("path", filePath.GetStr());
-					dict->SetString("fileName", onlyFileName.GetStr());
-
-					gameObjectsHive.AddTable(std::move(dict));
-				}
-			}											
 		}
 	}
 }
