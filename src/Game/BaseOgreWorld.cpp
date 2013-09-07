@@ -48,7 +48,7 @@ void Phobos::Game::BaseOgreWorld::StaticObject_s::Clear()
 		m_pclEntity = NULL;
 	}
 
-	m_spRigidBody.reset();		
+	//m_spRigidBody.reset();		
 }
 
 Phobos::Game::BaseOgreWorld::TempStaticObject_s::~TempStaticObject_s()
@@ -76,6 +76,8 @@ void Phobos::Game::BaseOgreWorld::CreateStaticObjectRigidBody(StaticObject_s &st
 	Physics::Manager &physicsManager = Physics::Manager::GetInstance();
 
 	auto collisionDef = Physics::Settings::TryGetStaticMeshCollisionShapeDef(path.GetStr());
+
+#if 0
 	if(collisionDef != NULL)
 	{
 		staticObj.m_spRigidBody = physicsManager.CreateRigidBody(Physics::RBT_STATIC, transform, 0, collisionTag, Physics::Utils::CreateCollisionShape(*collisionDef, scale));
@@ -86,5 +88,6 @@ void Phobos::Game::BaseOgreWorld::CreateStaticObjectRigidBody(StaticObject_s &st
 	}
 
 	staticObj.m_spRigidBody->Register();
+#endif
 }
 

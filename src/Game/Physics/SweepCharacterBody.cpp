@@ -24,9 +24,9 @@ namespace Phobos
 	{
 		namespace Physics
 		{
-			SweepCharacterBody::SweepCharacterBody(RigidBodyPtr_t rigidBody, Float_t stepHeight):
+			SweepCharacterBody::SweepCharacterBody(RigidBody &&rigidBody, Float_t stepHeight):
 				m_fpStepHeight(stepHeight * Manager::GetInstance().GetScale()),
-				m_spRigidBody(rigidBody),
+				m_clRigidBody(std::move(rigidBody)),
 				m_v3WalkDirection(0, 0, 0),
 				m_fGroundPlane(false),
 				m_fWalking(false)
@@ -41,14 +41,14 @@ namespace Phobos
 
 			void SweepCharacterBody::Register()
 			{
-				m_spRigidBody->Register();
+				m_clRigidBody.Register();
 				Manager::GetInstance().AddAction(*this);
 			}
 		
 			void SweepCharacterBody::Unregister()
 			{
 				Manager::GetInstance().RemoveAction(*this);
-				m_spRigidBody->Unregister();
+				m_clRigidBody.Unregister();
 			}
 
 			void SweepCharacterBody::SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal)
@@ -58,7 +58,7 @@ namespace Phobos
 
 			Ogre::Vector3 SweepCharacterBody::GetPosition() const
 			{
-				return m_spRigidBody->GetTransform().GetOrigin();
+				return m_clRigidBody.GetTransform().GetOrigin();
 			}
 
 			void SweepCharacterBody::Teleport(const Ogre::Vector3 &position)
@@ -68,7 +68,7 @@ namespace Phobos
 
 			void SweepCharacterBody::updateAction( btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 			{
-				const btTransform &fromTransform = m_spRigidBody->GetRigidBody().getWorldTransform();			
+				const btTransform &fromTransform = m_clRigidBody.GetRigidBody().getWorldTransform();			
 
 				//if not on ground
 				this->GroundTrace(fromTransform.getOrigin());			
@@ -82,7 +82,7 @@ namespace Phobos
 				btTransform toTransform;
 				this->Move(fromTransform, movement, toTransform, 1.0f);
 
-				m_spRigidBody->SetKinematicTransform(toTransform);
+				m_clRigidBody.SetKinematicTransform(toTransform);
 			}
 
 			void SweepCharacterBody::debugDraw(btIDebugDraw* debugDrawer)
@@ -98,7 +98,7 @@ namespace Phobos
 
 				Manager::GetInstance().ConvexSweepTest(
 					collisionResult, 
-					m_spRigidBody->GetRigidBody(),
+					m_clRigidBody.GetRigidBody(),
 					btTransform(btQuaternion::getIdentity(), position),
 					toTransform
 				);
@@ -113,7 +113,7 @@ namespace Phobos
 					btTransform toTransform(btQuaternion::getIdentity(), position + btVector3(0, GROUND_CHECK*0.1f, 0));
 						Manager::GetInstance().ConvexSweepTest(
 						collisionResult, 
-						m_spRigidBody->GetRigidBody(),
+						m_clRigidBody.GetRigidBody(),
 						btTransform(btQuaternion::getIdentity(), position),
 						toTransform
 					);
@@ -190,7 +190,7 @@ namespace Phobos
 					toTransform.setOrigin(fromTransform.getOrigin() + (velocity * timeLeft));
 
 					SweepCollisionResult_s cb;
-					physicsManager.ConvexSweepTest(cb, m_spRigidBody->GetRigidBody(), fromTransform, toTransform);			
+					physicsManager.ConvexSweepTest(cb, m_clRigidBody.GetRigidBody(), fromTransform, toTransform);			
 			
 					if( !cb.m_fHasHit || (cb.m_fHasHit && cb.m_fpFraction == 0))
 					{				

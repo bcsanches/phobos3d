@@ -17,8 +17,6 @@ subject to the following restrictions:
 #ifndef PH_GAME_PHYSICS_RIGID_BODY_FWD_H
 #define PH_GAME_PHYSICS_RIGID_BODY_FWD_H
 
-#include <memory>
-
 namespace Phobos
 {	
 	namespace Game
@@ -26,9 +24,7 @@ namespace Phobos
 		namespace Physics
 		{
 			class RigidBody;
-
-			typedef std::shared_ptr<RigidBody> RigidBodyPtr_t;
-
+			
 			enum RigidBodyTypes_e
 			{
 				RBT_STATIC,

@@ -72,9 +72,9 @@ namespace Phobos
 						For quick and easy rigid body creation.
 
 					*/
-					RigidBodyPtr_t CreateBoxRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
-					RigidBodyPtr_t CreateCapsuleRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height);
-					RigidBodyPtr_t CreateMeshRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
+					RigidBody CreateBoxRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz);
+					RigidBody CreateCapsuleRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height);
+					RigidBody CreateMeshRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale);
 
 					/**
 						Methods for manually creating a collision shape
@@ -93,7 +93,7 @@ namespace Phobos
 						Create a rigid body from an existing collision shape.
 
 					*/
-					RigidBodyPtr_t CreateRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape);
+					RigidBody CreateRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape);
 
 					CharacterBodyPtr_t CreateCharacterBody(const Ogre::Vector3 &startPosition, const CollisionTag &collisionTag, Float_t stepHeight, Float_t radius, Float_t height);
 

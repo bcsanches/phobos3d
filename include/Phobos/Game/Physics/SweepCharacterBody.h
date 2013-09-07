@@ -26,7 +26,7 @@ class btKinematicCharacterController;
 
 #include "Phobos/Game/Physics/ICharacterBody.h"
 #include "Phobos/Game/GameAPI.h"
-#include "Phobos/Game/Physics/RigidBodyFwd.h"
+#include "Phobos/Game/Physics/RigidBody.h"
 
 namespace Phobos
 {
@@ -37,7 +37,7 @@ namespace Phobos
 			class PH_GAME_API SweepCharacterBody: public ICharacterBody,  private btActionInterface
 			{
 				public:
-					SweepCharacterBody(RigidBodyPtr_t rigidBody, Float_t stepHeight);
+					SweepCharacterBody(RigidBody &&rigidBody, Float_t stepHeight);
 					~SweepCharacterBody();				
 
 					virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
@@ -60,7 +60,7 @@ namespace Phobos
 					void Move(const btTransform &fromTransform, const btVector3 &linearVel, btTransform &toTransform, Float_t timeStep);
 
 				private:
-					RigidBodyPtr_t m_spRigidBody;
+					RigidBody m_clRigidBody;
 
 					Float_t m_fpStepHeight;
 

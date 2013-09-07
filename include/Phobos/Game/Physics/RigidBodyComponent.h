@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include "Phobos/Game/Things/Component.h"
 #include "Phobos/Game/GameAPI.h"
 #include "Phobos/Game/Physics/Manager.h"
+#include "Phobos/Game/Physics/RigidBody.h"
 
 #include <Phobos/OgreEngine/Math/Transform.h>
 #include <Phobos/OgreEngine/TransformPropertyFwd.h>
@@ -49,7 +50,7 @@ namespace Phobos
 					void OnLoadFinished();
 
 				private:				
-					RigidBodyPtr_t		m_spRigidBody;
+					RigidBody		m_clRigidBody;
 
 					OgreEngine::TransformProperty		*m_pprpTransform;
 					Engine::Math::Transform				m_clPreviousTransform;

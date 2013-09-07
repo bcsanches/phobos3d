@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <LinearMath/btDefaultMotionState.h>
 
 #include <Phobos/Types.h>
+#include <Phobos/DisableCopy.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 
 #include "Phobos/Game/Physics/CollisionShapeFwd.h"
@@ -35,9 +36,15 @@ namespace Phobos
 		{		
 			class RigidBody
 			{
+				PH_DISABLE_COPY(RigidBody);
+
 				public:
-					RigidBody(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag &collisionTag);
+					RigidBody();
+					RigidBody(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, std::unique_ptr<btDefaultMotionState> &&motionState, CollisionShapePtr_t shape, const CollisionTag &collisionTag);
+					RigidBody(RigidBody &&other);
 					~RigidBody();
+
+					RigidBody &operator=(RigidBody &&other);
 
 					void Register();
 					void Unregister();

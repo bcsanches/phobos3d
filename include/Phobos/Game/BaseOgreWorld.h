@@ -26,7 +26,7 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 
 #include "Physics/CollisionTagFwd.h"
-#include "Physics/RigidBodyFwd.h"
+#include "Physics/RigidBody.h"
 
 namespace Phobos
 {		
@@ -43,7 +43,7 @@ namespace Phobos
 					Ogre::Entity *m_pclEntity;
 					Ogre::Light *m_pclLight;
 				
-					Physics::RigidBodyPtr_t m_spRigidBody;
+					//Physics::RigidBody m_clRigidBody;
 
 					void Clear();
 
