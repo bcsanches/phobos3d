@@ -18,14 +18,22 @@ subject to the following restrictions:
 
 #include <Phobos/Exception.h>
 #include <Phobos/HandlerList.h>
+#include <Phobos/Path.h>
 
 #include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/Math/Transform.h>
+
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Table.h>
 
 #include "Phobos/Game/MapDefs.h"
 
 #include "Phobos/Game/RegisterUtils.h"
+
+#include "Phobos/Game/Physics/Manager.h"
+#include "Phobos/Game/Physics/RigidBody.h"
+#include "Phobos/Game/Physics/Settings.h"
+#include "Phobos/Game/Physics/PhysicsUtils.h"
 
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
@@ -50,6 +58,8 @@ namespace Phobos
 				Ogre::Entity	*m_pclEntity;
 				Ogre::Light		*m_pclLight;
 
+				Physics::RigidBody	m_clRigidBody;
+
 				SceneNodeObject(const SceneNodeObject &);
 				SceneNodeObject &operator=(const SceneNodeObject &);
 
@@ -63,9 +73,10 @@ namespace Phobos
 				}
 
 				SceneNodeObject(SceneNodeObject &&rhs):
-					m_pclSceneNode(rhs.m_pclSceneNode),
-					m_pclEntity(rhs.m_pclEntity),
-					m_pclLight(rhs.m_pclLight)
+					m_pclSceneNode(std::move(rhs.m_pclSceneNode)),
+					m_pclEntity(std::move(rhs.m_pclEntity)),
+					m_pclLight(std::move(rhs.m_pclLight)),
+					m_clRigidBody(std::move(rhs.m_clRigidBody))
 				{
 					rhs.m_pclSceneNode = nullptr;
 					rhs.m_pclLight = nullptr;
@@ -100,6 +111,7 @@ namespace Phobos
 					std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
 					std::swap(rhs.m_pclEntity, m_pclEntity);
 					std::swap(rhs.m_pclLight, m_pclLight);
+					std::swap(rhs.m_clRigidBody, m_clRigidBody);
 
 					return *this;
 				}
@@ -119,6 +131,11 @@ namespace Phobos
 					m_pclEntity = entity;
 					m_pclSceneNode->attachObject(entity);
 				}		
+
+				inline void SetRigidBody(Physics::RigidBody &&body)
+				{
+					m_clRigidBody = std::move(body);
+				}
 
 				inline void SetParentNode(Ogre::SceneNode *node)
 				{
@@ -152,6 +169,16 @@ namespace Phobos
 				inline void SetOrientation(const Ogre::Quaternion &orientation)
 				{
 					m_pclSceneNode->setOrientation(orientation);
+				}
+
+				inline bool HasEntity() const
+				{
+					return m_pclEntity ? true : false;
+				}
+
+				inline const Ogre::Entity *GetEntity() const
+				{
+					return m_pclEntity;
 				}
 		};
 	}
@@ -313,6 +340,33 @@ static Ogre::Light &LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos:
 	return *light;
 }
 
+Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Entity &entity, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
+{		
+	const Ogre::MeshPtr mesh = entity.getMesh();
+	const auto &meshName = mesh->getName();
+		
+	Phobos::Path path(meshName);
+	path.StripExtension();
+
+	using namespace Phobos;
+
+	auto &physicsManager = Game::Physics::Manager::GetInstance();
+
+	auto collisionDef = Game::Physics::Settings::TryGetStaticMeshCollisionShapeDef(path.GetStr());
+
+#if 1
+
+	auto body = collisionDef != NULL ?
+		physicsManager.CreateRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, Game::Physics::Utils::CreateCollisionShape(*collisionDef, scale)) :
+		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, *mesh, scale)
+	;
+
+	body.Register();
+
+	return body;	
+#endif
+}
+
 void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive)
 {
 	using namespace Phobos;
@@ -323,6 +377,8 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 	std::vector<Register::Table *> vecTerrains;
 
 	Ogre::Light *terrainLight = nullptr;
+
+	auto staticCollisionTag = Game::Physics::Settings::CreateStaticWorldCollisionTag();
 	
 	for(auto it : hive)		
 	{
@@ -334,8 +390,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 			vecTerrains.push_back(&dict);
 			continue;
 		}
-
-		if(ref.compare(PH_GAME_OBJECT_TYPE_SCENE_MANAGER) == 0)
+		else if(ref.compare(PH_GAME_OBJECT_TYPE_SCENE_MANAGER) == 0)
 		{
 			render.SetAmbientColor(Register::GetColour(dict, "ambient"));
 			continue;
@@ -363,13 +418,22 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 				terrainLight = &light;
 			}
 		}
+		else if((ref.compare(PH_GAME_OBJECT_TYPE_STATIC) == 0) && (object.HasEntity()))
+		{			
+			Engine::Math::Transform transform(				
+				object.GetWorldPosition(),
+				object.GetWorldOrientation()
+			);		
+
+			object.SetRigidBody(CreateStaticObjectRigidBody(*object.GetEntity(), transform, object.GetWorldScale(), staticCollisionTag));
+		}
 		
 		auto result = m_lstNodes.Add(std::move(object));
 				
 		//Insert a key to allow entities to retrieve a handler to their nodes, so they can control it
 		dict.SetString(PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER, result.first.ToString());	
 			
-		vecObjectsCache.emplace_back(dict.TryGetString(PH_GAME_OBJECT_KEY_PARENT_NODE), result.first, std::ref(dict));
+		vecObjectsCache.emplace_back(dict.TryGetString(PH_GAME_OBJECT_KEY_PARENT_NODE), result.first, std::ref(dict));			
 	}
 
 	//
