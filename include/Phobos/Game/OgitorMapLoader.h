@@ -34,9 +34,7 @@ namespace Phobos
 					
 				OgitorMapLoader(const Register::Table &settings);
 			
-			protected:			
-				//virtual WorldPtr_t CreateWorld() override;
-
+			protected:							
 				virtual void OnLoad(StringRef_t fileName, Register::Hive &gameObjectsHive) override;
 		};	
 	}

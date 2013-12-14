@@ -169,9 +169,6 @@
     <ClCompile Include="..\..\..\src\Game\Things\Thing.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\TransformComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\ThingsUtils.cpp" />
-    <ClCompile Include="..\..\..\src\Game\TileWorld.cpp" />
-    <ClCompile Include="..\..\..\src\Game\TileMapLoader.cpp" />
-    <ClCompile Include="..\..\..\src\Game\TileTransform.cpp" />
     <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -237,9 +234,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\SweepCharacterBody.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCamera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCameraCommandProducer.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\TileWorld.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\TileMapLoader.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\TileTransform.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\WorldManager.h" />
   </ItemGroup>
   <ItemGroup>

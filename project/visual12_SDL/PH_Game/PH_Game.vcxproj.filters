@@ -22,8 +22,6 @@
     <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCamera.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCameraCommandProducer.cpp" />
-    <ClCompile Include="..\..\..\src\Game\TileMapLoader.cpp" />
-    <ClCompile Include="..\..\..\src\Game\TileTransform.cpp" />
     <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\CharacterBodyComponent.cpp">
       <Filter>Physics</Filter>
@@ -62,7 +60,6 @@
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
-    <ClCompile Include="..\..\..\src\Game\TileWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
     <ClCompile Include="..\..\..\src\Game\OgitorWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\Component.cpp">
@@ -129,8 +126,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\OgitorMapLoader.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCamera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCameraCommandProducer.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\TileMapLoader.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\TileTransform.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\WorldManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CharacterBodyComponent.h">
       <Filter>Physics</Filter>
@@ -199,7 +194,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\World.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\BaseOgreWorld.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\TileWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\IController.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\OgitorWorld.h" />
