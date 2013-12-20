@@ -121,28 +121,28 @@ namespace Phobos
 				return ptr;
 			}
 
-			RigidBodyPtr_t Manager::CreateMeshRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
+			RigidBody Manager::CreateMeshRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, const Ogre::Mesh &mesh, const Ogre::Vector3 &scale)
 			{
 				CollisionShapePtr_t collisionShape = this->CreateMeshShape(mesh, scale);
 
 				return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 			}
 
-			RigidBodyPtr_t Manager::CreateBoxRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
+			RigidBody Manager::CreateBoxRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t dimx, Float_t dimy, Float_t dimz)
 			{
 				CollisionShapePtr_t collisionShape = this->CreateBoxShape(dimx, dimy, dimz);
 
 				return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 			}
 
-			RigidBodyPtr_t Manager::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height)
+			RigidBody Manager::CreateCapsuleRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, Float_t radius, Float_t height)
 			{
 				CollisionShapePtr_t collisionShape = this->CreateCapsuleShape(radius, height);
 
 				return this->CreateRigidBody(type, transform, mass, collisionTag, collisionShape);
 			}
 
-			RigidBodyPtr_t Manager::CreateRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape)
+			RigidBody Manager::CreateRigidBody(RigidBodyTypes_e type, const Engine::Math::Transform &transform, Float_t mass, const CollisionTag &collisionTag, CollisionShapePtr_t shape)
 			{
 				bool dynamic = mass != 0;
 
@@ -153,12 +153,12 @@ namespace Phobos
 				if(dynamic)
 					btShape.calculateLocalInertia(mass, localInertia);			
 			
-				btDefaultMotionState *motionState = new btDefaultMotionState(MakeTransform(transform, m_fpScale));
+				std::unique_ptr<btDefaultMotionState> motionState(new btDefaultMotionState(MakeTransform(transform, m_fpScale)));
 
-				btRigidBody::btRigidBodyConstructionInfo info(mass, motionState, &btShape, localInertia);
+				btRigidBody::btRigidBodyConstructionInfo info(mass, motionState.get(), &btShape, localInertia);
 
-				return std::make_shared<RigidBody>(type, info, motionState, shape, collisionTag);			
-			}				
+				return RigidBody(type, info, std::move(motionState), shape, collisionTag);			
+			}
 
 			void Manager::RegisterRigidBody(btRigidBody &body, const CollisionTag &collisionTag)
 			{

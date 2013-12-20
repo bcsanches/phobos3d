@@ -69,6 +69,7 @@ namespace Phobos
 
 		void OgitorWorld::Load(const MapLoader &loader, const Register::Table &worldEntityDef)
 		{
+#if 0
 			const auto &hive = loader.GetStaticEntitiesHive();
 
 			for(auto it : hive)		
@@ -123,6 +124,7 @@ namespace Phobos
 					object.m_pclSceneNode->getParent()->removeChild(object.m_pclSceneNode);
 				it->second.m_pclSceneNode->addChild(object.m_pclSceneNode);
 			}
+#endif
 
 			//configure physics
 			Physics::Manager &physicsManager = Physics::Manager::GetInstance();
@@ -230,7 +232,9 @@ namespace Phobos
 		{
 			TempStaticObject_s temp;
 
+#if 0
 			temp.m_fParent = dict.TryGetString(PH_ENTITY_KEY_PARENT_NODE, object.strParent) && (object.strParent.compare(PH_WORLD_SCENE_MANAGER_NAME) != 0);
+#endif
 			temp.m_strName = name;
 
 			if(type.compare("Node Object") == 0)
@@ -264,8 +268,10 @@ namespace Phobos
 		{
 			temp.m_pclSceneNode = OgreEngine::Render::GetInstance().CreateSceneNode(temp.m_strName);
 
+#if 0
 			temp.m_pclSceneNode->setPosition(Register::GetVector3(dict, PH_ENTITY_KEY_POSITION));
 			temp.m_pclSceneNode->setOrientation(Register::GetQuaternion(dict, PH_ENTITY_KEY_ORIENTATION));
+#endif
 		}
 
 		void OgitorWorld::LoadEntityObject(TempStaticObject_s &temp, const Register::Table &dict)
@@ -288,7 +294,7 @@ namespace Phobos
 			}
 
 			temp.m_pclLight->setCastShadows(dict.GetBool("castshadows"));
-
+#if 0
 			switch(dict.GetInt("lighttype"))
 			{
 				case 0:
@@ -322,6 +328,7 @@ namespace Phobos
 					}
 					break;
 			}
+#endif
 
 			float attenuation[4];
 			dict.Get4Float(attenuation, "attenuation");

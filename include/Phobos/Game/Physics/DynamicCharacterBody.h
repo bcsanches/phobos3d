@@ -22,7 +22,7 @@ subject to the following restrictions:
 #include <Phobos/Types.h>
 
 #include "Phobos/Game/Physics/CollisionShapeFwd.h"
-#include "Phobos/Game/Physics/RigidBodyFwd.h"
+#include "Phobos/Game/Physics/RigidBody.h"
 #include "Phobos/Game/GameAPI.h"
 
 
@@ -35,7 +35,7 @@ namespace Phobos
 			class PH_GAME_API DynamicCharacterBody
 			{
 				public:
-					DynamicCharacterBody(RigidBodyPtr_t rigidBody);
+					DynamicCharacterBody(RigidBody &&rigidBody);
 					virtual ~DynamicCharacterBody();
 				
 					virtual void SetVelocityForTimeInterval(const Ogre::Vector3 &velocity, Float_t timeInvertal);
@@ -48,7 +48,7 @@ namespace Phobos
 					virtual void Teleport(const Ogre::Vector3 &position);
 
 				private:
-					RigidBodyPtr_t m_spRigidBody;
+					RigidBody m_clRigidBody;
 			};
 		}
 	}

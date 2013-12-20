@@ -25,8 +25,20 @@ namespace Phobos
 
 	}
 
-	Path::Path(const String_t &str):
-		m_strPath(str)
+	Path::Path(Path &&rhs):
+		m_strPath(std::move(rhs.m_strPath))
+	{
+		//empty
+	}
+
+	Path::Path(StringRef_t str):
+		m_strPath(str.data())
+	{
+		this->FixPath();
+	}
+
+	Path::Path(String_t &&ref):
+		m_strPath(std::move(ref))
 	{
 		this->FixPath();
 	}

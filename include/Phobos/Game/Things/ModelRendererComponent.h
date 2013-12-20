@@ -18,6 +18,7 @@ subject to the following restrictions:
 #define PH_MODEL_RENDERER_COMPONENT_H
 
 #include "Phobos/Game/Things/Component.h"
+#include "Phobos/Game/MapWorld.h"
 
 #include <Phobos/OgreEngine/TransformPropertyFwd.h>
 
@@ -40,6 +41,7 @@ namespace Phobos
 
 					void Update();
 
+#if 0
 					void AttachObjectToBone(
 						const Char_t *boneName, 
 						Ogre::MovableObject &movable, 
@@ -56,6 +58,7 @@ namespace Phobos
 
 					Ogre::Bone &GetBone(const char *boneName);
 					Ogre::Bone &GetBone(const String_t &boneName);
+#endif
 
 				protected:
 					ModelRendererComponent(const String_t &name, Entity &owner);			
@@ -70,10 +73,7 @@ namespace Phobos
 					//static EntityInputManager clInputManager_gl;
 
 				private:
-					Ogre::SceneNode *m_pclSceneNode;
-					Ogre::Entity *m_pclMeshEntity;
-
-					String_t	m_strParentNode;
+					SceneNodeKeeper m_kpSceneNode;
 
 					OgreEngine::TransformProperty *m_pprpTransform;
 			};

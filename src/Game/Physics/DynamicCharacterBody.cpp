@@ -29,8 +29,8 @@ namespace Phobos
 	{
 		namespace Physics
 		{	
-			DynamicCharacterBody::DynamicCharacterBody(RigidBodyPtr_t rigidBody):
-				m_spRigidBody(rigidBody)
+			DynamicCharacterBody::DynamicCharacterBody(RigidBody &&rigidBody):
+				m_clRigidBody(std::move(rigidBody))
 			{
 				//empty
 			}
@@ -47,18 +47,18 @@ namespace Phobos
 
 			Ogre::Vector3 DynamicCharacterBody::GetPosition() const
 			{
-				return m_spRigidBody->GetTransform().GetOrigin();
+				return m_clRigidBody.GetTransform().GetOrigin();
 			}
 
 
 			void DynamicCharacterBody::Register()
 			{
-				m_spRigidBody->Register();
+				m_clRigidBody.Register();
 			}
 
 			void DynamicCharacterBody::Unregister()
 			{
-				m_spRigidBody->Unregister();
+				m_clRigidBody.Unregister();
 			}
 
 			void DynamicCharacterBody::Teleport(const Ogre::Vector3 &position)

@@ -1063,3 +1063,10 @@
 /project/visual12_SDL/UT_EngineCore/Release
 
 /project/visual12_SDL/UT_GameEngine/Release
+docs/uml2.asta.bak
+project/visual12_SDL/PH_LibPlugin/PH_LibPlugin.vcxproj.user
+project/visual12_SDL/Phobos.opensdf
+work/mapViewerSample/scene.txt
+project/visual12_SDL/UT_BaseTest/test.log
+project/visual12_SDL/UT_BaseTest/logTest.log
+project/visual12_SDL/UT_BaseTest/context_file.cfg

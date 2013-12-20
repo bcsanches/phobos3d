@@ -17,7 +17,9 @@ subject to the following restrictions:
 #ifndef PH_SINGLETON_H
 #define PH_SINGLETON_H
 
+#include "Phobos/DisableCopy.h"
 #include "Phobos/Memory.h"
+#include "Phobos/Node.h"
 
 #define PH_DECLARE_SINGLETON_PTR(X)	PH_DECLARE_NODE_PTR(X)	
 

@@ -1,0 +1,9 @@
+Log created at Sat Aug 24 01:34:04 2013
+
+[ObjectNotFoundException] Invalid serial for handler
+[InvalidParameterException] handler is out of bounds
+[InvalidParameterException] handler is out of bounds
+[InvalidParameterException] handler is out of bounds
+[ObjectAlreadyExistsException] Variable temp already exists
+[FileNotFoundException] 'fileThatShouldNotExits.txt' not found
+[InvalidOperationException] Teting

@@ -51,7 +51,7 @@ Phobos::Register::TablePtr_t Phobos::Register::Table::Create(const String_t &nam
 }
 
 Phobos::Register::Table::Table(const String_t &name):
-	Node(name),
+	Node(name, NodeFlags::PRIVATE_CHILDREN),
 	m_pclInherit(NULL)
 {
 	//empty
@@ -62,7 +62,7 @@ Phobos::Register::Table::~Table()
 	//empty
 }
 
-void Phobos::Register::Table::CheckInvalidKey(const String_t &key, const char *keys[], const char *message) const
+void Phobos::Register::Table::CheckInvalidKey(StringRef_t key, const char *keys[], const char *message) const
 {
 	for(int i = 0;keys[i]; ++i)
 	{
@@ -75,7 +75,7 @@ void Phobos::Register::Table::CheckInvalidKey(const String_t &key, const char *k
 	}
 }
 
-void Phobos::Register::Table::CheckForKeyword(const String_t &key) const
+void Phobos::Register::Table::CheckForKeyword(StringRef_t  key) const
 {
 	this->CheckInvalidKey(key, parszKeywords_g, "cannot be a key because it is a reserved keyword");		
 }
@@ -90,20 +90,20 @@ void Phobos::Register::Table::SetBaseHive(const String_t &baseHive)
 	this->SetString(BASE_HIVE_KEY, baseHive);
 }
 
-void Phobos::Register::Table::SetString(const String_t &key, const String_t &value)
+void Phobos::Register::Table::SetString(StringRef_t key, StringRef_t value)
 {	
 	CheckForKeyword(key);
 
-	m_mapValues[key] = Value_s(value);
+	m_mapValues[String_t(key.data())] = Value_s(value);
 
 	if(key.compare(INHERIT_KEY) == 0)
 	{			
-		m_strInherit = value;
+		m_strInherit.assign(value.data());
 		m_pclInherit = NULL;
 	}
 	if(key.compare(BASE_HIVE_KEY) == 0)
 	{			
-		m_strBaseHive = value;
+		m_strBaseHive.assign(value.data());
 		m_pclInherit = NULL;
 	}
 }
@@ -414,3 +414,8 @@ const Phobos::String_t *Phobos::Register::Table::TryGetString(const Table *curre
 
 	return value != NULL ? &value->m_strValue : NULL;
 }	
+
+void Phobos::Register::Table::AddSubTable(std::unique_ptr<Table> &&table)
+{
+	this->AddPrivateChild(std::move(table));
+}

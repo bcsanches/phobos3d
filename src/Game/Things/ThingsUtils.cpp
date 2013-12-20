@@ -18,9 +18,9 @@ subject to the following restrictions:
 
 #include <Phobos/OgreEngine/Math/Transform.h>
 
+#include "Phobos/Game/MapDefs.h"
 #include "Phobos/Game/Things/Keys.h"
 #include "Phobos/Game/RegisterUtils.h"
-#include "Phobos/Game/TileWorld.h"
 #include "Phobos/Game/WorldManager.h"
 
 namespace Phobos
@@ -29,18 +29,10 @@ namespace Phobos
 	{
 		namespace Things
 		{
-			void LoadTransform(Engine::Math::Transform &transform, const Phobos::Register::Table &table)
+			void LoadWorldTransform(Engine::Math::Transform &transform, const Phobos::Register::Table &table)
 			{
-				if(table.TryGetString(PH_ENTITY_KEY_TILE_ROW))
-				{						
-					const TileWorld *tileWorld = static_cast<const TileWorld *>(WorldManager::GetInstance().GetWorld());
-					tileWorld->LoadTileTransform(transform, table);
-				}
-				else
-				{
-					transform.SetOrigin(Register::GetVector3(table, PH_ENTITY_KEY_POSITION));
-					transform.SetRotation(Register::GetQuaternion(table, PH_ENTITY_KEY_ORIENTATION));
-				}
+				transform.SetOrigin(Register::GetVector3(table, PH_GAME_OBJECT_KEY_WORLD_POSITION));
+				transform.SetRotation(Register::GetQuaternion(table, PH_GAME_OBJECT_KEY_WORLD_ORIENTATION));
 			}
 		}
 	}

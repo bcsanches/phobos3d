@@ -26,7 +26,7 @@ namespace Phobos
 	{
 		namespace Things
 		{
-			void LoadTransform(Engine::Math::Transform &transform, const Register::Table &table);
+			void LoadWorldTransform(Engine::Math::Transform &transform, const Register::Table &table);
 		}
 	}
 }

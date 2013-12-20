@@ -29,7 +29,7 @@ namespace Phobos
 					UInt32_t m_u32Group;
 					UInt32_t m_u32Filter;
 
-				public:
+				public:					
 					inline CollisionTag(UInt32_t group, UInt32_t filter):
 						m_u32Group(group),
 						m_u32Filter(filter)

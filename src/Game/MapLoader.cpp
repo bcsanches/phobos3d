@@ -17,92 +17,39 @@ subject to the following restrictions:
 
 #include "Phobos/Game/MapLoader.h"
 
-#include <iostream>
-#include <vector>
-
-#include <Phobos/Register/Manager.h>
+#include <Phobos/Path.h>
 #include <Phobos/Register/Table.h>
 #include <Phobos/Register/Hive.h>
 
-#include <Phobos/Exception.h>
-#include <Phobos/Path.h>
-
-#include "Phobos/Game/Things/EntityFactory.h"
-#include "Phobos/Game/Things/Keys.h"
-#include "Phobos/Game/World.h"
-
-#define WORLD_SPAWN_ENTITY "worldspawn"
+#include "Phobos/Game/MapWorld.h"
 
 namespace Phobos
 {	
 	namespace Game
 	{
-		Register::Hive *MapLoader::pclStaticEntitiesHive_g = NULL;
-		Register::Hive *MapLoader::pclDynamicEntitiesHive_g = NULL;
-		Register::Hive *MapLoader::pclCurrentLevelHive_g = NULL;
+		void MapLoader::Load(StringRef_t fileName, Register::Hive &gameObjectsHive)
+		{			
+			//delegate the load processing
+			this->OnLoad(fileName, gameObjectsHive);			
 
-		void MapLoader::OnBoot()
-		{		
-			pclCurrentLevelHive_g = &Register::CreateCustomHive("LevelInfo");
-			pclStaticEntitiesHive_g = &Register::CreateCustomHive("StaticEntities");
-			pclDynamicEntitiesHive_g = &Register::CreateCustomHive("DynamicEntities");		
-		}	
+			Path path(fileName);
+			Path filePath;
 
-		const Register::Hive &MapLoader::GetStaticEntitiesHive() const
-		{
-			return *pclStaticEntitiesHive_g;
+			path.ExtractPathAndFilename(&filePath, nullptr);
+
+			//Load all rendering stuff
+			MapWorld::LoadAccess::Load(filePath.GetStr(), gameObjectsHive);			
 		}
 
-		const Register::Hive &MapLoader::GetDynamicEntitiesHive() const
+		void MapLoader::Unload()
 		{
-			return *pclDynamicEntitiesHive_g;
+			MapWorld::LoadAccess::Unload();
 		}
-
-		const Register::Hive &MapLoader::GetCurrentLevelHive() const
-		{
-			return *pclCurrentLevelHive_g;
-		}
-
-		void MapLoader::ClearAllHives()
-		{
-			pclCurrentLevelHive_g->RemoveAllChildren();
-			pclStaticEntitiesHive_g->RemoveAllChildren();
-			pclDynamicEntitiesHive_g->RemoveAllChildren();
-		}
-
+				
 		MapLoader::MapLoader(const Register::Table &settings):
 			m_strWorldSpawnEntityType(settings.GetString("worldSpawnEntityDef"))
 		{
 			//empty
-		}
-
-		std::unique_ptr<Things::Entity> MapLoader::CreateAndLoadWorldSpawn()
-		{	
-			Register::Table &entityDef = pclCurrentLevelHive_g->GetTable(WORLD_SPAWN_ENTITY);
-
-			std::unique_ptr<Things::Entity> ptr(Things::EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName()));
-			ptr->Load(entityDef);
-
-			return ptr;
-		}
-
-		WorldPtr_t MapLoader::CreateAndLoadWorld()
-		{
-			WorldPtr_t world = this->CreateWorld();
-
-			world->Load(*this, pclCurrentLevelHive_g->GetTable(WORLD_SPAWN_ENTITY));
-
-			return world;
-		}
-
-		std::unique_ptr<Register::Table> MapLoader::CreateWorldSpawnEntityDef()
-		{
-			std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(WORLD_SPAWN_ENTITY));
-
-			dict->SetBaseHive(PH_ENTITY_DEF_HIVE);
-			dict->SetInherited(m_strWorldSpawnEntityType);
-
-			return dict;
-		}
+		}				
 	}
 }

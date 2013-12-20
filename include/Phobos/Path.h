@@ -76,8 +76,10 @@ namespace Phobos
 
 
 			Path(void);
+			Path(Path &&rhs);
 			explicit Path(const Char_t str[]);
-			explicit Path(const String_t &str);	
+			explicit Path(StringRef_t str);	
+			explicit Path(String_t &&ref);
 
 			Path &operator=(const Path &rhs);
 			Path &operator=(const String_t &rhs);

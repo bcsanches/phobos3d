@@ -23,6 +23,7 @@ subject to the following restrictions:
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Listener.h>
+#include <Phobos/Register/HiveFwd.h>
 #include <Phobos/Singleton.h>
 
 #include "Phobos/Game/Things/Entity.h"
@@ -76,7 +77,7 @@ namespace Phobos
 				void RemoveFromFixedUpdateList(Things::Thing &io);
 				void RemoveFromUpdateList(Things::Thing &io);
 
-				inline const World *GetWorld() const;
+				//inline const World *GetWorld() const;
 
 			protected:		
 				virtual void OnBoot() override;
@@ -103,11 +104,13 @@ namespace Phobos
 
 				MapLoaderPtr_t	m_spMapLoader;
 
-				WorldPtr_t		m_spGameWorld;
+				//WorldPtr_t		m_spGameWorld;
 
 				Shell::Command	m_cmdLoadMap;	
 				Shell::Command	m_cmdUnloadMap;	
 				Shell::Command	m_cmdDumpFactoryCreators;
+
+				Phobos::Register::Hive *m_pclGameObjectsHive;				
 
 				PH_DECLARE_LISTENER_LIST(WorldManagerListener, m_lstListeners);
 
@@ -120,10 +123,12 @@ namespace Phobos
 			return m_clEntityManager.GetNumActiveObjects();
 		}
 
+		/*
 		inline const World *WorldManager::GetWorld() const
 		{
 			return m_spGameWorld.get();
 		}
+		*/
 	}
 }
 

@@ -25,10 +25,16 @@ namespace Phobos
 	{
 		namespace Physics
 		{
-			RigidBody::RigidBody(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, btDefaultMotionState *motionState, CollisionShapePtr_t shape, const CollisionTag &collisionTag):
+			RigidBody::RigidBody():
+				m_clCollisionTag(0, 0)
+			{
+				//empty
+			}
+
+			RigidBody::RigidBody(RigidBodyTypes_e type, const btRigidBody::btRigidBodyConstructionInfo &info, std::unique_ptr<btDefaultMotionState> &&motionState, CollisionShapePtr_t shape, const CollisionTag &collisionTag):
 				m_upRigidBody(new btRigidBody(info)),
 				m_spCollisionShape(shape),
-				m_upMotionState(motionState),
+				m_upMotionState(std::move(motionState)),
 				m_clCollisionTag(collisionTag)
 			{
 				if(type == RBT_KINEMATIC)
@@ -42,10 +48,29 @@ namespace Phobos
 				}
 			}
 
+			RigidBody::RigidBody(RigidBody &&other):
+				m_upRigidBody(std::move(other.m_upRigidBody)),
+				m_spCollisionShape(std::move(other.m_spCollisionShape)),
+				m_upMotionState(std::move(other.m_upMotionState)),				
+				m_clCollisionTag(std::move(other.m_clCollisionTag))
+			{
+				//empty
+			}
+
 			RigidBody::~RigidBody()
 			{
-				if(m_upRigidBody->isInWorld())
+				if(m_upRigidBody && m_upRigidBody->isInWorld())
 					this->Unregister();
+			}
+
+			RigidBody &RigidBody::operator=(RigidBody &&other)
+			{
+				m_upRigidBody = std::move(other.m_upRigidBody);
+				m_spCollisionShape = std::move(other.m_spCollisionShape);
+				m_upMotionState = std::move(other.m_upMotionState);
+				m_clCollisionTag = std::move(other.m_clCollisionTag);
+
+				return *this;
 			}
 
 			void RigidBody::Register()

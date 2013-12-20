@@ -65,7 +65,7 @@ namespace Phobos
 			{	
 				Engine::Math::Transform transform;
 
-				Things::LoadTransform(transform, table);						
+				Things::LoadWorldTransform(transform, table);						
 
 				Physics::Manager &physicsManager = Manager::GetInstance();
 

@@ -38,7 +38,7 @@ namespace Phobos
 			{
 				Entity::OnLoad(table);
 		
-				LoadTransform(m_clTransform, table);	
+				LoadWorldTransform(m_clTransform, table);	
 			}
 		}
 	}

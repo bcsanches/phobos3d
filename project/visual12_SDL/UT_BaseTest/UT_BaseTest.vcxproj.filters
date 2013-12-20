@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\..\src\UT_Base\ShellContextTest.cpp" />
     <ClCompile Include="..\..\..\src\UT_Base\ShellVariableTest.cpp" />
     <ClCompile Include="..\..\..\src\UT_Base\GlobalLogTest.cpp" />
+    <ClCompile Include="..\..\..\src\UT_Base\HandleListTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\UT_Base\StringTest.h" />

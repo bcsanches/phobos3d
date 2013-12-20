@@ -53,36 +53,36 @@ namespace Phobos
 
 			void RigidBodyComponent::SaveTransform()
 			{			
-				m_clPreviousTransform = m_spRigidBody->GetTransform();
+				m_clPreviousTransform = m_clRigidBody.GetTransform();
 			}
 
 			void RigidBodyComponent::UpdateTransform(Float_t delta)
 			{			
-				m_pprpTransform->SetTransform(Engine::Math::Transform::Interpolate(m_clPreviousTransform, m_spRigidBody->GetTransform(), delta));
+				m_pprpTransform->SetTransform(Engine::Math::Transform::Interpolate(m_clPreviousTransform, m_clRigidBody.GetTransform(), delta));
 			}
 
 			void RigidBodyComponent::OnLoad(const Phobos::Register::Table &table)
 			{	
 				Engine::Math::Transform transform;
 
-				Things::LoadTransform(transform, table);						
+				Things::LoadWorldTransform(transform, table);						
 
 				Physics::Manager &physicsManager = Manager::GetInstance();
 
 				Physics::CollisionTag collisionTag = Settings::LoadCollisionTag(table);
 
-				PH_ASSERT(!m_spRigidBody);			
+				//PH_ASSERT(!m_spRigidBody);			
 			
 				Float_t mass = table.GetFloat("mass");
 
-				m_spRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(table, Ogre::Vector3(1, 1, 1)));
+				m_clRigidBody = physicsManager.CreateRigidBody(RBT_DYNAMIC, transform, mass, collisionTag, Physics::Utils::CreateCollisionShape(table, Ogre::Vector3(1, 1, 1)));
 			}
 
 			void RigidBodyComponent::OnLoadFinished()
 			{
 				Physics::Manager &manager = Manager::GetInstance();
 				manager.RegisterRigidBodyComponent(*this);
-				m_spRigidBody->Register();			
+				m_clRigidBody.Register();			
 
 				m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 

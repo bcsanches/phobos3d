@@ -36,7 +36,7 @@ namespace Phobos
 		PH_REGISTER_API void Init();
 		PH_REGISTER_API void Finalize();
 
-		PH_REGISTER_API void Load(const String_t &fileName);
+		PH_REGISTER_API void Load(StringRef_t fileName);
 		PH_REGISTER_API void Load(std::istream &stream);
 
 		PH_REGISTER_API void LoadAll(const String_t &path);

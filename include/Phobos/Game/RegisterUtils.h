@@ -27,6 +27,14 @@ namespace Phobos
 {	
 	namespace Register	
 	{
+		inline void SetVector3(Phobos::Register::Table &table, StringRef_t key, const Ogre::Vector3 &v)
+		{
+			std::stringstream stream;
+
+			stream << v.x << ' ' << v.y << ' ' << v.z;
+			table.SetString(key, stream.str());
+		}
+
 		inline Ogre::Vector3 GetVector3(const Phobos::Register::Table &dict, const String_t &key)
 		{		
 			const String_t &value = dict.GetString(key);
@@ -53,6 +61,14 @@ namespace Phobos
 			}
 		}
 
+		inline void SetQuaternion(Phobos::Register::Table &table, StringRef_t key, const Ogre::Quaternion &q)
+		{
+			std::stringstream stream;
+
+			stream << q.w << ' ' << q.x << ' ' << q.y << ' ' << q.z;
+			table.SetString(key, stream.str());
+		}
+
 		inline Ogre::Quaternion GetQuaternion(const Phobos::Register::Table &dict, const String_t &key)
 		{
 			const String_t &value = dict.GetString(key);
@@ -72,7 +88,7 @@ namespace Phobos
 			sscanf(value.c_str(), "%f %f %f %f", &colour.r, &colour.g, &colour.b, &colour.a);
 
 			return colour;
-		}
+		}		
 	}	
 }
 
