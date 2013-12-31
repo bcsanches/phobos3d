@@ -33,8 +33,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.worldPage1 = new SharpEditor.WorldPage();
             this.mEnginePanel = new System.Windows.Forms.Panel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.assetBrowser1 = new SharpEditor.AssetBrowser();
+            this.propertyPage1 = new SharpEditor.PropertyPage();
+            this.mLogsControl = new SharpEditor.LogsControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,10 +49,7 @@
             this.mStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.worldPage1 = new SharpEditor.WorldPage();
-            this.assetBrowser1 = new SharpEditor.AssetBrowser();
-            this.propertyPage1 = new SharpEditor.PropertyPage();
-            this.mLogsControl = new SharpEditor.LogsControl();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             mainSplit = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(mainSplit)).BeginInit();
             mainSplit.Panel1.SuspendLayout();
@@ -123,6 +124,14 @@
             this.splitContainer2.SplitterDistance = 226;
             this.splitContainer2.TabIndex = 0;
             // 
+            // worldPage1
+            // 
+            this.worldPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.worldPage1.Location = new System.Drawing.Point(0, 0);
+            this.worldPage1.Name = "worldPage1";
+            this.worldPage1.Size = new System.Drawing.Size(226, 531);
+            this.worldPage1.TabIndex = 0;
+            // 
             // mEnginePanel
             // 
             this.mEnginePanel.BackColor = System.Drawing.Color.Red;
@@ -149,6 +158,30 @@
             this.splitContainer3.SplitterDistance = 181;
             this.splitContainer3.TabIndex = 0;
             // 
+            // assetBrowser1
+            // 
+            this.assetBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.assetBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.assetBrowser1.Name = "assetBrowser1";
+            this.assetBrowser1.Size = new System.Drawing.Size(181, 531);
+            this.assetBrowser1.TabIndex = 0;
+            // 
+            // propertyPage1
+            // 
+            this.propertyPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyPage1.Location = new System.Drawing.Point(0, 0);
+            this.propertyPage1.Name = "propertyPage1";
+            this.propertyPage1.Size = new System.Drawing.Size(169, 531);
+            this.propertyPage1.TabIndex = 0;
+            // 
+            // mLogsControl
+            // 
+            this.mLogsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mLogsControl.Location = new System.Drawing.Point(0, 0);
+            this.mLogsControl.Name = "mLogsControl";
+            this.mLogsControl.Size = new System.Drawing.Size(1008, 124);
+            this.mLogsControl.TabIndex = 0;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -163,6 +196,8 @@
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -233,37 +268,12 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
-            // worldPage1
+            // newToolStripMenuItem
             // 
-            this.worldPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.worldPage1.Location = new System.Drawing.Point(0, 0);
-            this.worldPage1.Name = "worldPage1";
-            this.worldPage1.Size = new System.Drawing.Size(226, 531);
-            this.worldPage1.TabIndex = 0;
-            // 
-            // assetBrowser1
-            // 
-            this.assetBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.assetBrowser1.Location = new System.Drawing.Point(0, 0);
-            this.assetBrowser1.Name = "assetBrowser1";
-            this.assetBrowser1.Size = new System.Drawing.Size(181, 531);
-            this.assetBrowser1.TabIndex = 0;
-            // 
-            // propertyPage1
-            // 
-            this.propertyPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyPage1.Location = new System.Drawing.Point(0, 0);
-            this.propertyPage1.Name = "propertyPage1";
-            this.propertyPage1.Size = new System.Drawing.Size(169, 531);
-            this.propertyPage1.TabIndex = 0;
-            // 
-            // mLogsControl
-            // 
-            this.mLogsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mLogsControl.Location = new System.Drawing.Point(0, 0);
-            this.mLogsControl.Name = "mLogsControl";
-            this.mLogsControl.Size = new System.Drawing.Size(1008, 124);
-            this.mLogsControl.TabIndex = 0;
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Text = "&New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -324,6 +334,7 @@
         private PropertyPage propertyPage1;
         private WorldPage worldPage1;
         private LogsControl mLogsControl;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
     }
 }
 

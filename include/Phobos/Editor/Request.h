@@ -3,6 +3,9 @@
 
 #include <rapidjson/document.h>
 #include <JsonCreator/StringWriterFwd.h>
+#include <JsonCreator/Object.h>
+
+#include <Phobos/Types.h>
 
 namespace Phobos
 {
@@ -15,8 +18,15 @@ namespace Phobos
 
 				void Execute(JsonCreator::StringWriter &response);
 
+				inline UInt_t GetId() const { return m_uId; }
+
 			private:
-				virtual void OnExecute(JsonCreator::StringWriter &response) = 0;
+				virtual void OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response) = 0;
+
+			private:
+				UInt_t	m_uId;
+				
+				bool	m_fNotification;
 		};
 	}
 }

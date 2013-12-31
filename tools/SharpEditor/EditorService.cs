@@ -10,48 +10,33 @@ namespace SharpEditor
 {
     public static class EditorService
     {
-        private static Dictionary<string, Type> m_mapRequests = new Dictionary<string,Type>();
-        private static System.Windows.Forms.Control m_invokeControl = new System.Windows.Forms.Control();
-
-        private static void MainThreadProcessMessage(string message)
-        {
-            dynamic json = SimpleJson.DeserializeObject(message);            
-
-            Type tp = m_mapRequests[json.command];
-
-            var response = (EngineResponses.IEngineResponse)Activator.CreateInstance(tp);
-
-            response.Process(json);
-        }
-
-        //Thread safe
-        public static void ProcessMessage(string message)
-        {
-            if(m_invokeControl.InvokeRequired)
-                m_invokeControl.Invoke(new System.Windows.Forms.MethodInvoker(delegate {MainThreadProcessMessage(message);}));
-            else
-                MainThreadProcessMessage(message);                            
-        }
-
+        private static Dictionary<string, Type> m_mapRequests = new Dictionary<string,Type>();        
+       
         private static bool IsMappingOf<T>(Type type)
         {
             return !type.IsGenericType && typeof(T).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface;
         }
 
         public static void Start()
-        {
-            m_invokeControl.CreateControl();
-
+        {            
             foreach (Type t in Assembly.GetExecutingAssembly().GetTypes().Where(x => IsMappingOf<EngineResponses.IEngineResponse>(x)))
             {
                 m_mapRequests.Add(t.Name, t);
-            }            
+            }
+
+            RemoteProcedureService.Ready += RemoteProcedureService_Ready;
+        }
+
+        static void RemoteProcedureService_Ready(object sender, EventArgs e)
+        {
+            //
+            RemoteProcedureService.Call("AssetXList", null, null);
+            RemoteProcedureService.Call("AssetList", null, new EngineResponses.AssetListResponse().Process);
         }
 
         public static void Stop()
         {
-            m_invokeControl.Dispose();
-            m_invokeControl = null;
+            //empty
         }
     }
 }

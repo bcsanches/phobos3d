@@ -72,13 +72,22 @@ namespace Phobos
 				//empty
 			}
 
-			const T &GetObjectCreator(const String_t &className) const
+			const T *TryGetObjectCreator(const String_t &className) const
 			{
 				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<T>());
 				if(it == setObjectCreators.end())
+					return nullptr;
+
+				return &(*it);				
+			}
+
+			const T &GetObjectCreator(const String_t &className) const
+			{
+				const T *creator = this->TryGetObjectCreator(className);
+				if(!creator)				
 					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory::Create]", className);
 
-				return *it;
+				return *creator;
 			}
 
 		protected:
@@ -204,6 +213,15 @@ namespace Phobos
 			typename GenericFactory<T>::ObjectReturnType_t Create(const String_t &className, const PARAM1 &name) const
 			{
 				return this->GetObjectCreator(className).Create(name);
+			}
+
+			typename GenericFactory<T>::ObjectReturnType_t TryCreate(const String_t &className, const PARAM1 &name) const
+			{
+				auto creator = this->TryGetObjectCreator(className);
+				if(!creator)
+					return GenericFactory<T>::ObjectReturnType_t();
+
+				return creator->Create(name);
 			}
 
 	};

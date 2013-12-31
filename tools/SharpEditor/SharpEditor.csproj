@@ -92,7 +92,7 @@
     <Compile Include="Assets\Manager.cs" />
     <Compile Include="Assets\Category.cs" />
     <Compile Include="EditorService.cs" />
-    <Compile Include="EngineNetworkService.cs" />
+    <Compile Include="EngineClient.cs" />
     <Compile Include="EngineProcess.cs" />
     <Compile Include="EngineConfigForm.cs">
       <SubType>Form</SubType>
@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteProcedureService.cs" />
     <Compile Include="SimpleJson.cs" />
     <Compile Include="WorldPage.cs">
       <SubType>UserControl</SubType>

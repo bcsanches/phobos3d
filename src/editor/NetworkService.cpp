@@ -60,8 +60,9 @@ namespace
 		{
 			auto obj = JsonCreator::MakeObject(writer);
 
-			obj.AddStringValue("command", "Log");
-			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler::on_open] Connection opened");
+			obj.AddStringValue("jsonrpc", "2.0");
+			obj.AddStringValue("method", "Log");
+			obj.AddStringValue("params", "[Phobos::Editor::ServerHandler::on_open] Connection opened");			
 		}
 		
 		m_clMessageQueue.Push(writer.GetString());
@@ -75,8 +76,9 @@ namespace
 		{
 			auto obj = JsonCreator::MakeObject(writer);
 
-			obj.AddStringValue("command", "Log");
-			obj.AddStringValue("message", "[Phobos::Editor::ServerHandler::on_open] Connection closed");
+			obj.AddStringValue("jsonrpc", "2.0");
+			obj.AddStringValue("method", "Log");
+			obj.AddStringValue("params", "[Phobos::Editor::ServerHandler::on_open] Connection closed");
 		}
 
 		m_clMessageQueue.Push(writer.GetString());

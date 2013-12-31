@@ -9,6 +9,7 @@
 #include <JsonCreator/StringWriter.h>
 
 #include "Phobos/Editor/RequestFactory.h"
+#include "Phobos/Editor/ErrorRequest.h"
 
 PH_PLUGIN_ENTRY_POINT("EditorPluginModule", "editor.cfg")
 
@@ -21,7 +22,7 @@ namespace Phobos
 		PH_PLUGIN_REGISTER_MODULE(EditorModule);
 
 		PH_PLUGIN_CREATE_MODULE_PROC_IMPL(EditorModule);				
-	}
+	}	
 }
 
 Phobos::Editor::EditorModule::EditorModule():
@@ -54,16 +55,34 @@ void Phobos::Editor::EditorModule::OnBoot()
 
 void Phobos::Editor::EditorModule::ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response)
 {		
-	const auto &command = obj["command"];
+	const auto &command = obj["method"];
 	if(command.IsNull())
-	{		
+	{				
 		LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] JSON does not contains valid commands";
+
+		ErrorRequest error(obj, "Method not specified", ErrorRequest::INVALID_REQUEST);
+
+		error.Execute(response);
+
 		return;
 	}
 
-	auto &requestFactory = RequestFactory::GetInstance();
-	auto request = requestFactory.Create(command.GetString(), obj);
-	request->Execute(response);
+	auto &requestFactory = RequestFactory::GetInstance();	
+	if(auto request = requestFactory.TryCreate(command.GetString(), obj))
+	{
+		request->Execute(response);
+	}
+	else
+	{
+		LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] RPC method " << command.GetString() << " does not exists";
+
+		std::stringstream stream;
+
+		stream << "The method " << command.GetString() << " does not exists.";
+
+		ErrorRequest error(obj, stream.str().c_str(), ErrorRequest::METHOD_NOT_FOUND);
+		error.Execute(response);
+	}
 }
 
 void Phobos::Editor::EditorModule::OnFixedUpdate()
@@ -86,23 +105,8 @@ void Phobos::Editor::EditorModule::OnFixedUpdate()
 			LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] Error parsing JSON: " << msg;
 			continue;
 		}
-
-		const auto &commandList = document["commands"];
-		if(!commandList.IsNull())
-		{
-			if(!commandList.IsArray())
-			{
-				LogMakeStream() << "[Phobos::Editor::EditorModule::OnFixedUpdate] Command list is no an array: " << msg;
-				continue;
-			}
-
-			for (rapidjson::Value::ConstValueIterator itr = commandList.Begin(); itr != commandList.End(); ++itr)
-				this->ExecuteJsonCommand(*itr, response);
-		}
-		else
-		{			
-			this->ExecuteJsonCommand(document, response);
-		}		
+			
+		this->ExecuteJsonCommand(document, response);		
 	}
 
 	if(response.GetSize() > 0)

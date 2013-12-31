@@ -8,10 +8,12 @@ namespace SharpEditor.EngineResponses
 {
     public class AssetListResponse : IEngineResponse
     {
-        public void Process(dynamic json)
+        public void Process(long id, dynamic result, dynamic error)
         {
-            var array = json.assets;
-            foreach (dynamic obj in array)
+            if (error != null)
+                return;
+
+            foreach (dynamic obj in result)
             {
                 var asset = new Assets.Asset(obj);
                 Assets.Manager.AddAsset(asset);

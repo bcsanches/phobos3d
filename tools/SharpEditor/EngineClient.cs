@@ -6,12 +6,27 @@ using System.Threading.Tasks;
 
 namespace SharpEditor
 {
-    class EngineNetworkService
+    class EngineEventArgs: EventArgs
+    {        
+        public EngineEventArgs(string message)
+        {
+            Message = message;
+        }
+
+        public string Message
+        {
+            private set;
+            get;
+        }
+    }
+
+    class EngineClient
     {
         private WebSocket4Net.WebSocket mSocket = new WebSocket4Net.WebSocket("ws://localhost:2325");
         private bool mConnected = false;
 
         public event EventHandler Connected;
+        public event EventHandler<EngineEventArgs> MessageReceived;
 
         public void Start()
         {
@@ -59,7 +74,12 @@ namespace SharpEditor
         void mSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
         {
             LogService.Log("socket_DataReceived:" + e.Message);
-            EditorService.ProcessMessage(e.Message);
+
+            if (MessageReceived != null)
+            {
+                EngineEventArgs args = new EngineEventArgs(e.Message);
+                MessageReceived(sender, args);
+            }
         }
         
         void socket_Closed(object sender, EventArgs e)

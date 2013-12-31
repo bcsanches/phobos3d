@@ -23,6 +23,8 @@
     <ClCompile Include="..\..\..\src\editor\NetworkService.cpp" />
     <ClCompile Include="..\..\..\src\editor\Request.cpp" />
     <ClCompile Include="..\..\..\src\editor\RequestFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Phobos\Editor\ErrorRequest.cpp" />
+    <ClCompile Include="..\..\..\src\Phobos\Editor\NewWorldRequest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2010\websocketpp.vcxproj">
@@ -48,9 +50,11 @@
     <ClInclude Include="..\..\..\include\Phobos\Editor\AssetListRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\ErrorRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\MessageQueue.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\NetworkService.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\Request.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\RequestFactory.h" />
   </ItemGroup>

@@ -8,6 +8,6 @@ namespace SharpEditor.EngineResponses
 {
     interface IEngineResponse
     {
-        void Process(dynamic json);
+        void Process(long id, dynamic result, dynamic error);
     }
 }
