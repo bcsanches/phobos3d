@@ -22,7 +22,7 @@ Phobos::Editor::LogRequest::LogRequest(const rapidjson::Value &obj):
 	//empty
 }
 
-void Phobos::Editor::LogRequest::OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response)
+void Phobos::Editor::LogRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
 {
 	PH_ASSERT(response == nullptr);
 

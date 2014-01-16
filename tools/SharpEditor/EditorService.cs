@@ -29,14 +29,23 @@ namespace SharpEditor
 
         static void RemoteProcedureService_Ready(object sender, EventArgs e)
         {
-            //
-            RemoteProcedureService.Call("AssetXList", null, null);
+            //            
             RemoteProcedureService.Call("AssetList", null, new EngineResponses.AssetListResponse().Process);
         }
 
         public static void Stop()
         {
             //empty
+        }
+
+        public static void CreateNewWorld()
+        {
+            RemoteProcedureService.Call("NewWorld", null, null);
+        }
+
+        public static void CreateAsset(Assets.Asset asset)
+        {
+            RemoteProcedureService.Call("CreateAsset", asset, new EngineResponses.CreateAssetResponse().Process);
         }
     }
 }

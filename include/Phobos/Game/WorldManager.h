@@ -61,6 +61,7 @@ namespace Phobos
 			public:
 				~WorldManager();		
 
+				void LoadBlankMap(const char *name);
 				void LoadMap(const String_t &mapName);
 				void UnloadMap();
 

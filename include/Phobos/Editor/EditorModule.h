@@ -11,6 +11,7 @@
 #include <Phobos/Singleton.h>
 
 #include "Phobos/Editor/NetworkService.h"
+#include "Phobos/Editor/EditObjectManager.h"
 
 namespace Phobos
 {
@@ -31,6 +32,8 @@ namespace Phobos
 
 				virtual void OnFixedUpdate() override;
 
+				void CreateAsset(const String_t &asset, const String_t type);
+
 			protected:
 				virtual void OnBoot() override;				
 
@@ -40,7 +43,8 @@ namespace Phobos
 				EditorModule();
 
 			private:
-				NetworkService m_clNetworkService;
+				NetworkService		m_clNetworkService;
+				EditObjectManager	m_clEditObjectManager;
 		};
 	}
 }

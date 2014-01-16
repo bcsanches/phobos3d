@@ -28,7 +28,7 @@ Phobos::Editor::AssetListRequest::AssetListRequest(const rapidjson::Value &value
 }
 
 
-void Phobos::Editor::AssetListRequest::OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response)
+void Phobos::Editor::AssetListRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
 {			
 	auto assetArray = response->AddArray("result");
 		

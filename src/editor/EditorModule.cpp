@@ -28,7 +28,7 @@ namespace Phobos
 Phobos::Editor::EditorModule::EditorModule():
 	Module("EditorModule")
 {
-	//empty
+	this->AddChild(m_clEditObjectManager);
 }
 
 Phobos::Engine::EscAction Phobos::Editor::EditorModule::HandleEsc(Engine::Gui::Form *&outForm)
@@ -62,7 +62,7 @@ void Phobos::Editor::EditorModule::ExecuteJsonCommand(const rapidjson::Value &ob
 
 		ErrorRequest error(obj, "Method not specified", ErrorRequest::INVALID_REQUEST);
 
-		error.Execute(response);
+		error.Execute(obj, response);
 
 		return;
 	}
@@ -70,7 +70,7 @@ void Phobos::Editor::EditorModule::ExecuteJsonCommand(const rapidjson::Value &ob
 	auto &requestFactory = RequestFactory::GetInstance();	
 	if(auto request = requestFactory.TryCreate(command.GetString(), obj))
 	{
-		request->Execute(response);
+		request->Execute(obj, response);
 	}
 	else
 	{
@@ -81,7 +81,7 @@ void Phobos::Editor::EditorModule::ExecuteJsonCommand(const rapidjson::Value &ob
 		stream << "The method " << command.GetString() << " does not exists.";
 
 		ErrorRequest error(obj, stream.str().c_str(), ErrorRequest::METHOD_NOT_FOUND);
-		error.Execute(response);
+		error.Execute(obj, response);
 	}
 }
 
@@ -113,5 +113,10 @@ void Phobos::Editor::EditorModule::OnFixedUpdate()
 	{
 		m_clNetworkService.SendMessage(response.GetString());
 	}
+}
+
+void Phobos::Editor::EditorModule::CreateAsset(const String_t &asset, const String_t type)
+{
+
 }
 

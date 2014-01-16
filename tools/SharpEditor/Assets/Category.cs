@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace SharpEditor.Assets
 {
+    [DataContract]
     public class Category
     {
         private string m_strName;
@@ -15,6 +13,7 @@ namespace SharpEditor.Assets
             m_strName = name;
         }
 
+        [DataMember(Name = "name")]
         public string Name
         {
             get { return m_strName; }

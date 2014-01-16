@@ -21,15 +21,14 @@ namespace SharpEditor
 
         public static long Call(string name, object param, ResponseHandler handler)
         {
-            //{\"method\":\"AssetList\"}
-            //mNetworkService.Send("{\"method\":\"AssetList\"}");
+            var parameters = param != null ? ", \"params\":" + SimpleJson.SerializeObject(param) : "";
 
             if (handler != null)
             {
                 long id = ++mId;
 
                 //{"jsonrpc":"2.0", "method":"name", "id":id}
-                mClient.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\", \"id\":" + id + "}");
+                mClient.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\"" + parameters + ", \"id\":" + id + "}");
 
                 mHandlers.Add(id, handler);
 
@@ -37,7 +36,7 @@ namespace SharpEditor
             }
             else
             {
-                mClient.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\"}");
+                mClient.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\"" + parameters + "}");
 
                 return 0;
             }           

@@ -85,7 +85,9 @@ namespace SharpEditor
         void socket_Closed(object sender, EventArgs e)
         {
             mConnected = false;
-            LogService.Log("Connection closed.");
+
+            if(LogService.Running)
+                LogService.Log("Connection closed.");
         }
 
         void socket_Opened(object sender, EventArgs e)

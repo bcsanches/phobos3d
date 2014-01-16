@@ -59,6 +59,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -101,6 +102,8 @@
       <DependentUpon>EngineConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EngineResponses\AssetListResponse.cs" />
+    <Compile Include="EngineResponses\CreateAssetResponse.cs" />
+    <Compile Include="EngineResponses\EngineResponse.cs" />
     <Compile Include="EngineResponses\IEngineResponse.cs" />
     <Compile Include="EngineService.cs" />
     <Compile Include="LogControl.cs">

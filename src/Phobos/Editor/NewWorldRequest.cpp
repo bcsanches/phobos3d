@@ -2,13 +2,7 @@
 
 #include "Phobos/Editor/RequestFactory.h"
 
-#include <Phobos/Register/Hive.h>
-#include <Phobos/Register/Manager.h>
-#include <Phobos/Register/Table.h>
-
-#include <Phobos/Game/Things/Keys.h>
-
-#include <OgreResourceGroupManager.h>
+#include <Phobos/Game/WorldManager.h>
 
 #include <JsonCreator/Object.h>
 #include <JsonCreator/StringWriter.h>
@@ -28,7 +22,9 @@ Phobos::Editor::NewWorldRequest::NewWorldRequest(const rapidjson::Value &value):
 }
 
 
-void Phobos::Editor::NewWorldRequest::OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response)
-{		
-	response->AddStringValue("result", "Ok");
+void Phobos::Editor::NewWorldRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
+{			
+	Game::WorldManager::GetInstance().LoadBlankMap("NewLevel");
+
+	//auto result = response->AddObject("result");
 }

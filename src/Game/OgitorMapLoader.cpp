@@ -32,7 +32,6 @@ subject to the following restrictions:
 
 #include "Phobos/Game/MapLoaderFactory.h"
 #include "Phobos/Game/MapDefs.h"
-#include "Phobos/Game/OgitorWorld.h"
 
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"

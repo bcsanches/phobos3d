@@ -71,6 +71,13 @@ namespace Phobos
 				listener.OnMapUnloaded();		
 		}
 
+		void WorldManager::LoadBlankMap(const char *name)
+		{
+			this->UnloadMap();
+
+
+		}
+
 		void WorldManager::LoadMap(const String_t &mapName)
 		{
 			this->UnloadMap();

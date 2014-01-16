@@ -19,17 +19,17 @@ namespace Phobos
 
 Phobos::Editor::ErrorRequest::ErrorRequest(const rapidjson::Value &value, const char *message, Errors error):
 	Request(value),
-	m_pszMessage(message),
+	m_strMessage(message),
 	m_eError(error)
 {
 	//empty
 }
 
 
-void Phobos::Editor::ErrorRequest::OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response)
+void Phobos::Editor::ErrorRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
 {	
 	//Log the error
-	LogMakeStream() << "[Phobos::Editor::ErrorRequest::OnExecute] JSON-RPC Error (id=" << this->GetId() << "): " << m_pszMessage;
+	LogMakeStream() << "[Phobos::Editor::ErrorRequest::OnExecute] JSON-RPC Error (id=" << this->GetId() << "): " << m_strMessage;
 
 	//No response required, no error report
 	if(!response)
@@ -39,5 +39,5 @@ void Phobos::Editor::ErrorRequest::OnExecute(JsonCreator::Object<JsonCreator::St
 
 	errorObj.AddIntValue("code", m_eError);
 
-	errorObj.AddStringValue("message", m_pszMessage);	
+	errorObj.AddStringValue("message", m_strMessage.c_str());	
 }

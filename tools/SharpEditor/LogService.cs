@@ -12,6 +12,11 @@ namespace SharpEditor
         private static StreamWriter mWriter = new StreamWriter("editor.log", false);
         private static LogControl mLogControl;
 
+        public static bool Running
+        {
+            get { return mWriter != null; }
+        }
+
         public static void Start(LogControl logControl)
         {
             if (logControl == null)
