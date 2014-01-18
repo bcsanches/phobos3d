@@ -139,7 +139,7 @@ namespace Phobos
 					virtual void setVelocityForTimeInterval(const btVector3& velocity,
 								btScalar timeInterval);
 
-					void reset ();
+					void reset(btCollisionWorld* collisionWorld);
 					void warp (const btVector3& origin);
 
 					void preStep (  btCollisionWorld* collisionWorld);
@@ -165,6 +165,8 @@ namespace Phobos
 					{
 						m_useGhostObjectSweepTest = useGhostObjectSweepTest;
 					}
+
+					void setUpInterpolate(bool value);
 
 					bool onGround () const;
 			};

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="SDL">
+      <UniqueIdentifier>{95c3ed5c-6fe0-4f19-8e4a-a9c0259d01e2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\System\AxisButton.cpp" />
+    <ClCompile Include="..\..\..\src\System\Button.cpp" />
+    <ClCompile Include="..\..\..\src\System\InputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\System\InputManager.cpp" />
+    <ClCompile Include="..\..\..\src\System\InputMapper.cpp" />
+    <ClCompile Include="..\..\..\src\System\KeyboardInputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\System\MouseInputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\System\Thumb.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\MouseInputDeviceSDL.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\System\SDL\KeyboardInputDeviceSDL.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\System\SDL\InputManagerSDL.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\System\EventManager.cpp" />
+    <ClCompile Include="..\..\..\src\System\SDL\EventManagerSDL.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\System\SDL\TimerSDL.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\System\SDL\WindowSDL.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\System\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\System\AxisButton.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Button.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDefs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDevice.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDeviceFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputDeviceListener.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputEvent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputMapper.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\KeyboardInputDevice.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\MouseInputDevice.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Thumb.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\MouseInputDeviceSDL.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\KeyboardInputDeviceSDL.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\InputManagerSDL.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\System\EventListener.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventListenerFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\EventManagerFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputActions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Timer.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Window.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\EventManagerSDL.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\System\SDL\WindowSDL.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\System\SystemAPI.h" />
+  </ItemGroup>
+</Project>

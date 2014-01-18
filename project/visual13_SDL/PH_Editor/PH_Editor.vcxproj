@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_rel|Win32">
+      <Configuration>Debug_rel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\editor\AssetListRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\editor\LogRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\MessageQueue.cpp" />
+    <ClCompile Include="..\..\..\src\editor\NetworkService.cpp" />
+    <ClCompile Include="..\..\..\src\editor\Request.cpp" />
+    <ClCompile Include="..\..\..\src\editor\RequestFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Phobos\Editor\ErrorRequest.cpp" />
+    <ClCompile Include="..\..\..\src\Phobos\Editor\NewWorldRequest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2013\websocketpp.vcxproj">
+      <Project>{1c0fd04e-5aca-4031-b3d1-320a5360c9d0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
+      <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Game\PH_Game.vcxproj">
+      <Project>{d3f292da-2bc0-486c-9505-a2c4bb7cb486}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_LibPlugin\PH_LibPlugin.vcxproj">
+      <Project>{ef04e841-546f-4b39-90e8-e983fc8f8660}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
+      <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\AssetListRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\ErrorRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\MessageQueue.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NetworkService.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\Request.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\RequestFactory.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3668D9D0-A84F-4BCB-9D8E-BD9A8DA85C2A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PH_Editor</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(ProjectDir)..\..\..\contrib\rapidjson\include;$(JSON_CREATOR_HOME)\include\;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <IncludePath>$(JSON_CREATOR_HOME)\include\;$(ProjectDir)..\..\..\contrib\rapidjson\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <IncludePath>$(JSON_CREATOR_HOME)\include\;$(ProjectDir)..\..\..\contrib\rapidjson\include;$(IncludePath)</IncludePath>
+    <TargetName>$(ProjectName)_dr</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalDependencies>OgreMain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OGRE_HOME)\build\lib\Debug</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_SDL;PH_IGNORE_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;$(ProjectDir)..\..\..\include\OgreEngineCore;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\gamePlugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>OgreMain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>PH_FORCE_DEBUG;WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_SDL;PH_IGNORE_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;$(ProjectDir)..\..\..\include\OgreEngineCore;$(ProjectDir)..\..\..\include\gameEngine;$(ProjectDir)..\..\..\include\gamePlugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>OgreMain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
