@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\editor\MessageQueue.cpp" />
+    <ClCompile Include="..\..\..\src\editor\NetworkService.cpp" />
+    <ClCompile Include="..\..\..\src\editor\AssetListRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\RequestFactory.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\Request.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Phobos\Editor\NewWorldRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\LogRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Phobos\Editor\ErrorRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\MessageQueue.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NetworkService.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\AssetListRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\Request.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\RequestFactory.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\ErrorRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Requests">
+      <UniqueIdentifier>{37c37121-0fe4-41d0-971d-efaaf36d965a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

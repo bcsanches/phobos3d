@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{01cbe4b6-5446-4114-b303-2457124a8ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Things">
+      <UniqueIdentifier>{36d54a11-0fd2-468a-bf69-00d59e0b538e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{a06938b2-2152-435b-b94f-d9f2f89f4432}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Game\BaseClient.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Game\SpectatorCamera.cpp" />
+    <ClCompile Include="..\..\..\src\Game\SpectatorCameraCommandProducer.cpp" />
+    <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\CharacterBodyComponent.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\CollisionMesh.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\CollisionShape.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\CollisionShapes.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\DynamicCharacterBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\GhostCharacterBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\KinematicCharacterController.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\RigidBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\RigidBodyComponent.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\Settings.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\SweepCharacterBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\Manager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\Game\OgitorWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\Component.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\ComponentFactory.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\Entity.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\EntityEvent.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\EntityFactory.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\LinearMoverComponent.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererComponent.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererManager.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\MoverComponent.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\MoverManager.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\PointEntity.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\TransformComponent.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\Signal.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\SignalManager.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\Thing.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Gui\LevelSelector.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Physics\PhysicsUtils.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Things\ThingsUtils.cpp">
+      <Filter>Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Game\BaseClient.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoader.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoaderFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\OgitorMapLoader.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCamera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCameraCommandProducer.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\WorldManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CharacterBodyComponent.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionMesh.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionMeshFwd.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionShape.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionShapeFwd.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionShapes.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionTag.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionTagFwd.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\DynamicCharacterBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\GhostCharacterBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\ICharacterBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\ICharacterBodyFwd.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Keys.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\KinematicCharacterController.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyComponent.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyFwd.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Settings.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\SweepCharacterBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Manager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Conv.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\WorldFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\World.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\BaseOgreWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\IController.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\OgitorWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFactory.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFwd.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Entity.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityEvent.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityFactory.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityFwd.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Keys.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\LinearMoverComponent.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererComponent.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererManager.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverComponent.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverManager.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\PointEntity.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\TransformComponent.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\HandleManager.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Signal.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\SignalManager.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Thing.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingFwd.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\GenericComponentManager.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\GenericComponentManagerModule.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Gui\LevelSelector.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\PhysicsUtils.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingsUtils.h">
+      <Filter>Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapWorld.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_rel|Win32">
+      <Configuration>Debug_rel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D3F292DA-2BC0-486C-9505-A2C4BB7CB486}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PH_Game</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_dr</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_GAME_EXPORTS;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\contrib\rapidxml-1.13\</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;RocketCore_d.lib;RocketControls_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BULLET_HOME)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_EXPORTS;PH_SDL;PH_IGNORE_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\contrib\rapidxml-1.13\;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;RocketCore.lib;RocketControls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>PH_FORCE_DEBUG;WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_GAME_EXPORTS;PH_SDL;PH_IGNORE_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\contrib\rapidxml-1.13\;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>OgreMain.lib;OgreTerrain.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;RocketCore.lib;RocketControls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Game\BaseClient.cpp" />
+    <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Gui\LevelSelector.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Game\OgitorWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\CharacterBodyComponent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\CollisionMesh.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\CollisionShape.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\CollisionShapes.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\DynamicCharacterBody.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\GhostCharacterBody.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\KinematicCharacterController.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\Manager.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\PhysicsUtils.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\RigidBody.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\RigidBodyComponent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\Settings.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Physics\SweepCharacterBody.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\SpectatorCamera.cpp" />
+    <ClCompile Include="..\..\..\src\Game\SpectatorCameraCommandProducer.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\Component.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\ComponentFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\Entity.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\EntityEvent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\EntityFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\LinearMoverComponent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererComponent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererManager.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\MoverComponent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\MoverManager.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\PointEntity.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\Signal.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\SignalManager.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\Thing.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\TransformComponent.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Things\ThingsUtils.cpp" />
+    <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Game\BaseClient.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\BaseOgreWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Gui\LevelSelector.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Entity.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityEvent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\GenericComponentManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\GenericComponentManagerModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\HandleManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Keys.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\LinearMoverComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\PointEntity.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Signal.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\SignalManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Thing.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\TransformComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingsUtils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\World.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\WorldFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\IController.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoader.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoaderFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\OgitorWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\OgitorMapLoader.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CharacterBodyComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionMesh.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionMeshFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionShape.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionShapeFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionShapes.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionTag.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\CollisionTagFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\DynamicCharacterBody.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\GhostCharacterBody.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\ICharacterBody.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\ICharacterBodyFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Keys.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\KinematicCharacterController.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Conv.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Manager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\PhysicsUtils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBody.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Settings.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\SweepCharacterBody.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCamera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCameraCommandProducer.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\WorldManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
+      <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
+      <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_OgreEngine\PH_OgreEngine.vcxproj">
+      <Project>{1652ed80-c688-4cab-b4e3-15a510c284b1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
+      <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PH_System\PH_System.vcxproj">
+      <Project>{49ad3e51-f626-4c97-b051-a9f40f6b3858}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

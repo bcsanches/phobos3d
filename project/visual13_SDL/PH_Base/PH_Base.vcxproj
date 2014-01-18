@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_rel|Win32">
+      <Configuration>Debug_rel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A50E0D40-836D-471E-9749-3448A4A4060C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PH_Base</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_dr</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_BASE_EXPORTS;PH_SDL;PH_CHECK_ASSERT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_BASE_EXPORTS;_CRT_SECURE_NO_WARNINGS;PH_SDL;PH_IGNORE_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_rel|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PH_BASE_EXPORTS;PH_SDL;PH_IGNORE_ASSERT;_CRT_SECURE_NO_WARNINGS;PH_FORCE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Base\DynamicLibrary.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Exception.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Folders.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Log.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Memory.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Node.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Object.cpp" />
+    <ClCompile Include="..\..\..\src\Base\ObjectManager.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Parser.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Path.cpp" />
+    <ClCompile Include="..\..\..\src\Base\ProcVector.cpp" />
+    <ClCompile Include="..\..\..\src\Base\ResourceManager.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Shell\Command.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Shell\Context.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Shell\Item.cpp" />
+    <ClCompile Include="..\..\..\src\Base\Shell\Variable.cpp" />
+    <ClCompile Include="..\..\..\src\Base\String.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Defs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\DisableCopy.h" />
+    <ClInclude Include="..\..\..\include\Phobos\DynamicLibrary.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Enum.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Error.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Exception.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Folders.h" />
+    <ClInclude Include="..\..\..\include\Phobos\GenericFactory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\BaseAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Listener.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Log.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Memory.h" />
+    <ClInclude Include="..\..\..\include\Phobos\MemoryFunctions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Node.h" />
+    <ClInclude Include="..\..\..\include\Phobos\NodeFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\NodeProperty.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Object.h" />
+    <ClInclude Include="..\..\..\include\Phobos\HandlerList.h" />
+    <ClInclude Include="..\..\..\include\Phobos\ObjectManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Parser.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Path.h" />
+    <ClInclude Include="..\..\..\include\Phobos\PathFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\ProcVector.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Resource.h" />
+    <ClInclude Include="..\..\..\include\Phobos\ResourceManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Command.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\CommandFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Context.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\ContextFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\IContext.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Item.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Utils.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Shell\Variable.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Singleton.h" />
+    <ClInclude Include="..\..\..\include\Phobos\String.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Types.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
