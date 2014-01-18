@@ -14,15 +14,20 @@
     <ClCompile Include="..\..\..\src\editor\Request.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Phobos\Editor\NewWorldRequest.cpp">
-      <Filter>Requests</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\editor\LogRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Phobos\Editor\ErrorRequest.cpp">
+    <ClCompile Include="..\..\..\src\editor\CreateAssetRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\ErrorRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\NewWorldRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\EditObject.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditObjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
@@ -38,13 +43,15 @@
     <ClInclude Include="..\..\..\include\Phobos\Editor\RequestFactory.h">
       <Filter>Requests</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h">
-      <Filter>Requests</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Editor\ErrorRequest.h">
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditObject.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditObjectManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\CreateAssetRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
   </ItemGroup>
