@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{d8490cbf-73e3-429f-a649-21df1b8a8a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{a282165c-316c-4649-ba82-d3199e817603}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Engine\BootModule.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Console.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\EventManagerModule.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\PluginManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Session.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Gui\Context.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Gui\Manager.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Module.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\ModuleManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\PluginInstance.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Console.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Core.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\EngineAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\EventManagerModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IClient.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IEscHandler.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IInputHandler.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IPlayerCommandProducer.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\PluginManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Session.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Gui\Context.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Gui\ContextFwd.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Gui\Form.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Gui\Manager.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Math\Accelerometer.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Math\Functions.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Math\Interpolator.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Module.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\PluginInstance.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
+  </ItemGroup>
+</Project>

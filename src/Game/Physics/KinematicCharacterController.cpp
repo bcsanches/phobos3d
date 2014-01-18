@@ -23,6 +23,8 @@ subject to the following restrictions:
 
 #include "Phobos/Game/Physics/KinematicCharacterController.h"
 
+#include <Phobos/Error.h>
+
 namespace Phobos
 {
 	namespace Game
@@ -471,9 +473,16 @@ namespace Phobos
 
 
 
-			void KinematicCharacterController::reset ()
+			void KinematicCharacterController::reset(btCollisionWorld* collisionWorld)
 			{
+				PH_ASSERT(false);
 			}
+
+			void KinematicCharacterController::setUpInterpolate(bool value)
+			{
+				PH_ASSERT(false);
+			}
+
 
 			void KinematicCharacterController::warp (const btVector3& origin)
 			{
