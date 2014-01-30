@@ -102,7 +102,7 @@
       <DependentUpon>EngineConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EngineResponses\AssetListResponse.cs" />
-    <Compile Include="EngineResponses\CreateAssetResponse.cs" />
+    <Compile Include="EngineResponses\CreateMapObjectResponse.cs" />
     <Compile Include="EngineResponses\EngineResponse.cs" />
     <Compile Include="EngineResponses\IEngineResponse.cs" />
     <Compile Include="EngineService.cs" />

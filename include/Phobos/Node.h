@@ -68,6 +68,7 @@ namespace Phobos
 			static NodePtr_t Create(const Char_t *name);
 	
 			~Node();
+			explicit Node(String_t &&name, UInt32_t flags = 0);
 			explicit Node(const String_t &name, UInt32_t flags = 0);
 			explicit Node(const Char_t *name, UInt32_t flags = 0);			
 

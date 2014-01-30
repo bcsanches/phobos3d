@@ -19,15 +19,21 @@ subject to the following restrictions:
 #define PH_WORLD_MANAGER_H
 
 #include <list>
+#include <tuple>
 
-#include <Phobos/Shell/Command.h>
 #include <Phobos/Engine/Module.h>
+#include <Phobos/HandlerList.h>
 #include <Phobos/Listener.h>
-#include <Phobos/Register/HiveFwd.h>
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
+#include <Phobos/Shell/Command.h>
 #include <Phobos/Singleton.h>
+#include <Phobos/Register/HiveFwd.h>
+#include <Phobos/Register/TableFwd.h>
+
 
 #include "Phobos/Game/Things/Entity.h"
 #include "Phobos/Game/GameAPI.h"
+#include "Phobos/Game/MapDefs.h"
 #include "Phobos/Game/MapLoader.h"
 #include "Phobos/Game/Things/ThingFwd.h"
 
@@ -78,7 +84,7 @@ namespace Phobos
 				void RemoveFromFixedUpdateList(Things::Thing &io);
 				void RemoveFromUpdateList(Things::Thing &io);
 
-				//inline const World *GetWorld() const;
+				std::tuple<Register::Table &, Handler> MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
 
 			protected:		
 				virtual void OnBoot() override;
@@ -105,13 +111,11 @@ namespace Phobos
 
 				MapLoaderPtr_t	m_spMapLoader;
 
-				//WorldPtr_t		m_spGameWorld;
-
 				Shell::Command	m_cmdLoadMap;	
 				Shell::Command	m_cmdUnloadMap;	
 				Shell::Command	m_cmdDumpFactoryCreators;
 
-				Phobos::Register::Hive *m_pclGameObjectsHive;				
+				Phobos::Register::Hive *m_pclMapObjectsHive;				
 
 				PH_DECLARE_LISTENER_LIST(WorldManagerListener, m_lstListeners);
 

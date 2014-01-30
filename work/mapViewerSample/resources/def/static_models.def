@@ -1,0 +1,10 @@
+StaticObjectDef Model
+{
+  type = "static";
+  scale = "1 1 1";
+}
+
+StaticObjectDef Barrel: Model
+{
+  mesh = "Barrel.mesh";
+}

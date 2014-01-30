@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharpEditor.EngineResponses
 {
-    class CreateAssetResponse : IEngineResponse
+    class CreateMapObjectResponse : IEngineResponse
     {
         public void Process(long id, dynamic result, dynamic error)
         {

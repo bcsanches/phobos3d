@@ -1,9 +1,22 @@
 #include "Phobos/Editor/EditObject.h"
 
-Phobos::Editor::EditObject::EditObject(UInt_t id, const char *name):
-	Node(name),
-	m_uId(id)
+namespace Phobos
 {
-	//empty
+	namespace Editor
+	{
+		EditObject::EditObject(UInt_t id, const char *name) :
+			Node(name),
+			m_uId(id)
+		{
+			//empty
+		}
+
+		EditObject::EditObject(UInt_t id, String_t &&name) :
+			Node(name),
+			m_uId(id)
+		{
+
+		}
+	}
 }
 

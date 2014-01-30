@@ -43,9 +43,9 @@ namespace SharpEditor
             RemoteProcedureService.Call("NewWorld", null, null);
         }
 
-        public static void CreateAsset(Assets.Asset asset)
+        public static void CreateMapObject(Assets.Asset asset)
         {
-            RemoteProcedureService.Call("CreateAsset", asset, new EngineResponses.CreateAssetResponse().Process);
+            RemoteProcedureService.Call("CreateMapObject", asset, new EngineResponses.CreateMapObjectResponse().Process);
         }
     }
 }

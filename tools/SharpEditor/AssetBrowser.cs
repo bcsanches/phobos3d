@@ -73,7 +73,7 @@ namespace SharpEditor
         {
             var asset = (Assets.Asset) lvAssets.SelectedItems[0].Tag;
 
-            EditorService.CreateAsset(asset);
+            EditorService.CreateMapObject(asset);
 
             /*
                 {

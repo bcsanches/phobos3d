@@ -26,6 +26,7 @@ namespace Phobos
 	class Object: public std::enable_shared_from_this<Object> //public RefCounter_c
 	{
 		public:
+			explicit Object(String_t &&name);
 			explicit Object(const String_t &name);
 			explicit Object(const Char_t *name);
 

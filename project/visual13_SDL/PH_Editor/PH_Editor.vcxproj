@@ -17,7 +17,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\AssetListRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
-    <ClCompile Include="..\..\..\src\editor\CreateAssetRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\CreateMapObjectRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditObject.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditObjectManager.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditorModule.cpp" />
@@ -52,7 +52,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Editor\AssetListRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Editor\CreateAssetRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\CreateMapObjectRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditObject.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditObjectManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />

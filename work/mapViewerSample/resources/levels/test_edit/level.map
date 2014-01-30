@@ -1,0 +1,14 @@
+ObjectDef player: EntityDef.InfoPlayerStart
+{
+  
+}
+
+ObjectDef house_001: StaticObject.Model
+{
+  meshName = "house";  
+}
+
+ObjectDef light: StaticObject.Light
+{
+  
+}

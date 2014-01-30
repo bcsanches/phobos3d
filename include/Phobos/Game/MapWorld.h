@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <Phobos/Singleton.h>
 
 #include <Phobos/Register/HiveFwd.h>
+#include <Phobos/Register/TableFwd.h>
 
 #include <OgrePrerequisites.h>
 
@@ -34,6 +35,12 @@ namespace Phobos
 
 		class SceneNodeObject;
 
+		/*
+			This class is used to control the ownership of a SceneNodeObject.
+
+			When initialized with a SceneNodeObject it will own the object and destroy it on destructor.
+
+		*/
 		class SceneNodeKeeper
 		{
 			private:
@@ -83,13 +90,15 @@ namespace Phobos
 						}
 				};
 
+				virtual Handler MakeObject(Register::Table &table) = 0;
+
 			protected:
 				MapWorld() {};
 				virtual ~MapWorld() {}
 
 			protected:
 				virtual void Load(StringRef_t levelPath, const Register::Hive &hive) = 0;			
-				virtual void Unload() = 0;
+				virtual void Unload() = 0;				
 		};
 
 		

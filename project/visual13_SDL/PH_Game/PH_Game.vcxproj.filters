@@ -116,6 +116,7 @@
       <Filter>Things</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Game\BaseClient.h" />

@@ -28,8 +28,11 @@ subject to the following restrictions:
 #include <Phobos/Register/Table.h>
 
 #include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/MapWorld.h"
+#include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
+#include "Phobos/Game/Things/ThingsUtils.h"
 
 #include "Phobos/Game/Physics/Settings.h"
 #include "Phobos/Game/MapLoaderFactory.h"
@@ -65,7 +68,7 @@ namespace Phobos
 
 			m_spMapLoader->Unload();
 			
-			m_pclGameObjectsHive->RemoveAllChildren();	
+			m_pclMapObjectsHive->RemoveAllChildren();	
 
 			for(auto &listener: m_lstListeners)
 				listener.OnMapUnloaded();		
@@ -87,7 +90,7 @@ namespace Phobos
 			path.GetExtension(extension);
 
 			m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
-			m_spMapLoader->Load(mapName, *m_pclGameObjectsHive);
+			m_spMapLoader->Load(mapName, *m_pclMapObjectsHive);
 
 #if 0
 			{
@@ -130,13 +133,13 @@ namespace Phobos
 
 		void WorldManager::LoadEntities()
 		{			
-			for(auto &pair : *const_cast<const Register::Hive *>(m_pclGameObjectsHive))
+			for(auto &pair : *const_cast<const Register::Hive *>(m_pclMapObjectsHive))
 			{
 				auto *dict = static_cast<const Register::Table *>(pair.second);
 
-				StringRef_t type = dict->GetString(PH_GAME_OBJECT_KEY_TYPE);
+				StringRef_t type = dict->GetString(PH_MAP_OBJECT_KEY_TYPE);
 
-				if(type.compare(PH_GAME_OBJECT_TYPE_ENTITY) == 0)
+				if(type.compare(PH_MAP_OBJECT_TYPE_ENTITY) == 0)
 					this->LoadEntity(*dict);						
 			}
 		}
@@ -169,7 +172,7 @@ namespace Phobos
 
 		void WorldManager::OnBoot()
 		{			
-			m_pclGameObjectsHive = &Register::CreateCustomHive("ObjectDef");
+			m_pclMapObjectsHive = &Register::CreateCustomHive("ObjectDef");
 
 			Physics::Settings::OnBoot();
 		}
@@ -234,6 +237,30 @@ namespace Phobos
 		void WorldManager::RemoveFromUpdateList(Things::Thing &io)
 		{
 			PH_VERIFY_MSG(this->RemoveFromList(m_lstUpdate, io), "Entity not in Update list");
+		}
+
+		std::tuple<Register::Table &, Handler> WorldManager::MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		{
+			std::unique_ptr<Register::Table> table(PH_NEW Register::Table(name));			
+
+			if (type == MapObjectTypes::ENTITY)
+			{
+				table->SetBaseHive("EntityDef");				
+			}
+			else if (type == MapObjectTypes::STATIC)
+			{
+				table->SetBaseHive("StaticObjectDef");				
+			}
+
+			table->SetInherited(asset);
+
+			Things::SaveTransform(*table, transform);
+			//Register::SetVector3(*table, PH_MAP_OBJECT_KEY_SCALE, Ogre::Vector3(1, 1, 1));
+
+			auto &refTable = *(table.get());
+			m_pclMapObjectsHive->AddTable(std::move(table));			
+
+			return std::make_tuple(std::ref(refTable), MapWorld::GetInstance().MakeObject(refTable));
 		}
 
 		void WorldManager::CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &)

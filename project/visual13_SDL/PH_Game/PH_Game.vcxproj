@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
     <ClCompile Include="..\..\..\src\Game\Gui\LevelSelector.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
     <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />

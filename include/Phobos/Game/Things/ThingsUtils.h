@@ -27,6 +27,9 @@ namespace Phobos
 		namespace Things
 		{
 			void LoadWorldTransform(Engine::Math::Transform &transform, const Register::Table &table);
+			void SaveWorldTransform(Register::Table &table, const Engine::Math::Transform &transform);
+
+			void SaveTransform(Phobos::Register::Table &table, const Engine::Math::Transform &transform);
 		}
 	}
 }

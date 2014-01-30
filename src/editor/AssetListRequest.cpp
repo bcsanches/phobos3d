@@ -2,10 +2,13 @@
 
 #include "Phobos/Editor/RequestFactory.h"
 
+#include <Phobos/Path.h>
+
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
+#include <Phobos/Game/MapDefs.h>
 #include <Phobos/Game/Things/Keys.h>
 
 #include <OgreResourceGroupManager.h>
@@ -36,11 +39,15 @@ void Phobos::Editor::AssetListRequest::OnExecute(const rapidjson::Value *paramet
 
 	for(Ogre::StringVector::iterator it = pList->begin(), end = pList->end(); it != end;++it)
 	{
+		Path path(it->c_str());
+		
+		path.StripExtension();
+
 		auto assetObj = assetArray.AddObject();
 
-		assetObj.AddStringValue("name", it->c_str());
+		assetObj.AddStringValue("name", path.GetStr().c_str());
 		assetObj.AddStringValue("category", "static");
-		assetObj.AddStringValue("type", "static");
+		assetObj.AddStringValue("type", Game::MapObjectTypeToString(Game::MapObjectTypes::STATIC));
 	}
 
 	const auto &hive = Register::GetHive(PH_ENTITY_DEF_HIVE);
@@ -56,6 +63,6 @@ void Phobos::Editor::AssetListRequest::OnExecute(const rapidjson::Value *paramet
 
 		assetObj.AddStringValue("name", table->GetName().c_str());
 		assetObj.AddStringValue("category", category);
-		assetObj.AddStringValue("type", "entity");
+		assetObj.AddStringValue("type", Game::MapObjectTypeToString(Game::MapObjectTypes::ENTITY));
 	}	
 }

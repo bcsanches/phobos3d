@@ -31,8 +31,20 @@ namespace Phobos
 		{
 			void LoadWorldTransform(Engine::Math::Transform &transform, const Phobos::Register::Table &table)
 			{
-				transform.SetOrigin(Register::GetVector3(table, PH_GAME_OBJECT_KEY_WORLD_POSITION));
-				transform.SetRotation(Register::GetQuaternion(table, PH_GAME_OBJECT_KEY_WORLD_ORIENTATION));
+				transform.SetOrigin(Register::GetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION));
+				transform.SetRotation(Register::GetQuaternion(table, PH_MAP_OBJECT_KEY_WORLD_ORIENTATION));
+			}
+
+			void SaveWorldTransform(Phobos::Register::Table &table, const Engine::Math::Transform &transform)
+			{
+				Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION, transform.GetOrigin());
+				Register::SetQuaternion(table, PH_MAP_OBJECT_KEY_WORLD_ORIENTATION, transform.GetRotation());
+			}
+
+			void SaveTransform(Phobos::Register::Table &table, const Engine::Math::Transform &transform)
+			{
+				Register::SetVector3(table, PH_MAP_OBJECT_KEY_POSITION, transform.GetOrigin());
+				Register::SetQuaternion(table, PH_MAP_OBJECT_KEY_ORIENTATION, transform.GetRotation());
 			}
 		}
 	}

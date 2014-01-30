@@ -51,6 +51,15 @@ namespace Phobos
 		return NodePtr_t(std::make_shared<Node>(name));
 	}	
 
+	Node::Node(String_t &&name, UInt32_t flags) :
+		Object(name),
+		m_pclParent(NULL),
+		m_fPrivateChildren(flags & NodeFlags::PRIVATE_CHILDREN ? true : false),
+		m_fManagedNode(flags & NodeFlags::MANAGED ? true : false)
+	{
+		//empty
+	}
+
 	Node::Node(const String_t &name, UInt32_t flags):
 		Object(name),
 		m_pclParent(NULL),
