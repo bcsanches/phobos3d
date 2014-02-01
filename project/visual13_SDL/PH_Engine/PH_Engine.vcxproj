@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\BootModule.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Client.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Console.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Module.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Client.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Console.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Core.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />

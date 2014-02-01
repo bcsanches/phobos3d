@@ -16,7 +16,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Game\BaseClient.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
     <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
@@ -119,7 +118,6 @@
     <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\Phobos\Game\BaseClient.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\MapLoader.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\MapLoaderFactory.h" />

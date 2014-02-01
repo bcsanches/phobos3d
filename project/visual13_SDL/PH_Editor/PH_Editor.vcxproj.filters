@@ -28,6 +28,10 @@
     <ClCompile Include="..\..\..\src\editor\CreateMapObjectRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\EditorClient.cpp" />
+    <ClCompile Include="..\..\..\src\Editor\EnableEditModeRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
@@ -52,6 +56,10 @@
       <Filter>Requests</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Editor\CreateMapObjectRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorClient.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EnableEditModeRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
   </ItemGroup>

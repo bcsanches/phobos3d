@@ -102,6 +102,8 @@ namespace Phobos
 				inline bool RemoveFromList(ThingList_t &list, Things::Thing &io);
 				inline void CallEntityIOProc(ThingList_t &list, void (Things::Thing::*proc)());
 
+				void OnMapLoaded();
+
 				void CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdUnloadMap(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdDumpFactoryCreators(const Shell::StringVector_t &args, Shell::Context &);

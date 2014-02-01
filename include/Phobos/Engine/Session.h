@@ -38,7 +38,7 @@ namespace Phobos
 		PH_DECLARE_SINGLETON_PTR(Session);
 
 		class IPlayerCommandProducer;
-		class IClient;
+		class Client;
 		
 		namespace Gui
 		{
@@ -55,12 +55,13 @@ namespace Phobos
 				~Session();
 
 				void SetPlayerCommandProducer(IPlayerCommandProducer *commandProducer);
-				void SetClient(IClient *client);
+				void SetClient(Client *client);
 				void SetGuiForm(Gui::Form *form);
 				void CloseConsole();
 
 			protected:
 				virtual void OnFixedUpdate() override;
+				virtual void OnUpdate() override;
 
 			private:
 				Session();			
@@ -87,7 +88,7 @@ namespace Phobos
 				bool						m_fIgnoreConsoleKey;
 
 				IPlayerCommandProducer	*m_pclPlayerCommandProducer;
-				IClient					*m_pclClient;
+				Client					*m_pclClient;
 				Gui::Form				*m_pclForm;
 
 		};

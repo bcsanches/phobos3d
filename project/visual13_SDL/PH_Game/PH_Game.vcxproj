@@ -129,7 +129,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Game\BaseClient.cpp" />
     <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
     <ClCompile Include="..\..\..\src\Game\Gui\LevelSelector.cpp" />
@@ -172,7 +171,6 @@
     <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\Phobos\Game\BaseClient.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\BaseOgreWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />

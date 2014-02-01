@@ -74,11 +74,17 @@ namespace Phobos
 				listener.OnMapUnloaded();		
 		}
 
+		void WorldManager::OnMapLoaded()
+		{
+			for (auto &listener : m_lstListeners)
+				listener.OnMapLoaded();
+		}
+
 		void WorldManager::LoadBlankMap(const char *name)
 		{
 			this->UnloadMap();
 
-
+			this->OnMapLoaded();
 		}
 
 		void WorldManager::LoadMap(const String_t &mapName)
@@ -110,8 +116,7 @@ namespace Phobos
 				entity->LoadFinished();
 			}
 
-			for(auto &listener: m_lstListeners)
-				listener.OnMapLoaded();		
+			this->OnMapLoaded();
 		}
 
 		Things::Entity &WorldManager::LoadEntity(const Register::Table &entityDef)

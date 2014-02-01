@@ -20,7 +20,9 @@
     <ClCompile Include="..\..\..\src\editor\CreateMapObjectRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditObject.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditObjectManager.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditorClient.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\Editor\EnableEditModeRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\ErrorRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\LogRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\MessageQueue.cpp" />
@@ -55,7 +57,9 @@
     <ClInclude Include="..\..\..\include\Phobos\Editor\CreateMapObjectRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditObject.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditObjectManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorClient.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EnableEditModeRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\MessageQueue.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\NetworkService.h" />

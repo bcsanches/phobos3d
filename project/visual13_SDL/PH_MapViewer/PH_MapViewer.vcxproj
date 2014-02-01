@@ -145,10 +145,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\mapViewer\Client.cpp" />
+    <ClCompile Include="..\..\..\src\mapViewer\ViewerClient.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\mapViewer\Client.h" />
+    <ClInclude Include="..\..\..\src\mapViewer\ViewerClient.h" />
     <ClInclude Include="..\..\..\src\mapViewer\MapViewerAPI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

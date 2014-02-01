@@ -477,9 +477,11 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 Phobos::Handler MapWorldImpl::MakeObject(Phobos::Register::Table &table)
 {
-	using namespace Phobos;
+	using namespace Phobos;	
 
 	auto &render = OgreEngine::Render::GetInstance();	
+
+	render.SetAmbientColor(Ogre::ColourValue::White);
 
 	StringRef_t ref = table.GetString(PH_MAP_OBJECT_KEY_TYPE);
 	if ((ref.compare(PH_MAP_OBJECT_TYPE_TERRAIN) == 0) || (ref.compare(PH_MAP_OBJECT_TYPE_SCENE_MANAGER) == 0))

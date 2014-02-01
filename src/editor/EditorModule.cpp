@@ -29,24 +29,10 @@ namespace Phobos
 			this->AddChild(m_clEditObjectManager);
 		}
 
-		Phobos::Engine::EscAction EditorModule::HandleEsc(Engine::Gui::Form *&outForm)
-		{
-			return Engine::EscAction::IGNORE_ESC;
-		}
-
-		void EditorModule::SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd)
-		{
-			PH_RAISE(INVALID_OPERATION_EXCEPTION, "Phobos::Editor::EditorModule::SetPlayerCmd", "Not implemented");
-		}
-
 		void EditorModule::OnBoot()
 		{
 			auto &session = Engine::Session::GetInstance();
-
-			session.SetClient(this);
-			session.SetGuiForm(nullptr);
-			session.SetPlayerCommandProducer(nullptr);
-
+						
 			m_clNetworkService.Start();
 
 			Game::WorldManager::GetInstance().AddListener(*this);
@@ -131,9 +117,16 @@ namespace Phobos
 			Ogre::Vector3 axis[3];
 			transform.GetRotation().ToAxes(axis);
 
-			transform.SetOrigin(transform.GetOrigin() + axis[1]);
+			transform.SetOrigin(transform.GetOrigin() + (axis[2] * 1));
 
 			m_clEditObjectManager.CreateEditObject(asset, type, transform);
+		}
+
+		void EditorModule::EnableEditMode()
+		{
+			Engine::Session::GetInstance().SetClient(&m_clClient);
+
+			m_clCamera.Enable();
 		}
 
 	}	//namespace Editor

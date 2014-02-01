@@ -22,33 +22,30 @@ subject to the following restrictions:
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Engine/Plugin.h>
 #include <Phobos/Singleton.h>
-#include <Phobos/Game/BaseClient.h>
+#include <Phobos/Engine/Client.h>
 #include <Phobos/Game/SpectatorCamera.h>
 #include <Phobos/Game/WorldManager.h>
 
 namespace Phobos
-{
-	PH_DECLARE_NODE_PTR(Client);
+{	
+	class ViewerClient: public Engine::Client, private Game::WorldManagerListener
+	{		
+		public:			
+			ViewerClient();
 
-	class Client: public Game::BaseClient, private Game::WorldManagerListener
-	{
-		PH_DECLARE_SINGLETON_METHODS(Client);
-
-		public:
-			PH_PLUGIN_CREATE_MODULE_PROC_DECL;
-
-			virtual void SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd) override;
+			virtual void DispatchCommand(Engine::IPlayerCmdPtr_t cmd) override;
 
 			virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm) override;
 
-		protected:
-			virtual void OnFixedUpdate() override;
-			virtual void OnUpdate() override;			
-			virtual void OnPrepareToBoot() override;
-			virtual void OnBoot() override;			
+		protected:			
+			virtual void OnUpdate() override;
 
-		private:
-			Client();
+			virtual void OnConnect() override;
+			virtual void OnDisconnect() override;
+
+		private:						
+			void EnableSpectatorCamera();
+			void DisableSpectatorCamera();
 
 			void OnMapUnloaded();
 			void OnMapLoaded();

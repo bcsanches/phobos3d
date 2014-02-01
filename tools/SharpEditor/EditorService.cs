@@ -30,6 +30,7 @@ namespace SharpEditor
         static void RemoteProcedureService_Ready(object sender, EventArgs e)
         {
             //            
+            RemoteProcedureService.Call("EnableEditMode", null, null);
             RemoteProcedureService.Call("AssetList", null, new EngineResponses.AssetListResponse().Process);
         }
 
