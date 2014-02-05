@@ -1,6 +1,5 @@
 StaticObjectDef Model
-{
-  type = "static";
+{  
   scale = "1 1 1";
 }
 

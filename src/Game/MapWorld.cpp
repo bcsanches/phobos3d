@@ -23,6 +23,7 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Render.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
 
+#include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Table.h>
 
@@ -184,6 +185,12 @@ namespace Phobos
 	}
 }
 
+//
+//
+//Terrain
+//
+//
+
 namespace
 {		
 	class Terrain
@@ -254,6 +261,96 @@ Terrain::~Terrain()
 	Phobos::OgreEngine::Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
 }
 
+
+static Ogre::Light &LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Register::Table &dict)
+{
+	using namespace Phobos;
+
+	auto light = Phobos::OgreEngine::Render::GetInstance().CreateLight();
+
+	temp.AttachLight(light);
+
+	light->setCastShadows(dict.GetBool(PH_MAP_OBJECT_KEY_CAST_SHADOWS));
+
+	StringRef_t lightType = dict.GetString(PH_MAP_OBJECT_KEY_LIGHT_TYPE);
+
+	if (lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_POINT) == 0)
+	{
+		light->setType(Ogre::Light::LT_POINT);
+	}
+	else if (lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL) == 0)
+	{
+		light->setType(Ogre::Light::LT_DIRECTIONAL);
+	}
+	else if (lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_SPOT) == 0)
+	{
+		light->setType(Ogre::Light::LT_SPOTLIGHT);
+		Ogre::Vector3 lightRange = Register::GetVector3(dict, PH_MAP_OBJECT_KEY_LIGHT_RANGE);
+		light->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
+	}
+	else
+	{
+		std::stringstream stream;
+
+		stream << "Invalid light type " << lightType;
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "MapWorld::LoadLight", stream.str());
+	}
+
+	float attenuation[4];
+	dict.Get4Float(attenuation, "attenuation");
+	light->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
+
+	light->setDiffuseColour(Register::GetColour(dict, "diffuse"));
+
+	if (light->getType() != Ogre::Light::LT_POINT)
+		light->setDirection(Register::GetVector3(dict, "direction"));
+
+	light->setPowerScale(dict.GetFloat("power"));
+	light->setSpecularColour(Register::GetColour(dict, "specular"));
+
+	return *light;
+}
+
+static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Entity &entity, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
+{
+	const Ogre::MeshPtr mesh = entity.getMesh();
+	const auto &meshName = mesh->getName();
+
+	Phobos::Path path(meshName);
+	path.StripExtension();
+
+	using namespace Phobos;
+
+	auto &physicsManager = Game::Physics::Manager::GetInstance();
+
+	auto collisionDef = Game::Physics::Settings::TryGetStaticMeshCollisionShapeDef(path.GetStr());
+
+#if 1
+
+	auto body = collisionDef != NULL ?
+		physicsManager.CreateRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, Game::Physics::Utils::CreateCollisionShape(*collisionDef, scale)) :
+		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, *mesh, scale)
+		;
+
+	body.Register();
+
+	return body;
+#endif
+}
+
+static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobos::Game::SceneNodeObject &node)
+{
+	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION, node.GetWorldPosition());
+	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_SCALE, node.GetWorldScale());
+	Phobos::Register::SetQuaternion(table, PH_MAP_OBJECT_KEY_WORLD_ORIENTATION, node.GetWorldOrientation());
+}
+
+//
+//
+//MapWorldImpl
+//
+//
+
 namespace
 {
 	class MapWorldImpl;
@@ -277,10 +374,12 @@ namespace
 				g_pclMapWorld = nullptr;
 			}
 
+			virtual void OnRenderReady() override;
+
 			virtual Phobos::Game::SceneNodeKeeper AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t serial) override;
 			void DestroyDynamicNode(Phobos::Handler h);
 
-			virtual Phobos::Handler MakeObject(Phobos::Register::Table &table) override;
+			virtual Phobos::Game::SceneNodeKeeper MakeObject(Phobos::Register::Table &table) override;
 
 		protected:			
 			virtual void Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive) override;			
@@ -291,89 +390,6 @@ namespace
 
 			std::vector<Terrain>	m_vecTerrains;
 	};	
-}
-
-static Ogre::Light &LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Register::Table &dict)
-{
-	using namespace Phobos;
-
-	auto light = Phobos::OgreEngine::Render::GetInstance().CreateLight();
-	
-	temp.AttachLight(light);
-			
-	light->setCastShadows(dict.GetBool(PH_MAP_OBJECT_KEY_CAST_SHADOWS));
-
-	StringRef_t lightType = dict.GetString(PH_MAP_OBJECT_KEY_LIGHT_TYPE);
-
-	if(lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_POINT) == 0)
-	{
-		light->setType(Ogre::Light::LT_POINT);
-	}
-	else if(lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL) == 0)
-	{
-		light->setType(Ogre::Light::LT_DIRECTIONAL);		
-	}
-	else if(lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_SPOT) == 0)
-	{
-		light->setType(Ogre::Light::LT_SPOTLIGHT);
-		Ogre::Vector3 lightRange = Register::GetVector3(dict, PH_MAP_OBJECT_KEY_LIGHT_RANGE);
-		light->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
-	}
-	else
-	{
-		std::stringstream stream;
-
-		stream << "Invalid light type " << lightType;
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "MapWorld::LoadLight", stream.str());
-	}
-
-	float attenuation[4];
-	dict.Get4Float(attenuation, "attenuation");
-	light->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
-
-	light->setDiffuseColour(Register::GetColour(dict, "diffuse"));		
-
-	if(light->getType() != Ogre::Light::LT_POINT)
-		light->setDirection(Register::GetVector3(dict, "direction"));
-
-	light->setPowerScale(dict.GetFloat("power"));
-	light->setSpecularColour(Register::GetColour(dict, "specular"));	
-
-	return *light;
-}
-
-Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Entity &entity, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
-{		
-	const Ogre::MeshPtr mesh = entity.getMesh();
-	const auto &meshName = mesh->getName();
-		
-	Phobos::Path path(meshName);
-	path.StripExtension();
-
-	using namespace Phobos;
-
-	auto &physicsManager = Game::Physics::Manager::GetInstance();
-
-	auto collisionDef = Game::Physics::Settings::TryGetStaticMeshCollisionShapeDef(path.GetStr());
-
-#if 1
-
-	auto body = collisionDef != NULL ?
-		physicsManager.CreateRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, Game::Physics::Utils::CreateCollisionShape(*collisionDef, scale)) :
-		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, *mesh, scale)
-	;
-
-	body.Register();
-
-	return body;	
-#endif
-}
-
-static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobos::Game::SceneNodeObject &node)
-{	
-	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION, node.GetWorldPosition());
-	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_SCALE, node.GetWorldScale());
-	Phobos::Register::SetQuaternion(table, PH_MAP_OBJECT_KEY_WORLD_ORIENTATION, node.GetWorldOrientation());
 }
 
 void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive)
@@ -475,7 +491,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 	}	
 }
 
-Phobos::Handler MapWorldImpl::MakeObject(Phobos::Register::Table &table)
+Phobos::Game::SceneNodeKeeper MapWorldImpl::MakeObject(Phobos::Register::Table &table)
 {
 	using namespace Phobos;	
 
@@ -533,7 +549,7 @@ Phobos::Handler MapWorldImpl::MakeObject(Phobos::Register::Table &table)
 	
 	SetWorldTransformOnTable(table, result.second);
 
-	return result.first;
+	return Game::SceneNodeKeeper(result.second, result.first);
 }
 
 void MapWorldImpl::Unload()
@@ -556,6 +572,34 @@ void MapWorldImpl::DestroyDynamicNode(Phobos::Handler h)
 	m_lstNodes.Remove(h);	
 }
 
+void MapWorldImpl::OnRenderReady()
+{
+	auto hive = Phobos::Register::TryGetHive(PH_MAP_STATIC_OBJECT_DEF_HIVE);
+	if (!hive)
+	{
+		hive = &Phobos::Register::CreateCustomHive(PH_MAP_STATIC_OBJECT_DEF_HIVE);
+	}
+
+	Ogre::StringVectorPtr pList = Ogre::ResourceGroupManager::getSingleton().findResourceNames("PH_GameData", "*.mesh", false);
+
+	for (Ogre::StringVector::iterator it = pList->begin(), end = pList->end(); it != end; ++it)
+	{
+		Phobos::Path path(it->c_str());
+
+		path.StripExtension();
+
+		if (!hive->TryGetTable(path))
+		{
+			auto pTable = std::make_unique<Phobos::Register::Table>(path);
+
+			pTable->SetInherited(PH_MAP_STATIC_OBJECT_BASE_DEF);
+			pTable->SetString(PH_MAP_OBJECT_KEY_MESH, *it);
+
+			hive->AddTable(std::move(pTable));
+		}
+	}
+}
+
 namespace Phobos
 {
 	namespace Game
@@ -570,6 +614,12 @@ namespace Phobos
 		}
 	}
 }
+
+//
+//
+//SceneNodeKeeper
+//
+//
 
 Phobos::Game::SceneNodeKeeper::SceneNodeKeeper():
 	m_pclSceneNode(nullptr)
@@ -615,6 +665,17 @@ void Phobos::Game::SceneNodeKeeper::SetOrientation(const Ogre::Quaternion &orien
 	PH_ASSERT(m_pclSceneNode && "Invalid handler");
 
 	m_pclSceneNode->SetOrientation(orientation);
+}
+
+Phobos::Handler Phobos::Game::SceneNodeKeeper::Release()
+{
+	Handler h;
+
+	std::swap(m_hHandler, h);
+
+	this->m_pclSceneNode = nullptr;
+
+	return h;
 }
 
 Phobos::Game::SceneNodeKeeper::~SceneNodeKeeper()

@@ -52,6 +52,12 @@ subject to the following restrictions:
 #define PH_MAP_OBJECT_LIGHT_TYPE_SPOT "spot"
 #define PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL "directional"
 
+//Hives
+#define PH_MAP_STATIC_OBJECT_DEF_HIVE "StaticObjectDef"
+
+//Tables
+#define PH_MAP_STATIC_OBJECT_BASE_DEF "Model"
+
 namespace Phobos
 {
 	namespace Game

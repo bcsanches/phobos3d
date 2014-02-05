@@ -17,6 +17,7 @@ subject to the following restrictions:
 #ifndef PH_GAME_MAP_WORLD_H
 #define PH_GAME_MAP_WORLD_H
 
+#include <Phobos/Engine/Module.h>
 #include <Phobos/HandlerList.h>
 #include <Phobos/Singleton.h>
 
@@ -42,21 +43,24 @@ namespace Phobos
 
 		*/
 		class SceneNodeKeeper
-		{
-			private:
-				SceneNodeKeeper(const SceneNodeKeeper &rhs);
-				SceneNodeKeeper &operator=(const SceneNodeKeeper &rhs);
-
-			public:
-				~SceneNodeKeeper();
-				SceneNodeKeeper();
+		{			
+			public:				
+				SceneNodeKeeper();				
 				SceneNodeKeeper(SceneNodeObject &object, Handler h);
 				SceneNodeKeeper(SceneNodeKeeper &&other);
+
+				SceneNodeKeeper(const SceneNodeKeeper &rhs) = delete;
+				SceneNodeKeeper &operator=(const SceneNodeKeeper &rhs) = delete;
+
+				~SceneNodeKeeper();
 
 				SceneNodeKeeper &operator=(SceneNodeKeeper &&other);
 
 				void SetPosition(const Ogre::Vector3 &position);
 				void SetOrientation(const Ogre::Quaternion &orientation);
+
+				//Releases ownership, object is not destroyed
+				Handler Release();
 
 			private:
 				//The handler owns the object, not the memory
@@ -66,7 +70,7 @@ namespace Phobos
 				Handler				m_hHandler;				
 		};
 
-		class PH_GAME_API MapWorld
+		class PH_GAME_API MapWorld: public Engine::Module
 		{
 			PH_DECLARE_SINGLETON_METHODS(MapWorld);
 			
@@ -90,11 +94,10 @@ namespace Phobos
 						}
 				};
 
-				virtual Handler MakeObject(Register::Table &table) = 0;
+				virtual SceneNodeKeeper MakeObject(Register::Table &table) = 0;
 
 			protected:
-				MapWorld() {};
-				virtual ~MapWorld() {}
+				MapWorld() : Module("MapWorld"){  };
 
 			protected:
 				virtual void Load(StringRef_t levelPath, const Register::Hive &hive) = 0;			

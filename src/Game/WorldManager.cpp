@@ -250,22 +250,36 @@ namespace Phobos
 
 			if (type == MapObjectTypes::ENTITY)
 			{
+				table->SetString(PH_MAP_OBJECT_KEY_TYPE, PH_MAP_OBJECT_TYPE_ENTITY);
 				table->SetBaseHive("EntityDef");				
 			}
 			else if (type == MapObjectTypes::STATIC)
 			{
+				table->SetString(PH_MAP_OBJECT_KEY_TYPE, PH_MAP_OBJECT_TYPE_STATIC);
 				table->SetBaseHive("StaticObjectDef");				
 			}
 
 			table->SetInherited(asset);
 
-			Things::SaveTransform(*table, transform);
-			//Register::SetVector3(*table, PH_MAP_OBJECT_KEY_SCALE, Ogre::Vector3(1, 1, 1));
+			//it is boring to insert scale in every config, so generate a default if not set
+			if (!table->HasValue(PH_MAP_OBJECT_KEY_SCALE))
+			{
+				Phobos::Register::SetVector3(*table, PH_MAP_OBJECT_KEY_SCALE, Ogre::Vector3::UNIT_SCALE);
+			}
 
-			auto &refTable = *(table.get());
+			Things::SaveTransform(*table, transform);					
+
+			//Create Map object
+			SceneNodeKeeper keeper = MapWorld::GetInstance().MakeObject(*table);
+
+			//
+			//All is fine, commit results, transfer ownership to WorldManager and return data
+			auto &refTable = *(table.get());			
+
 			m_pclMapObjectsHive->AddTable(std::move(table));			
 
-			return std::make_tuple(std::ref(refTable), MapWorld::GetInstance().MakeObject(refTable));
+			//All is done, return references to objects
+			return std::make_tuple(std::ref(refTable), keeper.Release());
 		}
 
 		void WorldManager::CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &)

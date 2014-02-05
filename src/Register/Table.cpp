@@ -270,6 +270,11 @@ const Phobos::String_t &Phobos::Register::Table::GetString(const String_t &key) 
 	return Phobos::Register::Table::GetValue(this, key).m_strValue;		
 }
 
+bool Phobos::Register::Table::HasValue(const String_t &key) const
+{
+	return this->TryGetString(key) ? true : false;
+}
+
 bool Phobos::Register::Table::TryGetString(const String_t &key, String_t &value) const
 {
 	const String_t *foundValue = TryGetString(this, key);

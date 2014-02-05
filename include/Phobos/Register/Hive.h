@@ -17,6 +17,7 @@ subject to the following restrictions:
 #ifndef PH_REGISTER_HIVE_H
 #define PH_REGISTER_HIVE_H
 
+#include <Phobos/DisableCopy.h>
 #include <Phobos/Node.h>
 
 #include "Phobos/Register/RegisterAPI.h"
@@ -32,6 +33,8 @@ namespace Phobos
 
 		class PH_REGISTER_API Hive: public Node
 		{
+			PH_DISABLE_COPY(Hive);
+
 			public:
 				static HivePtr_t Create(const String_t &name);
 

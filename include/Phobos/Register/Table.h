@@ -156,6 +156,8 @@ namespace Phobos
 
 				void Load(Parser &parser);
 
+				bool HasValue(const String_t &key) const;
+
 				const String_t &GetString(const String_t &key) const;
 				bool TryGetString(const String_t &key, String_t &out) const;
 				const String_t *TryGetString(const String_t &key) const;
