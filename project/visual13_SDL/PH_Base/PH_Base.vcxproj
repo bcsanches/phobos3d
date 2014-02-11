@@ -159,7 +159,7 @@
     <ClInclude Include="..\..\..\include\Phobos\NodeFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\NodeProperty.h" />
     <ClInclude Include="..\..\..\include\Phobos\Object.h" />
-    <ClInclude Include="..\..\..\include\Phobos\HandlerList.h" />
+    <ClInclude Include="..\..\..\include\Phobos\HandleList.h" />
     <ClInclude Include="..\..\..\include\Phobos\ObjectManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Parser.h" />
     <ClInclude Include="..\..\..\include\Phobos\Path.h" />

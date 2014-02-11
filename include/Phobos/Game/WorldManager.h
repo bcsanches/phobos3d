@@ -22,7 +22,7 @@ subject to the following restrictions:
 #include <tuple>
 
 #include <Phobos/Engine/Module.h>
-#include <Phobos/HandlerList.h>
+#include <Phobos/HandleList.h>
 #include <Phobos/Listener.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 #include <Phobos/Shell/Command.h>
@@ -84,7 +84,7 @@ namespace Phobos
 				void RemoveFromFixedUpdateList(Things::Thing &io);
 				void RemoveFromUpdateList(Things::Thing &io);
 
-				std::tuple<Register::Table &, Handler> MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
+				std::tuple<Register::Table &, Handle> MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
 
 			protected:		
 				virtual void OnBoot() override;
@@ -129,13 +129,6 @@ namespace Phobos
 		{
 			return m_clEntityManager.GetNumActiveObjects();
 		}
-
-		/*
-		inline const World *WorldManager::GetWorld() const
-		{
-			return m_spGameWorld.get();
-		}
-		*/
 	}
 }
 

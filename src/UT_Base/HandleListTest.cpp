@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include <boost/test/unit_test.hpp>
 
-#include <Phobos/HandlerList.h>
+#include <Phobos/HandleList.h>
 
 class TestObject
 {
@@ -59,7 +59,7 @@ using namespace Phobos;
 
 BOOST_AUTO_TEST_CASE(list_basic)
 {
-	HandlerList<TestObject> list;
+	HandleList<TestObject> list;
 
 	auto handler = list.Add(std::move(TestObject())).first;
 
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(list_basic)
 
 	BOOST_REQUIRE_THROW(list.Get(handler), ObjectNotFoundException);
 
-	BOOST_REQUIRE_THROW(list.Get(Handler(1024, 1)), InvalidParameterException);
+	BOOST_REQUIRE_THROW(list.Get(Handle(1024, 1)), InvalidParameterException);
 
 	//Add again, check re-use
 	handler = list.Add(std::move(TestObject())).first;

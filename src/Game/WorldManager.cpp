@@ -244,7 +244,7 @@ namespace Phobos
 			PH_VERIFY_MSG(this->RemoveFromList(m_lstUpdate, io), "Entity not in Update list");
 		}
 
-		std::tuple<Register::Table &, Handler> WorldManager::MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		std::tuple<Register::Table &, Handle> WorldManager::MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
 		{
 			std::unique_ptr<Register::Table> table(PH_NEW Register::Table(name));			
 

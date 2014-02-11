@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include "Phobos/Game/MapWorld.h"
 
 #include <Phobos/Exception.h>
-#include <Phobos/HandlerList.h>
+#include <Phobos/HandleList.h>
 #include <Phobos/Path.h>
 
 #include <Phobos/OgreEngine/Render.h>
@@ -361,7 +361,7 @@ namespace
 	class MapWorldImpl: public Phobos::Game::MapWorld
 	{
 		private:
-			typedef Phobos::HandlerList<Phobos::Game::SceneNodeObject> SceneNodeList_t;
+			typedef Phobos::HandleList<Phobos::Game::SceneNodeObject> SceneNodeList_t;
 					
 		public:
 			MapWorldImpl()				
@@ -377,7 +377,7 @@ namespace
 			virtual void OnRenderReady() override;
 
 			virtual Phobos::Game::SceneNodeKeeper AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t serial) override;
-			void DestroyDynamicNode(Phobos::Handler h);
+			void DestroyDynamicNode(Phobos::Handle h);
 
 			virtual Phobos::Game::SceneNodeKeeper MakeObject(Phobos::Register::Table &table) override;
 
@@ -398,7 +398,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 	auto &render = OgreEngine::Render::GetInstance();
 
-	std::vector<std::tuple<const String_t *, Handler, Register::Table &>> vecObjectsCache;
+	std::vector<std::tuple<const String_t *, Handle, Register::Table &>> vecObjectsCache;
 	std::vector<Register::Table *> vecTerrains;
 
 	Ogre::Light *terrainLight = nullptr;
@@ -560,10 +560,10 @@ void MapWorldImpl::Unload()
 
 Phobos::Game::SceneNodeKeeper MapWorldImpl::AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t handler)
 {
-	return m_lstNodes.Acquire<Phobos::Game::SceneNodeKeeper>(Phobos::Handler(handler));	
+	return m_lstNodes.Acquire<Phobos::Game::SceneNodeKeeper>(Phobos::Handle(handler));	
 }
 
-void MapWorldImpl::DestroyDynamicNode(Phobos::Handler h)
+void MapWorldImpl::DestroyDynamicNode(Phobos::Handle h)
 {
 	//Ignore nulls
 	if(!h.GetSerial())
@@ -627,11 +627,11 @@ Phobos::Game::SceneNodeKeeper::SceneNodeKeeper():
 	//empty
 }
 
-Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeObject &object, Handler h):
+Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeObject &object, Handle h):
 	m_pclSceneNode(&object),
-	m_hHandler(h)
+	m_hHandle(h)
 {
-	PH_ASSERT(m_hHandler && "Constructor with object requires a valid serial");
+	PH_ASSERT(m_hHandle && "Constructor with object requires a valid serial");
 }
 
 Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeKeeper &&other):
@@ -642,12 +642,12 @@ Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeKeeper &&other):
 
 Phobos::Game::SceneNodeKeeper &Phobos::Game::SceneNodeKeeper::operator=(SceneNodeKeeper &&rhs)
 {
-	g_pclMapWorld->DestroyDynamicNode(m_hHandler);
+	g_pclMapWorld->DestroyDynamicNode(m_hHandle);
 	
 	this->m_pclSceneNode = rhs.m_pclSceneNode;
-	this->m_hHandler = rhs.m_hHandler;	
+	this->m_hHandle = rhs.m_hHandle;
 
-	rhs.m_hHandler = Handler();
+	rhs.m_hHandle = Handle();
 	rhs.m_pclSceneNode = nullptr;
 
 	return *this;
@@ -655,23 +655,23 @@ Phobos::Game::SceneNodeKeeper &Phobos::Game::SceneNodeKeeper::operator=(SceneNod
 
 void Phobos::Game::SceneNodeKeeper::SetPosition(const Ogre::Vector3 &position)
 {
-	PH_ASSERT(m_pclSceneNode && "Invalid handler");
+	PH_ASSERT(m_pclSceneNode && "Invalid handle");
 
 	m_pclSceneNode->SetPosition(position);
 }
 
 void Phobos::Game::SceneNodeKeeper::SetOrientation(const Ogre::Quaternion &orientation)
 {
-	PH_ASSERT(m_pclSceneNode && "Invalid handler");
+	PH_ASSERT(m_pclSceneNode && "Invalid handle");
 
 	m_pclSceneNode->SetOrientation(orientation);
 }
 
-Phobos::Handler Phobos::Game::SceneNodeKeeper::Release()
+Phobos::Handle Phobos::Game::SceneNodeKeeper::Release()
 {
-	Handler h;
+	Handle h;
 
-	std::swap(m_hHandler, h);
+	std::swap(m_hHandle, h);
 
 	this->m_pclSceneNode = nullptr;
 
@@ -680,6 +680,6 @@ Phobos::Handler Phobos::Game::SceneNodeKeeper::Release()
 
 Phobos::Game::SceneNodeKeeper::~SceneNodeKeeper()
 {	
-	g_pclMapWorld->DestroyDynamicNode(m_hHandler);
+	g_pclMapWorld->DestroyDynamicNode(m_hHandle);
 }
 

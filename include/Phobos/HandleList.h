@@ -14,8 +14,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef PH_HANDLER_LIST_H
-#define PH_HANDLER_LIST_H
+#ifndef PH_HANDLE_LIST_H
+#define PH_HANDLE_LIST_H
 
 #include "String.h"
 #include "Exception.h"
@@ -24,34 +24,34 @@ subject to the following restrictions:
 
 namespace Phobos
 {	
-	class Handler	
+	class Handle	
 	{
 		private:
 			//safe bool: http://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Safe_bool
-			typedef void (Handler::*BoolType_t)() const;
+			typedef void (Handle::*BoolType_t)() const;
 			void this_type_does_not_support_comparisons() const {}
 
 		public:
-			Handler():
+			Handle():
 				m_u16Serial(0),
 				m_u16Index(0)
 			{
 				//empty
 			}
 
-			Handler(UInt16_t index, UInt16_t serial):
+			Handle(UInt16_t index, UInt16_t serial):
 				m_u16Index(index),
 				m_u16Serial(serial)
 			{
 				//empty
 			}
 
-			explicit Handler(StringRef_t handler) 
+			explicit Handle(StringRef_t handler) 
 			{
-				UInt32_t uHandler = std::stoi(handler.data());
+				UInt32_t uHandle = std::stoi(handler.data());
 
-				m_u16Index = uHandler & 0x0000FFFF;
-				m_u16Serial = (uHandler >> 16);
+				m_u16Index = uHandle & 0x0000FFFF;
+				m_u16Serial = (uHandle >> 16);
 			}
 				
 			inline UInt16_t GetIndex() const
@@ -71,7 +71,7 @@ namespace Phobos
 
 			operator BoolType_t() const
 			{
-				return m_u16Serial ? &Handler::this_type_does_not_support_comparisons : nullptr;
+				return m_u16Serial ? &Handle::this_type_does_not_support_comparisons : nullptr;
 			}
 
 		private:
@@ -80,25 +80,25 @@ namespace Phobos
 	};
 
 	template <typename T>
-	class HandlerList
+	class HandleList
 	{
 		public:
 			static const UInt32_t MAX_HANDLERS = 0x0000FFFF;					
 
 		public:
-			HandlerList():
+			HandleList():
 				m_u16NextFreeSlot(MAX_HANDLERS)
 			{
 				//empty
 			}
 
-			std::pair<Handler, T&> Add(T &&object)
+			std::pair<Handle, T&> Add(T &&object)
 			{
 				auto slot = m_u16NextFreeSlot;
 
 				if(slot == MAX_HANDLERS)
 				{					
-					m_vecObjects.emplace_back(std::make_pair(MiniHandler(), std::move(object)));
+					m_vecObjects.emplace_back(std::make_pair(HandleEntry(), std::move(object)));
 					slot = m_vecObjects.size()-1;
 				}
 				else
@@ -108,10 +108,10 @@ namespace Phobos
 					m_vecObjects[slot].second = std::move(object);
 				}
 
-				return std::make_pair(Handler(slot, m_vecObjects[slot].first.m_u16Serial), std::ref(m_vecObjects[slot].second));
+				return std::make_pair(Handle(slot, m_vecObjects[slot].first.m_u16Serial), std::ref(m_vecObjects[slot].second));
 			}
 
-			T Remove(Handler h)
+			T Remove(Handle h)
 			{
 				auto index = GetValidIndex(h);				
 
@@ -127,7 +127,7 @@ namespace Phobos
 			}
 
 			template <typename CARRIER>
-			CARRIER Acquire(Handler h)
+			CARRIER Acquire(Handle h)
 			{
 				using namespace Phobos;
 								
@@ -136,7 +136,7 @@ namespace Phobos
 				return CARRIER(m_vecObjects[index].second, h);
 			}
 
-			T &Get(Handler h)
+			T &Get(Handle h)
 			{				
 				return m_vecObjects[GetValidIndex(h)].second;
 			}
@@ -149,31 +149,31 @@ namespace Phobos
 
 		private:			
 
-			Phobos::UInt16_t GetValidIndex(Handler h)
+			Phobos::UInt16_t GetValidIndex(Handle h)
 			{
 				const Phobos::UInt16_t index = h.GetIndex();
 				const Phobos::UInt16_t serial = h.GetSerial();
 
 				if(index >= m_vecObjects.size())
 				{
-					PH_RAISE(Phobos::INVALID_PARAMETER_EXCEPTION, "[RenderWorldImpl::AcquireDynamicSceneNodeHandler]", "handler is out of bounds");
+					PH_RAISE(Phobos::INVALID_PARAMETER_EXCEPTION, "[HandleList::GetValidIndex]", "handle is out of bounds");
 				}
 
 				if(m_vecObjects[index].first.m_u16Serial != serial)
 				{
-					PH_RAISE(Phobos::OBJECT_NOT_FOUND_EXCEPTION, "[RenderWorldImpl::AcquireDynamicSceneNodeHandler]", "Invalid serial for handler");
+					PH_RAISE(Phobos::OBJECT_NOT_FOUND_EXCEPTION, "[HandleList::GetValidIndex]", "Invalid serial for handle");
 				}
 
 				//return an valid index
 				return index;
 			}
 
-			struct MiniHandler
+			struct HandleEntry
 			{
 				Phobos::UInt16_t m_u16Serial;
 				Phobos::UInt16_t m_u16NextFreeSlot;
 
-				MiniHandler():
+				HandleEntry():
 					m_u16Serial(1),
 					m_u16NextFreeSlot(MAX_HANDLERS)
 				{
@@ -182,7 +182,7 @@ namespace Phobos
 			};
 
 		private:
-			typedef std::vector<std::pair<MiniHandler, T>> Vector_t;
+			typedef std::vector<std::pair<HandleEntry, T>> Vector_t;
 
 			Vector_t m_vecObjects;
 

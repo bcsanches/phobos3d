@@ -18,7 +18,7 @@ subject to the following restrictions:
 #define PH_GAME_MAP_WORLD_H
 
 #include <Phobos/Engine/Module.h>
-#include <Phobos/HandlerList.h>
+#include <Phobos/HandleList.h>
 #include <Phobos/Singleton.h>
 
 #include <Phobos/Register/HiveFwd.h>
@@ -46,7 +46,7 @@ namespace Phobos
 		{			
 			public:				
 				SceneNodeKeeper();				
-				SceneNodeKeeper(SceneNodeObject &object, Handler h);
+				SceneNodeKeeper(SceneNodeObject &object, Handle h);
 				SceneNodeKeeper(SceneNodeKeeper &&other);
 
 				SceneNodeKeeper(const SceneNodeKeeper &rhs) = delete;
@@ -60,14 +60,14 @@ namespace Phobos
 				void SetOrientation(const Ogre::Quaternion &orientation);
 
 				//Releases ownership, object is not destroyed
-				Handler Release();
+				Handle Release();
 
 			private:
 				//The handler owns the object, not the memory
 				//Must call MapWorld::DestroyDynamicnode to destroy it
 				SceneNodeObject		*m_pclSceneNode;
 
-				Handler				m_hHandler;				
+				Handle				m_hHandle;				
 		};
 
 		class PH_GAME_API MapWorld: public Engine::Module
