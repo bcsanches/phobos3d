@@ -119,8 +119,8 @@ namespace Phobos
 			}			
 
 		protected:			
-			void AddPrivateChild(Node &node);
-			void AddPrivateChild(std::unique_ptr<Node> &&ptr);
+			Node &AddPrivateChild(Node &node);
+			Node &AddPrivateChild(std::unique_ptr<Node> &&ptr);
 
 			inline NodeMap_t::iterator begin();
 			inline NodeMap_t::iterator end();

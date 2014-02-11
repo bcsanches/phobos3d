@@ -22,7 +22,7 @@ namespace Phobos
 			public:
 				EditObjectManager();
 
-				void CreateEditObject(const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
+				EditObject &CreateEditObject(const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
 
 			private:
 				String_t GenerateName(UInt64_t id) const;

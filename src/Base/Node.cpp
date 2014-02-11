@@ -102,7 +102,7 @@ namespace Phobos
 		AddPrivateChild(std::move(ptr));
 	}
 
-	void Node::AddPrivateChild(Node &node)
+	Node &Node::AddPrivateChild(Node &node)
 	{
 		if(node.m_pclParent)
 		{
@@ -119,14 +119,18 @@ namespace Phobos
 
 		m_mapNodes.insert(std::make_pair(node.GetName(), &node));
 		node.m_pclParent = this;
+
+		return node;
 	}
 
-	void Node::AddPrivateChild(std::unique_ptr<Node> &&ptr)
+	Node &Node::AddPrivateChild(std::unique_ptr<Node> &&ptr)
 	{
 		ptr->SetManaged(true);
-		this->AddPrivateChild(*ptr);
+		auto &node = this->AddPrivateChild(*ptr);
 		
 		ptr.release();
+
+		return node;
 	}
 
 	void Node::RemoveSelf()

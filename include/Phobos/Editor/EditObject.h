@@ -13,8 +13,13 @@ namespace Phobos
 				EditObject(UInt_t id, const char *name);
 				EditObject(UInt_t id, String_t &&name);
 
-				private:
-					UInt_t m_uId;
+				inline UInt_t GetId() const
+				{
+					return m_uId;
+				}
+
+			private:
+				UInt_t m_uId;
 		};
 	}
 }

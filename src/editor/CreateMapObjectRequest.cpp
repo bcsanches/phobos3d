@@ -1,5 +1,6 @@
 #include "Phobos/Editor/CreateMapObjectRequest.h"
 
+#include "Phobos/Editor/EditObject.h"
 #include "Phobos/Editor/EditorModule.h"
 #include "Phobos/Editor/RequestFactory.h"
 
@@ -24,13 +25,16 @@ Phobos::Editor::CreateMapObjectRequest::CreateMapObjectRequest(const rapidjson::
 
 
 void Phobos::Editor::CreateMapObjectRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
-{			
-	auto assetArray = response->AddArray("result");
-
+{				
 	auto name = (*parameters)["name"].GetString();
 	auto typeName = (*parameters)["type"].GetString();
 
 	auto type = Game::StringToMapObjectType(typeName);
 
-	EditorModule::GetInstance().CreateMapObject(name, type);
+	auto &editObject = EditorModule::GetInstance().CreateMapObject(name, type);
+
+	auto object = response->AddObject("result");
+
+	object.AddStringValue("name", editObject.GetName().c_str());
+	object.AddIntValue("id", editObject.GetId());
 }

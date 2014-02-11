@@ -15,7 +15,7 @@ namespace Phobos
 			//empty
 		}
 
-		void EditObjectManager::CreateEditObject(const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		EditObject &EditObjectManager::CreateEditObject(const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
 		{
 			auto nextId = ++m_uNextId;		
 
@@ -28,7 +28,7 @@ namespace Phobos
 				transform
 			);
 
-			this->AddPrivateChild(std::move(editObject));
+			return static_cast<EditObject &>(this->AddPrivateChild(std::move(editObject)));
 		}
 
 		String_t EditObjectManager::GenerateName(UInt64_t id) const
