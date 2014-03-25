@@ -22,34 +22,34 @@ namespace SharpEditor
 
     class EngineClient
     {
-        private WebSocket4Net.WebSocket mSocket = new WebSocket4Net.WebSocket("ws://localhost:2325");
-        private bool mConnected = false;
+        private WebSocket4Net.WebSocket m_Socket = new WebSocket4Net.WebSocket("ws://localhost:2325");
+        private bool m_fConnected = false;
 
         public event EventHandler Connected;
         public event EventHandler<EngineEventArgs> MessageReceived;
 
         public void Start()
         {
-            mSocket.Opened += socket_Opened;
-            mSocket.Closed += socket_Closed;            
-            mSocket.MessageReceived += mSocket_MessageReceived;
-            mSocket.Error += socket_Error;
+            m_Socket.Opened += socket_Opened;
+            m_Socket.Closed += socket_Closed;            
+            m_Socket.MessageReceived += mSocket_MessageReceived;
+            m_Socket.Error += socket_Error;
 
-            mSocket.Open();
+            m_Socket.Open();
         }        
 
         public void Stop()
         {
-            if (mConnected)
+            if (m_fConnected)
             {
-                mSocket.Close();
-                mConnected = false;
+                m_Socket.Close();
+                m_fConnected = false;
             }
         }
 
         public void Send(string cmd)
         {
-            mSocket.Send(cmd);
+            m_Socket.Send(cmd);
         }
 
         void socket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
@@ -57,12 +57,12 @@ namespace SharpEditor
             //System.Windows.Forms.MessageBox.Show("socket_Error");
             LogService.Log(e.Exception.Message);
             
-            mConnected = false;
+            m_fConnected = false;
 
-            if (mSocket.State != WebSocket4Net.WebSocketState.Open)
+            if (m_Socket.State != WebSocket4Net.WebSocketState.Open)
             {
                 //Keep trying
-                mSocket.Open();
+                m_Socket.Open();
             }
             else
             {
@@ -84,7 +84,7 @@ namespace SharpEditor
         
         void socket_Closed(object sender, EventArgs e)
         {
-            mConnected = false;
+            m_fConnected = false;
 
             if(LogService.Running)
                 LogService.Log("Connection closed.");
@@ -93,7 +93,7 @@ namespace SharpEditor
         void socket_Opened(object sender, EventArgs e)
         {
             LogService.Log("Connected to engine.");
-            mConnected = true;
+            m_fConnected = true;
 
             if (Connected != null)
             {

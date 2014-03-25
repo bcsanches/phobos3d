@@ -8,14 +8,19 @@ namespace SharpEditor
 {
     public static class EngineService
     {
-        private static EngineProcess mProcess;        
+        private static EngineProcess m_Process;        
 
         struct ProcessInfo
         {
-            public string mFileName;
-            public string mWorkingDirectory;
-            public string mSystemPath;
-            public bool mExternalProcess;
+            public string m_strFileName;
+            public string m_strWorkingDirectory;
+            public string m_strSystemPath;
+            public bool m_fExternalProcess;
+        }
+
+        public static bool IsExternalProcess()
+        {
+            return m_Process == null;
         }
 
         public static bool ShowEngineConfigDialog()
@@ -37,8 +42,8 @@ namespace SharpEditor
 
             for (; ; )
             {
-                info.mExternalProcess = Properties.Settings.Default.EngineExternalStart;
-                if (info.mExternalProcess)
+                info.m_fExternalProcess = Properties.Settings.Default.EngineExternalStart;
+                if (info.m_fExternalProcess)
                     return true;
 
                 string exe = Properties.Settings.Default.EnginePath;
@@ -69,44 +74,70 @@ namespace SharpEditor
                     continue;
                 }
 
-                info.mFileName = exe;
-                info.mWorkingDirectory = workingDir;
+                info.m_strFileName = exe;
+                info.m_strWorkingDirectory = workingDir;
 
-                info.mSystemPath = Properties.Settings.Default.EnginePathVariable;
+                info.m_strSystemPath = Properties.Settings.Default.EnginePathVariable;
 
                 return true;
             }
         }
 
-        public static void Start(System.Windows.Forms.Panel enginePanel)
+        private static void CheckIfStopped()
         {
-            if (mProcess != null)
+            if (m_Process != null)
             {
                 throw new InvalidOperationException("Engine process already running");
             }
+        }
+
+        public static void Start(System.Windows.Forms.Panel enginePanel)
+        {
+            CheckIfStopped();
 
             ProcessInfo info;
 
             if (!PrepareProcessInfo(out info))
                 throw new Exception("User aborted");
 
-            if (!info.mExternalProcess)
+            if (!info.m_fExternalProcess)
             {
                 LogService.Log("Starting engine");
-                mProcess = new EngineProcess(info.mFileName, info.mWorkingDirectory, info.mSystemPath, enginePanel);
-                mProcess.Start();
+                m_Process = new EngineProcess(info.m_strFileName, info.m_strWorkingDirectory, info.m_strSystemPath, enginePanel);                
                 LogService.Log("Engine started");
             }
 
             RemoteProcedureService.Start();
         }
+
+        public static void CaptureByWindow(IntPtr engineWindow, System.Windows.Forms.Panel enginePanel)
+        {
+            CheckIfStopped();
+
+            m_Process = new EngineProcess(engineWindow, enginePanel);
+        }
              
         public static void Stop()
         {
+            if (m_Process == null)
+                return;
+
+            RemoteProcedureService.Call("Quit", null, null);
+
             RemoteProcedureService.Stop();
 
-            if(mProcess != null)
-                mProcess.Stop();
-        }        
+            //m_Process.Stop();
+        }
+
+        public static void Kill()
+        {
+            if (m_Process != null && !m_Process.HasExited)
+                m_Process.Kill();
+        }
+
+        public static bool HasEngineProcessExited
+        {
+            get { return m_Process == null || m_Process.HasExited; }
+        }
     }
 }

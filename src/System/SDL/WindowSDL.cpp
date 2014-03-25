@@ -44,47 +44,61 @@ void Phobos::System::WindowSDL::Open(const String_t &name, const UIntSize_t &siz
 
 	SDL_EnableUNICODE(1);
 
-        #ifdef PH_WIN32
-			unsigned int flags = 0;
+    #ifdef PH_WIN32
+		unsigned int flags = 0;
 
-			HWND parent = reinterpret_cast<HWND>(parentWindow);
-			if(parent)
-				flags = SDL_NOFRAME | SDL_RESIZABLE;
+		HWND parent = reinterpret_cast<HWND>(parentWindow);
+		if(parent)
+			flags = SDL_NOFRAME | SDL_RESIZABLE;
 
-            SDL_SetVideoMode(size.m_tWidth, size.m_tHeight, 32, flags);
+        SDL_SetVideoMode(size.m_tWidth, size.m_tHeight, 32, flags);
+		
+		if(parent)
+		{
+			this->SetParentWindow(parentWindow);
+		}
 
-			if(parent)
-			{
-				HWND sdlHwnd = reinterpret_cast<HWND>(this->GetHandler());
+    #else
+        SDL_SetVideoMode(rect.tWidth, rect.tHeight, 0, SDL_OPENGL);
+    #endif
 
-				//not 100% trusted, but give us an extra check
-				if(!IsWindow(parent))
-				{
-					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[WindowSDL::Open]", "Invalid parent window handle");
-				}
+    #ifdef PH_LINUX
+        SDL_GL_SetAttribute( SDL_GL_RED_SIZE,           8  );
+        SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,         8  );
+        SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,          8  );
+        SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,         16 );
+    #endif
 
-				RECT parentRec;					
-				GetClientRect(parent, &parentRec);
-					
-				//SetWindowPos( sdlHwnd, parent, 0, 0, parentRec.right, parentRec.bottom, ( 0 /*SWP_NOSIZE*/ | SWP_SHOWWINDOW ));
-				MoveWindow(sdlHwnd, 0, 0,  parentRec.right, parentRec.bottom, true);
-				SetParent(sdlHwnd, parent);			
+    SDL_WM_SetCaption(name.c_str(), NULL);
+}
 
-				//SetWindowLong(sdlHwnd, GWL_STYLE, WS_MAXIMIZE);
-			}
+void Phobos::System::WindowSDL::SetParentWindow(void *parentWindow)
+{
+#ifdef PH_WIN32	
+	HWND sdlHwnd = reinterpret_cast<HWND>(this->GetHandler());
+	HWND parent = reinterpret_cast<HWND>(parentWindow);
 
-        #else
-            SDL_SetVideoMode(rect.tWidth, rect.tHeight, 0, SDL_OPENGL);
-        #endif
+	SetParent(sdlHwnd, parent);
 
-        #ifdef PH_LINUX
-            SDL_GL_SetAttribute( SDL_GL_RED_SIZE,           8  );
-            SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,         8  );
-            SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,          8  );
-            SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,         16 );
-        #endif
+	if (parent)
+	{
+		//not 100% trusted, but give us an extra check
+		if (!IsWindow(parent))
+		{
+			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[WindowSDL::Open]", "Invalid parent window handle");
+		}
 
-        SDL_WM_SetCaption(name.c_str(), NULL);
+		RECT parentRect;
+		GetClientRect(parent, &parentRect);
+
+		//SetWindowPos( sdlHwnd, parent, 0, 0, parentRec.right, parentRec.bottom, ( 0 /*SWP_NOSIZE*/ | SWP_SHOWWINDOW ));
+		MoveWindow(sdlHwnd, 0, 0, parentRect.right, parentRect.bottom, true);
+
+		SDL_SetVideoMode(parentRect.right - parentRect.left, parentRect.bottom - parentRect.top, 32, SDL_NOFRAME | SDL_RESIZABLE);
+	}	
+#else
+	#error "Not implemented"
+#endif
 }
 
 size_t Phobos::System::WindowSDL::GetWidth(void) const

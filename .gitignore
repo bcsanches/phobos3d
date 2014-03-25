@@ -1137,3 +1137,5 @@ project/visual13_SDL/UT_BaseTest/UT_BaseTest.vcxproj.user
 project/visual13_SDL/Sample_05/Debug/Sample_05_d.Build.CppClean.log
 project/visual13_SDL/UT_GameEngine/Debug/UT_GameEngine.Build.CppClean.log
 project/visual13_SDL/UT_Register/Phobos.log
+project/visual13_SDL/Sample_05/Debug/
+project/visual13_SDL/UT_GameEngine/Debug/UT_GameEngine.vcxprojResolveAssemblyReference.cache

@@ -32,6 +32,12 @@
     <ClCompile Include="..\..\..\src\Editor\EnableEditModeRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\AttachToWindowRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\QuitRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
@@ -60,6 +66,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditorClient.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EnableEditModeRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\AttachToWindowRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
   </ItemGroup>

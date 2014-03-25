@@ -8,9 +8,9 @@ namespace SharpEditor.EngineResponses
 {
     public static class EngineResponse
     {
-        public static void ShowErrorDialog(dynamic error)
+        public static void ShowErrorDialog(string message, dynamic error)
         {
-            System.Windows.Forms.MessageBox.Show("Cannot create asset: " + error.message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            System.Windows.Forms.MessageBox.Show(message + " " + error.message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
         }
     }
 }

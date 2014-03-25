@@ -12,7 +12,7 @@ namespace SharpEditor.EngineResponses
         {
             if (error != null)
             {
-                EngineResponse.ShowErrorDialog(error);                
+                EngineResponse.ShowErrorDialog("Cannot create asset:", error);                
                 return;
             }            
         }

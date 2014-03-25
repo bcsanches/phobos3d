@@ -9,12 +9,12 @@ namespace SharpEditor
 {
     public static class LogService
     {
-        private static StreamWriter mWriter = new StreamWriter("editor.log", false);
-        private static LogControl mLogControl;
+        private static StreamWriter m_Writer = new StreamWriter("editor.log", false);
+        private static LogControl m_LogControl;
 
         public static bool Running
         {
-            get { return mWriter != null; }
+            get { return m_Writer != null; }
         }
 
         public static void Start(LogControl logControl)
@@ -22,24 +22,24 @@ namespace SharpEditor
             if (logControl == null)
                 throw new ArgumentNullException();
 
-            mLogControl = logControl;
+            m_LogControl = logControl;
         }
 
         public static void Stop()
         {
-            mWriter.Close();
-            mWriter.Dispose();
-            mWriter = null;
+            m_Writer.Close();
+            m_Writer.Dispose();
+            m_Writer = null;
         }
 
         public static void Log(string msg)
         {            
-            mWriter.WriteLine(msg);
-            mWriter.Flush();
+            m_Writer.WriteLine(msg);
+            m_Writer.Flush();
 
             StatusBarService.Status = msg;
 
-            mLogControl.Log(msg);
+            m_LogControl.Log(msg);
         }
     }
 }

@@ -95,6 +95,11 @@ void Phobos::Engine::Core::Shutdown()
 	this->OnFinalize();
 }
 
+void Phobos::Engine::Core::StopMainLoop()
+{
+	m_fStopMainLoop = true;
+}
+
 Phobos::Float_t Phobos::Engine::Core::GetUpdateTime(void)
 {
 	const Float_t updateTime = m_varEngineFPS.GetFloat();
@@ -335,5 +340,5 @@ void Phobos::Engine::Core::CmdListModules(const Shell::StringVector_t &args, She
 
 void Phobos::Engine::Core::CmdQuit(const Shell::StringVector_t &, Shell::Context &)
 {
-	m_fStopMainLoop = true;
+	this->StopMainLoop();
 }

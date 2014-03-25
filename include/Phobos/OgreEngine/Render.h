@@ -131,7 +131,7 @@ namespace Phobos
 
 				void SetShadowMode(Ogre::ShadowTechnique tech);
 
-				void *GetWindowHandler();		
+				void SetParentWindow(void *parentWindow);
 
 				size_t GetScreenWidth();
 				size_t GetScreenHeight();
