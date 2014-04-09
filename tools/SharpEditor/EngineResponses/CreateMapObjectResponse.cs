@@ -14,7 +14,9 @@ namespace SharpEditor.EngineResponses
             {
                 EngineResponse.ShowErrorDialog("Cannot create asset:", error);                
                 return;
-            }            
+            }
+
+            System.Windows.Forms.MessageBox.Show(result.name);
         }
     }
 }
