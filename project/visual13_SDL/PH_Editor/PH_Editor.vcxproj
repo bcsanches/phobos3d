@@ -133,7 +133,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(PHOBOS_DEPS_HOME)\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(PHOBOS_DEPS_HOME)\websocketpp\src\;$(PHOBOS_DEPS_HOME)\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
