@@ -28,8 +28,11 @@ subject to the following restrictions:
 #include <Phobos/Register/Table.h>
 
 #include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/MapWorld.h"
+#include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
+#include "Phobos/Game/Things/ThingsUtils.h"
 
 #include "Phobos/Game/Physics/Settings.h"
 #include "Phobos/Game/MapLoaderFactory.h"
@@ -65,10 +68,23 @@ namespace Phobos
 
 			m_spMapLoader->Unload();
 			
-			m_pclGameObjectsHive->RemoveAllChildren();	
+			m_pclMapObjectsHive->RemoveAllChildren();	
 
 			for(auto &listener: m_lstListeners)
 				listener.OnMapUnloaded();		
+		}
+
+		void WorldManager::OnMapLoaded()
+		{
+			for (auto &listener : m_lstListeners)
+				listener.OnMapLoaded();
+		}
+
+		void WorldManager::LoadBlankMap(const char *name)
+		{
+			this->UnloadMap();
+
+			this->OnMapLoaded();
 		}
 
 		void WorldManager::LoadMap(const String_t &mapName)
@@ -80,7 +96,7 @@ namespace Phobos
 			path.GetExtension(extension);
 
 			m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
-			m_spMapLoader->Load(mapName, *m_pclGameObjectsHive);
+			m_spMapLoader->Load(mapName, *m_pclMapObjectsHive);
 
 #if 0
 			{
@@ -100,8 +116,7 @@ namespace Phobos
 				entity->LoadFinished();
 			}
 
-			for(auto &listener: m_lstListeners)
-				listener.OnMapLoaded();		
+			this->OnMapLoaded();
 		}
 
 		Things::Entity &WorldManager::LoadEntity(const Register::Table &entityDef)
@@ -123,13 +138,13 @@ namespace Phobos
 
 		void WorldManager::LoadEntities()
 		{			
-			for(auto &pair : *const_cast<const Register::Hive *>(m_pclGameObjectsHive))
+			for(auto &pair : *const_cast<const Register::Hive *>(m_pclMapObjectsHive))
 			{
 				auto *dict = static_cast<const Register::Table *>(pair.second);
 
-				StringRef_t type = dict->GetString(PH_GAME_OBJECT_KEY_TYPE);
+				StringRef_t type = dict->GetString(PH_MAP_OBJECT_KEY_TYPE);
 
-				if(type.compare(PH_GAME_OBJECT_TYPE_ENTITY) == 0)
+				if(type.compare(PH_MAP_OBJECT_TYPE_ENTITY) == 0)
 					this->LoadEntity(*dict);						
 			}
 		}
@@ -162,7 +177,7 @@ namespace Phobos
 
 		void WorldManager::OnBoot()
 		{			
-			m_pclGameObjectsHive = &Register::CreateCustomHive("ObjectDef");
+			m_pclMapObjectsHive = &Register::CreateCustomHive("ObjectDef");
 
 			Physics::Settings::OnBoot();
 		}
@@ -227,6 +242,44 @@ namespace Phobos
 		void WorldManager::RemoveFromUpdateList(Things::Thing &io)
 		{
 			PH_VERIFY_MSG(this->RemoveFromList(m_lstUpdate, io), "Entity not in Update list");
+		}
+
+		std::tuple<Register::Table &, Handle> WorldManager::MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		{
+			std::unique_ptr<Register::Table> table(PH_NEW Register::Table(name));			
+
+			if (type == MapObjectTypes::ENTITY)
+			{
+				table->SetString(PH_MAP_OBJECT_KEY_TYPE, PH_MAP_OBJECT_TYPE_ENTITY);
+				table->SetBaseHive("EntityDef");				
+			}
+			else if (type == MapObjectTypes::STATIC)
+			{
+				table->SetString(PH_MAP_OBJECT_KEY_TYPE, PH_MAP_OBJECT_TYPE_STATIC);
+				table->SetBaseHive("StaticObjectDef");				
+			}
+
+			table->SetInherited(asset);
+
+			//it is boring to insert scale in every config, so generate a default if not set
+			if (!table->HasValue(PH_MAP_OBJECT_KEY_SCALE))
+			{
+				Phobos::Register::SetVector3(*table, PH_MAP_OBJECT_KEY_SCALE, Ogre::Vector3::UNIT_SCALE);
+			}
+
+			Things::SaveTransform(*table, transform);					
+
+			//Create Map object
+			SceneNodeKeeper keeper = MapWorld::GetInstance().MakeObject(*table);
+
+			//
+			//All is fine, commit results, transfer ownership to WorldManager and return data
+			auto &refTable = *(table.get());			
+
+			m_pclMapObjectsHive->AddTable(std::move(table));			
+
+			//All is done, return references to objects
+			return std::make_tuple(std::ref(refTable), keeper.Release());
 		}
 
 		void WorldManager::CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &)

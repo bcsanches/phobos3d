@@ -23,10 +23,10 @@ namespace Phobos
 				ErrorRequest(const rapidjson::Value &value, const char *message, Errors error);
 
 			private:
-				virtual void OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response) override;
+				virtual void OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response) override;
 
 			private:
-				const char	*m_pszMessage;
+				std::string m_strMessage;
 				Errors		m_eError;
 		};
 	}

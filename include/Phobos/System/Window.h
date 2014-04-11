@@ -41,6 +41,8 @@ namespace Phobos
 				virtual size_t GetHeight(void) const = 0;
 				virtual UIntSize_t GetSize() const = 0;
 
+				virtual void SetParentWindow(void *parentWindow) = 0;
+
 			protected:
 				Window(const String_t &name);		
 		};

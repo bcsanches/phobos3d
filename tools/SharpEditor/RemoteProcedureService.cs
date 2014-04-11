@@ -8,10 +8,10 @@ namespace SharpEditor
 {
     public static class RemoteProcedureService
     {
-        private static System.Windows.Forms.Control mInvokeControl = new System.Windows.Forms.Control();
+        private static System.Windows.Forms.Control m_cntInvokeControl = new System.Windows.Forms.Control();
 
-        private static int mId = 0;
-        private static EngineClient mClient;
+        private static int m_iId = 0;
+        private static EngineClient m_Client;
 
         public static event EventHandler Ready;
 
@@ -21,15 +21,14 @@ namespace SharpEditor
 
         public static long Call(string name, object param, ResponseHandler handler)
         {
-            //{\"method\":\"AssetList\"}
-            //mNetworkService.Send("{\"method\":\"AssetList\"}");
+            var parameters = param != null ? ", \"params\":" + SimpleJson.SerializeObject(param) : "";
 
             if (handler != null)
             {
-                long id = ++mId;
+                long id = ++m_iId;
 
                 //{"jsonrpc":"2.0", "method":"name", "id":id}
-                mClient.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\", \"id\":" + id + "}");
+                m_Client.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\"" + parameters + ", \"id\":" + id + "}");
 
                 mHandlers.Add(id, handler);
 
@@ -37,7 +36,7 @@ namespace SharpEditor
             }
             else
             {
-                mClient.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\"}");
+                m_Client.Send("{\"jsonrpc\": \"2.0\", \"method\":\"" + name + "\"" + parameters + "}");
 
                 return 0;
             }           
@@ -45,30 +44,30 @@ namespace SharpEditor
 
         public static void Start()
         {
-            if (mClient != null)
+            if (m_Client != null)
             {
                 throw new InvalidOperationException("Network already service running");
             }
 
-            mInvokeControl.CreateControl();
+            m_cntInvokeControl.CreateControl();
 
-            mClient = new EngineClient();
+            m_Client = new EngineClient();
 
-            mClient.Connected += mNetworkService_Connected;
-            mClient.MessageReceived += mNetworkService_MessageReceived;
+            m_Client.Connected += mNetworkService_Connected;
+            m_Client.MessageReceived += mNetworkService_MessageReceived;
 
-            mClient.Start();
+            m_Client.Start();
         }
 
         public static void Stop()
         {
-            mInvokeControl.Dispose();
-            mInvokeControl = null;
+            m_cntInvokeControl.Dispose();
+            m_cntInvokeControl = null;
 
-            if (mClient != null)
+            if (m_Client != null)
             {
-                mClient.Stop();
-                mClient = null;
+                m_Client.Stop();
+                m_Client = null;
             }
         }
 
@@ -87,8 +86,8 @@ namespace SharpEditor
 
             mHandlers.Remove(id);
 
-            if (mInvokeControl.InvokeRequired)
-                mInvokeControl.Invoke(new System.Windows.Forms.MethodInvoker(delegate { DispatchMessage(handler, id, json); }));
+            if (m_cntInvokeControl.InvokeRequired)
+                m_cntInvokeControl.Invoke(new System.Windows.Forms.MethodInvoker(delegate { DispatchMessage(handler, id, json); }));
             else
                 DispatchMessage(handler, id, json);                       
         }

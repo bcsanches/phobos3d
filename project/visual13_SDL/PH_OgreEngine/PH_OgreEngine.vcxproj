@@ -74,7 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_OGRE_ENGINE_EXPORTS;PH_SDL;PH_CHECK_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(OGRE_HOME)\Components\RTShaderSystem\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(OGRE_HOME)\Components\RTShaderSystem\include;$(PHOBOS_DEPS_HOME)\libRocket\Include\</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -82,6 +82,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OgreMain_d.lib;OgreTerrain_d.lib;OgreRTShaderSystem_d.lib;OgreOverlay_d.lib;RocketCore_d.lib;RocketControls_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(PHOBOS_DEPS_HOME)\bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

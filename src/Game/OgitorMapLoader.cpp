@@ -32,7 +32,6 @@ subject to the following restrictions:
 
 #include "Phobos/Game/MapLoaderFactory.h"
 #include "Phobos/Game/MapDefs.h"
-#include "Phobos/Game/OgitorWorld.h"
 
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"
@@ -75,26 +74,26 @@ namespace
 
 		if(!g_fInitialized)
 		{
-			g_mapConversors.insert(std::make_pair("castshadows",	ValueConversor(PH_GAME_OBJECT_KEY_CAST_SHADOWS)));
-			g_mapConversors.insert(std::make_pair("meshfile",		ValueConversor(PH_GAME_OBJECT_KEY_MESH)));
-			g_mapConversors.insert(std::make_pair("lightrange",		ValueConversor(PH_GAME_OBJECT_KEY_LIGHT_RANGE)));
-			g_mapConversors.insert(std::make_pair("parentnode",		ValueConversor(PH_GAME_OBJECT_KEY_PARENT_NODE, [](Phobos::StringRef_t value)
+			g_mapConversors.insert(std::make_pair("castshadows",	ValueConversor(PH_MAP_OBJECT_KEY_CAST_SHADOWS)));
+			g_mapConversors.insert(std::make_pair("meshfile",		ValueConversor(PH_MAP_OBJECT_KEY_MESH)));
+			g_mapConversors.insert(std::make_pair("lightrange",		ValueConversor(PH_MAP_OBJECT_KEY_LIGHT_RANGE)));
+			g_mapConversors.insert(std::make_pair("parentnode",		ValueConversor(PH_MAP_OBJECT_KEY_PARENT_NODE, [](Phobos::StringRef_t value)
 			{			
 				return value.compare("SceneManager") == 0 ? nullptr : value.data();
 			})));
 
-			g_mapConversors.insert(std::make_pair("lighttype", ValueConversor(PH_GAME_OBJECT_KEY_LIGHT_TYPE, [](Phobos::StringRef_t value)
+			g_mapConversors.insert(std::make_pair("lighttype", ValueConversor(PH_MAP_OBJECT_KEY_LIGHT_TYPE, [](Phobos::StringRef_t value)
 			{
 				switch(std::stoi(value.data()))
 				{								
 					case 0:
-						return PH_GAME_OBJECT_LIGHT_TYPE_POINT;										
+						return PH_MAP_OBJECT_LIGHT_TYPE_POINT;										
 
 					case 1:
-						return PH_GAME_OBJECT_LIGHT_TYPE_DIRECTIONAL;					
+						return PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL;					
 
 					case 2:
-						return PH_GAME_OBJECT_LIGHT_TYPE_SPOT;
+						return PH_MAP_OBJECT_LIGHT_TYPE_SPOT;
 
 					default:
 						{
@@ -175,7 +174,7 @@ namespace Phobos
 		static const char *GetObjectType(const rapidxml::xml_node<> &element)
 		{
 			if(ContainsCustomProperties(element))
-				return PH_GAME_OBJECT_TYPE_ENTITY;			
+				return PH_MAP_OBJECT_TYPE_ENTITY;			
 
 			const rapidxml::xml_attribute<> *attribute = element.first_attribute("typename");
 			const char *attributeValue = attribute->value();
@@ -193,17 +192,17 @@ namespace Phobos
 			}
 			
 			if ((strcmp(attributeValue, "Marker Object") == 0) || (strcmp(attributeValue, "Camera Object") == 0))
-				return PH_GAME_OBJECT_TYPE_ENTITY;
+				return PH_MAP_OBJECT_TYPE_ENTITY;
 			else if((strcmp(attributeValue, "Node Object") == 0) || (strcmp(attributeValue, "Entity Object") == 0))
-				return PH_GAME_OBJECT_TYPE_STATIC;
+				return PH_MAP_OBJECT_TYPE_STATIC;
 			else if(strcmp(attributeValue, "Light Object") == 0)
-				return PH_GAME_OBJECT_TYPE_STATIC_LIGHT;
+				return PH_MAP_OBJECT_TYPE_STATIC_LIGHT;
 			else if(strcmp(attributeValue, "OctreeSceneManager") == 0)
-				return PH_GAME_OBJECT_TYPE_SCENE_MANAGER;
+				return PH_MAP_OBJECT_TYPE_SCENE_MANAGER;
 			else if(strcmp(attributeValue, "Terrain Group Object") == 0)
-				return PH_GAME_OBJECT_TYPE_TERRAIN;
+				return PH_MAP_OBJECT_TYPE_TERRAIN;
 			else if(strcmp(attributeValue, "Terrain Page Object") == 0)
-				return PH_GAME_OBJECT_TYPE_TERRAIN_PAGE;
+				return PH_MAP_OBJECT_TYPE_TERRAIN_PAGE;
 			else
 			{
 				std::stringstream stream;
@@ -309,24 +308,24 @@ namespace Phobos
 				
 					std::unique_ptr<Register::Table> dict(PH_NEW Register::Table(nameAttribute->value()));
 
-					dict->SetString(PH_GAME_OBJECT_KEY_TYPE, objectType);
+					dict->SetString(PH_MAP_OBJECT_KEY_TYPE, objectType);
 					LoadTable(*dict, *elem);
 
-					if(strcmp(objectType, PH_GAME_OBJECT_TYPE_STATIC_LIGHT) == 0)
+					if(strcmp(objectType, PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
 					{
-						dict->SetString(PH_GAME_OBJECT_KEY_ORIENTATION, "1 0 0 0");
+						dict->SetString(PH_MAP_OBJECT_KEY_ORIENTATION, "1 0 0 0");
 					}
-					else if(strcmp(objectType, PH_GAME_OBJECT_TYPE_TERRAIN) == 0)
+					else if(strcmp(objectType, PH_MAP_OBJECT_TYPE_TERRAIN) == 0)
 					{
 						dict->SetString("terrainDir", terrainDir);
 					}
 
-					if(!dict->TryGetString(PH_GAME_OBJECT_KEY_SCALE))
-						dict->SetString(PH_GAME_OBJECT_KEY_SCALE, "1 1 1");
+					if(!dict->TryGetString(PH_MAP_OBJECT_KEY_SCALE))
+						dict->SetString(PH_MAP_OBJECT_KEY_SCALE, "1 1 1");
 
-					if(strcmp(objectType, PH_GAME_OBJECT_TYPE_TERRAIN_PAGE) == 0)
+					if(strcmp(objectType, PH_MAP_OBJECT_TYPE_TERRAIN_PAGE) == 0)
 					{
-						auto &parent = gameObjectsHive.GetTable(dict->GetString(PH_GAME_OBJECT_KEY_PARENT_NODE));
+						auto &parent = gameObjectsHive.GetTable(dict->GetString(PH_MAP_OBJECT_KEY_PARENT_NODE));
 						parent.AddSubTable(std::move(dict));
 					}
 					else

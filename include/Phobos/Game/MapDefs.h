@@ -18,36 +18,63 @@ subject to the following restrictions:
 #ifndef PHOBOS_GAME_MAP_DEFS_H
 #define PHOBOS_GAME_MAP_DEFS_H
 
+#include "Phobos/Game/GameAPI.h"
+
 
 //
 //
 //Object types
-#define PH_GAME_OBJECT_TYPE_TERRAIN_PAGE "terrain_page"
-#define PH_GAME_OBJECT_TYPE_TERRAIN "terrain"
-#define PH_GAME_OBJECT_TYPE_STATIC "static"
-#define PH_GAME_OBJECT_TYPE_ENTITY "entity"
-#define PH_GAME_OBJECT_TYPE_STATIC_LIGHT "static_light"
-#define PH_GAME_OBJECT_TYPE_SCENE_MANAGER "scene_manager"
+#define PH_MAP_OBJECT_TYPE_TERRAIN_PAGE "terrain_page"
+#define PH_MAP_OBJECT_TYPE_TERRAIN "terrain"
+#define PH_MAP_OBJECT_TYPE_STATIC "static"
+#define PH_MAP_OBJECT_TYPE_ENTITY "entity"
+#define PH_MAP_OBJECT_TYPE_STATIC_LIGHT "static_light"
+#define PH_MAP_OBJECT_TYPE_SCENE_MANAGER "scene_manager"
 
 //Default keys
-#define PH_GAME_OBJECT_KEY_MESH "mesh"
-#define PH_GAME_OBJECT_KEY_TYPE "type"
-#define PH_GAME_OBJECT_KEY_POSITION "position"
-#define PH_GAME_OBJECT_KEY_SCALE "scale"
-#define PH_GAME_OBJECT_KEY_ORIENTATION "orientation"
-#define PH_GAME_OBJECT_KEY_CAST_SHADOWS "castShadows"
-#define PH_GAME_OBJECT_KEY_LIGHT_TYPE "lightType"
-#define PH_GAME_OBJECT_KEY_LIGHT_RANGE "lightRange"
-#define PH_GAME_OBJECT_KEY_PARENT_NODE "parentNode"
+#define PH_MAP_OBJECT_KEY_MESH "mesh"
+#define PH_MAP_OBJECT_KEY_TYPE "type"
+#define PH_MAP_OBJECT_KEY_POSITION "position"
+#define PH_MAP_OBJECT_KEY_SCALE "scale"
+#define PH_MAP_OBJECT_KEY_ORIENTATION "orientation"
+#define PH_MAP_OBJECT_KEY_CAST_SHADOWS "castShadows"
+#define PH_MAP_OBJECT_KEY_LIGHT_TYPE "lightType"
+#define PH_MAP_OBJECT_KEY_LIGHT_RANGE "lightRange"
+#define PH_MAP_OBJECT_KEY_PARENT_NODE "parentNode"
 
-#define PH_GAME_OBJECT_KEY_WORLD_POSITION "worldPosition"
-#define PH_GAME_OBJECT_KEY_WORLD_ORIENTATION "worldOrientation"
-#define PH_GAME_OBJECT_KEY_WORLD_SCALE "worldScale"
+#define PH_MAP_OBJECT_KEY_WORLD_POSITION "worldPosition"
+#define PH_MAP_OBJECT_KEY_WORLD_ORIENTATION "worldOrientation"
+#define PH_MAP_OBJECT_KEY_WORLD_SCALE "worldScale"
 
-#define PH_GAME_OBJECT_KEY_RENDER_OBJECT_HANDLER "renderObjectHandler"
+#define PH_MAP_OBJECT_KEY_RENDER_OBJECT_HANDLER "renderObjectHandler"
 
-#define PH_GAME_OBJECT_LIGHT_TYPE_POINT "point"
-#define PH_GAME_OBJECT_LIGHT_TYPE_SPOT "spot"
-#define PH_GAME_OBJECT_LIGHT_TYPE_DIRECTIONAL "directional"
+#define PH_MAP_OBJECT_LIGHT_TYPE_POINT "point"
+#define PH_MAP_OBJECT_LIGHT_TYPE_SPOT "spot"
+#define PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL "directional"
+
+//Hives
+#define PH_MAP_STATIC_OBJECT_DEF_HIVE "StaticObjectDef"
+
+//Tables
+#define PH_MAP_STATIC_OBJECT_BASE_DEF "Model"
+
+namespace Phobos
+{
+	namespace Game
+	{
+		enum class MapObjectTypes
+		{
+			TERRAIN_PAGE,
+			TERRAIN,
+			STATIC,
+			ENTITY,
+			STATIC_LIGHT,
+			SCENE_MANAGER
+		};
+
+		PH_GAME_API_PROC const char *MapObjectTypeToString(MapObjectTypes type);
+		PH_GAME_API_PROC MapObjectTypes StringToMapObjectType(const char *type);
+	}
+}
 
 #endif

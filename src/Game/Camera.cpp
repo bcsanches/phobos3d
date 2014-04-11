@@ -67,6 +67,11 @@ namespace Phobos
 			m_pclRootNode->setOrientation(t.GetRotation());
 		}
 
+		Engine::Math::Transform Camera::GetTransform() const
+		{
+			return Engine::Math::Transform(m_pclRootNode->getPosition(), m_pclRootNode->getOrientation());
+		}
+
 		void Camera::SetCameraTransform(const Engine::Math::Transform &t)
 		{
 			m_pclCamera->setPosition(t.GetOrigin());

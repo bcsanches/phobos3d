@@ -43,6 +43,8 @@ namespace Phobos
 				void LoadPlugin(const String_t &name);
 				void UnloadPlugin(const String_t &name);
 
+				void QueuePluginLoad(const String_t &name);
+
 			protected:
 				void OnPrepareToBoot();
 				void OnFinalize();
@@ -54,11 +56,15 @@ namespace Phobos
 				PluginManager();			
 
 				void CmdLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdQueuePluginLoad(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdUnloadPlugin(const Shell::StringVector_t &args, Shell::Context &);
 
 			private:
 				Shell::Command	m_cmdLoadPlugin;
+				Shell::Command	m_cmdQueuePluginLoad;
 				Shell::Command	m_cmdUnloadPlugin;
+
+				std::list<String_t> m_lstPluginsToLoad;
 				std::list<String_t> m_lstPluginsToActivate;
 
 				bool				m_fSystemReady;

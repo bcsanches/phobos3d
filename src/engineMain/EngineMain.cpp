@@ -77,8 +77,9 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::WorldManager::ReleaseInstance);
 		core.AddModule(worldManager);
 
-		auto &MapWorld = Game::MapWorld::CreateInstance();
+		auto &mapWorld = Game::MapWorld::CreateInstance();
 		m_clSingletons.AddProc(Game::MapWorld::ReleaseInstance);
+		core.AddModule(mapWorld);
 
 		auto &levelSelector = Game::Gui::LevelSelector::CreateInstance();
 		m_clSingletons.AddProc(Game::Gui::LevelSelector::ReleaseInstance);

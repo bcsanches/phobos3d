@@ -20,8 +20,8 @@ namespace SharpEditor
 
         protected override void OnLoad(EventArgs e)
         {
-            LogService.Start(mLogsControl.mEditorLogControl);            
-            EditorService.Start();
+            LogService.Start(mLogsControl.mEditorLogControl);
+            EditorService.Start(mEnginePanel);
 
             base.OnLoad(e);
 
@@ -33,16 +33,7 @@ namespace SharpEditor
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            EditorService.Stop();
-            EngineService.Stop();            
-            LogService.Stop();
-        }
+        }      
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -59,7 +50,30 @@ namespace SharpEditor
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            EditorService.CreateNewWorld();
+        }
 
+        private void mEnginePanel_SizeChanged(object sender, EventArgs e)
+        {
+            Panel panel = (Panel)sender;
+
+            //panel.
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            EditorService.Stop();
+
+            EngineService.Stop();
+
+            if(!EngineService.HasEngineProcessExited && WaitEngineQuitMessageBox.ShowDialog() == DialogResult.Cancel)
+            {
+                EngineService.Kill();
+            }
+                        
+            LogService.Stop();
         }
     }
 }

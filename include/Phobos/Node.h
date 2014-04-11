@@ -68,6 +68,7 @@ namespace Phobos
 			static NodePtr_t Create(const Char_t *name);
 	
 			~Node();
+			explicit Node(String_t &&name, UInt32_t flags = 0);
 			explicit Node(const String_t &name, UInt32_t flags = 0);
 			explicit Node(const Char_t *name, UInt32_t flags = 0);			
 
@@ -118,8 +119,8 @@ namespace Phobos
 			}			
 
 		protected:			
-			void AddPrivateChild(Node &node);
-			void AddPrivateChild(std::unique_ptr<Node> &&ptr);
+			Node &AddPrivateChild(Node &node);
+			Node &AddPrivateChild(std::unique_ptr<Node> &&ptr);
 
 			inline NodeMap_t::iterator begin();
 			inline NodeMap_t::iterator end();

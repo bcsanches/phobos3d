@@ -16,20 +16,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\AssetListRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\AttachToWindowRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\Camera.cpp" />
+    <ClCompile Include="..\..\..\src\editor\CreateMapObjectRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditObject.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditObjectManager.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditorClient.cpp" />
     <ClCompile Include="..\..\..\src\editor\EditorModule.cpp" />
+    <ClCompile Include="..\..\..\src\Editor\EnableEditModeRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\ErrorRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\LogRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\MessageQueue.cpp" />
     <ClCompile Include="..\..\..\src\editor\NetworkService.cpp" />
+    <ClCompile Include="..\..\..\src\editor\NewWorldRequest.cpp" />
+    <ClCompile Include="..\..\..\src\editor\QuitRequest.cpp" />
     <ClCompile Include="..\..\..\src\editor\Request.cpp" />
     <ClCompile Include="..\..\..\src\editor\RequestFactory.cpp" />
-    <ClCompile Include="..\..\..\src\Phobos\Editor\ErrorRequest.cpp" />
-    <ClCompile Include="..\..\..\src\Phobos\Editor\NewWorldRequest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\contrib\websocketpp\windows\vcpp2013\websocketpp.vcxproj">
-      <Project>{1c0fd04e-5aca-4031-b3d1-320a5360c9d0}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
       <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
     </ProjectReference>
@@ -42,15 +46,23 @@
     <ProjectReference Include="..\PH_LibPlugin\PH_LibPlugin.vcxproj">
       <Project>{ef04e841-546f-4b39-90e8-e983fc8f8660}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PH_OgreEngine\PH_OgreEngine.vcxproj">
+      <Project>{1652ed80-c688-4cab-b4e3-15a510c284b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
       <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Editor\AssetListRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\AttachToWindowRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\Camera.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\CreateMapObjectRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditObject.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditObjectManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorClient.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\EditorModule.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Editor\ErrorRequest.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EnableEditModeRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\MessageQueue.h" />
     <ClInclude Include="..\..\..\include\Phobos\Editor\NetworkService.h" />
@@ -101,7 +113,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\..\bin\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(ProjectDir)..\..\..\contrib\rapidjson\include;$(JSON_CREATOR_HOME)\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(PHOBOS_DEPS_HOME)\JsonCreator\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -121,7 +133,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_EDITOR_EXPORTS;PH_CHECK_ASSERT;PH_SDL;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(ProjectDir)..\..\..\contrib\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include\;$(PHOBOS_DEPS_HOME)\websocketpp\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -130,8 +142,8 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>OgreMain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OGRE_HOME)\build\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain_d.lib;websocketpp_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OGRE_HOME)\build\lib\Debug;$(PHOBOS_DEPS_HOME)\lib\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

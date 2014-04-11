@@ -132,6 +132,8 @@ namespace Phobos
 			
 				void Shutdown(void);
 
+				void StopMainLoop();
+
 				inline void SetFrameRate(Float_t rate);
 
 				inline const SimInfo_s &GetSimInfo() const;

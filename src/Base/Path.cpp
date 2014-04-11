@@ -357,8 +357,9 @@ namespace Phobos
 	bool Path::ExtractPathAndFilename(Path *path, Path *fileName) const
 	{
 		PH_ASSERT_VALID(path || fileName);
+		PH_ASSERT((path != this) && (fileName != this));
 
-		if(NULL == path)
+		if(nullptr == path)
 		{
 			return(this->GetFileName(*fileName));
 		}
@@ -371,7 +372,7 @@ namespace Phobos
 
 			path->Clear();
 
-			if(NULL != fileName)
+			if (nullptr != fileName)
 				fileName->Clear();
 
 			if(!it.GetCurrent(currentName))
@@ -384,7 +385,7 @@ namespace Phobos
 			{
 				if(!it.GetNext(&nextName))
 				{
-					if(fileName != NULL)
+					if (fileName != nullptr)
 						*fileName = currentName;
 
 					return(true);

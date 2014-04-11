@@ -20,7 +20,7 @@ EntityDef SkeletonTorch
   className=Entity;  
   components="ModelRenderer|Transform";
   
-  meshfile="skeltorch.mesh";
+  mesh="skeltorch.mesh";
   scale = "0.3 0.3 0.3";
   
   parentnode=SceneManager;
@@ -56,6 +56,8 @@ EntityDef Box1m
   collisionGroup = Dynamic;
   collisionFilter = "Static|Dynamic";
   
+  mesh="Box_1m.mesh";
+  
   mass = 5;
 }
 
@@ -70,7 +72,7 @@ EntityDef BoxQuaterMeter
   collisionGroup = Dynamic;
   collisionFilter = "Static|Dynamic";
   
-  meshfile="Box_1m";
+  mesh="Box_1m";
   scale="0.25 0.25 0.25";    
   
   mass = 5;

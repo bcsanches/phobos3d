@@ -8,18 +8,18 @@ namespace SharpEditor
 {
     public static class StatusBarService
     {
-        private static ToolStripStatusLabel mLabel;
+        private static ToolStripStatusLabel m_tlblLabel;
 
         public static void SetLabel(ToolStripStatusLabel label)
         {
-            mLabel = label;
+            m_tlblLabel = label;
         }
 
         public static string Status
         {
             set
             {
-                mLabel.Text = value;
+                m_tlblLabel.Text = value;
             }
         }
     }

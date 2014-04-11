@@ -48,10 +48,12 @@ void Phobos::Engine::PluginManager::ReleaseInstance(void)
 Phobos::Engine::PluginManager::PluginManager():
 	Module("PluginManager", NodeFlags::PRIVATE_CHILDREN),
 	m_cmdLoadPlugin("loadPlugin"),
+	m_cmdQueuePluginLoad("queuePluginLoad"),
 	m_cmdUnloadPlugin("unloadPlugin"),
 	m_fSystemReady(false)
 {
 	m_cmdLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdLoadPlugin, this));
+	m_cmdQueuePluginLoad.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdQueuePluginLoad, this));
 	m_cmdUnloadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdUnloadPlugin, this));
 }
 
@@ -65,6 +67,7 @@ void Phobos::Engine::PluginManager::OnPrepareToBoot()
 	Console &console = Console::GetInstance();
 
 	console.AddContextCommand(m_cmdLoadPlugin);
+	console.AddContextCommand(m_cmdQueuePluginLoad);
 	console.AddContextCommand(m_cmdUnloadPlugin);
 }
 
@@ -83,6 +86,15 @@ void Phobos::Engine::PluginManager::OnUpdate()
 	if(!m_fSystemReady)
 		return;
 
+	while (!m_lstPluginsToLoad.empty())
+	{
+		String_t pluginName;
+		pluginName.swap(m_lstPluginsToLoad.front());
+		m_lstPluginsToLoad.pop_front();
+
+		this->LoadPlugin(pluginName);
+	}
+
 	while(!m_lstPluginsToActivate.empty())
 	{
 		String_t pluginName;
@@ -95,6 +107,11 @@ void Phobos::Engine::PluginManager::OnUpdate()
 			plugin->Init();
 		}
 	}
+}
+
+void Phobos::Engine::PluginManager::QueuePluginLoad(const String_t &name)
+{
+	m_lstPluginsToLoad.push_back(name);
 }
 
 void Phobos::Engine::PluginManager::LoadPlugin(const String_t &name)
@@ -131,6 +148,20 @@ void Phobos::Engine::PluginManager::CmdLoadPlugin(const Shell::StringVector_t &a
 		{
 			LogMessage(e.what());
 		}
+	}
+}
+
+void Phobos::Engine::PluginManager::CmdQueuePluginLoad(const Shell::StringVector_t &args, Shell::Context &)
+{
+	if (args.size() < 2)
+	{
+		LogMessage("[PluginManager::CmdQueuePluginLoad] Insuficient parameters, usage: queuePluginLoad <pluginName> [pluginName1] [pluginName2] [pluginNamen]");
+		return;
+	}
+
+	for (int i = 1, len = args.size(); i < len; ++i)
+	{
+		this->QueuePluginLoad(args[i]);		
 	}
 }
 

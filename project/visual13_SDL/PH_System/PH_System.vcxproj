@@ -77,11 +77,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_SYSTEM_EXPORTS;PH_CHECK_ASSERT;PH_SDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(PHOBOS_DEPS_HOME)\SDL-1.2.15\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(PHOBOS_DEPS_HOME)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,9 +170,6 @@
     <ClInclude Include="..\..\..\include\Phobos\System\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\contrib\SDL-1.2.15\VisualC\SDL\SDL.vcxproj">
-      <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">
       <Project>{a50e0d40-836d-471e-9749-3448a4a4060c}</Project>
     </ProjectReference>

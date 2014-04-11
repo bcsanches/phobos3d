@@ -591,6 +591,17 @@ void Phobos::System::EventManagerSDL::Update()
 				this->NotityListeners(event);
 
 				break;
+
+			case SDL_VIDEORESIZE:
+				{
+					SDL_Surface *screen = SDL_GetVideoSurface();
+
+					int flags = screen->flags;
+					int bpp = screen->format->BitsPerPixel;
+
+					SDL_SetVideoMode(sdl_event.resize.w, sdl_event.resize.h, bpp, flags);
+				}
+				break;
 		}
 	}
 }

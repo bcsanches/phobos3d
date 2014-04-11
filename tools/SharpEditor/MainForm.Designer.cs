@@ -41,6 +41,7 @@
             this.mLogsControl = new SharpEditor.LogsControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +50,6 @@
             this.mStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             mainSplit = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(mainSplit)).BeginInit();
             mainSplit.Panel1.SuspendLayout();
@@ -140,6 +140,7 @@
             this.mEnginePanel.Name = "mEnginePanel";
             this.mEnginePanel.Size = new System.Drawing.Size(420, 531);
             this.mEnginePanel.TabIndex = 0;
+            this.mEnginePanel.SizeChanged += new System.EventHandler(this.mEnginePanel_SizeChanged);
             // 
             // splitContainer3
             // 
@@ -201,6 +202,13 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.newToolStripMenuItem.Text = "&New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -268,13 +276,6 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.newToolStripMenuItem.Text = "&New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,7 +287,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Sharp Editor";
+            this.Text = "Sharp Editor";            
             mainSplit.Panel1.ResumeLayout(false);
             mainSplit.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(mainSplit)).EndInit();

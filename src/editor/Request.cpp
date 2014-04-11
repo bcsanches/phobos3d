@@ -13,11 +13,13 @@ Phobos::Editor::Request::Request(const rapidjson::Value &obj):
 	}
 }
 
-void Phobos::Editor::Request::Execute(JsonCreator::StringWriter &response)
+void Phobos::Editor::Request::Execute(const rapidjson::Value &request, JsonCreator::StringWriter &response)
 {
+	auto parameters = request.HasMember("params") ? &request["params"] : nullptr;
+
 	if(m_fNotification)
 	{
-		this->OnExecute(nullptr);
+		this->OnExecute(parameters, nullptr);
 	}
 	else
 	{
@@ -25,7 +27,7 @@ void Phobos::Editor::Request::Execute(JsonCreator::StringWriter &response)
 
 		obj.AddStringValue("jsonrpc", "2.0");
 
-		this->OnExecute(&obj);
+		this->OnExecute(parameters, &obj);
 
 		obj.AddIntValue("id", m_uId);
 	}

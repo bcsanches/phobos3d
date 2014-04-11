@@ -26,7 +26,7 @@ subject to the following restrictions:
 #include "Phobos/Engine/Gui/Manager.h"
 
 #include "Phobos/Engine/Console.h"
-#include "Phobos/Engine/IClient.h"
+#include "Phobos/Engine/Client.h"
 #include "Phobos/Engine/IPlayerCommandProducer.h"
 
 #define CONSOLE_KEY '`'
@@ -36,9 +36,9 @@ PH_DEFINE_DEFAULT_SINGLETON(Phobos::Engine::Session);
 Phobos::Engine::Session::Session():
 	Module("Session"),
 	m_fIgnoreConsoleKey(false),
-	m_pclPlayerCommandProducer(NULL),
-	m_pclClient(NULL),
-	m_pclForm(NULL)
+	m_pclPlayerCommandProducer(nullptr),
+	m_pclClient(nullptr),
+	m_pclForm(nullptr)
 {
 	System::InputManager::CreateInstance("InputManager").AddListener(*this);
 
@@ -89,7 +89,7 @@ void Phobos::Engine::Session::OnInputEvent(const System::InputEvent_s &event)
 			{
 				//No console, so someone else must handle this
 
-				Gui::Form *newForm = NULL;
+				Gui::Form *newForm = nullptr;
 				EscAction action = EscAction::IGNORE_ESC;
 
 				if(m_pclForm)
@@ -150,9 +150,18 @@ void Phobos::Engine::Session::OnFixedUpdate()
 		if((m_pclPlayerCommandProducer) && (m_pclClient))
 		{
 			IPlayerCmdPtr_t cmd = m_pclPlayerCommandProducer->CreateCmd();
-			m_pclClient->SetPlayerCmd(cmd);
+			m_pclClient->DispatchCommand(cmd);
 		}
 	}
+
+	if (m_pclClient)
+		m_pclClient->FixedUpdate();
+}
+
+void Phobos::Engine::Session::OnUpdate()
+{
+	if (m_pclClient)
+		m_pclClient->Update();
 }
 
 void Phobos::Engine::Session::SetPlayerCommandProducer(IPlayerCommandProducer *commandProducer)
@@ -175,7 +184,7 @@ void Phobos::Engine::Session::SetPlayerCommandProducer(IPlayerCommandProducer *c
 		{
 			//Sets a default cmd
 			IPlayerCmdPtr_t cmd = m_pclPlayerCommandProducer->CreateCmd();
-			m_pclClient->SetPlayerCmd(cmd);
+			m_pclClient->DispatchCommand(cmd);
 		}
 			
 		if(!console.IsActive() && (!m_pclForm))
@@ -189,9 +198,15 @@ void Phobos::Engine::Session::SetPlayerCommandProducer(IPlayerCommandProducer *c
 	}
 }
 
-void Phobos::Engine::Session::SetClient(IClient *client)
+void Phobos::Engine::Session::SetClient(Client *client)
 {
+	if (m_pclClient)
+		m_pclClient->Disconnect();
+
 	m_pclClient = client;
+
+	if (m_pclClient)
+		m_pclClient->Connect();
 }
 
 void Phobos::Engine::Session::CloseConsole()
@@ -220,7 +235,7 @@ void Phobos::Engine::Session::SetGuiForm(Gui::Form *newForm)
 {
 	Console &console = Console::GetInstance();
 
-	if((m_pclForm == NULL) && (!console.IsActive()))
+	if ((m_pclForm == nullptr) && (!console.IsActive()))
 	{
 		//no previous form, so game active, disable it
 		this->DisableGameInput();
@@ -235,7 +250,7 @@ void Phobos::Engine::Session::SetGuiForm(Gui::Form *newForm)
 
 	if(!console.IsActive())
 	{
-		if(m_pclForm != NULL)
+		if(m_pclForm != nullptr)
 		{
 			Gui::Manager::GetInstance().EnableInput();
 

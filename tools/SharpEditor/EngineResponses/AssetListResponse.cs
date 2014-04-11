@@ -11,7 +11,10 @@ namespace SharpEditor.EngineResponses
         public void Process(long id, dynamic result, dynamic error)
         {
             if (error != null)
+            {
+                EngineResponse.ShowErrorDialog("Cannot retrieve asset list:", error);
                 return;
+            }
 
             foreach (dynamic obj in result)
             {

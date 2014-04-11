@@ -74,13 +74,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PH_ENGINE_EXPORTS;PH_SDL;PH_CHECK_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(PHOBOS_DEPS_HOME)\libRocket\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>RocketCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\..\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(PHOBOS_DEPS_HOME)\bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\BootModule.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Client.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Console.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Module.cpp" />
@@ -139,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Client.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Console.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Core.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />

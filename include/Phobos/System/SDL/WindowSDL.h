@@ -44,6 +44,8 @@ namespace Phobos
 
 				virtual bool HasGLContext() override;
 
+				virtual void SetParentWindow(void *parentWindow) override;
+
 			private:			
 				WindowSDL(const String_t &name);
 		

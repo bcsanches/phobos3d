@@ -42,6 +42,8 @@ namespace Phobos
 				void SetTransform(const Engine::Math::Transform &t);
 				void SetCameraTransform(const Engine::Math::Transform &t);
 
+				Engine::Math::Transform GetTransform() const;
+
 				void EnableFixedYawAxis(const Ogre::Vector3 &axis);
 
 				void SetNearClipDistance(const Float_t distance);

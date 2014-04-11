@@ -219,11 +219,11 @@ size_t Phobos::OgreEngine::Render::GetScreenHeight()
 	return m_ipWindow->GetHeight();
 }
 
-void *Phobos::OgreEngine::Render::GetWindowHandler()
+void Phobos::OgreEngine::Render::SetParentWindow(void *parent)
 {
 	PH_ASSERT(m_ipWindow);
 
-	return m_ipWindow->GetHandler();
+	m_ipWindow->SetParentWindow(parent);	
 }
 
 void Phobos::OgreEngine::Render::OnBoot(void)

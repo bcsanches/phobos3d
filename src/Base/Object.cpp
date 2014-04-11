@@ -18,6 +18,12 @@ subject to the following restrictions:
 
 namespace Phobos
 {
+	Object::Object(String_t &&name) :
+		m_strName(name)
+	{
+		//empty
+	}
+
 	Object::Object(const String_t &name):
 		m_strName(name)
 	{

@@ -28,7 +28,8 @@ namespace SharpEditor
         {
             base.OnLoad(e);
 
-            this.ParentForm.FormClosed += ParentForm_FormClosed;
+            if(this.ParentForm != null)
+                this.ParentForm.FormClosed += ParentForm_FormClosed;
 
             Assets.Manager.AssetAdded += Manager_AssetAdded;
             Assets.CategoryManager.CategoryAdded += CategoryManager_CategoryAdded;
@@ -71,6 +72,8 @@ namespace SharpEditor
         private void lvAssets_DoubleClick(object sender, EventArgs e)
         {
             var asset = (Assets.Asset) lvAssets.SelectedItems[0].Tag;
+
+            EditorService.CreateMapObject(asset);
 
             /*
                 {

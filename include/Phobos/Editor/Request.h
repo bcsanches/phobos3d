@@ -16,12 +16,12 @@ namespace Phobos
 			public:
 				Request(const rapidjson::Value &value);
 
-				void Execute(JsonCreator::StringWriter &response);
+				void Execute(const rapidjson::Value &request, JsonCreator::StringWriter &response);
 
 				inline UInt_t GetId() const { return m_uId; }
 
 			private:
-				virtual void OnExecute(JsonCreator::Object<JsonCreator::StringWriter> *response) = 0;
+				virtual void OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response) = 0;
 
 			private:
 				UInt_t	m_uId;

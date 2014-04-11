@@ -14,13 +14,28 @@
     <ClCompile Include="..\..\..\src\editor\Request.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Phobos\Editor\NewWorldRequest.cpp">
-      <Filter>Requests</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\editor\LogRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Phobos\Editor\ErrorRequest.cpp">
+    <ClCompile Include="..\..\..\src\editor\ErrorRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\NewWorldRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\EditObject.cpp" />
+    <ClCompile Include="..\..\..\src\editor\EditObjectManager.cpp" />
+    <ClCompile Include="..\..\..\src\editor\CreateMapObjectRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\EditorClient.cpp" />
+    <ClCompile Include="..\..\..\src\Editor\EnableEditModeRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\AttachToWindowRequest.cpp">
+      <Filter>Requests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\editor\QuitRequest.cpp">
       <Filter>Requests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,13 +53,22 @@
     <ClInclude Include="..\..\..\include\Phobos\Editor\RequestFactory.h">
       <Filter>Requests</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h">
-      <Filter>Requests</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Editor\LogRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Editor\ErrorRequest.h">
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditObject.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditObjectManager.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\NewWorldRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\CreateMapObjectRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EditorClient.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Editor\EnableEditModeRequest.h">
+      <Filter>Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Editor\AttachToWindowRequest.h">
       <Filter>Requests</Filter>
     </ClInclude>
   </ItemGroup>

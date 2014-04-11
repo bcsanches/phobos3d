@@ -223,7 +223,7 @@ void Phobos::Engine::ModuleManager::LaunchBootModule(const String_t &cfgName, in
 	this->AddModule(*ptr, ModulePriorities::BOOT_MODULE);
 
 	ptr.release();
-}	
+}
 
 void Phobos::Engine::ModuleManager::LogCoreModules()
 {

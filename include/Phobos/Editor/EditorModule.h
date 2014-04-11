@@ -7,10 +7,14 @@
 
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Engine/Plugin.h>
-#include <Phobos/Engine/IClient.h>
+#include <Phobos/Game/MapDefs.h>
+#include <Phobos/Game/WorldManager.h>
 #include <Phobos/Singleton.h>
 
+#include "Phobos/Editor/Camera.h"
+#include "Phobos/Editor/EditObjectManager.h"
 #include "Phobos/Editor/NetworkService.h"
+#include "Phobos/Editor/EditorClient.h"
 
 namespace Phobos
 {
@@ -18,7 +22,7 @@ namespace Phobos
 	{
 		PH_DECLARE_NODE_PTR(EditorModule)
 
-		class EditorModule: public Engine::Module, public Engine::IClient
+		class EditorModule : public Engine::Module, public Game::WorldManagerListener
 		{			
 			public:
 				PH_PLUGIN_CREATE_MODULE_PROC_DECL
@@ -26,10 +30,11 @@ namespace Phobos
 				PH_DECLARE_SINGLETON_METHODS(EditorModule);
 
 			public:				
-				virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm) override;
-				virtual void SetPlayerCmd(Engine::IPlayerCmdPtr_t cmd) override;
-
 				virtual void OnFixedUpdate() override;
+
+				EditObject &CreateMapObject(const String_t &asset, Game::MapObjectTypes type);
+
+				void EnableEditMode();
 
 			protected:
 				virtual void OnBoot() override;				
@@ -37,10 +42,17 @@ namespace Phobos
 			private:
 				void ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response);
 
+				virtual void OnMapUnloaded() override;
+				virtual void OnMapLoaded() override;
+
 				EditorModule();
 
 			private:
-				NetworkService m_clNetworkService;
+				NetworkService		m_clNetworkService;
+				EditObjectManager	m_clEditObjectManager;
+				Camera				m_clCamera;
+
+				EditorClient		m_clClient;
 		};
 	}
 }

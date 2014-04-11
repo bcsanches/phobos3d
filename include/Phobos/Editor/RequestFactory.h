@@ -24,11 +24,11 @@ namespace Phobos
 	static Phobos::ObjectCreator1<Phobos::Editor::Request, rapidjson::Value, Phobos::Editor::RequestFactory, std::unique_ptr<Phobos::Editor::Request>> TYPE##_CreatorObject_gl(NAME, PROC);
 
 
-#define PH_FULL_REQUEST_CREATOR(NAME, TYPE)  							\
-	PH_REQUEST_CREATOR(NAME, TYPE, [](const rapidjson::Value &obj)		\
-		{																\
-			return std::unique_ptr<Request>(PH_NEW TYPE(obj));		\
-		}																\
+#define PH_FULL_REQUEST_CREATOR(NAME, TYPE)  									\
+	PH_REQUEST_CREATOR(NAME, TYPE, [](const rapidjson::Value &obj)				\
+		{																		\
+			return std::unique_ptr<Phobos::Editor::Request>(PH_NEW TYPE(obj));	\
+		}																		\
 	);
 
 #endif
