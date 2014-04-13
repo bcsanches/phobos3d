@@ -22,6 +22,7 @@ subject to the following restrictions:
 
 #include <OgrePrerequisites.h>
 #include <OgreSceneManager.h>
+#include <OgreRenderTarget.h>
 
 #include <Overlay/OgreOverlaySystem.h>
 

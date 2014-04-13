@@ -23,6 +23,7 @@ subject to the following restrictions:
 #include <Phobos/Error.h>
 #include <Phobos/Memory.h>
 
+#include <Overlay/OgreOverlay.h>
 #include <Overlay/OgreOverlayElement.h>
 #include <Overlay/OgreOverlayManager.h>
 

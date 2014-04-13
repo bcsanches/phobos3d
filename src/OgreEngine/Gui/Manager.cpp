@@ -20,6 +20,7 @@ subject to the following restrictions:
 #include <Rocket/Core/SystemInterface.h>
 
 #include <OgreRoot.h>
+#include <OgreViewport.h>
 
 #include <Phobos/Engine/Console.h>
 

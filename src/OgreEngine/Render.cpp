@@ -17,13 +17,19 @@ subject to the following restrictions:
 #include "Phobos/OgreEngine/Render.h"
 
 #include <OgreEntity.h>
+#include <OgreLog.h>
+#include <OgreLogManager.h>
 #include <OgreMaterialManager.h>
+#include <OgreMesh.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
 #include <OgreRTShaderSystem.h>
+#include <OgreSceneNode.h>
 #include <OgreShadowCameraSetup.h>
 #include <OgreShadowCameraSetupPSSM.h>
 #include <OgreSubEntity.h>
+#include <OgreTechnique.h>
+#include <OgreViewport.h>
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Core.h>

@@ -19,6 +19,8 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Render.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
 
+#include <OgreSceneNode.h>
+
 namespace Phobos
 {
 	namespace Game

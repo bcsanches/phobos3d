@@ -23,6 +23,7 @@ Based on sample code provided by libRocket, original author: Peter Curry
 #include <OgreRenderOperation.h>
 #include <OgreRoot.h>
 #include <OgreTexture.h>
+#include <OgreTextureManager.h>
 
 namespace 
 {
