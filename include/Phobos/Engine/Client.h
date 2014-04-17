@@ -12,24 +12,24 @@ namespace Phobos
 	{
 		class PH_ENGINE_API Client : public IEscHandler
 		{
-		public:
-			void Connect();
-			void Disconnect();
+			public:
+				void Connect();
+				void Disconnect();
 
-			void FixedUpdate();
-			void Update();
+				void FixedUpdate();
+				void Update();
 
-			virtual void DispatchCommand(IPlayerCmdPtr_t cmd) = 0;
-
-		protected:
-			virtual void OnConnect(){};
-			virtual void OnDisconnect(){};
-
-			virtual void OnFixedUpdate() {};
-			virtual void OnUpdate() {};
+				virtual void DispatchCommand(IPlayerCmdPtr_t cmd) = 0;
 
 			protected:
-				Client();
+				virtual void OnConnect(){};
+				virtual void OnDisconnect(){};
+
+				virtual void OnFixedUpdate() {};
+				virtual void OnUpdate() {};
+
+				protected:
+					Client();
 		};
 	}
 }

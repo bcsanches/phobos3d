@@ -34,34 +34,6 @@ namespace
 	static const Phobos::String_t strPadName_gl("pad");	
 }
 
-PH_DEFINE_SINGLETON_VAR(Phobos::System::InputManager);
-
-Phobos::System::InputManager &Phobos::System::InputManager::CreateInstance(const Phobos::String_t &name)
-{
-	PH_ASSERT_MSG(!ipInstance_gl, "[InputManager::CreateInstance]: Instance already exists");
-
-	ipInstance_gl = InputManager::CreateInstanceImpl(name);
-
-	ObjectManager::AddObject(*ipInstance_gl, Path(PH_SYSTEM_FOLDER));
-
-	return *ipInstance_gl;
-}
-
-Phobos::System::InputManager &Phobos::System::InputManager::GetInstance()
-{
-	PH_ASSERT_MSG(ipInstance_gl, "[InputManager::GetInstance]: Instance does not exists, use CreateInstance");
-
-	return *ipInstance_gl;
-}
-
-void Phobos::System::InputManager::ReleaseInstance()
-{
-	PH_ASSERT_MSG(ipInstance_gl, "[InputManager::ReleaseInstance]: Instance does not exists, use CreateInstance");
-
-	ipInstance_gl->RemoveSelf();
-	ipInstance_gl.reset();
-}
-
 Phobos::System::InputManager::InputManager(const String_t &name):
 	Node(name, NodeFlags::PRIVATE_CHILDREN)
 {
@@ -74,8 +46,6 @@ Phobos::System::InputManager::~InputManager(void)
 
 void Phobos::System::InputManager::Update(void)
 {
-	this->PollDevices();
-
 	this->UpdateDevices();
 }
 
@@ -90,6 +60,14 @@ void Phobos::System::InputManager::UpdateDevices(void)
 	{		
 		static_cast<InputDevice *>(it.second)->Update();		
 	}	
+}
+
+void Phobos::System::InputManager::Accept(std::function<void(InputDevice &)> visitor)
+{
+	for (auto it : *this)
+	{
+		visitor(*static_cast<InputDevice *>(it.second));		
+	}
 }
 
 Phobos::System::InputDevice &Phobos::System::InputManager::GetDevice(const InputDeviceTypes_e deviceType, UInt_t id)
@@ -116,13 +94,7 @@ Phobos::System::InputDevice &Phobos::System::InputManager::GetDevice(const Input
 
 */
 void Phobos::System::InputManager::AttachDevice(InputDevice &device, UInt_t id)
-{
-	//InputDeviceTypes_e	type = device->GetDeviceType();
-	//Kernel_c			&kernel = Kernel_c::GetInstance();
-
-	//String_t			tempName;
-
-
+{	
 	//Set the name of the device (concat: name + id)
 	//InputManager::BuildDeviceName(tempName, type, id);
 	//device->SetName(tempName);

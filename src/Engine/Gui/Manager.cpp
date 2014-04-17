@@ -145,12 +145,10 @@ Phobos::Engine::Gui::ContextPtr_t Phobos::Engine::Gui::Manager::CreateContext(co
 	return ptr;
 }
 
-void Phobos::Engine::Gui::Manager::EnableInput()
+void Phobos::Engine::Gui::Manager::EnableInput(System::InputManager &inputManager)
 {
 	if(!m_fInputActive)
-	{
-		auto &inputManager = System::InputManager::GetInstance();
-
+	{		
 		auto &mouse = static_cast<System::MouseInputDevice &>(inputManager.GetDevice(System::INPUT_DEVICE_MOUSE));
 
 		m_clKeyboardListener.ListenTo(inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD));	
@@ -170,10 +168,14 @@ void Phobos::Engine::Gui::Manager::EnableInput()
 	}
 }
 
-void Phobos::Engine::Gui::Manager::DisableInput()
+static Phobos::System::InputManager *g_pclMyFuckingHack = nullptr;
+
+void Phobos::Engine::Gui::Manager::DisableInput(System::InputManager &inputManager)
 {
 	//we must delay input deactivation to avoid causing problem on listener lists
 	m_fDisableInput = true;	
+
+	g_pclMyFuckingHack = &inputManager;
 }
 
 void Phobos::Engine::Gui::Manager::InputEvent(const System::InputEvent_s &event)
@@ -190,7 +192,7 @@ void Phobos::Engine::Gui::Manager::OnFixedUpdate()
 {
 	if(m_fInputActive && m_fDisableInput)
 	{
-		auto &inputManager = System::InputManager::GetInstance();
+		auto &inputManager = *g_pclMyFuckingHack;
 
 		inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD).RemoveListener(m_clKeyboardListener);
 		inputManager.GetDevice(System::INPUT_DEVICE_MOUSE).RemoveListener(m_clMouseListener);

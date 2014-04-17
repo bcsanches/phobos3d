@@ -27,3 +27,43 @@ Phobos::Engine::Module::Module(const Char_t *name, UInt32_t flags):
 {
 	//empty
 }
+
+void Phobos::Engine::Module::Update()
+{
+	this->OnUpdate();
+}
+
+void Phobos::Engine::Module::FixedUpdate()
+{
+	this->OnFixedUpdate();
+}
+
+void Phobos::Engine::Module::PreInit()
+{
+	this->OnPreInit();
+}
+
+void Phobos::Engine::Module::Init()
+{
+	this->OnInit();
+}
+
+void Phobos::Engine::Module::Start()
+{
+	this->OnStart();
+}
+
+void Phobos::Engine::Module::Started()
+{
+	this->OnStarted();
+}
+
+void Phobos::Engine::Module::Stop()
+{
+	this->OnStop();
+}
+
+void Phobos::Engine::Module::Finalize()
+{
+	this->OnFinalize();
+}

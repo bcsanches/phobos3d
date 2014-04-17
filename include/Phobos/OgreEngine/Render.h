@@ -143,11 +143,10 @@ namespace Phobos
 				// =====================================================
 				Render();			
 
-				virtual void OnBoot() override;			
+				virtual void OnPreInit() override;
+				virtual void OnInit() override;			
 
-				virtual void OnUpdate() override;
-
-				virtual void OnPrepareToBoot() override;
+				virtual void OnUpdate() override;				
 
 			private:
 				// =====================================================

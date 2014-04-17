@@ -1,12 +1,12 @@
 /*
 Phobos 3d
-July 2010
-Copyright (c) 2005-2013 Bruno Sanches  http://code.google.com/p/phobos3d
+Arpil 2014
+Copyright (c) 2005-2014 Bruno Sanches  http://code.google.com/p/phobos3d
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -44,7 +44,7 @@ namespace Phobos
 			InputManagerEventType_e m_eType;
 			InputDevice				&m_rclDevice;
 
-			inline InputManagerEvent_s(InputManagerEventType_e type, InputDevice &device):
+			inline InputManagerEvent_s(InputManagerEventType_e type, InputDevice &device) :
 				m_eType(type),
 				m_rclDevice(device)
 
@@ -64,58 +64,62 @@ namespace Phobos
 				PH_DECLARE_LISTENER_HOOK;
 		};
 
-		PH_DECLARE_SINGLETON_PTR(InputManager);
+		class InputManager;
+		PH_DECLARE_NODE_PTR(InputManager);
 
-		class PH_SYSTEM_API InputManager: public Node
+		class PH_SYSTEM_API InputManager : public Node
 		{
-			PH_DECLARE_NAMED_SINGLETON_METHODS(InputManager)
+		public:
+			// =====================================================
+			// PUBLIC METHODS
+			// =====================================================
+			virtual void Update(void);
 
-			public:
-				// =====================================================
-				// PUBLIC METHODS
-				// =====================================================
-				virtual void Update(void);
+			static InputManagerPtr_t Create(const String_t &name);
 
-				void AddListenerToDevice(const String_t &deviceName,  InputDeviceListener &listener);
+			//Called to refresh devices
+			virtual void PollDevices(void) = 0;
 
-				InputDevice &GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
-				InputDevice &GetDevice(const InputDeviceTypes_e deviceType);
+			void AddListenerToDevice(const String_t &deviceName, InputDeviceListener &listener);
 
-				PH_DECLARE_LISTENER_PROCS(InputManagerListener);
+			InputDevice &GetDevice(const InputDeviceTypes_e deviceType, UInt_t id);
+			InputDevice &GetDevice(const InputDeviceTypes_e deviceType);
 
-			protected:
-				// =====================================================
-				// PROTECTED METHODS
-				// =====================================================
-				InputManager(const String_t &name);
-				~InputManager(void);
+			void Accept(std::function<void(InputDevice &)> visitor);
 
-				virtual void PollDevices(void) = 0;
+			PH_DECLARE_LISTENER_PROCS(InputManagerListener);
 
-				void AttachDevice(InputDevice &device, UInt_t id);
-				void DetachDevice(InputDevice &device);
+		protected:
+			// =====================================================
+			// PROTECTED METHODS
+			// =====================================================
+			InputManager(const String_t &name);
+			~InputManager(void);
 
-			private:
-				// =====================================================
-				// PRIVATE METHODS
-				// =====================================================
-				void UpdateDevices(void);
+			void AttachDevice(InputDevice &device, UInt_t id);
+			void DetachDevice(InputDevice &device);
 
-			public:
-				// =====================================================
-				// STATIC PUBLIC METHODS
-				// =====================================================
-				static const String_t &GetDeviceTypeName(InputDeviceTypes_e type);
-				static void BuildDeviceName(String_t &out, InputDeviceTypes_e type, UInt_t id);
+		private:
+			// =====================================================
+			// PRIVATE METHODS
+			// =====================================================
+			void UpdateDevices(void);
 
-			private:
-				// =====================================================
-				// STATIC PRIVATE METHODS
-				// =====================================================
-				static InputManagerPtr_t CreateInstanceImpl(const String_t &name);
+		public:
+			// =====================================================
+			// STATIC PUBLIC METHODS
+			// =====================================================
+			static const String_t &GetDeviceTypeName(InputDeviceTypes_e type);
+			static void BuildDeviceName(String_t &out, InputDeviceTypes_e type, UInt_t id);
 
-			private:
-				PH_DECLARE_LISTENER_LIST(InputManagerListener, m_lstListeners);
+		private:
+			// =====================================================
+			// STATIC PRIVATE METHODS
+			// =====================================================
+			static InputManagerPtr_t CreateInstanceImpl(const String_t &name);
+
+		private:
+			PH_DECLARE_LISTENER_LIST(InputManagerListener, m_lstListeners);
 		};
 	}
 }

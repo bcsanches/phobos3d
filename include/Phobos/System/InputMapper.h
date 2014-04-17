@@ -21,15 +21,14 @@ subject to the following restrictions:
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Node.h>
 
-#include "Phobos/System/InputDevice.h"
+#include "Phobos/System/InputDeviceFwd.h"
 #include "Phobos/System/InputManager.h"
+#include "Phobos/System/InputMapperFwd.h"
 
 namespace Phobos
 {	
 	namespace System
-	{
-		PH_DECLARE_NODE_PTR(InputMapper);	
-
+	{		
 		class PH_SYSTEM_API InputMapper: public Node, private InputManagerListener
 		{		
 			private:
@@ -66,7 +65,7 @@ namespace Phobos
 						void Unbind(const String_t &actionName);
 
 					private:
-						virtual void OnInputEvent(const InputEvent_s &event) override;
+						virtual void OnInputEvent(const InputEvent_s &event) override;						
 
 						void OnInputEventButton(const InputEvent_s &event);
 						void OnInputEventThumb(const InputEvent_s &event);
@@ -85,9 +84,9 @@ namespace Phobos
 				// =====================================================
 				// PUBLIC METHODS
 				// =====================================================
-				static InputMapperPtr_t Create(const String_t &name, Shell::IContext &context);
+				static InputMapperPtr_t Create(const String_t &name, Shell::IContext &context, InputManager &inputManager);
 
-				InputMapper(const String_t &name, Shell::IContext &context);
+				InputMapper(const String_t &name, Shell::IContext &context, InputManager &inputManager);
 				~InputMapper(void);
 
 				void Bind(const String_t &devicePathName, const String_t &actionName, const String_t &cmd);
@@ -115,6 +114,8 @@ namespace Phobos
 
 				virtual void OnInputManagerEvent(const InputManagerEvent_s &event) override;
 
+				void MapDevice(InputDevice &device);
+
 				void ForceButtonState(const String_t &commandName, char cmdPrefix, InputEventButtonState_e state, Float_t pressure);
 
 				void CmdUnbind(const Shell::StringVector_t &args, Shell::Context &);
@@ -129,7 +130,7 @@ namespace Phobos
 				typedef std::map<String_t, DeviceMapper> InputDeviceMap_t;
 				InputDeviceMap_t		m_mapInputDevices;
 
-				Shell::IContext				&m_rclContext;
+				Shell::IContext			&m_rclContext;
 
 				bool					m_fDisable;				
 
@@ -137,6 +138,8 @@ namespace Phobos
 				Shell::Command			m_cmdUnbind;
 				Shell::Command			m_cmdPushButton;
 				Shell::Command			m_cmdReleaseButton;
+
+				InputManager			&m_rclInputManager;
 		};
 
 		inline void InputMapper::Disable()

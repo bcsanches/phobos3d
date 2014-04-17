@@ -29,7 +29,7 @@ namespace
 	static Phobos::Register::Hive *pclStaticMeshCollisionShapeDefHive_gl;
 }
 
-void Phobos::Game::Physics::Settings::OnBoot()
+void Phobos::Game::Physics::Settings::Init()
 {		
 	pclCollisionGroups_gl = &Register::GetTable(PH_GAME_PHYSICS_DEF, PH_GAME_TABLE_COLLISION_GROUP);
 	pclStaticWorldCollision_gl = &Register::GetTable(PH_GAME_PHYSICS_DEF, PH_GAME_TABLE_STATIC_WORLD_COLLISION);

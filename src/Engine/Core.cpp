@@ -39,39 +39,33 @@ subject to the following restrictions:
 #define UPDATE_TIME (1.0f / 60.0f)
 #define MIN_TIME (10.0f / 1000.0f)
 
+static Phobos::Engine::Core *g_pclInstance = nullptr;
 
-const Phobos::String_t Phobos::Engine::Core::DEFAULT_NAME = "Core";
-
-Phobos::Engine::CorePtr_t Phobos::Engine::Core::ipInstance_gl;
-
-Phobos::Engine::Core &Phobos::Engine::Core::CreateInstance()
+Phobos::Engine::Core &Phobos::Engine::Core::CreateInstance(const char *cfgFileName, int argc, char * const argv[])
 {
-	PH_ASSERT_MSG(!ipInstance_gl, "[Core::CreateInstance]: Instance already exists");
+	PH_ASSERT_MSG(!g_pclInstance, "[Core::CreateInstance]: Instance already exists");
 
-	ipInstance_gl = std::make_shared<Core>(DEFAULT_NAME);
+	g_pclInstance = new Core(cfgFileName, argc, argv);
 
-	ObjectManager::AddObject(*ipInstance_gl, Path("/"));
-
-	return *ipInstance_gl;
+	return *g_pclInstance;
 }
 
 void Phobos::Engine::Core::ReleaseInstance()
 {
-	PH_ASSERT_MSG(ipInstance_gl, "[Core::ReleaseInstance]: Instance does not exists, use CreateInstance");
+	PH_ASSERT_MSG(g_pclInstance, "[Core::ReleaseInstance]: Instance does not exists, use CreateInstance");
 
-	ipInstance_gl->RemoveSelf();
-	ipInstance_gl.reset();
+	delete g_pclInstance;
 }
 
 Phobos::Engine::Core &Phobos::Engine::Core::GetInstance()
 {
-	PH_ASSERT_MSG(ipInstance_gl, "[Core::GetInstance]: Instance does not exists, use CreateInstance");
+	PH_ASSERT_MSG(g_pclInstance, "[Core::GetInstance]: Instance does not exists, use CreateInstance");
 
-	return *ipInstance_gl;
+	return *g_pclInstance;
 }
 
-Phobos::Engine::Core::Core(const Phobos::String_t &name):
-	ModuleManager(name, NodeFlags::PRIVATE_CHILDREN),
+Phobos::Engine::Core::Core(const char *cfgFileName, int argc, char * const argv[]) :
+	m_clModule("Core"),
 	m_cmdTime("time"),
 	m_cmdToggleTimerPause("toggleTimerPause"),
 	m_cmdListModules("listModules"),
@@ -83,6 +77,10 @@ Phobos::Engine::Core::Core(const Phobos::String_t &name):
 	m_fStopMainLoop(false)
 {
 	MemoryZero(&m_stSimInfo, sizeof(m_stSimInfo));
+
+	ObjectManager::AddObject(m_clModule, Path("/"));
+
+	m_clModule.LaunchBootModule(cfgFileName, argc, argv);
 }
 
 Phobos::Engine::Core::~Core()
@@ -90,14 +88,19 @@ Phobos::Engine::Core::~Core()
 	//empty
 }
 
-void Phobos::Engine::Core::Shutdown()
-{
-	this->OnFinalize();
-}
-
 void Phobos::Engine::Core::StopMainLoop()
 {
 	m_fStopMainLoop = true;
+}
+
+void Phobos::Engine::Core::AddModule(Module &module, UInt32_t priority)
+{
+	m_clModule.AddModule(module, priority);
+}
+
+void Phobos::Engine::Core::RemoveModule(Module &module)
+{
+	m_clModule.RemoveModule(module);
 }
 
 Phobos::Float_t Phobos::Engine::Core::GetUpdateTime(void)
@@ -130,8 +133,13 @@ Phobos::Float_t Phobos::Engine::Core::GetMinFrameTime(void)
 	return minFrameTime;
 }
 
-void Phobos::Engine::Core::MainLoop()
+void Phobos::Engine::Core::StartMainLoop()
 {
+	m_clModule.PreInit();
+	m_clModule.Init();
+	m_clModule.Start();	
+	m_clModule.Started();
+
 	Float_t			executionTime = 0;		
 	Float_t			updateTime = GetUpdateTime();
 		
@@ -186,6 +194,9 @@ void Phobos::Engine::Core::MainLoop()
 		m_clTimer.SetMinInterval( GetMinFrameTime() );				
 
 	} while(!m_fStopMainLoop);
+
+	m_clModule.Stop();
+	m_clModule.Finalize();	
 }
 
 void Phobos::Engine::Core::Update(Float_t seconds, Float_t delta)
@@ -200,7 +211,7 @@ void Phobos::Engine::Core::Update(Float_t seconds, Float_t delta)
 		m_stSimInfo.m_stTimers[i].m_fpDelta = delta;
 	}
 
-	ModuleManager::OnUpdate();
+	m_clModule.Update();	
 }
 
 void Phobos::Engine::Core::FixedUpdate(Float_t seconds)
@@ -215,7 +226,7 @@ void Phobos::Engine::Core::FixedUpdate(Float_t seconds)
 		++m_stSimInfo.m_stTimers[i].m_uFrameCount;
 	}
 
-	ModuleManager::OnFixedUpdate();
+	m_clModule.FixedUpdate();
 }
 
 void Phobos::Engine::Core::RegisterCommands(Shell::IContext &context)
@@ -335,7 +346,7 @@ void Phobos::Engine::Core::CmdToggleTimerPause(const Shell::StringVector_t &args
 
 void Phobos::Engine::Core::CmdListModules(const Shell::StringVector_t &args, Shell::Context &)
 {
-	this->LogCoreModules();
+	m_clModule.LogCoreModules();
 }
 
 void Phobos::Engine::Core::CmdQuit(const Shell::StringVector_t &, Shell::Context &)

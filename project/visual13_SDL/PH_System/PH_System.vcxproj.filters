@@ -75,5 +75,7 @@
       <Filter>SDL</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\System\SystemAPI.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputManagerFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputMapperFwd.h" />
   </ItemGroup>
 </Project>

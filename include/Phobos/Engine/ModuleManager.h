@@ -46,44 +46,35 @@ namespace Phobos
 		class PH_ENGINE_API ModuleManager: public Module
 		{
 			public:				
-				enum class Events
-				{		
-					PREPARE_TO_BOOT,
-					BOOT,
-					RENDER_READY,
-					START,
-					FINALIZE		
-				};
-
 				static ModuleManagerPtr_t Create(const String_t &name);
 
+				ModuleManager(const String_t &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);
 				~ModuleManager();
 
 				void AddModule(Module &module, UInt32_t priority = ModulePriorities::NORMAL);
 				void AddModuleToDestroyList(Module &module);
 				void RemoveModule(Module &module);
 
-				void OnEvent(Events event);
-
 				void LaunchBootModule(const String_t &cfgName, int argc, char *const argv[]);
 
-				void LogCoreModules();
+				void LogCoreModules();				
 
-			protected:
-				ModuleManager(const String_t &name, UInt32_t flags = NodeFlags::PRIVATE_CHILDREN);			
-
+			protected:				
 				virtual void OnUpdate() override;
 				virtual void OnFixedUpdate() override;
-				virtual void OnPrepareToBoot() override;
-				virtual void OnBoot() override;
-				virtual void OnFinalize() override;
-				virtual void OnRenderReady() override;
 
-				void CallModuleProc(ModuleProc_t proc);
+				virtual void OnPreInit() override;
+				virtual void OnInit() override;
+				virtual void OnStart() override;
+				virtual void OnStarted() override;
+
+				virtual void OnStop() override;
+				virtual void OnFinalize() override;				
+
+				void CallModuleProc(ModuleProc_t proc);			
 
 			private:
 				void UpdateDestroyList();
-				void DispatchEvents();
 				void SortModules();
 
 			protected:
@@ -128,11 +119,8 @@ namespace Phobos
 				typedef std::vector<ModuleInfo_s>	ModulesVector_t;
 				ModulesVector_t						m_vecModules;
 
-				typedef std::set<Module *>	ModulesSet_t;
-				ModulesSet_t					m_setModulesToDestroy;
-
-				typedef std::vector<Events>		EventsVector_t;
-				EventsVector_t					m_vecEvents;
+				typedef std::set<Module *>			ModulesSet_t;
+				ModulesSet_t						m_setModulesToDestroy;
 
 				bool								m_fLaunchedBoot;
 				bool								m_fPendingSort;

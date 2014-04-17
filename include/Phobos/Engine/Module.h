@@ -29,17 +29,37 @@ namespace Phobos
 		class PH_ENGINE_API Module: public Node
 		{
 			public:
-				virtual void OnUpdate() {}
-				virtual void OnFixedUpdate() {}
-				virtual void OnPrepareToBoot() {}
-				virtual void OnBoot() {}
-				virtual void OnFinalize() {}
-				virtual void OnRenderReady() {}
-				virtual void OnStart() {}
+				void Update();
+				void FixedUpdate();
+
+				//The first step on initialization, nothing is loaded yet and all modules should be already created
+				void PreInit();
+
+				//CFG file has been loaded and executed, so handle any config changes
+				void Init();
+
+				//All modules applied settings and should be ready to go and receive commands
+				void Start();		
+
+				void Started();
+
+				void Stop();
+				void Finalize();			
 
 			protected:
 				explicit Module(const String_t &name, UInt32_t flags = 0);
 				explicit Module(const Char_t *name, UInt32_t flags = 0);			
+
+				virtual void OnUpdate() {}
+				virtual void OnFixedUpdate() {}
+				
+				virtual void OnPreInit() {}				
+				virtual void OnInit() {}
+				virtual void OnStart() {}				
+				virtual void OnStarted() {}
+
+				virtual void OnFinalize() {}
+				virtual void OnStop() {}				
 		};
 
 		typedef void (Module::*ModuleProc_t)();

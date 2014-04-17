@@ -23,6 +23,7 @@ subject to the following restrictions:
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Singleton.h>
+#include <Phobos/System/InputManagerFwd.h>
 
 #include "Phobos/Engine/Module.h"
 #include "Phobos/Engine/EngineAPI.h"
@@ -60,8 +61,8 @@ namespace Phobos
 
 					~Manager();
 
-					void EnableInput();
-					void DisableInput();
+					void EnableInput(System::InputManager &inputManager);
+					void DisableInput(System::InputManager &inputManager);
 								
 				protected:
 					Manager();				

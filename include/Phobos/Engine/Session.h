@@ -60,6 +60,8 @@ namespace Phobos
 				void CloseConsole();
 
 			protected:
+				virtual void OnPreInit() override;
+
 				virtual void OnFixedUpdate() override;
 				virtual void OnUpdate() override;
 
@@ -84,6 +86,7 @@ namespace Phobos
 				struct ConfigInfo_s GetConfig();
 
 			private:			
+				System::InputManagerPtr_t	m_ipInputManager;
 				System::InputMapperPtr_t	m_ipInputMapper;
 				bool						m_fIgnoreConsoleKey;
 

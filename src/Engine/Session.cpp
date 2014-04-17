@@ -34,23 +34,33 @@ subject to the following restrictions:
 PH_DEFINE_DEFAULT_SINGLETON(Phobos::Engine::Session);
 
 Phobos::Engine::Session::Session():
-	Module("Session"),
+	Module("Session", PRIVATE_CHILDREN),
 	m_fIgnoreConsoleKey(false),
 	m_pclPlayerCommandProducer(nullptr),
 	m_pclClient(nullptr),
 	m_pclForm(nullptr)
 {
-	System::InputManager::CreateInstance("InputManager").AddListener(*this);
-
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", Console::GetInstance());
-	m_ipInputMapper->Disable();
-
-	this->AddChild(*m_ipInputMapper);
+	//empty
 }
 
 Phobos::Engine::Session::~Session()
 {
-	System::InputManager::ReleaseInstance();
+	//empty
+}
+
+void Phobos::Engine::Session::OnPreInit()
+{
+	m_ipInputManager = System::InputManager::Create("InputManager");
+
+	this->AddPrivateChild(*m_ipInputManager);
+
+	m_ipInputManager->GetDevice(Phobos::System::INPUT_DEVICE_KEYBOARD).AddListener(*this);
+
+	m_ipInputMapper = System::InputMapper::Create("InputMapper", Console::GetInstance(), *m_ipInputManager);
+	m_ipInputMapper->Disable();
+
+	this->AddPrivateChild(*m_ipInputMapper);
+
 }
 
 void Phobos::Engine::Session::OnInputManagerEvent(const System::InputManagerEvent_s &event)
@@ -111,7 +121,7 @@ void Phobos::Engine::Session::OnInputEvent(const System::InputEvent_s &event)
 
 			if(m_pclForm)
 			{
-				Gui::Manager::GetInstance().DisableInput();
+				Gui::Manager::GetInstance().DisableInput(*m_ipInputManager);
 				this->GetConfig().m_pclMouse->ShowCursor();
 			}
 			else
@@ -139,7 +149,7 @@ void Phobos::Engine::Session::OnInputEvent(const System::InputEvent_s &event)
 
 void Phobos::Engine::Session::OnFixedUpdate()
 {
-	System::InputManager::GetInstance().Update();
+	m_ipInputManager->Update();	
 
 	auto &console = Console::GetInstance();
 
@@ -222,7 +232,7 @@ void Phobos::Engine::Session::CloseConsole()
 
 	if(m_pclForm)
 	{
-		Gui::Manager::GetInstance().EnableInput();
+		Gui::Manager::GetInstance().EnableInput(*m_ipInputManager);
 		this->GetConfig().m_pclMouse->HideCursor();
 	}
 	else
@@ -252,13 +262,13 @@ void Phobos::Engine::Session::SetGuiForm(Gui::Form *newForm)
 	{
 		if(m_pclForm != nullptr)
 		{
-			Gui::Manager::GetInstance().EnableInput();
+			Gui::Manager::GetInstance().EnableInput(*m_ipInputManager);
 
 			this->GetConfig().m_pclMouse->HideCursor();
 		}
 		else
 		{
-			Gui::Manager::GetInstance().DisableInput();
+			Gui::Manager::GetInstance().DisableInput(*m_ipInputManager);
 			this->GetConfig().m_pclMouse->ShowCursor();
 			
 			this->EnableGameInput();
@@ -270,7 +280,7 @@ Phobos::Engine::Session::ConfigInfo_s Phobos::Engine::Session::GetConfig()
 {
 	ConfigInfo_s info;
 	
-	info.m_pclMouse = static_cast<System::MouseInputDevice *>(&System::InputManager::GetInstance().GetDevice(System::INPUT_DEVICE_MOUSE));
+	info.m_pclMouse = static_cast<System::MouseInputDevice *>(&m_ipInputManager->GetDevice(System::INPUT_DEVICE_MOUSE));
 
 	return info;
 }

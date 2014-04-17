@@ -17,7 +17,6 @@ subject to the following restrictions:
 #include "Render.h"
 
 #include <Phobos/Engine/Console.h>
-#include <Phobos/Engine/Core.h>
 
 PH_DEFINE_DEFAULT_SINGLETON(Render);
 
@@ -36,11 +35,11 @@ Render::Render():
 	LogMessage("[Render] Initialized.");
 }
 
-void Render::OnBoot(void)
+void Render::OnInit(void)
 {
 	using namespace Phobos;
 
-	LogMessage("[Render::OnBoot] Starting");
+	LogMessage("[Render::OnInit] Starting");
 
 	m_ipWindow = System::Window::Create("RenderWindow");
 
@@ -49,14 +48,13 @@ void Render::OnBoot(void)
 	bool fullScreen = m_varRFullScreen.GetBoolean();
 	bool vsync = m_varRVSync.GetBoolean();
 
-	LogMessage("[Render::OnBoot] Opening render window");
+	LogMessage("[Render::OnInit] Opening render window");
 	m_ipWindow->Open("Phobos Engine", size);
 
-	LogMessage("[Render::OnBoot] Ready.");
-	Engine::Core::GetInstance().OnEvent(Engine::Core::Events::RENDER_READY);
+	LogMessage("[Render::OnInit] Ready.");
 }
 
-void Render::OnPrepareToBoot()
+void Render::OnPreInit()
 {
 	auto &console = Phobos::Engine::Console::GetInstance();
 	

@@ -64,7 +64,7 @@ EngineMain::EngineMain()
 {
 	using namespace Phobos;
 
-	auto &core = Engine::Core::CreateInstance();
+	auto &core = Engine::Core::CreateInstance("autoexec.cfg", 0, nullptr);
 	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
 
 	auto &eventManager = Engine::EventManagerModule::CreateInstance();
@@ -84,14 +84,10 @@ EngineMain::EngineMain()
 	core.AddModule(render, Engine::ModulePriorities::LOWEST);
 
 	core.RegisterCommands(console);	
-
-	core.LaunchBootModule("autoexec.cfg", 0, nullptr);
 }
 
 EngineMain::~EngineMain()
-{	
-	Phobos::Engine::Core::GetInstance().Shutdown();
-
+{		
 	m_clSingletons.CallAll();	
 }			
 
@@ -102,7 +98,7 @@ EngineMain::~EngineMain()
 */
 void EngineMain::MainLoop(void)
 {
-	Phobos::Engine::Core::GetInstance().MainLoop();
+	Phobos::Engine::Core::GetInstance().StartMainLoop();
 }
 
 int main(int, char **)

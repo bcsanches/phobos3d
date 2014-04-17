@@ -48,7 +48,7 @@ Phobos::OgreEngine::Gui::Manager::~Manager()
 	//empty
 }
 
-void Phobos::OgreEngine::Gui::Manager::OnRenderReady()
+void Phobos::OgreEngine::Gui::Manager::OnStart()
 {
 	Ogre::ResourceGroupManager::getSingleton().createResourceGroup("Rocket");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("./", "FileSystem", "Rocket");

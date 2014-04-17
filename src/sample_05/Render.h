@@ -34,8 +34,8 @@ class Render: public Phobos::Engine::Module
 	protected:		
 		Render();
 
-		void OnBoot();
-		void OnPrepareToBoot();
+		void OnPreInit() override;
+		void OnInit() override;		
 
 	private:
 		void CmdScreenshot(const Phobos::Shell::StringVector_t &args, Phobos::Shell::Context &);

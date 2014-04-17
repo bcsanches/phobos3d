@@ -51,7 +51,7 @@ namespace Phobos
 				Console(void);			
 			
 				virtual void OnUpdate() override;
-				virtual void OnRenderReady() override;
+				virtual void OnStart() override;
 				virtual void OnFinalize() override;
 
 				virtual void OnToggleConsole() override;

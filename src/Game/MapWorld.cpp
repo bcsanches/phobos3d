@@ -374,7 +374,7 @@ namespace
 				g_pclMapWorld = nullptr;
 			}
 
-			virtual void OnRenderReady() override;
+			virtual void OnStart() override;
 
 			virtual Phobos::Game::SceneNodeKeeper AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t serial) override;
 			void DestroyDynamicNode(Phobos::Handle h);
@@ -572,7 +572,7 @@ void MapWorldImpl::DestroyDynamicNode(Phobos::Handle h)
 	m_lstNodes.Remove(h);	
 }
 
-void MapWorldImpl::OnRenderReady()
+void MapWorldImpl::OnStart()
 {
 	auto hive = Phobos::Register::TryGetHive(PH_MAP_STATIC_OBJECT_DEF_HIVE);
 	if (!hive)

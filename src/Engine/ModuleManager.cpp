@@ -53,44 +53,53 @@ void Phobos::Engine::ModuleManager::SortModules()
 	}
 }
 
-void Phobos::Engine::ModuleManager::OnPrepareToBoot()
+void Phobos::Engine::ModuleManager::OnPreInit()
 {
-	this->OnEvent(Events::PREPARE_TO_BOOT);
+	this->CallModuleProc(&Module::PreInit);
 }
 
-void Phobos::Engine::ModuleManager::OnBoot()
+void Phobos::Engine::ModuleManager::OnInit()
 {
-	this->OnEvent(Events::BOOT);
+	this->CallModuleProc(&Module::Init);
+}
+
+void Phobos::Engine::ModuleManager::OnStart()
+{
+	this->CallModuleProc(&Module::Start);
+}
+
+void Phobos::Engine::ModuleManager::OnStarted()
+{
+	this->CallModuleProc(&Module::Started);
 }
 
 void Phobos::Engine::ModuleManager::OnUpdate()
 {
 	this->UpdateDestroyList();
-	this->DispatchEvents();
 	this->SortModules();
 
-	this->CallModuleProc(&Module::OnUpdate);	
+	this->CallModuleProc(&Module::Update);	
 }
 
 void Phobos::Engine::ModuleManager::OnFixedUpdate()
 {
 	this->UpdateDestroyList();
-	this->DispatchEvents();		
 	this->SortModules();
 
-	this->CallModuleProc(&Module::OnFixedUpdate);		
+	this->CallModuleProc(&Module::FixedUpdate);
 }
 
-void Phobos::Engine::ModuleManager::OnRenderReady()
+void Phobos::Engine::ModuleManager::OnStop()
 {
-	this->OnEvent(Events::RENDER_READY);
-	this->OnEvent(Events::START);
+	this->CallModuleProc(&Module::Stop);
+
+	this->UpdateDestroyList();
 }
 
 void Phobos::Engine::ModuleManager::OnFinalize()
 {				
-	this->OnEvent(Events::FINALIZE);
-	this->DispatchEvents();
+	this->CallModuleProc(&Module::Finalize);
+	
 	this->UpdateDestroyList();			
 }
 
@@ -163,55 +172,10 @@ void Phobos::Engine::ModuleManager::UpdateDestroyList()
 						
 		m_vecModules.erase(it);
 		this->RemoveChild(*ptr);
-		ptr->OnFinalize();
+		ptr->Finalize();
 	}
 
 	m_setModulesToDestroy.clear();
-}
-
-void Phobos::Engine::ModuleManager::OnEvent(Events event)
-{
-	m_vecEvents.push_back(event);
-}
-
-void Phobos::Engine::ModuleManager::DispatchEvents()
-{
-	if(m_vecEvents.empty())
-		return;
-
-	//use another vector, so we do not freeze on recursive events
-	EventsVector_t tmp;
-	tmp.swap(m_vecEvents);
-
-	for(auto event : tmp)		
-	{
-		switch(event)
-		{
-			case Events::PREPARE_TO_BOOT:
-				this->CallModuleProc(&Module::OnPrepareToBoot);
-				break;
-
-			case Events::BOOT:
-				this->CallModuleProc(&Module::OnBoot);
-				break;
-
-			case Events::RENDER_READY:
-				this->CallModuleProc(&Module::OnRenderReady);
-				break;
-
-			case Events::START:
-				this->CallModuleProc(&Module::OnStart);
-				break;
-
-			case Events::FINALIZE:
-				this->CallModuleProc(&Module::OnFinalize);
-				break;
-
-			default:
-				PH_ASSERT_MSG(false, "Invalid value on events");
-				break;
-		}
-	}
 }
 	
 void Phobos::Engine::ModuleManager::LaunchBootModule(const String_t &cfgName, int argc, char *const argv[])

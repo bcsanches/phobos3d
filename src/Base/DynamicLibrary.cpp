@@ -70,12 +70,20 @@ namespace Phobos
             Path path(tmp);
             path.SetExtension(".so");
             tmp = path.GetStr();
-        #endif
+        #elif defined PH_WIN32
+			Path path(tmp);
+			path.SetExtension(".dll");
+			tmp = path.GetStr();
+		#endif
 
-		m_upHandle.reset(OpenLib(tmp.c_str()));
+		m_upHandle.reset(OpenLib(tmp.c_str()));						
 		
 		if(m_upHandle == NULL)
 		{
+#ifdef PH_WIN32
+			DWORD error = GetLastError();
+#endif
+
 			this->RaiseException("DynamicLibrary_c::Load", name.c_str());
 		}
 	}
