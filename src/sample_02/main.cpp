@@ -42,8 +42,9 @@ class Sample: System::EventListener, System::InputManagerListener, System::Input
 		virtual void OnInputEvent(const System::InputEvent_s &event) override;
 
 	private:
-		ProcVector				m_clSingletons;
-		System::WindowPtr_t		m_ipWindow;				
+		ProcVector					m_clSingletons;
+		System::WindowPtr_t			m_ipWindow;		
+		System::InputManagerPtr_t	m_ipInputManager;
 
 		bool m_fQuit;
 };
@@ -62,13 +63,16 @@ Sample::Sample():
 
 	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	auto &inputManager = System::InputManager::CreateInstance("InputManager");
-	m_clSingletons.AddProc(&System::InputManager::ReleaseInstance);
-	inputManager.AddListener(*this);
+	m_ipInputManager = System::InputManager::Create("InputManager");
+	m_ipInputManager->AddListener(*this);
+
+	m_ipInputManager->GetDevice(System::INPUT_DEVICE_KEYBOARD).AddListener(*this);
 }
 
 Sample::~Sample()
 {
+	m_ipInputManager.reset();
+
 	m_ipWindow.reset();
 
 	m_clSingletons.CallAll();
@@ -123,7 +127,7 @@ void Sample::Run()
 	while(!m_fQuit)
 	{
 		System::EventManager::GetInstance().Update();
-		System::InputManager::GetInstance().Update();		
+		m_ipInputManager->Update();
 	}
 }
 

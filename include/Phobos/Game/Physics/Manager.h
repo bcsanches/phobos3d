@@ -112,8 +112,8 @@ namespace Phobos
 					void UnregisterCharacterBodyComponent(CharacterBodyComponent &comp);
 
 				protected:
-					virtual void OnPrepareToBoot();
-					virtual void OnBoot();
+					virtual void OnPreInit();
+					virtual void OnInit();
 
 					virtual void OnFixedUpdate();
 					virtual void OnUpdate();				

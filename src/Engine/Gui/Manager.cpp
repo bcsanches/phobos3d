@@ -113,7 +113,7 @@ Phobos::Engine::Gui::Manager::~Manager()
 	//empty
 }
 
-void Phobos::Engine::Gui::Manager::OnPrepareToBoot()
+void Phobos::Engine::Gui::Manager::OnPreInit()
 {
 	Console &console = Console::GetInstance();
 

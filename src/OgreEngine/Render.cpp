@@ -271,7 +271,7 @@ void Phobos::OgreEngine::Render::OnInit(void)
 	const Ogre::RenderSystemList &renderSystems = (m_upRoot->getAvailableRenderers());
 	Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
 
-	LogMessage("[Render::OnBoot] Searching render system");
+	LogMessage("[Render::OnInit] Searching render system");
 	bool foundRenderSystem = false;
 
 	for(r_it = renderSystems.begin(); r_it != end; ++r_it)
@@ -289,7 +289,7 @@ void Phobos::OgreEngine::Render::OnInit(void)
 
 	if(!foundRenderSystem)
 	{
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render::OnBoot", "Render system " + m_varRRenderSystem.GetValue() + " not available");
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render::OnInit", "Render system " + m_varRRenderSystem.GetValue() + " not available");
 	}
 
 	LogMessage("[Render::OnInit] render system found, initializing Ogre");

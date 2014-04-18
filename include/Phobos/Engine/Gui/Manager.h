@@ -67,9 +67,9 @@ namespace Phobos
 				protected:
 					Manager();				
 
-					virtual void OnPrepareToBoot();				
-					virtual void OnFixedUpdate();
-					virtual void OnUpdate();				
+					virtual void OnPreInit() override;
+					virtual void OnFixedUpdate() override;
+					virtual void OnUpdate() override;				
 
 					virtual size_t GetScreenWidth() = 0;
 					virtual size_t GetScreenHeight() = 0;

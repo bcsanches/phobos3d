@@ -87,6 +87,7 @@ void Phobos::Engine::PluginManager::OnStarted()
 		this->LoadPlugin(pluginName);
 	}
 
+
 	while (!m_lstPluginsToActivate.empty())
 	{
 		String_t pluginName;

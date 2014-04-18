@@ -44,7 +44,8 @@ class Sample: System::EventListener
 
 	private:
 		ProcVector					m_clSingletons;
-		System::WindowPtr_t			m_ipWindow;				
+		System::WindowPtr_t			m_ipWindow;			
+		System::InputManagerPtr_t	m_ipInputManager;
 		System::InputMapperPtr_t	m_ipInputMapper;
 
 		Shell::Context				m_clMainContext;
@@ -66,21 +67,21 @@ Sample::Sample():
 
 	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	auto &inputManager = System::InputManager::CreateInstance("InputManager");
-	m_clSingletons.AddProc(&System::InputManager::ReleaseInstance);
+	m_ipInputManager = System::InputManager::Create("InputManager");
 
 	m_clMainContext.AddContextVariable(m_varQuit);
 
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext);
-
-	//Force an update to allow device attachment
-	inputManager.Update();
+	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext, *m_ipInputManager);
 
 	m_ipInputMapper->Bind("kb", "ESCAPE", "set dvQuit true");
 }
 
 Sample::~Sample()
 {
+	m_ipInputMapper.reset();
+
+	m_ipInputManager.reset();
+
 	m_ipWindow.reset();
 
 	m_clSingletons.CallAll();
@@ -108,7 +109,7 @@ void Sample::Run()
 	while(!m_varQuit.GetBoolean())
 	{
 		System::EventManager::GetInstance().Update();
-		System::InputManager::GetInstance().Update();
+		m_ipInputManager->Update();
 	}
 }
 

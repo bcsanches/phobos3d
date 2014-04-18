@@ -45,7 +45,8 @@ class Sample: System::EventListener
 
 	private:
 		ProcVector					m_clSingletons;
-		System::WindowPtr_t			m_ipWindow;				
+		System::WindowPtr_t			m_ipWindow;		
+		System::InputManagerPtr_t	m_ipInputManager;
 		System::InputMapperPtr_t	m_ipInputMapper;
 
 		Shell::Context				m_clMainContext;
@@ -70,17 +71,13 @@ Sample::Sample():
 
 	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	auto &inputManager = System::InputManager::CreateInstance("InputManager");
-	m_clSingletons.AddProc(&System::InputManager::ReleaseInstance);
+	m_ipInputManager = System::InputManager::Create("InputManager");	
 
 	m_cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Sample::CmdQuit, this));
 	m_clMainContext.AddContextCommand(m_cmdQuit);
 
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext);
-
-	//Force an update to allow device attachment
-	inputManager.Update();
-
+	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext, *m_ipInputManager);
+	
 	m_ipInputMapper->Bind("kb", "ESCAPE", "quit");
 }
 
@@ -119,7 +116,7 @@ void Sample::Run()
 	while(!m_fQuit)
 	{
 		System::EventManager::GetInstance().Update();
-		System::InputManager::GetInstance().Update();
+		m_ipInputManager->Update();
 	}
 }
 

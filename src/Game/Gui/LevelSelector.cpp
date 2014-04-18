@@ -232,7 +232,7 @@ Phobos::Game::Gui::LevelSelector::~LevelSelector()
 	//empty
 }
 
-void Phobos::Game::Gui::LevelSelector::OnPrepareToBoot()
+void Phobos::Game::Gui::LevelSelector::OnPreInit()
 {
 	auto &console = Engine::Console::GetInstance();
 

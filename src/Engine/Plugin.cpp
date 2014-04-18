@@ -49,7 +49,12 @@ void Phobos::Engine::Plugin::Init()
 		ipManager->AddModule(info.m_pfnCreate());
 	}
 
-	ipManager->LaunchBootModule(szCfgName_g, 0, nullptr);
+	ipManager->LaunchBootModule(szCfgName_g, 0, nullptr);	
+
+	ipManager->PreInit();
+	ipManager->Init();
+	ipManager->Start();
+	ipManager->Started();
 }
 
 void Phobos::Engine::Plugin::Finalize()
