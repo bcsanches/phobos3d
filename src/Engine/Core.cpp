@@ -55,6 +55,8 @@ void Phobos::Engine::Core::ReleaseInstance()
 	PH_ASSERT_MSG(g_pclInstance, "[Core::ReleaseInstance]: Instance does not exists, use CreateInstance");
 
 	delete g_pclInstance;
+
+	g_pclInstance = nullptr;
 }
 
 Phobos::Engine::Core &Phobos::Engine::Core::GetInstance()

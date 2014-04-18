@@ -1151,3 +1151,8 @@ project/visual13_SDL/UT_BaseTest/context_file.cfg
 project/visual13_SDL/UT_BaseTest/logTest.log
 project/visual13_SDL/UT_BaseTest/test.log
 project/visual13_SDL/UT_GameEngine/Phobos.log
+project/visual13_SDL/UT_EngineCore/Phobos.log
+project/visual13_SDL/UT_EngineCore/UT_EngineCore.vcxproj.user
+project/visual13_SDL/UT_EngineCore/engineCoretest.log
+project/visual13_SDL/UT_GameEngine/UT_GameEngine.vcxproj.user
+project/visual13_SDL/UT_Register/UT_Register.vcxproj.user
