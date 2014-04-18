@@ -16,6 +16,7 @@ subject to the following restrictions:
 
 #include "Phobos/Engine/Session.h"
 
+#include <Phobos/System/EventManager.h>
 #include <Phobos/System/InputActions.h>
 #include <Phobos/System/InputDevice.h>
 #include <Phobos/System/InputEvent.h>
@@ -50,6 +51,8 @@ Phobos::Engine::Session::~Session()
 
 void Phobos::Engine::Session::OnPreInit()
 {
+	System::EventManager::AddListener(*this, System::EVENT_TYPE_SYSTEM);
+
 	m_ipInputManager = System::InputManager::Create("InputManager");
 
 	this->AddPrivateChild(*m_ipInputManager);
@@ -149,6 +152,8 @@ void Phobos::Engine::Session::OnInputEvent(const System::InputEvent_s &event)
 
 void Phobos::Engine::Session::OnFixedUpdate()
 {
+	System::EventManager::PumpEvents();
+
 	m_ipInputManager->Update();	
 
 	auto &console = Console::GetInstance();
@@ -319,5 +324,18 @@ void Phobos::Engine::Session::EnableGameInput()
 
 		if(m_pclPlayerCommandProducer->IsMouseClipped())
 			this->ClipMouseCursor();
+	}
+}
+
+void Phobos::Engine::Session::OnEvent(System::Event_s &event)
+{
+	switch (event.m_stSystem.m_eType)
+	{
+		case System::SYSTEM_QUIT:
+			Console::GetInstance().Execute("quit");
+			break;
+
+		default:
+			break;
 	}
 }

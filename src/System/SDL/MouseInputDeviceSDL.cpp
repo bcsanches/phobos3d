@@ -34,7 +34,7 @@ Phobos::System::MouseInputDeviceSDL::MouseInputDeviceSDL(const String_t &name):
 	fClipToWindow(false),
 	fAppActive(true)
 {
-	EventManager::GetInstance().AddListener(*this, EVENT_TYPE_MOUSE);
+	EventManager::AddListener(*this, EVENT_TYPE_MOUSE);
 
 	m_clSystemListener.SetOwner(this);
 }
@@ -228,7 +228,7 @@ short Phobos::System::MouseInputDeviceSDL::GetY()
 Phobos::System::MouseInputDeviceSDL::SytemEventListner::SytemEventListner():
 	m_pclOwner(NULL)
 {
-	EventManager::GetInstance().AddListener(*this, EVENT_TYPE_SYSTEM);
+	EventManager::AddListener(*this, EVENT_TYPE_SYSTEM);
 }
 
 void Phobos::System::MouseInputDeviceSDL::SytemEventListner::SetOwner(MouseInputDeviceSDL *owner)

@@ -26,7 +26,6 @@ subject to the following restrictions:
 
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
-#include <Phobos/Engine/EventManagerModule.h>
 #include <Phobos/Game/MapWorld.h>
 #include <Phobos/Game/Things/SignalManager.h>
 #include <Phobos/Game/Things/ModelRendererManager.h>
@@ -60,11 +59,7 @@ namespace Phobos
 
 		Register::Init();
 		m_clSingletons.AddProc(Register::Finalize);		
-
-		Engine::EventManagerModule &eventManager = Engine::EventManagerModule::CreateInstance();
-		m_clSingletons.AddProc(Engine::EventManagerModule::ReleaseInstance);
-		core.AddModule(eventManager);
-
+		
 		auto &console = OgreEngine::Console::CreateInstance();
 		m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
 		core.AddModule(console);		

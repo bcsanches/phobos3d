@@ -16,7 +16,6 @@ subject to the following restrictions:
 
 #include <Phobos/Log.h>
 #include <Phobos/Memory.h>
-#include <Phobos/ProcVector.h>
 
 #include <Phobos/System/Window.h>
 #include <Phobos/System/EventManager.h>
@@ -42,7 +41,6 @@ class Sample: System::EventListener, System::InputManagerListener, System::Input
 		virtual void OnInputEvent(const System::InputEvent_s &event) override;
 
 	private:
-		ProcVector					m_clSingletons;
 		System::WindowPtr_t			m_ipWindow;		
 		System::InputManagerPtr_t	m_ipInputManager;
 
@@ -57,11 +55,8 @@ Sample::Sample():
 	m_ipWindow = System::Window::Create("RenderWindow");
 	
 	m_ipWindow->Open("Sample 02", UIntSize_t(640, 480));
-
-	auto &eventManager = System::EventManager::CreateInstance("EventManager");
-	m_clSingletons.AddProc(&System::EventManager::ReleaseInstance);	
-
-	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
+	
+	System::EventManager::AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
 	m_ipInputManager = System::InputManager::Create("InputManager");
 	m_ipInputManager->AddListener(*this);
@@ -74,8 +69,6 @@ Sample::~Sample()
 	m_ipInputManager.reset();
 
 	m_ipWindow.reset();
-
-	m_clSingletons.CallAll();
 }
 
 void Sample::OnEvent(System::Event_s &event)
@@ -126,7 +119,7 @@ void Sample::Run()
 {
 	while(!m_fQuit)
 	{
-		System::EventManager::GetInstance().Update();
+		System::EventManager::PumpEvents();
 		m_ipInputManager->Update();
 	}
 }

@@ -16,7 +16,6 @@
     <ClCompile Include="..\..\..\src\Engine\BootModule.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Console.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\EventManagerModule.cpp" />
     <ClCompile Include="..\..\..\src\Engine\PluginManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Session.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Gui\Context.cpp">
@@ -35,7 +34,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\Console.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Core.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\EngineAPI.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Engine\EventManagerModule.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IClient.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IEscHandler.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IInputHandler.h" />

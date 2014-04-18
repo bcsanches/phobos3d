@@ -16,7 +16,6 @@ subject to the following restrictions:
 
 
 #include <Phobos/Memory.h>
-#include <Phobos/ProcVector.h>
 
 #include <Phobos/System/Window.h>
 #include <Phobos/System/EventManager.h>
@@ -33,10 +32,8 @@ class Sample: Phobos::System::EventListener
 
 		void OnEvent(System::Event_s &event) override;
 
-	private:
-		ProcVector						m_clSingletons;
+	private:		
 		Phobos::System::WindowPtr_t		m_ipWindow;
-		Phobos::System::EventManager	*m_pclEventManager;
 
 		bool m_fQuit;
 };
@@ -46,19 +43,14 @@ Sample::Sample():
 {	
 	m_ipWindow = Phobos::System::Window::Create("RenderWindow");
 	
-	m_ipWindow->Open("Sample 01", UIntSize_t(640, 480));
+	m_ipWindow->Open("Sample 01", UIntSize_t(640, 480));	
 
-	m_pclEventManager = &Phobos::System::EventManager::CreateInstance("EventManager");
-	m_clSingletons.AddProc(&Phobos::System::EventManager::ReleaseInstance);	
-
-	m_pclEventManager->AddListener(*this, Phobos::System::EVENT_TYPE_SYSTEM);
+	Phobos::System::EventManager::AddListener(*this, Phobos::System::EVENT_TYPE_SYSTEM);
 }
 
 Sample::~Sample()
 {
-	m_ipWindow.reset();
-
-	m_clSingletons.CallAll();
+	//empty
 }
 
 void Sample::OnEvent(System::Event_s &event)
@@ -82,7 +74,7 @@ void Sample::Run()
 {
 	while(!m_fQuit)
 	{
-		m_pclEventManager->Update();
+		Phobos::System::EventManager::PumpEvents();
 	}
 }
 

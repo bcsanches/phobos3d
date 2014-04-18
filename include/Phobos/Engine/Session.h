@@ -17,6 +17,7 @@ subject to the following restrictions:
 #ifndef PH_ENGINE_SESSION_H
 #define PH_ENGINE_SESSION_H
 
+#include <Phobos/System/EventListener.h>
 #include <Phobos/System/InputDeviceListener.h>
 #include <Phobos/System/InputManager.h>
 #include <Phobos/System/InputMapper.h>
@@ -47,7 +48,8 @@ namespace Phobos
 
 		class PH_ENGINE_API Session: public Module,
 			private System::InputManagerListener, 
-			private System::InputDeviceListener
+			private System::InputDeviceListener,
+			private System::EventListener
 		{
 			PH_DECLARE_SINGLETON_METHODS(Session);
 
@@ -76,6 +78,8 @@ namespace Phobos
 
 				void DisableGameInput();
 				void EnableGameInput();
+
+				virtual void OnEvent(System::Event_s &event) override;
 
 			private:
 				struct ConfigInfo_s

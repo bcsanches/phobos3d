@@ -22,72 +22,56 @@ subject to the following restrictions:
 #include <Phobos/ObjectManager.h>
 #include <Phobos/Path.h>
 
-Phobos::System::EventManagerPtr_t Phobos::System::EventManager::ipInstance_gl;
-
-const Phobos::String_t Phobos::System::EventManager::DEFAULT_NAME("EventManager");
-
-Phobos::System::EventManager &Phobos::System::EventManager::CreateInstance(const String_t &name)
+namespace Phobos
 {
-	PH_ASSERT_MSG(!ipInstance_gl, "[EventManager::CreateInstance]: Instance already exists");
+	namespace System
+	{
+		namespace EventManager
+		{
+			PH_DECLARE_LISTENER_LIST_TYPE(EventListener);
 
-	ipInstance_gl = EventManager::CreateInstanceImpl(name);
+			static ListenersList_t g_arlstListeners[EVENT_TYPE_NUM];
 
-	Phobos::ObjectManager::AddObject(*ipInstance_gl, Path(PH_SYSTEM_FOLDER));
+			void AddListener(Phobos::System::EventListener &listener, EventType_e type)
+			{
+				PH_ASSERT_MSG(type != EVENT_TYPE_NUM, "[EventManager::AddListener]: EventType value \"EVENT_TYPE_NUM\" is not valid for adding listeners");
 
-	return *ipInstance_gl;
-}
+				g_arlstListeners[type].push_back(listener);
+			}
 
-Phobos::System::EventManager &Phobos::System::EventManager::GetInstance()
-{
-	PH_ASSERT_MSG(ipInstance_gl, "[EventManager::GetInstance]: Instance does not exists, use CreateInstance");
+			void RemoveListener(EventListener &listener)
+			{
+				listener.m_hkListener.unlink();
+			}
 
-	return *ipInstance_gl;
-}
+			bool IsListenersListEmpty(EventType_e type)
+			{
+				PH_ASSERT(type < EVENT_TYPE_NUM);
 
-void Phobos::System::EventManager::ReleaseInstance()
-{	
-	PH_ASSERT_MSG(ipInstance_gl, "[EventManager::ReleaseInstance]: Instance does not exists, use CreateInstance");
-		
-	ipInstance_gl.reset();
-}
+				return g_arlstListeners[type].empty();
+			}
 
-const Phobos::String_t &Phobos::System::EventManager::GetDefaultName()
-{
-	return DEFAULT_NAME;
-}
+			void PumpEvents()
+			{
+				detail::DoPumpEvents();
+			}
 
-Phobos::System::EventManager::EventManager(const String_t &name):
-	Node(name)
-{
+			namespace detail
+			{
+				void NotityListeners(Event_s &event)
+				{
+					PH_ASSERT(event.m_eType < EVENT_TYPE_NUM);
 
-}
-
-void Phobos::System::EventManager::AddListener(Phobos::System::EventListener &listener, EventType_e type)
-{
-	PH_ASSERT_MSG(type != EVENT_TYPE_NUM, "[EventManager::AddListener]: EventType value \"EVENT_TYPE_NUM\" is not valid for adding listeners");		
-
-	m_arlstListeners[type].push_back(listener);
-}
-
-void Phobos::System::EventManager::RemoveListener(EventListener &listener)
-{
-	listener.m_hkListener.unlink();
-}
-
-bool Phobos::System::EventManager::IsListenersListEmpty(EventType_e type)
-{
-	PH_ASSERT(type < EVENT_TYPE_NUM);
-
-	return m_arlstListeners[type].empty();
-}
-
-void Phobos::System::EventManager::NotityListeners(Event_s &event)
-{
-	PH_ASSERT(event.m_eType < EVENT_TYPE_NUM);
-
-	for(EventListener &listener : m_arlstListeners[event.m_eType])
-	{				
-		listener.OnEvent(event);
+					for (EventListener &listener : g_arlstListeners[event.m_eType])
+					{
+						listener.OnEvent(event);
+					}
+				}
+			}
+		}
 	}
 }
+
+
+
 
