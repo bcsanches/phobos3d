@@ -42,7 +42,6 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Shell/Utils.h>
 #include <Phobos/Engine/Core.h>
-#include <Phobos/Engine/EventManagerModule.h>
 #include <Phobos/Memory.h>
 #include <Phobos/ProcVector.h>
 
@@ -64,12 +63,8 @@ EngineMain::EngineMain()
 {
 	using namespace Phobos;
 
-	auto &core = Engine::Core::CreateInstance();
+	auto &core = Engine::Core::CreateInstance("autoexec.cfg", 0, nullptr);
 	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
-
-	auto &eventManager = Engine::EventManagerModule::CreateInstance();
-	m_clSingletons.AddProc(Engine::EventManagerModule::ReleaseInstance);
-	core.AddModule(eventManager);
 
 	auto &console = ::Console::CreateInstance();
 	m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
@@ -84,14 +79,10 @@ EngineMain::EngineMain()
 	core.AddModule(render, Engine::ModulePriorities::LOWEST);
 
 	core.RegisterCommands(console);	
-
-	core.LaunchBootModule("autoexec.cfg", 0, nullptr);
 }
 
 EngineMain::~EngineMain()
-{	
-	Phobos::Engine::Core::GetInstance().Shutdown();
-
+{		
 	m_clSingletons.CallAll();	
 }			
 
@@ -102,7 +93,7 @@ EngineMain::~EngineMain()
 */
 void EngineMain::MainLoop(void)
 {
-	Phobos::Engine::Core::GetInstance().MainLoop();
+	Phobos::Engine::Core::GetInstance().StartMainLoop();
 }
 
 int main(int, char **)

@@ -62,7 +62,7 @@ Phobos::Engine::PluginManager::~PluginManager()
 	//empty
 }
 
-void Phobos::Engine::PluginManager::OnPrepareToBoot()
+void Phobos::Engine::PluginManager::OnPreInit()
 {
 	Console &console = Console::GetInstance();
 
@@ -76,16 +76,8 @@ void Phobos::Engine::PluginManager::OnFinalize()
 	this->RemoveAllChildren();
 }
 
-void Phobos::Engine::PluginManager::OnRenderReady()
+void Phobos::Engine::PluginManager::OnStarted()
 {
-	m_fSystemReady = true;
-}
-
-void Phobos::Engine::PluginManager::OnUpdate()
-{
-	if(!m_fSystemReady)
-		return;
-
 	while (!m_lstPluginsToLoad.empty())
 	{
 		String_t pluginName;
@@ -95,19 +87,21 @@ void Phobos::Engine::PluginManager::OnUpdate()
 		this->LoadPlugin(pluginName);
 	}
 
-	while(!m_lstPluginsToActivate.empty())
+
+	while (!m_lstPluginsToActivate.empty())
 	{
 		String_t pluginName;
 		pluginName.swap(m_lstPluginsToActivate.front());
 		m_lstPluginsToActivate.pop_front();
 
 		PluginInstance *plugin = static_cast<PluginInstance *>(this->TryGetChild(pluginName));
-		if(plugin)
+		if (plugin)
 		{
 			plugin->Init();
 		}
 	}
 }
+
 
 void Phobos::Engine::PluginManager::QueuePluginLoad(const String_t &name)
 {

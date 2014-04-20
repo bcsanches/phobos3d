@@ -34,19 +34,14 @@ namespace Phobos
 		class BootModule: public Module
 		{
 			public:			
-				BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleManager &manager);
+				BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleManager &manager);				
 
-				virtual void OnUpdate() override;			
-				virtual void OnFixedUpdate() override;
+			protected:
+				virtual void OnInit() override;
 
 			private:
 				String_t					m_strCfgName;
-				std::vector<std::string>	m_vecArgs;
-
-				int		m_iFixedUpdateCount;
-				bool	m_fUpdateDone;
-				bool	m_fPrepareFired;
-				bool	m_fBootFired;
+				std::vector<std::string>	m_vecArgs;			
 
 				ModuleManager &m_rclManager;
 		};

@@ -35,7 +35,7 @@ namespace Phobos
 			class Settings
 			{
 				public:
-					static void OnBoot();
+					static void Init();
 
 					static UInt32_t DecodeCollisionMask(const String_t &config);
 					static Physics::CollisionTag LoadCollisionTag(const Phobos::Register::Table &table);

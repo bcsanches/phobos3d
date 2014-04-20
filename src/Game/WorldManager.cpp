@@ -166,7 +166,7 @@ namespace Phobos
 			return static_cast<Things::Entity &>(this->GetChild(name));
 		}
 
-		void WorldManager::OnPrepareToBoot()
+		void WorldManager::OnPreInit()
 		{
 			auto &console = Engine::Console::GetInstance();
 
@@ -175,11 +175,11 @@ namespace Phobos
 			console.AddContextCommand(m_cmdDumpFactoryCreators);
 		}
 
-		void WorldManager::OnBoot()
+		void WorldManager::OnInit()
 		{			
 			m_pclMapObjectsHive = &Register::CreateCustomHive("ObjectDef");
 
-			Physics::Settings::OnBoot();
+			Physics::Settings::Init();
 		}
 
 		void WorldManager::OnFinalize()

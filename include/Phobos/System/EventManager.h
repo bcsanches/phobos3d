@@ -20,7 +20,6 @@ subject to the following restrictions:
 #include <Phobos/Node.h>
 
 #include "Phobos/System/EventListener.h"
-#include "Phobos/System/EventManagerFwd.h"
 #include "Phobos/System/SystemAPI.h"
 
 namespace Phobos
@@ -102,38 +101,20 @@ namespace Phobos
 			void *m_pParam;
 		};
 
-		class PH_SYSTEM_API EventManager: public Node
+		namespace EventManager
 		{
-			public:	
-				static EventManager &CreateInstance(const String_t &name);
-				static void ReleaseInstance();
-				static EventManager &GetInstance();	
-				static const String_t &GetDefaultName();
+			PH_SYSTEM_API void PumpEvents();
 
-			public:
-				virtual void Update() = 0;
+			PH_SYSTEM_API void AddListener(EventListener &listener, EventType_e type);
+			PH_SYSTEM_API void RemoveListener(EventListener &listener);
 
-				void AddListener(EventListener &listener, EventType_e type);
-				void RemoveListener(EventListener &listener);
+			namespace detail
+			{
+				extern void NotityListeners(Event_s &event);
 
-			protected:
-				static EventManagerPtr_t CreateInstanceImpl(const String_t &name);			
-
-				EventManager(const String_t &name);
-
-				bool IsListenersListEmpty(EventType_e type);
-				void NotityListeners(Event_s &event);
-
-			private:			
-				static const String_t DEFAULT_NAME;
-				static EventManagerPtr_t ipInstance_gl;
-
-			private:
-				PH_DECLARE_LISTENER_LIST_TYPE(EventListener);
-
-				ListenersList_t m_arlstListeners[EVENT_TYPE_NUM];
-
-		};
+				extern void DoPumpEvents();
+			}
+		}
 	}
 }
 #endif

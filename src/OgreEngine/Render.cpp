@@ -232,9 +232,9 @@ void Phobos::OgreEngine::Render::SetParentWindow(void *parent)
 	m_ipWindow->SetParentWindow(parent);	
 }
 
-void Phobos::OgreEngine::Render::OnBoot(void)
+void Phobos::OgreEngine::Render::OnInit(void)
 {		
-	LogMessage("[Render::OnBoot] Starting");
+	LogMessage("[Render::OnInit] Initializing");
 
 	m_ipWindow = System::Window::Create("RenderWindow");
 
@@ -247,16 +247,16 @@ void Phobos::OgreEngine::Render::OnBoot(void)
 		
 	if(!StringIsBlank(m_varParentWindow.GetValue()))
 	{
-		LogMessage("[Render::OnBoot] Setting parent window.");
+		LogMessage("[Render::OnInit] Setting parent window.");
 
 		parentWindow = std::stoi(m_varParentWindow.GetValue(), 0, 16);
 	}
 	else
 	{
-		LogMessage("[Render::OnBoot] No parentWindow set.");
+		LogMessage("[Render::OnInit] No parentWindow set.");
 	}
 
-	LogMessage("[Render::OnBoot] Opening render window");
+	LogMessage("[Render::OnInit] Opening render window");
 	m_ipWindow->Open("Phobos Engine", size, reinterpret_cast<void*>(parentWindow));
 
 	//We need to do a "lazy load" with Ogre plugins, to make sure the render plugins are only 
@@ -271,7 +271,7 @@ void Phobos::OgreEngine::Render::OnBoot(void)
 	const Ogre::RenderSystemList &renderSystems = (m_upRoot->getAvailableRenderers());
 	Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
 
-	LogMessage("[Render::OnBoot] Searching render system");
+	LogMessage("[Render::OnInit] Searching render system");
 	bool foundRenderSystem = false;
 
 	for(r_it = renderSystems.begin(); r_it != end; ++r_it)
@@ -289,10 +289,10 @@ void Phobos::OgreEngine::Render::OnBoot(void)
 
 	if(!foundRenderSystem)
 	{
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render::OnBoot", "Render system " + m_varRRenderSystem.GetValue() + " not available");
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render::OnInit", "Render system " + m_varRRenderSystem.GetValue() + " not available");
 	}
 
-	LogMessage("[Render::OnBoot] render system found, initializing Ogre");
+	LogMessage("[Render::OnInit] render system found, initializing Ogre");
 
     m_upRoot->restoreConfig();
     m_upRoot->initialise(false);
@@ -313,12 +313,12 @@ void Phobos::OgreEngine::Render::OnBoot(void)
     if (m_ipWindow->HasGLContext())
         opts["currentGLContext"] = "true";
 
-	LogMessage("[Render::OnBoot] Creating ogre window");
+	LogMessage("[Render::OnInit] Creating ogre window");
 	m_pclOgreWindow = m_upRoot->createRenderWindow("PhobosMainWindow", size.m_tWidth, size.m_tHeight, fullScreen, &opts);
 
 	m_pclOgreWindow->setVisible(true);
 		
-	LogMessage("[Render::OnBoot] Creating SceneManager");
+	LogMessage("[Render::OnInit] Creating SceneManager");
 	m_pclMainSceneManager = m_upRoot->createSceneManager(Ogre::ST_GENERIC);
 	m_pclHelperScene = m_upRoot->createSceneManager(Ogre::ST_GENERIC);
 
@@ -331,7 +331,7 @@ void Phobos::OgreEngine::Render::OnBoot(void)
 
 	if(m_varRShaderSystem.GetBoolean())
 	{
-		LogMessage("[Render::OnBoot] Initializing ShaderSystem.");
+		LogMessage("[Render::OnInit] Initializing ShaderSystem.");
 
 		Ogre::RTShader::ShaderGenerator::initialize();
 
@@ -348,18 +348,14 @@ void Phobos::OgreEngine::Render::OnBoot(void)
 
 	this->SetShadowMode(m_eShadowMode);
 
-	LogMessage("[Render::OnBoot] Initializing all resource groups");
+	LogMessage("[Render::OnInit] Initializing all resource groups");
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-	LogMessage("[Render::OnBoot] Ready.");
-	Engine::Core::GetInstance().OnEvent(Engine::Core::Events::RENDER_READY);
+	LogMessage("[Render::OnInit] Ready.");	
 }
 
 void Phobos::OgreEngine::Render::OnUpdate(void)
-{
-	if(!m_ipWindow)
-		return;
-		
+{		
 	//Need to clear pending dirty hash because of multiple scene managers
 	//http://www.ogre3d.org/forums/viewtopic.php?p=189032#189032
 	if(!Ogre::Pass::getDirtyHashList().empty() || !Ogre::Pass::getPassGraveyard().empty())
@@ -395,7 +391,7 @@ void Phobos::OgreEngine::Render::OnUpdate(void)
     m_upRoot->renderOneFrame();
 }
 
-void Phobos::OgreEngine::Render::OnPrepareToBoot()
+void Phobos::OgreEngine::Render::OnPreInit()
 {
 	auto &console = Engine::Console::GetInstance();
 

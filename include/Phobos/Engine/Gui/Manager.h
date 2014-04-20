@@ -23,6 +23,7 @@ subject to the following restrictions:
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Singleton.h>
+#include <Phobos/System/InputManagerFwd.h>
 
 #include "Phobos/Engine/Module.h"
 #include "Phobos/Engine/EngineAPI.h"
@@ -60,15 +61,15 @@ namespace Phobos
 
 					~Manager();
 
-					void EnableInput();
-					void DisableInput();
+					void EnableInput(System::InputManager &inputManager);
+					void DisableInput(System::InputManager &inputManager);
 								
 				protected:
 					Manager();				
 
-					virtual void OnPrepareToBoot();				
-					virtual void OnFixedUpdate();
-					virtual void OnUpdate();				
+					virtual void OnPreInit() override;
+					virtual void OnFixedUpdate() override;
+					virtual void OnUpdate() override;				
 
 					virtual size_t GetScreenWidth() = 0;
 					virtual size_t GetScreenHeight() = 0;

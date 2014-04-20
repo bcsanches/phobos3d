@@ -46,11 +46,9 @@ namespace Phobos
 				void QueuePluginLoad(const String_t &name);
 
 			protected:
-				void OnPrepareToBoot();
-				void OnFinalize();
-				void OnRenderReady();
-
-				void OnUpdate();
+				void OnPreInit() override;
+				void OnFinalize() override;
+				void OnStarted() override;				
 
 			private:
 				PluginManager();			

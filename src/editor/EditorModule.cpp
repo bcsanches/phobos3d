@@ -29,7 +29,7 @@ namespace Phobos
 			this->AddChild(m_clEditObjectManager);
 		}
 
-		void EditorModule::OnBoot()
+		void EditorModule::OnInit()
 		{
 			auto &session = Engine::Session::GetInstance();
 						

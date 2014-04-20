@@ -37,7 +37,7 @@ namespace Phobos
 				void EnableEditMode();
 
 			protected:
-				virtual void OnBoot() override;				
+				virtual void OnInit() override;				
 
 			private:
 				void ExecuteJsonCommand(const rapidjson::Value &obj, JsonCreator::StringWriter &response);

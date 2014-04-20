@@ -28,13 +28,11 @@ namespace Phobos
 	{
 		class InputManagerSDL: public InputManager
 		{
-			protected:
-				virtual void PollDevices(void);
-
-			private:
+			public:
 				InputManagerSDL(const String_t &name);
 
-				friend class InputManager;
+			protected:
+				virtual void PollDevices(void) override;
 
 			private:
 				KeyboardInputDeviceSDL	m_clKeyboardDevice;

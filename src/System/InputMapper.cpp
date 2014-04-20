@@ -32,26 +32,26 @@ Phobos 3d
 #include <Phobos/Memory.h>
 #include <Phobos/Path.h>
 
+#include "Phobos/System/InputDevice.h"
 #include "Phobos/System/InputEvent.h"
 #include "Phobos/System/InputManager.h"
 
-Phobos::System::InputMapperPtr_t Phobos::System::InputMapper::Create(const String_t &name, Shell::IContext &context)
+Phobos::System::InputMapperPtr_t Phobos::System::InputMapper::Create(const String_t &name, Shell::IContext &context, InputManager &inputManager)
 {
-	return InputMapperPtr_t(PH_NEW InputMapper(name, context));
+	return std::make_shared<InputMapper>(name, context, inputManager);	
 }
 
-Phobos::System::InputMapper::InputMapper(const String_t &name, Shell::IContext &context):
+Phobos::System::InputMapper::InputMapper(const String_t &name, Shell::IContext &context, InputManager &inputManager):
 	Node(name),
 	m_rclContext(context),
+	m_rclInputManager(inputManager),
 	m_fDisable(false),
 	m_cmdBind("bind"),
 	m_cmdUnbind("unbind"),
 	m_cmdPushButton("pushButton"),
 	m_cmdReleaseButton("releaseButton")
-{
-	auto &manager = InputManager::GetInstance();
-
-	manager.AddListener(*this);
+{	
+	m_rclInputManager.AddListener(*this);
 
 	m_cmdBind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper::CmdBind, this));
 	m_cmdUnbind.SetProc(PH_CONTEXT_CMD_BIND(&InputMapper::CmdUnbind, this));
@@ -62,6 +62,8 @@ Phobos::System::InputMapper::InputMapper(const String_t &name, Shell::IContext &
 	m_rclContext.AddContextCommand(m_cmdUnbind);
 	m_rclContext.AddContextCommand(m_cmdPushButton);
 	m_rclContext.AddContextCommand(m_cmdReleaseButton);
+
+	m_rclInputManager.Accept(std::bind(&InputMapper::MapDevice, this, std::placeholders::_1));
 }
 
 Phobos::System::InputMapper::~InputMapper(void)
@@ -134,6 +136,23 @@ void Phobos::System::InputMapper::Unbind(const String_t &devicePathName, const S
 	this->GetDeviceMapper(devicePathName).Unbind(actionName);
 }
 
+void Phobos::System::InputMapper::MapDevice(Phobos::System::InputDevice &device)
+{
+	auto &deviceName = device.GetName();
+
+	InputDeviceMap_t::iterator it = m_mapInputDevices.lower_bound(deviceName);
+	if ((it != m_mapInputDevices.end()) && !(m_mapInputDevices.key_comp()(deviceName, it->first)))
+	{
+		std::stringstream stream;
+		stream << "Input device " << deviceName << " already attached." << std::endl;
+		PH_RAISE(INVALID_OPERATION_EXCEPTION, "InputMapper::InputManagerEvent", stream.str());
+	}
+	else
+	{
+		m_mapInputDevices.insert(it, std::make_pair(deviceName, DeviceMapper(*this, device)));
+	}
+}
+
 void Phobos::System::InputMapper::OnInputManagerEvent(const InputManagerEvent_s &event)
 {
 	const String_t &deviceName = event.m_rclDevice.GetName();
@@ -141,17 +160,7 @@ void Phobos::System::InputMapper::OnInputManagerEvent(const InputManagerEvent_s 
 	{
 		case INPUT_MANAGER_EVENT_DEVICE_ATTACHED:
 			{
-				InputDeviceMap_t::iterator it = m_mapInputDevices.lower_bound(deviceName);
-				if((it != m_mapInputDevices.end()) && !(m_mapInputDevices.key_comp()(deviceName, it->first)))
-				{
-					std::stringstream stream;
-					stream << "Input device " << deviceName << " already attached." << std::endl;
-					PH_RAISE(INVALID_OPERATION_EXCEPTION, "InputMapper::InputManagerEvent", stream.str());
-				}
-				else
-				{
-					m_mapInputDevices.insert(it, std::make_pair(deviceName, DeviceMapper(*this, event.m_rclDevice)));
-				}
+				this->MapDevice(event.m_rclDevice);
 			}
 			break;
 

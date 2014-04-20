@@ -87,10 +87,10 @@ namespace Phobos
 				std::tuple<Register::Table &, Handle> MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
 
 			protected:		
-				virtual void OnBoot() override;
+				virtual void OnInit() override;
 				virtual void OnFinalize() override;
 				virtual void OnFixedUpdate() override;
-				virtual void OnPrepareToBoot() override;
+				virtual void OnPreInit() override;
 				virtual void OnUpdate() override;
 
 			private:

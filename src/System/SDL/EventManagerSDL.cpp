@@ -13,15 +13,14 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 */
-
-
-#include "Phobos/System/SDL/EventManagerSDL.h"
-
 #include <Phobos/Error.h>
 #include <Phobos/Exception.h>
 #include <Phobos/Memory.h>
 
+#include "Phobos/System/EventManager.h"
 #include "Phobos/System/InputActions.h"
+
+#include <SDL.h>
 
 namespace Phobos
 {
@@ -414,194 +413,173 @@ namespace Phobos
 				{SDLK_LAST, 0}							//323
 			};
 		}
-	}
-}
 
-//
-//Creation HACK
-//
-Phobos::System::EventManagerPtr_t Phobos::System::EventManager::CreateInstanceImpl(const String_t &name)
-{
-	return EventManagerPtr_t(PH_NEW EventManagerSDL(name));
-}
+		//
+		//
+		//LOCAL FUNCTIONS
+		//
+		//
 
-//
-//
-//LOCAL FUNCTIONS
-//
-//
-
-inline bool Phobos::System::EventManagerSDL::IsValidSDLToPhobosKeyCode(SDLKey key)
-{
-	if(key >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
-		return(false);
-
-	if((stSDLToKeyCode_g[key].m_u16Phobos == 0) && (stSDLToKeyCode_g[key].m_u16SDL == 0))
-		return(false);
-
-	return(true);
-}
-
-bool Phobos::System::EventManagerSDL::BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
-{
-	event.m_eType = EVENT_TYPE_KEYBOARD;
-	event.m_pParam = &sdl_event;
-
-	switch(sdl_event.type)
-	{
-		case SDL_KEYDOWN:
-
-            if(sdl_event.key.keysym.unicode != 0)
-            {
-                event.m_stKeyboard.m_eType   = KEYBOARD_CHAR;
-                event.m_stKeyboard.m_u16Code = sdl_event.key.keysym.unicode;
-
-                this->NotityListeners(event);
-            }
-
-            if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
-                return(false);
-
-            event.m_stKeyboard.m_eType   = KEYBOARD_KEY_DOWN;
-            event.m_stKeyboard.m_u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].m_u16Phobos;
-
-			break;
-
-		case SDL_KEYUP:
-			if(!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
+		static bool IsValidSDLToPhobosKeyCode(SDLKey key)
+		{
+			if (key >= (sizeof(stSDLToKeyCode_g) / sizeof(stSDLToKeyCode_g[0])))
 				return(false);
 
-			event.m_stKeyboard.m_eType   = KEYBOARD_KEY_UP;
-			event.m_stKeyboard.m_u16Code = (UInt16_t) stSDLToKeyCode_g[sdl_event.key.keysym.sym].m_u16Phobos;
-			break;
+			if ((stSDLToKeyCode_g[key].m_u16Phobos == 0) && (stSDLToKeyCode_g[key].m_u16SDL == 0))
+				return(false);
 
-        default:
-            break;
+			return(true);
+		}
+
+		static bool BuildKeyboardEvent(Event_s &event, SDL_Event &sdl_event)
+		{
+			event.m_eType = EVENT_TYPE_KEYBOARD;
+			event.m_pParam = &sdl_event;
+
+			switch (sdl_event.type)
+			{
+				case SDL_KEYDOWN:
+					if (sdl_event.key.keysym.unicode != 0)
+					{
+						event.m_stKeyboard.m_eType = KEYBOARD_CHAR;
+						event.m_stKeyboard.m_u16Code = sdl_event.key.keysym.unicode;
+
+						EventManager::detail::NotityListeners(event);
+					}
+
+					if (!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
+						return(false);
+
+					event.m_stKeyboard.m_eType = KEYBOARD_KEY_DOWN;
+					event.m_stKeyboard.m_u16Code = (UInt16_t)stSDLToKeyCode_g[sdl_event.key.keysym.sym].m_u16Phobos;
+
+					break;
+
+				case SDL_KEYUP:
+					if (!IsValidSDLToPhobosKeyCode(sdl_event.key.keysym.sym))
+						return(false);
+
+					event.m_stKeyboard.m_eType = KEYBOARD_KEY_UP;
+					event.m_stKeyboard.m_u16Code = (UInt16_t)stSDLToKeyCode_g[sdl_event.key.keysym.sym].m_u16Phobos;
+					break;
+
+				default:
+					break;
+			}
+
+			return true;
+		}
+
+		static void BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
+		{
+			event.m_eType = EVENT_TYPE_MOUSE;
+			event.m_pParam = &sdl_event;
+
+			switch (sdl_event.type)
+			{
+				case SDL_MOUSEMOTION:
+
+					event.m_stMouse.m_eType = MOUSE_MOVE;
+					event.m_stMouse.m_u16X = sdl_event.motion.x;
+					event.m_stMouse.m_u16Y = sdl_event.motion.y;
+					event.m_stMouse.m_u16ButtonId = MOUSE_THUMB;
+
+					break;
+
+				case SDL_MOUSEBUTTONDOWN:
+
+					event.m_stMouse.m_u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].m_u16Phobos;
+					event.m_stMouse.m_eType = MOUSE_BUTTON_DOWN;
+
+					break;
+
+				case SDL_MOUSEBUTTONUP:
+
+					event.m_stMouse.m_u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].m_u16Phobos;
+					event.m_stMouse.m_eType = MOUSE_BUTTON_UP;
+
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		static void BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
+		{
+			event.m_eType = EVENT_TYPE_SYSTEM;
+			event.m_pParam = &sdl_event;
+
+			switch (sdl_event.type)
+			{
+			case SDL_QUIT:
+
+				event.m_stSystem.m_eType = SYSTEM_QUIT;
+
+				break;
+
+			case SDL_ACTIVEEVENT:
+
+				event.m_stSystem.m_eType = SYSTEM_ACTIVATE;
+				event.m_stSystem.m_fActive = true;
+				event.m_stSystem.m_fMinimized = false;
+
+				break;
+
+			default:
+				PH_ASSERT(false);
+				break;
+			}
+		}		
 	}
-
-	return true;
 }
 
-void Phobos::System::EventManagerSDL::BuildMouseEvent(Event_s &event, SDL_Event& sdl_event)
-{
-	event.m_eType = EVENT_TYPE_MOUSE;
-	event.m_pParam = &sdl_event;
-
-	switch(sdl_event.type)
-	{
-		case SDL_MOUSEMOTION:
-
-			event.m_stMouse.m_eType         = MOUSE_MOVE;
-			event.m_stMouse.m_u16X          = sdl_event.motion.x;
-			event.m_stMouse.m_u16Y          = sdl_event.motion.y;
-            event.m_stMouse.m_u16ButtonId   = MOUSE_THUMB;
-
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-
-            event.m_stMouse.m_u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].m_u16Phobos;
-			event.m_stMouse.m_eType = MOUSE_BUTTON_DOWN;
-
-			break;
-
-        case SDL_MOUSEBUTTONUP:
-
-            event.m_stMouse.m_u16ButtonId = SDLToMouseButton_g[sdl_event.button.button].m_u16Phobos;
-			event.m_stMouse.m_eType = MOUSE_BUTTON_UP;
-
-            break;
-
-        default:
-            break;
-	}
-}
-
-void Phobos::System::EventManagerSDL::BuildSystemEvent(Event_s &event, SDL_Event &sdl_event)
-{
-    event.m_eType  = EVENT_TYPE_SYSTEM;
-    event.m_pParam = &sdl_event;
-
-	switch(sdl_event.type)
-	{
-		case SDL_QUIT:
-
-			event.m_stSystem.m_eType = SYSTEM_QUIT;
-
-			break;
-
-		case SDL_ACTIVEEVENT:
-
-			event.m_stSystem.m_eType = SYSTEM_ACTIVATE;
-			event.m_stSystem.m_fActive = true;
-			event.m_stSystem.m_fMinimized = false;
-
-			break;
-
-        default:
-			PH_ASSERT(false);
-            break;
-	}
-}
-
-//
-//
-//EventManagerSDL
-//
-//
-
-Phobos::System::EventManagerSDL::EventManagerSDL(const String_t &name):
-	EventManager(name)
-{
-	//empty
-}
-
-void Phobos::System::EventManagerSDL::Update()
-{
+void Phobos::System::EventManager::detail::DoPumpEvents()
+{	
 	Event_s	event;
 	SDL_Event sdl_event;
 
-	while(SDL_PollEvent(&sdl_event))
+	while (SDL_PollEvent(&sdl_event))
 	{
-		switch(sdl_event.type)
+		switch (sdl_event.type)
 		{
-			case SDL_QUIT:
-			case SDL_ACTIVEEVENT:
+		case SDL_QUIT:
+		case SDL_ACTIVEEVENT:
 
-				BuildSystemEvent(event, sdl_event);
-				this->NotityListeners(event);
+			BuildSystemEvent(event, sdl_event);
+			detail::NotityListeners(event);
 
-				break;
+			break;
 
-			case SDL_KEYDOWN:
-			case SDL_KEYUP:
+		case SDL_KEYDOWN:
+		case SDL_KEYUP:
 
-				if(!BuildKeyboardEvent(event, sdl_event))
-					continue;
+			if (!BuildKeyboardEvent(event, sdl_event))
+				continue;
 
-				this->NotityListeners(event);
+			detail::NotityListeners(event);
 
-				break;
+			break;
 
-			case SDL_MOUSEMOTION:
-			case SDL_MOUSEBUTTONDOWN:
-			case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEMOTION:
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
 
-				BuildMouseEvent(event, sdl_event);
-				this->NotityListeners(event);
+			BuildMouseEvent(event, sdl_event);
+			detail::NotityListeners(event);
 
-				break;
+			break;
 
-			case SDL_VIDEORESIZE:
-				{
-					SDL_Surface *screen = SDL_GetVideoSurface();
+		case SDL_VIDEORESIZE:
+			{
+				SDL_Surface *screen = SDL_GetVideoSurface();
 
-					int flags = screen->flags;
-					int bpp = screen->format->BitsPerPixel;
+				int flags = screen->flags;
+				int bpp = screen->format->BitsPerPixel;
 
-					SDL_SetVideoMode(sdl_event.resize.w, sdl_event.resize.h, bpp, flags);
-				}
-				break;
+				SDL_SetVideoMode(sdl_event.resize.w, sdl_event.resize.h, bpp, flags);
+			}
+			break;
 		}
 	}
 }

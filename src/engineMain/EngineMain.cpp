@@ -26,7 +26,6 @@ subject to the following restrictions:
 
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
-#include <Phobos/Engine/EventManagerModule.h>
 #include <Phobos/Game/MapWorld.h>
 #include <Phobos/Game/Things/SignalManager.h>
 #include <Phobos/Game/Things/ModelRendererManager.h>
@@ -55,16 +54,12 @@ namespace Phobos
 
 	EngineMain::EngineMain(int argc, char * const argv[])
 	{
-		auto &core = Engine::Core::CreateInstance();
+		auto &core = Engine::Core::CreateInstance("autoexec.cfg", argc, argv);
 		m_clSingletons.AddProc(Engine::Core::ReleaseInstance);
 
 		Register::Init();
 		m_clSingletons.AddProc(Register::Finalize);		
-
-		Engine::EventManagerModule &eventManager = Engine::EventManagerModule::CreateInstance();
-		m_clSingletons.AddProc(Engine::EventManagerModule::ReleaseInstance);
-		core.AddModule(eventManager);
-
+		
 		auto &console = OgreEngine::Console::CreateInstance();
 		m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
 		core.AddModule(console);		
@@ -115,14 +110,10 @@ namespace Phobos
 
 		core.RegisterCommands(console);
 		Register::RegisterCommands(console);
-
-		core.LaunchBootModule("autoexec.cfg", argc, argv);
 	}
 
 	EngineMain::~EngineMain()
 	{
-		Engine::Core::GetInstance().Shutdown();
-
 		m_clSingletons.CallAll();
 	}			
 
@@ -133,7 +124,7 @@ namespace Phobos
 	*/
 	void EngineMain::MainLoop(void)
 	{
-		Engine::Core::GetInstance().MainLoop();
+		Engine::Core::GetInstance().StartMainLoop();
 	}
 }
 

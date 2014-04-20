@@ -54,7 +54,7 @@ namespace Phobos
 				protected:
 					LevelSelector();				
 
-					virtual void OnPrepareToBoot();
+					virtual void OnPreInit();
 					virtual void OnFinalize();
 					virtual void OnFixedUpdate();
 

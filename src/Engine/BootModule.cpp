@@ -27,11 +27,7 @@ subject to the following restrictions:
 
 Phobos::Engine::BootModule::BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleManager &manager):
 	Module("BootModule"),
-	m_strCfgName(cfgName),
-	m_iFixedUpdateCount(0),
-	m_fUpdateDone(false),
-	m_fPrepareFired(false),
-	m_fBootFired(false),
+	m_strCfgName(cfgName),	
 	m_rclManager(manager)
 {
 	if(argc > 1)
@@ -43,61 +39,32 @@ Phobos::Engine::BootModule::BootModule(const String_t &cfgName, int argc, char *
 	}
 }
 
-void Phobos::Engine::BootModule::OnFixedUpdate()
+void Phobos::Engine::BootModule::OnInit()
 {
-	++m_iFixedUpdateCount;
+	Console &console = Console::GetInstance();
 
-	if(m_fUpdateDone && (m_iFixedUpdateCount > 2))
+	try
 	{
-		//First time, tell the system that we are ready to go
-		if(!m_fPrepareFired)
-		{
-			m_rclManager.OnEvent(Core::Events::PREPARE_TO_BOOT);
-			m_fPrepareFired = true;
-
-			//restart count
-			m_iFixedUpdateCount = 0;
-			m_fUpdateDone = 0;
-		}
-		else if(!m_fBootFired)
-		{
-			Console &console = Console::GetInstance();
-
-			try
-			{										
-				console.ExecuteFromFile(m_strCfgName);					
-			}
-			catch(FileNotFoundException &e)
-			{
-				LogMakeStream() << "[BootModule::OnFixedUpdate] Warning, boot failed: " << e.what();
-			}
-
-			if(!m_vecArgs.empty())
-			{						
-				std::for_each(m_vecArgs.begin(), m_vecArgs.end(), [&console](const std::string &arg)
-					{
-						console.Execute(arg);
-					}
-				);
-
-				console.FlushCommandBuffer();
-			}
-
-			//Time to boot and game over for us
-			m_rclManager.OnEvent(Core::Events::BOOT);
-
-			m_fBootFired = true;
-
-			m_rclManager.RemoveModule(*this);
-
-			//suicide
-			delete this;
-		}
+		console.ExecuteFromFile(m_strCfgName);
 	}
-}
+	catch (FileNotFoundException &e)
+	{
+		LogMakeStream() << "[BootModule::OnFixedUpdate] Warning, boot failed: " << e.what();
+	}
 
-void Phobos::Engine::BootModule::OnUpdate()
-{
-	m_fUpdateDone = true;
-}
+	if (!m_vecArgs.empty())
+	{
+		std::for_each(m_vecArgs.begin(), m_vecArgs.end(), [&console](const std::string &arg)
+			{
+				console.Execute(arg);
+			}
+		);
 
+		console.FlushCommandBuffer();
+	}
+
+	m_rclManager.RemoveModule(*this);
+
+	//suicide
+	delete this;
+}

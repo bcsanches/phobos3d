@@ -41,8 +41,8 @@ namespace Phobos
 					virtual ~Manager();
 
 				protected:				
-					virtual void OnRenderReady();	
-					virtual void OnFinalize();
+					virtual void OnStart() override; 	
+					virtual void OnFinalize() override;
 
 					virtual size_t GetScreenWidth();
 					virtual size_t GetScreenHeight();

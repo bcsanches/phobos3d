@@ -189,7 +189,7 @@ void Phobos::OgreEngine::Console::OnUpdate(void)
 	}
 }
 
-void Phobos::OgreEngine::Console::OnRenderReady(void)
+void Phobos::OgreEngine::Console::OnStart(void)
 {
 	using namespace Ogre;
 

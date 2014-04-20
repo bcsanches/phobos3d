@@ -30,7 +30,7 @@ Phobos::System::InputDevicePtr_t Phobos::System::KeyboardInputDeviceSDL::Create(
 Phobos::System::KeyboardInputDeviceSDL::KeyboardInputDeviceSDL(const String_t &name):
 	KeyboardInputDevice(name)
 {
-	EventManager::GetInstance().AddListener(*this, EVENT_TYPE_KEYBOARD);
+	EventManager::AddListener(*this, EVENT_TYPE_KEYBOARD);
 }
 
 Phobos::System::KeyboardInputDeviceSDL::~KeyboardInputDeviceSDL(void)

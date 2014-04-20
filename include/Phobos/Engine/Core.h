@@ -32,12 +32,8 @@ subject to the following restrictions:
 namespace Phobos
 {	
 	namespace Engine
-	{
-		class Core;
-
-		PH_DECLARE_NODE_PTR(Core);	
-
-		class PH_ENGINE_API Core: public ModuleManager
+	{		
+		class PH_ENGINE_API Core
 		{
 			public:
 				struct TimerTypes
@@ -123,16 +119,9 @@ namespace Phobos
 				};
 
 			public:
-				static Core &CreateInstance();
+				static Core &CreateInstance(const char *cfgFileName, int argc, char * const argv[]);
 				static void ReleaseInstance();
 				static Core &GetInstance();
-
-				Core(const String_t &name);
-				~Core();
-			
-				void Shutdown(void);
-
-				void StopMainLoop();
 
 				inline void SetFrameRate(Float_t rate);
 
@@ -148,14 +137,24 @@ namespace Phobos
 
 				void ResetTimer(TimerTypes_t timer);
 
-				///Starts the main loop, should be called by main, only once
-				void MainLoop();
+				void AddModule(Module &module, UInt32_t priority = ModulePriorities::NORMAL);
+				void RemoveModule(Module &module);
 
-				///Called automatically by MainLoop
-				void Update(Float_t seconds, Float_t delta);
-				void FixedUpdate(Float_t seconds);
+				/** 
+					Starts the main loop, should be called by main, only once
+
+					Only returns when main loop stops, so after calling this, you are expected
+					to have added a module capable of stopping the loop somehow
+				*/
+				void StartMainLoop();
+
+				//Stops the engine
+				void StopMainLoop();
 
 			private:					
+				Core(const char *cfgFileName, int argc, char * const argv[]);
+				~Core();
+
 				inline Float_t GetUpdateTime(void);
 				inline Float_t GetMinFrameTime(void);			
 
@@ -164,11 +163,14 @@ namespace Phobos
 				void CmdListModules(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdQuit(const Shell::StringVector_t &, Shell::Context &);
 
-			private:			
-				static const String_t DEFAULT_NAME;
-				static CorePtr_t ipInstance_gl;
+				///Called automatically by MainLoop
+				void Update(Float_t seconds, Float_t delta);
+				void FixedUpdate(Float_t seconds);
 
+			private:
 				SimInfo_s	m_stSimInfo;
+
+				ModuleManager	m_clModule;
 
 				Shell::Command	m_cmdTime;
 				Shell::Command	m_cmdToggleTimerPause;

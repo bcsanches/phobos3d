@@ -149,10 +149,11 @@
     <ClInclude Include="..\..\..\include\Phobos\System\AxisButton.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\Button.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventListener.h" />
-    <ClInclude Include="..\..\..\include\Phobos\System\EventListenerFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventManagerFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\InputActions.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputManagerFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\InputMapperFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\SystemAPI.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\InputDefs.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\InputDevice.h" />
@@ -163,7 +164,6 @@
     <ClInclude Include="..\..\..\include\Phobos\System\InputMapper.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\KeyboardInputDevice.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\MouseInputDevice.h" />
-    <ClInclude Include="..\..\..\include\Phobos\System\SDL\EventManagerSDL.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\SDL\InputManagerSDL.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\SDL\KeyboardInputDeviceSDL.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\SDL\MouseInputDeviceSDL.h" />

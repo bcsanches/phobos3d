@@ -51,14 +51,14 @@ namespace Phobos
 				//empty
 			}
 
-			void Manager::OnPrepareToBoot()
+			void Manager::OnPreInit()
 			{
 				auto &console = Engine::Console::GetInstance();
 
 				console.AddContextVariable(m_varPhysicsScale);
 			}
 
-			void Manager::OnBoot()
+			void Manager::OnInit()
 			{
 				m_upCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&m_clCollisionConfig));
 				m_upWorld.reset(new btDiscreteDynamicsWorld(m_upCollisionDispatcher.get(), &m_clBroadphase, &m_clConstraintSolver, &m_clCollisionConfig));

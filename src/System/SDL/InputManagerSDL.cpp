@@ -22,9 +22,9 @@ subject to the following restrictions:
 #include "Phobos/System/InputDefs.h"
 
 
-Phobos::System::InputManagerPtr_t Phobos::System::InputManager::CreateInstanceImpl(const String_t &name)
+Phobos::System::InputManagerPtr_t Phobos::System::InputManager::Create(const String_t &name)
 {
-	return InputManagerPtr_t(PH_NEW InputManagerSDL(name));
+	return std::make_shared<InputManagerSDL>(name);	
 }
 
 Phobos::System::InputManagerSDL::InputManagerSDL(const String_t &name):
@@ -34,6 +34,8 @@ Phobos::System::InputManagerSDL::InputManagerSDL(const String_t &name):
 	m_fPooled(false)
 {
 	LogMessage("[InputManagerSDL] Created.");
+
+	this->PollDevices();
 }
 
 void Phobos::System::InputManagerSDL::PollDevices(void)

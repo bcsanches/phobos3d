@@ -18,7 +18,6 @@ subject to the following restrictions:
 #define PH_SYSTEM_WINDOW_SDL_H
 
 #include "Phobos/System/Window.h"
-#include "Phobos/System/SDL/EventManagerSDL.h"
 
 //#include <windows.h>
 #include <SDL.h>
@@ -50,10 +49,7 @@ namespace Phobos
 				WindowSDL(const String_t &name);
 		
 			private:			
-				friend WindowPtr_t Window::Create(const String_t &name);
-
-			private:
-				EventManagerSDLPtr_t m_ipEventManager;				
+				friend WindowPtr_t Window::Create(const String_t &name);			
 		};
 	}
 }

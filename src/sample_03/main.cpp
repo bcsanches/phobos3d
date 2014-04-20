@@ -16,7 +16,6 @@ subject to the following restrictions:
 
 #include <Phobos/Log.h>
 #include <Phobos/Memory.h>
-#include <Phobos/ProcVector.h>
 
 #include <Phobos/Shell/Context.h>
 #include <Phobos/Shell/Utils.h>
@@ -44,8 +43,8 @@ class Sample: System::EventListener
 		void CmdQuit(const Shell::StringVector_t &args, Shell::Context &);
 
 	private:
-		ProcVector					m_clSingletons;
-		System::WindowPtr_t			m_ipWindow;				
+		System::WindowPtr_t			m_ipWindow;		
+		System::InputManagerPtr_t	m_ipInputManager;
 		System::InputMapperPtr_t	m_ipInputMapper;
 
 		Shell::Context				m_clMainContext;
@@ -63,32 +62,23 @@ Sample::Sample():
 	
 	m_ipWindow = System::Window::Create("RenderWindow");
 	
-	m_ipWindow->Open("Sample 03", UIntSize_t(640, 480));
+	m_ipWindow->Open("Sample 03", UIntSize_t(640, 480));	
 
-	auto &eventManager = System::EventManager::CreateInstance("EventManager");
-	m_clSingletons.AddProc(&System::EventManager::ReleaseInstance);	
+	System::EventManager::AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
-	eventManager.AddListener(*this, System::EVENT_TYPE_SYSTEM);
-
-	auto &inputManager = System::InputManager::CreateInstance("InputManager");
-	m_clSingletons.AddProc(&System::InputManager::ReleaseInstance);
+	m_ipInputManager = System::InputManager::Create("InputManager");	
 
 	m_cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Sample::CmdQuit, this));
 	m_clMainContext.AddContextCommand(m_cmdQuit);
 
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext);
-
-	//Force an update to allow device attachment
-	inputManager.Update();
-
+	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext, *m_ipInputManager);
+	
 	m_ipInputMapper->Bind("kb", "ESCAPE", "quit");
 }
 
 Sample::~Sample()
 {
-	m_ipWindow.reset();
-
-	m_clSingletons.CallAll();
+	//empty
 }
 
 void Sample::OnEvent(System::Event_s &event)
@@ -118,8 +108,8 @@ void Sample::Run()
 {
 	while(!m_fQuit)
 	{
-		System::EventManager::GetInstance().Update();
-		System::InputManager::GetInstance().Update();
+		System::EventManager::PumpEvents();
+		m_ipInputManager->Update();
 	}
 }
 
