@@ -41,16 +41,6 @@ Phobos::Engine::Session::Session():
 	m_pclClient(nullptr),
 	m_pclForm(nullptr)
 {
-	//empty
-}
-
-Phobos::Engine::Session::~Session()
-{
-	//empty
-}
-
-void Phobos::Engine::Session::OnPreInit()
-{
 	System::EventManager::AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
 	m_ipInputManager = System::InputManager::Create("InputManager");
@@ -63,7 +53,11 @@ void Phobos::Engine::Session::OnPreInit()
 	m_ipInputMapper->Disable();
 
 	this->AddPrivateChild(*m_ipInputMapper);
+}
 
+Phobos::Engine::Session::~Session()
+{
+	//empty
 }
 
 void Phobos::Engine::Session::OnInputManagerEvent(const System::InputManagerEvent_s &event)

@@ -61,9 +61,7 @@ namespace Phobos
 				void SetGuiForm(Gui::Form *form);
 				void CloseConsole();
 
-			protected:
-				virtual void OnPreInit() override;
-
+			protected:				
 				virtual void OnFixedUpdate() override;
 				virtual void OnUpdate() override;
 
