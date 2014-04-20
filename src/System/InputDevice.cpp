@@ -18,10 +18,14 @@ subject to the following restrictions:
 
 void Phobos::System::InputDevice::DispatchEvent(const Phobos::System::InputEvent_s &e)
 {	
-	for(auto &listener: m_lstListeners)
+	for (auto it = m_lstListeners.begin(), end = m_lstListeners.end(); it != end;)
 	{
-		listener.OnInputEvent(e);
-	}	
+		//advance to next before firing handle
+		//so if handler removes itself from the list, the iterator is not invalidated
+		auto current = it++;
+
+		current->OnInputEvent(e);
+	}
 }
 
 PH_DEFINE_LISTENER_PROCS(Phobos::System::InputDevice, InputDeviceListener, m_lstListeners);

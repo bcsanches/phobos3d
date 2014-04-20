@@ -67,8 +67,7 @@ namespace Phobos
 				protected:
 					Manager();				
 
-					virtual void OnPreInit() override;
-					virtual void OnFixedUpdate() override;
+					virtual void OnPreInit() override;					
 					virtual void OnUpdate() override;				
 
 					virtual size_t GetScreenWidth() = 0;
@@ -107,8 +106,7 @@ namespace Phobos
 
 					std::list<String_t> m_lstFontFacesToLoad;
 
-					bool				m_fInputActive;
-					bool				m_fDisableInput;
+					bool				m_fInputActive;					
 
 					Shell::Command		m_cmdRocketLoadFontFace;				
 			};
