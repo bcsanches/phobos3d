@@ -18,9 +18,9 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 
-PH_DEFINE_DEFAULT_SINGLETON(Render);
+PH_DEFINE_DEFAULT_SINGLETON2(Render, Phobos::Engine::Console &);
 
-Render::Render():
+Render::Render(Phobos::Engine::Console &console) :
 	Module("Render"),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
@@ -33,6 +33,13 @@ Render::Render():
 	LogMessage("[Render] Initializing");
 
 	LogMessage("[Render] Initialized.");
+
+	console.AddContextCommand(m_cmdScreenshot);
+
+	console.AddContextVariable(m_varRScreenX);
+	console.AddContextVariable(m_varRScreenY);
+	console.AddContextVariable(m_varRFullScreen);
+	console.AddContextVariable(m_varRVSync);
 }
 
 void Render::OnInit(void)
@@ -52,18 +59,6 @@ void Render::OnInit(void)
 	m_ipWindow->Open("Phobos Engine", size);
 
 	LogMessage("[Render::OnInit] Ready.");
-}
-
-void Render::OnPreInit()
-{
-	auto &console = Phobos::Engine::Console::GetInstance();
-	
-	console.AddContextCommand(m_cmdScreenshot);
-	
-	console.AddContextVariable(m_varRScreenX);
-	console.AddContextVariable(m_varRScreenY);
-	console.AddContextVariable(m_varRFullScreen);
-	console.AddContextVariable(m_varRVSync);
 }
 
 void Render::CmdScreenshot(const Phobos::Shell::StringVector_t &container, Phobos::Shell::Context &)

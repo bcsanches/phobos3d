@@ -41,9 +41,9 @@ namespace Phobos
 {
 	namespace Game
 	{
-		PH_DEFINE_DEFAULT_SINGLETON(WorldManager);
+		PH_DEFINE_DEFAULT_SINGLETON2(WorldManager, Engine::Console &);
 
-		WorldManager::WorldManager():
+		WorldManager::WorldManager(Engine::Console &console):
 			Module("WorldManager", NodeFlags::PRIVATE_CHILDREN),
 			m_cmdLoadMap("loadMap"),
 			m_cmdUnloadMap("unloadMap"),
@@ -52,6 +52,10 @@ namespace Phobos
 			m_cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdLoadMap, this));
 			m_cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdUnloadMap, this));
 			m_cmdDumpFactoryCreators.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdDumpFactoryCreators, this));
+
+			console.AddContextCommand(m_cmdLoadMap);
+			console.AddContextCommand(m_cmdUnloadMap);
+			console.AddContextCommand(m_cmdDumpFactoryCreators);
 		}
 
 		WorldManager::~WorldManager()
@@ -164,15 +168,6 @@ namespace Phobos
 		Things::Entity &WorldManager::GetEntityByName(const String_t &name) const
 		{
 			return static_cast<Things::Entity &>(this->GetChild(name));
-		}
-
-		void WorldManager::OnPreInit()
-		{
-			auto &console = Engine::Console::GetInstance();
-
-			console.AddContextCommand(m_cmdLoadMap);
-			console.AddContextCommand(m_cmdUnloadMap);
-			console.AddContextCommand(m_cmdDumpFactoryCreators);
 		}
 
 		void WorldManager::OnInit()

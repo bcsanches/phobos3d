@@ -35,33 +35,28 @@ namespace Phobos
 	{
 		namespace Physics
 		{
-			PH_DEFINE_DEFAULT_SINGLETON(Manager);
+			PH_DEFINE_DEFAULT_SINGLETON2(Manager, Engine::Console &);
 
-			Manager::Manager():
+			Manager::Manager(Engine::Console &console) :
 				Module("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
 				m_fpScale(1),
 				m_varPhysicsScale("dvPhysicsScale", "1"),
 				m_clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))
 			{
-				//empty
+				console.AddContextVariable(m_varPhysicsScale);
 			}
 
 			Manager::~Manager()
 			{
 				//empty
-			}
-
-			void Manager::OnPreInit()
-			{
-				auto &console = Engine::Console::GetInstance();
-
-				console.AddContextVariable(m_varPhysicsScale);
-			}
+			}			
 
 			void Manager::OnInit()
 			{
+				m_upConstraintSolver.reset(new btSequentialImpulseConstraintSolver());
+
 				m_upCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&m_clCollisionConfig));
-				m_upWorld.reset(new btDiscreteDynamicsWorld(m_upCollisionDispatcher.get(), &m_clBroadphase, &m_clConstraintSolver, &m_clCollisionConfig));
+				m_upWorld.reset(new btDiscreteDynamicsWorld(m_upCollisionDispatcher.get(), &m_clBroadphase, m_upConstraintSolver.get(), &m_clCollisionConfig));
 
 				m_upWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
 				m_clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&m_clGhostPairCallback); 

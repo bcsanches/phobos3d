@@ -38,11 +38,6 @@ void Phobos::Engine::Module::FixedUpdate()
 	this->OnFixedUpdate();
 }
 
-void Phobos::Engine::Module::PreInit()
-{
-	this->OnPreInit();
-}
-
 void Phobos::Engine::Module::Init()
 {
 	this->OnInit();

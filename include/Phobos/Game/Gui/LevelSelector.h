@@ -19,9 +19,10 @@ subject to the following restrictions:
 
 #include <list>
 
-#include <Phobos/Shell/Command.h>
+#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Singleton.h>
+#include <Phobos/Shell/Command.h>
 
 #include <Phobos/Engine/Gui/ContextFwd.h>
 #include <Phobos/Engine/Gui/Form.h>
@@ -41,25 +42,23 @@ namespace Phobos
 
 			class PH_GAME_API LevelSelector: public Engine::Module, public Engine::Gui::Form
 			{
-				PH_DECLARE_SINGLETON_METHODS(LevelSelector);
+				PH_DECLARE_SINGLETON_METHODS2(LevelSelector, Engine::Console &);
 
-				public:
-					~LevelSelector();
-
+				public:					
 					virtual void Open();
 					virtual void Close();
 
 					virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm);				
 
-				protected:
-					LevelSelector();				
-
-					virtual void OnPreInit();
-					virtual void OnFinalize();
-					virtual void OnFixedUpdate();
+				protected:										
+					virtual void OnFinalize() override;
+					virtual void OnFixedUpdate() override;
 
 				private:
 					friend class LevelSelectorEventListener;
+
+					LevelSelector(Engine::Console &);
+					~LevelSelector();
 
 					void OnLoadButtonClick();
 					void OnQuitButtonClick();

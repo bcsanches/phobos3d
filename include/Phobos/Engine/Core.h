@@ -26,6 +26,7 @@ subject to the following restrictions:
 
 #include <Phobos/System/Timer.h>
 
+#include "Phobos/Engine/ConsoleFwd.h"
 #include "Phobos/Engine/ModuleManager.h"
 #include "Phobos/Engine/EngineAPI.h"
 
@@ -119,7 +120,7 @@ namespace Phobos
 				};
 
 			public:
-				static Core &CreateInstance(const char *cfgFileName, int argc, char * const argv[]);
+				static Core &CreateInstance(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
 				static void ReleaseInstance();
 				static Core &GetInstance();
 
@@ -127,9 +128,7 @@ namespace Phobos
 
 				inline const SimInfo_s &GetSimInfo() const;
 				inline const Timer_s &GetGameTimer() const;
-				inline const Timer_s &GetUiTimer() const;
-
-				void RegisterCommands(Shell::IContext &context);
+				inline const Timer_s &GetUiTimer() const;				
 
 				void PauseTimer(TimerTypes_t timer);
 				void UnpauseTimer(TimerTypes_t timer);
@@ -152,7 +151,7 @@ namespace Phobos
 				void StopMainLoop();
 
 			private:					
-				Core(const char *cfgFileName, int argc, char * const argv[]);
+				Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
 				~Core();
 
 				inline Float_t GetUpdateTime(void);
@@ -166,6 +165,8 @@ namespace Phobos
 				///Called automatically by MainLoop
 				void Update(Float_t seconds, Float_t delta);
 				void FixedUpdate(Float_t seconds);
+
+				void RegisterCommands(Shell::IContext &context);
 
 			private:
 				SimInfo_s	m_stSimInfo;

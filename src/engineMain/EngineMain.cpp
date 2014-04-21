@@ -54,21 +54,22 @@ namespace Phobos
 
 	EngineMain::EngineMain(int argc, char * const argv[])
 	{
-		auto &core = Engine::Core::CreateInstance("autoexec.cfg", argc, argv);
+		auto &console = OgreEngine::Console::CreateInstance();
+		m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
+
+		auto &core = Engine::Core::CreateInstance(console, "autoexec.cfg", argc, argv);
 		m_clSingletons.AddProc(Engine::Core::ReleaseInstance);
 
 		Register::Init();
 		m_clSingletons.AddProc(Register::Finalize);		
-		
-		auto &console = OgreEngine::Console::CreateInstance();
-		m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
+				
 		core.AddModule(console);		
 
 		auto &session = Engine::Session::CreateInstance();
 		m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
 		core.AddModule(session);
 
-		auto &worldManager = Game::WorldManager::CreateInstance();
+		auto &worldManager = Game::WorldManager::CreateInstance(console);
 		m_clSingletons.AddProc(Game::WorldManager::ReleaseInstance);
 		core.AddModule(worldManager);
 
@@ -76,7 +77,7 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::MapWorld::ReleaseInstance);
 		core.AddModule(mapWorld);
 
-		auto &levelSelector = Game::Gui::LevelSelector::CreateInstance();
+		auto &levelSelector = Game::Gui::LevelSelector::CreateInstance(console);
 		m_clSingletons.AddProc(Game::Gui::LevelSelector::ReleaseInstance);
 		core.AddModule(levelSelector);
 
@@ -84,7 +85,7 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::Things::SignalManager::ReleaseInstance);
 		core.AddModule(gameEventManager);
 
-		Engine::PluginManager &pluginManager = Engine::PluginManager::CreateInstance();
+		Engine::PluginManager &pluginManager = Engine::PluginManager::CreateInstance(console);
 		m_clSingletons.AddProc(Engine::PluginManager::ReleaseInstance);
 		core.AddModule(pluginManager, Engine::ModulePriorities::NORMAL-1);		
 
@@ -92,7 +93,7 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::Things::MoverManager::ReleaseInstance);
 		core.AddModule(moverManager);
 
-		auto &physicsManager = Game::Physics::Manager::CreateInstance();
+		auto &physicsManager = Game::Physics::Manager::CreateInstance(console);
 		m_clSingletons.AddProc(Game::Physics::Manager::ReleaseInstance);
 		core.AddModule(physicsManager, Engine::ModulePriorities::LOWEST+3);
 
@@ -100,15 +101,14 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::Things::ModelRendererManager::ReleaseInstance);
 		core.AddModule(modelRendererManager, Engine::ModulePriorities::LOWEST+2);
 
-		auto &guiManager = OgreEngine::Gui::Manager::CreateInstance();
+		auto &guiManager = OgreEngine::Gui::Manager::CreateInstance(console);
 		m_clSingletons.AddProc(Engine::Gui::Manager::ReleaseInstance);
 		core.AddModule(guiManager, Engine::ModulePriorities::LOWEST+1);
 
-		auto &render = OgreEngine::Render::CreateInstance();
+		auto &render = OgreEngine::Render::CreateInstance(console);
 		m_clSingletons.AddProc(OgreEngine::Render::ReleaseInstance);
 		core.AddModule(render, Engine::ModulePriorities::LOWEST);
 
-		core.RegisterCommands(console);
 		Register::RegisterCommands(console);
 	}
 

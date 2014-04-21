@@ -63,7 +63,6 @@ namespace Phobos
 				virtual void OnUpdate() override;
 				virtual void OnFixedUpdate() override;
 
-				virtual void OnPreInit() override;
 				virtual void OnInit() override;
 				virtual void OnStart() override;
 				virtual void OnStarted() override;

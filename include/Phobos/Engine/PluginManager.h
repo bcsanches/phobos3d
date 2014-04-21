@@ -29,16 +29,16 @@ namespace Phobos
 {
 	namespace Engine
 	{
+		class Console;
+
 		PH_DECLARE_NODE_PTR(PluginManager);
 
 		class PH_ENGINE_API PluginManager: public Module
 		{
 			public:
-				static PluginManager &CreateInstance(void);
+				static PluginManager &CreateInstance(Console &console);
 				static PluginManager &GetInstance(void);
-				static void ReleaseInstance(void);
-
-				~PluginManager();
+				static void ReleaseInstance(void);				
 
 				void LoadPlugin(const String_t &name);
 				void UnloadPlugin(const String_t &name);
@@ -46,12 +46,12 @@ namespace Phobos
 				void QueuePluginLoad(const String_t &name);
 
 			protected:
-				void OnPreInit() override;
 				void OnFinalize() override;
 				void OnStarted() override;				
 
-			private:
-				PluginManager();			
+			private:				
+				PluginManager(Console &console);
+				~PluginManager();
 
 				void CmdLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdQueuePluginLoad(const Shell::StringVector_t &args, Shell::Context &);
@@ -65,13 +65,7 @@ namespace Phobos
 				std::list<String_t> m_lstPluginsToLoad;
 				std::list<String_t> m_lstPluginsToActivate;
 
-				bool				m_fSystemReady;
-
-				// =====================================================
-				// STATIC PRIVATE ATTRIBUTES
-				// =====================================================
-				static PluginManagerPtr_t ipInstance_gl;
-
+				bool				m_fSystemReady;				
 		};
 	}
 }

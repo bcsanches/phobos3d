@@ -63,22 +63,21 @@ EngineMain::EngineMain()
 {
 	using namespace Phobos;
 
-	auto &core = Engine::Core::CreateInstance("autoexec.cfg", 0, nullptr);
-	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
-
 	auto &console = ::Console::CreateInstance();
 	m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
+
+	auto &core = Engine::Core::CreateInstance(console, "autoexec.cfg", 0, nullptr);
+	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
+	
 	core.AddModule(console);
 
 	auto &session = Engine::Session::CreateInstance();
 	m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
 	core.AddModule(session);
 
-	auto &render = Render::CreateInstance();
+	auto &render = Render::CreateInstance(console);
 	m_clSingletons.AddProc(Render::ReleaseInstance);
 	core.AddModule(render, Engine::ModulePriorities::LOWEST);
-
-	core.RegisterCommands(console);	
 }
 
 EngineMain::~EngineMain()

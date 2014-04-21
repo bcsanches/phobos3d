@@ -29,8 +29,10 @@ subject to the following restrictions:
 #include <Terrain/OgreTerrainGroup.h>
 #include <Terrain/OgreTerrainPrerequisites.h>
 
+#include <Phobos/Singleton.h>
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
+#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
 
 #include <Phobos/System/Window.h>
@@ -50,9 +52,7 @@ namespace Phobos
 	namespace OgreEngine
 	{
 		class ShaderGeneratorTechniqueResolverListener;
-
-		PH_DECLARE_NODE_PTR(Render);	
-
+		
 		namespace DefaultViewportZOrder
 		{
 			enum Enum
@@ -66,11 +66,9 @@ namespace Phobos
 
 		class PH_OGRE_ENGINE_API Render: public Engine::Module
 		{		
-			PH_DISABLE_COPY(Render);
+			PH_DECLARE_SINGLETON_METHODS2(Render, Engine::Console&);
 
 			public:
-				~Render();
-
 				enum EntityMeshFlags_e
 				{
 					FORCE_EDGE_LIST_GENERATION = 0x01
@@ -140,10 +138,7 @@ namespace Phobos
 			protected:
 				// =====================================================
 				// PROTECTED METHODS
-				// =====================================================
-				Render();			
-
-				virtual void OnPreInit() override;
+				// =====================================================				
 				virtual void OnInit() override;			
 
 				virtual void OnUpdate() override;				
@@ -151,7 +146,10 @@ namespace Phobos
 			private:
 				// =====================================================
 				// PRIVATE METHODS
-				// =====================================================			
+				// =====================================================		
+				Render(Engine::Console &console);
+				virtual ~Render();
+
 				void CmdOgreLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdOgreAddResourceLocation(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdOgreInitialiseResourceGroup(const Shell::StringVector_t &args, Shell::Context &);
@@ -209,17 +207,6 @@ namespace Phobos
 
 				typedef std::list<String_t>			StringList_t;
 				StringList_t						m_lstPluginsName;
-
-			public:		
-				static Render &CreateInstance();
-				static void ReleaseInstance();
-				static Render &GetInstance();			
-
-			private:
-				// =====================================================
-				// PRIVATE STATIC ATTRIBUTES
-				// =====================================================		
-				static RenderPtr_t ipInstance_gl;
 		};
 	}
 }

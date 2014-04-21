@@ -53,11 +53,6 @@ void Phobos::Engine::ModuleManager::SortModules()
 	}
 }
 
-void Phobos::Engine::ModuleManager::OnPreInit()
-{
-	this->CallModuleProc(&Module::PreInit);
-}
-
 void Phobos::Engine::ModuleManager::OnInit()
 {
 	this->CallModuleProc(&Module::Init);

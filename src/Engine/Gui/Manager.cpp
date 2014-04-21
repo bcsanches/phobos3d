@@ -57,11 +57,11 @@ namespace
 		return false;
 	}
 
-	static Phobos::Engine::Gui::ManagerPtr_t ipInstance_gl;
+	static Phobos::Engine::Gui::Manager *g_pclManager = nullptr; 
 }
 
 Phobos::Engine::Gui::Manager::LocalInputDeviceListener::LocalInputDeviceListener():
-	m_pclOwner(NULL)
+	m_pclOwner(nullptr)
 {
 	//empty
 }
@@ -83,43 +83,39 @@ void Phobos::Engine::Gui::Manager::LocalInputDeviceListener::OnInputEvent(const 
 
 Phobos::Engine::Gui::Manager &Phobos::Engine::Gui::Manager::GetInstance(void)
 {
-	return *ipInstance_gl;
+	return *g_pclManager;
 }
 
 void Phobos::Engine::Gui::Manager::ReleaseInstance(void)
 {
-	ipInstance_gl.reset();
+	delete g_pclManager;
+	g_pclManager = nullptr;	
 }
 
-void Phobos::Engine::Gui::Manager::UpdateInstance(ManagerPtr_t manager)
+void Phobos::Engine::Gui::Manager::UpdateInstance(Manager *manager)
 {
-	ipInstance_gl = manager;
+	ReleaseInstance();
+
+	g_pclManager = manager;
 }
 
-Phobos::Engine::Gui::Manager::Manager():
+Phobos::Engine::Gui::Manager::Manager(Console &console):
 	Module("GuiManager", NodeFlags::PRIVATE_CHILDREN),
 	m_cmdRocketLoadFontFace("rocketLoadFontFace"),
-	m_fInputActive(false),
-	m_fDisableInput(false)
+	m_fInputActive(false)
 {
 	m_cmdRocketLoadFontFace.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Engine::Gui::Manager::CmdRocketLoadFonfFace, this));
 
 	m_clKeyboardListener.SetOwner(*this);
 	m_clMouseListener.SetOwner(*this);
+
+	console.AddContextCommand(m_cmdRocketLoadFontFace);
 }
 
 Phobos::Engine::Gui::Manager::~Manager()
 {
 	//empty
 }
-
-void Phobos::Engine::Gui::Manager::OnPreInit()
-{
-	Console &console = Console::GetInstance();
-
-	console.AddContextCommand(m_cmdRocketLoadFontFace);
-}
-
 
 Rocket::Core::SystemInterface *Phobos::Engine::Gui::Manager::CreateSystemInterface()
 {
@@ -168,14 +164,15 @@ void Phobos::Engine::Gui::Manager::EnableInput(System::InputManager &inputManage
 	}
 }
 
-static Phobos::System::InputManager *g_pclMyFuckingHack = nullptr;
-
 void Phobos::Engine::Gui::Manager::DisableInput(System::InputManager &inputManager)
-{
-	//we must delay input deactivation to avoid causing problem on listener lists
-	m_fDisableInput = true;	
+{	
+	if (m_fInputActive)
+	{
+		inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD).RemoveListener(m_clKeyboardListener);
+		inputManager.GetDevice(System::INPUT_DEVICE_MOUSE).RemoveListener(m_clMouseListener);
 
-	g_pclMyFuckingHack = &inputManager;
+		m_fInputActive = false;
+	}
 }
 
 void Phobos::Engine::Gui::Manager::InputEvent(const System::InputEvent_s &event)
@@ -186,19 +183,6 @@ void Phobos::Engine::Gui::Manager::InputEvent(const System::InputEvent_s &event)
 
 		context->OnInputEvent(event);
 	}	
-}
-
-void Phobos::Engine::Gui::Manager::OnFixedUpdate()
-{
-	if(m_fInputActive && m_fDisableInput)
-	{
-		auto &inputManager = *g_pclMyFuckingHack;
-
-		inputManager.GetDevice(System::INPUT_DEVICE_KEYBOARD).RemoveListener(m_clKeyboardListener);
-		inputManager.GetDevice(System::INPUT_DEVICE_MOUSE).RemoveListener(m_clMouseListener);
-
-		m_fInputActive = m_fDisableInput = false;
-	}
 }
 
 void Phobos::Engine::Gui::Manager::OnUpdate()

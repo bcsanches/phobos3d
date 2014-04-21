@@ -129,30 +129,9 @@ namespace Phobos
 	}
 }
 
-Phobos::OgreEngine::RenderPtr_t Phobos::OgreEngine::Render::ipInstance_gl;
+PH_DEFINE_DEFAULT_SINGLETON2(Phobos::OgreEngine::Render, Engine::Console&);
 
-Phobos::OgreEngine::Render &Phobos::OgreEngine::Render::CreateInstance()
-{
-	PH_ASSERT(ipInstance_gl == NULL);
-
-	ipInstance_gl.reset(PH_NEW Render());
-
-	return *ipInstance_gl;
-}
-
-void Phobos::OgreEngine::Render::ReleaseInstance()
-{
-	ipInstance_gl.reset();
-}
-
-Phobos::OgreEngine::Render &Phobos::OgreEngine::Render::GetInstance()
-{
-	PH_ASSERT_VALID(ipInstance_gl);
-
-	return(*ipInstance_gl);
-}
-
-Phobos::OgreEngine::Render::Render(void):
+Phobos::OgreEngine::Render::Render(Engine::Console &console):
 	Module("Render"),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
@@ -198,6 +177,27 @@ Phobos::OgreEngine::Render::Render(void):
 	log->addListener(&clOgreLogListener_gl);
 
 	m_upOverlaySystem.reset(new Ogre::OverlaySystem());
+
+	console.AddContextCommand(m_cmdOgreAddResourceLocation);
+	console.AddContextCommand(m_cmdOgreInitialiseResourceGroup);
+	console.AddContextCommand(m_cmdOgreLoadPlugin);
+	console.AddContextCommand(m_cmdScreenshot);
+
+	console.AddContextCommand(m_cmdSetShadowMode);
+	console.AddContextCommand(m_cmdSetShadowFarDistance);
+
+	console.AddContextCommand(m_cmdDumpSceneHierarchy);
+
+	console.AddContextVariable(m_varRScreenX);
+	console.AddContextVariable(m_varRScreenY);
+	console.AddContextVariable(m_varRFullScreen);
+	console.AddContextVariable(m_varRVSync);
+	console.AddContextVariable(m_varRRenderSystem);
+	console.AddContextVariable(m_varRCaelum);
+	console.AddContextVariable(m_varParentWindow);
+
+	console.AddContextVariable(m_varRShaderSystem);
+	console.AddContextVariable(m_varRShaderSystemLibPath);
 
 	LogMessage("[Render] Initialized.");
 }
@@ -389,32 +389,6 @@ void Phobos::OgreEngine::Render::OnUpdate(void)
 	//clCaelum.Update(IM_GetGameTimer().fRenderFrameTime);
 
     m_upRoot->renderOneFrame();
-}
-
-void Phobos::OgreEngine::Render::OnPreInit()
-{
-	auto &console = Engine::Console::GetInstance();
-
-	console.AddContextCommand(m_cmdOgreAddResourceLocation);
-	console.AddContextCommand(m_cmdOgreInitialiseResourceGroup);
-	console.AddContextCommand(m_cmdOgreLoadPlugin);
-	console.AddContextCommand(m_cmdScreenshot);
-
-	console.AddContextCommand(m_cmdSetShadowMode);
-	console.AddContextCommand(m_cmdSetShadowFarDistance);
-
-	console.AddContextCommand(m_cmdDumpSceneHierarchy);
-
-	console.AddContextVariable(m_varRScreenX);
-	console.AddContextVariable(m_varRScreenY);
-	console.AddContextVariable(m_varRFullScreen);
-	console.AddContextVariable(m_varRVSync);
-	console.AddContextVariable(m_varRRenderSystem);
-	console.AddContextVariable(m_varRCaelum);
-	console.AddContextVariable(m_varParentWindow);
-
-	console.AddContextVariable(m_varRShaderSystem);
-	console.AddContextVariable(m_varRShaderSystemLibPath);
 }
 
 //

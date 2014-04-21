@@ -217,26 +217,21 @@ const Phobos::String_t &Phobos::Game::Gui::LevelFileDataSource::GetFile(int inde
 	return vecFiles[index];
 }
 
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Game::Gui::LevelSelector);
+PH_DEFINE_DEFAULT_SINGLETON2(Phobos::Game::Gui::LevelSelector, Engine::Console &);
 
-Phobos::Game::Gui::LevelSelector::LevelSelector():
+Phobos::Game::Gui::LevelSelector::LevelSelector(Engine::Console &console):
 	Module("GuiLevelSelector"),
 	m_cmdAddLevelPath("addLevelPath"),
 	m_fCloseRequested(false)
 {	
 	m_cmdAddLevelPath.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Game::Gui::LevelSelector::CmdAddLevelPath, this));	
+
+	console.AddContextCommand(m_cmdAddLevelPath);
 }
 
 Phobos::Game::Gui::LevelSelector::~LevelSelector()
 {
 	//empty
-}
-
-void Phobos::Game::Gui::LevelSelector::OnPreInit()
-{
-	auto &console = Engine::Console::GetInstance();
-
-	console.AddContextCommand(m_cmdAddLevelPath);
 }
 
 void Phobos::Game::Gui::LevelSelector::OnFixedUpdate()
