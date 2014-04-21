@@ -33,7 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.worldPage1 = new SharpEditor.WorldPage();
+            this.mWorldPage = new SharpEditor.WorldPage();
             this.mEnginePanel = new System.Windows.Forms.Panel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.assetBrowser1 = new SharpEditor.AssetBrowser();
@@ -115,7 +115,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.worldPage1);
+            this.splitContainer2.Panel1.Controls.Add(this.mWorldPage);
             // 
             // splitContainer2.Panel2
             // 
@@ -124,13 +124,13 @@
             this.splitContainer2.SplitterDistance = 226;
             this.splitContainer2.TabIndex = 0;
             // 
-            // worldPage1
+            // mWorldPage
             // 
-            this.worldPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.worldPage1.Location = new System.Drawing.Point(0, 0);
-            this.worldPage1.Name = "worldPage1";
-            this.worldPage1.Size = new System.Drawing.Size(226, 531);
-            this.worldPage1.TabIndex = 0;
+            this.mWorldPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mWorldPage.Location = new System.Drawing.Point(0, 0);
+            this.mWorldPage.Name = "mWorldPage";
+            this.mWorldPage.Size = new System.Drawing.Size(226, 531);
+            this.mWorldPage.TabIndex = 0;
             // 
             // mEnginePanel
             // 
@@ -287,7 +287,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Sharp Editor";            
+            this.Text = "Sharp Editor";
             mainSplit.Panel1.ResumeLayout(false);
             mainSplit.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(mainSplit)).EndInit();
@@ -333,7 +333,7 @@
         private System.Windows.Forms.SplitContainer splitContainer3;
         private AssetBrowser assetBrowser1;
         private PropertyPage propertyPage1;
-        private WorldPage worldPage1;
+        private WorldPage mWorldPage;
         private LogsControl mLogsControl;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
     }

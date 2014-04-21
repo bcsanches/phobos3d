@@ -16,7 +16,10 @@ namespace SharpEditor.EngineResponses
                 return;
             }
 
-            System.Windows.Forms.MessageBox.Show(result.name);
+            //System.Windows.Forms.MessageBox.Show(result.name);
+            MapObject obj = new MapObject(result.name, (int)result.id);
+
+            EditorService.AddMapObject(obj);
         }
     }
 }

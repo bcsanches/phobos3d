@@ -26,12 +26,14 @@ Phobos::Editor::CreateMapObjectRequest::CreateMapObjectRequest(const rapidjson::
 
 void Phobos::Editor::CreateMapObjectRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
 {				
-	auto name = (*parameters)["name"].GetString();
-	auto typeName = (*parameters)["type"].GetString();
+	auto parentId = (*parameters)["parentId"].GetInt();
+	auto &asset = (*parameters)["asset"];
+	auto name = asset["name"].GetString();
+	auto typeName = asset["type"].GetString();
 
 	auto type = Game::StringToMapObjectType(typeName);
 
-	auto &editObject = EditorModule::GetInstance().CreateMapObject(name, type);
+	auto &editObject = EditorModule::GetInstance().CreateMapObject(parentId, name, type);
 
 	auto object = response->AddObject("result");
 

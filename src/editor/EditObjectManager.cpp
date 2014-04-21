@@ -15,11 +15,17 @@ namespace Phobos
 			//empty
 		}
 
-		EditObject &EditObjectManager::CreateEditObject(const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		EditObject &EditObjectManager::CreateEditObject(UInt64_t parentId, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
 		{
+			EditObject *parentObject = nullptr;
+			if (parentId)
+			{ 
+				parentObject = m_mapEditObjectIndex.find(parentId)->second;
+			}
+
 			auto nextId = ++m_uNextId;		
 
-			auto editObject = std::make_unique<EditObject>(nextId, this->GenerateName(nextId));
+			auto editObject = std::make_unique<EditObject>(nextId, this->GenerateName(nextId));			
 
 			auto mapObjectData = Game::WorldManager::GetInstance().MakeMapObject(
 				editObject->GetName(),
@@ -28,7 +34,12 @@ namespace Phobos
 				transform
 			);
 
-			return static_cast<EditObject &>(this->AddPrivateChild(std::move(editObject)));
+			auto &finalEditObject = static_cast<EditObject &>(this->AddPrivateChild(std::move(editObject)));
+
+			m_mapEditObjectIndex.insert(std::make_pair(nextId, editObject.get()));
+			m_mapEditObjects.insert(std::make_pair(editObject->GetName(), editObject.get()));
+
+			return finalEditObject;
 		}
 
 		String_t EditObjectManager::GenerateName(UInt64_t id) const

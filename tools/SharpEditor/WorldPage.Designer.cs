@@ -30,7 +30,7 @@
         {
             System.Windows.Forms.TabControl tabControl1;
             System.Windows.Forms.TabPage tabPage2;
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.m_trView = new System.Windows.Forms.TreeView();
             tabControl1 = new System.Windows.Forms.TabControl();
             tabPage2 = new System.Windows.Forms.TabPage();
             tabControl1.SuspendLayout();
@@ -50,7 +50,7 @@
             // tabPage2
             // 
             tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            tabPage2.Controls.Add(this.treeView1);
+            tabPage2.Controls.Add(this.m_trView);
             tabPage2.Location = new System.Drawing.Point(4, 22);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -58,13 +58,15 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "World";
             // 
-            // treeView1
+            // m_trView
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(3, 3);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(194, 324);
-            this.treeView1.TabIndex = 0;
+            this.m_trView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_trView.FullRowSelect = true;
+            this.m_trView.HideSelection = false;
+            this.m_trView.Location = new System.Drawing.Point(3, 3);
+            this.m_trView.Name = "m_trView";
+            this.m_trView.Size = new System.Drawing.Size(194, 324);
+            this.m_trView.TabIndex = 0;
             // 
             // WorldPage
             // 
@@ -81,6 +83,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView m_trView;
     }
 }
