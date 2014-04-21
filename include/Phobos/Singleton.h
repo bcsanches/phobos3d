@@ -29,7 +29,7 @@ subject to the following restrictions:
 		static X##Ptr_t ipInstance_gl;		\
 											\
 	public:									\
-		static X &CreateInstance();			\
+		static X &CreateInstance();    		\
 		static void ReleaseInstance();		\
 		static X &GetInstance();
 
@@ -58,7 +58,7 @@ subject to the following restrictions:
 
 #define PH_DEFINE_DEFAULT_SINGLETON_EX(X, EXTRA_CREATE, EXTRA_RELEASE)\
 	PH_DEFINE_SINGLETON_VAR(X)				\
-	X &X::CreateInstance(void)				\
+	X &X::CreateInstance()					\
 	{										\
 		PH_ASSERT(!ipInstance_gl);			\
 											\
@@ -73,5 +73,33 @@ subject to the following restrictions:
 #define PH_DEFINE_NODE_SINGLETON(X, NODE_PATH) PH_DEFINE_DEFAULT_SINGLETON_EX(X, Phobos::ObjectManager::AddObject(*ipInstance_gl, Path(NODE_PATH)), ipInstance_gl->RemoveSelf())	
 
 #define PH_DEFINE_DEFAULT_SINGLETON(X) PH_DEFINE_DEFAULT_SINGLETON_EX(X, ;, ;)	
+#define PH_DEFINE_DEFAULT_SINGLETON1(X) PH_DEFINE_DEFAULT_SINGLETON_EX(X, ;, ;)	
+
+#define PH_DECLARE_SINGLETON_METHODS2(X,Y)	\
+	PH_DISABLE_COPY(X)						\
+											\
+	public:									\
+	static X &CreateInstance(Y);    		\
+	static void ReleaseInstance();			\
+	static X &GetInstance();
+
+#define PH_DEFINE_DEFAULT_SINGLETON2(X, Y)	\
+	static X *g_pclInstance = nullptr;		\
+	X &X::CreateInstance(Y param)			\
+	{										\
+		PH_ASSERT(!g_pclInstance);			\
+		g_pclInstance = PH_NEW X(param);	\
+		return *g_pclInstance;				\
+	}										\
+	X &X::GetInstance()						\
+	{										\
+		return *g_pclInstance;				\
+	}										\
+	void X::ReleaseInstance()				\
+	{										\
+		delete g_pclInstance;				\
+		g_pclInstance = nullptr;			\
+	}
+
 
 #endif

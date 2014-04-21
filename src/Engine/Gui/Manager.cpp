@@ -57,11 +57,11 @@ namespace
 		return false;
 	}
 
-	static Phobos::Engine::Gui::ManagerPtr_t ipInstance_gl;
+	static Phobos::Engine::Gui::Manager *g_pclManager = nullptr; 
 }
 
 Phobos::Engine::Gui::Manager::LocalInputDeviceListener::LocalInputDeviceListener():
-	m_pclOwner(NULL)
+	m_pclOwner(nullptr)
 {
 	//empty
 }
@@ -83,20 +83,23 @@ void Phobos::Engine::Gui::Manager::LocalInputDeviceListener::OnInputEvent(const 
 
 Phobos::Engine::Gui::Manager &Phobos::Engine::Gui::Manager::GetInstance(void)
 {
-	return *ipInstance_gl;
+	return *g_pclManager;
 }
 
 void Phobos::Engine::Gui::Manager::ReleaseInstance(void)
 {
-	ipInstance_gl.reset();
+	delete g_pclManager;
+	g_pclManager = nullptr;	
 }
 
-void Phobos::Engine::Gui::Manager::UpdateInstance(ManagerPtr_t manager)
+void Phobos::Engine::Gui::Manager::UpdateInstance(Manager *manager)
 {
-	ipInstance_gl = manager;
+	ReleaseInstance();
+
+	g_pclManager = manager;
 }
 
-Phobos::Engine::Gui::Manager::Manager():
+Phobos::Engine::Gui::Manager::Manager(Console &console):
 	Module("GuiManager", NodeFlags::PRIVATE_CHILDREN),
 	m_cmdRocketLoadFontFace("rocketLoadFontFace"),
 	m_fInputActive(false)
@@ -105,20 +108,14 @@ Phobos::Engine::Gui::Manager::Manager():
 
 	m_clKeyboardListener.SetOwner(*this);
 	m_clMouseListener.SetOwner(*this);
+
+	console.AddContextCommand(m_cmdRocketLoadFontFace);
 }
 
 Phobos::Engine::Gui::Manager::~Manager()
 {
 	//empty
 }
-
-void Phobos::Engine::Gui::Manager::OnPreInit()
-{
-	Console &console = Console::GetInstance();
-
-	console.AddContextCommand(m_cmdRocketLoadFontFace);
-}
-
 
 Rocket::Core::SystemInterface *Phobos::Engine::Gui::Manager::CreateSystemInterface()
 {

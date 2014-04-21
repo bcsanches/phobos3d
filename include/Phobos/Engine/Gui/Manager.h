@@ -47,6 +47,8 @@ namespace Phobos
 
 	namespace Engine
 	{
+		class Console;
+
 		namespace Gui
 		{
 			PH_DECLARE_NODE_PTR(Manager);
@@ -65,9 +67,8 @@ namespace Phobos
 					void DisableInput(System::InputManager &inputManager);
 								
 				protected:
-					Manager();				
-
-					virtual void OnPreInit() override;					
+					Manager(Console &console);				
+			
 					virtual void OnUpdate() override;				
 
 					virtual size_t GetScreenWidth() = 0;
@@ -80,7 +81,7 @@ namespace Phobos
 					void InputEvent(const System::InputEvent_s &event);
 
 				protected:
-					static void UpdateInstance(ManagerPtr_t manager);
+					static void UpdateInstance(Manager *manager);
 			
 				private:								
 					void CmdRocketLoadFonfFace(const Shell::StringVector_t &container, Phobos::Shell::Context &);

@@ -25,6 +25,7 @@ subject to the following restrictions:
 #include <Phobos/Exception.h>
 #include <Phobos/Folders.h>
 #include <Phobos/Log.h>
+#include <Phobos/Memory.h>
 #include <Phobos/MemoryFunctions.h>
 #include <Phobos/ObjectManager.h>
 #include <Phobos/Path.h>
@@ -41,11 +42,11 @@ subject to the following restrictions:
 
 static Phobos::Engine::Core *g_pclInstance = nullptr;
 
-Phobos::Engine::Core &Phobos::Engine::Core::CreateInstance(const char *cfgFileName, int argc, char * const argv[])
+Phobos::Engine::Core &Phobos::Engine::Core::CreateInstance(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[])
 {
 	PH_ASSERT_MSG(!g_pclInstance, "[Core::CreateInstance]: Instance already exists");
 
-	g_pclInstance = new Core(cfgFileName, argc, argv);
+	g_pclInstance = PH_NEW Core(context, cfgFileName, argc, argv);
 
 	return *g_pclInstance;
 }
@@ -66,7 +67,7 @@ Phobos::Engine::Core &Phobos::Engine::Core::GetInstance()
 	return *g_pclInstance;
 }
 
-Phobos::Engine::Core::Core(const char *cfgFileName, int argc, char * const argv[]) :
+Phobos::Engine::Core::Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]) :
 	m_clModule("Core"),
 	m_cmdTime("time"),
 	m_cmdToggleTimerPause("toggleTimerPause"),
@@ -83,6 +84,8 @@ Phobos::Engine::Core::Core(const char *cfgFileName, int argc, char * const argv[
 	ObjectManager::AddObject(m_clModule, Path("/"));
 
 	m_clModule.LaunchBootModule(cfgFileName, argc, argv);
+
+	this->RegisterCommands(context);
 }
 
 Phobos::Engine::Core::~Core()
@@ -137,7 +140,6 @@ Phobos::Float_t Phobos::Engine::Core::GetMinFrameTime(void)
 
 void Phobos::Engine::Core::StartMainLoop()
 {
-	m_clModule.PreInit();
 	m_clModule.Init();
 	m_clModule.Start();	
 	m_clModule.Started();

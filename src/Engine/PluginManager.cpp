@@ -24,28 +24,29 @@ subject to the following restrictions:
 #include "Phobos/Engine/Console.h"
 #include "Phobos/Engine/PluginInstance.h"
 
-Phobos::Engine::PluginManagerPtr_t Phobos::Engine::PluginManager::ipInstance_gl;
+static Phobos::Engine::PluginManager *g_pclPluginManager = nullptr;
 
-Phobos::Engine::PluginManager &Phobos::Engine::PluginManager::CreateInstance(void)
+Phobos::Engine::PluginManager &Phobos::Engine::PluginManager::CreateInstance(Console &console)
 {
-	PH_ASSERT(!ipInstance_gl);
+	PH_ASSERT(!g_pclPluginManager);
 
-	ipInstance_gl.reset(PH_NEW PluginManager());
+	g_pclPluginManager = new PluginManager(console);
 
-	return *ipInstance_gl;
+	return *g_pclPluginManager;
 }
 
 Phobos::Engine::PluginManager &Phobos::Engine::PluginManager::GetInstance(void)
 {
-	return *ipInstance_gl;
+	return *g_pclPluginManager;
 }
 
 void Phobos::Engine::PluginManager::ReleaseInstance(void)
 {
-	ipInstance_gl.reset();
+	delete g_pclPluginManager;
+	g_pclPluginManager = nullptr;
 }
 
-Phobos::Engine::PluginManager::PluginManager():
+Phobos::Engine::PluginManager::PluginManager(Console &console) :
 	Module("PluginManager", NodeFlags::PRIVATE_CHILDREN),
 	m_cmdLoadPlugin("loadPlugin"),
 	m_cmdQueuePluginLoad("queuePluginLoad"),
@@ -55,20 +56,15 @@ Phobos::Engine::PluginManager::PluginManager():
 	m_cmdLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdLoadPlugin, this));
 	m_cmdQueuePluginLoad.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdQueuePluginLoad, this));
 	m_cmdUnloadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdUnloadPlugin, this));
+
+	console.AddContextCommand(m_cmdLoadPlugin);
+	console.AddContextCommand(m_cmdQueuePluginLoad);
+	console.AddContextCommand(m_cmdUnloadPlugin);
 }
 
 Phobos::Engine::PluginManager::~PluginManager()
 {
 	//empty
-}
-
-void Phobos::Engine::PluginManager::OnPreInit()
-{
-	Console &console = Console::GetInstance();
-
-	console.AddContextCommand(m_cmdLoadPlugin);
-	console.AddContextCommand(m_cmdQueuePluginLoad);
-	console.AddContextCommand(m_cmdUnloadPlugin);
 }
 
 void Phobos::Engine::PluginManager::OnFinalize()

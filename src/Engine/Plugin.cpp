@@ -51,7 +51,6 @@ void Phobos::Engine::Plugin::Init()
 
 	ipManager->LaunchBootModule(szCfgName_g, 0, nullptr);	
 
-	ipManager->PreInit();
 	ipManager->Init();
 	ipManager->Start();
 	ipManager->Started();

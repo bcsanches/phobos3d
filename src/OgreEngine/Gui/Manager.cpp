@@ -29,14 +29,15 @@ subject to the following restrictions:
 
 #include "Phobos/OgreEngine/Render.h"
 
-Phobos::OgreEngine::Gui::Manager &Phobos::OgreEngine::Gui::Manager::CreateInstance(void)
+Phobos::OgreEngine::Gui::Manager &Phobos::OgreEngine::Gui::Manager::CreateInstance(Engine::Console &console)
 {		
-	Manager::UpdateInstance(ManagerPtr_t(PH_NEW Manager()));		
+	Manager::UpdateInstance(PH_NEW Manager(console));		
 
 	return static_cast<Manager &>(Manager::GetInstance());
 }
 
-Phobos::OgreEngine::Gui::Manager::Manager():	
+Phobos::OgreEngine::Gui::Manager::Manager(Engine::Console &console):	
+	Engine::Gui::Manager(console),
 	m_pclSceneManager(NULL),
 	m_pclCamera(NULL)
 {

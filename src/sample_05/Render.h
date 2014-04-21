@@ -19,22 +19,18 @@ subject to the following restrictions:
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
+#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Singleton.h>
 #include <Phobos/System/Window.h>
 
-PH_DECLARE_SINGLETON_PTR(Render);
-
 class Render: public Phobos::Engine::Module
 {
-	PH_DECLARE_SINGLETON_METHODS(Render);
-
-	public:		
+	PH_DECLARE_SINGLETON_METHODS2(Render, Phobos::Engine::Console &);
 
 	protected:		
-		Render();
+		Render(Phobos::Engine::Console &console);
 
-		void OnPreInit() override;
 		void OnInit() override;		
 
 	private:

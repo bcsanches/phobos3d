@@ -31,10 +31,7 @@ namespace Phobos
 			public:
 				void Update();
 				void FixedUpdate();
-
-				//The first step on initialization, nothing is loaded yet and all modules should be already created
-				void PreInit();
-
+				
 				//CFG file has been loaded and executed, so handle any config changes
 				void Init();
 
@@ -52,8 +49,7 @@ namespace Phobos
 
 				virtual void OnUpdate() {}
 				virtual void OnFixedUpdate() {}
-				
-				virtual void OnPreInit() {}				
+					
 				virtual void OnInit() {}
 				virtual void OnStart() {}				
 				virtual void OnStarted() {}

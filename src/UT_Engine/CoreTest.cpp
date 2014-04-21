@@ -47,7 +47,6 @@ class TestModule: public Engine::Module
 			m_iFixedUpdateCount(0),
 			m_iUpdateCount(0),
 			m_iInitCount(0),
-			m_iPreInitCount(0),
 			m_iFinalizeCount(0)
 		{
 			++iCount_g;
@@ -68,12 +67,7 @@ class TestModule: public Engine::Module
 		{
 			++m_iFixedUpdateCount;
 			eSequenceMarkerFixedUpdate_gl= TEST_MODULE;
-		}
-
-		virtual void OnPreInit() override
-		{
-			++m_iPreInitCount;
-		}
+		}		
 
 		virtual void OnInit() override
 		{
@@ -91,7 +85,6 @@ class TestModule: public Engine::Module
 		int m_iFixedUpdateCount;
 		int m_iUpdateCount;
 		int m_iInitCount;
-		int m_iPreInitCount;
 		int m_iFinalizeCount;
 };
 
@@ -177,9 +170,11 @@ struct CoreInstance_s
 	{
 		char * const argv[] = { "myexe.exe", "set dvExternal boo" };
 
+		auto &console = TestConsole::CreateInstance();
+
 		Phobos::LogChangeFile("engineCoretest.log");		
-		Core::CreateInstance("autoexec.cfg", 2, argv);
-		TestConsole::CreateInstance();
+		Core::CreateInstance(console, "autoexec.cfg", 2, argv);
+		
 	}
 
 	~CoreInstance_s()

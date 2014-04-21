@@ -67,5 +67,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\PluginInstance.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Client.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\ConsoleFwd.h" />
   </ItemGroup>
 </Project>

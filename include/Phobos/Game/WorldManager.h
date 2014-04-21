@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <list>
 #include <tuple>
 
+#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
 #include <Phobos/HandleList.h>
 #include <Phobos/Listener.h>
@@ -59,14 +60,12 @@ namespace Phobos
 
 		class PH_GAME_API WorldManager: public Phobos::Engine::Module
 		{
-			PH_DECLARE_SINGLETON_METHODS(WorldManager);			
+			PH_DECLARE_SINGLETON_METHODS2(WorldManager, Engine::Console &);
 
 			public:
 				typedef std::list<Things::Thing*> ThingList_t;
 
-			public:
-				~WorldManager();		
-
+			public:					
 				void LoadBlankMap(const char *name);
 				void LoadMap(const String_t &mapName);
 				void UnloadMap();
@@ -90,11 +89,11 @@ namespace Phobos
 				virtual void OnInit() override;
 				virtual void OnFinalize() override;
 				virtual void OnFixedUpdate() override;
-				virtual void OnPreInit() override;
 				virtual void OnUpdate() override;
 
 			private:
-				WorldManager();					
+				WorldManager(Engine::Console &console);
+				virtual ~WorldManager();
 
 				void LoadEntities();
 				Things::Entity &LoadEntity(const Phobos::Register::Table &entityDef);

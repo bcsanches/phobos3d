@@ -62,11 +62,9 @@ namespace Phobos
 
 			class PH_GAME_API Manager: public Engine::Module
 			{
-				PH_DECLARE_SINGLETON_METHODS(Manager);
+				PH_DECLARE_SINGLETON_METHODS2(Manager, Engine::Console &);
 
-				public:
-					~Manager();				
-
+				public:			
 					/**
 
 						For quick and easy rigid body creation.
@@ -112,11 +110,10 @@ namespace Phobos
 					void UnregisterCharacterBodyComponent(CharacterBodyComponent &comp);
 
 				protected:
-					virtual void OnPreInit();
-					virtual void OnInit();
+					virtual void OnInit() override;
 
-					virtual void OnFixedUpdate();
-					virtual void OnUpdate();				
+					virtual void OnFixedUpdate() override;
+					virtual void OnUpdate() override;				
 
 				private:
 					template<typename T>
@@ -126,9 +123,9 @@ namespace Phobos
 					typedef boost::intrusive::set<CollisionShape, boost::intrusive::constant_time_size<false> > CollisionShapesSet_t;
 					typedef boost::intrusive::set<CollisionMesh, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
 
-				private:
-
-					Manager();											
+				private:					
+					Manager(Engine::Console &console);
+					~Manager();
 
 					bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape::Key_s &key);
 
@@ -158,12 +155,12 @@ namespace Phobos
 					void ConvexSweepTest(SweepCollisionResult_s &result, const btRigidBody &body, const btTransform &start, const btTransform &end);
 
 				private:
-					std::unique_ptr<btDiscreteDynamicsWorld> m_upWorld;
-					std::unique_ptr<btCollisionDispatcher> m_upCollisionDispatcher;
+					std::unique_ptr<btDiscreteDynamicsWorld>				m_upWorld;
+					std::unique_ptr<btCollisionDispatcher>					m_upCollisionDispatcher;
+					std::unique_ptr<btSequentialImpulseConstraintSolver>	m_upConstraintSolver;
 
 					btDefaultCollisionConfiguration			m_clCollisionConfig;
-					btAxisSweep3							m_clBroadphase;
-					btSequentialImpulseConstraintSolver		m_clConstraintSolver;		
+					btAxisSweep3							m_clBroadphase;					
 
 					btGhostPairCallback						m_clGhostPairCallback;
 
