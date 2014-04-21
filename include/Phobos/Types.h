@@ -106,28 +106,28 @@ namespace Phobos
 	{
 		inline Rect_s()
 		{
-			tOrigin[0] = tOrigin[1] = 0;
+            m_tOrigin[0] = m_tOrigin[1] = 0;
 		}
 
 		inline Rect_s(T x, T y, const Size_s<T> &size):
 			m_tSize(size)
 		{
-			tOrigin[0] = x;
-			tOrigin[1] = y;		
+			m_tOrigin[0] = x;
+            m_tOrigin[1] = y;
 		}
 
 		inline Rect_s(T x, T y, T width, T height):
 			m_tSize(width, height)
 		{
-			tOrigin[0] = x;
-			tOrigin[1] = y;		
+            m_tOrigin[0] = x;
+            m_tOrigin[1] = y;
 		}
 
 		inline Rect_s(const Rect_s &rhs):
 			m_tSize(rhs.m_tSize)		
 		{
-			tOrigin[0] = rhs.tOrigin[0];
-			tOrigin[1] = rhs.tOrigin[1];
+            m_tOrigin[0] = rhs.m_tOrigin[0];
+            m_tOrigin[1] = rhs.m_tOrigin[1];
 		}
 
 
