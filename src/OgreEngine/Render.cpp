@@ -23,7 +23,7 @@ subject to the following restrictions:
 #include <OgreMesh.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
-#include <OgreRTShaderSystem.h>
+#include <RTShaderSystem/OgreRTShaderSystem.h>
 #include <OgreSceneNode.h>
 #include <OgreShadowCameraSetup.h>
 #include <OgreShadowCameraSetupPSSM.h>
