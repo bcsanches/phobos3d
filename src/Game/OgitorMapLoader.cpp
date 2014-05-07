@@ -319,6 +319,11 @@ namespace Phobos
 					{
 						dict->SetString("terrainDir", terrainDir);
 					}
+					else if (strcmp(objectType, PH_MAP_OBJECT_TYPE_STATIC) == 0)
+					{
+						if (dict->HasValue(PH_MAP_OBJECT_KEY_MESH))
+							dict->SetString("physicsType", "static");
+					}
 
 					if(!dict->TryGetString(PH_MAP_OBJECT_KEY_SCALE))
 						dict->SetString(PH_MAP_OBJECT_KEY_SCALE, "1 1 1");

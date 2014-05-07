@@ -55,6 +55,8 @@ namespace Phobos
 
 					void SetKinematicTransform(const btTransform &transform);
 
+					void Warp(const Engine::Math::Transform &transform);
+
 				private:
 					//Unless we force this class to be allocated on 16 bytes aligned memory, we cannot create RigidBody without using new :(				
 					std::unique_ptr<btRigidBody>			m_upRigidBody;

@@ -28,7 +28,6 @@ subject to the following restrictions:
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Game/MapWorld.h>
 #include <Phobos/Game/Things/SignalManager.h>
-#include <Phobos/Game/Things/ModelRendererManager.h>
 #include <Phobos/Game/Things/MoverManager.h>
 #include <Phobos/Game/Physics/Manager.h>
 #include <Phobos/Engine/PluginManager.h>
@@ -96,10 +95,6 @@ namespace Phobos
 		auto &physicsManager = Game::Physics::Manager::CreateInstance(console);
 		m_clSingletons.AddProc(Game::Physics::Manager::ReleaseInstance);
 		core.AddModule(physicsManager, Engine::ModulePriorities::LOWEST+3);
-
-		auto &modelRendererManager = Game::Things::ModelRendererManager::CreateInstance();
-		m_clSingletons.AddProc(Game::Things::ModelRendererManager::ReleaseInstance);
-		core.AddModule(modelRendererManager, Engine::ModulePriorities::LOWEST+2);
 
 		auto &guiManager = OgreEngine::Gui::Manager::CreateInstance(console);
 		m_clSingletons.AddProc(Engine::Gui::Manager::ReleaseInstance);

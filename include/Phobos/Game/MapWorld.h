@@ -18,7 +18,6 @@ subject to the following restrictions:
 #define PH_GAME_MAP_WORLD_H
 
 #include <Phobos/Engine/Module.h>
-#include <Phobos/HandleList.h>
 #include <Phobos/Singleton.h>
 
 #include <Phobos/Register/HiveFwd.h>
@@ -34,50 +33,13 @@ namespace Phobos
 	{
 		PH_DECLARE_SINGLETON_PTR(MapWorld);
 
-		class SceneNodeObject;
-
-		/*
-			This class is used to control the ownership of a SceneNodeObject.
-
-			When initialized with a SceneNodeObject it will own the object and destroy it on destructor.
-
-		*/
-		class SceneNodeKeeper
-		{			
-			public:				
-				SceneNodeKeeper();				
-				SceneNodeKeeper(SceneNodeObject &object, Handle h);
-				SceneNodeKeeper(SceneNodeKeeper &&other);
-
-				SceneNodeKeeper(const SceneNodeKeeper &rhs) = delete;
-				SceneNodeKeeper &operator=(const SceneNodeKeeper &rhs) = delete;
-
-				~SceneNodeKeeper();
-
-				SceneNodeKeeper &operator=(SceneNodeKeeper &&other);
-
-				void SetPosition(const Ogre::Vector3 &position);
-				void SetOrientation(const Ogre::Quaternion &orientation);
-
-				//Releases ownership, object is not destroyed
-				Handle Release();
-
-			private:
-				//The handler owns the object, not the memory
-				//Must call MapWorld::DestroyDynamicnode to destroy it
-				SceneNodeObject		*m_pclSceneNode;
-
-				Handle				m_hHandle;				
-		};
+		class MapObject;
 
 		class PH_GAME_API MapWorld: public Engine::Module
 		{
 			PH_DECLARE_SINGLETON_METHODS(MapWorld);
 			
-			public:
-				//The returned handler will owns the object, when it dies, it destroy the object
-				virtual SceneNodeKeeper AcquireDynamicSceneNodeKeeper(StringRef_t handler) = 0;
-
+			public:				
 				class LoadAccess
 				{
 					friend class MapLoader;
@@ -94,14 +56,30 @@ namespace Phobos
 						}
 				};
 
-				virtual SceneNodeKeeper MakeObject(Register::Table &table) = 0;
+				struct MapObjectTraits
+				{
+					typedef Phobos::Game::MapObject *pointer;
+
+					void operator()(pointer ptr)
+					{
+						MapWorld::GetInstance().DestroyObject(ptr);
+					}
+				};
+
+				typedef std::unique_ptr<MapObjectTraits::pointer, MapObjectTraits> MapObjectUniquePtr_t;
+
+				//Always returns a valid pointer, that is owned by MapWorld
+				//It can be destroyed calling DestroyObject
+				virtual MapObject *CreateObject(Register::Table &table) = 0;
+
+				virtual void DestroyObject(MapObject *object) = 0;
 
 			protected:
 				MapWorld() : Module("MapWorld"){  };
 
 			protected:
 				virtual void Load(StringRef_t levelPath, const Register::Hive &hive) = 0;			
-				virtual void Unload() = 0;				
+				virtual void Unload() = 0;							
 		};
 
 		

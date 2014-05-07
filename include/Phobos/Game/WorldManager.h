@@ -44,7 +44,9 @@ namespace Phobos
 	{
 		PH_DECLARE_SINGLETON_PTR(WorldManager);
 
-		typedef Things::HandleManager<Things::Entity> EntityManager;		
+		typedef Things::HandleManager<Things::Entity> EntityManager;	
+
+		class MapObject;
 
 		class WorldManagerListener
 		{
@@ -83,7 +85,10 @@ namespace Phobos
 				void RemoveFromFixedUpdateList(Things::Thing &io);
 				void RemoveFromUpdateList(Things::Thing &io);
 
-				std::tuple<Register::Table &, Handle> MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
+				//Always return a valid pointer
+				//The object is owner by WorldManager (actually MapWorld) and it can be destroyed calling DestroyMapObject
+				MapObject *CreateMapObject(const String_t &name, const String_t &asset, MapObjectTypes type, const Engine::Math::Transform &transform);
+				void DestroyMapObject(MapObject *object);
 
 			protected:		
 				virtual void OnInit() override;

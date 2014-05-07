@@ -48,6 +48,13 @@ subject to the following restrictions:
 
 #define PH_MAP_OBJECT_KEY_RENDER_OBJECT_HANDLER "renderObjectHandler"
 
+#define PH_MAP_OBJECT_KEY_PHYSICS_TYPE "physicsType"
+
+#define PH_MAP_OBJECT_PHYSICS_TYPE_NONE "none"
+#define PH_MAP_OBJECT_PHYSICS_TYPE_DYNAMIC "dynamic"
+#define PH_MAP_OBJECT_PHYSICS_TYPE_KINEMATIC "kinematic"
+#define PH_MAP_OBJECT_PHYSICS_TYPE_STATIC "static"
+
 #define PH_MAP_OBJECT_LIGHT_TYPE_POINT "point"
 #define PH_MAP_OBJECT_LIGHT_TYPE_SPOT "spot"
 #define PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL "directional"
@@ -74,6 +81,17 @@ namespace Phobos
 
 		PH_GAME_API_PROC const char *MapObjectTypeToString(MapObjectTypes type);
 		PH_GAME_API_PROC MapObjectTypes StringToMapObjectType(const char *type);
+
+		enum class PhysicsTypes
+		{
+			NONE,
+			DYNAMIC,
+			STATIC,
+			KINEMATIC
+		};
+
+		PH_GAME_API_PROC const char *PhysicsTypeToString(PhysicsTypes type);
+		PH_GAME_API_PROC PhysicsTypes StringToPhysicsType(const char *type);
 	}
 }
 

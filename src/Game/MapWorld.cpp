@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include "Phobos/Game/MapWorld.h"
 
 #include <Phobos/Exception.h>
-#include <Phobos/HandleList.h>
+#include <Phobos/Log.h>
 #include <Phobos/Path.h>
 
 #include <Phobos/OgreEngine/Render.h>
@@ -29,6 +29,8 @@ subject to the following restrictions:
 
 #include "Phobos/Game/MapDefs.h"
 
+#include "Phobos/Game/MapObject.h"
+
 #include "Phobos/Game/RegisterUtils.h"
 
 #include "Phobos/Game/Physics/Manager.h"
@@ -36,154 +38,22 @@ subject to the following restrictions:
 #include "Phobos/Game/Physics/Settings.h"
 #include "Phobos/Game/Physics/PhysicsUtils.h"
 
+#include "Phobos/Game/MapDefs.h"
+
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
+#include <OgreLight.h>
 
 #include <Terrain/OgreTerrainGroup.h>
 #include <Terrain/OgreTerrainPrerequisites.h>
+
+#include <boost/pool/object_pool.hpp>
 
 #include <tuple>
 #include <utility>
 
 PH_SINGLETON_PROCS(Phobos::Game::MapWorld,);
 PH_DEFINE_SINGLETON_VAR(Phobos::Game::MapWorld);
-
-namespace Phobos
-{
-	namespace Game
-	{
-		class SceneNodeObject
-		{				
-			private:
-				Ogre::SceneNode *m_pclSceneNode;
-				Ogre::Entity	*m_pclEntity;
-				Ogre::Light		*m_pclLight;
-
-				Physics::RigidBody	m_clRigidBody;
-
-				SceneNodeObject(const SceneNodeObject &);
-				SceneNodeObject &operator=(const SceneNodeObject &);
-
-			public:
-				SceneNodeObject(Ogre::SceneNode *sceneNode, Ogre::Entity *entity, Ogre::Light *light):			
-					m_pclSceneNode(sceneNode),
-					m_pclEntity(entity),
-					m_pclLight(light)
-				{
-					//empty
-				}
-
-				SceneNodeObject(SceneNodeObject &&rhs):
-					m_pclSceneNode(std::move(rhs.m_pclSceneNode)),
-					m_pclEntity(std::move(rhs.m_pclEntity)),
-					m_pclLight(std::move(rhs.m_pclLight)),
-					m_clRigidBody(std::move(rhs.m_clRigidBody))
-				{
-					rhs.m_pclSceneNode = nullptr;
-					rhs.m_pclLight = nullptr;
-					rhs.m_pclEntity = nullptr;
-				}
-								
-				~SceneNodeObject()
-				{
-					auto &render = Phobos::OgreEngine::Render::GetInstance();
-
-					if(m_pclSceneNode)
-					{
-						render.DestroySceneNode(m_pclSceneNode);
-						m_pclSceneNode = NULL;
-					}
-
-					if(m_pclLight)
-					{
-						render.DestroyLight(m_pclLight);
-						m_pclLight = NULL;
-					}
-
-					if(m_pclEntity)
-					{
-						render.DestroyEntity(m_pclEntity);
-						m_pclEntity = NULL;
-					}
-				}	
-
-				SceneNodeObject &operator=(SceneNodeObject &&rhs)
-				{
-					std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
-					std::swap(rhs.m_pclEntity, m_pclEntity);
-					std::swap(rhs.m_pclLight, m_pclLight);
-					std::swap(rhs.m_clRigidBody, m_clRigidBody);
-
-					return *this;
-				}
-
-				inline void AttachLight(Ogre::Light *light)
-				{				
-					PH_ASSERT(!m_pclLight);
-			
-					m_pclLight = light;
-					m_pclSceneNode->attachObject(m_pclLight);
-				}
-
-				inline void AttachEntity(Ogre::Entity *entity)
-				{
-					PH_ASSERT(!m_pclEntity);
-
-					m_pclEntity = entity;
-					m_pclSceneNode->attachObject(entity);
-				}		
-
-				inline void SetRigidBody(Physics::RigidBody &&body)
-				{
-					m_clRigidBody = std::move(body);
-				}
-
-				inline void SetParentNode(Ogre::SceneNode *node)
-				{
-					m_pclSceneNode->getParent()->removeChild(m_pclSceneNode);
-					node->addChild(m_pclSceneNode);
-				}
-
-				//Why using those _ functions: http://89.151.96.106/forums/viewtopic.php?f=22&t=62386
-				//http://www.ogre3d.org/forums/viewtopic.php?p=221113
-				//http://www.ogre3d.org/tikiwiki/-SceneNode
-				inline const Ogre::Vector3 &GetWorldPosition() const
-				{
-					return m_pclSceneNode->_getDerivedPosition();
-				}
-
-				inline const Ogre::Vector3 &GetWorldScale() const
-				{
-					return m_pclSceneNode->_getDerivedScale();
-				}
-
-				inline const Ogre::Quaternion &GetWorldOrientation() const
-				{
-					return m_pclSceneNode->_getDerivedOrientation();
-				}
-
-				inline void SetPosition(const Ogre::Vector3 &position)
-				{
-					m_pclSceneNode->setPosition(position);
-				}
-
-				inline void SetOrientation(const Ogre::Quaternion &orientation)
-				{
-					m_pclSceneNode->setOrientation(orientation);
-				}
-
-				inline bool HasEntity() const
-				{
-					return m_pclEntity ? true : false;
-				}
-
-				inline const Ogre::Entity *GetEntity() const
-				{
-					return m_pclEntity;
-				}
-		};
-	}
-}
 
 //
 //
@@ -207,7 +77,7 @@ namespace
 		private:
 			std::unique_ptr<Ogre::TerrainGlobalOptions> m_upGlobalOptions;
 			Ogre::TerrainGroup *m_pclTerrainGroup;
-	};
+	};	
 }
 
 Terrain::Terrain(Terrain &&rhs):
@@ -262,7 +132,7 @@ Terrain::~Terrain()
 }
 
 
-static Ogre::Light &LoadLight(Phobos::Game::SceneNodeObject &temp, const Phobos::Register::Table &dict)
+static Ogre::Light &LoadLight(Phobos::Game::MapObject::Data &temp, const Phobos::Register::Table &dict)
 {
 	using namespace Phobos;
 
@@ -330,15 +200,69 @@ static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::
 	auto body = collisionDef != NULL ?
 		physicsManager.CreateRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, Game::Physics::Utils::CreateCollisionShape(*collisionDef, scale)) :
 		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, *mesh, scale)
-		;
-
-	body.Register();
+	;	
 
 	return body;
 #endif
 }
 
-static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobos::Game::SceneNodeObject &node)
+static bool LoadPhysics(Phobos::Game::MapObject::Data &mapObjectData, const Phobos::Register::Table &dict, Phobos::StringRef_t mapObjectType)
+{
+	using namespace Phobos;
+
+	if (auto physicsTypeName = dict.TryGetString(PH_MAP_OBJECT_KEY_PHYSICS_TYPE))
+	{
+		auto physicsType = Game::StringToPhysicsType(physicsTypeName->c_str());
+		if (physicsType == Game::PhysicsTypes::NONE)
+			return true;
+
+		if ((mapObjectType.compare(PH_MAP_OBJECT_TYPE_STATIC) == 0) && (physicsType != Game::PhysicsTypes::STATIC))
+		{
+			LogMakeStream() << "[Phobos::Game::MapWorld] Error: Static object can only have physics of type STATIC, object " << dict.GetName() << " not loaded";
+			return false;
+		}
+
+		Engine::Math::Transform transform(
+			mapObjectData.GetWorldPosition(),
+			mapObjectData.GetWorldOrientation()
+			);
+
+		if (physicsType == Game::PhysicsTypes::STATIC)
+		{
+			mapObjectData.SetRigidBody(
+				CreateStaticObjectRigidBody(
+					*mapObjectData.GetEntity(), 
+					transform, mapObjectData.GetWorldScale(), 
+					Game::Physics::Settings::CreateStaticWorldCollisionTag()
+				),
+				physicsType
+			);
+		}
+		else if (physicsType == Game::PhysicsTypes::DYNAMIC)
+		{
+			auto collisionTag = Game::Physics::Settings::LoadCollisionTag(dict);		
+
+			Float_t mass = dict.GetFloat("mass");
+
+			auto &physicsManager = Game::Physics::Manager::GetInstance();
+
+			mapObjectData.SetRigidBody(
+				physicsManager.CreateRigidBody(
+					Game::Physics::RBT_DYNAMIC,
+					transform,
+					mass,
+					collisionTag,
+					Game::Physics::Utils::CreateCollisionShape(dict, Ogre::Vector3(1, 1, 1))
+				),
+				physicsType
+			);			
+		}		
+	}
+	
+	return true;
+}
+
+static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobos::Game::MapObject &node)
 {
 	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION, node.GetWorldPosition());
 	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_SCALE, node.GetWorldScale());
@@ -356,17 +280,28 @@ namespace
 	class MapWorldImpl;
 
 	//Internal shortcut
-	static MapWorldImpl *g_pclMapWorld = nullptr;			
+	static MapWorldImpl *g_pclMapWorld = nullptr;		
 
 	class MapWorldImpl: public Phobos::Game::MapWorld
 	{
-		private:
-			typedef Phobos::HandleList<Phobos::Game::SceneNodeObject> SceneNodeList_t;
+		public:	
+			struct MapObjectPoolTraits
+			{
+				typedef Phobos::Game::MapObject *pointer;
+
+				void operator()(pointer ptr)
+				{
+					g_pclMapWorld->m_clPool.destroy(ptr);
+				}
+			};
+
+			typedef std::unique_ptr<MapObjectTraits::pointer, MapObjectPoolTraits> MapObjectPoolUniquePtr_t;
 					
 		public:
-			MapWorldImpl()				
+			MapWorldImpl():
+				m_clPool(4096)
 			{
-				g_pclMapWorld = this;
+				g_pclMapWorld = this;				
 			}
 
 			virtual ~MapWorldImpl() override
@@ -375,21 +310,51 @@ namespace
 			}
 
 			virtual void OnStart() override;
-
-			virtual Phobos::Game::SceneNodeKeeper AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t serial) override;
-			void DestroyDynamicNode(Phobos::Handle h);
-
-			virtual Phobos::Game::SceneNodeKeeper MakeObject(Phobos::Register::Table &table) override;
+			virtual void OnUpdate() override;
+						
+			virtual Phobos::Game::MapObject *CreateObject(Phobos::Register::Table &table) override;
+			virtual void DestroyObject(Phobos::Game::MapObject *ptr) override;
 
 		protected:			
 			virtual void Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive) override;			
-			virtual void Unload() override;			
+			virtual void Unload() override;					
+
+		private:
+			MapObjectUniquePtr_t MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData);
 
 		private:			
-			SceneNodeList_t			m_lstNodes;		
+			std::vector<MapObjectPoolUniquePtr_t>		m_vecObjects;
 
-			std::vector<Terrain>	m_vecTerrains;
+			std::vector<Phobos::Game::MapObject*>		m_vecDynamicBodies;
+			std::vector<Terrain>						m_vecTerrains;
+
+			boost::object_pool<Phobos::Game::MapObject> m_clPool;
 	};	
+}
+
+Phobos::Game::MapWorld::MapObjectUniquePtr_t MapWorldImpl::MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData)
+{
+	using namespace Phobos;
+
+	//Make a sink, because boost pool cannot construct with move semantics
+	Game::MapObject::DataSink dataSink(std::move(mapObjectData));	
+
+	MapObjectPoolUniquePtr_t upMapObject(m_clPool.construct(std::ref(dataSink)));
+
+	//backup reference to object
+	auto *object = upMapObject.get();
+
+	//push it to object list
+	m_vecObjects.push_back(std::move(upMapObject));
+
+	//if dynamic body, track it on physics
+	if (object->GetPhysicsType() == Phobos::Game::PhysicsTypes::DYNAMIC)
+	{
+		m_vecDynamicBodies.push_back(object);
+	}
+
+	//return a safe pointer to caller
+	return MapObjectUniquePtr_t(object);
 }
 
 void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive)
@@ -397,13 +362,11 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 	using namespace Phobos;
 
 	auto &render = OgreEngine::Render::GetInstance();
-
-	std::vector<std::tuple<const String_t *, Handle, Register::Table &>> vecObjectsCache;
+	
 	std::vector<Register::Table *> vecTerrains;
+	std::map<String_t, std::tuple<const String_t *, Ogre::SceneNode *, Register::Table &, Game::MapObject &>> mapObjects;
 
 	Ogre::Light *terrainLight = nullptr;
-
-	auto staticCollisionTag = Game::Physics::Settings::CreateStaticWorldCollisionTag();
 	
 	for(auto it : hive)		
 	{
@@ -423,7 +386,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 		auto sceneNode = render.CreateSceneNode(dict.GetName());
 
-		Game::SceneNodeObject object(sceneNode, nullptr, nullptr);		
+		Game::MapObject::Data mapObjectData(sceneNode, nullptr, nullptr);
 
 		sceneNode->setPosition(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_POSITION));
 		sceneNode->setOrientation(Register::GetQuaternion(dict, PH_MAP_OBJECT_KEY_ORIENTATION));
@@ -431,45 +394,42 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 		if(auto str = dict.TryGetString(PH_MAP_OBJECT_KEY_MESH))
 		{
-			object.AttachEntity(render.CreateEntity(*str));			
+			mapObjectData.AttachEntity(render.CreateEntity(*str));
 		}
 
 		if(ref.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
 		{
-			auto &light = LoadLight(object, dict);
+			auto &light = LoadLight(mapObjectData, dict);
 
 			if(!terrainLight && light.getType() == Ogre::Light::LT_DIRECTIONAL)
 			{
 				terrainLight = &light;
 			}
 		}
-		else if((ref.compare(PH_MAP_OBJECT_TYPE_STATIC) == 0) && (object.HasEntity()))
-		{			
-			Engine::Math::Transform transform(				
-				object.GetWorldPosition(),
-				object.GetWorldOrientation()
-			);		
 
-			object.SetRigidBody(CreateStaticObjectRigidBody(*object.GetEntity(), transform, object.GetWorldScale(), staticCollisionTag));
-		}
+		if (!LoadPhysics(mapObjectData, dict, ref))
+			continue;		
 		
-		auto result = m_lstNodes.Add(std::move(object));
-				
-		//Insert a key to allow entities to retrieve a handler to their nodes, so they can control it
-		dict.SetString(PH_MAP_OBJECT_KEY_RENDER_OBJECT_HANDLER, result.first.ToString());	
-			
-		vecObjectsCache.emplace_back(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), result.first, std::ref(dict));			
+		auto ptrMapObject = MakeMapObject(std::move(mapObjectData));		
+
+		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()))));
+
+		//release it so it is not destroyed
+		ptrMapObject.release();
 	}
 
 	//
 	//Reconstruct the scene hierarchy
-	for(auto tuple : vecObjectsCache)
+	for (auto pair : mapObjects)
 	{
-		auto parentName = std::get<0>(tuple);
-		if(parentName)
+		auto parentName = std::get<0>(pair.second);
+		if (parentName)
 		{
-			auto parentNode = render.GetSceneNode(*parentName);
-			m_lstNodes.Get(std::get<1>(tuple)).SetParentNode(parentNode);
+			auto parentNode = std::get<1>(mapObjects.find(*parentName)->second);
+			auto currentNode = std::get<1>(pair.second);
+
+			currentNode->getParent()->removeChild(currentNode);
+			parentNode->addChild(std::get<1>(pair.second));			
 		}
 	}
 
@@ -482,16 +442,24 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 	//
 	//Save final transformation in world coordinates
-	for(auto tuple : vecObjectsCache)
+#if 1
+	for (auto pair : mapObjects)
 	{		
-		auto &object = m_lstNodes.Get(std::get<1>(tuple));
-		auto &dict = std::get<2>(tuple);
+		auto &object = std::get<3>(pair.second);
+		auto &dict = std::get<2>(pair.second);
 
 		SetWorldTransformOnTable(dict, object);	
+
+		if (object.GetPhysicsType() != Phobos::Game::PhysicsTypes::NONE)
+		{
+			object.SyncPhysicsToScene();
+			object.RegisterBody();
+		}
 	}	
+#endif
 }
 
-Phobos::Game::SceneNodeKeeper MapWorldImpl::MakeObject(Phobos::Register::Table &table)
+Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &table)
 {
 	using namespace Phobos;	
 
@@ -510,7 +478,7 @@ Phobos::Game::SceneNodeKeeper MapWorldImpl::MakeObject(Phobos::Register::Table &
 
 	auto sceneNode = render.CreateSceneNode(table.GetName());
 	
-	Game::SceneNodeObject object(sceneNode, nullptr, nullptr);
+	Game::MapObject::Data object(sceneNode, nullptr, nullptr);
 
 	sceneNode->setPosition(Register::GetVector3(table, PH_MAP_OBJECT_KEY_POSITION));
 	sceneNode->setOrientation(Register::GetQuaternion(table, PH_MAP_OBJECT_KEY_ORIENTATION));
@@ -525,51 +493,41 @@ Phobos::Game::SceneNodeKeeper MapWorldImpl::MakeObject(Phobos::Register::Table &
 	{
 		LoadLight(object, table);		
 	}
-	else if ((ref.compare(PH_MAP_OBJECT_TYPE_STATIC) == 0) && (object.HasEntity()))
-	{
-		Engine::Math::Transform transform(
-			object.GetWorldPosition(),
-			object.GetWorldOrientation()
-		);
 
-		auto staticCollisionTag = Game::Physics::Settings::CreateStaticWorldCollisionTag();
-		object.SetRigidBody(CreateStaticObjectRigidBody(*object.GetEntity(), transform, object.GetWorldScale(), staticCollisionTag));
-	}
+	if (!LoadPhysics(object, table, ref))
+		PH_RAISE(INVALID_OPERATION_EXCEPTION, "MapWorldImpl::MakeObject", "Cannot create physics state");
 
-	auto result = m_lstNodes.Add(std::move(object));
-
-	//Insert a key to allow entities to retrieve a handler to their nodes, so they can control it
-	table.SetString(PH_MAP_OBJECT_KEY_RENDER_OBJECT_HANDLER, result.first.ToString());
-
+	auto ptrObject = this->MakeMapObject(std::move(object));	
 	auto parentName = table.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE);
 	if (parentName)
 	{
+
+		PH_RAISE(INVALID_OPERATION_EXCEPTION, "MapWorld", "SetParent Not implemented");
+#if 0
 		object.SetParentNode(render.GetSceneNode(*parentName));
+#endif
 	}
 	
-	SetWorldTransformOnTable(table, result.second);
+	SetWorldTransformOnTable(table, *ptrObject.get());
 
-	return Game::SceneNodeKeeper(result.second, result.first);
+	auto *finalPtr = ptrObject.release();
+	return finalPtr;
 }
 
 void MapWorldImpl::Unload()
 {
 	m_vecTerrains.clear();
-	m_lstNodes.Clear();
+	m_vecDynamicBodies.clear();
+	m_vecObjects.clear();
 }
 
-Phobos::Game::SceneNodeKeeper MapWorldImpl::AcquireDynamicSceneNodeKeeper(Phobos::StringRef_t handler)
+void MapWorldImpl::DestroyObject(Phobos::Game::MapObject *ptr)
 {
-	return m_lstNodes.Acquire<Phobos::Game::SceneNodeKeeper>(Phobos::Handle(handler));	
-}
+	if (!ptr)
+		return;		
 
-void MapWorldImpl::DestroyDynamicNode(Phobos::Handle h)
-{
-	//Ignore nulls
-	if(!h.GetSerial())
-		return;
-
-	m_lstNodes.Remove(h);	
+	m_vecObjects.erase(std::remove_if(m_vecObjects.begin(), m_vecObjects.end(), [ptr](const MapObjectPoolUniquePtr_t &current){ return current.get() == ptr; }), m_vecObjects.end());
+	m_vecDynamicBodies.erase(std::remove_if(m_vecDynamicBodies.begin(), m_vecDynamicBodies.end(), [ptr](Phobos::Game::MapObject *current){return current == ptr; }), m_vecDynamicBodies.end());	
 }
 
 void MapWorldImpl::OnStart()
@@ -600,6 +558,14 @@ void MapWorldImpl::OnStart()
 	}
 }
 
+void MapWorldImpl::OnUpdate()
+{
+	for (auto h : m_vecDynamicBodies)
+	{
+		h->SyncSceneToPhysics();		
+	}
+}
+
 namespace Phobos
 {
 	namespace Game
@@ -614,72 +580,3 @@ namespace Phobos
 		}
 	}
 }
-
-//
-//
-//SceneNodeKeeper
-//
-//
-
-Phobos::Game::SceneNodeKeeper::SceneNodeKeeper():
-	m_pclSceneNode(nullptr)
-{
-	//empty
-}
-
-Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeObject &object, Handle h):
-	m_pclSceneNode(&object),
-	m_hHandle(h)
-{
-	PH_ASSERT(m_hHandle && "Constructor with object requires a valid serial");
-}
-
-Phobos::Game::SceneNodeKeeper::SceneNodeKeeper(SceneNodeKeeper &&other):
-	m_pclSceneNode(nullptr)	
-{
-	*this = std::move(other);	
-}
-
-Phobos::Game::SceneNodeKeeper &Phobos::Game::SceneNodeKeeper::operator=(SceneNodeKeeper &&rhs)
-{
-	g_pclMapWorld->DestroyDynamicNode(m_hHandle);
-	
-	this->m_pclSceneNode = rhs.m_pclSceneNode;
-	this->m_hHandle = rhs.m_hHandle;
-
-	rhs.m_hHandle = Handle();
-	rhs.m_pclSceneNode = nullptr;
-
-	return *this;
-}
-
-void Phobos::Game::SceneNodeKeeper::SetPosition(const Ogre::Vector3 &position)
-{
-	PH_ASSERT(m_pclSceneNode && "Invalid handle");
-
-	m_pclSceneNode->SetPosition(position);
-}
-
-void Phobos::Game::SceneNodeKeeper::SetOrientation(const Ogre::Quaternion &orientation)
-{
-	PH_ASSERT(m_pclSceneNode && "Invalid handle");
-
-	m_pclSceneNode->SetOrientation(orientation);
-}
-
-Phobos::Handle Phobos::Game::SceneNodeKeeper::Release()
-{
-	Handle h;
-
-	std::swap(m_hHandle, h);
-
-	this->m_pclSceneNode = nullptr;
-
-	return h;
-}
-
-Phobos::Game::SceneNodeKeeper::~SceneNodeKeeper()
-{	
-	g_pclMapWorld->DestroyDynamicNode(m_hHandle);
-}
-

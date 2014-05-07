@@ -239,7 +239,7 @@ namespace Phobos
 			PH_VERIFY_MSG(this->RemoveFromList(m_lstUpdate, io), "Entity not in Update list");
 		}
 
-		std::tuple<Register::Table &, Handle> WorldManager::MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		MapObject *WorldManager::CreateMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
 		{
 			std::unique_ptr<Register::Table> table(PH_NEW Register::Table(name));			
 
@@ -265,7 +265,7 @@ namespace Phobos
 			Things::SaveTransform(*table, transform);					
 
 			//Create Map object
-			SceneNodeKeeper keeper = MapWorld::GetInstance().MakeObject(*table);
+			MapWorld::MapObjectUniquePtr_t upMapObject(MapWorld::GetInstance().CreateObject(*table));			
 
 			//
 			//All is fine, commit results, transfer ownership to WorldManager and return data
@@ -273,8 +273,10 @@ namespace Phobos
 
 			m_pclMapObjectsHive->AddTable(std::move(table));			
 
-			//All is done, return references to objects
-			return std::make_tuple(std::ref(refTable), keeper.Release());
+			//All is done, cancel the unique pointer and return a valid reference to caller
+			//The object will be tracked by MapWorld
+			auto pMapObject = upMapObject.release();
+			return pMapObject;
 		}
 
 		void WorldManager::CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &)

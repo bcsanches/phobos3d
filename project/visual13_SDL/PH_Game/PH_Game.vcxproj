@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapObject.cpp" />
     <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\CharacterBodyComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\CollisionMesh.cpp" />
@@ -149,7 +150,6 @@
     <ClCompile Include="..\..\..\src\Game\Physics\Manager.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\PhysicsUtils.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\RigidBody.cpp" />
-    <ClCompile Include="..\..\..\src\Game\Physics\RigidBodyComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\Settings.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\SweepCharacterBody.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
@@ -161,8 +161,6 @@
     <ClCompile Include="..\..\..\src\Game\Things\EntityEvent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\EntityFactory.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\LinearMoverComponent.cpp" />
-    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererComponent.cpp" />
-    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererManager.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\MoverComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\MoverManager.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\PointEntity.cpp" />
@@ -179,6 +177,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Gui\LevelSelector.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapObject.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\MapWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h" />
@@ -193,8 +192,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\HandleManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Keys.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\LinearMoverComponent.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererComponent.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\PointEntity.h" />
@@ -228,7 +225,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Manager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\PhysicsUtils.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBody.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Settings.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\SweepCharacterBody.h" />

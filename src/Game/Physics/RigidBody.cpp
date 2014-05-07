@@ -75,11 +75,15 @@ namespace Phobos
 
 			void RigidBody::Register()
 			{
+				PH_ASSERT(m_upRigidBody.get());
+
 				Manager::GetInstance().RegisterRigidBody(*m_upRigidBody, m_clCollisionTag);
 			}
 		
 			void RigidBody::Unregister()
 			{
+				PH_ASSERT(m_upRigidBody.get());
+
 				Manager::GetInstance().UnregisterRigidBody(*m_upRigidBody);
 			}
 
@@ -94,6 +98,21 @@ namespace Phobos
 			void RigidBody::SetKinematicTransform(const btTransform &transform)
 			{
 				m_upMotionState->setWorldTransform(transform);
+			}
+
+			void RigidBody::Warp(const Engine::Math::Transform &transform)
+			{
+				auto bodyTransform = MakeTransform(transform, Manager::GetInstance().GetPhysicsToGameScale());
+
+				bool registered = m_upRigidBody->isInWorld();
+				if (registered)
+					this->Unregister();
+
+				m_upMotionState->setWorldTransform(bodyTransform);
+				m_upRigidBody->setWorldTransform(bodyTransform);
+
+				if (registered)
+					this->Register();
 			}
 		}
 	}

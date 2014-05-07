@@ -46,9 +46,6 @@
     <ClCompile Include="..\..\..\src\Game\Physics\RigidBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Physics\RigidBodyComponent.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Physics\Settings.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
@@ -76,12 +73,6 @@
       <Filter>Things</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Things\LinearMoverComponent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererComponent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererManager.cpp">
       <Filter>Things</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Things\MoverComponent.cpp">
@@ -116,6 +107,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
+    <ClCompile Include="..\..\..\src\Game\MapObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
@@ -170,9 +162,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyComponent.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyFwd.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -221,12 +210,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\LinearMoverComponent.h">
       <Filter>Things</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererComponent.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererManager.h">
-      <Filter>Things</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverComponent.h">
       <Filter>Things</Filter>
     </ClInclude>
@@ -271,5 +254,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\MapWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\MapObject.h" />
   </ItemGroup>
 </Project>
