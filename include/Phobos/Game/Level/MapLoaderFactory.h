@@ -23,7 +23,7 @@ subject to the following restrictions:
 #include <Phobos/Register/HiveFwd.h>
 
 #include "Phobos/Game/GameAPI.h"
-#include "Phobos/Game/MapLoader.h"
+#include "Phobos/Game/Level/MapLoader.h"
 
 #include <list>
 

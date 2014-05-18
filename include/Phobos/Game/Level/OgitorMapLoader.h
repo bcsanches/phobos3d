@@ -21,7 +21,7 @@ subject to the following restrictions:
 
 #include <Phobos/Register/Hive.h>
 
-#include "Phobos/Game/MapLoader.h"
+#include "Phobos/Game/Level/MapLoader.h"
 
 namespace Phobos
 {

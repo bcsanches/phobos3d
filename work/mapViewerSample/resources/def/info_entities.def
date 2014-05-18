@@ -18,7 +18,7 @@ EntityDef InfoPlayerStart
 EntityDef SkeletonTorch
 {
   className=Entity;  
-  components="Transform";
+  components = "Mesh";
   
   mesh="skeltorch.mesh";
   scale = "0.3 0.3 0.3";
@@ -29,7 +29,7 @@ EntityDef SkeletonTorch
 EntityDef Platform
 {
   className=Entity;
-  components="LinearMover|Transform";
+  //components="LinearMover|Transform";
   
   colliderType = "box";
   boxDimensions = "1 1 1";
@@ -48,7 +48,7 @@ EntityDef PathCorner
 EntityDef Box1m
 {
   className = Entity;
-  components = "Transform";
+  //components = "Transform";
   
   colliderType = "box";
   boxDimensions = "1 1 1";
@@ -56,6 +56,7 @@ EntityDef Box1m
   collisionGroup = Dynamic;
   collisionFilter = "Static|Dynamic";
   
+  components = "Mesh";
   mesh="Box_1m.mesh";
   
   physicsType = dynamic;
@@ -66,7 +67,7 @@ EntityDef Box1m
 EntityDef BoxQuaterMeter
 {
   className = Entity;
-  components = "Transform";
+  //components = "Transform";
   
   colliderType = "box";
   boxDimensions = "0.25 0.25 0.25";
@@ -74,6 +75,7 @@ EntityDef BoxQuaterMeter
   collisionGroup = Dynamic;
   collisionFilter = "Static|Dynamic";
   
+  components = "Mesh";
   mesh="Box_1m";
   scale="0.25 0.25 0.25";    
   

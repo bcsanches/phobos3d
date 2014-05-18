@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <atomic>
 
 #include <Phobos/Log.h>
+#include <Phobos/Path.h>
 
 namespace Phobos
 {
@@ -37,5 +38,22 @@ namespace Phobos
 		out += std::to_string(++tCount_gl);	
 
 		return out;
+	}
+
+	String_t FixMeshName(const String_t &meshName)
+	{
+		String_t extension;
+
+		//Newer ogitor does nto include .mesh in mesh names, so fix it here
+		bool found = Path::GetExtension(extension, meshName);
+		if ((found && extension != "mesh") || (!found))
+		{
+			String_t newName(meshName);			
+			newName.append(".mesh");
+
+			return newName;			
+		}
+
+		return meshName;
 	}
 }

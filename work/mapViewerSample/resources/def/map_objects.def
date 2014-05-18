@@ -1,0 +1,19 @@
+MapObjectDef MapObject
+{
+}
+
+MapObjectDef StaticObject: MapObject
+{
+  type = static;  
+}
+
+MapObjectDef StaticLight: MapObject
+{
+  type = static_light;
+}
+
+MapObjectDef EntityObject: MapObject
+{
+  type = entity; 
+}
+

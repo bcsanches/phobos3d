@@ -465,21 +465,9 @@ Ogre::Entity* Phobos::OgreEngine::Render::CreateEntity(const String_t &meshName,
 
 Ogre::Entity *Phobos::OgreEngine::Render::CreateEntity(const String_t &entityName, const String_t &meshName, UInt32_t flags)
 {
-	String_t tmpPath;		
-	String_t extension;
-
-	const String_t *meshNameToUse = &meshName;
-
-	//Newer ogitor does nto include .mesh in mesh names, so fix it here
-	bool found = Path::GetExtension(extension, meshName);		 
-	if((found && extension != "mesh") || (!found))
-	{
-		tmpPath = meshName;
-		tmpPath.append(".mesh");
-		meshNameToUse = &tmpPath;
-	}
-
-	Ogre::Entity *ent = m_pclMainSceneManager->createEntity(entityName, *meshNameToUse);
+	String_t newMeshName = FixMeshName(meshName);
+	
+	Ogre::Entity *ent = m_pclMainSceneManager->createEntity(entityName, newMeshName);
 
 	if(ent == NULL)
 		return NULL;

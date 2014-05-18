@@ -14,22 +14,23 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Phobos/Game/MapWorld.h"
+#include "Phobos/Game/Level/MapWorld.h"
 
 #include <Phobos/Exception.h>
 #include <Phobos/Log.h>
 #include <Phobos/Path.h>
 
 #include <Phobos/OgreEngine/Render.h>
+#include <Phobos/OgreEngine/Utils.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
 
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Table.h>
 
-#include "Phobos/Game/MapDefs.h"
-
-#include "Phobos/Game/MapObject.h"
+#include "Phobos/Game/Level/MapDefs.h"
+#include "Phobos/Game/Level/MapObject.h"
+#include "Phobos/Game/Level/MapObjectComponentFactory.h"
 
 #include "Phobos/Game/RegisterUtils.h"
 
@@ -38,11 +39,12 @@ subject to the following restrictions:
 #include "Phobos/Game/Physics/Settings.h"
 #include "Phobos/Game/Physics/PhysicsUtils.h"
 
-#include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/Level/MapDefs.h"
 
 #include <OgreEntity.h>
-#include <OgreSceneNode.h>
 #include <OgreLight.h>
+#include <OgreMeshManager.h>
+#include <OgreSceneNode.h>
 
 #include <Terrain/OgreTerrainGroup.h>
 #include <Terrain/OgreTerrainPrerequisites.h>
@@ -181,10 +183,9 @@ static Ogre::Light &LoadLight(Phobos::Game::MapObject::Data &temp, const Phobos:
 	return *light;
 }
 
-static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Entity &entity, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
-{
-	const Ogre::MeshPtr mesh = entity.getMesh();
-	const auto &meshName = mesh->getName();
+static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Mesh &mesh, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
+{	
+	const auto &meshName = mesh.getName();
 
 	Phobos::Path path(meshName);
 	path.StripExtension();
@@ -199,7 +200,7 @@ static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::
 
 	auto body = collisionDef != NULL ?
 		physicsManager.CreateRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, Game::Physics::Utils::CreateCollisionShape(*collisionDef, scale)) :
-		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, *mesh, scale)
+		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, mesh, scale)
 	;	
 
 	return body;
@@ -225,18 +226,24 @@ static bool LoadPhysics(Phobos::Game::MapObject::Data &mapObjectData, const Phob
 		Engine::Math::Transform transform(
 			mapObjectData.GetWorldPosition(),
 			mapObjectData.GetWorldOrientation()
-			);
+		);
 
 		if (physicsType == Game::PhysicsTypes::STATIC)
 		{
+#if 1
+			String_t meshName = Phobos::FixMeshName(dict.GetString(PH_MAP_OBJECT_KEY_MESH));			
+
+			auto pMesh = Ogre::MeshManager::getSingleton().load(meshName, Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
+
 			mapObjectData.SetRigidBody(
 				CreateStaticObjectRigidBody(
-					*mapObjectData.GetEntity(), 
+					*pMesh,
 					transform, mapObjectData.GetWorldScale(), 
 					Game::Physics::Settings::CreateStaticWorldCollisionTag()
 				),
 				physicsType
 			);
+#endif
 		}
 		else if (physicsType == Game::PhysicsTypes::DYNAMIC)
 		{
@@ -267,6 +274,26 @@ static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobo
 	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION, node.GetWorldPosition());
 	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_SCALE, node.GetWorldScale());
 	Phobos::Register::SetQuaternion(table, PH_MAP_OBJECT_KEY_WORLD_ORIENTATION, node.GetWorldOrientation());
+}
+
+static void CreateMapObjectComponents(Phobos::Game::MapObject &object, const Phobos::Register::Table &table)
+{
+	using namespace Phobos;
+
+	if (const String_t *components = table.TryGetString(PH_MAP_OBJECT_KEY_COMPONENTS))
+	{
+		String_t componentName;
+		size_t pos = 0;
+
+		auto &factory = Game::MapObjectComponentFactory::GetInstance();
+
+		while (StringSplitBy(componentName, *components, '|', pos, &pos))
+		{
+			auto comp(factory.Create(componentName, object, table));
+
+			object.AddComponent(std::move(comp));
+		}
+	}
 }
 
 //
@@ -320,7 +347,7 @@ namespace
 			virtual void Unload() override;					
 
 		private:
-			MapObjectUniquePtr_t MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData);
+			MapObjectUniquePtr_t MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table);
 
 		private:			
 			std::vector<MapObjectPoolUniquePtr_t>		m_vecObjects;
@@ -332,14 +359,14 @@ namespace
 	};	
 }
 
-Phobos::Game::MapWorld::MapObjectUniquePtr_t MapWorldImpl::MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData)
+Phobos::Game::MapWorld::MapObjectUniquePtr_t MapWorldImpl::MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table)
 {
 	using namespace Phobos;
 
 	//Make a sink, because boost pool cannot construct with move semantics
 	Game::MapObject::DataSink dataSink(std::move(mapObjectData));	
 
-	MapObjectPoolUniquePtr_t upMapObject(m_clPool.construct(std::ref(dataSink)));
+	MapObjectPoolUniquePtr_t upMapObject(m_clPool.construct(std::ref(dataSink), std::ref(table)));
 
 	//backup reference to object
 	auto *object = upMapObject.get();
@@ -386,16 +413,11 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 		auto sceneNode = render.CreateSceneNode(dict.GetName());
 
-		Game::MapObject::Data mapObjectData(sceneNode, nullptr, nullptr);
+		Game::MapObject::Data mapObjectData(sceneNode, nullptr);
 
 		sceneNode->setPosition(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_POSITION));
 		sceneNode->setOrientation(Register::GetQuaternion(dict, PH_MAP_OBJECT_KEY_ORIENTATION));
 		sceneNode->setScale(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_SCALE));
-
-		if(auto str = dict.TryGetString(PH_MAP_OBJECT_KEY_MESH))
-		{
-			mapObjectData.AttachEntity(render.CreateEntity(*str));
-		}
 
 		if(ref.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
 		{
@@ -410,7 +432,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 		if (!LoadPhysics(mapObjectData, dict, ref))
 			continue;		
 		
-		auto ptrMapObject = MakeMapObject(std::move(mapObjectData));		
+		auto ptrMapObject = MakeMapObject(std::move(mapObjectData), dict);
 
 		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()))));
 
@@ -456,7 +478,14 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 			object.RegisterBody();
 		}
 	}	
-#endif
+#endif	
+	for (auto pair : mapObjects)
+	{
+		auto &object = std::get<3>(pair.second);
+		auto &dict = std::get<2>(pair.second);
+
+		CreateMapObjectComponents(object, dict);
+	}
 }
 
 Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &table)
@@ -478,16 +507,11 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 
 	auto sceneNode = render.CreateSceneNode(table.GetName());
 	
-	Game::MapObject::Data object(sceneNode, nullptr, nullptr);
+	Game::MapObject::Data object(sceneNode, nullptr);
 
 	sceneNode->setPosition(Register::GetVector3(table, PH_MAP_OBJECT_KEY_POSITION));
 	sceneNode->setOrientation(Register::GetQuaternion(table, PH_MAP_OBJECT_KEY_ORIENTATION));
 	sceneNode->setScale(Register::GetVector3(table, PH_MAP_OBJECT_KEY_SCALE));
-
-	if (auto str = table.TryGetString(PH_MAP_OBJECT_KEY_MESH))
-	{
-		object.AttachEntity(render.CreateEntity(*str));
-	}
 
 	if (ref.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
 	{
@@ -497,7 +521,7 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 	if (!LoadPhysics(object, table, ref))
 		PH_RAISE(INVALID_OPERATION_EXCEPTION, "MapWorldImpl::MakeObject", "Cannot create physics state");
 
-	auto ptrObject = this->MakeMapObject(std::move(object));	
+	auto ptrObject = this->MakeMapObject(std::move(object), table);	
 	auto parentName = table.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE);
 	if (parentName)
 	{
@@ -509,6 +533,8 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 	}
 	
 	SetWorldTransformOnTable(table, *ptrObject.get());
+
+	CreateMapObjectComponents(*ptrObject.get(), table);
 
 	auto *finalPtr = ptrObject.release();
 	return finalPtr;

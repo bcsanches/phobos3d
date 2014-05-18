@@ -1,4 +1,7 @@
-#include "Phobos/Game/MapObject.h"
+#include "Phobos/Game/Level/MapObject.h"
+
+#include "Phobos/Game/Level/MapObjectComponent.h"
+#include "Phobos/Game/Level/MapObjectComponentFactory.h"
 
 #include <Phobos/Error.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
@@ -26,12 +29,6 @@ namespace Phobos
 				render.DestroyLight(m_pclLight);
 				m_pclLight = NULL;
 			}
-
-			if (m_pclEntity)
-			{
-				render.DestroyEntity(m_pclEntity);
-				m_pclEntity = NULL;
-			}
 		}
 
 		void MapObject::Data::AttachLight(Ogre::Light *light)
@@ -40,15 +37,7 @@ namespace Phobos
 
 			m_pclLight = light;
 			m_pclSceneNode->attachObject(m_pclLight);
-		}
-
-		void MapObject::Data::AttachEntity(Ogre::Entity *entity)
-		{
-			PH_ASSERT(!m_pclEntity);
-
-			m_pclEntity = entity;
-			m_pclSceneNode->attachObject(entity);
-		}
+		}	
 
 #if 0
 		void MapObject::Data::SetParentNode(Data &node)
@@ -94,6 +83,11 @@ namespace Phobos
 			m_clRigidBody.Register();
 		}
 
+		MapObject::~MapObject()
+		{
+			//empty
+		}
+
 		void MapObject::SyncSceneToPhysics()
 		{
 			PH_ASSERT(m_clData.m_ePhysicsType != PhysicsTypes::NONE);
@@ -111,6 +105,22 @@ namespace Phobos
 			Engine::Math::Transform transform(this->GetWorldPosition(), this->GetWorldOrientation());
 
 			m_clData.m_clRigidBody.Warp(transform);
+		}
+
+		void MapObject::AddComponent(const String_t &name)
+		{
+			auto component = MapObjectComponentFactory::GetInstance().Create(name, *this, m_rclTable);
+			m_vecComponents.push_back(std::move(component));
+		}
+
+		void MapObject::AddComponent(MapObjectComponent::UniquePtr_t &&component)
+		{
+			m_vecComponents.push_back(std::move(component));
+		}
+
+		void MapObject::AttachOgreObject(Ogre::MovableObject &object)
+		{
+			m_clData.m_pclSceneNode->attachObject(&object);
 		}
 
 #if 0

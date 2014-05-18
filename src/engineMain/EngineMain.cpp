@@ -26,7 +26,7 @@ subject to the following restrictions:
 
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
-#include <Phobos/Game/MapWorld.h>
+#include <Phobos/Game/Level/MapWorld.h>
 #include <Phobos/Game/Things/SignalManager.h>
 #include <Phobos/Game/Things/MoverManager.h>
 #include <Phobos/Game/Physics/Manager.h>

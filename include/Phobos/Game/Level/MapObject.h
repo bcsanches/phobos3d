@@ -5,13 +5,17 @@
 
 #include <OgrePrerequisites.h>
 
+#include <Phobos/Register/TableFwd.h>
+#include <Phobos/String.h>
+
 #include "Phobos/Game/Physics/RigidBody.h"
-#include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/Level/MapDefs.h"
+#include "Phobos/Game/Level/MapObjectComponent.h"
 
 namespace Phobos
 {
 	namespace Game
-	{
+	{		
 		class MapObject
 		{
 			public:
@@ -20,8 +24,7 @@ namespace Phobos
 					friend MapObject;
 
 					private:
-						Ogre::SceneNode *m_pclSceneNode;
-						Ogre::Entity	*m_pclEntity;
+						Ogre::SceneNode *m_pclSceneNode;						
 						Ogre::Light		*m_pclLight;
 
 						Physics::RigidBody	m_clRigidBody;		
@@ -29,9 +32,8 @@ namespace Phobos
 						PhysicsTypes		m_ePhysicsType;
 
 					public:
-						Data(Ogre::SceneNode *sceneNode, Ogre::Entity *entity, Ogre::Light *light) :
-							m_pclSceneNode(sceneNode),
-							m_pclEntity(entity),
+						Data(Ogre::SceneNode *sceneNode, Ogre::Light *light) :
+							m_pclSceneNode(sceneNode),							
 							m_pclLight(light),
 							m_ePhysicsType(PhysicsTypes::NONE)
 						{
@@ -39,15 +41,13 @@ namespace Phobos
 						}
 
 						Data(Data &&rhs) :
-							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),
-							m_pclEntity(std::move(rhs.m_pclEntity)),
+							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),							
 							m_pclLight(std::move(rhs.m_pclLight)),
 							m_clRigidBody(std::move(rhs.m_clRigidBody)),
 							m_ePhysicsType(rhs.m_ePhysicsType)
 						{
 							rhs.m_pclSceneNode = nullptr;
 							rhs.m_pclLight = nullptr;
-							rhs.m_pclEntity = nullptr;
 						}
 
 						Data(const Data &) = delete;
@@ -58,7 +58,6 @@ namespace Phobos
 						Data &operator=(Data &&rhs)
 						{
 							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
-							std::swap(rhs.m_pclEntity, m_pclEntity);
 							std::swap(rhs.m_pclLight, m_pclLight);
 							std::swap(rhs.m_clRigidBody, m_clRigidBody);
 
@@ -67,9 +66,7 @@ namespace Phobos
 							return *this;
 						}
 
-						void AttachLight(Ogre::Light *light);
-
-						void AttachEntity(Ogre::Entity *entity);
+						void AttachLight(Ogre::Light *light);						
 
 						inline void SetRigidBody(Physics::RigidBody &&body, PhysicsTypes type)
 						{
@@ -82,17 +79,7 @@ namespace Phobos
 						const Ogre::Quaternion &GetWorldOrientation() const;
 
 						void SetPosition(const Ogre::Vector3 &position);
-						void SetOrientation(const Ogre::Quaternion &orientation);
-
-						inline bool HasEntity() const
-						{
-							return m_pclEntity ? true : false;
-						}
-
-						inline const Ogre::Entity *GetEntity() const
-						{
-							return m_pclEntity;
-						}
+						void SetOrientation(const Ogre::Quaternion &orientation);						
 
 						void RegisterBody();
 					};		
@@ -113,23 +100,29 @@ namespace Phobos
 					};
 
 			public:
-				inline MapObject(Data &&data) :
-					m_clData(std::move(data))
+				inline MapObject(Data &&data, const Register::Table &table) :
+					m_clData(std::move(data)),
+					m_rclTable(table)
 				{
 					//empty
 				}
 
 				inline MapObject(MapObject &&data) :
-					m_clData(std::move(data.m_clData))
+					m_clData(std::move(data.m_clData)),
+					m_vecComponents(std::move(data.m_vecComponents)),
+					m_rclTable(data.m_rclTable)
 				{
 					//empty
 				}
 
-				inline MapObject(DataSink &sink) :
-					m_clData(std::move(sink.m_clData))
+				inline MapObject(DataSink &sink, const Register::Table &table) :
+					m_clData(std::move(sink.m_clData)),
+					m_rclTable(table)
 				{
 
 				}
+
+				~MapObject();
 
 				MapObject() = delete;		
 				MapObject(const MapObject &) = delete;
@@ -170,6 +163,9 @@ namespace Phobos
 					m_clData.RegisterBody();
 				}
 
+				void AddComponent(const String_t &typeName);
+				void AddComponent(MapObjectComponent::UniquePtr_t &&component);
+
 #if 0
 				void AttachObjectToBone(
 					const Char_t *boneName,
@@ -188,11 +184,17 @@ namespace Phobos
 				Ogre::Bone &GetBone(const char *boneName);
 				Ogre::Bone &GetBone(const String_t &boneName);
 #endif
-
+				friend class MapObjectComponentAccess;
+				
 			private:
-				Data m_clData;
-		};
-		
+				void AttachOgreObject(Ogre::MovableObject &object);
+
+			private:				
+				Data								m_clData;
+				std::vector<MapObjectComponent::UniquePtr_t>	m_vecComponents;
+
+				const Register::Table				&m_rclTable;
+		};		
 	}
 }
 

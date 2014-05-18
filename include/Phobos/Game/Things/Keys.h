@@ -21,7 +21,7 @@ subject to the following restrictions:
 
 #define PH_ENTITY_KEY_CLASS_NAME "className"
 
-#define PH_ENTITY_KEY_COMPONENTS "components"
+#define PH_ENTITY_KEY_COMPONENTS "entityComponents"
 #define PH_ENTITY_KEY_PARENT_NODE "parentnode"
 
 #define PH_ENTITY_KEY_TILE_ROW "tileRow"

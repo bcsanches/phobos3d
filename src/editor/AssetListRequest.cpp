@@ -8,7 +8,7 @@
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
-#include <Phobos/Game/MapDefs.h>
+#include <Phobos/Game/Level/MapDefs.h>
 #include <Phobos/Game/Things/Keys.h>
 
 #include <OgreResourceGroupManager.h>

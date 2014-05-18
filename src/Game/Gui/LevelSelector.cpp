@@ -29,7 +29,7 @@ subject to the following restrictions:
 #include <Phobos/Engine/Gui/Context.h>
 #include <Phobos/Engine/Gui/Manager.h>
 
-#include "Phobos/Game/MapLoaderFactory.h"
+#include "Phobos/Game/Level/MapLoaderFactory.h"
 #include "Phobos/Game/WorldManager.h"
 
 namespace Phobos

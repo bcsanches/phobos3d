@@ -27,15 +27,15 @@ subject to the following restrictions:
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
-#include "Phobos/Game/MapDefs.h"
-#include "Phobos/Game/MapWorld.h"
+#include "Phobos/Game/Level/MapDefs.h"
+#include "Phobos/Game/Level/MapWorld.h"
 #include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
 #include "Phobos/Game/Things/ThingsUtils.h"
 
 #include "Phobos/Game/Physics/Settings.h"
-#include "Phobos/Game/MapLoaderFactory.h"
+#include "Phobos/Game/Level/MapLoaderFactory.h"
 
 namespace Phobos
 {

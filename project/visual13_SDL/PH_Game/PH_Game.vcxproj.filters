@@ -14,11 +14,11 @@
     <Filter Include="Gui">
       <UniqueIdentifier>{a06938b2-2152-435b-b94f-d9f2f89f4432}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{4b690373-37b0-43db-9507-cf4dc1dcfe6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
-    <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
-    <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCamera.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCameraCommandProducer.cpp" />
     <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
@@ -105,15 +105,36 @@
     <ClCompile Include="..\..\..\src\Game\Things\ThingsUtils.cpp">
       <Filter>Things</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
-    <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
-    <ClCompile Include="..\..\..\src\Game\MapObject.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Level\MapDefs.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapLoader.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapLoaderFactory.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapObject.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapWorld.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\OgitorMapLoader.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MeshComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapObjectComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapObjectComponentFactory.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoader.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoaderFactory.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\OgitorMapLoader.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCamera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCameraCommandProducer.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\WorldManager.h" />
@@ -252,8 +273,35 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingsUtils.h">
       <Filter>Things</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapWorld.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapObject.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapDefs.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapLoader.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapLoaderFactory.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObject.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapWorld.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\OgitorMapLoader.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MeshComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentFactory.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentAccess.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

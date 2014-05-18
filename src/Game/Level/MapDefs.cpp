@@ -1,4 +1,4 @@
-#include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/Level/MapDefs.h"
 
 #include <Phobos/Exception.h>
 

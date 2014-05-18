@@ -21,10 +21,14 @@ subject to the following restrictions:
 
 #include <Phobos/String.h>
 
+#include <Phobos/OgreEngine/OgreEngineAPI.h>
+
 namespace Phobos
 {
 	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex);
 	String_t &GenerateOgreName(String_t &out);
+
+	PH_OGRE_ENGINE_API String_t FixMeshName(const String_t &meshName);
 }
 
 #endif

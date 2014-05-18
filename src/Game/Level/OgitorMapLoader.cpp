@@ -15,7 +15,7 @@ subject to the following restrictions:
 */
 
 
-#include "Phobos/Game/OgitorMapLoader.h"
+#include "Phobos/Game/Level/OgitorMapLoader.h"
 
 #include <iostream>
 #include <vector>
@@ -30,8 +30,8 @@ subject to the following restrictions:
 #include <Phobos/Log.h>
 #include <Phobos/Path.h>
 
-#include "Phobos/Game/MapLoaderFactory.h"
-#include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/Level/MapLoaderFactory.h"
+#include "Phobos/Game/Level/MapDefs.h"
 
 #define CUSTOM_PROPERTY_NODE_NAME "CUSTOMPROPERTIES"
 #define PROPERTY_NODE_NAME "PROPERTY"
@@ -322,7 +322,10 @@ namespace Phobos
 					else if (strcmp(objectType, PH_MAP_OBJECT_TYPE_STATIC) == 0)
 					{
 						if (dict->HasValue(PH_MAP_OBJECT_KEY_MESH))
-							dict->SetString("physicsType", "static");
+						{
+							dict->SetString(PH_MAP_OBJECT_KEY_PHYSICS_TYPE, PH_MAP_OBJECT_PHYSICS_TYPE_STATIC);
+							dict->SetString(PH_MAP_OBJECT_KEY_COMPONENTS, "Mesh");
+						}
 					}
 
 					if(!dict->TryGetString(PH_MAP_OBJECT_KEY_SCALE))

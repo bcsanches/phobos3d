@@ -7,7 +7,7 @@
 #include <JsonCreator/Object.h>
 #include <JsonCreator/StringWriter.h>
 
-#include <Phobos/Game/MapDefs.h>
+#include <Phobos/Game/Level/MapDefs.h>
 
 namespace Phobos
 {

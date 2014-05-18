@@ -50,6 +50,8 @@ subject to the following restrictions:
 
 #define PH_MAP_OBJECT_KEY_PHYSICS_TYPE "physicsType"
 
+#define PH_MAP_OBJECT_KEY_COMPONENTS "components"
+
 #define PH_MAP_OBJECT_PHYSICS_TYPE_NONE "none"
 #define PH_MAP_OBJECT_PHYSICS_TYPE_DYNAMIC "dynamic"
 #define PH_MAP_OBJECT_PHYSICS_TYPE_KINEMATIC "kinematic"
@@ -58,6 +60,8 @@ subject to the following restrictions:
 #define PH_MAP_OBJECT_LIGHT_TYPE_POINT "point"
 #define PH_MAP_OBJECT_LIGHT_TYPE_SPOT "spot"
 #define PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL "directional"
+
+
 
 //Hives
 #define PH_MAP_STATIC_OBJECT_DEF_HIVE "StaticObjectDef"

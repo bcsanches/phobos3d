@@ -14,7 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Phobos/Game/MapLoaderFactory.h"
+#include "Phobos/Game/Level/MapLoaderFactory.h"
 
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Manager.h>

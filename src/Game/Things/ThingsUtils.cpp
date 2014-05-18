@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 #include <Phobos/OgreEngine/Math/Transform.h>
 
-#include "Phobos/Game/MapDefs.h"
+#include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Things/Keys.h"
 #include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/WorldManager.h"

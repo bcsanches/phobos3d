@@ -34,8 +34,8 @@ subject to the following restrictions:
 
 #include "Phobos/Game/Things/Entity.h"
 #include "Phobos/Game/GameAPI.h"
-#include "Phobos/Game/MapDefs.h"
-#include "Phobos/Game/MapLoader.h"
+#include "Phobos/Game/Level/MapDefs.h"
+#include "Phobos/Game/Level/MapLoader.h"
 #include "Phobos/Game/Things/ThingFwd.h"
 
 namespace Phobos

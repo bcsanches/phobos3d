@@ -15,13 +15,13 @@ subject to the following restrictions:
 */
 
 
-#include "Phobos/Game/MapLoader.h"
+#include "Phobos/Game/Level/MapLoader.h"
 
 #include <Phobos/Path.h>
 #include <Phobos/Register/Table.h>
 #include <Phobos/Register/Hive.h>
 
-#include "Phobos/Game/MapWorld.h"
+#include "Phobos/Game/Level/MapWorld.h"
 
 namespace Phobos
 {	
