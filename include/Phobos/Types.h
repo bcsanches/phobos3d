@@ -130,12 +130,12 @@ namespace Phobos
             m_tOrigin[1] = rhs.m_tOrigin[1];
 		}
 
-        inline bool operator == (const Recet_s &other) const
+        inline bool operator == (const Rect_s &other) const
         {
             return  m_tOrigin[0]        == other.m_tOrigin[0] &&
                     m_tOrigin[1]        == other.m_tOrigin[1] &&
-                    m_tSize.m_tWidth    == other.m_tSise.m_tWidth &&
-                    m_tSize.m_tHeight   == other.m_tHeight;
+                    m_tSize.m_tWidth    == other.m_tSize.m_tWidth &&
+                    m_tSize.m_tHeight   == other.m_tSize.m_tHeight;
                    
         }
 
