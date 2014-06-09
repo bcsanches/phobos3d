@@ -257,7 +257,10 @@ void Phobos::OgreEngine::Render::OnInit(void)
 	}
 
 	LogMessage("[Render::OnInit] Opening render window");
-	m_ipWindow->Open("Phobos Engine", size, reinterpret_cast<void*>(parentWindow));
+
+	unsigned int windowFlags = 0;// m_varRRenderSystem.GetValue().find("OpenGL") != std::string::npos ? System::Window::WND_OPENGL_CONTEXT : 0;
+
+	m_ipWindow->Open("Phobos Engine", size, windowFlags, reinterpret_cast<void*>(parentWindow));
 
 	//We need to do a "lazy load" with Ogre plugins, to make sure the render plugins are only 
 	//loaded after screen is created.
@@ -310,8 +313,11 @@ void Phobos::OgreEngine::Render::OnInit(void)
     if (handler != NULL)
 		opts["externalWindowHandle"] = std::to_string(reinterpret_cast<unsigned long>(handler));
 
-    if (m_ipWindow->HasGLContext())
-        opts["currentGLContext"] = "true";
+	if (m_ipWindow->HasGLContext())
+	{
+		opts["externalGLContext"] = "true";
+		opts["externalGLControl"] = "true";
+	}
 
 	LogMessage("[Render::OnInit] Creating ogre window");
 	m_pclOgreWindow = m_upRoot->createRenderWindow("PhobosMainWindow", size.m_tWidth, size.m_tHeight, fullScreen, &opts);

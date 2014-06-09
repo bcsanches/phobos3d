@@ -26,14 +26,21 @@ namespace Phobos
 {
 	namespace System
 	{
-		PH_DECLARE_NODE_PTR(Window);			
+		PH_DECLARE_NODE_PTR(Window);		
 
 		class PH_SYSTEM_API Window: public Node
 		{
 			public:
+				enum Flags
+				{
+					WND_FULL_SCREEN = 0x01,
+					WND_OPENGL_CONTEXT = 0x02
+				};
+
+			public:
 				static WindowPtr_t Create(const String_t &name);
 
-				virtual void Open(const String_t &name, const UIntSize_t &size, void *parentWindow = NULL) = 0;
+				virtual void Open(const String_t &name, const UIntSize_t &size, unsigned int flags, void *parentWindow = NULL) = 0;
 				virtual void *GetHandler() const = 0;
 				virtual bool HasGLContext() = 0;	
 
