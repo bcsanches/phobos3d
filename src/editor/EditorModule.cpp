@@ -110,7 +110,7 @@ namespace Phobos
 			}
 		}
 
-		EditObject &EditorModule::CreateMapObject(const String_t &asset, Game::MapObjectTypes type)
+		EditObject &EditorModule::CreateMapObject(UInt64_t parentId, const String_t &asset, Game::MapObjectTypes type)
 		{
 			auto transform = m_clCamera.GetTransform();
 
@@ -119,7 +119,7 @@ namespace Phobos
 
 			transform.SetOrigin(transform.GetOrigin() + (axis[2] * 1));
 
-			return m_clEditObjectManager.CreateEditObject(asset, type, transform);
+			return m_clEditObjectManager.CreateEditObject(parentId, asset, type, transform);
 		}
 
 		void EditorModule::EnableEditMode()

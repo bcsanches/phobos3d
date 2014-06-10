@@ -16,5 +16,23 @@ namespace SharpEditor
         {
             InitializeComponent();
         }
+
+        public void AddMapObject(MapObject obj)
+        {
+            var node = m_trView.Nodes.Add(obj.Id.ToString(), obj.Name);
+            node.Tag = obj;
+        }
+
+        public MapObject SelectedItem
+        {
+            get
+            {
+                var node = m_trView.SelectedNode;
+                if (node == null)
+                    return null;
+
+                return (MapObject)node.Tag;
+            }            
+        }
     }
 }

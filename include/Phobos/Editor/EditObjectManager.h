@@ -22,15 +22,17 @@ namespace Phobos
 			public:
 				EditObjectManager();
 
-				EditObject &CreateEditObject(const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
+				EditObject &CreateEditObject(UInt64_t parentId, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
 
 			private:
 				String_t GenerateName(UInt64_t id) const;
 
 			private:
-				typedef std::map<String_t, EditObject *> EditObjectsMap_t;
+				typedef std::map<String_t, EditObject *> EditObjectsNameMap_t;
+				typedef std::map<UInt64_t, EditObject *> EditObjectsIdMap_t;
 
-				EditObjectsMap_t	m_mapEditObjects;
+				EditObjectsNameMap_t	m_mapEditObjects;
+				EditObjectsIdMap_t		m_mapEditObjectIndex;
 
 				UInt64_t			m_uNextId;
 		};

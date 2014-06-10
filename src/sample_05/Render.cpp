@@ -56,7 +56,7 @@ void Render::OnInit(void)
 	bool vsync = m_varRVSync.GetBoolean();
 
 	LogMessage("[Render::OnInit] Opening render window");
-	m_ipWindow->Open("Phobos Engine", size);
+	m_ipWindow->Open("Phobos Engine", size, 0);
 
 	LogMessage("[Render::OnInit] Ready.");
 }

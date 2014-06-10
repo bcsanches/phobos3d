@@ -32,7 +32,7 @@ namespace Phobos
 			public:				
 				virtual void OnFixedUpdate() override;
 
-				EditObject &CreateMapObject(const String_t &asset, Game::MapObjectTypes type);
+				EditObject &CreateMapObject(UInt64_t parentId, const String_t &asset, Game::MapObjectTypes type);
 
 				void EnableEditMode();
 

@@ -14,15 +14,17 @@ namespace SharpEditor
     {
         private static Dictionary<string, Type> m_mapRequests = new Dictionary<string,Type>();
         private static Panel m_pnlEnginePanel;
+        private static WorldPage m_WorldPage;
        
         private static bool IsMappingOf<T>(Type type)
         {
             return !type.IsGenericType && typeof(T).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface;
         }
 
-        public static void Start(Panel enginePanel)
+        public static void Start(Panel enginePanel, WorldPage worldPage)
         {
             m_pnlEnginePanel = enginePanel;
+            m_WorldPage = worldPage;
 
             foreach (Type t in Assembly.GetExecutingAssembly().GetTypes().Where(x => IsMappingOf<EngineResponses.IEngineResponse>(x)))
             {
@@ -66,7 +68,16 @@ namespace SharpEditor
 
         public static void CreateMapObject(Assets.Asset asset)
         {
-            RemoteProcedureService.Call("CreateMapObject", asset, new EngineResponses.CreateMapObjectResponse().Process);
+            var selectedObject = m_WorldPage.SelectedItem;
+
+            RemoteProcedureService.Call("CreateMapObject", new { parentId = (selectedObject != null ? selectedObject.Id : 0), asset = asset }, new EngineResponses.CreateMapObjectResponse().Process);            
+
+            //RemoteProcedureService.Call("CreateMapObject", asset, new EngineResponses.CreateMapObjectResponse().Process);
+        }
+
+        public static void AddMapObject(MapObject obj)
+        {
+            m_WorldPage.AddMapObject(obj);
         }
 
         class AttachToWindowResponse : EngineResponses.IEngineResponse
