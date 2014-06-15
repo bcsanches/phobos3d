@@ -21,10 +21,10 @@ namespace Phobos
 {
 	namespace Game
 	{
-		PH_MAP_COMPONENT_FULL_CREATOR("Mesh", MeshComponent, g_poolMeshes);
+		PH_MAP_COMPONENT_FULL_CREATOR(PH_MESH_COMPONENT_NAME, MeshComponent, g_poolMeshes);
 
 		MeshComponent::MeshComponent(MapObject &owner, const Register::Table &table) :
-			MapObjectComponent(owner),
+			MapObjectComponent(PH_MESH_COMPONENT_NAME, owner),
 			m_pclEntity(OgreEngine::Render::GetInstance().CreateEntity(table.GetString(PH_MAP_OBJECT_KEY_MESH)))
 		{
 			this->AccessMapObject().AttachOgreObject(*m_pclEntity);			

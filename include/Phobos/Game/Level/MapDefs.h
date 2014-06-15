@@ -14,7 +14,6 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-
 #ifndef PHOBOS_GAME_MAP_DEFS_H
 #define PHOBOS_GAME_MAP_DEFS_H
 

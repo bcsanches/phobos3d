@@ -22,23 +22,9 @@ namespace Phobos
 			{
 				render.DestroySceneNode(m_pclSceneNode);
 				m_pclSceneNode = NULL;
-			}
-
-			if (m_pclLight)
-			{
-				render.DestroyLight(m_pclLight);
-				m_pclLight = NULL;
-			}
+			}			
 		}
-
-		void MapObject::Data::AttachLight(Ogre::Light *light)
-		{
-			PH_ASSERT(!m_pclLight);
-
-			m_pclLight = light;
-			m_pclSceneNode->attachObject(m_pclLight);
-		}	
-
+	
 #if 0
 		void MapObject::Data::SetParentNode(Data &node)
 		{
@@ -154,5 +140,49 @@ namespace Phobos
 			return *m_pclMeshEntity->getSkeleton()->getBone(boneName);
 		}
 #endif
+
+		MapObject::ComponentEnumerator::ComponentEnumerator(const ComponentEnumerator &rhs):
+			m_pszType(rhs.m_pszType),
+			m_rclMapObject(rhs.m_rclMapObject),
+			m_itCurrent(rhs.m_itCurrent),
+			m_itPosition(rhs.m_itPosition),
+			m_itEnd(rhs.m_itEnd)			
+		{
+			//empty
+		}
+					
+		MapObject::ComponentEnumerator::ComponentEnumerator(MapObject &object, const char *type):
+			m_pszType(type),
+			m_rclMapObject(object),
+			m_itPosition(object.m_vecComponents.begin()),
+			m_itEnd(object.m_vecComponents.end()),
+			m_itCurrent(object.m_vecComponents.end())
+		{
+			PH_ASSERT_VALID(type);
+		}
+		
+		bool MapObject::ComponentEnumerator::Next()
+		{									
+			for (; m_itPosition != m_itEnd; ++m_itPosition)
+			{
+				if (strcmp(m_itPosition->get()->GetType(), m_pszType))
+					continue;
+
+				m_itCurrent = m_itPosition;
+
+				++m_itPosition;
+				
+				return true;
+			}			
+						
+			m_itCurrent = m_itPosition;
+
+			return false;			
+		}
+
+		MapObjectComponent *MapObject::ComponentEnumerator::GetCurrent()
+		{
+			return (m_itCurrent == m_itEnd) ? nullptr : m_itCurrent->get();
+		}
 	}
 }

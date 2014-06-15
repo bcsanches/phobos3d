@@ -7,6 +7,8 @@
 
 #include <OgrePrerequisites.h>
 
+#define PH_MESH_COMPONENT_NAME "Mesh"
+
 namespace Phobos
 {
 	namespace Game

@@ -18,36 +18,35 @@ namespace Phobos
 	{		
 		class MapObject
 		{
+			private:
+				typedef std::vector<MapObjectComponent::UniquePtr_t> ComponentsVector_t;
+
 			public:
 				class Data
 				{
 					friend MapObject;
 
 					private:
-						Ogre::SceneNode *m_pclSceneNode;						
-						Ogre::Light		*m_pclLight;
+						Ogre::SceneNode		*m_pclSceneNode;
 
 						Physics::RigidBody	m_clRigidBody;		
 
 						PhysicsTypes		m_ePhysicsType;
 
 					public:
-						Data(Ogre::SceneNode *sceneNode, Ogre::Light *light) :
-							m_pclSceneNode(sceneNode),							
-							m_pclLight(light),
+						Data(Ogre::SceneNode *sceneNode) :
+							m_pclSceneNode(sceneNode),
 							m_ePhysicsType(PhysicsTypes::NONE)
 						{
 							//empty
 						}
 
 						Data(Data &&rhs) :
-							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),							
-							m_pclLight(std::move(rhs.m_pclLight)),
+							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),
 							m_clRigidBody(std::move(rhs.m_clRigidBody)),
 							m_ePhysicsType(rhs.m_ePhysicsType)
 						{
 							rhs.m_pclSceneNode = nullptr;
-							rhs.m_pclLight = nullptr;
 						}
 
 						Data(const Data &) = delete;
@@ -58,15 +57,12 @@ namespace Phobos
 						Data &operator=(Data &&rhs)
 						{
 							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
-							std::swap(rhs.m_pclLight, m_pclLight);
 							std::swap(rhs.m_clRigidBody, m_clRigidBody);
 
 							m_ePhysicsType = rhs.m_ePhysicsType;
 
 							return *this;
 						}
-
-						void AttachLight(Ogre::Light *light);						
 
 						inline void SetRigidBody(Physics::RigidBody &&body, PhysicsTypes type)
 						{
@@ -97,6 +93,33 @@ namespace Phobos
 
 						private:
 							Data m_clData;
+					};
+
+					class ComponentEnumerator
+					{
+						public:							
+							ComponentEnumerator(const ComponentEnumerator &rhs);
+
+							ComponentEnumerator &&operator=(ComponentEnumerator &&rhs) = delete;
+							ComponentEnumerator &operator=(const ComponentEnumerator &rhs) = delete;
+
+						private:
+							ComponentEnumerator(MapObject &object, const char *type);
+
+							friend class MapObject;
+
+						public:
+							bool Next();
+
+							MapObjectComponent *GetCurrent();
+
+						private:
+							const char	*m_pszType;
+							MapObject	&m_rclMapObject;
+
+							ComponentsVector_t::iterator m_itCurrent;
+							ComponentsVector_t::iterator m_itPosition;
+							ComponentsVector_t::iterator m_itEnd;
 					};
 
 			public:
@@ -166,6 +189,11 @@ namespace Phobos
 				void AddComponent(const String_t &typeName);
 				void AddComponent(MapObjectComponent::UniquePtr_t &&component);
 
+				inline ComponentEnumerator MakeEnumerator(const char *type)
+				{
+					return ComponentEnumerator(*this, type);
+				}
+
 #if 0
 				void AttachObjectToBone(
 					const Char_t *boneName,
@@ -190,10 +218,10 @@ namespace Phobos
 				void AttachOgreObject(Ogre::MovableObject &object);
 
 			private:				
-				Data								m_clData;
-				std::vector<MapObjectComponent::UniquePtr_t>	m_vecComponents;
+				Data					m_clData;
+				ComponentsVector_t		m_vecComponents;
 
-				const Register::Table				&m_rclTable;
+				const Register::Table	&m_rclTable;
 		};		
 	}
 }

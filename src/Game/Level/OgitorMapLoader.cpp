@@ -314,6 +314,7 @@ namespace Phobos
 					if(strcmp(objectType, PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
 					{
 						dict->SetString(PH_MAP_OBJECT_KEY_ORIENTATION, "1 0 0 0");
+						dict->SetString(PH_MAP_OBJECT_KEY_COMPONENTS, "Light");
 					}
 					else if(strcmp(objectType, PH_MAP_OBJECT_TYPE_TERRAIN) == 0)
 					{

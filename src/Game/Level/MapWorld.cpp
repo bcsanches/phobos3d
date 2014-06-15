@@ -28,6 +28,8 @@ subject to the following restrictions:
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Table.h>
 
+#include "Phobos/Game/Level/LightComponent.h"
+
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/Level/MapObjectComponentFactory.h"
@@ -68,7 +70,7 @@ namespace
 	class Terrain
 	{		
 		public:
-			Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &data, Ogre::Light *terrainLight);
+			Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &data, Phobos::Game::LightComponent *terrainLight);
 			Terrain(Terrain &&);
 			~Terrain();
 
@@ -89,7 +91,7 @@ Terrain::Terrain(Terrain &&rhs):
 	rhs.m_pclTerrainGroup = nullptr;
 }
 
-Terrain::Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &data, Ogre::Light *terrainLight):
+Terrain::Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &data, Phobos::Game::LightComponent *terrainLight):
 	m_upGlobalOptions(new Ogre::TerrainGlobalOptions())
 {	
 	m_upGlobalOptions->setMaxPixelError(data.GetFloat("tuning::maxpixelerror"));
@@ -108,9 +110,9 @@ Terrain::Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &d
 
 	if(terrainLight != nullptr)
 	{
-		m_upGlobalOptions->setLightMapDirection(terrainLight->getDirection());
+		m_upGlobalOptions->setLightMapDirection(terrainLight->GetDirection());
 		m_upGlobalOptions->setCompositeMapAmbient(render.GetAmbientColor());
-		m_upGlobalOptions->setCompositeMapDiffuse(terrainLight->getDiffuseColour());
+		m_upGlobalOptions->setCompositeMapDiffuse(terrainLight->GetDiffuseColour());
 	}
 
 	Phobos::String_t baseName = Phobos::String_t(levelPath.data()) + "/" + data.GetString("terrainDir") + "/";
@@ -131,56 +133,6 @@ Terrain::Terrain(Phobos::StringRef_t levelPath, const Phobos::Register::Table &d
 Terrain::~Terrain()
 {	
 	Phobos::OgreEngine::Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
-}
-
-
-static Ogre::Light &LoadLight(Phobos::Game::MapObject::Data &temp, const Phobos::Register::Table &dict)
-{
-	using namespace Phobos;
-
-	auto light = Phobos::OgreEngine::Render::GetInstance().CreateLight();
-
-	temp.AttachLight(light);
-
-	light->setCastShadows(dict.GetBool(PH_MAP_OBJECT_KEY_CAST_SHADOWS));
-
-	StringRef_t lightType = dict.GetString(PH_MAP_OBJECT_KEY_LIGHT_TYPE);
-
-	if (lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_POINT) == 0)
-	{
-		light->setType(Ogre::Light::LT_POINT);
-	}
-	else if (lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_DIRECTIONAL) == 0)
-	{
-		light->setType(Ogre::Light::LT_DIRECTIONAL);
-	}
-	else if (lightType.compare(PH_MAP_OBJECT_LIGHT_TYPE_SPOT) == 0)
-	{
-		light->setType(Ogre::Light::LT_SPOTLIGHT);
-		Ogre::Vector3 lightRange = Register::GetVector3(dict, PH_MAP_OBJECT_KEY_LIGHT_RANGE);
-		light->setSpotlightRange(Ogre::Degree(lightRange.x), Ogre::Degree(lightRange.y), lightRange.z);
-	}
-	else
-	{
-		std::stringstream stream;
-
-		stream << "Invalid light type " << lightType;
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "MapWorld::LoadLight", stream.str());
-	}
-
-	float attenuation[4];
-	dict.Get4Float(attenuation, "attenuation");
-	light->setAttenuation(attenuation[0], attenuation[1], attenuation[2], attenuation[3]);
-
-	light->setDiffuseColour(Register::GetColour(dict, "diffuse"));
-
-	if (light->getType() != Ogre::Light::LT_POINT)
-		light->setDirection(Register::GetVector3(dict, "direction"));
-
-	light->setPowerScale(dict.GetFloat("power"));
-	light->setSpecularColour(Register::GetColour(dict, "specular"));
-
-	return *light;
 }
 
 static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Mesh &mesh, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
@@ -391,9 +343,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 	auto &render = OgreEngine::Render::GetInstance();
 	
 	std::vector<Register::Table *> vecTerrains;
-	std::map<String_t, std::tuple<const String_t *, Ogre::SceneNode *, Register::Table &, Game::MapObject &>> mapObjects;
-
-	Ogre::Light *terrainLight = nullptr;
+	std::map<String_t, std::tuple<const String_t *, Ogre::SceneNode *, Register::Table &, Game::MapObject &, StringRef_t>> mapObjects;
 	
 	for(auto it : hive)		
 	{
@@ -413,28 +363,18 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 		auto sceneNode = render.CreateSceneNode(dict.GetName());
 
-		Game::MapObject::Data mapObjectData(sceneNode, nullptr);
+		Game::MapObject::Data mapObjectData(sceneNode);
 
 		sceneNode->setPosition(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_POSITION));
 		sceneNode->setOrientation(Register::GetQuaternion(dict, PH_MAP_OBJECT_KEY_ORIENTATION));
 		sceneNode->setScale(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_SCALE));
-
-		if(ref.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
-		{
-			auto &light = LoadLight(mapObjectData, dict);
-
-			if(!terrainLight && light.getType() == Ogre::Light::LT_DIRECTIONAL)
-			{
-				terrainLight = &light;
-			}
-		}
 
 		if (!LoadPhysics(mapObjectData, dict, ref))
 			continue;		
 		
 		auto ptrMapObject = MakeMapObject(std::move(mapObjectData), dict);
 
-		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()))));
+		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()), ref)));
 
 		//release it so it is not destroyed
 		ptrMapObject.release();
@@ -453,13 +393,6 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 			currentNode->getParent()->removeChild(currentNode);
 			parentNode->addChild(std::get<1>(pair.second));			
 		}
-	}
-
-	//
-	//Load terrain
-	for(auto &table : vecTerrains)
-	{
-		m_vecTerrains.emplace_back(levelPath, *table, terrainLight);
 	}
 
 	//
@@ -486,6 +419,44 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 		CreateMapObjectComponents(object, dict);
 	}
+
+	if (!vecTerrains.empty())
+	{
+		Phobos::Game::LightComponent *terrainLight = nullptr;
+
+		//find a suitable light for terrain
+		for (auto pair : mapObjects)
+		{
+			auto type = std::get<4>(pair.second);
+			if (type.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT))
+				continue;
+
+			auto &object = std::get<3>(pair.second);
+
+			auto enumerator = object.MakeEnumerator(PH_LIGHT_COMPONENT_NAME);
+
+			while (enumerator.Next())
+			{
+				auto light = static_cast<Game::LightComponent *>(enumerator.GetCurrent());
+
+				if (!light->IsDirectional())
+					continue;
+
+				terrainLight = light;
+				break;
+			}
+
+			if (terrainLight)
+				break;
+		}
+
+		//
+		//Load terrain
+		for (auto &table : vecTerrains)
+		{
+			m_vecTerrains.emplace_back(levelPath, *table, terrainLight);
+		}
+	}
 }
 
 Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &table)
@@ -507,16 +478,11 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 
 	auto sceneNode = render.CreateSceneNode(table.GetName());
 	
-	Game::MapObject::Data object(sceneNode, nullptr);
+	Game::MapObject::Data object(sceneNode);
 
 	sceneNode->setPosition(Register::GetVector3(table, PH_MAP_OBJECT_KEY_POSITION));
 	sceneNode->setOrientation(Register::GetQuaternion(table, PH_MAP_OBJECT_KEY_ORIENTATION));
 	sceneNode->setScale(Register::GetVector3(table, PH_MAP_OBJECT_KEY_SCALE));
-
-	if (ref.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT) == 0)
-	{
-		LoadLight(object, table);		
-	}
 
 	if (!LoadPhysics(object, table, ref))
 		PH_RAISE(INVALID_OPERATION_EXCEPTION, "MapWorldImpl::MakeObject", "Cannot create physics state");

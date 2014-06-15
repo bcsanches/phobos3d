@@ -11,11 +11,11 @@
     <Filter Include="Things">
       <UniqueIdentifier>{36d54a11-0fd2-468a-bf69-00d59e0b538e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Gui">
-      <UniqueIdentifier>{a06938b2-2152-435b-b94f-d9f2f89f4432}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Level">
       <UniqueIdentifier>{4b690373-37b0-43db-9507-cf4dc1dcfe6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{a06938b2-2152-435b-b94f-d9f2f89f4432}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +130,9 @@
       <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Level\MapObjectComponentFactory.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\LightComponent.cpp">
       <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
@@ -301,6 +304,9 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentAccess.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\LightComponent.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>

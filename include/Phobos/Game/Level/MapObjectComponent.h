@@ -3,6 +3,8 @@
 
 #include <Phobos/DisableCopy.h>
 
+#include <Phobos/Error.h>
+
 #include <memory>
 
 namespace Phobos
@@ -32,11 +34,17 @@ namespace Phobos
 			public:				
 				virtual void Release() = 0;
 
-			protected:
-				MapObjectComponent(MapObject &owner) :
-					m_rclOwner(owner)
+				const char *GetType() const
 				{
-					//empty
+					return m_pszType;
+				}
+
+			protected:
+				MapObjectComponent(const char *type, MapObject &owner) :
+					m_rclOwner(owner),
+					m_pszType(type)
+				{
+					PH_ASSERT_VALID(type);
 				}
 
 				virtual ~MapObjectComponent()
@@ -47,7 +55,8 @@ namespace Phobos
 				MapObjectComponentAccess AccessMapObject();
 
 			private:
-				MapObject &m_rclOwner;
+				MapObject	&m_rclOwner;
+				const char	*m_pszType;
 		};		
 	}
 }
