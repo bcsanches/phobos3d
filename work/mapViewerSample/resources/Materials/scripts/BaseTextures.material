@@ -15,13 +15,13 @@ material ___Base_128
 	}
 }
                 
-material Base_128: PH_DiffuseLighting
+material _Base_128: PH_DiffuseLighting
 {  
   set_texture_alias DiffuseMap base128.png
 }
 
 //material RTSS/PerPixel_MultiPass
-material _Base_128
+material Base_128
 {	
 	technique
 	{

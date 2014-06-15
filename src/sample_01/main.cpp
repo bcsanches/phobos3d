@@ -43,7 +43,7 @@ Sample::Sample():
 {	
 	m_ipWindow = Phobos::System::Window::Create("RenderWindow");
 	
-	m_ipWindow->Open("Sample 01", UIntSize_t(640, 480));	
+	m_ipWindow->Open("Sample 01", UIntSize_t(640, 480), 0);	
 
 	Phobos::System::EventManager::AddListener(*this, Phobos::System::EVENT_TYPE_SYSTEM);
 }

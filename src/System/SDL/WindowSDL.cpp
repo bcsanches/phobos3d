@@ -28,7 +28,8 @@ Phobos::System::WindowPtr_t Phobos::System::Window::Create(const String_t &name)
 }
 
 Phobos::System::WindowSDL::WindowSDL(const String_t &name):
-	Window(name)
+	Window(name),
+	m_fOpenGLContext(false)
 {
 }
 
@@ -37,19 +38,33 @@ Phobos::System::WindowSDL::~WindowSDL(void)
         SDL_Quit();
 }
 
-void Phobos::System::WindowSDL::Open(const String_t &name, const UIntSize_t &size, void *parentWindow)
+void Phobos::System::WindowSDL::Open(const String_t &name, const UIntSize_t &size, unsigned int flags, void *parentWindow)
 {
-
 	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_EnableUNICODE(1);
 
-    #ifdef PH_WIN32
-		unsigned int flags = 0;
+	unsigned int sdlFlags = 0;
 
+	if (flags & WND_OPENGL_CONTEXT)
+	{
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+
+		sdlFlags |= SDL_OPENGL;
+		m_fOpenGLContext = true;
+	}
+
+	if (flags & WND_FULL_SCREEN)
+		sdlFlags |= SDL_FULLSCREEN;
+
+    #ifdef PH_WIN32
+		
 		HWND parent = reinterpret_cast<HWND>(parentWindow);
 		if(parent)
-			flags = SDL_NOFRAME | SDL_RESIZABLE;
+			flags |= SDL_NOFRAME | SDL_RESIZABLE;
 
         SDL_SetVideoMode(size.m_tWidth, size.m_tHeight, 32, flags);
 		
@@ -59,14 +74,7 @@ void Phobos::System::WindowSDL::Open(const String_t &name, const UIntSize_t &siz
 		}
 
     #else
-        SDL_SetVideoMode(rect.tWidth, rect.tHeight, 0, SDL_OPENGL);
-    #endif
-
-    #ifdef PH_LINUX
-        SDL_GL_SetAttribute( SDL_GL_RED_SIZE,           8  );
-        SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,         8  );
-        SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,          8  );
-        SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,         16 );
+        SDL_SetVideoMode(rect.tWidth, rect.tHeight, 0, flags);
     #endif
 
     SDL_WM_SetCaption(name.c_str(), NULL);
@@ -139,9 +147,5 @@ void *Phobos::System::WindowSDL::GetHandler() const
 
 bool Phobos::System::WindowSDL::HasGLContext()
 {
-	#ifdef PH_WIN32
-        return false;
-    #else
-        return true;
-    #endif
+	return m_fOpenGLContext;
 }	

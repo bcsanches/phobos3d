@@ -32,7 +32,7 @@ namespace Phobos
 			public:			
 				~WindowSDL();
 
-				virtual void Open(	const String_t &name, const UIntSize_t &size, void *parentWindow = NULL) override;
+				virtual void Open(	const String_t &name, const UIntSize_t &size, unsigned int flags, void *parentWindow = NULL) override;
 
 				virtual size_t GetWidth(void) const override;
 				virtual size_t GetHeight(void) const override;
@@ -49,7 +49,9 @@ namespace Phobos
 				WindowSDL(const String_t &name);
 		
 			private:			
-				friend WindowPtr_t Window::Create(const String_t &name);			
+				friend WindowPtr_t Window::Create(const String_t &name);	
+
+				bool m_fOpenGLContext;
 		};
 	}
 }

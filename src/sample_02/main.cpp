@@ -54,7 +54,7 @@ Sample::Sample():
 
 	m_ipWindow = System::Window::Create("RenderWindow");
 	
-	m_ipWindow->Open("Sample 02", UIntSize_t(640, 480));
+	m_ipWindow->Open("Sample 02", UIntSize_t(640, 480), 0);
 	
 	System::EventManager::AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
