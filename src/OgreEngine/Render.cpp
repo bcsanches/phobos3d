@@ -137,12 +137,14 @@ Phobos::OgreEngine::Render::Render(Engine::Console &console):
 	m_varRScreenY("dvRScreenY", "600"),
 	m_varRVSync("dvRVSync", "1"),
 	m_varRFullScreen("dvRFullScreen", "0"),
-	m_varRRenderSystem("dvRRenderSystem", "Direct3D9"),
+	m_varRRenderSystem("dvRRenderSystem", "Direct3D"),
+	m_varRSecondaryRenderSystem("dvRSecondaryRenderSystem", "OpenGL"),
 	m_varRShaderSystem("dvRShaderSystem", "true"),
 	m_varRShaderSystemLibPath("dvRShaderSystemLibPath", "resources/RTShaderLib"),
 	m_varRCaelum("dvRCaelum", "1"),	
 	m_varParentWindow("dvParentWindow", "0x0"),
 	m_cmdOgreLoadPlugin("ogreLoadPlugin"),
+	m_cmdOgreTryLoadPlugin("ogreTryLoadPlugin"),
 	m_cmdOgreAddResourceLocation("ogreAddResourceLocation"),
 	m_cmdOgreInitialiseResourceGroup("ogreInitialiseResourceGroup"),
 	m_cmdScreenshot("screenshot"),
@@ -159,6 +161,7 @@ Phobos::OgreEngine::Render::Render(Engine::Console &console):
 	LogMessage("[Render] Initializing");
 
 	m_cmdOgreLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdOgreLoadPlugin, this));
+	m_cmdOgreTryLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdOgreTryLoadPlugin, this));
 	m_cmdOgreAddResourceLocation.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdOgreAddResourceLocation, this));
 	m_cmdOgreInitialiseResourceGroup.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdOgreInitialiseResourceGroup, this));
 	m_cmdScreenshot.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdScreenshot, this));
@@ -181,6 +184,7 @@ Phobos::OgreEngine::Render::Render(Engine::Console &console):
 	console.AddContextCommand(m_cmdOgreAddResourceLocation);
 	console.AddContextCommand(m_cmdOgreInitialiseResourceGroup);
 	console.AddContextCommand(m_cmdOgreLoadPlugin);
+	console.AddContextCommand(m_cmdOgreTryLoadPlugin);
 	console.AddContextCommand(m_cmdScreenshot);
 
 	console.AddContextCommand(m_cmdSetShadowMode);
@@ -232,6 +236,27 @@ void Phobos::OgreEngine::Render::SetParentWindow(void *parent)
 	m_ipWindow->SetParentWindow(parent);	
 }
 
+bool Phobos::OgreEngine::Render::TrySetRenderSystem(const String_t &renderSystemName)
+{
+	const Ogre::RenderSystemList &renderSystems = (m_upRoot->getAvailableRenderers());
+	Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
+	
+	for (r_it = renderSystems.begin(); r_it != end; ++r_it)
+	{
+		const std::string &name((*r_it)->getName());
+		LogMessage("\tFound: " + name);
+
+		if (name.find(renderSystemName) != String_t::npos)
+		{
+			m_upRoot->setRenderSystem(*r_it);
+
+			return true;			
+		}	
+	}
+
+	return false;
+}
+
 void Phobos::OgreEngine::Render::OnInit(void)
 {		
 	LogMessage("[Render::OnInit] Initializing");
@@ -266,33 +291,38 @@ void Phobos::OgreEngine::Render::OnInit(void)
 	//loaded after screen is created.
 
 	//Loading plugin befire creating the screen, may cause problem in some platforms: ie linux opengl plugin
-	for(auto it : m_lstPluginsName)		
+	for(auto it : m_lstOgrePluginsName)		
 		m_upRoot->loadPlugin(it);
 
-	m_lstPluginsName.clear();		
+	m_lstOgrePluginsName.clear();
 
-	const Ogre::RenderSystemList &renderSystems = (m_upRoot->getAvailableRenderers());
-	Ogre::RenderSystemList::const_iterator r_it, end = renderSystems.end();
+	for (auto it : m_lstOgreOptionalPluginsName)
+	{
+		try
+		{
+			m_upRoot->loadPlugin(it);
+		}
+		catch (Ogre::Exception &ex)
+		{
+			//if optional plugins fails, we just log and continue
+			LogOgreException("Phobos::OgreEngine::Render", ex);
+		}
+	}
+
+	m_lstOgreOptionalPluginsName.clear();
+
 
 	LogMessage("[Render::OnInit] Searching render system");
-	bool foundRenderSystem = false;
-
-	for(r_it = renderSystems.begin(); r_it != end; ++r_it)
+	bool foundRenderSystem = this->TrySetRenderSystem(m_varRRenderSystem.GetValue());
+	if (!foundRenderSystem)
 	{
-		const std::string &name((*r_it)->getName());
-		LogMessage("\tFound: " + name);
-
-		if(name.find(m_varRRenderSystem.GetValue()) >= 0)
-		{
-			m_upRoot->setRenderSystem(*r_it);
-			foundRenderSystem = true;
-			break;
-		}
+		LogMessage("[Render::OnInit] Searching secondary render system");
+		foundRenderSystem = this->TrySetRenderSystem(m_varRSecondaryRenderSystem.GetValue());
 	}
 
 	if(!foundRenderSystem)
 	{
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render::OnInit", "Render system " + m_varRRenderSystem.GetValue() + " not available");
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Render::OnInit", "Render system " + m_varRRenderSystem.GetValue() + " and " + m_varRSecondaryRenderSystem.GetValue() + " not available");
 	}
 
 	LogMessage("[Render::OnInit] render system found, initializing Ogre");
@@ -313,11 +343,13 @@ void Phobos::OgreEngine::Render::OnInit(void)
     if (handler != NULL)
 		opts["externalWindowHandle"] = std::to_string(reinterpret_cast<unsigned long>(handler));
 
+#if 0
 	if (m_ipWindow->HasGLContext())
 	{
 		opts["externalGLContext"] = "true";
 		opts["externalGLControl"] = "true";
 	}
+#endif
 
 	LogMessage("[Render::OnInit] Creating ogre window");
 	m_pclOgreWindow = m_upRoot->createRenderWindow("PhobosMainWindow", size.m_tWidth, size.m_tHeight, fullScreen, &opts);
@@ -471,21 +503,9 @@ Ogre::Entity* Phobos::OgreEngine::Render::CreateEntity(const String_t &meshName,
 
 Ogre::Entity *Phobos::OgreEngine::Render::CreateEntity(const String_t &entityName, const String_t &meshName, UInt32_t flags)
 {
-	String_t tmpPath;		
-	String_t extension;
-
-	const String_t *meshNameToUse = &meshName;
-
-	//Newer ogitor does nto include .mesh in mesh names, so fix it here
-	bool found = Path::GetExtension(extension, meshName);		 
-	if((found && extension != "mesh") || (!found))
-	{
-		tmpPath = meshName;
-		tmpPath.append(".mesh");
-		meshNameToUse = &tmpPath;
-	}
-
-	Ogre::Entity *ent = m_pclMainSceneManager->createEntity(entityName, *meshNameToUse);
+	String_t newMeshName = FixMeshName(meshName);
+	
+	Ogre::Entity *ent = m_pclMainSceneManager->createEntity(entityName, newMeshName);
 
 	if(ent == NULL)
 		return NULL;
@@ -907,7 +927,19 @@ void Phobos::OgreEngine::Render::CmdOgreLoadPlugin(const Shell::StringVector_t &
 		return;
 	}
 
-	m_lstPluginsName.push_back(container[1]);		
+	m_lstOgrePluginsName.push_back(container[1]);		
+}
+
+void Phobos::OgreEngine::Render::CmdOgreTryLoadPlugin(const Shell::StringVector_t &container, Shell::Context &)
+{
+	if (container.size() < 2)
+	{
+		LogMessage("[Render::CmdOgreTryLoadPlugin] ERROR: insuficient parameters, usage: ogreTryLoadPlugin <pluginName>");
+
+		return;
+	}
+
+	m_lstOgreOptionalPluginsName.push_back(container[1]);
 }
 
 void Phobos::OgreEngine::Render::CmdScreenshot(const Shell::StringVector_t &container, Shell::Context &)
