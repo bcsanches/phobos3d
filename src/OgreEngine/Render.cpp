@@ -211,12 +211,7 @@ Phobos::OgreEngine::Render::~Render(void)
 	//we must make sure that caelum is destroyed before ogre :(
 	//clCaelum.Shutdown();
 
-	m_upOverlaySystem.reset();
-
-	if(m_ipWindow)
-	{
-		//EventManager_c::GetInstance()->RemoveListener(*(m_ipWindow.get()));
-	}
+	m_upOverlaySystem.reset();	
 }
 
 size_t Phobos::OgreEngine::Render::GetScreenWidth()
