@@ -63,17 +63,14 @@ namespace Phobos
 		{
 			m_pclSceneNode->setOrientation(orientation);
 		}
-
-		void MapObject::Data::RegisterBody()
-		{
-			m_clRigidBody.Register();
-		}
+		
 
 		MapObject::~MapObject()
 		{
 			//empty
 		}
 
+#if 0
 		void MapObject::SyncSceneToPhysics()
 		{
 			PH_ASSERT(m_clData.m_ePhysicsType != PhysicsTypes::NONE);
@@ -92,6 +89,7 @@ namespace Phobos
 
 			m_clData.m_clRigidBody.Warp(transform);
 		}
+#endif
 
 		void MapObject::AddComponent(const String_t &name)
 		{
@@ -107,6 +105,12 @@ namespace Phobos
 		void MapObject::AttachOgreObject(Ogre::MovableObject &object)
 		{
 			m_clData.m_pclSceneNode->attachObject(&object);
+		}
+
+		void MapObject::SetTransform(const Engine::Math::Transform &transform)
+		{
+			m_clData.m_pclSceneNode->setPosition(transform.GetOrigin());
+			m_clData.m_pclSceneNode->setOrientation(transform.GetRotation());
 		}
 
 #if 0

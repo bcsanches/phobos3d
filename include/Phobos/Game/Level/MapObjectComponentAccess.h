@@ -3,6 +3,8 @@
 
 #include "Phobos/Game/Level/MapObject.h"
 
+#include <Phobos/OgreEngine/Math/Transform.h>
+
 namespace Phobos
 {
 	namespace Game
@@ -21,6 +23,11 @@ namespace Phobos
 				void AttachOgreObject(Ogre::MovableObject &object)
 				{
 					m_rclObject.AttachOgreObject(object);
+				}
+
+				void SetTransform(const Engine::Math::Transform &transform)
+				{
+					m_rclObject.SetTransform(transform);					
 				}
 
 			private:

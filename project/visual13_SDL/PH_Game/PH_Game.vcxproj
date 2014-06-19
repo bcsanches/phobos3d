@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\..\src\Game\Level\MapWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Level\MeshComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Level\OgitorMapLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Level\RigidBodyComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\CharacterBodyComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\CollisionMesh.cpp" />
     <ClCompile Include="..\..\..\src\Game\Physics\CollisionShape.cpp" />
@@ -167,7 +168,6 @@
     <ClCompile Include="..\..\..\src\Game\Things\LinearMoverComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\MoverComponent.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\MoverManager.cpp" />
-    <ClCompile Include="..\..\..\src\Game\Things\PointEntity.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\Signal.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\SignalManager.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\Thing.cpp" />
@@ -191,6 +191,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MeshComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\OgitorMapLoader.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\RigidBodyComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFactory.h" />
@@ -206,7 +207,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\LinearMoverComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverManager.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\PointEntity.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Signal.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\SignalManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Thing.h" />

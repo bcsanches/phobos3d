@@ -25,35 +25,38 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	static std::atomic_uint tCount_gl;
-
-	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
-	{		
-		LogMakeStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
-	}
-
-	String_t &GenerateOgreName(String_t &out)
-	{		
-		out = "name_";
-		out += std::to_string(++tCount_gl);	
-
-		return out;
-	}
-
-	String_t FixMeshName(const String_t &meshName)
+	namespace OgreEngine
 	{
-		String_t extension;
+		static std::atomic_uint tCount_gl;
 
-		//Newer ogitor does nto include .mesh in mesh names, so fix it here
-		bool found = Path::GetExtension(extension, meshName);
-		if ((found && extension != "mesh") || (!found))
+		void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
 		{
-			String_t newName(meshName);			
-			newName.append(".mesh");
-
-			return newName;			
+			LogMakeStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
 		}
 
-		return meshName;
+		String_t &GenerateOgreName(String_t &out)
+		{
+			out = "name_";
+			out += std::to_string(++tCount_gl);
+
+			return out;
+		}
+
+		String_t FixMeshName(const String_t &meshName)
+		{
+			String_t extension;
+
+			//Newer ogitor does nto include .mesh in mesh names, so fix it here
+			bool found = Path::GetExtension(extension, meshName);
+			if ((found && extension != "mesh") || (!found))
+			{
+				String_t newName(meshName);
+				newName.append(".mesh");
+
+				return newName;
+			}
+
+			return meshName;
+		}
 	}
 }

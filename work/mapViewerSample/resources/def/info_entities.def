@@ -12,7 +12,7 @@ EntityDef TileWorldSpawn
 
 EntityDef InfoPlayerStart
 {
-  className=PointEntity;
+    className=Entity;
 }
 
 EntityDef SkeletonTorch
@@ -42,7 +42,7 @@ EntityDef Platform
 
 EntityDef PathCorner
 {
-    className=PointEntity;
+      className=Entity;
 }
 
 EntityDef Box1m

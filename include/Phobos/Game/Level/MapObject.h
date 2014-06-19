@@ -5,6 +5,7 @@
 
 #include <OgrePrerequisites.h>
 
+#include <Phobos/OgreEngine/Math/Transform.h>
 #include <Phobos/Register/TableFwd.h>
 #include <Phobos/String.h>
 
@@ -27,9 +28,7 @@ namespace Phobos
 					friend MapObject;
 
 					private:
-						Ogre::SceneNode		*m_pclSceneNode;
-
-						Physics::RigidBody	m_clRigidBody;		
+						Ogre::SceneNode		*m_pclSceneNode;						
 
 						PhysicsTypes		m_ePhysicsType;
 
@@ -42,8 +41,7 @@ namespace Phobos
 						}
 
 						Data(Data &&rhs) :
-							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),
-							m_clRigidBody(std::move(rhs.m_clRigidBody)),
+							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),							
 							m_ePhysicsType(rhs.m_ePhysicsType)
 						{
 							rhs.m_pclSceneNode = nullptr;
@@ -56,28 +54,19 @@ namespace Phobos
 
 						Data &operator=(Data &&rhs)
 						{
-							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
-							std::swap(rhs.m_clRigidBody, m_clRigidBody);
+							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);							
 
 							m_ePhysicsType = rhs.m_ePhysicsType;
 
 							return *this;
-						}
-
-						inline void SetRigidBody(Physics::RigidBody &&body, PhysicsTypes type)
-						{
-							m_clRigidBody = std::move(body);
-							m_ePhysicsType = type;
-						}						
+						}			
 
 						const Ogre::Vector3 &GetWorldPosition() const;
 						const Ogre::Vector3 &GetWorldScale() const;
 						const Ogre::Quaternion &GetWorldOrientation() const;
 
 						void SetPosition(const Ogre::Vector3 &position);
-						void SetOrientation(const Ogre::Quaternion &orientation);						
-
-						void RegisterBody();
+						void SetOrientation(const Ogre::Quaternion &orientation);
 					};		
 
 					class DataSink
@@ -173,11 +162,20 @@ namespace Phobos
 					return m_clData.GetWorldOrientation();
 				}
 
+				inline Engine::Math::Transform MakeWorldTransform() const
+				{
+					return Engine::Math::Transform(
+						this->GetWorldPosition(),
+						this->GetWorldOrientation()
+					);
+				}
+
 				inline PhysicsTypes GetPhysicsType() const
 				{
 					return m_clData.m_ePhysicsType;
 				}
 
+#if 0
 				void SyncSceneToPhysics();
 				void SyncPhysicsToScene();
 
@@ -185,6 +183,7 @@ namespace Phobos
 				{
 					m_clData.RegisterBody();
 				}
+#endif
 
 				void AddComponent(const String_t &typeName);
 				void AddComponent(MapObjectComponent::UniquePtr_t &&component);
@@ -216,6 +215,8 @@ namespace Phobos
 				
 			private:
 				void AttachOgreObject(Ogre::MovableObject &object);
+
+				void SetTransform(const Engine::Math::Transform &transform);
 
 			private:				
 				Data					m_clData;

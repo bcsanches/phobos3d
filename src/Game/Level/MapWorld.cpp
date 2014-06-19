@@ -21,31 +21,21 @@ subject to the following restrictions:
 #include <Phobos/Path.h>
 
 #include <Phobos/OgreEngine/Render.h>
-#include <Phobos/OgreEngine/Utils.h>
-#include <Phobos/OgreEngine/Math/Transform.h>
 
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Hive.h>
 #include <Phobos/Register/Table.h>
 
 #include "Phobos/Game/Level/LightComponent.h"
+#include "Phobos/Game/Level/RigidBodyComponent.h"
 
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/Level/MapObjectComponentFactory.h"
 
 #include "Phobos/Game/RegisterUtils.h"
-
-#include "Phobos/Game/Physics/Manager.h"
-#include "Phobos/Game/Physics/RigidBody.h"
-#include "Phobos/Game/Physics/Settings.h"
-#include "Phobos/Game/Physics/PhysicsUtils.h"
-
 #include "Phobos/Game/Level/MapDefs.h"
 
-#include <OgreEntity.h>
-#include <OgreLight.h>
-#include <OgreMeshManager.h>
 #include <OgreSceneNode.h>
 
 #include <Terrain/OgreTerrainGroup.h>
@@ -135,92 +125,6 @@ Terrain::~Terrain()
 	Phobos::OgreEngine::Render::GetInstance().DestroyTerrainGroup(m_pclTerrainGroup);
 }
 
-static Phobos::Game::Physics::RigidBody CreateStaticObjectRigidBody(const Ogre::Mesh &mesh, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
-{	
-	const auto &meshName = mesh.getName();
-
-	Phobos::Path path(meshName);
-	path.StripExtension();
-
-	using namespace Phobos;
-
-	auto &physicsManager = Game::Physics::Manager::GetInstance();
-
-	auto collisionDef = Game::Physics::Settings::TryGetStaticMeshCollisionShapeDef(path.GetStr());
-
-#if 1
-
-	auto body = collisionDef != NULL ?
-		physicsManager.CreateRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, Game::Physics::Utils::CreateCollisionShape(*collisionDef, scale)) :
-		physicsManager.CreateMeshRigidBody(Game::Physics::RBT_STATIC, transform, 0, collisionTag, mesh, scale)
-	;	
-
-	return body;
-#endif
-}
-
-static bool LoadPhysics(Phobos::Game::MapObject::Data &mapObjectData, const Phobos::Register::Table &dict, Phobos::StringRef_t mapObjectType)
-{
-	using namespace Phobos;
-
-	if (auto physicsTypeName = dict.TryGetString(PH_MAP_OBJECT_KEY_PHYSICS_TYPE))
-	{
-		auto physicsType = Game::StringToPhysicsType(physicsTypeName->c_str());
-		if (physicsType == Game::PhysicsTypes::NONE)
-			return true;
-
-		if ((mapObjectType.compare(PH_MAP_OBJECT_TYPE_STATIC) == 0) && (physicsType != Game::PhysicsTypes::STATIC))
-		{
-			LogMakeStream() << "[Phobos::Game::MapWorld] Error: Static object can only have physics of type STATIC, object " << dict.GetName() << " not loaded";
-			return false;
-		}
-
-		Engine::Math::Transform transform(
-			mapObjectData.GetWorldPosition(),
-			mapObjectData.GetWorldOrientation()
-		);
-
-		if (physicsType == Game::PhysicsTypes::STATIC)
-		{
-#if 1
-			String_t meshName = Phobos::FixMeshName(dict.GetString(PH_MAP_OBJECT_KEY_MESH));			
-
-			auto pMesh = Ogre::MeshManager::getSingleton().load(meshName, Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-
-			mapObjectData.SetRigidBody(
-				CreateStaticObjectRigidBody(
-					*pMesh,
-					transform, mapObjectData.GetWorldScale(), 
-					Game::Physics::Settings::CreateStaticWorldCollisionTag()
-				),
-				physicsType
-			);
-#endif
-		}
-		else if (physicsType == Game::PhysicsTypes::DYNAMIC)
-		{
-			auto collisionTag = Game::Physics::Settings::LoadCollisionTag(dict);		
-
-			Float_t mass = dict.GetFloat("mass");
-
-			auto &physicsManager = Game::Physics::Manager::GetInstance();
-
-			mapObjectData.SetRigidBody(
-				physicsManager.CreateRigidBody(
-					Game::Physics::RBT_DYNAMIC,
-					transform,
-					mass,
-					collisionTag,
-					Game::Physics::Utils::CreateCollisionShape(dict, Ogre::Vector3(1, 1, 1))
-				),
-				physicsType
-			);			
-		}		
-	}
-	
-	return true;
-}
-
 static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobos::Game::MapObject &node)
 {
 	Phobos::Register::SetVector3(table, PH_MAP_OBJECT_KEY_WORLD_POSITION, node.GetWorldPosition());
@@ -303,8 +207,7 @@ namespace
 
 		private:			
 			std::vector<MapObjectPoolUniquePtr_t>		m_vecObjects;
-
-			std::vector<Phobos::Game::MapObject*>		m_vecDynamicBodies;
+			
 			std::vector<Terrain>						m_vecTerrains;
 
 			boost::object_pool<Phobos::Game::MapObject> m_clPool;
@@ -324,13 +227,7 @@ Phobos::Game::MapWorld::MapObjectUniquePtr_t MapWorldImpl::MakeMapObject(Phobos:
 	auto *object = upMapObject.get();
 
 	//push it to object list
-	m_vecObjects.push_back(std::move(upMapObject));
-
-	//if dynamic body, track it on physics
-	if (object->GetPhysicsType() == Phobos::Game::PhysicsTypes::DYNAMIC)
-	{
-		m_vecDynamicBodies.push_back(object);
-	}
+	m_vecObjects.push_back(std::move(upMapObject));	
 
 	//return a safe pointer to caller
 	return MapObjectUniquePtr_t(object);
@@ -368,10 +265,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 		sceneNode->setPosition(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_POSITION));
 		sceneNode->setOrientation(Register::GetQuaternion(dict, PH_MAP_OBJECT_KEY_ORIENTATION));
 		sceneNode->setScale(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_SCALE));
-
-		if (!LoadPhysics(mapObjectData, dict, ref))
-			continue;		
-		
+				
 		auto ptrMapObject = MakeMapObject(std::move(mapObjectData), dict);
 
 		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()), ref)));
@@ -395,23 +289,6 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 		}
 	}
 
-	//
-	//Save final transformation in world coordinates
-#if 1
-	for (auto pair : mapObjects)
-	{		
-		auto &object = std::get<3>(pair.second);
-		auto &dict = std::get<2>(pair.second);
-
-		SetWorldTransformOnTable(dict, object);	
-
-		if (object.GetPhysicsType() != Phobos::Game::PhysicsTypes::NONE)
-		{
-			object.SyncPhysicsToScene();
-			object.RegisterBody();
-		}
-	}	
-#endif	
 	for (auto pair : mapObjects)
 	{
 		auto &object = std::get<3>(pair.second);
@@ -483,10 +360,7 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 	sceneNode->setPosition(Register::GetVector3(table, PH_MAP_OBJECT_KEY_POSITION));
 	sceneNode->setOrientation(Register::GetQuaternion(table, PH_MAP_OBJECT_KEY_ORIENTATION));
 	sceneNode->setScale(Register::GetVector3(table, PH_MAP_OBJECT_KEY_SCALE));
-
-	if (!LoadPhysics(object, table, ref))
-		PH_RAISE(INVALID_OPERATION_EXCEPTION, "MapWorldImpl::MakeObject", "Cannot create physics state");
-
+	
 	auto ptrObject = this->MakeMapObject(std::move(object), table);	
 	auto parentName = table.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE);
 	if (parentName)
@@ -508,8 +382,7 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 
 void MapWorldImpl::Unload()
 {
-	m_vecTerrains.clear();
-	m_vecDynamicBodies.clear();
+	m_vecTerrains.clear();	
 	m_vecObjects.clear();
 }
 
@@ -518,8 +391,7 @@ void MapWorldImpl::DestroyObject(Phobos::Game::MapObject *ptr)
 	if (!ptr)
 		return;		
 
-	m_vecObjects.erase(std::remove_if(m_vecObjects.begin(), m_vecObjects.end(), [ptr](const MapObjectPoolUniquePtr_t &current){ return current.get() == ptr; }), m_vecObjects.end());
-	m_vecDynamicBodies.erase(std::remove_if(m_vecDynamicBodies.begin(), m_vecDynamicBodies.end(), [ptr](Phobos::Game::MapObject *current){return current == ptr; }), m_vecDynamicBodies.end());	
+	m_vecObjects.erase(std::remove_if(m_vecObjects.begin(), m_vecObjects.end(), [ptr](const MapObjectPoolUniquePtr_t &current){ return current.get() == ptr; }), m_vecObjects.end());	
 }
 
 void MapWorldImpl::OnStart()
@@ -552,10 +424,7 @@ void MapWorldImpl::OnStart()
 
 void MapWorldImpl::OnUpdate()
 {
-	for (auto h : m_vecDynamicBodies)
-	{
-		h->SyncSceneToPhysics();		
-	}
+	Phobos::Game::DynamicBodyComponent::SyncAllToPhysics();	
 }
 
 namespace Phobos

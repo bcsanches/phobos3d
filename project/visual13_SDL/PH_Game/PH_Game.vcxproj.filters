@@ -81,9 +81,6 @@
     <ClCompile Include="..\..\..\src\Game\Things\MoverManager.cpp">
       <Filter>Things</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\PointEntity.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Things\TransformComponent.cpp">
       <Filter>Things</Filter>
     </ClCompile>
@@ -133,6 +130,9 @@
       <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Level\LightComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\RigidBodyComponent.cpp">
       <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
@@ -240,9 +240,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverManager.h">
       <Filter>Things</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\PointEntity.h">
-      <Filter>Things</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\TransformComponent.h">
       <Filter>Things</Filter>
     </ClInclude>
@@ -307,6 +304,9 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\LightComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\RigidBodyComponent.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
