@@ -5,6 +5,7 @@
 
 #include <OgrePrerequisites.h>
 
+#include <Phobos/Node.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
 #include <Phobos/Register/TableFwd.h>
 #include <Phobos/String.h>
@@ -17,7 +18,7 @@ namespace Phobos
 {
 	namespace Game
 	{		
-		class MapObject
+		class MapObject: public Node
 		{
 			private:
 				typedef std::vector<MapObjectComponent::UniquePtr_t> ComponentsVector_t;
@@ -68,22 +69,7 @@ namespace Phobos
 						void SetPosition(const Ogre::Vector3 &position);
 						void SetOrientation(const Ogre::Quaternion &orientation);
 					};		
-
-					class DataSink
-					{
-						friend class MapObject;
-
-						public:
-							DataSink(Data &&data):
-								m_clData(std::move(data))
-							{
-								//empty
-							}
-
-						private:
-							Data m_clData;
-					};
-
+					
 					class ComponentEnumerator
 					{
 						public:							
@@ -112,13 +98,15 @@ namespace Phobos
 					};
 
 			public:
-				inline MapObject(Data &&data, const Register::Table &table) :
+				inline MapObject(const String_t &name, Data &&data, const Register::Table &table) :
+					Node(name, NodeFlags::PRIVATE_CHILDREN),
 					m_clData(std::move(data)),
 					m_rclTable(table)
 				{
 					//empty
 				}
 
+#if 0
 				inline MapObject(MapObject &&data) :
 					m_clData(std::move(data.m_clData)),
 					m_vecComponents(std::move(data.m_vecComponents)),
@@ -127,25 +115,32 @@ namespace Phobos
 					//empty
 				}
 
-				inline MapObject(DataSink &sink, const Register::Table &table) :
+				inline MapObject(const String_t &name, DataSink &sink, const Register::Table &table) :
+					Node(name, NodeFlags::PRIVATE_CHILDREN),
 					m_clData(std::move(sink.m_clData)),
 					m_rclTable(table)
 				{
 
 				}
 
+#endif
+
 				~MapObject();
 
 				MapObject() = delete;		
 				MapObject(const MapObject &) = delete;
+				MapObject(const MapObject &&) = delete;
 				MapObject &operator=(MapObject &) = delete;
+				MapObject &operator=(MapObject &&) = delete;
 
+#if 0
 				inline MapObject &operator=(MapObject &&rhs)
 				{
 					std::swap(rhs.m_clData, m_clData);
 
 					return *this;
 				}
+#endif
 
 				inline const Ogre::Vector3 &GetWorldPosition() const
 				{
@@ -192,6 +187,9 @@ namespace Phobos
 				{
 					return ComponentEnumerator(*this, type);
 				}
+
+				void *operator new(size_t sz);
+				void operator delete(void *ptr);
 
 #if 0
 				void AttachObjectToBone(

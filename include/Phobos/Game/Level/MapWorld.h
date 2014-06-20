@@ -55,24 +55,13 @@ namespace Phobos
 							MapWorld::GetInstance().Unload();
 						}
 				};
-
-				struct MapObjectTraits
-				{
-					typedef Phobos::Game::MapObject *pointer;
-
-					void operator()(pointer ptr)
-					{
-						MapWorld::GetInstance().DestroyObject(ptr);
-					}
-				};
-
-				typedef std::unique_ptr<MapObjectTraits::pointer, MapObjectTraits> MapObjectUniquePtr_t;
-
+				
 				//Always returns a valid pointer, that is owned by MapWorld
-				//It can be destroyed calling DestroyObject
+				//It can be destroyed by deleting it
+				//The pointer will be valid as long the level is valid, if the level is unloaded, the pointer will be a dandling pointer
 				virtual MapObject *CreateObject(Register::Table &table) = 0;
 
-				virtual void DestroyObject(MapObject *object) = 0;
+				//virtual void DestroyObject(MapObject *object) = 0;
 
 			protected:
 				MapWorld() : Module("MapWorld"){  };

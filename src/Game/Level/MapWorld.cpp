@@ -41,8 +41,6 @@ subject to the following restrictions:
 #include <Terrain/OgreTerrainGroup.h>
 #include <Terrain/OgreTerrainPrerequisites.h>
 
-#include <boost/pool/object_pool.hpp>
-
 #include <tuple>
 #include <utility>
 
@@ -167,22 +165,8 @@ namespace
 
 	class MapWorldImpl: public Phobos::Game::MapWorld
 	{
-		public:	
-			struct MapObjectPoolTraits
-			{
-				typedef Phobos::Game::MapObject *pointer;
-
-				void operator()(pointer ptr)
-				{
-					g_pclMapWorld->m_clPool.destroy(ptr);
-				}
-			};
-
-			typedef std::unique_ptr<MapObjectTraits::pointer, MapObjectPoolTraits> MapObjectPoolUniquePtr_t;
-					
 		public:
-			MapWorldImpl():
-				m_clPool(4096)
+			MapWorldImpl()
 			{
 				g_pclMapWorld = this;				
 			}
@@ -195,42 +179,41 @@ namespace
 			virtual void OnStart() override;
 			virtual void OnUpdate() override;
 						
-			virtual Phobos::Game::MapObject *CreateObject(Phobos::Register::Table &table) override;
-			virtual void DestroyObject(Phobos::Game::MapObject *ptr) override;
+			//The return object is valid as long the current level is valid, like a iterator is valid as long the conteiner is not changed
+			//The pointer can be deleted by the caller, MapWorld will notice and clean up
+			virtual Phobos::Game::MapObject *CreateObject(Phobos::Register::Table &table) override;			
 
 		protected:			
 			virtual void Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive) override;			
 			virtual void Unload() override;					
 
 		private:
-			MapObjectUniquePtr_t MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table);
+			std::unique_ptr<Phobos::Game::MapObject> MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table);
 
-		private:			
-			std::vector<MapObjectPoolUniquePtr_t>		m_vecObjects;
-			
-			std::vector<Terrain>						m_vecTerrains;
-
-			boost::object_pool<Phobos::Game::MapObject> m_clPool;
+		private:
+			std::vector<Terrain>						m_vecTerrains;			
 	};	
 }
 
-Phobos::Game::MapWorld::MapObjectUniquePtr_t MapWorldImpl::MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table)
+std::unique_ptr<Phobos::Game::MapObject> MapWorldImpl::MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table)
 {
 	using namespace Phobos;
 
 	//Make a sink, because boost pool cannot construct with move semantics
-	Game::MapObject::DataSink dataSink(std::move(mapObjectData));	
+	//Game::MapObject::DataSink dataSink(std::move(mapObjectData));	
 
-	MapObjectPoolUniquePtr_t upMapObject(m_clPool.construct(std::ref(dataSink), std::ref(table)));
+	return  std::make_unique<Game::MapObject>(table.GetName(), std::move(mapObjectData), std::ref(table));
 
 	//backup reference to object
-	auto *object = upMapObject.get();
+	//auto *object = upMapObject.get();
+
+	//this->AddPrivateChild(std::move(upMapObject));
 
 	//push it to object list
-	m_vecObjects.push_back(std::move(upMapObject));	
+	//m_mapObjects.insert(it, std::make_pair(table.GetName(), std::move(upMapObject)));	
 
 	//return a safe pointer to caller
-	return MapObjectUniquePtr_t(object);
+	//return MapObjectUniquePtr_t(object);
 }
 
 void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive)
@@ -270,8 +253,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()), ref)));
 
-		//release it so it is not destroyed
-		ptrMapObject.release();
+		this->AddPrivateChild(std::move(ptrMapObject));
 	}
 
 	//
@@ -376,22 +358,18 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 
 	CreateMapObjectComponents(*ptrObject.get(), table);
 
-	auto *finalPtr = ptrObject.release();
+	auto *finalPtr = ptrObject.get();
+
+	this->AddPrivateChild(std::move(ptrObject));
+
 	return finalPtr;
 }
 
 void MapWorldImpl::Unload()
 {
 	m_vecTerrains.clear();	
-	m_vecObjects.clear();
-}
-
-void MapWorldImpl::DestroyObject(Phobos::Game::MapObject *ptr)
-{
-	if (!ptr)
-		return;		
-
-	m_vecObjects.erase(std::remove_if(m_vecObjects.begin(), m_vecObjects.end(), [ptr](const MapObjectPoolUniquePtr_t &current){ return current.get() == ptr; }), m_vecObjects.end());	
+	
+	this->RemoveAllChildren();
 }
 
 void MapWorldImpl::OnStart()

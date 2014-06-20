@@ -29,6 +29,7 @@ subject to the following restrictions:
 
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapWorld.h"
+#include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
@@ -102,15 +103,6 @@ namespace Phobos
 			m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
 			m_spMapLoader->Load(mapName, *m_pclMapObjectsHive);
 
-#if 0
-			{
-				auto world(m_spMapLoader->CreateAndLoadWorldSpawn());
-				this->AddPrivateChild(std::move(world));
-			}
-
-			m_spGameWorld = m_spMapLoader->CreateAndLoadWorld();
-#endif
-
 			this->LoadEntities();
 
 			for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
@@ -125,6 +117,8 @@ namespace Phobos
 
 		Things::Entity &WorldManager::LoadEntity(const Register::Table &entityDef)
 		{
+
+
 			auto ptr = Things::EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName());
 
 			//Update handle before loading entity, so components would have a valid handle
@@ -265,7 +259,7 @@ namespace Phobos
 			Things::SaveTransform(*table, transform);					
 
 			//Create Map object
-			MapWorld::MapObjectUniquePtr_t upMapObject(MapWorld::GetInstance().CreateObject(*table));			
+			std::unique_ptr<MapObject> upMapObject(MapWorld::GetInstance().CreateObject(*table));			
 
 			//
 			//All is fine, commit results, transfer ownership to WorldManager and return data

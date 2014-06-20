@@ -10,6 +10,8 @@
 #include <OgreSceneNode.h>
 #include <OgreEntity.h>
 
+#include <boost/pool/object_pool.hpp>
+
 namespace Phobos
 {
 	namespace Game
@@ -62,6 +64,20 @@ namespace Phobos
 		void MapObject::Data::SetOrientation(const Ogre::Quaternion &orientation)
 		{
 			m_pclSceneNode->setOrientation(orientation);
+		}
+
+		static boost::object_pool<Phobos::Game::MapObject> g_clPool;
+
+		void *MapObject::operator new(size_t sz)
+		{
+			PH_ASSERT(sz == sizeof(MapObject));
+
+			return g_clPool.malloc();
+		}
+
+		void MapObject::operator delete(void *ptr)
+		{
+			g_clPool.free(static_cast<MapObject *>(ptr));
 		}
 		
 

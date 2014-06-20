@@ -86,9 +86,8 @@ namespace Phobos
 				void RemoveFromUpdateList(Things::Thing &io);
 
 				//Always return a valid pointer
-				//The object is owner by WorldManager (actually MapWorld) and it can be destroyed calling DestroyMapObject
-				MapObject *CreateMapObject(const String_t &name, const String_t &asset, MapObjectTypes type, const Engine::Math::Transform &transform);
-				void DestroyMapObject(MapObject *object);
+				//The object is owner by WorldManager (actually MapWorld) and it can be destroyed simple deleting it
+				MapObject *CreateMapObject(const String_t &name, const String_t &asset, MapObjectTypes type, const Engine::Math::Transform &transform);				
 
 			protected:		
 				virtual void OnInit() override;
