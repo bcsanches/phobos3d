@@ -30,23 +30,28 @@ namespace Phobos
 	{
 		namespace Things
 		{
-			class PH_GAME_API EntityFactory: public GenericFactory1<ObjectCreator1<Entity, String_t, EntityFactory, std::unique_ptr<Entity>>, String_t >
+			class PH_GAME_API EntityFactory : public GenericFactoryEx<Entity, std::unique_ptr<Entity>, MapObject &>
 			{
+				PH_DISABLE_COPY(EntityFactory);
+
 				public:
-					static EntityFactory &GetInstance();			
+					static EntityFactory &GetInstance();	
+
+				private:
+					EntityFactory() {};
 			};
 		}
 	}
 }
 
-#define PH_ENTITY_CREATOR(NAME, TYPE)										\
-	static Phobos::ObjectCreator1<Phobos::Game::Things::Entity, Phobos::String_t, Phobos::Game::Things::EntityFactory, std::unique_ptr<Phobos::Game::Things::Entity>> TYPE##_CreatorObject_gl(NAME, TYPE::Create);
+#define PH_ENTITY_CREATOR(NAME, PROC)											\
+	static Phobos::Game::Things::EntityFactory::ObjectCreator_t TYPE_##CreatorObject_gl(NAME, PROC, Phobos::Game::Things::EntityFactory::GetInstance())	
 
-#define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  		\
-	PH_ENTITY_CREATOR(NAME, TYPE);					\
-	std::unique_ptr<Phobos::Game::Things::Entity> TYPE::Create(const Phobos::String_t &name)	\
-	{												\
-		return std::unique_ptr<Phobos::Game::Things::Entity>(new TYPE(name));					\
-	}
+#define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  \
+	std::unique_ptr<Phobos::Game::Things::Entity> TYPE::Create(Phobos::Game::MapObject &owner)	\
+{												\
+	return std::make_unique<Phobos::Game::Things::Entity>(std::ref(owner));					\
+}\
+PH_ENTITY_CREATOR(NAME, &TYPE::Create);
 
 #endif

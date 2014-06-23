@@ -188,6 +188,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapLoaderFactory.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObject.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponent.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MeshComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\OgitorMapLoader.h" />

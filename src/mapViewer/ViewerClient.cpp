@@ -144,9 +144,8 @@ namespace Phobos
 			LogMessage("[CmdLoadMap] World does not contains InfoPlayerStart entity");
 		}
 		else
-		{
-			//FIXME
-			//m_clSpectatorCamera.SetTransform(player->GetTransform());
+		{			
+			m_clSpectatorCamera.SetTransform(player->MakeWorldTransform());
 		}		
 
 		m_fMapLoaded = true;

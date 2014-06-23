@@ -61,7 +61,7 @@ namespace Phobos
 				//The pointer will be valid as long the level is valid, if the level is unloaded, the pointer will be a dandling pointer
 				virtual MapObject *CreateObject(Register::Table &table) = 0;
 
-				//virtual void DestroyObject(MapObject *object) = 0;
+				virtual MapObject &GetMapObject(const String_t &name) = 0;
 
 			protected:
 				MapWorld() : Module("MapWorld"){  };

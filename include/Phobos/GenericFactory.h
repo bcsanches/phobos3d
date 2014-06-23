@@ -344,7 +344,7 @@ namespace Phobos
 				return this->GetObjectCreator(className).Create(args...);
 			}
 		
-			RETURN_TYPE TryCreate(const String_t &className, Args...)
+			RETURN_TYPE TryCreate(const String_t &className, Args...args)
 			{
 				auto creator = this->TryGetObjectCreator(className);
 				if (creator == nullptr)

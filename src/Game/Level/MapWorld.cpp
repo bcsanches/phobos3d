@@ -183,6 +183,8 @@ namespace
 			//The pointer can be deleted by the caller, MapWorld will notice and clean up
 			virtual Phobos::Game::MapObject *CreateObject(Phobos::Register::Table &table) override;			
 
+			virtual Phobos::Game::MapObject &GetMapObject(const Phobos::String_t &name) override;
+
 		protected:			
 			virtual void Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive) override;			
 			virtual void Unload() override;					
@@ -363,6 +365,11 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 	this->AddPrivateChild(std::move(ptrObject));
 
 	return finalPtr;
+}
+
+Phobos::Game::MapObject &MapWorldImpl::GetMapObject(const Phobos::String_t &name)
+{
+	return static_cast<Phobos::Game::MapObject&>(this->GetChild(name));
 }
 
 void MapWorldImpl::Unload()

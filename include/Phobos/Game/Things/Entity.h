@@ -21,9 +21,13 @@ subject to the following restrictions:
 
 #include "Phobos/Game/GameAPI.h"
 
+#include "Phobos/Game/Level/MapObjectFwd.h"
+
 #include "Phobos/Game/Things/Thing.h"
 #include "Phobos/Game/Things/HandleManager.h"
 #include "Phobos/Game/Things/ComponentFwd.h"
+
+#include <Phobos/OgreEngine/Math/TransformFwd.h>
 
 namespace Phobos
 {	
@@ -36,7 +40,9 @@ namespace Phobos
 			class PH_GAME_API Entity: public Thing
 			{
 				public:
-					static std::unique_ptr<Entity> Create(const String_t &name);
+					static std::unique_ptr<Entity> Create(MapObject &mapObject);
+
+					Entity(MapObject &mapObject);
 
 					void Load(const Register::Table &table);
 					void LoadFinished();
@@ -46,9 +52,9 @@ namespace Phobos
 					inline void SetHandle(Handle_s handle);
 					const Handle_s GetHandle() const;
 
-				protected:
-					Entity(const String_t &name);
+					Engine::Math::Transform MakeWorldTransform() const;
 
+				protected:					
 					virtual void OnLoad(const Register::Table &table) {};
 
 					virtual void OnLoadFinished() {};
@@ -60,6 +66,7 @@ namespace Phobos
 				private:			
 					String_t				m_strClassName;
 					const Register::Table	*m_pclTable;
+					MapObject				&m_rclMapObject;
 
 					Handle_s m_hHandle;
 			};

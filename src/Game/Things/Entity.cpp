@@ -16,6 +16,8 @@ subject to the following restrictions:
 
 #include "Phobos/Game/Things/ComponentFactory.h"
 
+#include "Phobos/Game/Level/MapObject.h"
+
 #include "Phobos/Game/Things/Entity.h"
 #include "Phobos/Game/Things/EntityFactory.h"
 #include "Phobos/Game/Things/Keys.h"
@@ -30,9 +32,10 @@ namespace Phobos
 		{
 			PH_FULL_ENTITY_CREATOR("Entity", Entity);
 
-			Entity::Entity(const String_t &name):
-				Thing(name, NodeFlags::PRIVATE_CHILDREN),
-				m_pclTable(NULL)
+			Entity::Entity(MapObject &mapObject) :
+				Thing(mapObject.GetName(), NodeFlags::PRIVATE_CHILDREN),
+				m_pclTable(NULL),
+				m_rclMapObject(mapObject)
 			{
 			}
 
@@ -83,6 +86,11 @@ namespace Phobos
 			Things::Component &Entity::GetComponent(const char *typeName)
 			{
 				return static_cast<Things::Component &>(this->GetChild(typeName));			
+			}
+			
+			Engine::Math::Transform Entity::MakeWorldTransform() const
+			{
+				return m_rclMapObject.MakeWorldTransform();
 			}
 		}
 	}
