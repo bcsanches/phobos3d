@@ -150,7 +150,10 @@ namespace Phobos
 				Render(Engine::Console &console);
 				virtual ~Render();
 
+				bool TrySetRenderSystem(const String_t &renderSystem);
+
 				void CmdOgreLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdOgreTryLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdOgreAddResourceLocation(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdOgreInitialiseResourceGroup(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdScreenshot(const Shell::StringVector_t &args, Shell::Context &);
@@ -175,7 +178,8 @@ namespace Phobos
 				Shell::Variable						m_varRScreenY;
 				Shell::Variable						m_varRVSync;
 				Shell::Variable						m_varRFullScreen;
-				Shell::Variable						m_varRRenderSystem;			
+				Shell::Variable						m_varRRenderSystem;	
+				Shell::Variable						m_varRSecondaryRenderSystem;
 
 				Shell::Variable						m_varRShaderSystem;
 				Shell::Variable						m_varRShaderSystemLibPath;
@@ -184,6 +188,7 @@ namespace Phobos
 				Shell::Variable						m_varParentWindow;
 
 				Shell::Command						m_cmdOgreLoadPlugin;
+				Shell::Command						m_cmdOgreTryLoadPlugin;
 				Shell::Command						m_cmdOgreAddResourceLocation;
 				Shell::Command						m_cmdOgreInitialiseResourceGroup;
 				Shell::Command						m_cmdScreenshot;
@@ -206,7 +211,8 @@ namespace Phobos
 				Ogre::ShadowTechnique										m_eShadowMode;			
 
 				typedef std::list<String_t>			StringList_t;
-				StringList_t						m_lstPluginsName;
+				StringList_t						m_lstOgrePluginsName;
+				StringList_t						m_lstOgreOptionalPluginsName;
 		};
 	}
 }
