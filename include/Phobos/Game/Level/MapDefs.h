@@ -85,6 +85,7 @@ namespace Phobos
 		PH_GAME_API_PROC const char *MapObjectTypeToString(MapObjectTypes type);
 		PH_GAME_API_PROC MapObjectTypes StringToMapObjectType(const char *type);
 
+#if 0
 		enum class PhysicsTypes
 		{
 			NONE,
@@ -95,6 +96,7 @@ namespace Phobos
 
 		PH_GAME_API_PROC const char *PhysicsTypeToString(PhysicsTypes type);
 		PH_GAME_API_PROC PhysicsTypes StringToPhysicsType(const char *type);
+#endif
 	}
 }
 

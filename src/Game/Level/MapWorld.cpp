@@ -143,6 +143,8 @@ static void CreateMapObjectComponents(Phobos::Game::MapObject &object, const Pho
 
 		while (StringSplitBy(componentName, *components, '|', pos, &pos))
 		{
+			StringTrim(componentName, STRING_TRIM_BOTH);
+
 			auto comp(factory.Create(componentName, object, table));
 
 			object.AddComponent(std::move(comp));

@@ -17,3 +17,19 @@ MapObjectDef EntityObject: MapObject
   type = entity; 
 }
 
+MapObjectDef DynamicBox_1m: MapObject
+{
+  type = entity;
+  
+  components = "DynamicBody | Mesh"; 
+  
+  colliderType = "box";
+  boxDimensions = "1 1 1";
+  
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
+  mass = 5;
+  
+  className = Entity;
+} 

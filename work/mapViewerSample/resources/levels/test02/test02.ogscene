@@ -198,8 +198,8 @@
     <PROPERTY id="subentitycount" type="2" value="1"></PROPERTY>
     <PROPERTY id="updatescript" type="7" value=""></PROPERTY>
     <CUSTOMPROPERTIES>
-      <PROPERTY id="inherit" type="7" value="Box1m" autooptiontype="0"></PROPERTY>
-      <PROPERTY id="baseHive" type="7" value="EntityDef" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="inherit" type="7" value="DynamicBox_1m" autooptiontype="0"></PROPERTY>
+      <PROPERTY id="baseHive" type="7" value="MapObjectDef" autooptiontype="0"></PROPERTY>
     </CUSTOMPROPERTIES>
   </OBJECT>
 

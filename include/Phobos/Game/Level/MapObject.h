@@ -10,7 +10,6 @@
 #include <Phobos/Register/TableFwd.h>
 #include <Phobos/String.h>
 
-#include "Phobos/Game/Physics/RigidBody.h"
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapObjectComponent.h"
 
@@ -29,21 +28,17 @@ namespace Phobos
 					friend MapObject;
 
 					private:
-						Ogre::SceneNode		*m_pclSceneNode;						
-
-						PhysicsTypes		m_ePhysicsType;
+						Ogre::SceneNode		*m_pclSceneNode;
 
 					public:
 						Data(Ogre::SceneNode *sceneNode) :
-							m_pclSceneNode(sceneNode),
-							m_ePhysicsType(PhysicsTypes::NONE)
+							m_pclSceneNode(sceneNode)							
 						{
 							//empty
 						}
 
 						Data(Data &&rhs) :
-							m_pclSceneNode(std::move(rhs.m_pclSceneNode)),							
-							m_ePhysicsType(rhs.m_ePhysicsType)
+							m_pclSceneNode(std::move(rhs.m_pclSceneNode))
 						{
 							rhs.m_pclSceneNode = nullptr;
 						}
@@ -55,9 +50,7 @@ namespace Phobos
 
 						Data &operator=(Data &&rhs)
 						{
-							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);							
-
-							m_ePhysicsType = rhs.m_ePhysicsType;
+							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
 
 							return *this;
 						}			
@@ -165,12 +158,12 @@ namespace Phobos
 					);
 				}
 
+#if 0
 				inline PhysicsTypes GetPhysicsType() const
 				{
 					return m_clData.m_ePhysicsType;
 				}
 
-#if 0
 				void SyncSceneToPhysics();
 				void SyncPhysicsToScene();
 

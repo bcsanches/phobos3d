@@ -55,6 +55,7 @@ namespace Phobos
 			return StringToType<MapObjectTypes>(g_artplTypes, type);
 		}
 
+#if 0
 		static std::tuple<PhysicsTypes, const char *> g_artplPhysicsTypes[] = {
 			std::make_tuple(PhysicsTypes::NONE, PH_MAP_OBJECT_PHYSICS_TYPE_NONE),
 			std::make_tuple(PhysicsTypes::DYNAMIC, PH_MAP_OBJECT_PHYSICS_TYPE_DYNAMIC),
@@ -75,5 +76,6 @@ namespace Phobos
 		{
 			return StringToType<PhysicsTypes>(g_artplPhysicsTypes, type);
 		}
+#endif
 	}
 }

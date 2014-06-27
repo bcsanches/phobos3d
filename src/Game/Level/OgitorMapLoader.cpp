@@ -325,7 +325,7 @@ namespace Phobos
 						if (dict->HasValue(PH_MAP_OBJECT_KEY_MESH))
 						{
 							dict->SetString(PH_MAP_OBJECT_KEY_PHYSICS_TYPE, PH_MAP_OBJECT_PHYSICS_TYPE_STATIC);
-							dict->SetString(PH_MAP_OBJECT_KEY_COMPONENTS, "Mesh");
+							dict->SetString(PH_MAP_OBJECT_KEY_COMPONENTS, "Mesh|StaticBody");
 						}
 					}
 

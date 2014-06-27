@@ -76,13 +76,11 @@ namespace Phobos
 
 namespace
 {
-	using namespace Phobos;	
+	using namespace Phobos;		
 
 	static Game::Physics::RigidBody CreateStaticObjectRigidBody(const String_t &meshName, const Phobos::Engine::Math::Transform &transform, const Ogre::Vector3 &scale, const Phobos::Game::Physics::CollisionTag &collisionTag)
 	{		
 		auto pMesh = Ogre::MeshManager::getSingleton().load(meshName, Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-
-		//const auto &meshName = mesh.getName();
 
 		Path path(meshName);
 		path.StripExtension();
