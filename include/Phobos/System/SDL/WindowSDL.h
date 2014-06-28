@@ -19,9 +19,10 @@ subject to the following restrictions:
 
 #include "Phobos/System/Window.h"
 
+// No one of these include are used on this header!!!
 //#include <windows.h>
-#include <SDL.h>
-#include <SDL_syswm.h>
+//#include <SDL.h>
+//#include <SDL_syswm.h>
 
 namespace Phobos
 {
