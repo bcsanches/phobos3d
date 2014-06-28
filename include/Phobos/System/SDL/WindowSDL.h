@@ -45,7 +45,7 @@ namespace Phobos
 
 				virtual void SetParentWindow(void *parentWindow) override;
 
-			private:			
+			protected:			
 				WindowSDL(const String_t &name);
 		
 			private:			
