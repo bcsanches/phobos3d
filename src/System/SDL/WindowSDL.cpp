@@ -150,5 +150,10 @@ void *Phobos::System::WindowSDL::GetHandler() const
 
 bool Phobos::System::WindowSDL::HasGLContext()
 {
-	return m_fOpenGLContext;
-}	
+    return m_fOpenGLContext;
+}
+
+void Phobos::System::WindowSDL::SwapBuffers()
+{
+    SDL_GL_SwapBuffers();
+}

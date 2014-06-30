@@ -44,6 +44,8 @@ namespace Phobos
 
 				virtual bool HasGLContext() override;
 
+                virtual void SwapBuffers() override;
+
 				virtual void SetParentWindow(void *parentWindow) override;
 
 			protected:			
