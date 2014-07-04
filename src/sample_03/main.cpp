@@ -43,9 +43,9 @@ class Sample: System::EventListener
 		void CmdQuit(const Shell::StringVector_t &args, Shell::Context &);
 
 	private:
-		System::WindowPtr_t			m_ipWindow;		
-		System::InputManagerPtr_t	m_ipInputManager;
-		System::InputMapperPtr_t	m_ipInputMapper;
+		System::WindowPtr_t						m_ipWindow;		
+		System::InputManagerPtr_t				m_ipInputManager;
+		std::unique_ptr<System::InputMapper>	m_upInputMapper;
 
 		Shell::Context				m_clMainContext;
 
@@ -71,9 +71,9 @@ Sample::Sample():
 	m_cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Sample::CmdQuit, this));
 	m_clMainContext.AddContextCommand(m_cmdQuit);
 
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext, *m_ipInputManager);
+	m_upInputMapper = std::make_unique<System::InputMapper>("InputMapper", m_clMainContext, *m_ipInputManager);
 	
-	m_ipInputMapper->Bind("kb", "ESCAPE", "quit");
+	m_upInputMapper->Bind("kb", "ESCAPE", "quit");
 }
 
 Sample::~Sample()

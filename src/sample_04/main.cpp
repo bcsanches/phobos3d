@@ -42,9 +42,9 @@ class Sample: System::EventListener
 		virtual void OnEvent(System::Event_s &event) override;
 
 	private:		
-		System::WindowPtr_t			m_ipWindow;			
-		System::InputManagerPtr_t	m_ipInputManager;
-		System::InputMapperPtr_t	m_ipInputMapper;
+		System::WindowPtr_t						m_ipWindow;			
+		System::InputManagerPtr_t				m_ipInputManager;
+		std::unique_ptr<System::InputMapper>	m_upInputMapper;
 
 		Shell::Context				m_clMainContext;
 
@@ -66,9 +66,9 @@ Sample::Sample():
 
 	m_clMainContext.AddContextVariable(m_varQuit);
 
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", m_clMainContext, *m_ipInputManager);
+	m_upInputMapper = std::make_unique<System::InputMapper>("InputMapper", m_clMainContext, *m_ipInputManager);
 
-	m_ipInputMapper->Bind("kb", "ESCAPE", "set dvQuit true");
+	m_upInputMapper->Bind("kb", "ESCAPE", "set dvQuit true");
 }
 
 Sample::~Sample()

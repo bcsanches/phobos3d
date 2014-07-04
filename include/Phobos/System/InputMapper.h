@@ -83,14 +83,12 @@ namespace Phobos
 			public:
 				// =====================================================
 				// PUBLIC METHODS
-				// =====================================================
-				static InputMapperPtr_t Create(const String_t &name, Shell::IContext &context, InputManager &inputManager);
-
+				// =====================================================				
 				InputMapper(const String_t &name, Shell::IContext &context, InputManager &inputManager);
 				~InputMapper(void);
 
 				void Bind(const String_t &devicePathName, const String_t &actionName, const String_t &cmd);
-				void Unbind(const String_t &devicePathName, const String_t &actionName);						
+				void Unbind(const String_t &devicePathName, const String_t &actionName);
 
 				inline void Disable();
 				inline void Enable();

@@ -36,11 +36,6 @@ Phobos 3d
 #include "Phobos/System/InputEvent.h"
 #include "Phobos/System/InputManager.h"
 
-Phobos::System::InputMapperPtr_t Phobos::System::InputMapper::Create(const String_t &name, Shell::IContext &context, InputManager &inputManager)
-{
-	return std::make_shared<InputMapper>(name, context, inputManager);	
-}
-
 Phobos::System::InputMapper::InputMapper(const String_t &name, Shell::IContext &context, InputManager &inputManager):
 	Node(name),
 	m_rclContext(context),

@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <Phobos/System/InputDevice.h>
 #include <Phobos/System/InputEvent.h>
 #include <Phobos/System/InputManager.h>
+#include <Phobos/System/InputMapper.h>
 #include <Phobos/System/MouseInputDevice.h>
 
 #include "Phobos/Engine/Gui/Form.h"
@@ -49,7 +50,7 @@ Phobos::Engine::Session::Session():
 
 	m_ipInputManager->GetDevice(Phobos::System::INPUT_DEVICE_KEYBOARD).AddListener(*this);
 
-	m_ipInputMapper = System::InputMapper::Create("InputMapper", Console::GetInstance(), *m_ipInputManager);
+	m_ipInputMapper = std::make_shared<System::InputMapper>("InputMapper", Console::GetInstance(), *m_ipInputManager);
 	m_ipInputMapper->Disable();
 
 	this->AddPrivateChild(*m_ipInputMapper);
@@ -179,11 +180,11 @@ void Phobos::Engine::Session::SetPlayerCommandProducer(IPlayerCommandProducer *c
 
 	if(m_pclPlayerCommandProducer)
 	{
-		m_pclPlayerCommandProducer->Disable();
-
-		if(!console.IsActive() && !m_pclForm)
-			this->DisableGameInput();
+		m_pclPlayerCommandProducer->Disable();		
 	}
+
+	if (!console.IsActive() && !m_pclForm)
+		this->DisableGameInput();
 
 	m_pclPlayerCommandProducer = commandProducer;
 	
@@ -194,16 +195,16 @@ void Phobos::Engine::Session::SetPlayerCommandProducer(IPlayerCommandProducer *c
 			//Sets a default cmd
 			IPlayerCmdPtr_t cmd = m_pclPlayerCommandProducer->CreateCmd();
 			m_pclClient->DispatchCommand(cmd);
-		}
-			
-		if(!console.IsActive() && (!m_pclForm))
-		{
-			this->EnableGameInput();			
-		}
+		}				
 	}
 	else if(!console.IsActive())
 	{
 		this->UnclipMouseCursor();
+	}
+
+	if (!console.IsActive() && (!m_pclForm))
+	{
+		this->EnableGameInput();
 	}
 }
 
@@ -310,10 +311,10 @@ void Phobos::Engine::Session::DisableGameInput()
 
 void Phobos::Engine::Session::EnableGameInput()
 {	
-	if(m_pclPlayerCommandProducer)
-	{
-		m_ipInputMapper->Enable();
+	m_ipInputMapper->Enable();
 
+	if(m_pclPlayerCommandProducer)
+	{		
 		m_pclPlayerCommandProducer->Enable();
 
 		if(m_pclPlayerCommandProducer->IsMouseClipped())
@@ -332,4 +333,14 @@ void Phobos::Engine::Session::OnEvent(System::Event_s &event)
 		default:
 			break;
 	}
+}
+
+void Phobos::Engine::Session::Bind(const String_t &devicePathName, const String_t &actionName, const String_t &cmd)
+{
+	m_ipInputMapper->Bind(devicePathName, actionName, cmd);
+}
+
+void Phobos::Engine::Session::Unbind(const String_t &devicePathName, const String_t &actionName)
+{
+	m_ipInputMapper->Unbind(devicePathName, actionName);
 }

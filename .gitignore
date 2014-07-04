@@ -1169,3 +1169,6 @@ project/visual13_SDL/UT_EngineCore/UT_EngineCore.vcxproj.user
 project/visual13_SDL/UT_EngineCore/engineCoretest.log
 project/visual13_SDL/UT_GameEngine/UT_GameEngine.vcxproj.user
 project/visual13_SDL/UT_Register/UT_Register.vcxproj.user
+project/visual13_SDL/Sample_06/Debug/
+work/sample05/Phobos.log
+project/visual13_SDL/Sample_06/Phobos.log

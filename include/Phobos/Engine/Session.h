@@ -20,7 +20,7 @@ subject to the following restrictions:
 #include <Phobos/System/EventListener.h>
 #include <Phobos/System/InputDeviceListener.h>
 #include <Phobos/System/InputManager.h>
-#include <Phobos/System/InputMapper.h>
+#include <Phobos/System/InputMapperFwd.h>
 #include <Phobos/Singleton.h>
 
 #include "Phobos/Engine/EngineAPI.h"
@@ -61,6 +61,9 @@ namespace Phobos
 				void SetGuiForm(Gui::Form *form);
 				void CloseConsole();
 
+				void Bind(const String_t &devicePathName, const String_t &actionName, const String_t &cmd);
+				void Unbind(const String_t &devicePathName, const String_t &actionName);
+
 			protected:				
 				virtual void OnFixedUpdate() override;
 				virtual void OnUpdate() override;
@@ -96,7 +99,7 @@ namespace Phobos
 				Client					*m_pclClient;
 				Gui::Form				*m_pclForm;
 
-		};
+		};		
 	}
 }
 
