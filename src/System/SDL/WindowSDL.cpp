@@ -22,6 +22,9 @@ subject to the following restrictions:
 
 #include <string>
 
+#include <SDL.h>
+#include <SDL_syswm.h>
+
 Phobos::System::WindowPtr_t Phobos::System::Window::Create(const String_t &name)
 {
 	return WindowPtr_t(PH_NEW WindowSDL(name));
@@ -147,5 +150,10 @@ void *Phobos::System::WindowSDL::GetHandler() const
 
 bool Phobos::System::WindowSDL::HasGLContext()
 {
-	return m_fOpenGLContext;
-}	
+    return m_fOpenGLContext;
+}
+
+void Phobos::System::WindowSDL::SwapBuffers()
+{
+    SDL_GL_SwapBuffers();
+}
