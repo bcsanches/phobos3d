@@ -50,6 +50,21 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 
 #define SPEED 100
 
+class Controller
+{
+};
+
+class PlayerController
+{
+	public:
+};
+
+class AutoController
+{
+	public:
+
+};
+
 class GameClient: public Phobos::Engine::Client
 {
 	public:

@@ -1,0 +1,34 @@
+Log created at Mon Jul 07 23:24:25 2014
+
+[InputManagerSDL] Created.
+[Render] Initializing
+[Render] Initialized.
+Console disabled
+[FileNotFoundException] 'autoexec.cfg' not found
+[BootModule::OnFixedUpdate] Warning, boot failed: [Context::ExecuteFromFile; f:\develop\git\phobos3d_develop\src\base\shell\context.cpp:497] FileNotFoundException: 'autoexec.cfg' not found
+
+[Render::OnInit] Starting
+[Render::OnInit] Opening render window
+[Render::OnInit] Ready.
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
+[Core::CmdToggleTimerPause] Paused GAME
+[Core::CmdToggleTimerPause] Unpaused GAME
