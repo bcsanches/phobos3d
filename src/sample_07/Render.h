@@ -48,6 +48,7 @@ class Render: public Phobos::Engine::Module
 
 	public:
 		void Draw(const Sprite &object);
+		void Clear();
 
 		int GetWindowWidth();
 		int GetWindowHeight();
@@ -73,7 +74,7 @@ class Render: public Phobos::Engine::Module
 		Phobos::Shell::Variable m_varRVSync;
 		Phobos::Shell::Variable m_varRFullScreen;
 
-		Phobos::Shell::Command m_cmdScreenshot;
+		Phobos::Shell::Command m_cmdScreenshot;		
 };
 
 #endif

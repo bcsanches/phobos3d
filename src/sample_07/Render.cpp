@@ -65,12 +65,15 @@ void Render::OnInit()
 	LogMessage("[Render::OnInit] Ready.");
 }
 
+void Render::Clear()
+{
+	//clear it
+	SDL_FillRect(SDL_GetVideoSurface(), nullptr, 0x0);
+}
+
 void Render::Draw(const Sprite &object)
 {
-	auto surface = SDL_GetVideoSurface();
-
-	//clear it
-	SDL_FillRect(surface, nullptr, 0x0);
+	auto surface = SDL_GetVideoSurface();	
 
 	SDL_Rect rect;
 

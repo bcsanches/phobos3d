@@ -45,35 +45,171 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Memory.h>
 #include <Phobos/ProcVector.h>
+#include <Phobos/System/AxisButton.h>
 
 #include <Phobos/System/Timer.h>
 
 #define SPEED 100
 
+class GameObject;
+
 class Controller
 {
+	public:
+		virtual void FixedUpdate(const GameObject &owner) = 0;
+
+		virtual Phobos::Float_t GetDesiredDixX() = 0;
+		virtual Phobos::Float_t GetDesiredDixY() = 0;
 };
 
-class PlayerController
+class PlayerController : public Controller
 {
 	public:
+		PlayerController(Phobos::Shell::IContext &context) :
+			m_btnUpDown("+down", "=down", "-down", "+up", "=up", "-up"),
+			m_btnLeftRight("+left", "=left", "-left", "+right", "=right", "-right")
+		{
+			m_btnUpDown.Enable(context);
+			m_btnLeftRight.Enable(context);
+		}
+
+		void FixedUpdate(const GameObject &owner) override
+		{
+			//empty
+		}
+
+		virtual Phobos::Float_t GetDesiredDixX() override
+		{
+			return m_btnLeftRight.GetValue() * SPEED;
+		}
+
+		virtual Phobos::Float_t GetDesiredDixY() override
+		{
+			//flip y
+			return m_btnUpDown.GetValue() * -SPEED;
+		}
+
+	private:
+		Phobos::System::AxisButton m_btnUpDown;
+		Phobos::System::AxisButton m_btnLeftRight;
 };
 
-class AutoController
+class AutoController : public Controller
 {
 	public:
+		AutoController() :
+			m_fpDirX(SPEED),
+			m_fpDirY(SPEED)
+		{
 
+		}
+
+		virtual void FixedUpdate(const GameObject &owner) override;
+
+		virtual Phobos::Float_t GetDesiredDixX() override
+		{
+			return m_fpDirX;
+		}
+
+		virtual Phobos::Float_t GetDesiredDixY() override
+		{
+			return m_fpDirY;
+		}
+
+	private:
+		Phobos::Float_t m_fpDirX;
+		Phobos::Float_t m_fpDirY;
 };
+
+class GameObject
+{
+	public:
+		GameObject(std::unique_ptr<Controller> &&controller, Phobos::Float_t x, Phobos::Float_t y, Phobos::UInt32_t color) :
+			m_upController(std::move(controller))			
+		{
+			m_clSprite.m_fpX = x;
+			m_clSprite.m_fpY = y;
+
+			m_clSprite.m_u32Color = color;
+		}
+
+		GameObject(GameObject &&other) :
+			m_upController(std::move(other.m_upController)),
+			m_clSprite(std::move(other.m_clSprite))
+		{
+			//empty
+		}
+
+		inline Phobos::Float_t GetX() const
+		{
+			return m_clSprite.m_fpX;
+		}
+
+		inline Phobos::Float_t GetY() const
+		{
+			return m_clSprite.m_fpY;
+		}
+
+		void FixedUpdate(Phobos::Float_t ticks)
+		{
+			m_upController->FixedUpdate(*this);
+
+			m_clSprite.m_fpX += m_upController->GetDesiredDixX() * ticks;
+			m_clSprite.m_fpY += m_upController->GetDesiredDixY() * ticks;
+		}
+
+		void Draw()
+		{
+			auto &render = Render::GetInstance();			
+
+			render.Draw(m_clSprite);
+		}
+
+	private:		
+		Sprite m_clSprite;
+
+		std::unique_ptr<Controller> m_upController;
+};
+
+
+void AutoController::FixedUpdate(const GameObject &owner)
+{
+	auto &render = Render::GetInstance();
+
+	if (owner.GetX() >= render.GetWindowWidth() - 10)
+	{
+		m_fpDirX = -SPEED;
+	}
+
+	if (owner.GetY() >= render.GetWindowHeight() - 10)
+	{
+		m_fpDirY = -SPEED;
+	}
+
+	if (owner.GetX() < 0)
+	{
+		m_fpDirX = SPEED;
+	}
+
+	if (owner.GetY() < 0)
+	{
+		m_fpDirY = SPEED;
+	}
+}
+
 
 class GameClient: public Phobos::Engine::Client
 {
 	public:
-		GameClient():
-			m_fpDirX(SPEED),
-			m_fpDirY(SPEED)
+		GameClient()			
+		{		
+			//empty
+		}
+
+		void OnConnect() override
 		{
-			m_clSprite.m_fpX = 150;
-			m_clSprite.m_fpY = 350;
+			m_vecObjects.emplace_back(std::make_unique<AutoController>(), 150.0f, 150.0f, 0x00FFFF0000);
+			m_vecObjects.emplace_back(std::make_unique<PlayerController>(Phobos::Engine::Console::GetInstance()), 150.0f, 250.0f, 0x00FFFFFF00);
 		}
 
 		virtual void OnFixedUpdate() override;
@@ -90,47 +226,29 @@ class GameClient: public Phobos::Engine::Client
 		}
 
 	private:
-		Sprite m_clSprite;
-
-		Phobos::Float_t m_fpDirX;
-		Phobos::Float_t m_fpDirY;
+		std::vector<GameObject> m_vecObjects;
 };
 
 void GameClient::OnFixedUpdate()
-{
-	auto &render = Render::GetInstance();		
-
-	if (m_clSprite.m_fpX >= render.GetWindowWidth() - 10)
-	{
-		m_fpDirX = -SPEED;
-	}
-
-	if (m_clSprite.m_fpY >= render.GetWindowHeight()- 10)
-	{
-		m_fpDirY = -SPEED;
-	}
-
-	if (m_clSprite.m_fpX < 0)
-	{
-		m_fpDirX = SPEED;
-	}
-
-	if (m_clSprite.m_fpY < 0)
-	{
-		m_fpDirY = SPEED;
-	}
-
+{	
 	auto timer = Phobos::Engine::Core::GetInstance().GetGameTimer();
 
 	if (!timer.IsPaused())
 	{
 		auto ticks = timer.m_fpFrameTime;
 
-		m_clSprite.m_fpX += m_fpDirX * ticks;
-		m_clSprite.m_fpY += m_fpDirY * ticks;
-	}
+		for (auto &object : m_vecObjects)
+		{
+			object.FixedUpdate(ticks);
+		}					
+	}	
 
-	render.Draw(m_clSprite);
+	Render::GetInstance().Clear();
+
+	for (auto &object : m_vecObjects)
+	{
+		object.Draw();
+	}
 }
 
 class EngineMain
@@ -181,6 +299,16 @@ EngineMain::EngineMain()
 	*/
 	session.Bind("kb", "ESCAPE", "quit");
 	session.Bind("kb", "p", "toggleTimerPause GAME");
+
+	session.Bind("kb", "w", "+up");
+	session.Bind("kb", "s", "+down");
+	session.Bind("kb", "a", "+left");
+	session.Bind("kb", "d", "+right");
+
+	session.Bind("kb", "UP_ARROW", "+up");
+	session.Bind("kb", "DOWN_ARROW", "+down");
+	session.Bind("kb", "LEFT_ARROW", "+left");
+	session.Bind("kb", "RIGHT_ARROW", "+right");
 
 	/*
 	By default the console starts open, so tell the session that we do not want it now
