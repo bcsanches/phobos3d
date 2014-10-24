@@ -21,6 +21,7 @@ subject to the following restrictions:
 #include <OgreLogManager.h>
 #include <OgreMaterialManager.h>
 #include <OgreMesh.h>
+#include <OgreMeshSerializer.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
 #include <RTShaderSystem/OgreRTShaderSystem.h>
@@ -515,7 +516,8 @@ Ogre::Entity *Phobos::OgreEngine::Render::CreateEntity(const String_t &entityNam
 	Ogre::MeshPtr mesh = ent->getMesh();
 	if((flags & FORCE_EDGE_LIST_GENERATION) && (!mesh->isEdgeListBuilt()))
 	{
-		mesh->buildEdgeList();
+		mesh->setAutoBuildEdgeLists(true);
+		//mesh->buildEdgeList();			
 	}
 
 	return (ent);

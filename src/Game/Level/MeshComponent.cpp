@@ -11,6 +11,9 @@
 #include <boost/pool/object_pool.hpp>
 
 #include <OgreEntity.h>
+#include <OgreSkeletonInstance.h>
+
+#define PH_MESH_COMPONENT_NAME "Mesh"
 
 namespace
 {
@@ -22,6 +25,14 @@ namespace Phobos
 	namespace Game
 	{
 		PH_MAP_COMPONENT_FULL_CREATOR(PH_MESH_COMPONENT_NAME, MeshComponent, g_poolMeshes);
+
+		static const String_t g_strComponentTypeName(PH_MESH_COMPONENT_NAME);
+		
+		const String_t &MeshComponent::GetComponentName()
+		{
+			return g_strComponentTypeName;
+		}
+		
 
 		MeshComponent::MeshComponent(MapObject &owner, const Register::Table &table) :
 			MapObjectComponent(PH_MESH_COMPONENT_NAME, owner),
@@ -38,6 +49,36 @@ namespace Phobos
 		void MeshComponent::Release()
 		{
 			g_poolMeshes.destroy(this);
+		}
+
+		void MeshComponent::AttachObjectToBone(
+			const Char_t *boneName,
+			Ogre::MovableObject &movable,
+			const Ogre::Quaternion &offsetOrientation,
+			const Ogre::Vector3 &offsetPosition
+		)
+		{
+			m_pclEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
+		}
+
+		void MeshComponent::AttachObjectToBone(
+			const String_t &boneName,
+			Ogre::MovableObject &movable,
+			const Ogre::Quaternion &offsetOrientation,
+			const Ogre::Vector3 &offsetPosition
+			)
+		{
+			m_pclEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
+		}
+
+		Ogre::Bone &MeshComponent::GetBone(const char *boneName)
+		{
+			return *m_pclEntity->getSkeleton()->getBone(boneName);
+		}
+
+		Ogre::Bone &MeshComponent::GetBone(const String_t &boneName)
+		{
+			return *m_pclEntity->getSkeleton()->getBone(boneName);
 		}
 	}
 }

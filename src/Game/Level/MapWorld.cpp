@@ -130,28 +130,6 @@ static void SetWorldTransformOnTable(Phobos::Register::Table &table, const Phobo
 	Phobos::Register::SetQuaternion(table, PH_MAP_OBJECT_KEY_WORLD_ORIENTATION, node.GetWorldOrientation());
 }
 
-static void CreateMapObjectComponents(Phobos::Game::MapObject &object, const Phobos::Register::Table &table)
-{
-	using namespace Phobos;
-
-	if (const String_t *components = table.TryGetString(PH_MAP_OBJECT_KEY_COMPONENTS))
-	{
-		String_t componentName;
-		size_t pos = 0;
-
-		auto &factory = Game::MapObjectComponentFactory::GetInstance();
-
-		while (StringSplitBy(componentName, *components, '|', pos, &pos))
-		{
-			StringTrim(componentName, STRING_TRIM_BOTH);
-
-			auto comp(factory.Create(componentName, object, table));
-
-			object.AddComponent(std::move(comp));
-		}
-	}
-}
-
 //
 //
 //MapWorldImpl
@@ -177,6 +155,8 @@ namespace
 			{
 				g_pclMapWorld = nullptr;
 			}
+
+			virtual void OnFixedUpdate() override;
 
 			virtual void OnStart() override;
 			virtual void OnUpdate() override;
@@ -277,10 +257,9 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 	for (auto pair : mapObjects)
 	{
-		auto &object = std::get<3>(pair.second);
-		auto &dict = std::get<2>(pair.second);
+		auto &object = std::get<3>(pair.second);		
 
-		CreateMapObjectComponents(object, dict);
+		this->LoadMapObjectComponents(object);		
 	}
 
 	if (!vecTerrains.empty())
@@ -360,7 +339,7 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 	
 	SetWorldTransformOnTable(table, *ptrObject.get());
 
-	CreateMapObjectComponents(*ptrObject.get(), table);
+	this->LoadMapObjectComponents(*ptrObject);	
 
 	auto *finalPtr = ptrObject.get();
 
@@ -409,6 +388,11 @@ void MapWorldImpl::OnStart()
 	}
 }
 
+void MapWorldImpl::OnFixedUpdate()
+{
+	Phobos::Game::MapObjectComponent::TickReminders();
+}
+
 void MapWorldImpl::OnUpdate()
 {
 	Phobos::Game::DynamicBodyComponent::SyncAllToPhysics();	
@@ -425,6 +409,11 @@ namespace Phobos
 			ipInstance_gl.reset(PH_NEW MapWorldImpl());
 
 			return *ipInstance_gl;
+		}
+
+		void MapWorld::LoadMapObjectComponents(MapObject &obj)
+		{
+			MapObject::MapWorldAccess::LoadComponents(obj);
 		}
 	}
 }

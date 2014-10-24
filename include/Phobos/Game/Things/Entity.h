@@ -54,6 +54,20 @@ namespace Phobos
 
 					Engine::Math::Transform MakeWorldTransform() const;
 
+					void SetTransform(const Engine::Math::Transform &transform);
+
+					template <typename T> 
+					T &GetMapObjectComponent()
+					{
+						return m_rclMapObject.GetComponent<T>();
+					}
+
+					template <typename T>
+					const T &GetMapObjectComponent() const
+					{
+						return m_rclMapObject.GetComponent<T>();
+					}
+
 				protected:					
 					virtual void OnLoad(const Register::Table &table) {};
 

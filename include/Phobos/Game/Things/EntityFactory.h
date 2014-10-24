@@ -50,7 +50,7 @@ namespace Phobos
 #define PH_FULL_ENTITY_CREATOR(NAME, TYPE)  \
 	std::unique_ptr<Phobos::Game::Things::Entity> TYPE::Create(Phobos::Game::MapObject &owner)	\
 {												\
-	return std::make_unique<Phobos::Game::Things::Entity>(std::ref(owner));					\
+	return std::make_unique<TYPE>(std::ref(owner));					\
 }\
 PH_ENTITY_CREATOR(NAME, &TYPE::Create);
 

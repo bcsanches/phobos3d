@@ -312,5 +312,8 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectFwd.h">
       <Filter>Level</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentFwd.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

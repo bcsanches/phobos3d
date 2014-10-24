@@ -10,6 +10,7 @@
 #include <Phobos/Register/TableFwd.h>
 #include <Phobos/String.h>
 
+#include "Phobos/Game/GameAPI.h"
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapObjectComponent.h"
 
@@ -17,12 +18,23 @@ namespace Phobos
 {
 	namespace Game
 	{		
-		class MapObject: public Node
+		class PH_GAME_API MapObject : public Node
 		{
 			private:
 				typedef std::vector<MapObjectComponent::UniquePtr_t> ComponentsVector_t;
 
 			public:
+				class MapWorldAccess
+				{
+					friend class MapWorld;
+
+					private:
+						static void LoadComponents(MapObject &obj)
+						{
+							obj.LoadComponents();
+						}					
+				};
+
 				class Data
 				{
 					friend MapObject;
@@ -61,9 +73,11 @@ namespace Phobos
 
 						void SetPosition(const Ogre::Vector3 &position);
 						void SetOrientation(const Ogre::Quaternion &orientation);
+
+						void SetTransform(const Engine::Math::Transform &transform);
 					};		
 					
-					class ComponentEnumerator
+					class PH_GAME_API ComponentEnumerator
 					{
 						public:							
 							ComponentEnumerator(const ComponentEnumerator &rhs);
@@ -158,6 +172,11 @@ namespace Phobos
 					);
 				}
 
+				inline void SetTransform(const Engine::Math::Transform &transform)
+				{
+					m_clData.SetTransform(transform);
+				}
+
 #if 0
 				inline PhysicsTypes GetPhysicsType() const
 				{
@@ -180,34 +199,19 @@ namespace Phobos
 				{
 					return ComponentEnumerator(*this, type);
 				}
+				
+				template <typename T>
+				T &GetComponent();				
 
 				void *operator new(size_t sz);
 				void operator delete(void *ptr);
 
-#if 0
-				void AttachObjectToBone(
-					const Char_t *boneName,
-					Ogre::MovableObject &movable,
-					const Ogre::Quaternion &offsetOrientation = Ogre::Quaternion::IDENTITY,
-					const Ogre::Vector3 &offsetPosition = Ogre::Vector3::ZERO
-					);
-
-				void AttachObjectToBone(
-					const String_t &boneName,
-					Ogre::MovableObject &movable,
-					const Ogre::Quaternion &offsetOrientation = Ogre::Quaternion::IDENTITY,
-					const Ogre::Vector3 &offsetPosition = Ogre::Vector3::ZERO
-					);
-
-				Ogre::Bone &GetBone(const char *boneName);
-				Ogre::Bone &GetBone(const String_t &boneName);
-#endif
 				friend class MapObjectComponentAccess;
 				
 			private:
-				void AttachOgreObject(Ogre::MovableObject &object);
+				void AttachOgreObject(Ogre::MovableObject &object);		
 
-				void SetTransform(const Engine::Math::Transform &transform);
+				void LoadComponents();
 
 			private:				
 				Data					m_clData;
@@ -215,6 +219,22 @@ namespace Phobos
 
 				const Register::Table	&m_rclTable;
 		};		
+
+		template <typename T>
+		T &MapObject::GetComponent()
+		{			
+			auto enumerator = this->MakeEnumerator(T::GetComponentName().c_str());
+
+			if (!enumerator.Next())
+			{
+				std::stringstream stream;
+
+				stream << "Object type " << T::GetComponentName() << "not found on " << this->GetName() << " components";
+				PH_RAISE(Phobos::OBJECT_NOT_FOUND_EXCEPTION, "MapObject::GetComponent<T>", stream.str());
+			}
+
+			return static_cast<T &>(*enumerator.GetCurrent());
+		}
 	}
 }
 

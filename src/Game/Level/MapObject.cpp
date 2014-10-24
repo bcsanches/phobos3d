@@ -6,6 +6,7 @@
 #include <Phobos/Error.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
 #include <Phobos/OgreEngine/Render.h>
+#include <Phobos/Register/Table.h>
 
 #include <OgreSceneNode.h>
 #include <OgreEntity.h>
@@ -66,6 +67,12 @@ namespace Phobos
 			m_pclSceneNode->setOrientation(orientation);
 		}
 
+		void MapObject::Data::SetTransform(const Engine::Math::Transform &transform)
+		{
+			m_pclSceneNode->setPosition(transform.GetOrigin());
+			m_pclSceneNode->setOrientation(transform.GetRotation());
+		}
+
 		static boost::object_pool<Phobos::Game::MapObject> g_clPool;
 
 		void *MapObject::operator new(size_t sz)
@@ -118,49 +125,36 @@ namespace Phobos
 			m_vecComponents.push_back(std::move(component));
 		}
 
+		void MapObject::LoadComponents()
+		{
+			if (const String_t *components = m_rclTable.TryGetString(PH_MAP_OBJECT_KEY_COMPONENTS))
+			{
+				String_t componentName;
+				size_t pos = 0;
+
+				auto &factory = Game::MapObjectComponentFactory::GetInstance();
+
+				while (StringSplitBy(componentName, *components, '|', pos, &pos))
+				{
+					StringTrim(componentName, STRING_TRIM_BOTH);
+
+					auto comp(factory.Create(componentName, *this, m_rclTable));
+
+					this->AddComponent(std::move(comp));
+				}
+			}
+
+			for (auto &comp : m_vecComponents)
+			{
+				MapObjectComponent::LoadFinishedAccess::LoadFinished(*comp, m_rclTable);				
+			}
+		}
+
 		void MapObject::AttachOgreObject(Ogre::MovableObject &object)
 		{
 			m_clData.m_pclSceneNode->attachObject(&object);
 		}
-
-		void MapObject::SetTransform(const Engine::Math::Transform &transform)
-		{
-			m_clData.m_pclSceneNode->setPosition(transform.GetOrigin());
-			m_clData.m_pclSceneNode->setOrientation(transform.GetRotation());
-		}
-
-#if 0
-		void ModelRendererComponent::AttachObjectToBone(
-			const Char_t *boneName,
-			Ogre::MovableObject &movable,
-			const Ogre::Quaternion &offsetOrientation,
-			const Ogre::Vector3 &offsetPosition
-			)
-		{
-			m_pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
-		}
-
-		void ModelRendererComponent::AttachObjectToBone(
-			const String_t &boneName,
-			Ogre::MovableObject &movable,
-			const Ogre::Quaternion &offsetOrientation,
-			const Ogre::Vector3 &offsetPosition
-			)
-		{
-			m_pclMeshEntity->attachObjectToBone(boneName, &movable, offsetOrientation, offsetPosition);
-		}
-
-		Ogre::Bone &ModelRendererComponent::GetBone(const char *boneName)
-		{
-			return *m_pclMeshEntity->getSkeleton()->getBone(boneName);
-		}
-
-		Ogre::Bone &ModelRendererComponent::GetBone(const String_t &boneName)
-		{
-			return *m_pclMeshEntity->getSkeleton()->getBone(boneName);
-		}
-#endif
-
+	
 		MapObject::ComponentEnumerator::ComponentEnumerator(const ComponentEnumerator &rhs):
 			m_pszType(rhs.m_pszType),
 			m_rclMapObject(rhs.m_rclMapObject),

@@ -92,6 +92,11 @@ namespace Phobos
 			{
 				return m_rclMapObject.MakeWorldTransform();
 			}
+
+			void Entity::SetTransform(const Engine::Math::Transform &transform)
+			{
+				m_rclMapObject.SetTransform(transform);
+			}
 		}
 	}
 }
