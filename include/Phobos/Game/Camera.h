@@ -60,8 +60,8 @@ namespace Phobos
 				void CreateCamera();
 
 			private:
-				Ogre::SceneNode	*m_pclRootNode;
-				Ogre::Camera	*m_pclCamera;
+				OgreEngine::SceneNodeUniquePtr_t	m_upRootNode;
+				Ogre::Camera						*m_pclCamera;
 
 				int m_iViewportZOrder;
 

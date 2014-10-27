@@ -66,8 +66,6 @@ namespace Phobos
 			protected:
 				MapWorld() : Module("MapWorld"){  };
 
-				void LoadMapObjectComponents(MapObject &obj);
-
 			protected:
 				virtual void Load(StringRef_t levelPath, const Register::Hive &hive) = 0;			
 				virtual void Unload() = 0;							

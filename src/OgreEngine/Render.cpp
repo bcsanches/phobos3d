@@ -473,25 +473,18 @@ Ogre::SceneNode *Phobos::OgreEngine::Render::GetSceneNode(const String_t &name)
 	return m_pclMainSceneManager->getSceneNode(name);
 }
 
-Ogre::SceneNode *Phobos::OgreEngine::Render::CreateSceneNode(const String_t &name)
+Phobos::OgreEngine::SceneNodeUniquePtr_t Phobos::OgreEngine::Render::CreateSceneNode(const String_t &name)
 {
 	PH_ASSERT_VALID(m_pclMainSceneManager);
 
-	return m_pclMainSceneManager->getRootSceneNode()->createChildSceneNode(name);
+	return SceneNodeUniquePtr_t(m_pclMainSceneManager->getRootSceneNode()->createChildSceneNode(name));
 }
 
-Ogre::SceneNode *Phobos::OgreEngine::Render::CreateSceneNode()
+Phobos::OgreEngine::SceneNodeUniquePtr_t Phobos::OgreEngine::Render::CreateSceneNode()
 {
 	PH_ASSERT_VALID(m_pclMainSceneManager);
 
-	return m_pclMainSceneManager->getRootSceneNode()->createChildSceneNode();
-}
-
-void Phobos::OgreEngine::Render::DestroySceneNode(Ogre::SceneNode *node)
-{
-	PH_ASSERT_VALID(m_pclMainSceneManager);		
-
-	m_pclMainSceneManager->destroySceneNode(node->getName());
+	return SceneNodeUniquePtr_t(m_pclMainSceneManager->getRootSceneNode()->createChildSceneNode());
 }
 
 Ogre::Entity* Phobos::OgreEngine::Render::CreateEntity(const String_t &meshName, UInt32_t flags)

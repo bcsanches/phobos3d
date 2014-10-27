@@ -16,18 +16,7 @@
 namespace Phobos
 {
 	namespace Game
-	{
-		MapObject::Data::~Data()
-		{
-			auto &render = Phobos::OgreEngine::Render::GetInstance();
-
-			if (m_pclSceneNode)
-			{
-				render.DestroySceneNode(m_pclSceneNode);
-				m_pclSceneNode = NULL;
-			}			
-		}
-	
+	{		
 #if 0
 		void MapObject::Data::SetParentNode(Data &node)
 		{
@@ -36,25 +25,6 @@ namespace Phobos
 
 			m_pclSceneNode->getParent()->removeChild(m_pclSceneNode);
 			node.m_pclSceneNode->addChild(m_pclSceneNode);
-		}
-#endif
-
-		//Why using those _ functions: http://89.151.96.106/forums/viewtopic.php?f=22&t=62386
-		//http://www.ogre3d.org/forums/viewtopic.php?p=221113
-		//http://www.ogre3d.org/tikiwiki/-SceneNode
-		const Ogre::Vector3 &MapObject::Data::GetWorldPosition() const
-		{
-			return m_pclSceneNode->_getDerivedPosition();
-		}
-
-		const Ogre::Vector3 &MapObject::Data::GetWorldScale() const
-		{
-			return m_pclSceneNode->_getDerivedScale();
-		}
-
-		const Ogre::Quaternion &MapObject::Data::GetWorldOrientation() const
-		{
-			return m_pclSceneNode->_getDerivedOrientation();
 		}
 
 		void MapObject::Data::SetPosition(const Ogre::Vector3 &position)
@@ -66,12 +36,7 @@ namespace Phobos
 		{
 			m_pclSceneNode->setOrientation(orientation);
 		}
-
-		void MapObject::Data::SetTransform(const Engine::Math::Transform &transform)
-		{
-			m_pclSceneNode->setPosition(transform.GetOrigin());
-			m_pclSceneNode->setOrientation(transform.GetRotation());
-		}
+#endif								
 
 		static boost::object_pool<Phobos::Game::MapObject> g_clPool;
 
@@ -85,8 +50,7 @@ namespace Phobos
 		void MapObject::operator delete(void *ptr)
 		{
 			g_clPool.free(static_cast<MapObject *>(ptr));
-		}
-		
+		}		
 
 		MapObject::~MapObject()
 		{
@@ -152,8 +116,33 @@ namespace Phobos
 
 		void MapObject::AttachOgreObject(Ogre::MovableObject &object)
 		{
-			m_clData.m_pclSceneNode->attachObject(&object);
+			m_upSceneNode->attachObject(&object);
 		}
+
+		const Ogre::Vector3 &MapObject::GetWorldPosition() const
+		{
+			//Why using those _ functions: http://89.151.96.106/forums/viewtopic.php?f=22&t=62386
+			//http://www.ogre3d.org/forums/viewtopic.php?p=221113
+			//http://www.ogre3d.org/tikiwiki/-SceneNode
+			return m_upSceneNode->_getDerivedPosition();
+		}
+
+		const Ogre::Vector3 &MapObject::GetWorldScale() const
+		{
+			return m_upSceneNode->_getDerivedScale();
+		}
+
+		const Ogre::Quaternion &MapObject::GetWorldOrientation() const
+		{
+			return m_upSceneNode->_getDerivedOrientation();
+		}
+
+		void MapObject::SetTransform(const Engine::Math::Transform &transform)
+		{
+			m_upSceneNode->setPosition(transform.GetOrigin());
+			m_upSceneNode->setOrientation(transform.GetRotation());
+		}
+
 	
 		MapObject::ComponentEnumerator::ComponentEnumerator(const ComponentEnumerator &rhs):
 			m_pszType(rhs.m_pszType),

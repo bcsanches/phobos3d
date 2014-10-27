@@ -172,21 +172,21 @@ namespace
 			virtual void Unload() override;					
 
 		private:
-			std::unique_ptr<Phobos::Game::MapObject> MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table);
+			std::unique_ptr<Phobos::Game::MapObject> MakeMapObject(Phobos::OgreEngine::SceneNodeUniquePtr_t &&sceneNode, Phobos::Register::Table &table);
 
 		private:
 			std::vector<Terrain>						m_vecTerrains;			
 	};	
 }
 
-std::unique_ptr<Phobos::Game::MapObject> MapWorldImpl::MakeMapObject(Phobos::Game::MapObject::Data &&mapObjectData, Phobos::Register::Table &table)
+std::unique_ptr<Phobos::Game::MapObject> MapWorldImpl::MakeMapObject(Phobos::OgreEngine::SceneNodeUniquePtr_t &&sceneNode, Phobos::Register::Table &table)
 {
 	using namespace Phobos;
 
 	//Make a sink, because boost pool cannot construct with move semantics
 	//Game::MapObject::DataSink dataSink(std::move(mapObjectData));	
 
-	return  std::make_unique<Game::MapObject>(table.GetName(), std::move(mapObjectData), std::ref(table));
+	return  std::make_unique<Game::MapObject>(table.GetName(), std::move(sceneNode), std::ref(table));
 
 	//backup reference to object
 	//auto *object = upMapObject.get();
@@ -207,59 +207,58 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 	auto &render = OgreEngine::Render::GetInstance();
 	
 	std::vector<Register::Table *> vecTerrains;
-	std::map<String_t, std::tuple<const String_t *, Ogre::SceneNode *, Register::Table &, Game::MapObject &, StringRef_t>> mapObjects;
+	std::map<String_t, std::tuple<const String_t *, OgreEngine::SceneNodeUniquePtr_t, Register::Table &, StringRef_t, Game::MapObject *>> mapObjects;	
 	
 	for(auto it : hive)		
 	{
 		auto &dict = *static_cast<Register::Table *>(it.second);
 
-		StringRef_t ref = dict.GetString(PH_MAP_OBJECT_KEY_TYPE);
-		if(ref.compare(PH_MAP_OBJECT_TYPE_TERRAIN) == 0)
+		StringRef_t type = dict.GetString(PH_MAP_OBJECT_KEY_TYPE);
+		if (type.compare(PH_MAP_OBJECT_TYPE_TERRAIN) == 0)
 		{
 			vecTerrains.push_back(&dict);
 			continue;
 		}
-		else if(ref.compare(PH_MAP_OBJECT_TYPE_SCENE_MANAGER) == 0)
+		else if (type.compare(PH_MAP_OBJECT_TYPE_SCENE_MANAGER) == 0)
 		{
 			render.SetAmbientColor(Register::GetColour(dict, "ambient"));
 			continue;
 		}
 
-		auto sceneNode = render.CreateSceneNode(dict.GetName());
-
-		Game::MapObject::Data mapObjectData(sceneNode);
+		auto sceneNode = render.CreateSceneNode(dict.GetName());		
 
 		sceneNode->setPosition(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_POSITION));
 		sceneNode->setOrientation(Register::GetQuaternion(dict, PH_MAP_OBJECT_KEY_ORIENTATION));
 		sceneNode->setScale(Register::GetVector3(dict, PH_MAP_OBJECT_KEY_SCALE));
-				
-		auto ptrMapObject = MakeMapObject(std::move(mapObjectData), dict);
-
-		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), sceneNode, std::ref(dict), std::ref(*ptrMapObject.get()), ref)));
-
-		this->AddPrivateChild(std::move(ptrMapObject));
+						
+		mapObjects.insert(std::make_pair(dict.GetName(), std::make_tuple(dict.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE), std::move(sceneNode), std::ref(dict), type, nullptr)));
 	}
-
+	
 	//
 	//Reconstruct the scene hierarchy
-	for (auto pair : mapObjects)
+	for (auto &pair : mapObjects)
 	{
 		auto parentName = std::get<0>(pair.second);
 		if (parentName)
 		{
-			auto parentNode = std::get<1>(mapObjects.find(*parentName)->second);
-			auto currentNode = std::get<1>(pair.second);
+			auto parentNode = std::get<1>(mapObjects.find(*parentName)->second).get();
+			auto currentNode = std::get<1>(pair.second).get();
 
 			currentNode->getParent()->removeChild(currentNode);
-			parentNode->addChild(std::get<1>(pair.second));			
+			parentNode->addChild(currentNode);
 		}
 	}
-
-	for (auto pair : mapObjects)
+	
+	//Construct MapObject
+	for (auto &pair : mapObjects)
 	{
-		auto &object = std::get<3>(pair.second);		
+		auto ptrMapObject = MakeMapObject(std::move(std::get<1>(pair.second)), std::get<2>(pair.second));
 
-		this->LoadMapObjectComponents(object);		
+		auto pMapObject = ptrMapObject.get();
+
+		this->AddPrivateChild(std::move(ptrMapObject));		
+
+		std::get<4>(pair.second) = pMapObject;
 	}
 
 	if (!vecTerrains.empty())
@@ -267,15 +266,15 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 		Phobos::Game::LightComponent *terrainLight = nullptr;
 
 		//find a suitable light for terrain
-		for (auto pair : mapObjects)
+		for (auto &pair : mapObjects)
 		{
-			auto type = std::get<4>(pair.second);
+			auto type = std::get<3>(pair.second);
 			if (type.compare(PH_MAP_OBJECT_TYPE_STATIC_LIGHT))
 				continue;
 
-			auto &object = std::get<3>(pair.second);
+			auto pObject = std::get<4>(pair.second);
 
-			auto enumerator = object.MakeEnumerator(PH_LIGHT_COMPONENT_NAME);
+			auto enumerator = pObject->MakeEnumerator(PH_LIGHT_COMPONENT_NAME);
 
 			while (enumerator.Next())
 			{
@@ -298,7 +297,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 		{
 			m_vecTerrains.emplace_back(levelPath, *table, terrainLight);
 		}
-	}
+	}	
 }
 
 Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &table)
@@ -320,13 +319,11 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 
 	auto sceneNode = render.CreateSceneNode(table.GetName());
 	
-	Game::MapObject::Data object(sceneNode);
-
 	sceneNode->setPosition(Register::GetVector3(table, PH_MAP_OBJECT_KEY_POSITION));
 	sceneNode->setOrientation(Register::GetQuaternion(table, PH_MAP_OBJECT_KEY_ORIENTATION));
 	sceneNode->setScale(Register::GetVector3(table, PH_MAP_OBJECT_KEY_SCALE));
 	
-	auto ptrObject = this->MakeMapObject(std::move(object), table);	
+	auto ptrObject = this->MakeMapObject(std::move(sceneNode), table);
 	auto parentName = table.TryGetString(PH_MAP_OBJECT_KEY_PARENT_NODE);
 	if (parentName)
 	{
@@ -338,9 +335,7 @@ Phobos::Game::MapObject *MapWorldImpl::CreateObject(Phobos::Register::Table &tab
 	}
 	
 	SetWorldTransformOnTable(table, *ptrObject.get());
-
-	this->LoadMapObjectComponents(*ptrObject);	
-
+	
 	auto *finalPtr = ptrObject.get();
 
 	this->AddPrivateChild(std::move(ptrObject));
@@ -409,11 +404,6 @@ namespace Phobos
 			ipInstance_gl.reset(PH_NEW MapWorldImpl());
 
 			return *ipInstance_gl;
-		}
-
-		void MapWorld::LoadMapObjectComponents(MapObject &obj)
-		{
-			MapObject::MapWorldAccess::LoadComponents(obj);
-		}
+		}		
 	}
 }

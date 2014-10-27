@@ -7,6 +7,7 @@
 
 #include <Phobos/Node.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
+#include <Phobos/OgreEngine/Utils.h>
 #include <Phobos/Register/TableFwd.h>
 #include <Phobos/String.h>
 
@@ -18,99 +19,48 @@ namespace Phobos
 {
 	namespace Game
 	{		
+
+
 		class PH_GAME_API MapObject : public Node
 		{
 			private:
 				typedef std::vector<MapObjectComponent::UniquePtr_t> ComponentsVector_t;
 
-			public:
-				class MapWorldAccess
+			public:														
+				class PH_GAME_API ComponentEnumerator
 				{
-					friend class MapWorld;
+					public:							
+						ComponentEnumerator(const ComponentEnumerator &rhs);
+
+						ComponentEnumerator &&operator=(ComponentEnumerator &&rhs) = delete;
+						ComponentEnumerator &operator=(const ComponentEnumerator &rhs) = delete;
 
 					private:
-						static void LoadComponents(MapObject &obj)
-						{
-							obj.LoadComponents();
-						}					
-				};
+						ComponentEnumerator(MapObject &object, const char *type);
 
-				class Data
-				{
-					friend MapObject;
-
-					private:
-						Ogre::SceneNode		*m_pclSceneNode;
+						friend class MapObject;
 
 					public:
-						Data(Ogre::SceneNode *sceneNode) :
-							m_pclSceneNode(sceneNode)							
-						{
-							//empty
-						}
+						bool Next();
 
-						Data(Data &&rhs) :
-							m_pclSceneNode(std::move(rhs.m_pclSceneNode))
-						{
-							rhs.m_pclSceneNode = nullptr;
-						}
+						MapObjectComponent *GetCurrent();
 
-						Data(const Data &) = delete;
-						Data &operator=(const Data &) = delete;
+					private:
+						const char	*m_pszType;
+						MapObject	&m_rclMapObject;
 
-						~Data();
-
-						Data &operator=(Data &&rhs)
-						{
-							std::swap(rhs.m_pclSceneNode, m_pclSceneNode);
-
-							return *this;
-						}			
-
-						const Ogre::Vector3 &GetWorldPosition() const;
-						const Ogre::Vector3 &GetWorldScale() const;
-						const Ogre::Quaternion &GetWorldOrientation() const;
-
-						void SetPosition(const Ogre::Vector3 &position);
-						void SetOrientation(const Ogre::Quaternion &orientation);
-
-						void SetTransform(const Engine::Math::Transform &transform);
-					};		
-					
-					class PH_GAME_API ComponentEnumerator
-					{
-						public:							
-							ComponentEnumerator(const ComponentEnumerator &rhs);
-
-							ComponentEnumerator &&operator=(ComponentEnumerator &&rhs) = delete;
-							ComponentEnumerator &operator=(const ComponentEnumerator &rhs) = delete;
-
-						private:
-							ComponentEnumerator(MapObject &object, const char *type);
-
-							friend class MapObject;
-
-						public:
-							bool Next();
-
-							MapObjectComponent *GetCurrent();
-
-						private:
-							const char	*m_pszType;
-							MapObject	&m_rclMapObject;
-
-							ComponentsVector_t::iterator m_itCurrent;
-							ComponentsVector_t::iterator m_itPosition;
-							ComponentsVector_t::iterator m_itEnd;
-					};
+						ComponentsVector_t::iterator m_itCurrent;
+						ComponentsVector_t::iterator m_itPosition;
+						ComponentsVector_t::iterator m_itEnd;
+				};
 
 			public:
-				inline MapObject(const String_t &name, Data &&data, const Register::Table &table) :
+				inline MapObject(const String_t &name, OgreEngine::SceneNodeUniquePtr_t &&sceneNode, const Register::Table &table) :
 					Node(name, NodeFlags::PRIVATE_CHILDREN),
-					m_clData(std::move(data)),
+					m_upSceneNode(std::move(sceneNode)),
 					m_rclTable(table)
 				{
-					//empty
+					this->LoadComponents();
 				}
 
 #if 0
@@ -149,20 +99,11 @@ namespace Phobos
 				}
 #endif
 
-				inline const Ogre::Vector3 &GetWorldPosition() const
-				{
-					return m_clData.GetWorldPosition();
-				}
+				const Ogre::Vector3 &GetWorldPosition() const;
 
-				inline const Ogre::Vector3 &GetWorldScale() const
-				{
-					return m_clData.GetWorldScale();
-				}
+				const Ogre::Vector3 &GetWorldScale() const;
 
-				inline const Ogre::Quaternion &GetWorldOrientation() const
-				{
-					return m_clData.GetWorldOrientation();
-				}
+				const Ogre::Quaternion &GetWorldOrientation() const;
 
 				inline Engine::Math::Transform MakeWorldTransform() const
 				{
@@ -172,10 +113,7 @@ namespace Phobos
 					);
 				}
 
-				inline void SetTransform(const Engine::Math::Transform &transform)
-				{
-					m_clData.SetTransform(transform);
-				}
+				void SetTransform(const Engine::Math::Transform &transform);
 
 #if 0
 				inline PhysicsTypes GetPhysicsType() const
@@ -214,8 +152,8 @@ namespace Phobos
 				void LoadComponents();
 
 			private:				
-				Data					m_clData;
-				ComponentsVector_t		m_vecComponents;
+				ComponentsVector_t					m_vecComponents;
+				OgreEngine::SceneNodeUniquePtr_t	m_upSceneNode;				
 
 				const Register::Table	&m_rclTable;
 		};		

@@ -55,7 +55,6 @@
     <ClCompile Include="..\..\..\src\Game\Physics\Manager.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
     <ClCompile Include="..\..\..\src\Game\Things\Component.cpp">
       <Filter>Things</Filter>
@@ -204,7 +203,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\WorldFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\World.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\BaseOgreWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\IController.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h">

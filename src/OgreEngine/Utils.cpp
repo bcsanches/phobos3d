@@ -16,6 +16,9 @@ subject to the following restrictions:
 
 #include "Phobos/OgreEngine/Utils.h"
 
+#include <OgreSceneManager.h>
+#include <OgreSceneNode.h>
+
 #include <string>
 
 #include <atomic>
@@ -58,5 +61,14 @@ namespace Phobos
 
 			return meshName;
 		}
+
+		void Phobos::OgreEngine::OgreSceneNodeDeleter::operator()(Ogre::SceneNode *node)
+		{
+			if (node == nullptr)
+				return;
+
+			node->getCreator()->destroySceneNode(node);
+		}
+
 	}
 }
