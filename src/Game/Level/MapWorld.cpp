@@ -183,21 +183,7 @@ std::unique_ptr<Phobos::Game::MapObject> MapWorldImpl::MakeMapObject(Phobos::Ogr
 {
 	using namespace Phobos;
 
-	//Make a sink, because boost pool cannot construct with move semantics
-	//Game::MapObject::DataSink dataSink(std::move(mapObjectData));	
-
-	return  std::make_unique<Game::MapObject>(table.GetName(), std::move(sceneNode), std::ref(table));
-
-	//backup reference to object
-	//auto *object = upMapObject.get();
-
-	//this->AddPrivateChild(std::move(upMapObject));
-
-	//push it to object list
-	//m_mapObjects.insert(it, std::make_pair(table.GetName(), std::move(upMapObject)));	
-
-	//return a safe pointer to caller
-	//return MapObjectUniquePtr_t(object);
+	return  std::make_unique<Game::MapObject>(table.GetName(), std::move(sceneNode), std::ref(table));	
 }
 
 void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::Hive &hive)

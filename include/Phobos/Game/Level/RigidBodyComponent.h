@@ -5,6 +5,7 @@
 
 #include "Phobos/Game/Physics/RigidBody.h"
 
+#include <Phobos/Memory.h>
 #include <Phobos/Register/TableFwd.h>
 
 #define PH_DYNAMIC_BODY_COMPONENT_NAME "DynamicBody"
@@ -15,15 +16,11 @@ namespace Phobos
 	namespace Game
 	{
 		class RigidBodyComponent : public MapObjectComponent
-		{
-			public:				
-				virtual ~RigidBodyComponent() {};
-
-				//static MapObjectComponent::UniquePtr_t Create(MapObject &owner, const Register::Table &table);
+		{			
+			public:
+				virtual ~RigidBodyComponent() {};				
 
 			protected:
-				//virtual void Release() override;
-
 				RigidBodyComponent(const char *type, MapObject &owner, const Register::Table &table, Physics::RigidBody &&rigidBody);
 
 			protected:
@@ -33,14 +30,15 @@ namespace Phobos
 		class DynamicBodyComponent : public RigidBodyComponent
 		{
 			public:
+				PH_DECLARE_MEMORY_OPERATORS;
+
+			public:
 				DynamicBodyComponent(Game::MapObject &owner, const Register::Table &table);
+				virtual ~DynamicBodyComponent();
 
 				static MapObjectComponent::UniquePtr_t Create(Game::MapObject &owner, const Register::Table &table);
 
 				static void SyncAllToPhysics();
-
-			protected:
-				virtual void Release() override;
 		};
 
 	}

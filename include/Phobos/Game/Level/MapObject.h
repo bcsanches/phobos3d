@@ -5,6 +5,7 @@
 
 #include <OgrePrerequisites.h>
 
+#include <Phobos/Memory.h>
 #include <Phobos/Node.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
 #include <Phobos/OgreEngine/Utils.h>
@@ -141,8 +142,7 @@ namespace Phobos
 				template <typename T>
 				T &GetComponent();				
 
-				void *operator new(size_t sz);
-				void operator delete(void *ptr);
+				PH_DECLARE_MEMORY_OPERATORS;
 
 				friend class MapObjectComponentAccess;
 				

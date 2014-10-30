@@ -1,5 +1,6 @@
 #include "Phobos/Game/Level/MapObject.h"
 
+#include "Phobos/Game/Level/ComponentPool.h"
 #include "Phobos/Game/Level/MapObjectComponent.h"
 #include "Phobos/Game/Level/MapObjectComponentFactory.h"
 
@@ -38,19 +39,7 @@ namespace Phobos
 		}
 #endif								
 
-		static boost::object_pool<Phobos::Game::MapObject> g_clPool;
-
-		void *MapObject::operator new(size_t sz)
-		{
-			PH_ASSERT(sz == sizeof(MapObject));
-
-			return g_clPool.malloc();
-		}
-
-		void MapObject::operator delete(void *ptr)
-		{
-			g_clPool.free(static_cast<MapObject *>(ptr));
-		}		
+		PH_GAME_DEFINE_COMPONENT_POOL(Phobos::Game::MapObject, g_clPool);
 
 		MapObject::~MapObject()
 		{

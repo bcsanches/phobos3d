@@ -22,17 +22,7 @@ namespace Phobos
 			PH_DISABLE_COPY(MapObjectComponent);
 
 			public:
-				struct PointerTraits
-				{
-					typedef Phobos::Game::MapObjectComponent *pointer;
-
-					void operator()(pointer ptr)
-					{
-						ptr->Release();
-					}
-				};
-
-				typedef std::unique_ptr<MapObjectComponent, PointerTraits> UniquePtr_t;
+				typedef std::unique_ptr<MapObjectComponent> UniquePtr_t;
 
 				class LoadFinishedAccess
 				{
@@ -45,9 +35,7 @@ namespace Phobos
 						}
 				};
 
-			public:				
-				virtual void Release() = 0;
-
+			public:
 				const char *GetType() const
 				{
 					return m_pszType;
@@ -55,15 +43,15 @@ namespace Phobos
 
 				static void TickReminders();
 
+				virtual ~MapObjectComponent();
+
 			protected:
 				MapObjectComponent(const char *type, MapObject &owner) :
 					m_rclOwner(owner),
 					m_pszType(type)
 				{
 					PH_ASSERT_VALID(type);
-				}
-
-				virtual ~MapObjectComponent();
+				}				
 				
 				MapObjectComponentAccess AccessMapObject();
 

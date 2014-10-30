@@ -28,10 +28,10 @@ namespace Phobos
 #define PH_MAP_COMPONENT_CREATOR(NAME, PROC)											\
 	static Phobos::Game::MapObjectComponentFactory::ObjectCreator_t TYPE_##CreatorObject_gl(NAME, PROC, Phobos::Game::MapObjectComponentFactory::GetInstance())	
 
-#define PH_MAP_COMPONENT_FULL_CREATOR(NAME, TYPE, POOL)  		\
+#define PH_MAP_COMPONENT_FULL_CREATOR(NAME, TYPE)  		\
 	Phobos::Game::MapObjectComponent::UniquePtr_t TYPE::Create(Phobos::Game::MapObject &owner, const Phobos::Register::Table &table)	\
 {												\
-	return MapObjectComponent::UniquePtr_t(POOL.construct(std::ref(owner), std::ref(table)));					\
+	return MapObjectComponent::UniquePtr_t(std::make_unique<TYPE>(owner, table));					\
 }\
 PH_MAP_COMPONENT_CREATOR(NAME, &TYPE::Create);
 

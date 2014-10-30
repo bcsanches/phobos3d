@@ -1,5 +1,6 @@
 #include "Phobos/Game/Level/RigidBodyComponent.h"
 
+#include "Phobos/Game/Level/ComponentPool.h"
 #include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/Level/MapObjectComponentFactory.h"
 #include "Phobos/Game/Level/MapObjectComponentAccess.h"
@@ -34,9 +35,10 @@ namespace Phobos
 		//
 
 		static std::vector<DynamicBodyComponent *>		g_vecDynamicBodies;	
-		static boost::object_pool<DynamicBodyComponent> g_poolDynamicBodies;
+		
+		PH_GAME_DEFINE_COMPONENT_POOL(DynamicBodyComponent, g_poolDynamicBodies);
 
-		PH_MAP_COMPONENT_FULL_CREATOR(PH_DYNAMIC_BODY_COMPONENT_NAME, DynamicBodyComponent, g_poolDynamicBodies);
+		PH_MAP_COMPONENT_FULL_CREATOR(PH_DYNAMIC_BODY_COMPONENT_NAME, DynamicBodyComponent);
 	
 		DynamicBodyComponent::DynamicBodyComponent(Game::MapObject &owner, const Register::Table &table):
 			RigidBodyComponent(
@@ -55,10 +57,8 @@ namespace Phobos
 			g_vecDynamicBodies.push_back(this);
 		}	
 
-		void DynamicBodyComponent::Release()
-		{
-			g_poolDynamicBodies.destroy(this);
-
+		DynamicBodyComponent::~DynamicBodyComponent()
+		{			
 			g_vecDynamicBodies.erase(std::remove_if(g_vecDynamicBodies.begin(), g_vecDynamicBodies.end(), [this](DynamicBodyComponent *current){return current == this; }), g_vecDynamicBodies.end());
 		}
 
@@ -100,17 +100,17 @@ namespace
 	class StaticBodyComponent : public Game::RigidBodyComponent
 	{
 		public:
+			PH_DECLARE_MEMORY_OPERATORS;
+
+		public:
 			StaticBodyComponent::StaticBodyComponent(Game::MapObject &owner, const Register::Table &table);
 
-			static MapObjectComponent::UniquePtr_t Create(Game::MapObject &owner, const Register::Table &table);
-
-		protected:
-			virtual void Release() override;
+			static MapObjectComponent::UniquePtr_t Create(Game::MapObject &owner, const Register::Table &table);		
 	};
+	
+	PH_GAME_DEFINE_COMPONENT_POOL(StaticBodyComponent, g_poolStaticBodies);
 
-	static boost::object_pool<StaticBodyComponent> g_poolStaticBodies;
-
-	PH_MAP_COMPONENT_FULL_CREATOR(PH_STATIC_BODY_COMPONENT_NAME, StaticBodyComponent, g_poolStaticBodies);
+	PH_MAP_COMPONENT_FULL_CREATOR(PH_STATIC_BODY_COMPONENT_NAME, StaticBodyComponent);
 
 	StaticBodyComponent::StaticBodyComponent(Game::MapObject &owner, const Register::Table &table) :
 		RigidBodyComponent(
@@ -126,11 +126,6 @@ namespace
 		)		
 	{
 		//empty
-	}
-
-	void StaticBodyComponent::Release()
-	{
-		g_poolStaticBodies.destroy(this);
-	}
+	}	
 }
 

@@ -3,6 +3,7 @@
 #include <Phobos/OgreEngine/Render.h>
 #include <Phobos/Register/Table.h>
 
+#include "Phobos/Game/Level/ComponentPool.h"
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/Level/MapObjectComponentAccess.h"
@@ -15,16 +16,13 @@
 
 #define PH_MESH_COMPONENT_NAME "Mesh"
 
-namespace
-{
-	static boost::object_pool<Phobos::Game::MeshComponent> g_poolMeshes;
-}
+PH_GAME_DEFINE_COMPONENT_POOL(Phobos::Game::MeshComponent, g_poolMeshes);
 
 namespace Phobos
 {
 	namespace Game
 	{
-		PH_MAP_COMPONENT_FULL_CREATOR(PH_MESH_COMPONENT_NAME, MeshComponent, g_poolMeshes);
+		PH_MAP_COMPONENT_FULL_CREATOR(PH_MESH_COMPONENT_NAME, MeshComponent);
 
 		static const String_t g_strComponentTypeName(PH_MESH_COMPONENT_NAME);
 		
@@ -44,11 +42,6 @@ namespace Phobos
 		MeshComponent::~MeshComponent()
 		{
 			OgreEngine::Render::GetInstance().DestroyEntity(m_pclEntity);
-		}
-
-		void MeshComponent::Release()
-		{
-			g_poolMeshes.destroy(this);
 		}
 
 		void MeshComponent::AttachObjectToBone(

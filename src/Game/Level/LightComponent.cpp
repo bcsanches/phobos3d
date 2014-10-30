@@ -3,6 +3,7 @@
 #include <Phobos/OgreEngine/Render.h>
 #include <Phobos/Register/Table.h>
 
+#include "Phobos/Game/Level/ComponentPool.h"
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/Level/MapObjectComponentAccess.h"
@@ -13,16 +14,13 @@
 
 #include <OgreEntity.h>
 
-namespace
-{
-	static boost::object_pool<Phobos::Game::LightComponent> g_poolLights;
-}
+PH_GAME_DEFINE_COMPONENT_POOL(Phobos::Game::LightComponent, g_poolLights);
 
 namespace Phobos
 {
 	namespace Game
 	{
-		PH_MAP_COMPONENT_FULL_CREATOR(PH_LIGHT_COMPONENT_NAME, LightComponent, g_poolLights);
+		PH_MAP_COMPONENT_FULL_CREATOR(PH_LIGHT_COMPONENT_NAME, LightComponent);
 
 		LightComponent::LightComponent(MapObject &owner, const Register::Table &table):
 			MapObjectComponent(PH_LIGHT_COMPONENT_NAME, owner),
@@ -87,11 +85,6 @@ namespace Phobos
 		LightComponent::~LightComponent()
 		{
 			OgreEngine::Render::GetInstance().DestroyLight(m_pclLight);
-		}
-
-		void LightComponent::Release()
-		{
-			g_poolLights.destroy(this);
 		}
 	}
 }

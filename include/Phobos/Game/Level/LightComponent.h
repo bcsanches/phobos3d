@@ -3,6 +3,7 @@
 
 #include "Phobos/Game/Level/MapObjectComponent.h"
 
+#include <Phobos/Memory.h>
 #include <Phobos/Register/TableFwd.h>
 
 #include <OgrePrerequisites.h>
@@ -16,6 +17,9 @@ namespace Phobos
 		class LightComponent : public MapObjectComponent
 		{
 			public:
+				PH_DECLARE_MEMORY_OPERATORS;
+
+			public:
 				LightComponent(MapObject &owner, const Register::Table &table);
 				virtual ~LightComponent();
 
@@ -24,10 +28,7 @@ namespace Phobos
 				bool IsDirectional();
 
 				Ogre::Vector3 GetDirection();
-				Ogre::ColourValue GetDiffuseColour();
-
-			protected:
-				virtual void Release() override;
+				Ogre::ColourValue GetDiffuseColour();			
 
 			private:
 				Ogre::Light *m_pclLight;

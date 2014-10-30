@@ -178,6 +178,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Gui\LevelSelector.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\ComponentPool.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\LightComponent.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentAccess.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentFactory.h" />

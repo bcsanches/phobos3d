@@ -5,6 +5,7 @@
 
 #include "Phobos/Game/GameAPI.h"
 
+#include <Phobos/Memory.h>
 #include <Phobos/Register/TableFwd.h>
 
 #include <OgrePrerequisites.h>
@@ -16,6 +17,9 @@ namespace Phobos
 	{
 		class PH_GAME_API MeshComponent : public MapObjectComponent
 		{
+			public:
+				PH_DECLARE_MEMORY_OPERATORS
+
 			public:
 				MeshComponent(MapObject &owner, const Register::Table &table);
 				virtual ~MeshComponent();
@@ -39,10 +43,7 @@ namespace Phobos
 
 				static MapObjectComponent::UniquePtr_t Create(MapObject &owner, const Register::Table &table);
 
-				static const String_t &GetComponentName();
-
-			protected:
-				virtual void Release() override;
+				static const String_t &GetComponentName();			
 
 			private:
 				Ogre::Entity *m_pclEntity;

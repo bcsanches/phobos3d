@@ -41,4 +41,8 @@ namespace Phobos
 	PH_BASE_API_PROC bool BreakMemoryAllocation(long id);
 }
 
+#define PH_DECLARE_MEMORY_OPERATORS		\
+	void *operator new(size_t size);	\
+	void operator delete(void *ptr);
+
 #endif
