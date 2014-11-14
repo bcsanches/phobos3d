@@ -9,7 +9,7 @@ namespace
 	class Reminder
 	{
 		public:
-			typedef std::function<void(Phobos::Game::MapObjectComponent*)> ProcType_t;
+			typedef void (Phobos::Game::MapObjectComponent::*ProcType_t)();
 
 			Reminder(Phobos::Game::MapObjectComponent &target, ProcType_t proc);
 
@@ -20,7 +20,7 @@ namespace
 		private:
 			Phobos::Game::MapObjectComponent &m_rclTarget;
 
-			std::function<void(Phobos::Game::MapObjectComponent*)> m_pfnProc;
+			ProcType_t m_pfnProc;
 	};
 
 	Reminder::Reminder(Phobos::Game::MapObjectComponent &target, ProcType_t proc):
@@ -37,7 +37,7 @@ namespace
 
 	inline void Reminder::Fire()
 	{
-		m_pfnProc(&m_rclTarget);
+		(m_rclTarget.*m_pfnProc)();		
 	}
 
 	typedef std::multimap<Phobos::Float_t, Reminder> ReminderMultiMap_t;
@@ -58,6 +58,62 @@ namespace
 	}
 }
 
+namespace
+{
+	class ProcManager
+	{
+		private:
+			typedef std::vector<std::pair<Phobos::Game::MapObjectComponent *, Phobos::Game::MapObjectComponent::Proc_t>> ProcVector_t;
+
+			ProcVector_t m_vecProcs;
+
+		public:
+			void AddProc(Phobos::Game::MapObjectComponent &comp, Phobos::Game::MapObjectComponent::Proc_t proc);
+			void RemoveProc(Phobos::Game::MapObjectComponent &comp, Phobos::Game::MapObjectComponent::Proc_t proc);
+			void RemoveAllReferences(Phobos::Game::MapObjectComponent &comp);
+
+			void InvokeAll();
+	};	
+
+	void ProcManager::AddProc(Phobos::Game::MapObjectComponent &comp, Phobos::Game::MapObjectComponent::Proc_t proc)
+	{
+		m_vecProcs.emplace_back(&comp, proc);
+	}
+
+	void ProcManager::RemoveProc(Phobos::Game::MapObjectComponent &comp, Phobos::Game::MapObjectComponent::Proc_t proc)
+	{
+		auto element = std::make_pair(&comp, proc);
+
+		auto it = std::find(m_vecProcs.begin(), m_vecProcs.end(), element);
+
+		PH_ASSERT(it != m_vecProcs.end());
+
+		m_vecProcs.erase(it);
+	}
+
+	void ProcManager::RemoveAllReferences(Phobos::Game::MapObjectComponent &comp)
+	{
+		m_vecProcs.erase(std::remove_if(m_vecProcs.begin(), m_vecProcs.end(), [&comp](const ProcVector_t::value_type &element){ return element.first == &comp; }), m_vecProcs.end());
+	}
+
+	void ProcManager::InvokeAll()
+	{
+		for (auto &pair : m_vecProcs)
+		{
+			(pair.first->*(pair.second))();
+		}
+	}
+
+	static ProcManager g_clFixedUpdate;
+	static ProcManager g_clUpdate;
+
+	static void CancelUpdates(Phobos::Game::MapObjectComponent &target)
+	{
+		g_clFixedUpdate.RemoveAllReferences(target);
+		g_clUpdate.RemoveAllReferences(target);
+	}
+}
+
 namespace Phobos
 {
 	namespace Game
@@ -65,6 +121,7 @@ namespace Phobos
 		MapObjectComponent::~MapObjectComponent()
 		{
 			CancelReminders(*this);
+			CancelUpdates(*this);
 		}
 
 		MapObjectComponentAccess MapObjectComponent::AccessMapObject()
@@ -77,7 +134,7 @@ namespace Phobos
 			this->OnLoadFinished(table);
 		}
 
-		void MapObjectComponent::AddReminder(ReminderProcType_t proc, Float_t time)
+		void MapObjectComponent::AddReminderImpl(ReminderProcType_t proc, Float_t time)
 		{
 			g_mmapReminders.insert(std::make_pair(time + Engine::Core::GetInstance().GetGameTimer().m_fpTotalTicks, Reminder(*this, proc)));
 		}
@@ -98,6 +155,36 @@ namespace Phobos
 
 				event.Fire();
 			}
+		}
+
+		void MapObjectComponent::EnableFixedUpdateImpl(Proc_t proc)
+		{
+			g_clFixedUpdate.AddProc(*this, proc);
+		}
+
+		void MapObjectComponent::DisableFixedUpdateImpl(Proc_t proc)
+		{
+			g_clFixedUpdate.RemoveProc(*this, proc);
+		}
+
+		void MapObjectComponent::EnableUpdateImpl(Proc_t proc)
+		{
+			g_clUpdate.AddProc(*this, proc);
+		}
+
+		void MapObjectComponent::DisableUpdateImpl(Proc_t proc)
+		{
+			g_clUpdate.RemoveProc(*this, proc);
+		}
+
+		void MapObjectComponent::TickFixedUpdate()
+		{
+			g_clFixedUpdate.InvokeAll();
+		}
+
+		void MapObjectComponent::TickUpdate()
+		{
+			g_clUpdate.InvokeAll();
 		}
 	}
 }

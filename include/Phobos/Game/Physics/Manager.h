@@ -24,6 +24,8 @@ subject to the following restrictions:
 
 #include <OgreMesh.h>
 
+#include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/Module.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 #include <Phobos/Singleton.h>
@@ -35,7 +37,6 @@ subject to the following restrictions:
 #include "RigidBodyFwd.h"
 
 #include "Phobos/Game/GameAPI.h"
-#include "Phobos/Game/Things/GenericComponentManagerModule.h"
 
 namespace Phobos
 {	
@@ -169,7 +170,7 @@ namespace Phobos
 					//Because scaled meshes references the original mesh we keep a cache of all meshes that were been loaded
 					CollisionMeshesSet_t m_setCollisionMeshesCache;
 
-					Things::GenericComponentManager<CharacterBodyComponent>		m_clCharacterBodyComponents;
+					//Things::GenericComponentManager<CharacterBodyComponent>		m_clCharacterBodyComponents;
 
 					friend class RigidBody;
 					friend class SweepCharacterBody;

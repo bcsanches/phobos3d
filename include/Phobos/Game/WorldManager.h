@@ -31,20 +31,15 @@ subject to the following restrictions:
 #include <Phobos/Register/HiveFwd.h>
 #include <Phobos/Register/TableFwd.h>
 
-
-#include "Phobos/Game/Things/Entity.h"
 #include "Phobos/Game/GameAPI.h"
 #include "Phobos/Game/Level/MapDefs.h"
 #include "Phobos/Game/Level/MapLoader.h"
-#include "Phobos/Game/Things/ThingFwd.h"
 
 namespace Phobos
 {	
 	namespace Game
 	{
-		PH_DECLARE_SINGLETON_PTR(WorldManager);
-
-		typedef Things::HandleManager<Things::Entity> EntityManager;	
+		PH_DECLARE_SINGLETON_PTR(WorldManager);		
 
 		class MapObject;
 
@@ -63,27 +58,17 @@ namespace Phobos
 		class PH_GAME_API WorldManager: public Phobos::Engine::Module
 		{
 			PH_DECLARE_SINGLETON_METHODS2(WorldManager, Engine::Console &);
-
-			public:
-				typedef std::list<Things::Thing*> ThingList_t;
-
+		
 			public:					
 				void LoadBlankMap(const char *name);
 				void LoadMap(const String_t &mapName);
 				void UnloadMap();
 
-				Things::Entity *TryGetEntityByType(const String_t &className) const;
-				Things::Entity &GetEntityByName(const String_t &name) const;			
+				MapObject &GetMapObject(const String_t &name) const;
 
 				PH_DECLARE_LISTENER_PROCS(WorldManagerListener);	
 
 				inline UInt_t GetNumActiveEntities() const;
-
-				void AddToFixedUpdateList(Things::Thing &io);
-				void AddToUpdateList(Things::Thing &io);
-
-				void RemoveFromFixedUpdateList(Things::Thing &io);
-				void RemoveFromUpdateList(Things::Thing &io);
 
 				//Always return a valid pointer
 				//The object is owner by WorldManager (actually MapWorld) and it can be destroyed simple deleting it
@@ -91,47 +76,27 @@ namespace Phobos
 
 			protected:		
 				virtual void OnInit() override;
-				virtual void OnFinalize() override;
-				virtual void OnFixedUpdate() override;
-				virtual void OnUpdate() override;
+				virtual void OnFinalize() override;				
 
 			private:
 				WorldManager(Engine::Console &console);
-				virtual ~WorldManager();
-
-				void LoadEntities();
-				Things::Entity &LoadEntity(const Phobos::Register::Table &entityDef);
-
-				inline bool RemoveFromList(ThingList_t &list, Things::Thing &io);
-				inline void CallEntityIOProc(ThingList_t &list, void (Things::Thing::*proc)());
+				virtual ~WorldManager();												
 
 				void OnMapLoaded();
 
 				void CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &);
-				void CmdUnloadMap(const Shell::StringVector_t &args, Shell::Context &);
-				void CmdDumpFactoryCreators(const Shell::StringVector_t &args, Shell::Context &);
+				void CmdUnloadMap(const Shell::StringVector_t &args, Shell::Context &);				
 
-			private:
-				EntityManager	m_clEntityManager;
-
+			private:				
 				MapLoaderPtr_t	m_spMapLoader;
 
 				Shell::Command	m_cmdLoadMap;	
-				Shell::Command	m_cmdUnloadMap;	
-				Shell::Command	m_cmdDumpFactoryCreators;
+				Shell::Command	m_cmdUnloadMap;					
 
 				Phobos::Register::Hive *m_pclMapObjectsHive;				
 
 				PH_DECLARE_LISTENER_LIST(WorldManagerListener, m_lstListeners);
-
-				ThingList_t m_lstFixedUpdate;
-				ThingList_t m_lstUpdate;
-		};
-
-		inline UInt_t WorldManager::GetNumActiveEntities() const
-		{
-			return m_clEntityManager.GetNumActiveObjects();
-		}
+		};		
 	}
 }
 

@@ -372,10 +372,12 @@ void MapWorldImpl::OnStart()
 void MapWorldImpl::OnFixedUpdate()
 {
 	Phobos::Game::MapObjectComponent::TickReminders();
+	Phobos::Game::MapObjectComponent::TickFixedUpdate();
 }
 
 void MapWorldImpl::OnUpdate()
 {
+	Phobos::Game::MapObjectComponent::TickUpdate();
 	Phobos::Game::DynamicBodyComponent::SyncAllToPhysics();	
 }
 

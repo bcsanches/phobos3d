@@ -72,11 +72,11 @@ namespace Phobos
 				if(timer.IsPaused())
 					return;
 
-				m_clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent::PreparePhysicsFrame, timer.m_fpFrameTime);
+				//m_clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent::PreparePhysicsFrame, timer.m_fpFrameTime);
 
 				m_upWorld->stepSimulation(timer.m_fpFrameTime, 32);
 
-				m_clCharacterBodyComponents.CallForAll(&CharacterBodyComponent::FinishPhysicsFrame);
+				//m_clCharacterBodyComponents.CallForAll(&CharacterBodyComponent::FinishPhysicsFrame);
 			}
 
 			void Manager::SetGravity(const Ogre::Vector3 &gravity)
@@ -366,12 +366,12 @@ namespace Phobos
 			//COMPONENTS
 			void Manager::RegisterCharacterBodyComponent(CharacterBodyComponent &comp)
 			{
-				m_clCharacterBodyComponents.Register(comp);
+				//m_clCharacterBodyComponents.Register(comp);
 			}
 
 			void Manager::UnregisterCharacterBodyComponent(CharacterBodyComponent &comp)
 			{
-				m_clCharacterBodyComponents.Unregister(comp);
+				//m_clCharacterBodyComponents.Unregister(comp);
 			}
 		}
 	}

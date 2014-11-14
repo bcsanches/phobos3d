@@ -14,6 +14,9 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#ifndef PH_ENGINE_CONSOLE_H
+#define PH_ENGINE_CONSOLE_H
+
 #include "Phobos/Engine/Module.h"
 #include "Phobos/Engine/IInputHandler.h"
 
@@ -180,3 +183,5 @@ namespace Phobos
 		}	
 	}
 }
+
+#endif

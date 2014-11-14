@@ -5,6 +5,7 @@
 
 #include <OgrePrerequisites.h>
 
+#include <Phobos/Exception.h>
 #include <Phobos/Memory.h>
 #include <Phobos/Node.h>
 #include <Phobos/OgreEngine/Math/Transform.h>
@@ -20,8 +21,6 @@ namespace Phobos
 {
 	namespace Game
 	{		
-
-
 		class PH_GAME_API MapObject : public Node
 		{
 			private:
@@ -63,25 +62,6 @@ namespace Phobos
 				{
 					this->LoadComponents();
 				}
-
-#if 0
-				inline MapObject(MapObject &&data) :
-					m_clData(std::move(data.m_clData)),
-					m_vecComponents(std::move(data.m_vecComponents)),
-					m_rclTable(data.m_rclTable)
-				{
-					//empty
-				}
-
-				inline MapObject(const String_t &name, DataSink &sink, const Register::Table &table) :
-					Node(name, NodeFlags::PRIVATE_CHILDREN),
-					m_clData(std::move(sink.m_clData)),
-					m_rclTable(table)
-				{
-
-				}
-
-#endif
 
 				~MapObject();
 

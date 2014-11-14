@@ -27,8 +27,6 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Game/Level/MapWorld.h>
-#include <Phobos/Game/Things/SignalManager.h>
-#include <Phobos/Game/Things/MoverManager.h>
 #include <Phobos/Game/Physics/Manager.h>
 #include <Phobos/Engine/PluginManager.h>
 #include <Phobos/OgreEngine/Render.h>
@@ -80,17 +78,9 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::Gui::LevelSelector::ReleaseInstance);
 		core.AddModule(levelSelector);
 
-		auto &gameEventManager = Game::Things::SignalManager::CreateInstance();
-		m_clSingletons.AddProc(Game::Things::SignalManager::ReleaseInstance);
-		core.AddModule(gameEventManager);
-
 		Engine::PluginManager &pluginManager = Engine::PluginManager::CreateInstance(console);
 		m_clSingletons.AddProc(Engine::PluginManager::ReleaseInstance);
 		core.AddModule(pluginManager, Engine::ModulePriorities::NORMAL-1);		
-
-		auto &moverManager = Game::Things::MoverManager::CreateInstance();
-		m_clSingletons.AddProc(Game::Things::MoverManager::ReleaseInstance);
-		core.AddModule(moverManager);
 
 		auto &physicsManager = Game::Physics::Manager::CreateInstance(console);
 		m_clSingletons.AddProc(Game::Physics::Manager::ReleaseInstance);

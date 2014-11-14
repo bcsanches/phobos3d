@@ -5,6 +5,7 @@
 #include <Phobos/DisableCopy.h>
 #include <Phobos/Register/TableFwd.h>
 
+#include "Phobos/Game/GameAPI.h"
 #include "Phobos/Game/Level/MapObjectComponent.h"
 
 
@@ -12,7 +13,7 @@ namespace Phobos
 {
 	namespace Game
 	{
-		class MapObjectComponentFactory : public GenericFactoryEx<MapObjectComponent, MapObjectComponent::UniquePtr_t, MapObject &, const Phobos::Register::Table &>
+		class PH_GAME_API MapObjectComponentFactory : public GenericFactoryEx<MapObjectComponent, MapObjectComponent::UniquePtr_t, MapObject &, const Phobos::Register::Table &>
 		{
 			PH_DISABLE_COPY(MapObjectComponentFactory);
 

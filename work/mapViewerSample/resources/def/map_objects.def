@@ -12,11 +12,6 @@ MapObjectDef StaticLight: MapObject
   type = static_light;
 }
 
-MapObjectDef EntityObject: MapObject
-{
-  type = entity; 
-}
-
 MapObjectDef DynamicBox_1m: MapObject
 {
   type = entity;
@@ -30,6 +25,73 @@ MapObjectDef DynamicBox_1m: MapObject
   collisionFilter = "Static|Dynamic";
   
   mass = 5;
+}
+
+MapObjectDef SkeletonTorch
+{  
+  components = "Mesh";
   
-  className = Entity;
-} 
+  mesh="skeltorch.mesh";
+  scale = "0.3 0.3 0.3";
+}
+
+MapObjectDef Platform
+{ 
+  //components="LinearMover|Transform";
+  
+  colliderType = "box";
+  boxDimensions = "1 1 1";
+  
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
+  mass = 5;
+}
+
+MapObjectDef PathCorner
+{
+      
+}
+
+MapObjectDef Box1m
+{ 
+  //components = "Transform";
+  
+  colliderType = "box";
+  boxDimensions = "1 1 1";
+  
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
+  components = "Mesh";
+  mesh="Box_1m.mesh";
+  
+  physicsType = dynamic;
+  
+  mass = 5;
+}
+
+MapObjectDef BoxQuaterMeter
+{
+  //className = Entity;
+  //components = "Transform";
+  
+  colliderType = "box";
+  boxDimensions = "0.25 0.25 0.25";
+  
+  collisionGroup = Dynamic;
+  collisionFilter = "Static|Dynamic";
+  
+  components = "Mesh";
+  mesh="Box_1m";
+  scale="0.25 0.25 0.25";    
+  
+  mass = 5;   
+  
+  physicsType = dynamic;
+}
+
+MapObjectDef InfoPlayerStart
+{
+  
+}

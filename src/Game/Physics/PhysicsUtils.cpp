@@ -19,6 +19,7 @@ subject to the following restrictions:
 #include <Phobos/Register/Table.h>
 
 #include <Phobos/Enum.h>
+#include <Phobos/Exception.h>
 
 #include "Phobos/Game/RegisterUtils.h"
 #include "Phobos/Game/Physics/Manager.h"
