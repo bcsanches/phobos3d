@@ -15,10 +15,13 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_DIR} )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_DIR} )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RUNTIME_OUTPUT_DIR} ) # dll and exe
 
+set( BOOST_DIR "" CACHE PATH "Path to the boost directory." )
+set( BOOST_LIB_DIR ${BOOST_DIR}/stage/lib )
+
 # preprocessors
 set( ALL_CONFIGS_DEFS PH_REGISTER_EXPORTS )
 set( DEBUG_CONFIG_DEFS PH_CHECK_ASSERT ${ALL_CONFIGS_DEFS} )
-set( RELEASE_CONFIG_DEFS PG_IGNORE_ASSERT ${ALL_CONFIGS_DEFS} )
+set( RELEASE_CONFIG_DEFS PH_IGNORE_ASSERT ${ALL_CONFIGS_DEFS} )
 
 if ( MSVC )
     set( PROJECT_DEFINITIONS $<$<CONFIG:Debug>: ${DEBUG_CONFIG_DEFS}>
@@ -47,6 +50,7 @@ file( GLOB PROJECT_INCLUDES "${INCLUDE_DIR}/Phobos/Register/*.h"
                             "${INCLUDE_DIR}/Phobos/Register/*.hpp" )
 
 include_directories( ${INCLUDE_DIR} )
+link_directories( ${BOOST_LIB_DIR} )
 
 add_library ( ${PROJECT_TARGET} SHARED ${PROJECT_SOURCES}
                                        ${PROJECT_INCLUDES} )

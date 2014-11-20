@@ -9,6 +9,7 @@ if ( WITH_SAMPLES )
     # include( Sample_01.cmake )
 endif( WITH_SAMPLES )
 
+include( PH_Engine.cmake )
 include( PH_System.cmake )
 include( PH_Register.cmake )
 include( PH_Base.cmake ) # the name of solution is the same of the last included file.
