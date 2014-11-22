@@ -20,7 +20,7 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Vector3Property.h>
 #include <Phobos/OgreEngine/TransformPropertyFwd.h>
 
-#include "Phobos/Game/Things/Component.h"
+#include "Phobos/Game/Level/MapObjectComponent.h"
 #include "Phobos/Game/GameAPI.h"
 #include "Phobos/Game/Physics/Manager.h"
 
@@ -32,10 +32,10 @@ namespace Phobos
 	{
 		namespace Physics
 		{
-			class PH_GAME_API CharacterBodyComponent: public Things::Component
+			class PH_GAME_API CharacterBodyComponent: public MapObjectComponent
 			{
 				public:
-					static std::unique_ptr<Component> Create(const String_t &name, Things::Entity &owner);
+					//static std::unique_ptr<Component> Create(const String_t &name, Things::Entity &owner);
 
 					~CharacterBodyComponent();
 
@@ -43,7 +43,7 @@ namespace Phobos
 					void FinishPhysicsFrame();
 
 				protected:
-					CharacterBodyComponent(const String_t &name, Things::Entity &owner);				
+					CharacterBodyComponent(const String_t &name, MapObject &owner);				
 
 					void OnLoad(const Register::Table &table);
 					void OnLoadFinished();

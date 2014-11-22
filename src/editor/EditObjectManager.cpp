@@ -27,7 +27,7 @@ namespace Phobos
 
 			auto editObject = std::make_unique<EditObject>(nextId, this->GenerateName(nextId));			
 
-			auto mapObjectData = Game::WorldManager::GetInstance().MakeMapObject(
+			auto mapObjectData = Game::WorldManager::GetInstance().CreateMapObject(
 				editObject->GetName(),
 				asset,
 				type,
@@ -36,8 +36,8 @@ namespace Phobos
 
 			auto &finalEditObject = static_cast<EditObject &>(this->AddPrivateChild(std::move(editObject)));
 
-			m_mapEditObjectIndex.insert(std::make_pair(nextId, editObject.get()));
-			m_mapEditObjects.insert(std::make_pair(editObject->GetName(), editObject.get()));
+			m_mapEditObjectIndex.insert(std::make_pair(nextId, &finalEditObject));
+			m_mapEditObjects.insert(std::make_pair(finalEditObject.GetName(), &finalEditObject));
 
 			return finalEditObject;
 		}

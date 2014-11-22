@@ -19,9 +19,6 @@ subject to the following restrictions:
 #include <Phobos/OgreEngine/Math/Transform.h>
 #include <Phobos/OgreEngine/TransformProperty.h>
 
-#include "Phobos/Game/Things/ComponentFactory.h"
-#include "Phobos/Game/Things/Keys.h"
-#include "Phobos/Game/Things/ThingsUtils.h"
 #include "Phobos/Game/Physics/CollisionTag.h"
 #include "Phobos/Game/Physics/Settings.h"
 #include "Phobos/Game/Physics/Manager.h"
@@ -34,16 +31,16 @@ namespace Phobos
 	{
 		namespace Physics
 		{
-			PH_FULL_ENTITY_COMPONENT_CREATOR(PH_CHARACTER_BODY_COMPONENT_NAME, CharacterBodyComponent);
+			//PH_FULL_ENTITY_COMPONENT_CREATOR(PH_CHARACTER_BODY_COMPONENT_NAME, CharacterBodyComponent);
 		
-			CharacterBodyComponent::CharacterBodyComponent(const String_t &name, Things::Entity &owner):
-				Component(name, owner),			
+			CharacterBodyComponent::CharacterBodyComponent(const String_t &name, MapObject &owner) :
+				MapObjectComponent(owner),
 				m_pprpTransform(NULL),
 				m_prpVelocity("velocity"),
 				m_prpCharacterPosition("characterPosition")
 			{
-				owner.AddProperty(m_prpVelocity);
-				owner.AddProperty(m_prpCharacterPosition);
+				// owner.AddProperty(m_prpVelocity);
+				//owner.AddProperty(m_prpCharacterPosition);
 			}
 
 			CharacterBodyComponent::~CharacterBodyComponent()
@@ -65,7 +62,8 @@ namespace Phobos
 			{	
 				Engine::Math::Transform transform;
 
-				Things::LoadWorldTransform(transform, table);						
+				//FIXME
+				//Things::LoadWorldTransform(transform, table);						
 
 				Physics::Manager &physicsManager = Manager::GetInstance();
 
@@ -91,7 +89,7 @@ namespace Phobos
 				manager.RegisterCharacterBodyComponent(*this);
 				m_spCharacterBody->Register();			
 
-				m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
+				//m_pprpTransform = &this->GetCustomEntityProperty<OgreEngine::TransformProperty>(PH_ENTITY_PROP_TRANSFORM);
 			}
 		}
 	}

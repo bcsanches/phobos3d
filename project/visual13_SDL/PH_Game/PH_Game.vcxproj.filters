@@ -8,17 +8,14 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{01cbe4b6-5446-4114-b303-2457124a8ffc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Things">
-      <UniqueIdentifier>{36d54a11-0fd2-468a-bf69-00d59e0b538e}</UniqueIdentifier>
+    <Filter Include="Level">
+      <UniqueIdentifier>{4b690373-37b0-43db-9507-cf4dc1dcfe6b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Gui">
       <UniqueIdentifier>{a06938b2-2152-435b-b94f-d9f2f89f4432}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Game\MapLoader.cpp" />
-    <ClCompile Include="..\..\..\src\Game\MapLoaderFactory.cpp" />
-    <ClCompile Include="..\..\..\src\Game\OgitorMapLoader.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCamera.cpp" />
     <ClCompile Include="..\..\..\src\Game\SpectatorCameraCommandProducer.cpp" />
     <ClCompile Include="..\..\..\src\Game\WorldManager.cpp" />
@@ -46,9 +43,6 @@
     <ClCompile Include="..\..\..\src\Game\Physics\RigidBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Physics\RigidBodyComponent.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Physics\Settings.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
@@ -58,70 +52,49 @@
     <ClCompile Include="..\..\..\src\Game\Physics\Manager.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\BaseOgreWorld.cpp" />
     <ClCompile Include="..\..\..\src\Game\Camera.cpp" />
-    <ClCompile Include="..\..\..\src\Game\Things\Component.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\ComponentFactory.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\Entity.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\EntityEvent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\EntityFactory.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\LinearMoverComponent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererComponent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\ModelRendererManager.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\MoverComponent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\MoverManager.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\PointEntity.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\TransformComponent.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\Signal.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\SignalManager.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\Thing.cpp">
-      <Filter>Things</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Gui\LevelSelector.cpp">
       <Filter>Gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Game\Physics\PhysicsUtils.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\Things\ThingsUtils.cpp">
-      <Filter>Things</Filter>
+    <ClCompile Include="..\..\..\src\Game\Level\MapDefs.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Game\MapWorld.cpp" />
-    <ClCompile Include="..\..\..\src\Game\MapDefs.cpp" />
+    <ClCompile Include="..\..\..\src\Game\Level\MapLoader.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapLoaderFactory.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapObject.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapWorld.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\OgitorMapLoader.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MeshComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapObjectComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\MapObjectComponentFactory.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\LightComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Game\Level\RigidBodyComponent.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Game\GameAPI.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoader.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapLoaderFactory.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\OgitorMapLoader.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCamera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\SpectatorCameraCommandProducer.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\WorldManager.h" />
@@ -170,9 +143,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyComponent.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\RigidBodyFwd.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -188,88 +158,59 @@
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\Conv.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\WorldFwd.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\World.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\RegisterUtils.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\BaseOgreWorld.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\Camera.h" />
     <ClInclude Include="..\..\..\include\Phobos\Game\IController.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Component.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFactory.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ComponentFwd.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Entity.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityEvent.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityFactory.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\EntityFwd.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Keys.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\LinearMoverComponent.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererComponent.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ModelRendererManager.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverComponent.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\MoverManager.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\PointEntity.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\TransformComponent.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\HandleManager.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Signal.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\SignalManager.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\Thing.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingFwd.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\GenericComponentManager.h">
-      <Filter>Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\GenericComponentManagerModule.h">
-      <Filter>Things</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Gui\LevelSelector.h">
       <Filter>Gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Game\Physics\PhysicsUtils.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\Things\ThingsUtils.h">
-      <Filter>Things</Filter>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapDefs.h">
+      <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapDefs.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Game\MapWorld.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapLoader.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapLoaderFactory.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObject.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapWorld.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\OgitorMapLoader.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MeshComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentFactory.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentAccess.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\LightComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\RigidBodyComponent.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectFwd.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\MapObjectComponentFwd.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Phobos\Game\Level\ComponentPool.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

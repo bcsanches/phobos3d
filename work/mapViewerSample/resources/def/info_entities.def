@@ -12,13 +12,13 @@ EntityDef TileWorldSpawn
 
 EntityDef InfoPlayerStart
 {
-  className=PointEntity;  
+    className=Entity;
 }
 
 EntityDef SkeletonTorch
 {
   className=Entity;  
-  components="ModelRenderer|Transform";
+  components = "Mesh";
   
   mesh="skeltorch.mesh";
   scale = "0.3 0.3 0.3";
@@ -29,7 +29,7 @@ EntityDef SkeletonTorch
 EntityDef Platform
 {
   className=Entity;
-  components="ModelRenderer|LinearMover|Transform|RigidBody";
+  //components="LinearMover|Transform";
   
   colliderType = "box";
   boxDimensions = "1 1 1";
@@ -42,13 +42,13 @@ EntityDef Platform
 
 EntityDef PathCorner
 {
-    className=PointEntity;
+      className=Entity;
 }
 
 EntityDef Box1m
 {
   className = Entity;
-  components = "ModelRenderer|Transform|RigidBody";
+  //components = "Transform";
   
   colliderType = "box";
   boxDimensions = "1 1 1";
@@ -56,7 +56,10 @@ EntityDef Box1m
   collisionGroup = Dynamic;
   collisionFilter = "Static|Dynamic";
   
+  components = "Mesh";
   mesh="Box_1m.mesh";
+  
+  physicsType = dynamic;
   
   mass = 5;
 }
@@ -64,7 +67,7 @@ EntityDef Box1m
 EntityDef BoxQuaterMeter
 {
   className = Entity;
-  components = "ModelRenderer|Transform|RigidBody";
+  //components = "Transform";
   
   colliderType = "box";
   boxDimensions = "0.25 0.25 0.25";
@@ -72,6 +75,7 @@ EntityDef BoxQuaterMeter
   collisionGroup = Dynamic;
   collisionFilter = "Static|Dynamic";
   
+  components = "Mesh";
   mesh="Box_1m";
   scale="0.25 0.25 0.25";    
   
@@ -79,4 +83,6 @@ EntityDef BoxQuaterMeter
   
   //ogitor
   parentnode = "SceneManager";
+  
+  physicsType = dynamic;
 }

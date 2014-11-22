@@ -2,7 +2,7 @@
 #define PH_EDITOR_EDIT_OBJECT_MANAGER_H
 
 #include <Phobos/DisableCopy.h>
-#include <Phobos/Game/MapDefs.h>
+#include <Phobos/Game/Level/MapDefs.h>
 #include <Phobos/Node.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 

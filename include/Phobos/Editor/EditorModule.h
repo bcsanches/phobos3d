@@ -7,7 +7,7 @@
 
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Engine/Plugin.h>
-#include <Phobos/Game/MapDefs.h>
+#include <Phobos/Game/Level/MapDefs.h>
 #include <Phobos/Game/WorldManager.h>
 #include <Phobos/Singleton.h>
 

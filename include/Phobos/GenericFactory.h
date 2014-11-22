@@ -249,6 +249,131 @@ namespace Phobos
             return res.GetName().compare(name) < 0;
         }
     };
+	
+	template <typename T, typename RETURN_TYPE, typename... Args>
+	class ObjectCreatorEx : public ObjectCreatorAutoUnlinkHook_t
+	{
+		public:
+			typedef T ObjectType_t;
+			typedef std::function<RETURN_TYPE(Args...)> ObjectCreatorProc_t;
+
+		public:
+			template <typename FACTORY>
+			ObjectCreatorEx(const String_t &name, ObjectCreatorProc_t proc, FACTORY &factory) :
+				strName(name),
+				pfnCreateProc(proc)
+			{
+				if (proc == NULL)
+				{
+					std::stringstream stream;
+					stream << "creator proc cant be null, entity " << name;
+					PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[BaseObjectCreator::BaseObjectCreator]", stream.str());
+				}
+
+				factory.Register(*this);
+			}
+
+			inline const String_t &GetName() const
+			{
+				return strName;
+			}
+
+			inline bool operator<(const ObjectCreatorEx &rhs) const
+			{
+				return strName.compare(rhs.strName) < 0;
+			}
+
+			RETURN_TYPE Create(Args...args) const
+			{
+				return pfnCreateProc(args...);
+			}
+
+		private:
+			String_t strName;
+
+		protected:
+			ObjectCreatorProc_t pfnCreateProc;
+	};
+
+	template <typename T, typename RETURN_TYPE, typename...Args>
+	class GenericFactoryEx
+	{
+		PH_DISABLE_COPY(GenericFactoryEx);
+
+		public:
+			template<typename A>
+			struct ObjectCreatorComp_s
+			{
+				bool operator()(const String_t &name, const A &res) const
+				{
+					return name.compare(res.GetName()) < 0;
+				}
+
+				bool operator()(const A &res, const String_t &name) const
+				{
+					return res.GetName().compare(name) < 0;
+				}
+			};
+
+			typedef ObjectCreatorEx<T, RETURN_TYPE, Args...> ObjectCreator_t;
+			typedef boost::intrusive::set<ObjectCreator_t, boost::intrusive::constant_time_size<false> > ObjectCreatorSet_t;
+					
+		public:			
+			GenericFactoryEx()
+			{
+				//empty
+			}
+
+			void Register(ObjectCreator_t &creator)
+			{
+				setObjectCreators.insert(creator);
+			}
+
+			typename ObjectCreatorSet_t::const_iterator begin() const
+			{
+				return setObjectCreators.begin();
+			}
+
+			typename ObjectCreatorSet_t::const_iterator end() const
+			{
+				return setObjectCreators.end();
+			}
+
+			RETURN_TYPE Create(const String_t &className, Args...args)
+			{
+				return this->GetObjectCreator(className).Create(args...);
+			}
+		
+			RETURN_TYPE TryCreate(const String_t &className, Args...args)
+			{
+				auto creator = this->TryGetObjectCreator(className);
+				if (creator == nullptr)
+					return nullptr;
+
+				return creator->Create(args...);
+			}
+
+		private:			
+			const ObjectCreator_t *TryGetObjectCreator(const String_t &className) const
+			{
+				typename ObjectCreatorSet_t::const_iterator it = setObjectCreators.find(className, ObjectCreatorComp_s<ObjectCreator_t>());
+				if (it == setObjectCreators.end())
+					return nullptr;
+
+				return &(*it);
+			}
+
+			const ObjectCreator_t &GetObjectCreator(const String_t &className) const
+			{
+				auto *creator = this->TryGetObjectCreator(className);
+				if (!creator)
+					PH_RAISE(OBJECT_NOT_FOUND_EXCEPTION, "[EntityFactory::Create]", className);
+
+				return *creator;
+			}
+		
+			ObjectCreatorSet_t setObjectCreators;			
+	};	
 }
 
 #endif

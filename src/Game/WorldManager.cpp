@@ -27,15 +27,13 @@ subject to the following restrictions:
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
-#include "Phobos/Game/MapDefs.h"
-#include "Phobos/Game/MapWorld.h"
+#include "Phobos/Game/Level/MapDefs.h"
+#include "Phobos/Game/Level/MapWorld.h"
+#include "Phobos/Game/Level/MapObject.h"
 #include "Phobos/Game/RegisterUtils.h"
-#include "Phobos/Game/Things/EntityFactory.h"
-#include "Phobos/Game/Things/Keys.h"
-#include "Phobos/Game/Things/ThingsUtils.h"
 
 #include "Phobos/Game/Physics/Settings.h"
-#include "Phobos/Game/MapLoaderFactory.h"
+#include "Phobos/Game/Level/MapLoaderFactory.h"
 
 namespace Phobos
 {
@@ -46,16 +44,13 @@ namespace Phobos
 		WorldManager::WorldManager(Engine::Console &console):
 			Module("WorldManager", NodeFlags::PRIVATE_CHILDREN),
 			m_cmdLoadMap("loadMap"),
-			m_cmdUnloadMap("unloadMap"),
-			m_cmdDumpFactoryCreators("dumpFactoryCreators")
+			m_cmdUnloadMap("unloadMap")
 		{
 			m_cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdLoadMap, this));
-			m_cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdUnloadMap, this));
-			m_cmdDumpFactoryCreators.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdDumpFactoryCreators, this));
+			m_cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdUnloadMap, this));			
 
 			console.AddContextCommand(m_cmdLoadMap);
-			console.AddContextCommand(m_cmdUnloadMap);
-			console.AddContextCommand(m_cmdDumpFactoryCreators);
+			console.AddContextCommand(m_cmdUnloadMap);			
 		}
 
 		WorldManager::~WorldManager()
@@ -66,9 +61,6 @@ namespace Phobos
 		void WorldManager::UnloadMap()
 		{
 			this->RemoveAllChildren();
-			m_clEntityManager.Clear();
-
-			//m_spGameWorld.reset();
 
 			m_spMapLoader->Unload();
 			
@@ -102,72 +94,12 @@ namespace Phobos
 			m_spMapLoader = MapLoaderFactory::GetInstance().Create(extension.c_str());
 			m_spMapLoader->Load(mapName, *m_pclMapObjectsHive);
 
-#if 0
-			{
-				auto world(m_spMapLoader->CreateAndLoadWorldSpawn());
-				this->AddPrivateChild(std::move(world));
-			}
-
-			m_spGameWorld = m_spMapLoader->CreateAndLoadWorld();
-#endif
-
-			this->LoadEntities();
-
-			for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
-			{
-				auto *entity = static_cast<Things::Entity *>(it->second);
-
-				entity->LoadFinished();
-			}
-
 			this->OnMapLoaded();
 		}
-
-		Things::Entity &WorldManager::LoadEntity(const Register::Table &entityDef)
+		
+		MapObject &WorldManager::GetMapObject(const String_t &name) const
 		{
-			auto ptr = Things::EntityFactory::GetInstance().Create(entityDef.GetString(PH_ENTITY_KEY_CLASS_NAME), entityDef.GetName());
-
-			//Update handle before loading entity, so components would have a valid handle
-			Things::Handle_s h = m_clEntityManager.AddObject(ptr.get());
-			ptr->SetHandle(h);
-			
-			ptr->Load(entityDef);
-				
-			auto &entityRef = *ptr;
-
-			this->AddPrivateChild(std::move(ptr));
-
-			return entityRef;
-		}
-
-		void WorldManager::LoadEntities()
-		{			
-			for(auto &pair : *const_cast<const Register::Hive *>(m_pclMapObjectsHive))
-			{
-				auto *dict = static_cast<const Register::Table *>(pair.second);
-
-				StringRef_t type = dict->GetString(PH_MAP_OBJECT_KEY_TYPE);
-
-				if(type.compare(PH_MAP_OBJECT_TYPE_ENTITY) == 0)
-					this->LoadEntity(*dict);						
-			}
-		}
-
-		Things::Entity *WorldManager::TryGetEntityByType(const String_t &className) const
-		{
-			for(Node::const_iterator it = this->begin(), end = this->end(); it != end; ++it)
-			{
-				auto *entity = static_cast<Things::Entity *>(it->second);
-				if(entity->GetEntityClassName().compare(className) == 0)
-					return entity;
-			}
-
-			return NULL;
-		}
-
-		Things::Entity &WorldManager::GetEntityByName(const String_t &name) const
-		{
-			return static_cast<Things::Entity &>(this->GetChild(name));
+			return MapWorld::GetInstance().GetMapObject(name);
 		}
 
 		void WorldManager::OnInit()
@@ -184,62 +116,7 @@ namespace Phobos
 			m_spMapLoader.reset();
 		}
 
-		void WorldManager::CallEntityIOProc(ThingList_t &list, void (Things::Thing::*proc)())
-		{
-			for(auto it = list.begin();it != list.end();)
-			{
-				auto workIt = it++;
-
-				(*workIt->*proc)();
-			}
-		}
-
-		void WorldManager::OnFixedUpdate()
-		{
-			this->CallEntityIOProc(m_lstFixedUpdate, &Things::Thing::FixedUpdate);
-		}
-
-		void WorldManager::OnUpdate()
-		{
-			this->CallEntityIOProc(m_lstUpdate, &Things::Thing::Update);
-		}
-
-		void WorldManager::AddToFixedUpdateList(Things::Thing &io)
-		{
-			m_lstFixedUpdate.push_back(&io);
-		}
-
-		void WorldManager::AddToUpdateList(Things::Thing &io)
-		{
-			m_lstUpdate.push_back(&io);
-		}
-
-		bool WorldManager::RemoveFromList(ThingList_t &list, Things::Thing &io)
-		{
-			for(auto it = list.begin(), end = list.end();it != end; ++it)
-			{
-				if(*it == &io)
-				{
-					list.erase(it);
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-
-		void WorldManager::RemoveFromFixedUpdateList(Things::Thing &io)
-		{
-			PH_VERIFY_MSG(this->RemoveFromList(m_lstFixedUpdate, io), "Entity not in FixedUpdate list");
-		}
-
-		void WorldManager::RemoveFromUpdateList(Things::Thing &io)
-		{
-			PH_VERIFY_MSG(this->RemoveFromList(m_lstUpdate, io), "Entity not in Update list");
-		}
-
-		std::tuple<Register::Table &, Handle> WorldManager::MakeMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
+		MapObject *WorldManager::CreateMapObject(const String_t &name, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform)
 		{
 			std::unique_ptr<Register::Table> table(PH_NEW Register::Table(name));			
 
@@ -262,10 +139,12 @@ namespace Phobos
 				Phobos::Register::SetVector3(*table, PH_MAP_OBJECT_KEY_SCALE, Ogre::Vector3::UNIT_SCALE);
 			}
 
-			Things::SaveTransform(*table, transform);					
+			//Things::SaveTransform(*table, transform);					
+			Register::SetVector3(*table, PH_MAP_OBJECT_KEY_POSITION, transform.GetOrigin());
+			Register::SetQuaternion(*table, PH_MAP_OBJECT_KEY_ORIENTATION, transform.GetRotation());
 
 			//Create Map object
-			SceneNodeKeeper keeper = MapWorld::GetInstance().MakeObject(*table);
+			std::unique_ptr<MapObject> upMapObject(MapWorld::GetInstance().CreateObject(*table));			
 
 			//
 			//All is fine, commit results, transfer ownership to WorldManager and return data
@@ -273,8 +152,10 @@ namespace Phobos
 
 			m_pclMapObjectsHive->AddTable(std::move(table));			
 
-			//All is done, return references to objects
-			return std::make_tuple(std::ref(refTable), keeper.Release());
+			//All is done, cancel the unique pointer and return a valid reference to caller
+			//The object will be tracked by MapWorld
+			auto pMapObject = upMapObject.release();
+			return pMapObject;
 		}
 
 		void WorldManager::CmdLoadMap(const Shell::StringVector_t &args, Shell::Context &)
@@ -299,22 +180,7 @@ namespace Phobos
 		void WorldManager::CmdUnloadMap(const Shell::StringVector_t &args, Shell::Context &)
 		{
 			this->UnloadMap();
-		}
-
-		void WorldManager::CmdDumpFactoryCreators(const Shell::StringVector_t &args, Shell::Context &)
-		{
-			auto stream = LogMakeStream();
-
-			stream << "Entity Factory creators:\n";
-
-			auto &factory = Things::EntityFactory::GetInstance();
-			for(auto it : factory)		
-			{
-				stream << "\t" << it.GetName() << "\n";
-			}
-
-			stream << "End.";
-		}
+		}		
 
 		PH_DEFINE_LISTENER_PROCS(WorldManager, WorldManagerListener, m_lstListeners);
 	}

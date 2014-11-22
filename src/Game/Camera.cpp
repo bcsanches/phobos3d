@@ -27,12 +27,9 @@ namespace Phobos
 	{
 		Camera::Camera():
 			m_iViewportZOrder(-1),
-			m_fpNearPlane(1)
-		{
-			auto &render = OgreEngine::Render::GetInstance();
-				
-			m_pclRootNode = render.CreateSceneNode();
-
+			m_fpNearPlane(1),
+			m_upRootNode(OgreEngine::Render::GetInstance().CreateSceneNode())
+		{			
 			this->CreateCamera();
 		}
 
@@ -44,10 +41,7 @@ namespace Phobos
 				render.RemoveViewport(m_iViewportZOrder);
 
 			if(m_pclCamera)
-				render.DestroyCamera(m_pclCamera);
-
-			if(m_pclRootNode)
-				render.DestroySceneNode(m_pclRootNode);
+				render.DestroyCamera(m_pclCamera);			
 		}
 
 		void Camera::EnableViewport(int ZOrder)
@@ -65,13 +59,13 @@ namespace Phobos
 
 		void Camera::SetTransform(const Engine::Math::Transform &t)
 		{		
-			m_pclRootNode->setPosition(t.GetOrigin());
-			m_pclRootNode->setOrientation(t.GetRotation());
+			m_upRootNode->setPosition(t.GetOrigin());
+			m_upRootNode->setOrientation(t.GetRotation());
 		}
 
 		Engine::Math::Transform Camera::GetTransform() const
 		{
-			return Engine::Math::Transform(m_pclRootNode->getPosition(), m_pclRootNode->getOrientation());
+			return Engine::Math::Transform(m_upRootNode->getPosition(), m_upRootNode->getOrientation());
 		}
 
 		void Camera::SetCameraTransform(const Engine::Math::Transform &t)
@@ -139,7 +133,7 @@ namespace Phobos
 		
 			m_pclCamera = render.CreateCamera();	
 
-			m_pclRootNode->attachObject(m_pclCamera);
+			m_upRootNode->attachObject(m_pclCamera);
 
 			if(m_iViewportZOrder >= 0)
 				render.AddViewport(m_pclCamera, m_iViewportZOrder);

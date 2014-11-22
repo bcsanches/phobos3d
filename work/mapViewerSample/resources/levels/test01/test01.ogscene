@@ -301,7 +301,7 @@
     </CUSTOMPROPERTIES>
   </OBJECT>
 
-  <OBJECT object_id="454512160" name="Ogre#0Copy#0#0" typename="Entity Object" parentnode="NodeCasa">
+  <OBJECT object_id="454512160" name="Player" typename="Entity Object" parentnode="NodeCasa">
     <PROPERTY id="autotracktarget" type="7" value="None"></PROPERTY>
     <PROPERTY id="castshadows" type="12" value="true"></PROPERTY>
     <PROPERTY id="layer" type="2" value="0"></PROPERTY>

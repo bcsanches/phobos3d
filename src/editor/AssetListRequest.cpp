@@ -8,8 +8,7 @@
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Register/Table.h>
 
-#include <Phobos/Game/MapDefs.h>
-#include <Phobos/Game/Things/Keys.h>
+#include <Phobos/Game/Level/MapDefs.h>
 
 #include <OgreResourceGroupManager.h>
 
@@ -50,7 +49,7 @@ void Phobos::Editor::AssetListRequest::OnExecute(const rapidjson::Value *paramet
 		assetObj.AddStringValue("type", Game::MapObjectTypeToString(Game::MapObjectTypes::STATIC));
 	}
 
-	const auto &hive = Register::GetHive(PH_ENTITY_DEF_HIVE);
+	const auto &hive = Register::GetHive("MapObjectDef");
 						
 	for(auto it : hive)
 	{												

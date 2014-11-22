@@ -145,7 +145,6 @@
     <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Math\TransformFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\OgreEngine\OgreEngineAPI.h" />
     <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Render.h" />
-    <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Transform.h" />
     <ClInclude Include="..\..\..\include\Phobos\OgreEngine\TransformProperty.h" />
     <ClInclude Include="..\..\..\include\Phobos\OgreEngine\TransformPropertyFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\OgreEngine\Utils.h" />

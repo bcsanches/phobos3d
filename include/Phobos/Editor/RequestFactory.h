@@ -1,6 +1,8 @@
 #ifndef PH_EDITOR_REQUEST_FACTORY_H
 #define PH_EDITOR_REQUEST_FACTORY_H
 
+#include <memory>
+
 #include <Phobos/GenericFactory.h>
 #include <Phobos/Memory.h>
 

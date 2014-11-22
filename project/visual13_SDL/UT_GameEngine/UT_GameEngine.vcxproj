@@ -124,7 +124,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\UT_GameEngine\HandleManagerTest.cpp" />
     <ClCompile Include="..\..\..\src\UT_GameEngine\main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,8 @@ subject to the following restrictions:
 
 #include <OgreMesh.h>
 
+#include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/Module.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 #include <Phobos/Singleton.h>
@@ -35,7 +37,6 @@ subject to the following restrictions:
 #include "RigidBodyFwd.h"
 
 #include "Phobos/Game/GameAPI.h"
-#include "Phobos/Game/Things/GenericComponentManagerModule.h"
 
 namespace Phobos
 {	
@@ -58,7 +59,6 @@ namespace Phobos
 			};				
 
 			class CharacterBodyComponent;
-			class RigidBodyComponent;
 
 			class PH_GAME_API Manager: public Engine::Module
 			{
@@ -103,17 +103,13 @@ namespace Phobos
 					//
 					//
 					//Components
-					void RegisterRigidBodyComponent(RigidBodyComponent &comp);
-					void UnregisterRigidBodyComponent(RigidBodyComponent &comp);
-
 					void RegisterCharacterBodyComponent(CharacterBodyComponent &comp);
 					void UnregisterCharacterBodyComponent(CharacterBodyComponent &comp);
 
 				protected:
 					virtual void OnInit() override;
 
-					virtual void OnFixedUpdate() override;
-					virtual void OnUpdate() override;				
+					virtual void OnFixedUpdate() override;		
 
 				private:
 					template<typename T>
@@ -174,8 +170,7 @@ namespace Phobos
 					//Because scaled meshes references the original mesh we keep a cache of all meshes that were been loaded
 					CollisionMeshesSet_t m_setCollisionMeshesCache;
 
-					Things::GenericComponentManager<RigidBodyComponent>			m_clRigidBodyComponents;
-					Things::GenericComponentManager<CharacterBodyComponent>		m_clCharacterBodyComponents;
+					//Things::GenericComponentManager<CharacterBodyComponent>		m_clCharacterBodyComponents;
 
 					friend class RigidBody;
 					friend class SweepCharacterBody;

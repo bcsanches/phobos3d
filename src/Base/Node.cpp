@@ -110,14 +110,16 @@ namespace Phobos
 			stream << "Node " << node.GetName() << " is already a child of " << node.m_pclParent->GetName() << ", unregister if first before adding it to " << this->GetName();
 			PH_RAISE(INVALID_PARAMETER_EXCEPTION, "[Node::AddChild]", stream.str());
 		} 
-		else if(m_mapNodes.find(node.GetName()) != m_mapNodes.end())
+
+		auto it = m_mapNodes.lower_bound(node.GetName());
+		if ((it != m_mapNodes.end()) && !(m_mapNodes.key_comp()(node.GetName(), it->first)))
 		{
 			std::stringstream stream;
 			stream << "Node " << node.GetName() << " already exists on node " << this->GetName();
 			PH_RAISE(OBJECT_ALREADY_EXISTS_EXCEPTION, "[Node::AddChild]", stream.str());
 		}
 
-		m_mapNodes.insert(std::make_pair(node.GetName(), &node));
+		m_mapNodes.insert(it, std::make_pair(node.GetName(), &node));
 		node.m_pclParent = this;
 
 		return node;

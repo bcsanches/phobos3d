@@ -16,26 +16,59 @@ subject to the following restrictions:
 
 #include "Phobos/OgreEngine/Utils.h"
 
+#include <OgreSceneManager.h>
+#include <OgreSceneNode.h>
+
 #include <string>
 
 #include <atomic>
 
 #include <Phobos/Log.h>
+#include <Phobos/Path.h>
 
 namespace Phobos
 {
-	static std::atomic_uint tCount_gl;
+	namespace OgreEngine
+	{
+		static std::atomic_uint tCount_gl;
 
-	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
-	{		
-		LogMakeStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
-	}
+		void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex)
+		{
+			LogMakeStream() << "[" << moduleName << "]: Exception: " << ex.getFullDescription();
+		}
 
-	String_t &GenerateOgreName(String_t &out)
-	{		
-		out = "name_";
-		out += std::to_string(++tCount_gl);	
+		String_t &GenerateOgreName(String_t &out)
+		{
+			out = "name_";
+			out += std::to_string(++tCount_gl);
 
-		return out;
+			return out;
+		}
+
+		String_t FixMeshName(const String_t &meshName)
+		{
+			String_t extension;
+
+			//Newer ogitor does nto include .mesh in mesh names, so fix it here
+			bool found = Path::GetExtension(extension, meshName);
+			if ((found && extension != "mesh") || (!found))
+			{
+				String_t newName(meshName);
+				newName.append(".mesh");
+
+				return newName;
+			}
+
+			return meshName;
+		}
+
+		void Phobos::OgreEngine::OgreSceneNodeDeleter::operator()(Ogre::SceneNode *node)
+		{
+			if (node == nullptr)
+				return;
+
+			node->getCreator()->destroySceneNode(node);
+		}
+
 	}
 }

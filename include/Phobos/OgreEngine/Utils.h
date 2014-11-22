@@ -17,14 +17,32 @@ subject to the following restrictions:
 #ifndef PH_OGRE_UTILS_H
 #define PH_OGRE_UTILS_H
 
+#include <memory>
+
 #include <OgreException.h>
 
 #include <Phobos/String.h>
 
+#include <Phobos/OgreEngine/OgreEngineAPI.h>
+
 namespace Phobos
 {
-	void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex);
-	String_t &GenerateOgreName(String_t &out);
+	namespace OgreEngine
+	{
+		void LogOgreException(const Char_t *moduleName, const Ogre::Exception &ex);
+		String_t &GenerateOgreName(String_t &out);
+
+		PH_OGRE_ENGINE_API String_t FixMeshName(const String_t &meshName);
+
+		class PH_OGRE_ENGINE_API OgreSceneNodeDeleter
+		{
+			public:
+				void operator()(Ogre::SceneNode *node);
+		};
+
+		typedef std::unique_ptr<Ogre::SceneNode, OgreSceneNodeDeleter> SceneNodeUniquePtr_t;
+
+	}
 }
 
 #endif

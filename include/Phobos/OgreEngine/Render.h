@@ -38,6 +38,7 @@ subject to the following restrictions:
 #include <Phobos/System/Window.h>
 
 #include "Phobos/OgreEngine/OgreEngineAPI.h"
+#include "Phobos/OgreEngine/Utils.h"
 
 namespace Ogre
 {
@@ -88,11 +89,10 @@ namespace Phobos
 
 				void AddRenderQueueListener(Ogre::RenderQueueListener &listener);
 				void RemoveRenderQueueListener(Ogre::RenderQueueListener &listener);
-			
-				//Ogre::SceneNode *GetOrCreateSceneNode(const String_t &name);
-				Ogre::SceneNode *CreateSceneNode(const String_t &name);
-				Ogre::SceneNode *CreateSceneNode();
-				void DestroySceneNode(Ogre::SceneNode *node);
+							
+				SceneNodeUniquePtr_t CreateSceneNode(const String_t &name);
+				SceneNodeUniquePtr_t CreateSceneNode();
+				
 				Ogre::SceneNode *GetSceneNode(const String_t &name);
 
 				Ogre::Entity	*CreateEntity(const String_t &meshName, UInt32_t flags = 0);
@@ -133,7 +133,7 @@ namespace Phobos
 				void SetParentWindow(void *parentWindow);
 
 				size_t GetScreenWidth();
-				size_t GetScreenHeight();
+				size_t GetScreenHeight();				
 
 			protected:
 				// =====================================================

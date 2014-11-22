@@ -1,6 +1,7 @@
 StaticObjectDef Model
 {  
   scale = "1 1 1";
+  physicsType = static;
 }
 
 StaticObjectDef Barrel: Model

@@ -23,8 +23,8 @@ subject to the following restrictions:
 #include <Phobos/Error.h>
 #include <Phobos/Exception.h>
 
-#include <Phobos/Game/Things/PointEntity.h>
 #include <Phobos/Engine/Session.h>
+#include <Phobos/Game/Level/MapObject.h>
 #include <Phobos/Game/WorldManager.h>
 
 #include <Phobos/Game/Gui/LevelSelector.h>
@@ -139,15 +139,9 @@ namespace Phobos
 	void ViewerClient::OnMapLoaded()
 	{
 		auto &worldManager = Game::WorldManager::GetInstance();
-		auto *player = static_cast<Game::Things::PointEntity *>(worldManager.TryGetEntityByType("InfoPlayerStart"));
-		if(!player)
-		{
-			LogMessage("[CmdLoadMap] World does not contains InfoPlayerStart entity");
-		}
-		else
-		{
-			m_clSpectatorCamera.SetTransform(player->GetTransform());
-		}		
+		auto &player = worldManager.GetMapObject("Player");
+				
+		m_clSpectatorCamera.SetTransform(player.MakeWorldTransform());
 
 		m_fMapLoaded = true;
 		

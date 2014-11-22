@@ -26,7 +26,6 @@ subject to the following restrictions:
 #include "Phobos/Game/Physics/Manager.h"
 #include "Phobos/Game/Physics/Conv.h"
 #include "Phobos/Game/Physics/RigidBody.h"
-#include "Phobos/Game/Physics/RigidBodyComponent.h"
 #include "Phobos/Game/Physics/SweepCharacterBody.h"
 
 namespace Phobos
@@ -73,22 +72,11 @@ namespace Phobos
 				if(timer.IsPaused())
 					return;
 
-				m_clRigidBodyComponents.CallForAll(&RigidBodyComponent::SaveTransform);
-				m_clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent::PreparePhysicsFrame, timer.m_fpFrameTime);
+				//m_clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent::PreparePhysicsFrame, timer.m_fpFrameTime);
 
 				m_upWorld->stepSimulation(timer.m_fpFrameTime, 32);
 
-				m_clCharacterBodyComponents.CallForAll(&CharacterBodyComponent::FinishPhysicsFrame);
-			}
-
-			void Manager::OnUpdate()
-			{
-				//No world, no reason to update
-				if(!m_upWorld)
-					return;
-			
-				//No pause check, to allow client interpolation
-				m_clRigidBodyComponents.CallForAll1(&RigidBodyComponent::UpdateTransform, Engine::Core::GetInstance().GetGameTimer().m_fpDelta);
+				//m_clCharacterBodyComponents.CallForAll(&CharacterBodyComponent::FinishPhysicsFrame);
 			}
 
 			void Manager::SetGravity(const Ogre::Vector3 &gravity)
@@ -376,25 +364,14 @@ namespace Phobos
 			//
 			//
 			//COMPONENTS
-
-			void Manager::RegisterRigidBodyComponent(RigidBodyComponent &comp)
-			{
-				m_clRigidBodyComponents.Register(comp);
-			}
-		
-			void Manager::UnregisterRigidBodyComponent(RigidBodyComponent &comp)
-			{
-				m_clRigidBodyComponents.Unregister(comp);
-			}
-
 			void Manager::RegisterCharacterBodyComponent(CharacterBodyComponent &comp)
 			{
-				m_clCharacterBodyComponents.Register(comp);
+				//m_clCharacterBodyComponents.Register(comp);
 			}
 
 			void Manager::UnregisterCharacterBodyComponent(CharacterBodyComponent &comp)
 			{
-				m_clCharacterBodyComponents.Unregister(comp);
+				//m_clCharacterBodyComponents.Unregister(comp);
 			}
 		}
 	}
