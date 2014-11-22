@@ -23,8 +23,8 @@ namespace Phobos
 {
 	namespace Game
 	{
-		RigidBodyComponent::RigidBodyComponent(const char *type, MapObject &owner, const Register::Table &table, Physics::RigidBody &&rigidBody) :
-			MapObjectComponent(type, owner),
+		RigidBodyComponent::RigidBodyComponent(MapObject &owner, const Register::Table &table, Physics::RigidBody &&rigidBody) :
+			MapObjectComponent(owner),
 			m_clRigidBody(std::move(rigidBody))
 		{
 			m_clRigidBody.Register();
@@ -42,7 +42,6 @@ namespace Phobos
 	
 		DynamicBodyComponent::DynamicBodyComponent(Game::MapObject &owner, const Register::Table &table):
 			RigidBodyComponent(
-				PH_DYNAMIC_BODY_COMPONENT_NAME,
 				owner, 
 				table,
 				Game::Physics::Manager::GetInstance().CreateRigidBody(
@@ -114,7 +113,6 @@ namespace
 
 	StaticBodyComponent::StaticBodyComponent(Game::MapObject &owner, const Register::Table &table) :
 		RigidBodyComponent(
-			PH_STATIC_BODY_COMPONENT_NAME,
 			owner,
 			table,
 			CreateStaticObjectRigidBody(

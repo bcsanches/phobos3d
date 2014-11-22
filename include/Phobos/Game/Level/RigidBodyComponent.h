@@ -21,7 +21,7 @@ namespace Phobos
 				virtual ~RigidBodyComponent() {};				
 
 			protected:
-				RigidBodyComponent(const char *type, MapObject &owner, const Register::Table &table, Physics::RigidBody &&rigidBody);
+				RigidBodyComponent(MapObject &owner, const Register::Table &table, Physics::RigidBody &&rigidBody);
 
 			protected:
 				Physics::RigidBody m_clRigidBody;

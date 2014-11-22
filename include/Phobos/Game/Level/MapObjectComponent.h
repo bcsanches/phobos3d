@@ -39,11 +39,6 @@ namespace Phobos
 				};
 
 			public:
-				const char *GetType() const
-				{
-					return m_pszType;
-				}
-
 				static void TickReminders();
 				static void TickFixedUpdate();
 				static void TickUpdate();				
@@ -56,11 +51,10 @@ namespace Phobos
 				virtual ~MapObjectComponent();
 
 			protected:
-				MapObjectComponent(const char *type, MapObject &owner) :
-					m_rclOwner(owner),
-					m_pszType(type)
+				MapObjectComponent(MapObject &owner) :
+					m_rclOwner(owner)
 				{
-					PH_ASSERT_VALID(type);
+					//empty
 				}				
 
 				MapObjectComponentAccess AccessMapObject();
@@ -117,7 +111,6 @@ namespace Phobos
 
 			private:
 				MapObject	&m_rclOwner;
-				const char	*m_pszType;
 		};		
 	}
 }

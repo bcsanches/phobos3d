@@ -23,7 +23,7 @@ namespace Phobos
 		PH_MAP_COMPONENT_FULL_CREATOR(PH_LIGHT_COMPONENT_NAME, LightComponent);
 
 		LightComponent::LightComponent(MapObject &owner, const Register::Table &table):
-			MapObjectComponent(PH_LIGHT_COMPONENT_NAME, owner),
+			MapObjectComponent(owner),
 			m_pclLight(Phobos::OgreEngine::Render::GetInstance().CreateLight())
 		{
 			m_pclLight->setCastShadows(table.GetBool(PH_MAP_OBJECT_KEY_CAST_SHADOWS));

@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+#include <boost/type_index.hpp>
+
 #include <OgrePrerequisites.h>
 
 #include <Phobos/Exception.h>
@@ -36,7 +38,7 @@ namespace Phobos
 						ComponentEnumerator &operator=(const ComponentEnumerator &rhs) = delete;
 
 					private:
-						ComponentEnumerator(MapObject &object, const char *type);
+						ComponentEnumerator(MapObject &object, boost::typeindex::type_index type);
 
 						friend class MapObject;
 
@@ -46,8 +48,8 @@ namespace Phobos
 						MapObjectComponent *GetCurrent();
 
 					private:
-						const char	*m_pszType;
-						MapObject	&m_rclMapObject;
+						boost::typeindex::type_index	m_clType;
+						MapObject						&m_rclMapObject;
 
 						ComponentsVector_t::iterator m_itCurrent;
 						ComponentsVector_t::iterator m_itPosition;
@@ -114,9 +116,10 @@ namespace Phobos
 				void AddComponent(const String_t &typeName);
 				void AddComponent(MapObjectComponent::UniquePtr_t &&component);
 
-				inline ComponentEnumerator MakeEnumerator(const char *type)
+				template <typename T>
+				inline ComponentEnumerator MakeEnumerator()
 				{
-					return ComponentEnumerator(*this, type);
+					return ComponentEnumerator(*this, boost::typeindex::type_id<T>());
 				}
 				
 				template <typename T>
@@ -141,7 +144,7 @@ namespace Phobos
 		template <typename T>
 		T &MapObject::GetComponent()
 		{			
-			auto enumerator = this->MakeEnumerator(T::GetComponentName().c_str());
+			auto enumerator = this->MakeEnumerator(boost::typeindex::type_id<T>());
 
 			if (!enumerator.Next())
 			{

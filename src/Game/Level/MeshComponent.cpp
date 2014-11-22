@@ -33,7 +33,7 @@ namespace Phobos
 		
 
 		MeshComponent::MeshComponent(MapObject &owner, const Register::Table &table) :
-			MapObjectComponent(PH_MESH_COMPONENT_NAME, owner),
+			MapObjectComponent(owner),
 			m_pclEntity(OgreEngine::Render::GetInstance().CreateEntity(table.GetString(PH_MAP_OBJECT_KEY_MESH)))
 		{
 			this->AccessMapObject().AttachOgreObject(*m_pclEntity);			

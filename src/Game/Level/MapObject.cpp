@@ -134,7 +134,7 @@ namespace Phobos
 
 	
 		MapObject::ComponentEnumerator::ComponentEnumerator(const ComponentEnumerator &rhs):
-			m_pszType(rhs.m_pszType),
+			m_clType(rhs.m_clType),
 			m_rclMapObject(rhs.m_rclMapObject),
 			m_itCurrent(rhs.m_itCurrent),
 			m_itPosition(rhs.m_itPosition),
@@ -143,21 +143,21 @@ namespace Phobos
 			//empty
 		}
 					
-		MapObject::ComponentEnumerator::ComponentEnumerator(MapObject &object, const char *type):
-			m_pszType(type),
+		MapObject::ComponentEnumerator::ComponentEnumerator(MapObject &object, boost::typeindex::type_index type) :
+			m_clType(type),
 			m_rclMapObject(object),
 			m_itPosition(object.m_vecComponents.begin()),
 			m_itEnd(object.m_vecComponents.end()),
 			m_itCurrent(object.m_vecComponents.end())
 		{
-			PH_ASSERT_VALID(type);
+			//empty
 		}
 		
 		bool MapObject::ComponentEnumerator::Next()
 		{									
 			for (; m_itPosition != m_itEnd; ++m_itPosition)
 			{
-				if (strcmp(m_itPosition->get()->GetType(), m_pszType))
+				if (boost::typeindex::type_id_runtime(*m_itPosition->get()) != m_clType)				
 					continue;
 
 				m_itCurrent = m_itPosition;

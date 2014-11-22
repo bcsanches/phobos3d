@@ -260,7 +260,7 @@ void MapWorldImpl::Load(Phobos::StringRef_t levelPath, const Phobos::Register::H
 
 			auto pObject = std::get<4>(pair.second);
 
-			auto enumerator = pObject->MakeEnumerator(PH_LIGHT_COMPONENT_NAME);
+			auto enumerator = pObject->MakeEnumerator<Game::LightComponent>();
 
 			while (enumerator.Next())
 			{
