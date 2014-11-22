@@ -25,7 +25,7 @@ namespace Phobos
 				EditObject &CreateEditObject(UInt64_t parentId, const String_t &asset, Game::MapObjectTypes type, const Engine::Math::Transform &transform);
 
 			private:
-				String_t GenerateName(UInt64_t id) const;
+				String_t GenerateName(UInt_t id) const;
 
 			private:
 				typedef std::map<String_t, EditObject *> EditObjectsNameMap_t;
@@ -34,7 +34,7 @@ namespace Phobos
 				EditObjectsNameMap_t	m_mapEditObjects;
 				EditObjectsIdMap_t		m_mapEditObjectIndex;
 
-				UInt64_t			m_uNextId;
+				UInt_t					m_uNextId;
 		};
 	}
 }

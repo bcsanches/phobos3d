@@ -42,7 +42,7 @@ namespace Phobos
 			return finalEditObject;
 		}
 
-		String_t EditObjectManager::GenerateName(UInt64_t id) const
+		String_t EditObjectManager::GenerateName(UInt_t id) const
 		{
 			std::stringstream name;
 
