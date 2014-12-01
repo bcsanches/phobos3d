@@ -108,22 +108,22 @@ void Phobos::Engine::Core::RemoveModule(Module &module)
 	m_clModule.RemoveModule(module);
 }
 
-Phobos::Float_t Phobos::Engine::Core::GetUpdateTime(void)
+Phobos::Chrono::Seconds Phobos::Engine::Core::GetUpdateTime()
 {
 	const Float_t updateTime = m_varEngineFPS.GetFloat();
 
 	if(updateTime > 0)
-		return(1.0f / updateTime);
+		return(Chrono::Seconds(1.0f / updateTime));
 	else
 	{
 		LogMakeStream() << "[Core::GetUpdateTime] Warning: Invalid update time: " << updateTime << ", must be > 0";
 		m_varEngineFPS.SetValue("60");
 
-		return(1.0f / UPDATE_TIME);
+		return Chrono::Seconds(1.0f / UPDATE_TIME);
 	}
 }
 
-Phobos::Float_t Phobos::Engine::Core::GetMinFrameTime(void)
+Phobos::Chrono::Seconds Phobos::Engine::Core::GetMinFrameTime()
 {
 	Float_t minFrameTime = m_varMinFrameTime.GetFloat();
 
@@ -135,7 +135,7 @@ Phobos::Float_t Phobos::Engine::Core::GetMinFrameTime(void)
 		minFrameTime = MIN_TIME;
 	}
 
-	return minFrameTime;
+	return Chrono::Seconds(minFrameTime);
 }
 
 void Phobos::Engine::Core::StartMainLoop()
@@ -144,27 +144,21 @@ void Phobos::Engine::Core::StartMainLoop()
 	m_clModule.Start();	
 	m_clModule.Started();
 
-	Float_t			executionTime = 0;		
-	Float_t			updateTime = GetUpdateTime();
-		
-	m_clTimer.Reset();
+	Chrono::Seconds	executionTime;		
+	auto			updateTime = GetUpdateTime();
+	auto previousTime = Chrono::Clock::now();
+			
 	do
 	{
-		this->SetFrameRate(updateTime);
+		this->SetFrameRate(updateTime.count());
 						
-		auto lastFrameTime = m_clTimer.Elapsed();		
-
-		//FIXME HACK, fIX THIS
-		if(lastFrameTime > 1)
-		{
-			m_clTimer.Reset();
-			continue;
-		}
-
+		auto now = Chrono::Clock::now();
+		auto lastFrameTime = now - previousTime;
+		
 		if(m_varFixedTime.GetBoolean())
 			lastFrameTime = updateTime;
 
-		if(lastFrameTime == 0.0f)
+		if (lastFrameTime == Chrono::Seconds(0.0f))
 		{				
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			continue;
@@ -176,26 +170,28 @@ void Phobos::Engine::Core::StartMainLoop()
 
 		#ifdef PH_DEBUG
 			//this happens on debug mode while stopped on break points
-			if(executionTime > 20)
-				executionTime = updateTime;
+		if (executionTime > Chrono::Seconds(20.0f))
+			executionTime = updateTime;
 		#endif				
 
 		//update the game on fixed time steps
 		while(executionTime >= updateTime)
 		{
 			//fixed Update
-			this->FixedUpdate(updateTime);
+			this->FixedUpdate(updateTime.count());
 				
 			executionTime -= updateTime;
 		}
-		Float_t delta = (Float_t) executionTime / (Float_t) updateTime;			
+		Float_t delta = executionTime / updateTime;			
 			
 		//Now update other modules as fast as we can
-		this->Update(totalFrameTime, delta);
+		this->Update(totalFrameTime.count(), delta);
 
 		//update it after frame
 		updateTime = this->GetUpdateTime();
-		m_clTimer.SetMinInterval( GetMinFrameTime() );				
+		//m_clTimer.SetMinInterval( GetMinFrameTime() );	
+
+		previousTime = now;
 
 	} while(!m_fStopMainLoop);
 

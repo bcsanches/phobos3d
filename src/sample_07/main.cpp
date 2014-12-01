@@ -47,8 +47,6 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <Phobos/ProcVector.h>
 #include <Phobos/System/AxisButton.h>
 
-#include <Phobos/System/Timer.h>
-
 #define SPEED 100
 
 class GameObject;

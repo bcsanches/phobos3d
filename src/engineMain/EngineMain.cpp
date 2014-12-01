@@ -20,7 +20,6 @@ subject to the following restrictions:
 #include <Phobos/Register/Manager.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Shell/Utils.h>
-#include <Phobos/System/Timer.h>
 
 #include <Phobos/OgreEngine/Gui/Manager.h>
 

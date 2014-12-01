@@ -31,9 +31,6 @@
     <ClCompile Include="..\..\..\src\System\SDL\EventManagerSDL.cpp">
       <Filter>SDL</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\System\SDL\TimerSDL.cpp">
-      <Filter>SDL</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\System\SDL\WindowSDL.cpp">
       <Filter>SDL</Filter>
     </ClCompile>
@@ -65,7 +62,6 @@
     <ClInclude Include="..\..\..\include\Phobos\System\EventManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventManagerFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\InputActions.h" />
-    <ClInclude Include="..\..\..\include\Phobos\System\Timer.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\Window.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\SDL\WindowSDL.h">
       <Filter>SDL</Filter>
@@ -73,5 +69,6 @@
     <ClInclude Include="..\..\..\include\Phobos\System\SystemAPI.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\InputManagerFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\InputMapperFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Chrono.h" />
   </ItemGroup>
 </Project>

@@ -24,7 +24,7 @@ subject to the following restrictions:
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
 
-#include <Phobos/System/Timer.h>
+#include <Phobos/System/Chrono.h>
 
 #include "Phobos/Engine/ConsoleFwd.h"
 #include "Phobos/Engine/ModuleManager.h"
@@ -154,8 +154,8 @@ namespace Phobos
 				Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
 				~Core();
 
-				inline Float_t GetUpdateTime(void);
-				inline Float_t GetMinFrameTime(void);			
+				inline Chrono::Seconds GetUpdateTime(void);
+				inline Chrono::Seconds GetMinFrameTime(void);
 
 				void CmdTime(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdToggleTimerPause(const Shell::StringVector_t &args, Shell::Context &);
@@ -180,9 +180,7 @@ namespace Phobos
 
 				Shell::Variable	m_varFixedTime;
 				Shell::Variable	m_varEngineFPS;
-				Shell::Variable	m_varMinFrameTime;
-
-				System::Timer	m_clTimer;
+				Shell::Variable	m_varMinFrameTime;				
 
 				bool			m_fLaunchedBoot;
 				bool			m_fStopMainLoop;									
