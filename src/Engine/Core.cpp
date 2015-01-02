@@ -42,6 +42,17 @@ subject to the following restrictions:
 
 static Phobos::Engine::Core *g_pclInstance = nullptr;
 
+namespace Phobos
+{
+	namespace Engine
+	{		
+		void ClocksRegisterCommands(Phobos::Shell::IContext &context);
+
+		void ClocksTickFixedUpdate(Phobos::Chrono::Seconds seconds);
+		void ClocksTickUpdate(Chrono::Seconds seconds, Float_t delta);
+	}
+}
+
 Phobos::Engine::Core &Phobos::Engine::Core::CreateInstance(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[])
 {
 	PH_ASSERT_MSG(!g_pclInstance, "[Core::CreateInstance]: Instance already exists");
@@ -68,9 +79,7 @@ Phobos::Engine::Core &Phobos::Engine::Core::GetInstance()
 }
 
 Phobos::Engine::Core::Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]) :
-	m_clModule("Core"),
-	m_cmdTime("time"),
-	m_cmdToggleTimerPause("toggleTimerPause"),
+	m_clModule("Core"),	
 	m_cmdListModules("listModules"),
 	m_cmdQuit("quit"),
 	m_varFixedTime("dvFixedTime", "0"),
@@ -79,8 +88,6 @@ Phobos::Engine::Core::Core(Shell::IContext &context, const char *cfgFileName, in
 	m_fLaunchedBoot(false),
 	m_fStopMainLoop(false)
 {
-	MemoryZero(&m_stSimInfo, sizeof(m_stSimInfo));
-
 	ObjectManager::AddObject(m_clModule, Path("/"));
 
 	m_clModule.LaunchBootModule(cfgFileName, argc, argv);
@@ -150,7 +157,7 @@ void Phobos::Engine::Core::StartMainLoop()
 			
 	do
 	{
-		this->SetFrameRate(updateTime.count());
+		//this->SetFrameRate(updateTime.count());
 						
 		auto now = Chrono::Clock::now();
 		auto lastFrameTime = now - previousTime;
@@ -178,14 +185,14 @@ void Phobos::Engine::Core::StartMainLoop()
 		while(executionTime >= updateTime)
 		{
 			//fixed Update
-			this->FixedUpdate(updateTime.count());
+			this->FixedUpdate(updateTime);
 				
 			executionTime -= updateTime;
 		}
 		Float_t delta = executionTime / updateTime;			
 			
 		//Now update other modules as fast as we can
-		this->Update(totalFrameTime.count(), delta);
+		this->Update(totalFrameTime, delta);
 
 		//update it after frame
 		updateTime = this->GetUpdateTime();
@@ -199,8 +206,9 @@ void Phobos::Engine::Core::StartMainLoop()
 	m_clModule.Finalize();	
 }
 
-void Phobos::Engine::Core::Update(Float_t seconds, Float_t delta)
+void Phobos::Engine::Core::Update(Chrono::Seconds seconds, Float_t delta)
 {
+	/*
 	for(int i = 0;i < TimerTypes::MAX_TIMERS; ++i)
 	{
 		if(m_stSimInfo.m_stTimers[i].IsPaused())
@@ -210,138 +218,33 @@ void Phobos::Engine::Core::Update(Float_t seconds, Float_t delta)
 		m_stSimInfo.m_stTimers[i].m_fpTotalRenderFrameTime += seconds;
 		m_stSimInfo.m_stTimers[i].m_fpDelta = delta;
 	}
+	*/
+
+	ClocksTickUpdate(seconds, delta);
 
 	m_clModule.Update();	
 }
 
-void Phobos::Engine::Core::FixedUpdate(Float_t seconds)
+void Phobos::Engine::Core::FixedUpdate(Chrono::Seconds seconds)
 {
-	for(int i = 0;i < TimerTypes::MAX_TIMERS; ++i)
-	{
-		if(m_stSimInfo.m_stTimers[i].IsPaused())
-			continue;
-
-		m_stSimInfo.m_stTimers[i].m_fpFrameTime = seconds;
-		m_stSimInfo.m_stTimers[i].m_fpTotalTicks += seconds;
-		++m_stSimInfo.m_stTimers[i].m_uFrameCount;
-	}
+	ClocksTickFixedUpdate(seconds);
 
 	m_clModule.FixedUpdate();
 }
 
 void Phobos::Engine::Core::RegisterCommands(Shell::IContext &context)
 {
-	m_cmdTime.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdTime, this));
-	m_cmdToggleTimerPause.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdToggleTimerPause, this));
 	m_cmdListModules.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdListModules, this));
 	m_cmdQuit.SetProc(PH_CONTEXT_CMD_BIND(&Core::CmdQuit, this));
-
-	context.AddContextCommand(m_cmdTime);
-	context.AddContextCommand(m_cmdToggleTimerPause);
+	
 	context.AddContextCommand(m_cmdListModules);
 	context.AddContextCommand(m_cmdQuit);
 
 	context.AddContextVariable(m_varFixedTime);
 	context.AddContextVariable(m_varEngineFPS);
 	context.AddContextVariable(m_varMinFrameTime);
-}
 
-void Phobos::Engine::Core::PauseTimer(TimerTypes_t timer)
-{
-	PH_ASSERT(timer < TimerTypes::MAX_TIMERS);
-
-	if(timer == TimerTypes::SYSTEM)
-	{
-		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "Core::PauseTimer", "Cant pause sys timer");
-	}
-
-	m_stSimInfo.m_stTimers[timer].Pause();
-}
-
-void Phobos::Engine::Core::UnpauseTimer(TimerTypes_t timer)
-{
-	PH_ASSERT(timer < TimerTypes::MAX_TIMERS);
-
-	m_stSimInfo.m_stTimers[timer].Unpause();
-}
-
-void Phobos::Engine::Core::ToggleTimerPause(TimerTypes_t timer)
-{
-	PH_ASSERT(timer < TimerTypes::MAX_TIMERS);
-
-	if(timer == TimerTypes::SYSTEM)
-	{
-		LogMessage("IM_Core::PauseTimer: Cant pause sys timer");
-		return;
-	}
-
-	m_stSimInfo.m_stTimers[timer].TogglePause();
-}
-
-void Phobos::Engine::Core::ResetTimer(TimerTypes_t timer)
-{
-	PH_ASSERT(timer < TimerTypes::MAX_TIMERS);
-
-	m_stSimInfo.m_stTimers[timer].Reset();
-}
-
-void Phobos::Engine::Core::CmdTime(const Shell::StringVector_t &args, Shell::Context &)
-{
-	using namespace std;
-	stringstream stream;
-
-	stream	<< "[IM_Core] Current time:"<<endl<<"\tfpTotalTics: "<<m_stSimInfo.m_stTimers[TimerTypes::SYSTEM].m_fpTotalTicks<<endl
-			<<"\tfpFrameTime: "<<m_stSimInfo.m_stTimers[TimerTypes::SYSTEM].m_fpFrameTime<<endl
-			<<"\tFrameCount: "<<m_stSimInfo.m_stTimers[TimerTypes::SYSTEM].m_uFrameCount;
-
-	LogMessage(stream.str());
-}
-
-void Phobos::Engine::Core::CmdToggleTimerPause(const Shell::StringVector_t &args, Shell::Context &)
-{
-	struct PauseInfo_s
-	{
-		const char	*pstrzName;
-		TimerTypes_t eType;
-	};
-
-	PauseInfo_s pauseInfo[] =
-	{
-		{"SYSTEM",	TimerTypes::SYSTEM},
-		{"GAME",	TimerTypes::GAME},
-		{"UI",		TimerTypes::UI},
-		{NULL,		TimerTypes::MAX_TIMERS}
-	};
-
-	if(args.size() < 2)
-	{
-		using namespace std;
-		stringstream stream;
-
-		stream << "[Core::CmdToggleTimerPause] togglePause usage error, usage: togglePause ";
-		for(int i = 0;pauseInfo[i].pstrzName; ++i)
-		{
-			stream << pauseInfo[i].pstrzName << '|';
-		}
-
-		LogMessage(stream.str());
-		return;
-	}
-
-	const String_t &timerName(args[1]);
-
-	for(int i = 0;pauseInfo[i].pstrzName; ++i)
-	{
-		if(timerName.compare(pauseInfo[i].pstrzName) == 0)
-		{				
-			this->ToggleTimerPause(pauseInfo[i].eType);
-
-			std::stringstream stream;
-			stream << "[Core::CmdToggleTimerPause] " << (m_stSimInfo.m_stTimers[pauseInfo[i].eType].IsPaused() ? "Paused" : "Unpaused") << " " << pauseInfo[i].pstrzName;				
-			LogMessage(stream.str());				
-			break;
-		}
-	}
+	ClocksRegisterCommands(context);
 }
 
 void Phobos::Engine::Core::CmdListModules(const Shell::StringVector_t &args, Shell::Context &)

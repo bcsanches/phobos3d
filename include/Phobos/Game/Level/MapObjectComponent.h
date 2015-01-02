@@ -5,6 +5,7 @@
 
 #include <Phobos/Error.h>
 #include <Phobos/Register/TableFwd.h>
+#include <Phobos/System/Chrono.h>
 #include <Phobos/Types.h>
 
 #include "Phobos/Game/GameAPI.h"
@@ -60,10 +61,10 @@ namespace Phobos
 				MapObjectComponentAccess AccessMapObject();
 
 				typedef Proc_t ReminderProcType_t;
-				void AddReminderImpl(ReminderProcType_t proc, Float_t delay);
+				void AddReminderImpl(ReminderProcType_t proc, Phobos::Chrono::Seconds delay);
 
 				template <typename T>
-				inline void AddReminder(void (T::*proc)(), Float_t time)
+				inline void AddReminder(void (T::*proc)(), Phobos::Chrono::Seconds time)
 				{
 					this->AddReminderImpl(static_cast<ReminderProcType_t>(proc), time);
 				}

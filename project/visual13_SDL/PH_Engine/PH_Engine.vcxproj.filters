@@ -28,6 +28,7 @@
     <ClCompile Include="..\..\..\src\Engine\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\PluginInstance.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Client.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Clocks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
@@ -68,5 +69,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Client.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ConsoleFwd.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Clocks.h" />
   </ItemGroup>
 </Project>

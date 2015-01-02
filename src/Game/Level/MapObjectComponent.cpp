@@ -2,7 +2,7 @@
 
 #include "Phobos/Game/Level/MapObjectComponentAccess.h"
 
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/Clocks.h>
 
 namespace
 {
@@ -40,7 +40,7 @@ namespace
 		(m_rclTarget.*m_pfnProc)();		
 	}
 
-	typedef std::multimap<Phobos::Float_t, Reminder> ReminderMultiMap_t;
+	typedef std::multimap<Phobos::Engine::GameClock::time_point, Reminder> ReminderMultiMap_t;
 
 	static ReminderMultiMap_t g_mmapReminders;
 
@@ -134,20 +134,20 @@ namespace Phobos
 			this->OnLoadFinished(table);
 		}
 
-		void MapObjectComponent::AddReminderImpl(ReminderProcType_t proc, Float_t time)
+		void MapObjectComponent::AddReminderImpl(ReminderProcType_t proc, Phobos::Chrono::Seconds time)
 		{
-			g_mmapReminders.insert(std::make_pair(time + Engine::Core::GetInstance().GetGameTimer().m_fpTotalTicks, Reminder(*this, proc)));
+			g_mmapReminders.insert(std::make_pair(time + Engine::GameClock::Now(), Reminder(*this, proc)));
 		}
 
 		void MapObjectComponent::TickReminders()
 		{
-			auto ticks = Engine::Core::GetInstance().GetGameTimer().m_fpTotalTicks;
+			auto now = Engine::GameClock::Now();			
 
 			while (!g_mmapReminders.empty())
 			{
 				auto it = g_mmapReminders.begin();
 
-				if (it->first > ticks)
+				if (it->first >= now)
 					break;
 
 				Reminder event(it->second);

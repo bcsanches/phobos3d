@@ -42,6 +42,7 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <Phobos/Engine/Session.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Shell/Utils.h>
+#include <Phobos/Engine/Clocks.h>
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Memory.h>
 #include <Phobos/ProcVector.h>
@@ -148,12 +149,12 @@ class GameObject
 			return m_clSprite.m_fpY;
 		}
 
-		void FixedUpdate(Phobos::Float_t ticks)
+		void FixedUpdate(Phobos::Chrono::Seconds ticks)
 		{
 			m_upController->FixedUpdate(*this);
 
-			m_clSprite.m_fpX += m_upController->GetDesiredDixX() * ticks;
-			m_clSprite.m_fpY += m_upController->GetDesiredDixY() * ticks;
+			m_clSprite.m_fpX += m_upController->GetDesiredDixX() * ticks.count();
+			m_clSprite.m_fpY += m_upController->GetDesiredDixY() * ticks.count();
 		}
 
 		void Draw()
@@ -229,11 +230,9 @@ class GameClient: public Phobos::Engine::Client
 
 void GameClient::OnFixedUpdate()
 {	
-	auto timer = Phobos::Engine::Core::GetInstance().GetGameTimer();
-
-	if (!timer.IsPaused())
-	{
-		auto ticks = timer.m_fpFrameTime;
+	if (!Phobos::Engine::GameClock::IsPaused())
+	{		
+		auto ticks = Phobos::Engine::GameClock::GetFrameDuration();
 
 		for (auto &object : m_vecObjects)
 		{
@@ -296,7 +295,7 @@ EngineMain::EngineMain()
 
 	*/
 	session.Bind("kb", "ESCAPE", "quit");
-	session.Bind("kb", "p", "toggleTimerPause GAME");
+	session.Bind("kb", "p", "toggleClockPause GAME");
 
 	session.Bind("kb", "w", "+up");
 	session.Bind("kb", "s", "+down");

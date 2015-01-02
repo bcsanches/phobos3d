@@ -190,9 +190,7 @@ BOOST_AUTO_TEST_CASE(core_basic)
 {
 	CoreInstance_s instance;
 
-	Core &core = Core::GetInstance();
-
-	BOOST_CHECK_THROW(core.PauseTimer(Core::TimerTypes::SYSTEM), InvalidParameterException);
+	Core &core = Core::GetInstance();	
 
 	{
 		TestModule module;
