@@ -143,7 +143,6 @@
     <ClCompile Include="..\..\..\src\System\SDL\InputManagerSDL.cpp" />
     <ClCompile Include="..\..\..\src\System\SDL\KeyboardInputDeviceSDL.cpp" />
     <ClCompile Include="..\..\..\src\System\SDL\MouseInputDeviceSDL.cpp" />
-    <ClCompile Include="..\..\..\src\System\SDL\TimerSDL.cpp" />
     <ClCompile Include="..\..\..\src\System\SDL\WindowSDL.cpp" />
     <ClCompile Include="..\..\..\src\System\Thumb.cpp" />
     <ClCompile Include="..\..\..\src\System\Window.cpp" />
@@ -151,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\System\AxisButton.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\Button.h" />
+    <ClInclude Include="..\..\..\include\Phobos\System\Chrono.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventListener.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\EventManagerFwd.h" />
@@ -172,7 +172,6 @@
     <ClInclude Include="..\..\..\include\Phobos\System\SDL\MouseInputDeviceSDL.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\SDL\WindowSDL.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\Thumb.h" />
-    <ClInclude Include="..\..\..\include\Phobos\System\Timer.h" />
     <ClInclude Include="..\..\..\include\Phobos\System\Window.h" />
   </ItemGroup>
   <ItemGroup>

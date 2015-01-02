@@ -19,7 +19,7 @@ subject to the following restrictions:
 #include <Rocket/Core/SystemInterface.h>
 
 #include "Phobos/Engine/Console.h"
-#include "Phobos/Engine/Core.h"
+#include "Phobos/Engine/Clocks.h"
 
 
 #include "Phobos/Engine/Gui/Context.h"
@@ -45,7 +45,7 @@ namespace
 
 	float SystemInterface::GetElapsedTime()
 	{
-		return Phobos::Engine::Core::GetInstance().GetUiTimer().m_fpTotalTicks;
+		return Phobos::Engine::GuiClock::Now().time_since_epoch().count();
 	}
 					
 	bool SystemInterface::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)

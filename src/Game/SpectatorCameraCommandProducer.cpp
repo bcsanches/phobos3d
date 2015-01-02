@@ -18,8 +18,7 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Shell/Utils.h>
-#include <Phobos/Engine/Core.h>
-#include <Phobos/Engine/CoreTimer.h>
+#include <Phobos/Engine/Clocks.h>
 #include <Phobos/Exception.h>
 #include <Phobos/Memory.h>
 
@@ -44,7 +43,7 @@ namespace Phobos
 
 		Engine::IPlayerCmdPtr_t SpectatorCameraCommandProducer_c::CreateCmd()
 		{
-			const Float_t ticks = Engine::Core::GetInstance().GetSimInfo().m_stTimers[Engine::Core::TimerTypes::SYSTEM].m_fpFrameTime;
+			const auto ticks = Engine::SystemClock::GetFrameDuration().count();
 
 			const Float_t fwd = m_clMoveButton.GetValue() * ticks * m_fpMoveSpeed;
 			const Float_t strafe = m_clStrafeButton.GetValue() * ticks * m_fpMoveSpeed;

@@ -24,7 +24,7 @@ subject to the following restrictions:
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
 
-#include <Phobos/System/Timer.h>
+#include <Phobos/System/Chrono.h>
 
 #include "Phobos/Engine/ConsoleFwd.h"
 #include "Phobos/Engine/ModuleManager.h"
@@ -35,106 +35,11 @@ namespace Phobos
 	namespace Engine
 	{		
 		class PH_ENGINE_API Core
-		{
-			public:
-				struct TimerTypes
-				{
-					enum Enum
-					{
-						SYSTEM,
-						GAME,
-						UI,
-		
-						MAX_TIMERS
-					};
-				};
-
-				typedef TimerTypes::Enum TimerTypes_t;
-
-				enum TimerFlags
-				{					
-					PAUSED = 0x01					
-				};
-
-				struct Timer_s
-				{
-					//* Number of ticks occurred since started.
-					Float_t	m_fpTotalTicks;
-
-					//* Number of ticks for simulation frame
-					Float_t	m_fpFrameTime;
-
-					//* number of ticks for the rendering frame
-					Float_t	m_fpRenderFrameTime;
-
-
-					Float_t	m_fpTotalRenderFrameTime;
-
-					//*number of frames occurred
-					unsigned int m_uFrameCount;
-
-					//*delta used for rendering interpolation
-					Float_t	m_fpDelta;
-
-					UInt32_t m_u32Flags;
-
-					inline bool IsPaused(void) const
-					{
-						return(m_u32Flags & TimerFlags::PAUSED);
-					}
-
-					inline void Pause(void)
-					{
-						m_u32Flags |= TimerFlags::PAUSED;
-					}
-
-					inline void Unpause(void)
-					{
-						m_u32Flags &= ~TimerFlags::PAUSED;
-					}
-
-					inline void TogglePause(void)
-					{
-						if(this->IsPaused())
-							this->Unpause();
-						else
-							this->Pause();
-					}
-
-					inline void Reset(void)
-					{
-						m_fpTotalTicks = 0;
-						m_fpFrameTime = 0;
-						m_fpRenderFrameTime = 0;
-						m_fpTotalRenderFrameTime = 0;
-						m_uFrameCount = 0;
-						m_fpDelta = 0;
-					}
-				};
-
-				struct SimInfo_s
-				{
-					Float_t		m_fpFrameRate;
-
-					Timer_s		m_stTimers[TimerTypes::MAX_TIMERS];
-				};
-
+		{			
 			public:
 				static Core &CreateInstance(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
 				static void ReleaseInstance();
-				static Core &GetInstance();
-
-				inline void SetFrameRate(Float_t rate);
-
-				inline const SimInfo_s &GetSimInfo() const;
-				inline const Timer_s &GetGameTimer() const;
-				inline const Timer_s &GetUiTimer() const;				
-
-				void PauseTimer(TimerTypes_t timer);
-				void UnpauseTimer(TimerTypes_t timer);
-				void ToggleTimerPause(TimerTypes_t timer);
-
-				void ResetTimer(TimerTypes_t timer);
+				static Core &GetInstance();				
 
 				void AddModule(Module &module, UInt32_t priority = ModulePriorities::NORMAL);
 				void RemoveModule(Module &module);
@@ -154,59 +59,31 @@ namespace Phobos
 				Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
 				~Core();
 
-				inline Float_t GetUpdateTime(void);
-				inline Float_t GetMinFrameTime(void);			
-
-				void CmdTime(const Shell::StringVector_t &args, Shell::Context &);
-				void CmdToggleTimerPause(const Shell::StringVector_t &args, Shell::Context &);
+				inline Chrono::Seconds GetUpdateTime(void);
+				inline Chrono::Seconds GetMinFrameTime(void);
+				
 				void CmdListModules(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdQuit(const Shell::StringVector_t &, Shell::Context &);
 
 				///Called automatically by MainLoop
-				void Update(Float_t seconds, Float_t delta);
-				void FixedUpdate(Float_t seconds);
+				void Update(Chrono::Seconds seconds, Float_t delta);
+				void FixedUpdate(Chrono::Seconds seconds);
 
 				void RegisterCommands(Shell::IContext &context);
 
 			private:
-				SimInfo_s	m_stSimInfo;
-
 				ModuleManager	m_clModule;
-
-				Shell::Command	m_cmdTime;
-				Shell::Command	m_cmdToggleTimerPause;
+				
 				Shell::Command	m_cmdListModules;
 				Shell::Command	m_cmdQuit;
 
 				Shell::Variable	m_varFixedTime;
 				Shell::Variable	m_varEngineFPS;
-				Shell::Variable	m_varMinFrameTime;
-
-				System::Timer	m_clTimer;
+				Shell::Variable	m_varMinFrameTime;				
 
 				bool			m_fLaunchedBoot;
 				bool			m_fStopMainLoop;									
-		};
-
-		inline const Core::SimInfo_s &Core::GetSimInfo() const
-		{
-			return(m_stSimInfo);
-		}
-
-		inline const Core::Timer_s &Core::GetGameTimer() const
-		{
-			return m_stSimInfo.m_stTimers[TimerTypes::GAME];
-		}
-
-		inline const Core::Timer_s &Core::GetUiTimer() const
-		{
-			return m_stSimInfo.m_stTimers[TimerTypes::UI];
-		}
-
-		inline void Core::SetFrameRate(Float_t rate)
-		{
-			m_stSimInfo.m_fpFrameRate = rate;
-		}
+		};		
 	}
 }
 

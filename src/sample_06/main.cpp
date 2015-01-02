@@ -42,11 +42,10 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <Phobos/Engine/Session.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Shell/Utils.h>
+#include <Phobos/Engine/Clocks.h>
 #include <Phobos/Engine/Core.h>
 #include <Phobos/Memory.h>
 #include <Phobos/ProcVector.h>
-
-#include <Phobos/System/Timer.h>
 
 #define SPEED 100
 
@@ -105,14 +104,13 @@ void GameClient::OnFixedUpdate()
 		m_fpDirY = SPEED;
 	}
 
-	auto timer = Phobos::Engine::Core::GetInstance().GetGameTimer();
 
-	if (!timer.IsPaused())
+	if (!Phobos::Engine::GameClock::IsPaused())
 	{
-		auto ticks = timer.m_fpFrameTime;
+		auto ticks = Phobos::Engine::GameClock::GetFrameDuration();		
 
-		m_clSprite.m_fpX += m_fpDirX * ticks;
-		m_clSprite.m_fpY += m_fpDirY * ticks;
+		m_clSprite.m_fpX += m_fpDirX * ticks.count();
+		m_clSprite.m_fpY += m_fpDirY * ticks.count();
 	}
 
 	render.Draw(m_clSprite);
@@ -165,7 +163,7 @@ EngineMain::EngineMain()
 
 	*/
 	session.Bind("kb", "ESCAPE", "quit");
-	session.Bind("kb", "p", "toggleTimerPause GAME");
+	session.Bind("kb", "p", "toggleClockPause GAME");
 
 	/*
 	By default the console starts open, so tell the session that we do not want it now

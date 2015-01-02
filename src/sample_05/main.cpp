@@ -45,8 +45,6 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include <Phobos/Memory.h>
 #include <Phobos/ProcVector.h>
 
-#include <Phobos/System/Timer.h>
-
 class EngineMain
 {
 	public:

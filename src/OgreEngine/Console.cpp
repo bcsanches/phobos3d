@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 #include <limits.h>
 
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/Clocks.h>
 
 #include <Phobos/Error.h>
 #include <Phobos/Memory.h>
@@ -109,11 +109,13 @@ void Phobos::OgreEngine::Console::OnUpdate(void)
 
 	bool visible = true;
 
+	auto movement = Engine::RenderClock::GetFrameDuration().count() * CONSOLE_TIME;
+
 	if(this->IsActive())
 	{
 		if(m_fpHeight < CONSOLE_HEIGHT)
 		{
-			m_fpHeight += Engine::Core::GetInstance().GetSimInfo().m_stTimers[Engine::Core::TimerTypes::SYSTEM].m_fpRenderFrameTime * CONSOLE_TIME;
+			m_fpHeight += movement;
 			m_fUIMoved = true;
 			if(m_fpHeight >= CONSOLE_HEIGHT)
 			{
@@ -123,7 +125,7 @@ void Phobos::OgreEngine::Console::OnUpdate(void)
 	}
 	else if(m_fpHeight > 0)
 	{
-		m_fpHeight -= Engine::Core::GetInstance().GetSimInfo().m_stTimers[Engine::Core::TimerTypes::SYSTEM].m_fpRenderFrameTime * CONSOLE_TIME;
+		m_fpHeight -= movement;
 		m_fUIMoved = true;
 
 		if(m_fpHeight <= 0)
@@ -139,8 +141,6 @@ void Phobos::OgreEngine::Console::OnUpdate(void)
 
 	if(visible)
 	{
-		//pclTextBox->setPosition(0,(fHeight-1)*0.5);
-		//pclRect->setCorners(-1,1+fHeight,1,1-fHeight);
 		if(m_fUIMoved)
 		{
 			m_pclRect->setPosition(0, (m_fpHeight - CONSOLE_HEIGHT));

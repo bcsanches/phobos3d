@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include "Phobos/Game/SpectatorCamera.h"
 
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/Clocks.h>
 
 namespace Phobos
 {
@@ -65,7 +65,7 @@ namespace Phobos
 
 		void SpectatorCamera::Update()
 		{
-			m_clCamera.SetTransform(m_clTransformInterpolator.GetValue(Engine::Core::GetInstance().GetSimInfo().m_stTimers[Engine::Core::TimerTypes::SYSTEM].m_fpDelta));
+			m_clCamera.SetTransform(m_clTransformInterpolator.GetValue(Engine::RenderClock::GetDelta()));
 		}
 
 		void SpectatorCamera::SetTransform(const Engine::Math::Transform &transform)

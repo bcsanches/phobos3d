@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include <memory>
 
 #include <Phobos/Engine/Console.h>
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/Clocks.h>
 
 #include "Phobos/Game/Physics/CharacterBodyComponent.h"
 #include "Phobos/Game/Physics/CollisionShapes.h"
@@ -68,13 +68,12 @@ namespace Phobos
 				if(!m_upWorld)
 					return;
 
-				auto &timer = Engine::Core::GetInstance().GetGameTimer();
-				if(timer.IsPaused())
-					return;
+				if (Engine::GameClock::IsPaused())
+					return;				
 
 				//m_clCharacterBodyComponents.CallForAll1(&CharacterBodyComponent::PreparePhysicsFrame, timer.m_fpFrameTime);
 
-				m_upWorld->stepSimulation(timer.m_fpFrameTime, 32);
+				m_upWorld->stepSimulation(Engine::GameClock::GetFrameDuration().count(), 32);
 
 				//m_clCharacterBodyComponents.CallForAll(&CharacterBodyComponent::FinishPhysicsFrame);
 			}
