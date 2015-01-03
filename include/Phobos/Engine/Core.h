@@ -59,15 +59,15 @@ namespace Phobos
 				Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
 				~Core();
 
-				inline Chrono::Seconds GetUpdateTime(void);
-				inline Chrono::Seconds GetMinFrameTime(void);
+				inline System::Seconds GetUpdateTime(void);
+				inline System::Seconds GetMinFrameTime(void);
 				
 				void CmdListModules(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdQuit(const Shell::StringVector_t &, Shell::Context &);
 
 				///Called automatically by MainLoop
-				void Update(Chrono::Seconds seconds, Float_t delta);
-				void FixedUpdate(Chrono::Seconds seconds);
+				void Update(System::Seconds seconds, Float_t delta);
+				void FixedUpdate(System::Seconds seconds);
 
 				void RegisterCommands(Shell::IContext &context);
 

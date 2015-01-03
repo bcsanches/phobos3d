@@ -28,32 +28,32 @@ namespace Phobos
 		{
 			class Accelerometer
 			{
-				public:
-					inline Accelerometer(Float_t accelTime);
+				public:				
+					inline Accelerometer(System::Seconds accelTime = System::Seconds());
 
 					inline void Reset();
 
-					inline void Update(Float_t ticks);
+					inline void Update(System::Seconds ticks);
 
 					inline void SetButtonState(Float_t buttonState);
 
-					inline void SetAccelerationTime(Float_t value);
+					inline void SetAccelerationTime(System::Seconds value);
 					inline void SetRestBoost(Float_t value);
 
 					inline Float_t GetValue() const;
 
 				private:
-					Float_t m_fpAccelTime;
+					System::Seconds m_secAccelTime;
 					Float_t m_fpButtonState;
 					Float_t m_fpRestBoost;
 
 					LinearInterpolator<Float_t> m_clInterpolator;
 			};
 
-			inline Accelerometer::Accelerometer(Float_t accelTime):
-				m_fpAccelTime(accelTime),
+			inline Accelerometer::Accelerometer(System::Seconds accelTime) :
+				m_secAccelTime(accelTime),
 				m_fpButtonState(0.0f),
-				m_clInterpolator(0, 0, 0, 0),
+				//m_clInterpolator(0, 0, 0, 0),
 				m_fpRestBoost(1)
 			{
 			}
@@ -63,14 +63,14 @@ namespace Phobos
 				m_fpRestBoost = v;
 			}
 
-			inline void Accelerometer::SetAccelerationTime(Float_t v)
+			inline void Accelerometer::SetAccelerationTime(System::Seconds  v)
 			{
-				m_fpAccelTime = v;
+				m_secAccelTime = v;
 			}
 
 			inline void Accelerometer::Reset()
 			{
-				m_clInterpolator.Start(0, 0, 0, 0);
+				m_clInterpolator.Start(System::Seconds(), System::Seconds(), 0, 0);
 			}
 
 			inline void Accelerometer::SetButtonState(Float_t buttonState)
@@ -88,17 +88,17 @@ namespace Phobos
 				Float_t buttonDelta = (buttonState > currentValue) ? buttonState - currentValue : currentValue - buttonState;
 				if(buttonDelta == 0)
 				{
-					m_clInterpolator.Start(m_clInterpolator.GetCurrentTime(), 0, currentValue, currentValue);
+					m_clInterpolator.Start(m_clInterpolator.GetCurrentTime(), System::Seconds(), currentValue, currentValue);
 				}
 				else
 				{
-					m_clInterpolator.Start(m_clInterpolator.GetCurrentTime(), buttonDelta * (m_fpAccelTime * boost), currentValue, buttonState);
+					m_clInterpolator.Start(m_clInterpolator.GetCurrentTime(), buttonDelta * (m_secAccelTime * boost), currentValue, buttonState);
 				}
 					
 				m_fpButtonState = buttonState;
 			}
 
-			inline void Accelerometer::Update(Float_t ticks)
+			inline void Accelerometer::Update(System::Seconds ticks)
 			{
 				m_clInterpolator.Update(ticks);
 			}

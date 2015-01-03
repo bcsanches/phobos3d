@@ -18,6 +18,7 @@ subject to the following restrictions:
 #define PH_ENGINE_MATH_INTERPOLATOR_H
 
 #include <Phobos/Types.h>
+#include <Phobos/System/Chrono.h>
 
 namespace Phobos
 {
@@ -93,52 +94,53 @@ namespace Phobos
 			{
 				public:
 					LinearInterpolator():
-						m_fpStartTime(0),
-						m_fpDuration(0),
-						m_fpCurrentTime(0)
+						m_secStartTime(0.0f),
+						m_secDuration(0.0f),
+						m_secCurrentTime(0.0f)
 					{
+						this->Start(System::Seconds(), System::Seconds(), T(), T());
 					}
 
-					LinearInterpolator(const float startTime, const float duration, const T &startValue, const T &endValue)			
+					LinearInterpolator(System::Seconds startTime, System::Seconds duration, const T &startValue, const T &endValue)
 					{
 						this->Start(startTime, duration, startValue, endValue);
 					}
 
-					void Start(const float startTime, const float duration, const T &startValue, const T &endValue)
+					void Start(System::Seconds startTime, System::Seconds duration, const T &startValue, const T &endValue)
 					{
-						m_fpStartTime = startTime;
-						m_fpDuration = duration;
-						m_fpCurrentTime = m_fpStartTime;
+						m_secStartTime = startTime;
+						m_secDuration = duration;
+						m_secCurrentTime = m_secStartTime;
 						m_tStartValue = startValue;
 						m_tEndValue = endValue;
 						m_tCurrentValue = startValue;
 					}
 
-					void Update(Float_t ticks)
+					void Update(System::Seconds ticks)
 					{
 						//Force a value update
-						this->GetValue(m_fpCurrentTime + ticks);
+						this->GetValue(m_secCurrentTime + ticks);
 					}
 
-					T GetValue(Float_t time)
+					T GetValue(System::Seconds time)
 					{
-						if(time != m_fpCurrentTime)
+						if(time != m_secCurrentTime)
 						{
-							float delta = time - m_fpStartTime;
-							if(delta <= 0)
+							auto delta = time - m_secStartTime;
+							if(delta <= System::Seconds(0.0f))
 							{
 								m_tCurrentValue = m_tStartValue;
 							}
-							else if(delta >= m_fpDuration)
+							else if(delta >= m_secDuration)
 							{
 								m_tCurrentValue = m_tEndValue;
 							}
 							else
 							{
-								m_tCurrentValue = m_tStartValue + (m_tEndValue - m_tStartValue) * (delta / m_fpDuration);
+								m_tCurrentValue = m_tStartValue + (m_tEndValue - m_tStartValue) * (delta / m_secDuration);
 							}
 
-							m_fpCurrentTime = time;
+							m_secCurrentTime = time;
 						}
 
 						return m_tCurrentValue;
@@ -149,15 +151,15 @@ namespace Phobos
 						return m_tCurrentValue;
 					}
 
-					Float_t GetCurrentTime() const
+					System::Seconds GetCurrentTime() const
 					{
-						return m_fpCurrentTime;
+						return m_secCurrentTime;
 					}
 
 				private:
-					Float_t m_fpStartTime;
-					Float_t m_fpDuration;
-					Float_t m_fpCurrentTime;
+					System::Seconds m_secStartTime;
+					System::Seconds m_secDuration;
+					System::Seconds m_secCurrentTime;
 
 					T		m_tStartValue;
 					T		m_tEndValue;

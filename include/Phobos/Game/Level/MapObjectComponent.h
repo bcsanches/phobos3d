@@ -61,10 +61,10 @@ namespace Phobos
 				MapObjectComponentAccess AccessMapObject();
 
 				typedef Proc_t ReminderProcType_t;
-				void AddReminderImpl(ReminderProcType_t proc, Phobos::Chrono::Seconds delay);
+				void AddReminderImpl(ReminderProcType_t proc, Phobos::System::Seconds delay);
 
 				template <typename T>
-				inline void AddReminder(void (T::*proc)(), Phobos::Chrono::Seconds time)
+				inline void AddReminder(void (T::*proc)(), Phobos::System::Seconds time)
 				{
 					this->AddReminderImpl(static_cast<ReminderProcType_t>(proc), time);
 				}

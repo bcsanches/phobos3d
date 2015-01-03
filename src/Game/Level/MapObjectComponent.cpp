@@ -134,7 +134,7 @@ namespace Phobos
 			this->OnLoadFinished(table);
 		}
 
-		void MapObjectComponent::AddReminderImpl(ReminderProcType_t proc, Phobos::Chrono::Seconds time)
+		void MapObjectComponent::AddReminderImpl(ReminderProcType_t proc, Phobos::System::Seconds time)
 		{
 			g_mmapReminders.insert(std::make_pair(time + Engine::GameClock::Now(), Reminder(*this, proc)));
 		}

@@ -13,9 +13,9 @@ namespace Phobos
 		{
 			public:
 				typedef Float_t rep;
-				typedef Chrono::Clock::period period;
-				typedef Chrono::Clock::duration duration;
-				typedef Chrono::chrono::time_point<SystemClock> time_point;
+				typedef System::Clock::period period;
+				typedef System::Clock::duration duration;
+				typedef System::chrono::time_point<SystemClock> time_point;
 				static const bool is_monotonic = false;
 				static const bool is_steady = false;
 
@@ -28,9 +28,9 @@ namespace Phobos
 		{
 			public:
 				typedef Float_t rep;
-				typedef Chrono::Clock::period period;
-				typedef Chrono::Clock::duration duration;
-				typedef Chrono::chrono::time_point<SystemClock> time_point;
+				typedef System::Clock::period period;
+				typedef System::Clock::duration duration;
+				typedef System::chrono::time_point<SystemClock> time_point;
 				static const bool is_monotonic = false;
 				static const bool is_steady = false;
 
@@ -45,9 +45,9 @@ namespace Phobos
 		{
 			public:
 				typedef Float_t rep;
-				typedef Chrono::Clock::period period;
-				typedef Chrono::Clock::duration duration;
-				typedef Chrono::chrono::time_point<SystemClock> time_point;
+				typedef System::Clock::period period;
+				typedef System::Clock::duration duration;
+				typedef System::chrono::time_point<SystemClock> time_point;
 				static const bool is_monotonic = false;
 				static const bool is_steady = false;
 
@@ -60,9 +60,9 @@ namespace Phobos
 		{
 			public:
 			typedef Float_t rep;
-			typedef Chrono::Clock::period period;
-			typedef Chrono::Clock::duration duration;
-			typedef Chrono::chrono::time_point<SystemClock> time_point;
+			typedef System::Clock::period period;
+			typedef System::Clock::duration duration;
+			typedef System::chrono::time_point<SystemClock> time_point;
 			static const bool is_monotonic = false;
 			static const bool is_steady = false;
 

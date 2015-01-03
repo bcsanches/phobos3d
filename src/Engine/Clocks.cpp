@@ -23,8 +23,8 @@ namespace
 
 	struct ClockImpl
 	{
-		Phobos::Chrono::Seconds m_durTotal;
-		Phobos::Chrono::Seconds m_durFrame;
+		Phobos::System::Seconds m_durTotal;
+		Phobos::System::Seconds m_durFrame;
 
 		Phobos::Float_t m_fpDelta = 0.0f;
 
@@ -143,7 +143,7 @@ namespace Phobos
 			context.AddContextCommand(g_cmdToggleClockPause);
 		}			
 
-		extern void ClocksTickFixedUpdate(Chrono::Seconds seconds)
+		extern void ClocksTickFixedUpdate(System::Seconds seconds)
 		{
 			for (auto &clock : g_stClocks)
 			{
@@ -155,7 +155,7 @@ namespace Phobos
 			}
 		}
 
-		extern void ClocksTickUpdate(Chrono::Seconds seconds, Float_t delta)
+		extern void ClocksTickUpdate(System::Seconds seconds, Float_t delta)
 		{
 			g_stClocks[ClockTypes::RENDER].m_durTotal += seconds;
 			g_stClocks[ClockTypes::RENDER].m_durFrame = seconds;

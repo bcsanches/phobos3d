@@ -48,8 +48,8 @@ namespace Phobos
 	{		
 		void ClocksRegisterCommands(Phobos::Shell::IContext &context);
 
-		void ClocksTickFixedUpdate(Phobos::Chrono::Seconds seconds);
-		void ClocksTickUpdate(Chrono::Seconds seconds, Float_t delta);
+		void ClocksTickFixedUpdate(System::Seconds seconds);
+		void ClocksTickUpdate(System::Seconds seconds, Float_t delta);
 	}
 }
 
@@ -115,22 +115,22 @@ void Phobos::Engine::Core::RemoveModule(Module &module)
 	m_clModule.RemoveModule(module);
 }
 
-Phobos::Chrono::Seconds Phobos::Engine::Core::GetUpdateTime()
+Phobos::System::Seconds Phobos::Engine::Core::GetUpdateTime()
 {
 	const Float_t updateTime = m_varEngineFPS.GetFloat();
 
 	if(updateTime > 0)
-		return(Chrono::Seconds(1.0f / updateTime));
+		return(System::Seconds(1.0f / updateTime));
 	else
 	{
 		LogMakeStream() << "[Core::GetUpdateTime] Warning: Invalid update time: " << updateTime << ", must be > 0";
 		m_varEngineFPS.SetValue("60");
 
-		return Chrono::Seconds(1.0f / UPDATE_TIME);
+		return System::Seconds(1.0f / UPDATE_TIME);
 	}
 }
 
-Phobos::Chrono::Seconds Phobos::Engine::Core::GetMinFrameTime()
+Phobos::System::Seconds Phobos::Engine::Core::GetMinFrameTime()
 {
 	Float_t minFrameTime = m_varMinFrameTime.GetFloat();
 
@@ -142,7 +142,7 @@ Phobos::Chrono::Seconds Phobos::Engine::Core::GetMinFrameTime()
 		minFrameTime = MIN_TIME;
 	}
 
-	return Chrono::Seconds(minFrameTime);
+	return System::Seconds(minFrameTime);
 }
 
 void Phobos::Engine::Core::StartMainLoop()
@@ -151,21 +151,21 @@ void Phobos::Engine::Core::StartMainLoop()
 	m_clModule.Start();	
 	m_clModule.Started();
 
-	Chrono::Seconds	executionTime;		
+	System::Seconds	executionTime;
 	auto			updateTime = GetUpdateTime();
-	auto previousTime = Chrono::Clock::now();
+	auto previousTime = System::Clock::now();
 			
 	do
 	{
 		//this->SetFrameRate(updateTime.count());
 						
-		auto now = Chrono::Clock::now();
+		auto now = System::Clock::now();
 		auto lastFrameTime = now - previousTime;
 		
 		if(m_varFixedTime.GetBoolean())
 			lastFrameTime = updateTime;
 
-		if (lastFrameTime == Chrono::Seconds(0.0f))
+		if (lastFrameTime == System::Seconds(0.0f))
 		{				
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			continue;
@@ -177,7 +177,7 @@ void Phobos::Engine::Core::StartMainLoop()
 
 		#ifdef PH_DEBUG
 			//this happens on debug mode while stopped on break points
-		if (executionTime > Chrono::Seconds(20.0f))
+		if (executionTime > System::Seconds(20.0f))
 			executionTime = updateTime;
 		#endif				
 
@@ -206,7 +206,7 @@ void Phobos::Engine::Core::StartMainLoop()
 	m_clModule.Finalize();	
 }
 
-void Phobos::Engine::Core::Update(Chrono::Seconds seconds, Float_t delta)
+void Phobos::Engine::Core::Update(System::Seconds seconds, Float_t delta)
 {
 	/*
 	for(int i = 0;i < TimerTypes::MAX_TIMERS; ++i)
@@ -225,7 +225,7 @@ void Phobos::Engine::Core::Update(Chrono::Seconds seconds, Float_t delta)
 	m_clModule.Update();	
 }
 
-void Phobos::Engine::Core::FixedUpdate(Chrono::Seconds seconds)
+void Phobos::Engine::Core::FixedUpdate(System::Seconds seconds)
 {
 	ClocksTickFixedUpdate(seconds);
 

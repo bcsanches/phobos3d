@@ -149,7 +149,7 @@ class GameObject
 			return m_clSprite.m_fpY;
 		}
 
-		void FixedUpdate(Phobos::Chrono::Seconds ticks)
+		void FixedUpdate(Phobos::System::Seconds ticks)
 		{
 			m_upController->FixedUpdate(*this);
 

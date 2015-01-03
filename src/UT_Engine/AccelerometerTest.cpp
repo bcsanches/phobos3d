@@ -20,27 +20,27 @@ subject to the following restrictions:
 
 BOOST_AUTO_TEST_CASE(Accelerometer_basic)
 {
-	Phobos::Engine::Math::Accelerometer accel(5);	
+	Phobos::Engine::Math::Accelerometer accel(Phobos::System::Seconds(5.0f));
 
 	BOOST_CHECK(accel.GetValue() == 0);
 
 	accel.SetButtonState(1.0f);
 	BOOST_CHECK(accel.GetValue() == 0);
 
-	accel.Update(5);
+	accel.Update(Phobos::System::Seconds(5.0f));
 	BOOST_CHECK(accel.GetValue() == 1);
 
 	accel.SetButtonState(-1.0f);
-	accel.Update(5);
+	accel.Update(Phobos::System::Seconds(5.0f));
 	BOOST_CHECK(accel.GetValue() == 0);
 
-	accel.Update(5);
+	accel.Update(Phobos::System::Seconds(5.0f));
 	BOOST_CHECK(accel.GetValue() == -1);
 
 	accel.SetButtonState(0);
-	accel.Update(2.5);
+	accel.Update(Phobos::System::Seconds(2.5f));
 	BOOST_CHECK(accel.GetValue() == -0.5);
 
-	accel.Update(2.5);
+	accel.Update(Phobos::System::Seconds(2.5f));
 	BOOST_CHECK(accel.GetValue() == 0);
 }

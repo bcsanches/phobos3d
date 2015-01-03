@@ -29,7 +29,7 @@ subject to the following restrictions:
 
 namespace Phobos
 {
-	namespace Chrono
+	namespace System
 	{
 		#ifdef PH_USE_BOOST_CHRONO
 			namespace chrono = boost::chrono;

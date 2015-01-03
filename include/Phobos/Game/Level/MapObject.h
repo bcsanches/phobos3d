@@ -144,13 +144,13 @@ namespace Phobos
 		template <typename T>
 		T &MapObject::GetComponent()
 		{			
-			auto enumerator = this->MakeEnumerator(boost::typeindex::type_id<T>());
+			auto enumerator = this->MakeEnumerator<T>();
 
 			if (!enumerator.Next())
 			{
-				std::stringstream stream;
+				std::stringstream stream;				
 
-				stream << "Object type " << T::GetComponentName() << "not found on " << this->GetName() << " components";
+				stream << "Object type " << boost::typeindex::type_id<T>().pretty_name() << "not found on " << this->GetName() << " components";
 				PH_RAISE(Phobos::OBJECT_NOT_FOUND_EXCEPTION, "MapObject::GetComponent<T>", stream.str());
 			}
 
