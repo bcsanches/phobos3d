@@ -27,7 +27,7 @@ subject to the following restrictions:
 #include <Phobos/System/Chrono.h>
 
 #include "Phobos/Engine/ConsoleFwd.h"
-#include "Phobos/Engine/ModuleManager.h"
+#include "Phobos/Engine/ModuleContainer.h"
 #include "Phobos/Engine/EngineAPI.h"
 
 namespace Phobos
@@ -72,7 +72,7 @@ namespace Phobos
 				void RegisterCommands(Shell::IContext &context);
 
 			private:
-				ModuleManager	m_clModule;
+				ModuleContainer	m_clModule;
 				
 				Shell::Command	m_cmdListModules;
 				Shell::Command	m_cmdQuit;

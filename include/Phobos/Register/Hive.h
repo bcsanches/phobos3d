@@ -35,9 +35,7 @@ namespace Phobos
 		{
 			PH_DISABLE_COPY(Hive);
 
-			public:
-				static HivePtr_t Create(const String_t &name);
-
+			public:				
 				Hive(const String_t &name);
 				~Hive();
 

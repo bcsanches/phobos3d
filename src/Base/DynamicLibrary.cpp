@@ -59,6 +59,21 @@ namespace Phobos
 		//empty
 	}
 
+	DynamicLibrary::DynamicLibrary(DynamicLibrary &&rhs):
+		m_strName(std::move(rhs.m_strName)),
+		m_upHandle(std::move(rhs.m_upHandle))
+	{
+		//empty
+	}
+
+	DynamicLibrary &DynamicLibrary::operator=(DynamicLibrary &&rhs)
+	{
+		m_strName = std::move(rhs.m_strName);
+		m_upHandle = std::move(rhs.m_upHandle);
+
+		return *this;
+	}
+
 	void DynamicLibrary::Load(const String_t &name)
 	{
 		m_strName = name;

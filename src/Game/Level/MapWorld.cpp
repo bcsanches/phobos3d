@@ -357,7 +357,7 @@ void MapWorldImpl::OnStart()
 
 		path.StripExtension();
 
-		if (!hive->TryGetTable(path))
+		if (!hive->TryGetTable(path.GetStr()))
 		{
 			auto pTable = std::make_unique<Phobos::Register::Table>(path);
 

@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef PH_ENGINE_PLUGIN_H
 #define PH_ENGINE_PLUGIN_H
 
-#include <Phobos/Engine/ModuleManager.h>
+#include <Phobos/Engine/ModuleContainer.h>
 #include <Phobos/Engine/IPlugin.h>
 
 namespace Phobos
@@ -51,7 +51,7 @@ namespace Phobos
 				static void Configure(const char *moduleName, const char *cfgName);
 		
 			private:			
-				Engine::ModuleManagerPtr_t ipManager;
+				Engine::ModuleContainerPtr_t ipManager;
 
 				std::vector<Register_s> m_vecModules;
 

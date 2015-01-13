@@ -14,7 +14,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Phobos/Engine/ModuleManager.h"
+#include "Phobos/Engine/ModuleContainer.h"
 
 #include <algorithm>
 
@@ -25,12 +25,7 @@ subject to the following restrictions:
 
 #include "Phobos/Engine/BootModule.h"
 
-Phobos::Engine::ModuleManagerPtr_t Phobos::Engine::ModuleManager::Create(const String_t &name)
-{
-	return ModuleManagerPtr_t(PH_NEW ModuleManager(name));
-}
-
-Phobos::Engine::ModuleManager::ModuleManager(const Phobos::String_t &name, UInt32_t flags):
+Phobos::Engine::ModuleContainer::ModuleContainer(const Phobos::String_t &name, UInt32_t flags) :
 	Module(name, flags),
 	m_fLaunchedBoot(false),
 	m_fPendingSort(false),
@@ -39,12 +34,12 @@ Phobos::Engine::ModuleManager::ModuleManager(const Phobos::String_t &name, UInt3
 	//empty
 }
 
-Phobos::Engine::ModuleManager::~ModuleManager()
+Phobos::Engine::ModuleContainer::~ModuleContainer()
 {
 	//empty
 }
 
-void Phobos::Engine::ModuleManager::SortModules()
+void Phobos::Engine::ModuleContainer::SortModules()
 {
 	if(m_fPendingSort)
 	{
@@ -53,22 +48,22 @@ void Phobos::Engine::ModuleManager::SortModules()
 	}
 }
 
-void Phobos::Engine::ModuleManager::OnInit()
+void Phobos::Engine::ModuleContainer::OnInit()
 {
 	this->CallModuleProc(&Module::Init);
 }
 
-void Phobos::Engine::ModuleManager::OnStart()
+void Phobos::Engine::ModuleContainer::OnStart()
 {
 	this->CallModuleProc(&Module::Start);
 }
 
-void Phobos::Engine::ModuleManager::OnStarted()
+void Phobos::Engine::ModuleContainer::OnStarted()
 {
 	this->CallModuleProc(&Module::Started);
 }
 
-void Phobos::Engine::ModuleManager::OnUpdate()
+void Phobos::Engine::ModuleContainer::OnUpdate()
 {
 	this->UpdateDestroyList();
 	this->SortModules();
@@ -76,7 +71,7 @@ void Phobos::Engine::ModuleManager::OnUpdate()
 	this->CallModuleProc(&Module::Update);	
 }
 
-void Phobos::Engine::ModuleManager::OnFixedUpdate()
+void Phobos::Engine::ModuleContainer::OnFixedUpdate()
 {
 	this->UpdateDestroyList();
 	this->SortModules();
@@ -84,21 +79,21 @@ void Phobos::Engine::ModuleManager::OnFixedUpdate()
 	this->CallModuleProc(&Module::FixedUpdate);
 }
 
-void Phobos::Engine::ModuleManager::OnStop()
+void Phobos::Engine::ModuleContainer::OnStop()
 {
 	this->CallModuleProc(&Module::Stop);
 
 	this->UpdateDestroyList();
 }
 
-void Phobos::Engine::ModuleManager::OnFinalize()
+void Phobos::Engine::ModuleContainer::OnFinalize()
 {				
 	this->CallModuleProc(&Module::Finalize);
 	
 	this->UpdateDestroyList();			
 }
 
-void Phobos::Engine::ModuleManager::CallModuleProc(ModuleProc_t proc)
+void Phobos::Engine::ModuleContainer::CallModuleProc(ModuleProc_t proc)
 {
 	for(size_t i = 0, len = m_vecModules.size();i < len; ++i)		
 	{	
@@ -109,7 +104,7 @@ void Phobos::Engine::ModuleManager::CallModuleProc(ModuleProc_t proc)
 	}
 }
 
-void Phobos::Engine::ModuleManager::AddModule(Module &module, UInt32_t priority)
+void Phobos::Engine::ModuleContainer::AddModule(Module &module, UInt32_t priority)
 {
 	if((priority == ModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule *>(&module) == NULL))
 		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "ModuleManager::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module.GetName());
@@ -120,7 +115,7 @@ void Phobos::Engine::ModuleManager::AddModule(Module &module, UInt32_t priority)
 	m_fPendingSort = true;
 }
 
-void Phobos::Engine::ModuleManager::AddModuleToDestroyList(Module &module)
+void Phobos::Engine::ModuleContainer::AddModuleToDestroyList(Module &module)
 {
 	ModulesVector_t::iterator it = std::find(m_vecModules.begin(), m_vecModules.end(), module);
 	if(it == m_vecModules.end())
@@ -134,7 +129,7 @@ void Phobos::Engine::ModuleManager::AddModuleToDestroyList(Module &module)
 	m_setModulesToDestroy.insert(it->m_pclModule);
 }
 
-void Phobos::Engine::ModuleManager::RemoveModule(Module &module)
+void Phobos::Engine::ModuleContainer::RemoveModule(Module &module)
 {
 	ModulesVector_t::iterator it = std::find(m_vecModules.begin(), m_vecModules.end(), module);
 	if(it == m_vecModules.end())
@@ -151,7 +146,7 @@ void Phobos::Engine::ModuleManager::RemoveModule(Module &module)
 	m_fPendingRemoveErase = true;
 }	
 
-void Phobos::Engine::ModuleManager::UpdateDestroyList()
+void Phobos::Engine::ModuleContainer::UpdateDestroyList()
 {
 	if(m_fPendingRemoveErase)
 	{
@@ -173,7 +168,7 @@ void Phobos::Engine::ModuleManager::UpdateDestroyList()
 	m_setModulesToDestroy.clear();
 }
 	
-void Phobos::Engine::ModuleManager::LaunchBootModule(const String_t &cfgName, int argc, char *const argv[])
+void Phobos::Engine::ModuleContainer::LaunchBootModule(const String_t &cfgName, int argc, char *const argv[])
 {
 	if(m_fLaunchedBoot)
 		PH_RAISE(INVALID_OPERATION_EXCEPTION, "Core::LaunchBootModule", "Boot module already launched");
@@ -184,7 +179,7 @@ void Phobos::Engine::ModuleManager::LaunchBootModule(const String_t &cfgName, in
 	ptr.release();
 }
 
-void Phobos::Engine::ModuleManager::LogCoreModules()
+void Phobos::Engine::ModuleContainer::LogCoreModules()
 {
 	using namespace std;
 	stringstream stream;
@@ -197,7 +192,7 @@ void Phobos::Engine::ModuleManager::LogCoreModules()
 
 		stream << '\t' << m.m_pclModule->GetName() << ' ' << m.m_u32Priority << endl;			
 
-		ModuleManager *subModule = dynamic_cast<ModuleManager *>(m.m_pclModule);
+		auto *subModule = dynamic_cast<ModuleContainer *>(m.m_pclModule);
 		if(subModule)
 		{
 			LogMessage(stream.str());				

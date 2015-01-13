@@ -175,6 +175,13 @@ void Phobos::Register::LoadAll(const String_t &path)
 	}
 }
 
+Phobos::Register::Hive &Phobos::Register::GetOrCreateHive(const String_t &name)
+{
+	auto *hive = TryGetHive(name);
+
+	return (hive == nullptr) ? CreateCustomHive(name) : *hive;	
+}
+
 Phobos::Register::Hive &Phobos::Register::GetHive(const String_t &name)
 {
 	return static_cast<Hive&>(spManager_gl->GetChild(name));

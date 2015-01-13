@@ -76,6 +76,7 @@ namespace Phobos
 			void AddChild(std::unique_ptr<Node> &&ptr);
 			void RemoveChild(Node &node);
 			void RemoveAllChildren();
+
 			Node &GetChild(const String_t &name) const;
 			Node *TryGetChild(const String_t &name) const;
 

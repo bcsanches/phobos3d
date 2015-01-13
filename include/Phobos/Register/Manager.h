@@ -44,6 +44,7 @@ namespace Phobos
 		PH_REGISTER_API Hive &CreateCustomHive(const String_t &name);			
 
 		PH_REGISTER_API Hive &GetHive(const String_t &name);
+		PH_REGISTER_API Hive &GetOrCreateHive(const String_t &name);
 		PH_REGISTER_API Hive *TryGetHive(const String_t &name);
 		PH_REGISTER_API Table &GetTable(const String_t &hive, const String_t &table);
 		PH_REGISTER_API Table *TryGetTable(const String_t &hive, const String_t &table);

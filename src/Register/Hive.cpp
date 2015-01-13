@@ -23,11 +23,6 @@ subject to the following restrictions:
 #include "Phobos/Register/Table.h"
 #include "Phobos/Register/Utils.h"
 
-Phobos::Register::HivePtr_t Phobos::Register::Hive::Create(const String_t &name)
-{
-	return HivePtr_t(PH_NEW Hive(name));
-}
-
 Phobos::Register::Hive::Hive(const String_t &name):
 	Node(name, NodeFlags::PRIVATE_CHILDREN),
 	m_uSequence(0)

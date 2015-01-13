@@ -22,10 +22,10 @@ subject to the following restrictions:
 
 #include "Phobos/Engine/Console.h"
 #include "Phobos/Engine/Core.h"
-#include "Phobos/Engine/ModuleManager.h"
+#include "Phobos/Engine/ModuleContainer.h"
 
 
-Phobos::Engine::BootModule::BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleManager &manager):
+Phobos::Engine::BootModule::BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleContainer &manager) :
 	Module("BootModule"),
 	m_strCfgName(cfgName),	
 	m_rclManager(manager)

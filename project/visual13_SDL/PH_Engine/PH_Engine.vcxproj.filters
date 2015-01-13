@@ -25,10 +25,11 @@
       <Filter>Gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Module.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\PluginInstance.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Client.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Clocks.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\ModuleContainer.cpp" />
+    <ClCompile Include="..\..\..\src\Phobos\Engine\ModuleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
@@ -64,11 +65,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Phobos\Engine\Module.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleFwd.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleManager.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\PluginInstance.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Client.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ConsoleFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Clocks.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleContainer.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleManager.h" />
   </ItemGroup>
 </Project>

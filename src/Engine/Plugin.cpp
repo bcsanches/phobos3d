@@ -17,7 +17,7 @@ subject to the following restrictions:
 #include "Phobos/Engine/Plugin.h"
 
 #include <Phobos/Engine/Core.h>
-#include <Phobos/Engine/ModuleManager.h>
+#include <Phobos/Engine/ModuleContainer.h>
 
 #include <Phobos/ProcVector.h>
 
@@ -39,7 +39,7 @@ void Phobos::Engine::Plugin::Configure(const char *moduleName, const char *cfgNa
 
 void Phobos::Engine::Plugin::Init()
 {
-	ipManager = Engine::ModuleManager::Create(szModuleName_g);
+	ipManager = std::make_shared<Engine::ModuleContainer>(szModuleName_g);
 
 	auto &core = Engine::Core::GetInstance();
 	core.AddModule(*ipManager);	

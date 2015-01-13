@@ -27,14 +27,14 @@ namespace Phobos
 	namespace Engine
 	{
 		class BootModule;
-		class ModuleManager;
+		class ModuleContainer;
 
 		PH_DECLARE_NODE_PTR(BootModule);	
 
 		class BootModule: public Module
 		{
 			public:			
-				BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleManager &manager);				
+				BootModule(const String_t &cfgName, int argc, char *const argv[], ModuleContainer &manager);
 
 			protected:
 				virtual void OnInit() override;
@@ -43,7 +43,7 @@ namespace Phobos
 				String_t					m_strCfgName;
 				std::vector<std::string>	m_vecArgs;			
 
-				ModuleManager &m_rclManager;
+				ModuleContainer &m_rclManager;
 		};
 	}
 }

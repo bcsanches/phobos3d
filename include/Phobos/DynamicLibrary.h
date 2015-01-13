@@ -21,14 +21,20 @@ subject to the following restrictions:
 
 #include "Phobos/BaseAPI.h"
 #include "Phobos/String.h"
+#include "Phobos/DisableCopy.h"
 
 namespace Phobos
 {
 	class PH_BASE_API DynamicLibrary
 	{
+		PH_DISABLE_COPY(DynamicLibrary);
+
 		public:
 			DynamicLibrary();
 			~DynamicLibrary();
+			DynamicLibrary(DynamicLibrary &&);
+
+			DynamicLibrary &operator=(DynamicLibrary &&rhs);
 
 			void Load(const String_t &name);
 
