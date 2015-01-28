@@ -32,9 +32,8 @@ namespace Phobos
 	class Path;
 
 	namespace Register
-	{		
-		PH_REGISTER_API void Init();
-		PH_REGISTER_API void Finalize();
+	{				
+		PH_REGISTER_API void Clear();
 
 		PH_REGISTER_API void Load(StringRef_t fileName);
 		PH_REGISTER_API void Load(std::istream &stream);

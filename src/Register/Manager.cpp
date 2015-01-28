@@ -54,7 +54,7 @@ namespace Phobos
 			Manager::Manager():
 				Node("Register", NodeFlags::PRIVATE_CHILDREN)
 			{
-				//empty
+				ObjectManager::AddObject(*this, Path("/"));
 			}
 
 			inline void Manager::AddLocalPrivateChild(std::unique_ptr<Node> &&ptr)
@@ -76,21 +76,14 @@ namespace Phobos
 			}
 
 			static Shell::Command cmdLoadAllDeclarations_gl("loadAllDeclarations", CmdLoadAllDeclarations);
-			static std::unique_ptr<Manager> spManager_gl;
+			static std::unique_ptr<Manager> spManager_gl(PH_NEW(Manager));
 		}
 	}
 }
 
-void Phobos::Register::Init()
+void Phobos::Register::Clear()
 {
-	spManager_gl.reset(PH_NEW(Manager));
-
-	ObjectManager::AddObject(*spManager_gl, Path("/"));
-}
-
-void Phobos::Register::Finalize()
-{
-	spManager_gl.reset();
+	spManager_gl->RemoveAllChildren();
 }
 
 void Phobos::Register::Load(StringRef_t fileName)

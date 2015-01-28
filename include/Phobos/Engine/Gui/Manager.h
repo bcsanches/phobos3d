@@ -56,18 +56,17 @@ namespace Phobos
 			class PH_ENGINE_API Manager: public Module
 			{			
 				public:
-					static Manager &GetInstance(void);			
-					static void ReleaseInstance(void);
+					static Manager &GetInstance(void);					
 
 					Gui::ContextPtr_t CreateContext(const String_t &name);
 
-					~Manager();
+					virtual ~Manager();
 
 					void EnableInput(System::InputManager &inputManager);
 					void DisableInput(System::InputManager &inputManager);
 								
 				protected:
-					Manager(Console &console);				
+					Manager(const String_t &name);
 			
 					virtual void OnUpdate() override;				
 
@@ -78,10 +77,7 @@ namespace Phobos
 
 					void LoadFonts();
 
-					void InputEvent(const System::InputEvent_s &event);
-
-				protected:
-					static void UpdateInstance(Manager *manager);
+					void InputEvent(const System::InputEvent_s &event);				
 			
 				private:								
 					void CmdRocketLoadFonfFace(const Shell::StringVector_t &container, Phobos::Shell::Context &);

@@ -1,0 +1,70 @@
+ModuleDef Console
+{
+  lib = "PH_OgreEngine";
+  
+  priority = 1000;
+}   
+
+ModuleDef PluginManager
+{
+  lib = "PH_Engine";
+  
+  //after = "Console";
+  priority = 950;  
+}
+
+ModuleDef Session
+{
+  lib = "PH_Engine";
+  
+  //after = "Console";
+  priority = 900;
+}
+
+ModuleDef GuiManager
+{
+  lib = "PH_OgreEngine";
+  
+  //after = "Session";
+  priority = 850;
+}
+
+ModuleDef LevelSelector
+{
+  lib = "PH_Game";
+  
+  //after = "GuiManager";
+  priority = 800;
+}
+
+ModuleDef MapWorld
+{
+  lib = "PH_Game";
+  
+  //after = "LevelSelector";
+  priority = 750;
+}
+
+ModuleDef PhysicsManager
+{
+  lib = "PH_Game";
+  
+  //after = "MapWorld";
+  priority = 700;
+}
+
+ModuleDef WorldManager
+{
+  lib = "PH_Game";
+  
+  //after = "PhysicsManager";
+  priority = 650;
+}
+
+ModuleDef Render
+{
+  lib = "PH_OgreEngine";
+  
+  //after = "WorldManager";
+  priority = 0;
+}

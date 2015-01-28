@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\engineMain\EngineMain.cpp" />
+    <ClCompile Include="..\..\..\src\engineMain\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PH_Base\PH_Base.vcxproj">

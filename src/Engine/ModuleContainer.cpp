@@ -104,14 +104,44 @@ void Phobos::Engine::ModuleContainer::CallModuleProc(ModuleProc_t proc)
 	}
 }
 
+#if 0
+template <typename T>
+void Phobos::Engine::ModuleContainer::AddModuleImpl(T &&module, UInt32_t priority)
+{
+	if ((priority == ModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule *>(&(*module)) == nullptr))
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "ModuleManager::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module->GetName());
+
+	if (std::is_pointer<T>())
+		this->AddPrivateChild(*module);
+	else
+		this->AddPrivateChild(std::move(module));	
+
+	m_vecModules.push_back(ModuleInfo_s(*module, priority));
+	m_fPendingSort = true;
+}
+#endif
+
+void Phobos::Engine::ModuleContainer::AddModule(std::unique_ptr<Module> &&module, UInt32_t priority)
+{
+	if ((priority == ModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule *>(module.get()) == nullptr))
+		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "ModuleManager::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module->GetName());
+
+	auto pModule = module.get();
+	
+	this->AddPrivateChild(std::move(module));
+
+	m_vecModules.push_back(ModuleInfo_s(*pModule, priority));
+	m_fPendingSort = true;
+}
+
 void Phobos::Engine::ModuleContainer::AddModule(Module &module, UInt32_t priority)
 {
-	if((priority == ModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule *>(&module) == NULL))
+	if ((priority == ModulePriorities::BOOT_MODULE) && (dynamic_cast<BootModule *>(&module) == nullptr))
 		PH_RAISE(INVALID_PARAMETER_EXCEPTION, "ModuleManager::AddModule", "Only BootModule can use BOOT_MODULE_PRIORITY, module name: " + module.GetName());
 
-	this->AddPrivateChild(module);		
+	this->AddPrivateChild(module);
 
-	m_vecModules.push_back(ModuleInfo_s(module, priority));	
+	m_vecModules.push_back(ModuleInfo_s(module, priority));
 	m_fPendingSort = true;
 }
 

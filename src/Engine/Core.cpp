@@ -110,6 +110,11 @@ void Phobos::Engine::Core::AddModule(Module &module, UInt32_t priority)
 	m_clModule.AddModule(module, priority);
 }
 
+void Phobos::Engine::Core::AddModule(std::unique_ptr<Module> &&module, UInt32_t priority)
+{
+	m_clModule.AddModule(std::move(module), priority);
+}
+
 void Phobos::Engine::Core::RemoveModule(Module &module)
 {
 	m_clModule.RemoveModule(module);

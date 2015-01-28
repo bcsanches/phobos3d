@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef PH_MEMORY_H
 #define PH_MEMORY_H
 
+#include <memory>
+
 #include "Phobos/Defs.h"
 #include "Phobos/BaseAPI.h"
 
@@ -44,5 +46,17 @@ namespace Phobos
 #define PH_DECLARE_MEMORY_OPERATORS		\
 	void *operator new(size_t size);	\
 	void operator delete(void *ptr);
+
+namespace Phobos
+{
+	template<typename Derived, typename Base>
+	std::unique_ptr<Derived> StaticUniquePtrCast(std::unique_ptr<Base>&& p)
+	{
+		auto d = static_cast<Derived *>(p.release());
+		return std::unique_ptr<Derived>(d);
+	}
+
+}
+
 
 #endif

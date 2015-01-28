@@ -83,38 +83,33 @@ void Phobos::Engine::Gui::Manager::LocalInputDeviceListener::OnInputEvent(const 
 
 Phobos::Engine::Gui::Manager &Phobos::Engine::Gui::Manager::GetInstance(void)
 {
+	PH_ASSERT(g_pclManager != nullptr);
+
 	return *g_pclManager;
 }
 
-void Phobos::Engine::Gui::Manager::ReleaseInstance(void)
-{
-	delete g_pclManager;
-	g_pclManager = nullptr;	
-}
-
-void Phobos::Engine::Gui::Manager::UpdateInstance(Manager *manager)
-{
-	ReleaseInstance();
-
-	g_pclManager = manager;
-}
-
-Phobos::Engine::Gui::Manager::Manager(Console &console):
-	Module("GuiManager", NodeFlags::PRIVATE_CHILDREN),
+Phobos::Engine::Gui::Manager::Manager(const String_t &name):
+	Module(name, NodeFlags::PRIVATE_CHILDREN),
 	m_cmdRocketLoadFontFace("rocketLoadFontFace"),
 	m_fInputActive(false)
 {
+	PH_ASSERT(g_pclManager == nullptr);
+
+	g_pclManager = this;
+
 	m_cmdRocketLoadFontFace.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Engine::Gui::Manager::CmdRocketLoadFonfFace, this));
 
 	m_clKeyboardListener.SetOwner(*this);
 	m_clMouseListener.SetOwner(*this);
 
-	console.AddContextCommand(m_cmdRocketLoadFontFace);
+	Console::GetInstance().AddContextCommand(m_cmdRocketLoadFontFace);
 }
 
 Phobos::Engine::Gui::Manager::~Manager()
 {
-	//empty
+	PH_ASSERT(g_pclManager == this);
+
+	g_pclManager = nullptr;
 }
 
 Rocket::Core::SystemInterface *Phobos::Engine::Gui::Manager::CreateSystemInterface()

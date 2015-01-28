@@ -21,7 +21,6 @@ subject to the following restrictions:
 
 #include <OgreRenderQueueListener.h>
 
-#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Gui/Manager.h>
 
 #include "Phobos/OgreEngine/OgreEngineAPI.h"
@@ -37,7 +36,7 @@ namespace Phobos
 			class PH_OGRE_ENGINE_API Manager: public Engine::Gui::Manager, Ogre::RenderQueueListener
 			{			
 				public:				
-					static Manager &CreateInstance(Engine::Console &console);
+					static std::unique_ptr<Phobos::Engine::Module> CreateInstance(const String_t &name);
 
 					virtual ~Manager();
 
@@ -52,7 +51,7 @@ namespace Phobos
 					virtual void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation);				
 
 				private:
-					Manager(Engine::Console &console);
+					Manager(const String_t &name);
 
 					void ConfigureRenderSystem();
 					void BuildProjectionMatrix(Ogre::Matrix4& projection_matrix);

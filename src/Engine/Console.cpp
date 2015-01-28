@@ -33,16 +33,15 @@ subject to the following restrictions:
 #define CONSOLE_LINE_COUNT 15
 
 
-Phobos::Engine::ConsolePtr_t Phobos::Engine::Console::ipInstance_gl;
+namespace
+{
+	Phobos::Engine::Console *g_pclInstance = nullptr;
+}
+
 	
 Phobos::Engine::Console &Phobos::Engine::Console::GetInstance(void)
 {
-	return *ipInstance_gl;
-}
-
-void Phobos::Engine::Console::ReleaseInstance(void)
-{
-	ipInstance_gl.reset();
+	return *g_pclInstance;
 }
 			
 Phobos::Engine::Console::Console(const String_t &name, UInt32_t flags):
@@ -55,6 +54,10 @@ Phobos::Engine::Console::Console(const String_t &name, UInt32_t flags):
 	m_strCurrentNodePathName("/"),
 	m_fActive(true)
 {
+	PH_ASSERT(g_pclInstance == nullptr);
+
+	g_pclInstance = this;
+
 	LogAddListener(*this);				
 
 	m_cmdLs.SetProc(PH_CONTEXT_CMD_BIND(&Console::CmdLs, this));
@@ -68,12 +71,9 @@ Phobos::Engine::Console::Console(const String_t &name, UInt32_t flags):
 
 Phobos::Engine::Console::~Console()
 {
-	//empty
-}
+	PH_ASSERT(g_pclInstance == this);
 
-void Phobos::Engine::Console::UpdateInstance(ConsolePtr_t console)
-{
-	ipInstance_gl = console;
+	g_pclInstance = nullptr;
 }
 
 const Phobos::String_t &Phobos::Engine::Console::EditBoxStr() const

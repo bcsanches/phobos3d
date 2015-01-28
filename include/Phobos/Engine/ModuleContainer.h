@@ -52,6 +52,7 @@ namespace Phobos
 				~ModuleContainer();
 
 				void AddModule(Module &module, UInt32_t priority = ModulePriorities::NORMAL);
+				void AddModule(std::unique_ptr<Module> &&module, UInt32_t priority = ModulePriorities::NORMAL);
 				void AddModuleToDestroyList(Module &module);
 				void RemoveModule(Module &module);
 
@@ -75,6 +76,9 @@ namespace Phobos
 			private:
 				void UpdateDestroyList();
 				void SortModules();
+
+				template <typename T>
+				void AddModuleImpl(T &&module, UInt32_t priority = ModulePriorities::NORMAL);
 
 			protected:
 				struct ModuleInfo_s

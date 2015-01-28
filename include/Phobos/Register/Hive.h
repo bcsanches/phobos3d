@@ -42,6 +42,7 @@ namespace Phobos
 				void Load(Parser &parser);
 
 				Table &GetTable(const String_t &name);
+				const Table &GetTable(const String_t &name) const;
 				Table *TryGetTable(const String_t &name);
 
 				void AddTable(std::unique_ptr<Table> &&dict);

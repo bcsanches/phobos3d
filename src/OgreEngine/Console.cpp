@@ -32,6 +32,8 @@ subject to the following restrictions:
 #include "Phobos/OgreEngine/Render.h"
 #include "Phobos/OgreEngine/Utils.h"
 
+#include <Phobos/Engine/ModuleFactory.h>
+
 #define CONSOLE_TIME 2.5f
 
 #define CONSOLE_LINE_LENGHT 120
@@ -40,15 +42,10 @@ subject to the following restrictions:
 
 #define CONSOLE_LINE_COUNT 15
 
-Phobos::OgreEngine::Console &Phobos::OgreEngine::Console::CreateInstance(void)
-{		
-	Console::UpdateInstance(ConsolePtr_t(PH_NEW Console()));		
+PH_MODULE_FULL_CREATOR("Console", Phobos::OgreEngine::Console);
 
-	return static_cast<Console &>(Console::GetInstance());
-}
-	
-Phobos::OgreEngine::Console::Console(void):
-	Engine::Console("Console"),
+Phobos::OgreEngine::Console::Console(const String_t &name):
+	Engine::Console(name),
 	m_pclRect(NULL),
 	m_pclTextBox(NULL),
 	m_pclOverlay(NULL),

@@ -32,7 +32,6 @@ subject to the following restrictions:
 #include <Phobos/Singleton.h>
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
-#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
 
 #include <Phobos/System/Window.h>
@@ -67,7 +66,7 @@ namespace Phobos
 
 		class PH_OGRE_ENGINE_API Render: public Engine::Module
 		{		
-			PH_DECLARE_SINGLETON_METHODS2(Render, Engine::Console&);
+			PH_DECLARE_SINGLETON_METHODS2(Render, const String_t &name);
 
 			public:
 				enum EntityMeshFlags_e
@@ -147,7 +146,7 @@ namespace Phobos
 				// =====================================================
 				// PRIVATE METHODS
 				// =====================================================		
-				Render(Engine::Console &console);
+				Render(const String_t &name);
 				virtual ~Render();
 
 				bool TrySetRenderSystem(const String_t &renderSystem);

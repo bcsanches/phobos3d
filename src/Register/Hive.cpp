@@ -114,6 +114,11 @@ Phobos::Register::Table &Phobos::Register::Hive::GetTable(const String_t &name)
 	return static_cast<Table &>(this->GetChild(name));
 }
 
+const Phobos::Register::Table &Phobos::Register::Hive::GetTable(const String_t &name) const
+{
+	return static_cast<Table &>(this->GetChild(name));
+}
+
 Phobos::Register::Table *Phobos::Register::Hive::TryGetTable(const String_t &name)
 {
 	return static_cast<Phobos::Register::Table *>(this->TryGetChild(name));

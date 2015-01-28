@@ -21,10 +21,9 @@ subject to the following restrictions:
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Shell/Utils.h>
 
-#include <Phobos/OgreEngine/Gui/Manager.h>
-
 #include <Phobos/OgreEngine/Console.h>
 #include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/EngineMain.h>
 #include <Phobos/Game/Level/MapWorld.h>
 #include <Phobos/Game/Physics/Manager.h>
 #include <Phobos/Engine/PluginManager.h>
@@ -46,20 +45,15 @@ namespace Phobos
 
 		private:			
 			ProcVector	m_clSingletons;
+			Phobos::Engine::EngineMain m_clEngine;
 	};
 
-	EngineMain::EngineMain(int argc, char * const argv[])
+	EngineMain::EngineMain(int argc, char * const argv[]):
+		m_clEngine(argc, argv)
 	{
-		auto &console = OgreEngine::Console::CreateInstance();
-		m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
+		auto &console = Engine::Console::GetInstance();
 
-		auto &core = Engine::Core::CreateInstance(console, "autoexec.cfg", argc, argv);
-		m_clSingletons.AddProc(Engine::Core::ReleaseInstance);
-
-		Register::Init();
-		m_clSingletons.AddProc(Register::Finalize);		
-				
-		core.AddModule(console);		
+		auto &core = Engine::Core::GetInstance();
 
 		auto &session = Engine::Session::CreateInstance();
 		m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
@@ -85,15 +79,15 @@ namespace Phobos
 		m_clSingletons.AddProc(Game::Physics::Manager::ReleaseInstance);
 		core.AddModule(physicsManager, Engine::ModulePriorities::LOWEST+3);
 
+#if 0
 		auto &guiManager = OgreEngine::Gui::Manager::CreateInstance(console);
 		m_clSingletons.AddProc(Engine::Gui::Manager::ReleaseInstance);
 		core.AddModule(guiManager, Engine::ModulePriorities::LOWEST+1);
+#endif
 
-		auto &render = OgreEngine::Render::CreateInstance(console);
+		auto &render = OgreEngine::Render::CreateInstance("Render");
 		m_clSingletons.AddProc(OgreEngine::Render::ReleaseInstance);
-		core.AddModule(render, Engine::ModulePriorities::LOWEST);
-
-		Register::RegisterCommands(console);
+		core.AddModule(render, Engine::ModulePriorities::LOWEST);		
 	}
 
 	EngineMain::~EngineMain()

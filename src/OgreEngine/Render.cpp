@@ -130,9 +130,9 @@ namespace Phobos
 	}
 }
 
-PH_DEFINE_DEFAULT_SINGLETON2(Phobos::OgreEngine::Render, Engine::Console&);
+PH_DEFINE_DEFAULT_SINGLETON2(Phobos::OgreEngine::Render, const Phobos::String_t &);
 
-Phobos::OgreEngine::Render::Render(Engine::Console &console):
+Phobos::OgreEngine::Render::Render(const String_t &name):
 	Module("Render"),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
@@ -181,6 +181,8 @@ Phobos::OgreEngine::Render::Render(Engine::Console &console):
 	log->addListener(&clOgreLogListener_gl);
 
 	m_upOverlaySystem.reset(new Ogre::OverlaySystem());
+
+	auto &console = Engine::Console::GetInstance();
 
 	console.AddContextCommand(m_cmdOgreAddResourceLocation);
 	console.AddContextCommand(m_cmdOgreInitialiseResourceGroup);

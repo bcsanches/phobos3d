@@ -23,21 +23,17 @@ subject to the following restrictions:
 #include <OgreViewport.h>
 
 #include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/ModuleFactory.h>
 
 #include "Phobos/Engine/Gui/Context.h"
 #include "Phobos/OgreEngine/Gui/RenderInterface.h"
 
 #include "Phobos/OgreEngine/Render.h"
 
-Phobos::OgreEngine::Gui::Manager &Phobos::OgreEngine::Gui::Manager::CreateInstance(Engine::Console &console)
-{		
-	Manager::UpdateInstance(PH_NEW Manager(console));		
+PH_MODULE_FULL_CREATOR("GuiManager", Phobos::OgreEngine::Gui::Manager);
 
-	return static_cast<Manager &>(Manager::GetInstance());
-}
-
-Phobos::OgreEngine::Gui::Manager::Manager(Engine::Console &console):	
-	Engine::Gui::Manager(console),
+Phobos::OgreEngine::Gui::Manager::Manager(const String_t &name) :
+	Engine::Gui::Manager(name),
 	m_pclSceneManager(NULL),
 	m_pclCamera(NULL)
 {

@@ -30,12 +30,12 @@ struct KernelInstance_s
 {
 	KernelInstance_s()
 	{		
-		Register::Init();
+		//empty
 	}
 
 	~KernelInstance_s()
 	{		
-		Register::Finalize();		
+		Register::Clear();		
 	}
 };
 

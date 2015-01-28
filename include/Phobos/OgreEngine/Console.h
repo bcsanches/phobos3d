@@ -41,14 +41,14 @@ namespace Phobos
 				// =====================================================
 				// PUBLIC METHODS
 				// =====================================================		
-				static Console &CreateInstance(void);
+				static std::unique_ptr<Module> CreateInstance(const String_t &name);
 
 				~Console(void);
 			protected:
 				// =====================================================
 				// PROTECTED METHODS
 				// =====================================================
-				Console(void);			
+				Console(const String_t &name);				
 			
 				virtual void OnUpdate() override;
 				virtual void OnStart() override;

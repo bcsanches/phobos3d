@@ -77,8 +77,9 @@ namespace Phobos
 				typedef boost::circular_buffer<String_t> TextList_t;
 
 			public:
-				static Console &GetInstance(void);			
-				static void ReleaseInstance(void);
+				static Console &GetInstance(void);							
+
+				virtual ~Console();
 
 				void Execute(const String_t &cmdLine);
 				void ExecuteFromFile(const String_t &fileName);
@@ -101,8 +102,7 @@ namespace Phobos
 				bool HandleInputEvent(const System::InputEvent_s &event);
 
 			protected:
-				Console(const String_t &name, UInt32_t flags = 0);
-				virtual ~Console();
+				Console(const String_t &name, UInt32_t flags = 0);				
 
 				virtual void OnToggleConsole() = 0;
 				virtual void OnEditBoxChanged() = 0;
@@ -155,12 +155,6 @@ namespace Phobos
 				TextList_t::iterator		m_itPrevCmd;
 			
 				bool m_fActive;
-
-			private:
-				// =====================================================
-				// STATIC PRIVATE ATTRIBUTES
-				// =====================================================
-				static ConsolePtr_t ipInstance_gl;
 		};
 
 		// =====================================================

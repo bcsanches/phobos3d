@@ -41,6 +41,7 @@ namespace Phobos
 				static void ReleaseInstance();
 				static Core &GetInstance();				
 
+				void AddModule(std::unique_ptr<Module> &&module, UInt32_t priority = ModulePriorities::NORMAL);
 				void AddModule(Module &module, UInt32_t priority = ModulePriorities::NORMAL);
 				void RemoveModule(Module &module);
 
