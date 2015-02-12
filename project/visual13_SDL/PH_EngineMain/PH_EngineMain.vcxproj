@@ -148,15 +148,6 @@
     <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
       <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PH_Game\PH_Game.vcxproj">
-      <Project>{d3f292da-2bc0-486c-9505-a2c4bb7cb486}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_OgreEngine\PH_OgreEngine.vcxproj">
-      <Project>{1652ed80-c688-4cab-b4e3-15a510c284b1}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\PH_Register\PH_Register.vcxproj">
-      <Project>{4fa1aedb-6d65-4ab9-bb51-b58b7e9ac518}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

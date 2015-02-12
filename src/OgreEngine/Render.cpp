@@ -34,6 +34,7 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/ModuleFactory.h>
 #include <Phobos/Shell/Context.h>
 #include <Phobos/Shell/Utils.h>
 #include <Phobos/Error.h>
@@ -130,7 +131,19 @@ namespace Phobos
 	}
 }
 
-PH_DEFINE_DEFAULT_SINGLETON2(Phobos::OgreEngine::Render, const Phobos::String_t &);
+namespace
+{
+	static Phobos::OgreEngine::Render *g_pclRender = nullptr;
+}
+
+PH_MODULE_FULL_CREATOR("Render", Phobos::OgreEngine::Render);
+
+Phobos::OgreEngine::Render &Phobos::OgreEngine::Render::GetInstance()
+{
+	PH_ASSERT_VALID(g_pclRender);
+
+	return *g_pclRender;
+}
 
 Phobos::OgreEngine::Render::Render(const String_t &name):
 	Module("Render"),
@@ -159,6 +172,10 @@ Phobos::OgreEngine::Render::Render(const String_t &name):
 	m_pclHelperScene(nullptr),
 	m_pclHelperCamera(nullptr)
 {
+	PH_ASSERT(g_pclRender == nullptr);
+
+	g_pclRender = this;
+
 	LogMessage("[Render] Initializing");
 
 	m_cmdOgreLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&Render::CmdOgreLoadPlugin, this));
@@ -211,10 +228,14 @@ Phobos::OgreEngine::Render::Render(const String_t &name):
 
 Phobos::OgreEngine::Render::~Render(void)
 {
+	PH_ASSERT(g_pclRender == this);
+
+	g_pclRender = nullptr;
+
 	//we must make sure that caelum is destroyed before ogre :(
 	//clCaelum.Shutdown();
 
-	m_upOverlaySystem.reset();	
+	m_upOverlaySystem.reset();
 }
 
 size_t Phobos::OgreEngine::Render::GetScreenWidth()

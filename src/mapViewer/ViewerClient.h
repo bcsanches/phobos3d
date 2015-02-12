@@ -21,7 +21,6 @@ subject to the following restrictions:
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Engine/Plugin.h>
-#include <Phobos/Singleton.h>
 #include <Phobos/Engine/Client.h>
 #include <Phobos/Game/SpectatorCamera.h>
 #include <Phobos/Game/WorldManager.h>

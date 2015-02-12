@@ -24,6 +24,7 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/ModuleFactory.h>
+#include <Phobos/Memory.h>
 
 #include "Phobos/Engine/Gui/Context.h"
 #include "Phobos/OgreEngine/Gui/RenderInterface.h"

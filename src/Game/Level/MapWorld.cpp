@@ -17,6 +17,7 @@ subject to the following restrictions:
 #include "Phobos/Game/Level/MapWorld.h"
 
 #include <Phobos/Exception.h>
+#include <Phobos/Engine/ModuleFactory.h>
 #include <Phobos/Log.h>
 #include <Phobos/Path.h>
 
@@ -43,9 +44,6 @@ subject to the following restrictions:
 
 #include <tuple>
 #include <utility>
-
-PH_SINGLETON_PROCS(Phobos::Game::MapWorld,);
-PH_DEFINE_SINGLETON_VAR(Phobos::Game::MapWorld);
 
 //
 //
@@ -146,7 +144,8 @@ namespace
 	class MapWorldImpl: public Phobos::Game::MapWorld
 	{
 		public:
-			MapWorldImpl()
+			MapWorldImpl(const Phobos::String_t &name):
+				MapWorld(name)
 			{
 				g_pclMapWorld = this;				
 			}
@@ -381,17 +380,42 @@ void MapWorldImpl::OnUpdate()
 	Phobos::Game::DynamicBodyComponent::SyncAllToPhysics();	
 }
 
+namespace
+{
+	static Phobos::Game::MapWorld *g_pclInstance = nullptr;
+}
+
+PH_MODULE_CREATOR("MapWorld", Phobos::Game::MapWorld::CreateInstance);
+
 namespace Phobos
 {
 	namespace Game
 	{
-		MapWorld &MapWorld::CreateInstance()
+		std::unique_ptr<Phobos::Engine::Module> MapWorld::CreateInstance(const String_t &name)
+		{					
+			return std::unique_ptr<Phobos::Engine::Module>(new MapWorldImpl(name));			
+		}
+
+		MapWorld &MapWorld::GetInstance()
 		{
-			PH_ASSERT(!ipInstance_gl);
+			PH_ASSERT_VALID(g_pclInstance);
 
-			ipInstance_gl.reset(PH_NEW MapWorldImpl());
+			return *g_pclInstance;
+		}
 
-			return *ipInstance_gl;
+		MapWorld::MapWorld(const String_t &name) :
+			Module(name)
+		{
+			PH_ASSERT(g_pclInstance == nullptr);
+
+			g_pclInstance = this;
+		}
+
+		MapWorld::~MapWorld()
+		{
+			PH_ASSERT(g_pclInstance == this);
+
+			g_pclInstance = nullptr;
 		}		
 	}
 }

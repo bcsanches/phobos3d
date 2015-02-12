@@ -27,7 +27,6 @@ subject to the following restrictions:
 #include <Phobos/Listener.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
 #include <Phobos/Shell/Command.h>
-#include <Phobos/Singleton.h>
 #include <Phobos/Register/HiveFwd.h>
 #include <Phobos/Register/TableFwd.h>
 
@@ -39,8 +38,6 @@ namespace Phobos
 {	
 	namespace Game
 	{
-		PH_DECLARE_SINGLETON_PTR(WorldManager);		
-
 		class MapObject;
 
 		class WorldManagerListener
@@ -56,10 +53,13 @@ namespace Phobos
 		};
 
 		class PH_GAME_API WorldManager: public Phobos::Engine::Module
-		{
-			PH_DECLARE_SINGLETON_METHODS2(WorldManager, Engine::Console &);
-		
+		{					
 			public:					
+				static std::unique_ptr<Module> CreateInstance(const String_t &name);
+				static WorldManager &GetInstance();
+
+				virtual ~WorldManager();
+
 				void LoadBlankMap(const char *name);
 				void LoadMap(const String_t &mapName);
 				void UnloadMap();
@@ -79,8 +79,7 @@ namespace Phobos
 				virtual void OnFinalize() override;				
 
 			private:
-				WorldManager(Engine::Console &console);
-				virtual ~WorldManager();												
+				WorldManager(const String_t &name);				
 
 				void OnMapLoaded();
 

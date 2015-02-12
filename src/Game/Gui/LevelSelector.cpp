@@ -29,6 +29,8 @@ subject to the following restrictions:
 #include <Phobos/Engine/Gui/Context.h>
 #include <Phobos/Engine/Gui/Manager.h>
 
+#include <Phobos/Engine/ModuleFactory.h>
+
 #include "Phobos/Game/Level/MapLoaderFactory.h"
 #include "Phobos/Game/WorldManager.h"
 
@@ -217,21 +219,39 @@ const Phobos::String_t &Phobos::Game::Gui::LevelFileDataSource::GetFile(int inde
 	return vecFiles[index];
 }
 
-PH_DEFINE_DEFAULT_SINGLETON2(Phobos::Game::Gui::LevelSelector, Engine::Console &);
+namespace
+{
+	static Phobos::Game::Gui::LevelSelector *g_pclLevelSelector = nullptr;
+}
 
-Phobos::Game::Gui::LevelSelector::LevelSelector(Engine::Console &console):
+PH_MODULE_FULL_CREATOR("LevelSelector", Phobos::Game::Gui::LevelSelector);
+
+Phobos::Game::Gui::LevelSelector &Phobos::Game::Gui::LevelSelector::GetInstance()
+{
+	PH_ASSERT_VALID(g_pclLevelSelector);
+
+	return *g_pclLevelSelector;
+}
+
+Phobos::Game::Gui::LevelSelector::LevelSelector(const String_t &name):
 	Module("GuiLevelSelector"),
 	m_cmdAddLevelPath("addLevelPath"),
 	m_fCloseRequested(false)
 {	
+	PH_ASSERT(g_pclLevelSelector == nullptr);
+
+	g_pclLevelSelector = this;
+
 	m_cmdAddLevelPath.SetProc(PH_CONTEXT_CMD_BIND(&Phobos::Game::Gui::LevelSelector::CmdAddLevelPath, this));	
 
-	console.AddContextCommand(m_cmdAddLevelPath);
+	Phobos::Engine::Console::GetInstance().AddContextCommand(m_cmdAddLevelPath);
 }
 
 Phobos::Game::Gui::LevelSelector::~LevelSelector()
 {
-	//empty
+	PH_ASSERT(g_pclLevelSelector == this);
+
+	g_pclLevelSelector = nullptr;
 }
 
 void Phobos::Game::Gui::LevelSelector::OnFixedUpdate()

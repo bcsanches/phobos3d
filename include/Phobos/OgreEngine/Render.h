@@ -29,7 +29,6 @@ subject to the following restrictions:
 #include <Terrain/OgreTerrainGroup.h>
 #include <Terrain/OgreTerrainPrerequisites.h>
 
-#include <Phobos/Singleton.h>
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/Engine/Module.h>
@@ -65,9 +64,7 @@ namespace Phobos
 		}
 
 		class PH_OGRE_ENGINE_API Render: public Engine::Module
-		{		
-			PH_DECLARE_SINGLETON_METHODS2(Render, const String_t &name);
-
+		{					
 			public:
 				enum EntityMeshFlags_e
 				{
@@ -77,6 +74,11 @@ namespace Phobos
 				// =====================================================
 				// PUBLIC METHODS
 				// =====================================================			
+				static std::unique_ptr<Module> CreateInstance(const String_t &name);
+				static Render &GetInstance();
+
+				virtual ~Render();
+
 				void CreateDefaultCmds(Shell::Context &context);
 			
 				Ogre::SceneManager *CreateSceneManager(Ogre::SceneTypeMask typeMask);
@@ -146,8 +148,7 @@ namespace Phobos
 				// =====================================================
 				// PRIVATE METHODS
 				// =====================================================		
-				Render(const String_t &name);
-				virtual ~Render();
+				Render(const String_t &name);				
 
 				bool TrySetRenderSystem(const String_t &renderSystem);
 

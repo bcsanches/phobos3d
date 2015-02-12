@@ -22,7 +22,6 @@ subject to the following restrictions:
 #include <Phobos/System/InputDeviceListener.h>
 
 #include <Phobos/Shell/Command.h>
-#include <Phobos/Singleton.h>
 #include <Phobos/System/InputManagerFwd.h>
 
 #include "Phobos/Engine/Module.h"
@@ -50,9 +49,7 @@ namespace Phobos
 		class Console;
 
 		namespace Gui
-		{
-			PH_DECLARE_NODE_PTR(Manager);
-
+		{			
 			class PH_ENGINE_API Manager: public Module
 			{			
 				public:

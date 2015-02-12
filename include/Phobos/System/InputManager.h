@@ -20,7 +20,6 @@ subject to the following restrictions:
 #include "Phobos/System/SystemAPI.h"
 
 #include <Phobos/Node.h>
-#include <Phobos/Singleton.h>
 #include <Phobos/Types.h>
 
 #include "Phobos/System/InputDefs.h"

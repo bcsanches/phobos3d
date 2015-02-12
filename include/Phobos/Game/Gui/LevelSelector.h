@@ -21,7 +21,6 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
-#include <Phobos/Singleton.h>
 #include <Phobos/Shell/Command.h>
 
 #include <Phobos/Engine/Gui/ContextFwd.h>
@@ -34,21 +33,23 @@ namespace Phobos
 	namespace Game
 	{
 		namespace Gui
-		{
-			PH_DECLARE_SINGLETON_PTR(LevelSelector);
-
+		{			
 			class DataGridController;
 			class LevelFileDataSource;		
 
 			class PH_GAME_API LevelSelector: public Engine::Module, public Engine::Gui::Form
-			{
-				PH_DECLARE_SINGLETON_METHODS2(LevelSelector, Engine::Console &);
-
+			{				
 				public:					
+					static std::unique_ptr<Module> CreateInstance(const String_t &name);
+
+					static LevelSelector &GetInstance();
+
 					virtual void Open();
 					virtual void Close();
 
 					virtual Engine::EscAction HandleEsc(Engine::Gui::Form *&outForm);				
+
+					~LevelSelector();					
 
 				protected:										
 					virtual void OnFinalize() override;
@@ -57,8 +58,7 @@ namespace Phobos
 				private:
 					friend class LevelSelectorEventListener;
 
-					LevelSelector(Engine::Console &);
-					~LevelSelector();
+					LevelSelector(const String_t &name);					
 
 					void OnLoadButtonClick();
 					void OnQuitButtonClick();

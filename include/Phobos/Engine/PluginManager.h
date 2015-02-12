@@ -19,6 +19,7 @@ subject to the following restrictions:
 
 #include <list>
 
+
 #include <Phobos/Shell/Command.h>
 
 #include "Phobos/Engine/Module.h"
@@ -29,29 +30,26 @@ namespace Phobos
 {
 	namespace Engine
 	{
-		class Console;
-
-		PH_DECLARE_NODE_PTR(PluginManager);
+		class Console;		
 
 		class PH_ENGINE_API PluginManager: public Module
 		{
 			public:
-				static PluginManager &CreateInstance(Console &console);
-				static PluginManager &GetInstance(void);
-				static void ReleaseInstance(void);				
+				static std::unique_ptr<Module> CreateInstance(const String_t &name);
+				static PluginManager &GetInstance(void);							
 
 				void LoadPlugin(const String_t &name);
 				void UnloadPlugin(const String_t &name);
 
 				void QueuePluginLoad(const String_t &name);
 
+				~PluginManager();
 			protected:
 				void OnFinalize() override;
 				void OnStarted() override;				
 
 			private:				
-				PluginManager(Console &console);
-				~PluginManager();
+				PluginManager(const String_t &name);				
 
 				void CmdLoadPlugin(const Shell::StringVector_t &args, Shell::Context &);
 				void CmdQueuePluginLoad(const Shell::StringVector_t &args, Shell::Context &);

@@ -18,6 +18,7 @@ subject to the following restrictions:
 #include "Phobos/Game/WorldManager.h"
 
 #include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/ModuleFactory.h>
 #include <Phobos/Shell/Utils.h>
 #include <Phobos/Error.h>
 #include <Phobos/Exception.h>
@@ -35,19 +36,37 @@ subject to the following restrictions:
 #include "Phobos/Game/Physics/Settings.h"
 #include "Phobos/Game/Level/MapLoaderFactory.h"
 
+PH_MODULE_FULL_CREATOR("WorldManager", Phobos::Game::WorldManager);
+
+namespace
+{
+	static Phobos::Game::WorldManager *g_pclWorldManager = nullptr;
+}
+
 namespace Phobos
 {
 	namespace Game
-	{
-		PH_DEFINE_DEFAULT_SINGLETON2(WorldManager, Engine::Console &);
+	{		
+		WorldManager &WorldManager::GetInstance()
+		{
+			PH_ASSERT_VALID(g_pclWorldManager);
 
-		WorldManager::WorldManager(Engine::Console &console):
-			Module("WorldManager", NodeFlags::PRIVATE_CHILDREN),
+			return *g_pclWorldManager;
+		}
+
+		WorldManager::WorldManager(const String_t &name):
+			Module(name, NodeFlags::PRIVATE_CHILDREN),
 			m_cmdLoadMap("loadMap"),
 			m_cmdUnloadMap("unloadMap")
 		{
+			PH_ASSERT(g_pclWorldManager == nullptr);
+
+			g_pclWorldManager = this;
+
 			m_cmdLoadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdLoadMap, this));
 			m_cmdUnloadMap.SetProc(PH_CONTEXT_CMD_BIND(&WorldManager::CmdUnloadMap, this));			
+
+			auto &console = Engine::Console::GetInstance();
 
 			console.AddContextCommand(m_cmdLoadMap);
 			console.AddContextCommand(m_cmdUnloadMap);			
@@ -55,7 +74,9 @@ namespace Phobos
 
 		WorldManager::~WorldManager()
 		{
-			//empty
+			PH_ASSERT(g_pclWorldManager == this);
+
+			g_pclWorldManager = nullptr;
 		}	
 
 		void WorldManager::UnloadMap()

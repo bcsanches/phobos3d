@@ -21,7 +21,6 @@ subject to the following restrictions:
 #include <Phobos/System/InputDeviceListener.h>
 #include <Phobos/System/InputManager.h>
 #include <Phobos/System/InputMapperFwd.h>
-#include <Phobos/Singleton.h>
 
 #include "Phobos/Engine/EngineAPI.h"
 
@@ -35,9 +34,7 @@ namespace Phobos
 	}
 
 	namespace Engine
-	{
-		PH_DECLARE_SINGLETON_PTR(Session);
-
+	{		
 		class IPlayerCommandProducer;
 		class Client;
 		
@@ -50,10 +47,11 @@ namespace Phobos
 			private System::InputManagerListener, 
 			private System::InputDeviceListener,
 			private System::EventListener
-		{
-			PH_DECLARE_SINGLETON_METHODS(Session);
-
+		{			
 			public:
+				static std::unique_ptr<Module> CreateInstance(const String_t &name);
+				static Session &GetInstance();
+
 				~Session();
 
 				void SetPlayerCommandProducer(IPlayerCommandProducer *commandProducer);
@@ -69,7 +67,7 @@ namespace Phobos
 				virtual void OnUpdate() override;
 
 			private:
-				Session();			
+				Session(const String_t &name);			
 
 				virtual void OnInputManagerEvent(const System::InputManagerEvent_s &event) override;
 				virtual void OnInputEvent(const System::InputEvent_s &event) override;

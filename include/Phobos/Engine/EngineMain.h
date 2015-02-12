@@ -19,6 +19,8 @@ namespace Phobos
 				EngineMain(int argc, char * const argv[]);
 				~EngineMain();
 
+				void StartMainLoop();
+
 			private:
 				ProcVector		m_clSingletons;
 				ModuleManager	m_clModuleManager;

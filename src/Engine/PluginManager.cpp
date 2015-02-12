@@ -22,40 +22,36 @@ subject to the following restrictions:
 #include <Phobos/Memory.h>
 
 #include "Phobos/Engine/Console.h"
+#include "Phobos/Engine/ModuleFactory.h"
 #include "Phobos/Engine/PluginInstance.h"
 
 static Phobos::Engine::PluginManager *g_pclPluginManager = nullptr;
 
-Phobos::Engine::PluginManager &Phobos::Engine::PluginManager::CreateInstance(Console &console)
-{
-	PH_ASSERT(!g_pclPluginManager);
-
-	g_pclPluginManager = new PluginManager(console);
-
-	return *g_pclPluginManager;
-}
+PH_MODULE_FULL_CREATOR("PluginManager", Phobos::Engine::PluginManager);
 
 Phobos::Engine::PluginManager &Phobos::Engine::PluginManager::GetInstance(void)
 {
+	PH_ASSERT_VALID(g_pclPluginManager);
+
 	return *g_pclPluginManager;
 }
 
-void Phobos::Engine::PluginManager::ReleaseInstance(void)
-{
-	delete g_pclPluginManager;
-	g_pclPluginManager = nullptr;
-}
-
-Phobos::Engine::PluginManager::PluginManager(Console &console) :
-	Module("PluginManager", NodeFlags::PRIVATE_CHILDREN),
+Phobos::Engine::PluginManager::PluginManager(const String_t &name) :
+	Module(name, NodeFlags::PRIVATE_CHILDREN),
 	m_cmdLoadPlugin("loadPlugin"),
 	m_cmdQueuePluginLoad("queuePluginLoad"),
 	m_cmdUnloadPlugin("unloadPlugin"),
 	m_fSystemReady(false)
 {
+	PH_ASSERT(g_pclPluginManager == nullptr);
+
+	g_pclPluginManager = this;
+
 	m_cmdLoadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdLoadPlugin, this));
 	m_cmdQueuePluginLoad.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdQueuePluginLoad, this));
 	m_cmdUnloadPlugin.SetProc(PH_CONTEXT_CMD_BIND(&PluginManager::CmdUnloadPlugin, this));
+
+	auto &console = Console::GetInstance();
 
 	console.AddContextCommand(m_cmdLoadPlugin);
 	console.AddContextCommand(m_cmdQueuePluginLoad);
@@ -64,7 +60,9 @@ Phobos::Engine::PluginManager::PluginManager(Console &console) :
 
 Phobos::Engine::PluginManager::~PluginManager()
 {
-	//empty
+	PH_ASSERT(g_pclPluginManager == this);
+
+	g_pclPluginManager = nullptr;
 }
 
 void Phobos::Engine::PluginManager::OnFinalize()

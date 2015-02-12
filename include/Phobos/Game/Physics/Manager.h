@@ -28,7 +28,6 @@ subject to the following restrictions:
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Shell/Variable.h>
 #include <Phobos/OgreEngine/Math/TransformFwd.h>
-#include <Phobos/Singleton.h>
 
 #include "CollisionMesh.h"
 #include "CollisionShape.h"
@@ -43,9 +42,7 @@ namespace Phobos
 	namespace Game
 	{
 		namespace Physics
-		{						
-			PH_DECLARE_SINGLETON_PTR(Manager);
-
+		{
 			struct SweepCollisionResult_s
 			{	
 				btVector3				m_v3HitPointWorld;
@@ -61,10 +58,12 @@ namespace Phobos
 			class CharacterBodyComponent;
 
 			class PH_GAME_API Manager: public Engine::Module
-			{
-				PH_DECLARE_SINGLETON_METHODS2(Manager, Engine::Console &);
+			{				
+				public:		
+					static std::unique_ptr<Module> CreateInstance(const String_t &name);
+					static Manager &GetInstance();
 
-				public:			
+
 					/**
 
 						For quick and easy rigid body creation.
@@ -106,6 +105,8 @@ namespace Phobos
 					void RegisterCharacterBodyComponent(CharacterBodyComponent &comp);
 					void UnregisterCharacterBodyComponent(CharacterBodyComponent &comp);
 
+					~Manager();
+
 				protected:
 					virtual void OnInit() override;
 
@@ -120,8 +121,7 @@ namespace Phobos
 					typedef boost::intrusive::set<CollisionMesh, boost::intrusive::constant_time_size<false> > CollisionMeshesSet_t;				
 
 				private:					
-					Manager(Engine::Console &console);
-					~Manager();
+					Manager(const String_t &name);					
 
 					bool RetrieveCollisionShape(CollisionShapesSet_t::iterator &retIt, const CollisionShape::Key_s &key);
 
@@ -155,8 +155,9 @@ namespace Phobos
 					std::unique_ptr<btCollisionDispatcher>					m_upCollisionDispatcher;
 					std::unique_ptr<btSequentialImpulseConstraintSolver>	m_upConstraintSolver;
 
-					btDefaultCollisionConfiguration			m_clCollisionConfig;
-					btAxisSweep3							m_clBroadphase;					
+					std::unique_ptr<btAxisSweep3>							m_upBroadphase;
+
+					btDefaultCollisionConfiguration			m_clCollisionConfig;					
 
 					btGhostPairCallback						m_clGhostPairCallback;
 

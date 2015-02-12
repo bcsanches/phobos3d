@@ -35,5 +35,10 @@ namespace Phobos
 		{
 
 		}
+
+		void EngineMain::StartMainLoop()
+		{
+			Core::GetInstance().StartMainLoop();
+		}
 	}
 }

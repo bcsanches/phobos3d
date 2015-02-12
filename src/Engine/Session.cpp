@@ -30,18 +30,35 @@ subject to the following restrictions:
 #include "Phobos/Engine/Console.h"
 #include "Phobos/Engine/Client.h"
 #include "Phobos/Engine/IPlayerCommandProducer.h"
+#include "Phobos/Engine/ModuleFactory.h"
 
 #define CONSOLE_KEY '`'
 
-PH_DEFINE_DEFAULT_SINGLETON(Phobos::Engine::Session);
+namespace
+{
+	static Phobos::Engine::Session *g_pclSession = nullptr;
+}
 
-Phobos::Engine::Session::Session():
-	Module("Session", PRIVATE_CHILDREN),
+PH_MODULE_FULL_CREATOR("Session", Phobos::Engine::Session);
+
+Phobos::Engine::Session &Phobos::Engine::Session::GetInstance()
+{
+	PH_ASSERT_VALID(g_pclSession);
+
+	return *g_pclSession;
+}
+
+Phobos::Engine::Session::Session(const String_t &name):
+	Module(name, PRIVATE_CHILDREN),
 	m_fIgnoreConsoleKey(false),
 	m_pclPlayerCommandProducer(nullptr),
 	m_pclClient(nullptr),
 	m_pclForm(nullptr)
 {
+	PH_ASSERT(g_pclSession == nullptr);
+
+	g_pclSession = this;
+
 	System::EventManager::AddListener(*this, System::EVENT_TYPE_SYSTEM);
 
 	m_ipInputManager = System::InputManager::Create("InputManager");
@@ -58,7 +75,9 @@ Phobos::Engine::Session::Session():
 
 Phobos::Engine::Session::~Session()
 {
-	//empty
+	PH_ASSERT(g_pclSession == this);
+
+	g_pclSession = nullptr;
 }
 
 void Phobos::Engine::Session::OnInputManagerEvent(const System::InputManagerEvent_s &event)

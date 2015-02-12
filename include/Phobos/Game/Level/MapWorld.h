@@ -18,7 +18,6 @@ subject to the following restrictions:
 #define PH_GAME_MAP_WORLD_H
 
 #include <Phobos/Engine/Module.h>
-#include <Phobos/Singleton.h>
 
 #include <Phobos/Register/HiveFwd.h>
 #include <Phobos/Register/TableFwd.h>
@@ -30,15 +29,11 @@ subject to the following restrictions:
 namespace Phobos
 {
 	namespace Game
-	{
-		PH_DECLARE_SINGLETON_PTR(MapWorld);
-
+	{		
 		class MapObject;
 
 		class PH_GAME_API MapWorld: public Engine::Module
-		{
-			PH_DECLARE_SINGLETON_METHODS(MapWorld);
-			
+		{						
 			public:				
 				class LoadAccess
 				{
@@ -55,6 +50,10 @@ namespace Phobos
 							MapWorld::GetInstance().Unload();
 						}
 				};
+
+				static std::unique_ptr<Module> CreateInstance(const String_t &name);
+
+				static MapWorld &GetInstance();
 				
 				//Always returns a valid pointer, that is owned by MapWorld
 				//It can be destroyed by deleting it
@@ -63,8 +62,10 @@ namespace Phobos
 
 				virtual MapObject &GetMapObject(const String_t &name) = 0;
 
+				virtual ~MapWorld();
+
 			protected:
-				MapWorld() : Module("MapWorld"){  };
+				MapWorld(const String_t &name);
 
 			protected:
 				virtual void Load(StringRef_t levelPath, const Register::Hive &hive) = 0;			

@@ -18,6 +18,8 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Clocks.h>
+#include <Phobos/Engine/ModuleFactory.h>
+#include <Phobos/Memory.h>
 
 #include "Phobos/Game/Physics/CharacterBodyComponent.h"
 #include "Phobos/Game/Physics/CollisionShapes.h"
@@ -28,37 +30,56 @@ subject to the following restrictions:
 #include "Phobos/Game/Physics/RigidBody.h"
 #include "Phobos/Game/Physics/SweepCharacterBody.h"
 
+PH_MODULE_FULL_CREATOR("PhysicsManager", Phobos::Game::Physics::Manager);
+
+namespace
+{
+	static Phobos::Game::Physics::Manager *g_pclManager = nullptr;
+}
+
 namespace Phobos
 {
 	namespace Game
 	{
 		namespace Physics
-		{
-			PH_DEFINE_DEFAULT_SINGLETON2(Manager, Engine::Console &);
-
-			Manager::Manager(Engine::Console &console) :
-				Module("PhysicsManager", NodeFlags::PRIVATE_CHILDREN),
-				m_fpScale(1),
-				m_varPhysicsScale("dvPhysicsScale", "1"),
-				m_clBroadphase(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000))
+		{						
+			Manager &Manager::GetInstance()
 			{
-				console.AddContextVariable(m_varPhysicsScale);
+				PH_ASSERT_VALID(g_pclManager);
+
+				return *g_pclManager;
+			}
+			
+			Manager::Manager(const String_t &name) :
+				Module(name, NodeFlags::PRIVATE_CHILDREN),
+				m_fpScale(1),
+				m_varPhysicsScale("dvPhysicsScale", "1")				
+			{
+				PH_ASSERT(g_pclManager == nullptr);
+
+				g_pclManager = this;
+
+				Engine::Console::GetInstance().AddContextVariable(m_varPhysicsScale);
 			}
 
 			Manager::~Manager()
 			{
-				//empty
+				PH_ASSERT(g_pclManager == this);
+
+				g_pclManager = nullptr;
 			}			
 
 			void Manager::OnInit()
 			{
 				m_upConstraintSolver.reset(new btSequentialImpulseConstraintSolver());
 
+				m_upBroadphase = std::make_unique<btAxisSweep3>(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000));
+
 				m_upCollisionDispatcher.reset(PH_NEW btCollisionDispatcher(&m_clCollisionConfig));
-				m_upWorld.reset(new btDiscreteDynamicsWorld(m_upCollisionDispatcher.get(), &m_clBroadphase, m_upConstraintSolver.get(), &m_clCollisionConfig));
+				m_upWorld.reset(new btDiscreteDynamicsWorld(m_upCollisionDispatcher.get(), m_upBroadphase.get(), m_upConstraintSolver.get(), &m_clCollisionConfig));
 
 				m_upWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
-				m_clBroadphase.getOverlappingPairCache()->setInternalGhostPairCallback(&m_clGhostPairCallback); 
+				m_upBroadphase->getOverlappingPairCache()->setInternalGhostPairCallback(&m_clGhostPairCallback);
 
 				m_fpScale = std::stof(m_varPhysicsScale.GetValue());
 			}

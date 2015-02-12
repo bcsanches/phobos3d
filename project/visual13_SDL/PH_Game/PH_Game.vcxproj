@@ -214,6 +214,9 @@
     <ProjectReference Include="..\PH_Engine\PH_Engine.vcxproj">
       <Project>{9ee707be-65a5-4769-86c6-9e224eced96c}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PH_LibModuleFactory\PH_LibModuleFactory.vcxproj">
+      <Project>{24df987c-63f7-4660-86d8-024ab70abf4e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\PH_OgreEngine\PH_OgreEngine.vcxproj">
       <Project>{1652ed80-c688-4cab-b4e3-15a510c284b1}</Project>
     </ProjectReference>

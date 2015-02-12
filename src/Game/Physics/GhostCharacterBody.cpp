@@ -4,6 +4,8 @@
 #include <BulletCollision/CollisionShapes/btConvexShape.h>
 //#include <BulletDynamics/Character/btKinematicCharacterController.h>
 
+#include <Phobos/Memory.h>
+
 #include "Phobos/Game/Physics/CollisionShape.h"
 
 #include "Phobos/Game/Physics/KinematicCharacterController.h"
