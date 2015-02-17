@@ -16,7 +16,7 @@ namespace Phobos
 			PH_DISABLE_COPY(EngineMain);
 
 			public:
-				EngineMain(int argc, char * const argv[]);
+				EngineMain(int argc, char * const argv[], ModuleManager::InitializerList_t list = {});
 				~EngineMain();
 
 				void StartMainLoop();

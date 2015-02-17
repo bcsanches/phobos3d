@@ -19,17 +19,16 @@ subject to the following restrictions:
 
 #include <Phobos/Shell/Command.h>
 #include <Phobos/Shell/Variable.h>
-#include <Phobos/Engine/ConsoleFwd.h>
 #include <Phobos/Engine/Module.h>
-#include <Phobos/Singleton.h>
 #include <Phobos/System/Window.h>
 
 class Render: public Phobos::Engine::Module
 {
-	PH_DECLARE_SINGLETON_METHODS2(Render, Phobos::Engine::Console &);
+	public:
+		static std::unique_ptr<Phobos::Engine::Module> CreateInstance(const Phobos::String_t &name);
 
 	protected:		
-		Render(Phobos::Engine::Console &console);
+		Render(const Phobos::String_t &name);
 
 		void OnInit() override;		
 

@@ -50,13 +50,30 @@ namespace Phobos
 		};
 
 		typedef GenericModuleInfo<Module> ModuleInfo;
+		typedef std::unique_ptr<Module>(*CreateModuleProc_t)(const Phobos::String_t &name);
+
+		struct LocalModuleClass
+		{
+			CreateModuleProc_t	m_pfnCreateProc;
+			unsigned int		m_uPriority;			
+		};
+
+		typedef std::tuple<String_t, CreateModuleProc_t, unsigned int> ModuleInfoTuple_t;
+
+		inline ModuleInfoTuple_t MakeLocalModuleClass(const String_t &name, CreateModuleProc_t proc, unsigned int priority)
+		{
+			return std::make_tuple(name, proc, priority);
+		}
 
 		class ModuleManager
 		{
-			PH_DISABLE_COPY(ModuleManager);
+			PH_DISABLE_MOVE_COPY(ModuleManager);
+
+			public:				
+				typedef std::initializer_list <ModuleInfoTuple_t> InitializerList_t;
 
 			public:
-				ModuleManager();
+				ModuleManager(InitializerList_t ignoreList = {});
 
 				ModuleInfo CreateModule(const String_t &name);
 
@@ -74,7 +91,8 @@ namespace Phobos
 				ModuleInfo CreateModule(const Register::Table &table);
 
 			private:
-				std::map<String_t, DynamicLibrary>	m_mapLibs;
+				std::map<String_t, DynamicLibrary>		m_mapLibs;
+				std::map<String_t, LocalModuleClass>	m_mapLocalModules;
 
 				const Register::Hive				&m_rclModulesHive;
 		};

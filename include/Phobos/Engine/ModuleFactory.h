@@ -24,15 +24,18 @@ namespace Phobos
 	}
 }
 
-#define PH_MODULE_CREATOR(NAME, PROC)											\
-	static Phobos::Engine::ModuleFactory::ObjectCreator_t TYPE_##CreatorObject_gl(NAME, PROC, Phobos::Engine::ModuleFactory::GetInstance())	
-
-#define PH_MODULE_FULL_CREATOR(NAME, TYPE)  													\
+#define PH_MODULE_CREATE_INSTANCE(TYPE)  														\
 	std::unique_ptr<Phobos::Engine::Module> TYPE::CreateInstance(const Phobos::String_t &name)	\
 {																								\
 	return std::unique_ptr<Phobos::Engine::Module>(new TYPE(name));								\
-}																								\
-PH_MODULE_CREATOR(NAME, TYPE::CreateInstance);
+}
+
+#define PH_MODULE_CREATOR(NAME, PROC)											\
+	static Phobos::Engine::ModuleFactory::ObjectCreator_t TYPE_##CreatorObject_gl(NAME, PROC, Phobos::Engine::ModuleFactory::GetInstance())	
+
+#define PH_MODULE_FULL_CREATOR(NAME, TYPE)			\
+	PH_MODULE_CREATE_INSTANCE(TYPE)					\
+	PH_MODULE_CREATOR(NAME, TYPE::CreateInstance);
 
 
 #endif

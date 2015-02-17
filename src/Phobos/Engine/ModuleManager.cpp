@@ -26,10 +26,13 @@ namespace Phobos
 {
 	namespace Engine
 	{
-		ModuleManager::ModuleManager():
+		ModuleManager::ModuleManager(InitializerList_t list) :
 			m_rclModulesHive(Register::GetOrCreateHive("ModuleDef"))
 		{
-			//empty
+			for (auto it : list)
+			{
+				m_mapLocalModules.insert(std::make_pair(std::get<0>(it), LocalModuleClass{ std::get<1>(it), std::get<2>(it) }));
+			}
 		}
 
 		ModuleInfo ModuleManager::CreateModule(const Register::Table &table)
@@ -58,6 +61,12 @@ namespace Phobos
 
 		ModuleInfo ModuleManager::CreateModule(const String_t &name)
 		{
+			auto it = m_mapLocalModules.find(name);
+			if (it != m_mapLocalModules.end())
+			{
+				return ModuleInfo(it->second.m_pfnCreateProc(name), it->second.m_uPriority);
+			}			
+
 			const auto &table = m_rclModulesHive.GetTable(name);
 
 			return this->CreateModule(table);
@@ -67,10 +76,26 @@ namespace Phobos
 		{
 			std::vector<ModuleInfo> vecModules;
 
+			auto ignoreListProc = [&list](const String_t &name){
+				if (std::find_if(list.begin(), list.end(), [&name](const char *value) { return name.compare(value) == 0; }) != list.end())
+					return true;
+
+				return false;
+			};
+
+			for (auto it : m_mapLocalModules)
+			{
+				//if on ignore list, ignore  it :)
+				if (ignoreListProc(it.first))
+					continue;
+				
+				vecModules.emplace_back(it.second.m_pfnCreateProc(it.first), it.second.m_uPriority);
+			}
+
 			for (auto it : m_rclModulesHive)
 			{
 				//if on ignore list, ignore  it :)
-				if (std::find_if(list.begin(), list.end(), [&it](const char *value) { return it.first.compare(value) == 0; }) != list.end())
+				if (ignoreListProc(it.first))
 					continue;
 
 				auto &table = *static_cast<const Register::Table *>(it.second);

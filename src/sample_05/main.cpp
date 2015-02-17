@@ -39,71 +39,25 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 #include "Render.h"
 
 #include <Phobos/Engine/Session.h>
-#include <Phobos/Shell/Variable.h>
-#include <Phobos/Shell/Utils.h>
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/EngineMain.h>
 #include <Phobos/Memory.h>
-#include <Phobos/ProcVector.h>
 
-class EngineMain
-{
-	public:
-		EngineMain();
-		~EngineMain();
-
-		void MainLoop(void);					
-
-	private:			
-		Phobos::ProcVector	m_clSingletons;
-};
-
-EngineMain::EngineMain()
-{
-	using namespace Phobos;
-
-	auto &console = ::Console::CreateInstance();
-	m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
-
-	auto &core = Engine::Core::CreateInstance(console, "autoexec.cfg", 0, nullptr);
-	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
-	
-	core.AddModule(console);
-
-	auto &session = Engine::Session::CreateInstance();
-	m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
-	core.AddModule(session);
-
-	auto &render = Render::CreateInstance(console);
-	m_clSingletons.AddProc(Render::ReleaseInstance);
-	core.AddModule(render, Engine::ModulePriorities::LOWEST);
-}
-
-EngineMain::~EngineMain()
-{		
-	m_clSingletons.CallAll();	
-}			
-
-/**
-
-	The engine main loop
-
-*/
-void EngineMain::MainLoop(void)
-{
-	Phobos::Engine::Core::GetInstance().StartMainLoop();
-}
-
-int main(int, char **)
-{
+int main(int argc, char **argv)
+{	
 	//Phobos::EnableMemoryTracker();	
 	{
-		EngineMain engine;
+		Phobos::Engine::EngineMain engine(argc, argv,
+		{
+			Phobos::Engine::MakeLocalModuleClass("Console", Console::CreateInstance, 100),
+			Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
+			Phobos::Engine::MakeLocalModuleClass("Render", Render::CreateInstance, 500)
+		});
 
 #ifndef PH_DEBUG
 		try
 #endif
 		{
-			engine.MainLoop();
+			engine.StartMainLoop();
 		}
 #ifndef PH_DEBUG
 		catch(std::exception &e)

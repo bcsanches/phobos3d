@@ -10,7 +10,8 @@ namespace Phobos
 {
 	namespace Engine
 	{
-		EngineMain::EngineMain(int argc, char * const argv[])
+		EngineMain::EngineMain(int argc, char *const argv[], ModuleManager::InitializerList_t list):
+			m_clModuleManager(list)
 		{						
 			Register::Load("modules.def");
 

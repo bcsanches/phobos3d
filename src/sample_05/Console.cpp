@@ -17,15 +17,12 @@ subject to the following restrictions:
 
 #include "Console.h"
 
-Console &Console::CreateInstance(void)
-{		
-	Phobos::Engine::Console::UpdateInstance(std::make_shared<Console>());
+#include <Phobos/Engine/ModuleFactory.h>
 
-	return static_cast<Console&>(Phobos::Engine::Console::GetInstance());
-}
+PH_MODULE_CREATE_INSTANCE(Console);
 
-Console::Console(void):
-	Phobos::Engine::Console("Console"),		
+Console::Console(const Phobos::String_t &name):
+	Phobos::Engine::Console(name),		
 	m_fEditBoxChanged(true),
 	m_fTextBufferChanged(true)
 {				

@@ -19,5 +19,6 @@ subject to the following restrictions:
 #define PH_DISABLE_COPY_H
 
 #define PH_DISABLE_COPY(X) X(const X &) = delete; X &operator=(const X&) = delete;
+#define PH_DISABLE_MOVE_COPY(X) PH_DISABLE_COPY(X); X(const X &&) = delete; X &operator=(const X &&) = delete;
 
 #endif

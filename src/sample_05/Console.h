@@ -28,10 +28,10 @@ class Console:
 		// =====================================================
 		// PUBLIC METHODS
 		// =====================================================
-		static Console &CreateInstance(void);
+		static std::unique_ptr<Phobos::Engine::Module> CreateInstance(const Phobos::String_t &name);
 
-		Console(void);
-		~Console(void);
+		Console(const Phobos::String_t &name);
+		~Console();
 
 	protected:
 		// =====================================================

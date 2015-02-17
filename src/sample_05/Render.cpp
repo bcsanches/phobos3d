@@ -18,9 +18,11 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 
-PH_DEFINE_DEFAULT_SINGLETON2(Render, Phobos::Engine::Console &);
+#include <Phobos/Engine/ModuleFactory.h>
 
-Render::Render(Phobos::Engine::Console &console) :
+PH_MODULE_CREATE_INSTANCE(Render);
+
+Render::Render(const Phobos::String_t &name) :
 	Module("Render"),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
@@ -33,6 +35,8 @@ Render::Render(Phobos::Engine::Console &console) :
 	LogMessage("[Render] Initializing");
 
 	LogMessage("[Render] Initialized.");
+
+	auto &console = Phobos::Engine::Console::GetInstance();
 
 	console.AddContextCommand(m_cmdScreenshot);
 
