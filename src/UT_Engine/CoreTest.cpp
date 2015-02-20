@@ -18,6 +18,7 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/EngineMain.h>
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Exception.h>
 #include <Phobos/Log.h>
@@ -135,55 +136,30 @@ static std::unique_ptr<TestModule> CreateAndRegisterTestModule()
 	return ptr;
 }
 
-class TestConsole: public Console
+namespace
 {
-	public:
-		static Console &CreateInstance(void)
-		{
-			Console::UpdateInstance(ConsolePtr_t(PH_NEW TestConsole()));		
-
-			return Console::GetInstance();
-		}
-
-	protected:
-		TestConsole():
-			 Console("Console")
-		{
-		}
-
-		virtual void OnToggleConsole() override
-		{
-		}
-
-		virtual void OnEditBoxChanged() override
-		{
-		}
-
-		virtual void OnTextListChanged() override
-		{
-		}
-};
+	static char * const g_arszArgv[] = { "myexe.exe", "set dvExternal boo" };
+}
 
 struct CoreInstance_s
 {
 	CoreInstance_s()
 	{
-		char * const argv[] = { "myexe.exe", "set dvExternal boo" };
+		Phobos::LogChangeFile("engineCoretest.log");
 
-		auto &console = TestConsole::CreateInstance();
-
-		Phobos::LogChangeFile("engineCoretest.log");		
-		Core::CreateInstance(console, "autoexec.cfg", 2, argv);
-		
+		m_upEngine.reset(PH_NEW EngineMain(2, g_arszArgv, {
+			Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100)
+		}));
 	}
 
 	~CoreInstance_s()
-	{
-		Console::ReleaseInstance();
-		Core::ReleaseInstance();
-		
+	{				
+		m_upEngine.reset();
+
 		ObjectManager::Clear();		
 	}
+
+	std::unique_ptr<EngineMain> m_upEngine;
 };
 
 BOOST_AUTO_TEST_CASE(core_basic)

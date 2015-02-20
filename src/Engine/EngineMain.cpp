@@ -34,7 +34,7 @@ namespace Phobos
 
 		EngineMain::~EngineMain()
 		{
-
+			m_clSingletons.CallAll();
 		}
 
 		void EngineMain::StartMainLoop()
