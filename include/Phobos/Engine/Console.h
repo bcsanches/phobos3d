@@ -77,6 +77,12 @@ namespace Phobos
 				typedef boost::circular_buffer<String_t> TextList_t;
 
 			public:
+				//
+				//
+				//This is the default do nothing console, so you may wish to inherit and replace this class
+				//
+				static std::unique_ptr<Phobos::Engine::Module> CreateInstance(const Phobos::String_t &name);
+
 				static Console &GetInstance(void);							
 
 				virtual ~Console();
@@ -104,9 +110,9 @@ namespace Phobos
 			protected:
 				Console(const String_t &name, UInt32_t flags = 0);				
 
-				virtual void OnToggleConsole() = 0;
-				virtual void OnEditBoxChanged() = 0;
-				virtual void OnTextListChanged() = 0;			
+				virtual void OnToggleConsole() { };
+				virtual void OnEditBoxChanged() { };
+				virtual void OnTextListChanged() { };
 
 				inline TextList_t::const_iterator ListTextBegin() const;
 				inline TextList_t::const_iterator ListTextEnd() const;

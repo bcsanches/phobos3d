@@ -35,17 +35,13 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 
 #include <sstream>
 
-#include "Console.h"
 #include "Render.h"
 
+#include <Phobos/Engine/EngineMain.h>
 #include <Phobos/Engine/Client.h>
+#include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Session.h>
-#include <Phobos/Shell/Variable.h>
-#include <Phobos/Shell/Utils.h>
 #include <Phobos/Engine/Clocks.h>
-#include <Phobos/Engine/Core.h>
-#include <Phobos/Memory.h>
-#include <Phobos/ProcVector.h>
 #include <Phobos/System/AxisButton.h>
 
 #define SPEED 100
@@ -170,7 +166,6 @@ class GameObject
 		std::unique_ptr<Controller> m_upController;
 };
 
-
 void AutoController::FixedUpdate(const GameObject &owner)
 {
 	auto &render = Render::GetInstance();
@@ -248,40 +243,19 @@ void GameClient::OnFixedUpdate()
 	}
 }
 
-class EngineMain
-{
-	public:
-		EngineMain();
-		~EngineMain();
+int main(int argc, char **argv)
+{				
+	Phobos::Engine::EngineMain engine(argc, argv, {
+		Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100),
+		Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
+		Phobos::Engine::MakeLocalModuleClass("Render", Render::CreateInstance, 500)
+	});
 
-		void MainLoop(void);		
+	auto &session = Phobos::Engine::Session::GetInstance();
 
-	private:			
-		Phobos::ProcVector	m_clSingletons;
-		GameClient			m_clClient;
-};
-
-EngineMain::EngineMain()
-{
-	using namespace Phobos;
-
-	auto &console = ::Console::CreateInstance();
-	m_clSingletons.AddProc(Engine::Console::ReleaseInstance);
-
-	auto &core = Engine::Core::CreateInstance(console, "autoexec.cfg", 0, nullptr);
-	m_clSingletons.AddProc(Engine::Core::ReleaseInstance);	
+	GameClient client;
 	
-	core.AddModule(console);
-
-	auto &session = Engine::Session::CreateInstance();
-	m_clSingletons.AddProc(Engine::Session::ReleaseInstance);
-	core.AddModule(session);
-
-	auto &render = Render::CreateInstance(console);
-	m_clSingletons.AddProc(Render::ReleaseInstance);
-	core.AddModule(render, Engine::ModulePriorities::LOWEST);
-
-	session.SetClient(&m_clClient);
+	session.SetClient(&client);
 
 	//
 	//The ideal is to store those on a config, perhaps autoexec.cfg, see sample 05
@@ -312,49 +286,7 @@ EngineMain::EngineMain()
 	*/
 	session.CloseConsole();
 
-
-}
-
-EngineMain::~EngineMain()
-{		
-	m_clSingletons.CallAll();	
-}			
-
-/**
-
-	The engine main loop
-
-*/
-void EngineMain::MainLoop(void)
-{
-	Phobos::Engine::Core::GetInstance().StartMainLoop();
-}
-
-int main(int, char **)
-{
-	//Phobos::EnableMemoryTracker();	
-	{
-		EngineMain engine;
-
-#ifndef PH_DEBUG
-		try
-#endif
-		{
-			engine.MainLoop();
-		}
-#ifndef PH_DEBUG
-		catch(std::exception &e)
-		{
-			std::stringstream stream;
-			stream << "main: Unhandled excetion: ";
-			stream << e.what();
-			Phobos::LogMessage(stream.str());
-
-			exit(EXIT_FAILURE);
-		}
-#endif
-	}
-	//Phobos::DumpMemoryLeaks();
+	engine.StartMainLoop();
 
 	return 0;
 }

@@ -84,12 +84,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\sample_07\Console.cpp" />
     <ClCompile Include="..\..\..\src\sample_07\main.cpp" />
     <ClCompile Include="..\..\..\src\sample_07\Render.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\sample_07\Console.h" />
     <ClInclude Include="..\..\..\src\sample_07\Render.h" />
   </ItemGroup>
   <ItemGroup>

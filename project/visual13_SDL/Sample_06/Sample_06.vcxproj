@@ -85,12 +85,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\sample_06\Console.cpp" />
     <ClCompile Include="..\..\..\src\sample_06\main.cpp" />
     <ClCompile Include="..\..\..\src\sample_06\Render.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\sample_06\Console.h" />
     <ClInclude Include="..\..\..\src\sample_06\Render.h" />
   </ItemGroup>
   <ItemGroup>

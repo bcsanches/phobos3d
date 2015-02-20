@@ -17,26 +17,45 @@ subject to the following restrictions:
 #include "Render.h"
 
 #include <Phobos/Engine/Console.h>
+#include <Phobos/Engine/ModuleFactory.h>
 
 #include <SDL.h>
 
 #include <cmath>
 
-PH_DEFINE_DEFAULT_SINGLETON2(Render, Phobos::Engine::Console &);
+PH_MODULE_CREATE_INSTANCE(Render);
 
-Render::Render(Phobos::Engine::Console &console) :
-	Module("Render"),
+namespace
+{
+	Render *g_pclRender = nullptr;
+}
+
+Render &Render::GetInstance()
+{
+	PH_ASSERT_VALID(g_pclRender);
+
+	return *g_pclRender;
+}
+
+Render::Render(const Phobos::String_t &name) :
+	Module(name),
 	m_varRScreenX("dvRScreenX", "800"),
 	m_varRScreenY("dvRScreenY", "600"),
 	m_varRVSync("dvRVSync", "1"),
 	m_varRFullScreen("dvRFullScreen", "0"),
 	m_cmdScreenshot("screenshot")
 {
+	PH_ASSERT(g_pclRender == nullptr);
+
+	g_pclRender = this;
+
 	using namespace Phobos;
 
 	LogMessage("[Render] Initializing");
 
 	LogMessage("[Render] Initialized.");
+
+	auto &console = Engine::Console::GetInstance();
 
 	console.AddContextCommand(m_cmdScreenshot);
 
@@ -45,6 +64,14 @@ Render::Render(Phobos::Engine::Console &console) :
 	console.AddContextVariable(m_varRFullScreen);
 	console.AddContextVariable(m_varRVSync);
 }
+
+Render::~Render()
+{
+	PH_ASSERT(g_pclRender == this);
+
+	g_pclRender = nullptr;
+}
+
 
 void Render::OnInit()
 {

@@ -16,6 +16,8 @@ subject to the following restrictions:
 
 #include "Phobos/Engine/Console.h"
 
+#include "Phobos/Engine/ModuleFactory.h"
+
 #include <Phobos/Exception.h>
 #include <Phobos/ObjectManager.h>
 #include <Phobos/Path.h>
@@ -32,12 +34,12 @@ subject to the following restrictions:
 
 #define CONSOLE_LINE_COUNT 15
 
+PH_MODULE_FULL_CREATOR("NullConsole", Phobos::Engine::Console);
 
 namespace
 {
 	Phobos::Engine::Console *g_pclInstance = nullptr;
 }
-
 	
 Phobos::Engine::Console &Phobos::Engine::Console::GetInstance(void)
 {

@@ -35,43 +35,42 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 
 #include <sstream>
 
-#include "Console.h"
 #include "Render.h"
 
+#include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Session.h>
 #include <Phobos/Engine/EngineMain.h>
-#include <Phobos/Memory.h>
 
 int main(int argc, char **argv)
-{	
-	//Phobos::EnableMemoryTracker();	
+{		
+	Phobos::Engine::EngineMain engine(argc, argv,
 	{
-		Phobos::Engine::EngineMain engine(argc, argv,
-		{
-			Phobos::Engine::MakeLocalModuleClass("Console", Console::CreateInstance, 100),
-			Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
-			Phobos::Engine::MakeLocalModuleClass("Render", Render::CreateInstance, 500)
-		});
+		Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100),
+		Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
+		Phobos::Engine::MakeLocalModuleClass("Render", Render::CreateInstance, 500)
+	});
 
-#ifndef PH_DEBUG
-		try
-#endif
-		{
-			engine.StartMainLoop();
-		}
-#ifndef PH_DEBUG
-		catch(std::exception &e)
-		{
-			std::stringstream stream;
-			stream << "main: Unhandled excetion: ";
-			stream << e.what();
-			Phobos::LogMessage(stream.str());
+	auto &session = Phobos::Engine::Session::GetInstance();
 
-			exit(EXIT_FAILURE);
-		}
-#endif
-	}
-	//Phobos::DumpMemoryLeaks();
+	//
+	//The ideal is to store those on a config, perhaps autoexec.cfg, see sample 05
+	//
+
+	/*
+	Bind ESCAPE key from keyboard (kb) with the command quit
+
+	The quit command is automatically created by the engine core (Core class) and it stops the main loop
+	The toggleTimerPause is created by Core class.
+
+	*/
+	session.Bind("kb", "ESCAPE", "quit");
+
+	/*
+	By default the console starts open (even if not visible, as the default console), so tell the session that we do not want it now
+	*/
+	session.CloseConsole();
+
+	engine.StartMainLoop();	
 
 	return 0;
 }

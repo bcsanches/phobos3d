@@ -127,12 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\sample_05\Console.cpp" />
     <ClCompile Include="..\..\..\src\sample_05\main.cpp" />
     <ClCompile Include="..\..\..\src\sample_05\Render.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\sample_05\Console.h" />
     <ClInclude Include="..\..\..\src\sample_05\Render.h" />
   </ItemGroup>
   <ItemGroup>
