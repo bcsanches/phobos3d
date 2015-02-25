@@ -1,7 +1,7 @@
 #include "Phobos/Editor/Request.h"
 #include "Phobos/Editor/RequestFactory.h"
 
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/Kernel.h>
 
 namespace Editor = Phobos::Editor;
 
@@ -26,6 +26,6 @@ namespace
 
 	void QuitRequest::OnExecute(const rapidjson::Value *parameters, JsonCreator::Object<JsonCreator::StringWriter> *response)
 	{
-		Phobos::Engine::Core::GetInstance().StopMainLoop();
+		Phobos::Engine::Kernel::GetInstance().StopMainLoop();
 	}
 }

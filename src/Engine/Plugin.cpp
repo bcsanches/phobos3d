@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include "Phobos/Engine/Plugin.h"
 
-#include <Phobos/Engine/Core.h>
+#include <Phobos/Engine/Kernel.h>
 #include <Phobos/Engine/ModuleContainer.h>
 
 #include <Phobos/ProcVector.h>
@@ -41,8 +41,7 @@ void Phobos::Engine::Plugin::Init()
 {
 	ipManager = std::make_shared<Engine::ModuleContainer>(szModuleName_g);
 
-	auto &core = Engine::Core::GetInstance();
-	core.AddModule(*ipManager);	
+	Kernel::GetInstance().AddModule(*ipManager);
 
 	for(auto &info : m_vecModules)		
 	{
@@ -58,7 +57,7 @@ void Phobos::Engine::Plugin::Init()
 
 void Phobos::Engine::Plugin::Finalize()
 {
-	Engine::Core::GetInstance().RemoveModule(*ipManager);		
+	Kernel::GetInstance().RemoveModule(*ipManager);
 
 	for(auto &info : m_vecModules)		
 	{

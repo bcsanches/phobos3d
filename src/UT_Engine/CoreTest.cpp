@@ -18,7 +18,7 @@ subject to the following restrictions:
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Core.h>
-#include <Phobos/Engine/EngineMain.h>
+#include <Phobos/Engine/Kernel.h>
 #include <Phobos/Engine/Module.h>
 #include <Phobos/Exception.h>
 #include <Phobos/Log.h>
@@ -126,7 +126,7 @@ class TestModule2: public Engine::Module
 
 static std::unique_ptr<TestModule> CreateAndRegisterTestModule()
 {
-	Core &core = Core::GetInstance();
+	auto &core = Kernel::GetInstance();
 
 	std::unique_ptr<TestModule> ptr(PH_NEW TestModule());	
 	BOOST_REQUIRE(TestModule::iCount_g == 1);
@@ -147,7 +147,7 @@ struct CoreInstance_s
 	{
 		Phobos::LogChangeFile("engineCoretest.log");
 
-		m_upEngine.reset(PH_NEW EngineMain(2, g_arszArgv, {
+		m_upEngine.reset(PH_NEW Kernel(2, g_arszArgv, {
 			Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100)
 		}));
 	}
@@ -159,14 +159,14 @@ struct CoreInstance_s
 		ObjectManager::Clear();		
 	}
 
-	std::unique_ptr<EngineMain> m_upEngine;
+	std::unique_ptr<Kernel> m_upEngine;
 };
 
 BOOST_AUTO_TEST_CASE(core_basic)
 {
 	CoreInstance_s instance;
 
-	Core &core = Core::GetInstance();	
+	auto &core = Kernel::GetInstance();
 
 	{
 		TestModule module;
@@ -286,7 +286,7 @@ BOOST_AUTO_TEST_CASE(core_sorting)
 
 	TestModule2Ptr_t ptr = TestModule2::CreateInstance();
 
-	Core &core = Core::GetInstance();
+	auto &core = Kernel::GetInstance();
 	core.AddModule(*ptr, ModulePriorities::LOWEST);
 
 #if 0

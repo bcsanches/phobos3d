@@ -39,7 +39,7 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 
 #include <Phobos/Engine/Client.h>
 #include <Phobos/Engine/Console.h>
-#include <Phobos/Engine/EngineMain.h>
+#include <Phobos/Engine/Kernel.h>
 #include <Phobos/Engine/Session.h>
 #include <Phobos/Engine/Clocks.h>
 
@@ -114,7 +114,7 @@ void GameClient::OnFixedUpdate()
 
 int main(int, char **)
 {	
-	Phobos::Engine::EngineMain	engine(0, nullptr, {
+	Phobos::Engine::Kernel	engine(0, nullptr, {
 		Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100),
 		Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
 		Phobos::Engine::MakeLocalModuleClass("Render", Render::CreateInstance, 500)
@@ -145,7 +145,7 @@ int main(int, char **)
 	*/
 	session.CloseConsole();
 	
-	engine.StartMainLoop();		
+	engine.RunMainLoop();
 
 	return 0;
 }

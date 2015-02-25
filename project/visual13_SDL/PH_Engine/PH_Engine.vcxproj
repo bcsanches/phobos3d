@@ -132,7 +132,7 @@
     <ClCompile Include="..\..\..\src\Engine\Clocks.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Console.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\EngineMain.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Kernel.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Module.cpp" />
     <ClCompile Include="..\..\..\src\Engine\ModuleContainer.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Gui\Context.cpp" />
@@ -149,7 +149,7 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\Console.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ConsoleFwd.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Core.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Engine\EngineMain.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Kernel.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\IPlugin.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\Module.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleFwd.h" />

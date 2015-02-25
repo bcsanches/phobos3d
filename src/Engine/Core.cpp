@@ -40,8 +40,6 @@ subject to the following restrictions:
 #define UPDATE_TIME (1.0f / 60.0f)
 #define MIN_TIME (10.0f / 1000.0f)
 
-static Phobos::Engine::Core *g_pclInstance = nullptr;
-
 namespace Phobos
 {
 	namespace Engine
@@ -53,31 +51,6 @@ namespace Phobos
 	}
 }
 
-Phobos::Engine::Core &Phobos::Engine::Core::CreateInstance(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[])
-{
-	PH_ASSERT_MSG(!g_pclInstance, "[Core::CreateInstance]: Instance already exists");
-
-	g_pclInstance = PH_NEW Core(context, cfgFileName, argc, argv);
-
-	return *g_pclInstance;
-}
-
-void Phobos::Engine::Core::ReleaseInstance()
-{
-	PH_ASSERT_MSG(g_pclInstance, "[Core::ReleaseInstance]: Instance does not exists, use CreateInstance");
-
-	delete g_pclInstance;
-
-	g_pclInstance = nullptr;
-}
-
-Phobos::Engine::Core &Phobos::Engine::Core::GetInstance()
-{
-	PH_ASSERT_MSG(g_pclInstance, "[Core::GetInstance]: Instance does not exists, use CreateInstance");
-
-	return *g_pclInstance;
-}
-
 Phobos::Engine::Core::Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]) :
 	m_clModule("Core"),	
 	m_cmdListModules("listModules"),
@@ -86,7 +59,8 @@ Phobos::Engine::Core::Core(Shell::IContext &context, const char *cfgFileName, in
 	m_varEngineFPS("dvEngineFPS", "60"),
 	m_varMinFrameTime("dvMinFrameTime", "0.01"),
 	m_fLaunchedBoot(false),
-	m_fStopMainLoop(false)
+	m_fStopMainLoop(false),
+	m_tpPreviousTime(System::Clock::now())
 {
 	ObjectManager::AddObject(m_clModule, Path("/"));
 
@@ -120,6 +94,21 @@ void Phobos::Engine::Core::RemoveModule(Module &module)
 	m_clModule.RemoveModule(module);
 }
 
+void Phobos::Engine::Core::InitModules()
+{
+	m_clModule.Init();
+	m_clModule.Start();
+	m_clModule.Started();
+
+	m_tpPreviousTime = System::Clock::now();
+}
+
+void Phobos::Engine::Core::FinalizeModules()
+{
+	m_clModule.Stop();
+	m_clModule.Finalize();
+}
+
 Phobos::System::Seconds Phobos::Engine::Core::GetUpdateTime()
 {
 	const Float_t updateTime = m_varEngineFPS.GetFloat();
@@ -150,81 +139,71 @@ Phobos::System::Seconds Phobos::Engine::Core::GetMinFrameTime()
 	return System::Seconds(minFrameTime);
 }
 
-void Phobos::Engine::Core::StartMainLoop()
+int Phobos::Engine::Core::RunSingleFrame()
 {
-	m_clModule.Init();
-	m_clModule.Start();	
-	m_clModule.Started();
+	if (m_fStopMainLoop)
+		return -1;
 
-	System::Seconds	executionTime;
-	auto			updateTime = GetUpdateTime();
-	auto previousTime = System::Clock::now();
-			
-	do
+	auto updateTime = GetUpdateTime();
+	
+	auto now = System::Clock::now();
+	auto lastFrameTime = now - m_tpPreviousTime;
+
+	if (m_varFixedTime.GetBoolean())
+		lastFrameTime = updateTime;
+
+	if (lastFrameTime == System::Seconds(0.0f))
 	{
-		//this->SetFrameRate(updateTime.count());
-						
-		auto now = System::Clock::now();
-		auto lastFrameTime = now - previousTime;
-		
-		if(m_varFixedTime.GetBoolean())
-			lastFrameTime = updateTime;
+		return 0;
+	}
 
-		if (lastFrameTime == System::Seconds(0.0f))
-		{				
+	//how long the simulation can run?
+	m_secExecutionTime += lastFrameTime;
+	auto totalFrameTime = lastFrameTime;
+
+#ifdef PH_DEBUG
+	//this happens on debug mode while stopped on break points
+	if (m_secExecutionTime > System::Seconds(20.0f))
+		m_secExecutionTime = updateTime;
+#endif					
+
+	//update the game on fixed time steps
+	while (m_secExecutionTime >= updateTime)
+	{
+		//fixed Update
+		this->FixedUpdate(updateTime);
+
+		m_secExecutionTime -= updateTime;
+	}
+	Float_t delta = m_secExecutionTime / updateTime;
+
+	//Now update other modules as fast as we can
+	this->Update(totalFrameTime, delta);
+
+	//update it after frame
+	updateTime = this->GetUpdateTime();
+	//m_clTimer.SetMinInterval( GetMinFrameTime() );	
+
+	m_tpPreviousTime = now;	
+
+	return 1;
+}
+
+void Phobos::Engine::Core::RunMainLoop()
+{		
+	for (;;)
+	{
+		int result = this->RunSingleFrame();
+
+		if (result == 0)
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-			continue;
-		}					
-
-		//how long the simulation can run?
-		executionTime += lastFrameTime;
-		auto totalFrameTime = lastFrameTime;
-
-		#ifdef PH_DEBUG
-			//this happens on debug mode while stopped on break points
-		if (executionTime > System::Seconds(20.0f))
-			executionTime = updateTime;
-		#endif				
-
-		//update the game on fixed time steps
-		while(executionTime >= updateTime)
-		{
-			//fixed Update
-			this->FixedUpdate(updateTime);
-				
-			executionTime -= updateTime;
-		}
-		Float_t delta = executionTime / updateTime;			
-			
-		//Now update other modules as fast as we can
-		this->Update(totalFrameTime, delta);
-
-		//update it after frame
-		updateTime = this->GetUpdateTime();
-		//m_clTimer.SetMinInterval( GetMinFrameTime() );	
-
-		previousTime = now;
-
-	} while(!m_fStopMainLoop);
-
-	m_clModule.Stop();
-	m_clModule.Finalize();	
+		else if (result < 0)
+			break;
+	}			
 }
 
 void Phobos::Engine::Core::Update(System::Seconds seconds, Float_t delta)
 {
-	/*
-	for(int i = 0;i < TimerTypes::MAX_TIMERS; ++i)
-	{
-		if(m_stSimInfo.m_stTimers[i].IsPaused())
-			continue;
-
-		m_stSimInfo.m_stTimers[i].m_fpRenderFrameTime = seconds;
-		m_stSimInfo.m_stTimers[i].m_fpTotalRenderFrameTime += seconds;
-		m_stSimInfo.m_stTimers[i].m_fpDelta = delta;
-	}
-	*/
-
 	ClocksTickUpdate(seconds, delta);
 
 	m_clModule.Update();	

@@ -30,7 +30,7 @@
     <ClCompile Include="..\..\..\src\Engine\Clocks.cpp" />
     <ClCompile Include="..\..\..\src\Engine\ModuleContainer.cpp" />
     <ClCompile Include="..\..\..\src\Phobos\Engine\ModuleManager.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\EngineMain.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Kernel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Phobos\Engine\BootModule.h" />
@@ -73,6 +73,6 @@
     <ClInclude Include="..\..\..\include\Phobos\Engine\Clocks.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleContainer.h" />
     <ClInclude Include="..\..\..\include\Phobos\Engine\ModuleManager.h" />
-    <ClInclude Include="..\..\..\include\Phobos\Engine\EngineMain.h" />
+    <ClInclude Include="..\..\..\include\Phobos\Engine\Kernel.h" />
   </ItemGroup>
 </Project>

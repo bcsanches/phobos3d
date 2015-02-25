@@ -16,7 +16,7 @@ subject to the following restrictions:
 
 #include <sstream>
 
-#include <Phobos/Engine/EngineMain.h>
+#include <Phobos/Engine/Kernel.h>
 #include <Phobos/Memory.h>
 
 extern "C" int SDL_main(int argc, char *argv[])
@@ -28,13 +28,13 @@ extern "C" int SDL_main(int argc, char *argv[])
 	#endif
 
 	{
-		Phobos::Engine::EngineMain engine(argc, argv);
+		Phobos::Engine::Kernel engine(argc, argv);
 
 	#ifndef PH_DEBUG
 		try
 	#endif
 		{
-			engine.StartMainLoop();
+			engine.RunMainLoop();
 		}
 	#ifndef PH_DEBUG
 		catch(std::exception &e)

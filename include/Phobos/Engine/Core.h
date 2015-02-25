@@ -37,13 +37,15 @@ namespace Phobos
 		class PH_ENGINE_API Core
 		{			
 			public:
-				static Core &CreateInstance(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
-				static void ReleaseInstance();
-				static Core &GetInstance();				
+				Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
+				~Core();
 
 				void AddModule(std::unique_ptr<Module> &&module, UInt32_t priority = ModulePriorities::NORMAL);
 				void AddModule(Module &module, UInt32_t priority = ModulePriorities::NORMAL);
 				void RemoveModule(Module &module);
+
+				void InitModules();
+				void FinalizeModules();
 
 				/** 
 					Starts the main loop, should be called by main, only once
@@ -51,15 +53,23 @@ namespace Phobos
 					Only returns when main loop stops, so after calling this, you are expected
 					to have added a module capable of stopping the loop somehow
 				*/
-				void StartMainLoop();
+				void RunMainLoop();
+
+				/**
+					Run a single frame for the engine
+
+					@returns
+						number > 0, one render frame has been run (logic frame may have run)
+						number == 0, no logic and no render frame has been run, timeslice is too small, so wait and call later
+						number < 0, stop main loop was called, so no loop run
+
+				*/
+				int RunSingleFrame();
 
 				//Stops the engine
 				void StopMainLoop();
 
-			private:					
-				Core(Shell::IContext &context, const char *cfgFileName, int argc, char * const argv[]);
-				~Core();
-
+			private:									
 				inline System::Seconds GetUpdateTime(void);
 				inline System::Seconds GetMinFrameTime(void);
 				
@@ -83,7 +93,11 @@ namespace Phobos
 				Shell::Variable	m_varMinFrameTime;				
 
 				bool			m_fLaunchedBoot;
-				bool			m_fStopMainLoop;									
+				bool			m_fStopMainLoop;		
+
+
+				System::Seconds				m_secExecutionTime;
+				System::Clock::time_point	m_tpPreviousTime;
 		};		
 	}
 }

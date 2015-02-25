@@ -39,11 +39,11 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Session.h>
-#include <Phobos/Engine/EngineMain.h>
+#include <Phobos/Engine/Kernel.h>
 
 int main(int argc, char **argv)
 {		
-	Phobos::Engine::EngineMain engine(argc, argv,
+	Phobos::Engine::Kernel engine(argc, argv,
 	{
 		Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100),
 		Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 	*/
 	session.CloseConsole();
 
-	engine.StartMainLoop();	
+	engine.RunMainLoop();	
 
 	return 0;
 }

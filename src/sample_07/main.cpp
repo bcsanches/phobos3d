@@ -37,7 +37,7 @@ For Visual Studio users, go to the project Property Pages, on the "Debugging" pa
 
 #include "Render.h"
 
-#include <Phobos/Engine/EngineMain.h>
+#include <Phobos/Engine/Kernel.h>
 #include <Phobos/Engine/Client.h>
 #include <Phobos/Engine/Console.h>
 #include <Phobos/Engine/Session.h>
@@ -245,7 +245,7 @@ void GameClient::OnFixedUpdate()
 
 int main(int argc, char **argv)
 {				
-	Phobos::Engine::EngineMain engine(argc, argv, {
+	Phobos::Engine::Kernel engine(argc, argv, {
 		Phobos::Engine::MakeLocalModuleClass("Console", Phobos::Engine::Console::CreateInstance, 100),
 		Phobos::Engine::MakeLocalModuleClass("Session", Phobos::Engine::Session::CreateInstance, 200),
 		Phobos::Engine::MakeLocalModuleClass("Render", Render::CreateInstance, 500)
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 	*/
 	session.CloseConsole();
 
-	engine.StartMainLoop();
+	engine.RunMainLoop();
 
 	return 0;
 }
